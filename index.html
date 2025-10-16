@@ -21,6 +21,7 @@
                 <h2>The Real World Account</h2>
                 <p class="description">حساب مشترك للكورسات ومنصة The Real World، مع دعم فني وضمان.</p>
                 <div class="price">3500 د.ج</div>
+                <button class="order-btn" data-product="The Real World Account">اطلب الآن</button>
             </div>
 
             <!-- Product 2: Adobe Creative Cloud -->
@@ -33,6 +34,7 @@
                     <div class="price">3 أشهر: 7500 د.ج</div>
                     <div class="price">12 شهرًا: 17800 د.ج</div>
                 </div>
+                <button class="order-btn" data-product="Adobe Creative Cloud">اطلب الآن</button>
             </div>
 
             <!-- Product 3: ChatGPT Business -->
@@ -41,6 +43,7 @@
                 <h2>ChatGPT Business</h2>
                 <p class="description">حسابات ChatGPT Business فردية خاصة بك، مع تفعيل سهل وسريع وميزات النسخة الاحترافية.</p>
                 <div class="price">900 د.ج / للشهر</div>
+                <button class="order-btn" data-product="ChatGPT Business">اطلب الآن</button>
             </div>
         </div>
 
@@ -65,5 +68,25 @@
             </div>
         </div>
     </footer>
+
+    <!-- Order Modal -->
+    <div id="order-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>تقديم طلب</h2>
+            <form id="order-form" action="https://formspree.io/f/xjvnrqrl" method="POST">
+                <input type="hidden" name="product" id="product-name">
+                <label for="name">الاسم الكامل:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="contact">رقم الهاتف أو البريد الإلكتروني:</label>
+                <input type="text" id="contact" name="contact" required>
+
+                <button type="submit">تأكيد الطلب</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
