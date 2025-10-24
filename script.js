@@ -36,9 +36,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hero) {
         const pointerQuery = window.matchMedia('(pointer: coarse)');
-        let spotlightEnabled = false;
-
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+        let spotlightInitialized = false;
+        let inactivityTimeoutId;
+
+        const activateSpotlight = () => {
+            if (!hero.classList.contains('hero-spotlight-active')) {
+                hero.classList.add('hero-spotlight-active');
+            }
+        };
+
+        const deactivateSpotlight = () => {
+            hero.classList.remove('hero-spotlight-active');
+            hero.style.setProperty('--spot-x', '50%');
+            hero.style.setProperty('--spot-y', '50%');
+        };
+
+        const scheduleInactivityReset = () => {
+            clearTimeout(inactivityTimeoutId);
+            inactivityTimeoutId = setTimeout(() => {
+                deactivateSpotlight();
+            }, 3500);
+        };
 
         const updateSpotlight = (x, y) => {
             hero.style.setProperty('--spot-x', `${x}%`);
@@ -49,15 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const rect = hero.getBoundingClientRect();
             const x = clamp(((clientX - rect.left) / rect.width) * 100, 0, 100);
             const y = clamp(((clientY - rect.top) / rect.height) * 100, 0, 100);
+            activateSpotlight();
             updateSpotlight(x, y);
+            scheduleInactivityReset();
         };
 
-        const enableSpotlight = () => {
-            if (spotlightEnabled) {
+        const attachSpotlightHandlers = () => {
+            if (spotlightInitialized) {
                 return;
             }
 
-            spotlightEnabled = true;
+            spotlightInitialized = true;
 
             hero.addEventListener('mousemove', (event) => {
                 handlePointerMove(event.clientX, event.clientY);
@@ -68,7 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             hero.addEventListener('mouseleave', () => {
-                updateSpotlight(50, 50);
+                clearTimeout(inactivityTimeoutId);
+                deactivateSpotlight();
             });
 
             hero.addEventListener('touchstart', (event) => {
@@ -86,16 +108,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { passive: true });
 
             hero.addEventListener('touchend', () => {
-                updateSpotlight(50, 50);
+                scheduleInactivityReset();
             });
         };
 
         const setHeroMode = (isCoarse) => {
+            hero.classList.toggle('hero-static', isCoarse);
+
             if (isCoarse) {
-                hero.classList.add('hero-static');
+                clearTimeout(inactivityTimeoutId);
+                deactivateSpotlight();
             } else {
-                hero.classList.remove('hero-static');
-                enableSpotlight();
+                attachSpotlightHandlers();
             }
         };
 
@@ -110,9 +134,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         setHeroMode(pointerQuery.matches);
-
-        if (!pointerQuery.matches) {
-            enableSpotlight();
-        }
     }
 });

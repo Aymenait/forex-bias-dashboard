@@ -155,7 +155,6 @@ img {
     --spot-size: clamp(240px, 30vw, 420px);
     --spot-x: 50%;
     --spot-y: 50%;
-    cursor: none;
 }
 
 .hero::before {
@@ -163,8 +162,9 @@ img {
     position: absolute;
     inset: -40%;
     background: radial-gradient(circle var(--spot-size) at var(--spot-x) var(--spot-y), rgba(255, 255, 255, 0.05) 0%, rgba(16, 18, 34, 0.4) 55%, rgba(6, 7, 18, 0.92) 100%);
-    transition: background 0.18s ease-out;
     pointer-events: none;
+    opacity: 0;
+    transition: background 0.18s ease-out, opacity 0.3s ease;
 }
 
 .hero::after {
@@ -176,10 +176,19 @@ img {
     left: var(--spot-x);
     transform: translate(-50%, -50%);
     background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.18) 35%, rgba(255, 255, 255, 0) 70%);
-    opacity: 0.35;
+    opacity: 0;
     pointer-events: none;
     mix-blend-mode: screen;
-    transition: top 0.15s ease-out, left 0.15s ease-out, width 0.18s ease-out, height 0.18s ease-out;
+    transition: top 0.15s ease-out, left 0.15s ease-out, width 0.18s ease-out, height 0.18s ease-out, opacity 0.3s ease;
+}
+
+.hero.hero-spotlight-active {
+    cursor: none;
+}
+
+.hero.hero-spotlight-active::before,
+.hero.hero-spotlight-active::after {
+    opacity: 1;
 }
 
 .hero.hero-static {
@@ -188,7 +197,7 @@ img {
 
 .hero.hero-static::before,
 .hero.hero-static::after {
-    display: none;
+    opacity: 0;
 }
 
 .hero.hero-static .hero-content {
@@ -203,9 +212,12 @@ img {
     gap: 40px;
     position: relative;
     z-index: 2;
+    transition: mask-position 0.15s ease-out, -webkit-mask-position 0.15s ease-out;
+}
+
+.hero.hero-spotlight-active .hero-content {
     -webkit-mask-image: radial-gradient(circle calc(var(--spot-size) * 0.9) at var(--spot-x) var(--spot-y), rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0) 85%);
     mask-image: radial-gradient(circle calc(var(--spot-size) * 0.9) at var(--spot-x) var(--spot-y), rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0) 85%);
-    transition: mask-position 0.15s ease-out, -webkit-mask-position 0.15s ease-out;
 }
 
 .hero-text h1 {
