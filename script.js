@@ -1,14 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize VanillaTilt for 3D effect
-    if (typeof VanillaTilt !== 'undefined') {
-        VanillaTilt.init(document.querySelectorAll(".product-card"), {
-            max: 15,
-            speed: 400,
-            glare: true,
-            "max-glare": 0.2,
-            scale: 1.05
-        });
-    }
+    // 3D Tilt effect removed for better performance
 
     const modal = document.getElementById('order-modal');
     const closeBtn = document.querySelector('.close-btn');
