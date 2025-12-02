@@ -1,0 +1,122 @@
+/* Mobile Enhanced Version - تجريبي */
+/* هذا الملف يحتوي على تحسينات إضافية للهاتف */
+
+@media (max-width: 768px) {
+
+    /* 1. تصغير الشعار والعلامة التجارية */
+    .logo {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .brand-name {
+        font-size: 1.2rem !important;
+    }
+
+    .brand-tagline {
+        font-size: 0.75rem !important;
+    }
+
+    /* 2. إخفاء السلايدر لتوفير مساحة */
+    .hero-slider {
+        display: none !important;
+    }
+
+    /* 3. إخفاء البطاقات العائمة */
+    .floating-card {
+        display: none !important;
+    }
+
+    .hero-card {
+        display: none !important;
+    }
+
+    /* 4. تقليل padding في Hero */
+    .hero {
+        padding: 20px 0 10px !important;
+    }
+
+    .site-header {
+        padding-bottom: 20px !important;
+    }
+
+    .hero-text {
+        margin-bottom: 20px;
+    }
+
+    /* 5. تصغير الشارات */
+    .badge {
+        flex: 1 1 30% !important;
+        padding: 8px 10px !important;
+        font-size: 0.75rem !important;
+    }
+
+    .badge strong {
+        font-size: 1rem !important;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    .badge span {
+        font-size: 0.7rem !important;
+    }
+
+    /* 6. تحسين أحجام اللمس للأزرار */
+    .btn {
+        min-height: 44px !important;
+        padding: 10px 16px !important;
+    }
+
+    .nav-actions .btn {
+        min-height: 44px !important;
+        padding: 10px 12px !important;
+    }
+
+    /* 7. تقليل المسافات العامة */
+    .trust-badges {
+        gap: 8px !important;
+        margin-top: 15px !important;
+    }
+
+    .hero-buttons {
+        gap: 10px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .hero-text h1 {
+        margin-bottom: 12px !important;
+        font-size: 1.8rem !important;
+    }
+
+    .hero-text p {
+        font-size: 0.9rem !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* 8. تحسين قسم المنتجات */
+    .section {
+        padding: 30px 0 !important;
+    }
+
+    /* 9. جعل الأيقونات الاجتماعية العائمة أصغر */
+    .floating-social {
+        gap: 6px !important;
+    }
+
+    .social-float {
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    /* 10. تحسين النافبار */
+    .nav-bar {
+        padding: 15px 0 !important;
+        gap: 10px !important;
+    }
+
+    /* 11. جعل container أوسع قليلاً */
+    .container {
+        width: 96% !important;
+        padding: 0 6px !important;
+    }
+}
