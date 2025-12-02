@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -96,6 +96,368 @@
             color: black;
             border-color: #39ff14;
         }
+
+        /* Floating Social Buttons */
+        .floating-social-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .social-float {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .whatsapp-float {
+            background: #25D366;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            animation: pulse-whatsapp 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+        }
+
+        .instagram-float {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
+            animation: pulse-instagram 2s infinite;
+        }
+
+        .instagram-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(225, 48, 108, 0.6);
+        }
+
+        .social-float svg {
+            width: 35px;
+            height: 35px;
+            fill: white;
+        }
+
+        .social-tooltip {
+            position: absolute;
+            right: 70px;
+            background: white;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 8px;
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .social-float:hover .social-tooltip {
+            opacity: 1;
+        }
+
+        @keyframes pulse-whatsapp {
+            0% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1);
+            }
+            100% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            }
+        }
+
+        @keyframes pulse-instagram {
+            0% {
+                box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 30px rgba(225, 48, 108, 0.7), 0 0 0 10px rgba(225, 48, 108, 0.1);
+            }
+            100% {
+                box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
+            }
+        }
+
+        /* Enhanced Button Animations */
+        .payment-method-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-method-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .payment-method-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* CTA Button Pulse */
+        .cta-pulse {
+            animation: cta-pulse-animation 2s infinite;
+        }
+
+        @keyframes cta-pulse-animation {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14, 0 0 60px #39ff14;
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+            }
+        }
+
+        /* Smooth Hover Effects */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(57, 255, 20, 0.3);
+        }
+
+        /* Fade In Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Mobile Responsive - Tablet */
+        @media (max-width: 1024px) {
+            .product-grid-mobile {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Mobile Responsive - Phone */
+        @media (max-width: 768px) {
+            /* Social Buttons */
+            .floating-social-buttons {
+                bottom: 20px;
+                right: 20px;
+                gap: 12px;
+            }
+
+            .social-float {
+                width: 55px;
+                height: 55px;
+            }
+
+            .social-float svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .social-tooltip {
+                display: none;
+            }
+
+            /* Navigation */
+            .mobile-nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .lang-btn {
+                padding: 4px 10px;
+                font-size: 12px;
+            }
+
+            /* Hero Section */
+            .hero-title-mobile {
+                font-size: 1.5rem !important;
+                line-height: 1.3;
+            }
+
+            .hero-subtitle-mobile {
+                font-size: 1rem !important;
+            }
+
+            /* Payment Buttons */
+            .payment-buttons-mobile {
+                gap: 1rem !important;
+            }
+
+            .payment-btn-circle {
+                width: 60px !important;
+                height: 60px !important;
+            }
+
+            .payment-btn-circle svg {
+                width: 28px !important;
+                height: 28px !important;
+            }
+
+            /* Campus Cards */
+            .campus-card-mobile {
+                padding: 1rem !important;
+            }
+
+            .campus-icon-mobile {
+                font-size: 2rem !important;
+            }
+
+            .campus-title-mobile {
+                font-size: 0.9rem !important;
+            }
+
+            .campus-list-mobile li {
+                font-size: 0.7rem !important;
+            }
+
+            /* CTA Buttons */
+            .cta-btn-mobile {
+                padding: 12px 24px !important;
+                font-size: 1rem !important;
+            }
+
+            /* Modals */
+            .modal-content {
+                margin: 10px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .crypto-modal {
+                padding: 15px !important;
+            }
+
+            .crypto-modal h2 {
+                font-size: 1.2rem !important;
+            }
+
+            .crypto-modal h3 {
+                font-size: 1rem !important;
+            }
+
+            .crypto-instructions ol {
+                font-size: 0.85rem;
+                padding-right: 20px;
+            }
+
+            .wallet-address-box code {
+                font-size: 0.7rem !important;
+                word-break: break-all;
+            }
+
+            .network-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .network-btn {
+                width: 100%;
+            }
+
+            /* Recommendation Section */
+            .recommend-grid-mobile {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* Footer CTA */
+            .footer-cta-mobile {
+                padding: 12px 32px !important;
+                font-size: 1.2rem !important;
+            }
+
+            /* Reduce particles on mobile for performance */
+            #particles-js {
+                opacity: 0.5;
+            }
+        }
+
+        /* Extra Small Devices */
+        @media (max-width: 480px) {
+            .hero-title-mobile {
+                font-size: 1.2rem !important;
+            }
+
+            .payment-buttons-mobile {
+                flex-wrap: wrap;
+            }
+
+            .payment-btn-circle {
+                width: 50px !important;
+                height: 50px !important;
+            }
+
+            .campus-card-mobile {
+                padding: 0.75rem !important;
+            }
+
+            .campus-list-mobile {
+                display: none;
+            }
+
+            .campus-subtitle-mobile {
+                font-size: 0.7rem !important;
+            }
+
+            /* Hide some elements on very small screens */
+            .hide-on-xs {
+                display: none !important;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .hover-lift:hover {
+                transform: none;
+            }
+
+            .payment-method-btn:active {
+                transform: scale(0.95);
+            }
+
+            .cta-pulse {
+                animation: none;
+            }
+
+            .cta-pulse:active {
+                transform: scale(0.98);
+            }
+        }
     </style>
 </head>
 
@@ -110,10 +472,10 @@
     </div>
 
     <!-- Language Switcher -->
-    <div class="absolute top-4 right-4 z-[100] flex gap-2">
+    <div class="absolute top-4 right-4 z-[100] flex gap-2 mobile-nav">
         <button class="lang-btn active" data-lang="ar">العربية</button>
-        <button class="lang-btn" data-lang="en">English</button>
-        <button class="lang-btn" data-lang="fr">Français</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
     </div>
 
     <!-- Hero Section -->
@@ -121,28 +483,35 @@
         class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden z-10">
         <img src="https://i.imgur.com/QzlT4Ch.gif" alt="The Real World"
             class="w-40 h-40 md:w-56 md:h-56 object-cover rounded-full border-4 border-matrix-green shadow-[0_0_30px_#39ff14] mb-8 animate-pulse-fast">
-        <h1 class="text-4xl md:text-6xl font-black mb-4 leading-tight text-matrix-green text-glow">
-            THE REAL WORLD ACCOUNT <br> VETERAN PLAN ALL COURSES
+        <h1 class="text-2xl sm:text-4xl md:text-6xl font-black mb-4 leading-tight text-matrix-green text-glow hero-title-mobile px-2">
+            THE REAL WORLD ACCOUNT <br class="hidden sm:block"> VETERAN PLAN ALL COURSES
         </h1>
         <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.price">
             فقط بـ 15 USDT
         </p>
 
         <!-- Payment Methods Section -->
-        <div class="w-full max-w-4xl mx-auto mb-12">
-            <h2 class="text-2xl font-bold text-matrix-green mb-6" data-i18n="payment.title">طرق الدفع المتاحة
-            </h2>
+        <div class="w-full max-w-4xl mx-auto mb-12 px-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-matrix-green mb-6" data-i18n="payment.title">طرق الدفع المتاحة</h2>
 
-            <div class="flex flex-wrap justify-center gap-8 md:gap-12">
-
+            <div class="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-12 payment-buttons-mobile">
+                <!-- RedotPay Button -->
+                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer redotpay-btn payment-method-btn hover-lift"
+                    data-product="The Real World Account - Veteran Plan" data-price="3750">
+                    <div
+                        class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:shadow-[0_0_25px_rgba(220,38,38,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-white payment-btn-circle">
+                        <span class="text-white font-bold text-sm sm:text-lg">Redot</span>
+                    </div>
+                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">RedotPay</span>
+                </a>
 
                 <!-- USDT Button -->
                 <a href="javascript:void(0)"
-                    class="flex flex-col items-center gap-3 group cursor-pointer crypto-pay-btn"
+                    class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer crypto-pay-btn payment-method-btn hover-lift"
                     data-product="The Real World Account - Veteran Plan" data-price="3750">
                     <div
-                        class="w-20 h-20 rounded-full bg-matrix-green flex items-center justify-center shadow-[0_0_15px_rgba(57,255,20,0.5)] group-hover:shadow-[0_0_25px_rgba(57,255,20,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                        class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-matrix-green flex items-center justify-center shadow-[0_0_15px_rgba(57,255,20,0.5)] group-hover:shadow-[0_0_25px_rgba(57,255,20,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-white payment-btn-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="none"
                             stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
                             <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
@@ -151,230 +520,611 @@
                             <path d="M8 16v4"></path>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors"
-                        data-i18n="payment.usdt">USDT</span>
+                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">USDT</span>
                 </a>
 
                 <!-- BaridiMob Button -->
-                <a href="javascript:void(0)" class="flex flex-col items-center gap-3 group cursor-pointer baridimob-btn"
+                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer baridimob-btn payment-method-btn hover-lift"
                     data-product="The Real World Account - Veteran Plan" data-price="3750">
                     <div
-                        class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.5)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-matrix-green">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                        class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.5)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-matrix-green payment-btn-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="none"
                             stroke="#0066cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                             <line x1="2" y1="10" x2="22" y2="10"></line>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors"
-                        data-i18n="payment.baridimob">BaridiMob</span>
+                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">BaridiMob</span>
                 </a>
             </div>
         </div>
 
+        <!-- Scarcity Counter -->
+        <div class="w-full max-w-2xl mx-auto mb-8 px-4">
+            <div class="bg-gradient-to-r from-red-900/40 to-orange-900/40 border-2 border-red-500/50 rounded-2xl p-6 backdrop-blur-sm">
+                <div class="flex items-center justify-center gap-3 mb-4">
+                    <span class="text-3xl">⚠️</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-red-400" data-i18n="scarcity.title">مقاعد محدودة!</h3>
+                    <span class="text-3xl">⚠️</span>
+                </div>
+                <p class="text-center text-gray-200 mb-4 text-sm sm:text-base" data-i18n="scarcity.description">
+                    لضمان جودة الدعم، نقبل فقط <span class="text-red-400 font-bold">10-15 عميل شهرياً</span>
+                </p>
+                <div class="flex items-center justify-center gap-4 mb-4">
+                    <div class="text-center">
+                        <div class="text-4xl sm:text-5xl font-black text-matrix-green" id="seats-remaining">12</div>
+                        <p class="text-xs sm:text-sm text-gray-400" data-i18n="scarcity.remaining">مقعد متبقي</p>
+                    </div>
+                    <div class="text-3xl text-gray-600">/</div>
+                    <div class="text-center">
+                        <div class="text-3xl sm:text-4xl font-bold text-gray-500">15</div>
+                        <p class="text-xs sm:text-sm text-gray-400" data-i18n="scarcity.total">إجمالي</p>
+                    </div>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-3 mb-4 overflow-hidden">
+                    <div class="bg-gradient-to-r from-red-500 to-orange-500 h-3 rounded-full transition-all duration-500" 
+                         style="width: 20%" id="seats-progress"></div>
+                </div>
+                <p class="text-center text-yellow-400 text-xs sm:text-sm font-semibold animate-pulse" data-i18n="scarcity.warning">
+                    ⏰ احجز مقعدك الآن قبل نفاد الكمية!
+                </p>
+            </div>
+        </div>
+
         <a href="https://wa.me/213782125821"
-            class="bg-matrix-green text-black font-bold text-xl py-3 px-8 rounded-full hover:bg-green-400 transition-all transform hover:scale-105 matrix-glow shadow-lg"
+            class="bg-matrix-green text-black font-bold text-base sm:text-xl py-3 px-6 sm:px-8 rounded-full hover:bg-green-400 transition-all transform hover:scale-105 matrix-glow shadow-lg cta-pulse cta-btn-mobile"
             data-i18n="hero.cta">
             انضم الآن
         </a>
     </section>
 
-    <!-- Campuses Section -->
-    <section class="py-20 px-4 max-w-7xl mx-auto relative z-10">
-        <h2 class="text-3xl md:text-5xl font-bold text-center mb-4 text-matrix-green" data-i18n="campuses.title">جميع
-            الدورات التسعة متضمنة</h2>
-        <p class="text-center text-gray-400 mb-12" data-i18n="campuses.subtitle">وصول كامل لكل دورة ومهارة</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- 1. E-commerce Campus -->
-            <div
-                class="bg-[#111]/80 p-6 rounded-xl border border-matrix-green/30 hover:border-matrix-green transition-all hover:-translate-y-2 group">
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🛒</div>
-                <h3 class="text-lg font-bold mb-2 text-matrix-green" data-i18n="campus1.title">دورة التجارة
-                    الإلكترونية
-                </h3>
-                <p class="text-gray-400 text-sm mb-2" data-i18n="campus1.subtitle">الدروبشيبينغ والمتاجر
-                    الإلكترونية</p>
-                <ul class="text-gray-300 text-xs space-y-1">
-                    <li data-i18n="campus1.point1">• البحث عن المنتجات الرابحة</li>
-                    <li data-i18n="campus1.point2">• بناء متاجر Shopify</li>
-                    <li data-i18n="campus1.point3">• إعلانات TikTok وFacebook</li>
-                    <li data-i18n="campus1.point4">• التوصيل بدون مخزون</li>
-                    <li data-i18n="campus1.point5">• بناء علامة تجارية طويلة الأمد</li>
-                </ul>
-            </div>
-
-            <!-- 2. Copywriting Campus -->
-            <div
-                class="bg-[#111]/80 p-6 rounded-xl border border-matrix-green/30 hover:border-matrix-green transition-all hover:-translate-y-2 group">
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">✍️</div>
-                <h3 class="text-lg font-bold mb-2 text-matrix-green" data-i18n="campus2.title">دورة كتابة
-                    الإعلانات
-                </h3>
-                <p class="text-gray-400 text-sm mb-2" data-i18n="campus2.subtitle">الكتابة الإقناعية للربح</p>
-                <ul class="text-gray-300 text-xs space-y-1">
-                    <li data-i18n="campus2.point1">• المحفزات النفسية</li>
-                    <li data-i18n="campus2.point2">• حملات التسويق بالبريد الإلكتروني</li>
-                    <li data-i18n="campus2.point3">• اكتساب العملاء والعروض</li>
-                    <li data-i18n="campus2.point4">• نمو وسائل التواصل (Twitter/X)</li>
-                    <li data-i18n="campus2.point5">• أساسيات العمل الحر</li>
-                </ul>
-            </div>
-
-            <!-- 3. Crypto & DeFi Campus -->
-            <div
-                class="bg-[#111]/80 p-6 rounded-xl border border-matrix-green/30 hover:border-matrix-green transition-all hover:-translate-y-2 group">
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">₿</div>
-                <h3 class="text-lg font-bold mb-2 text-matrix-green" data-i18n="campus3.title">دورة العملات
-                    الرقمية
-                    والـ DeFi</h3>
-                <p class="text-gray-400 text-sm mb-2" data-i18n="campus3.subtitle">تداول واستثمار العملات
-                    الرقمية
-                </p>
-                <ul class="text-gray-300 text-xs space-y-1">
-                    <li data-i18n="campus3.point1">• بناء محفظة طويلة الأجل</li>
-                    <li data-i18n="campus3.point2">• التحليل الفني والرسوم البيانية</li>
-                    <li data-i18n="campus3.point3">• DeFi ومجمعات السيولة</li>
-                    <li data-i18n="campus3.point4">• استراتيجيات إدارة المخاطر</li>
-                    <li data-i18n="campus3.point5">• التركيز على Bitcoin وEthereum</li>
-                </ul>
-            </div>
-
-            <!-- 4. Content Creation Campus -->
-            <div
-                class="bg-[#111]/80 p-6 rounded-xl border border-matrix-green/30 hover:border-matrix-green transition-all hover:-translate-y-2 group">
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🎬</div>
-                <h3 class="text-lg font-bold mb-2 text-matrix-green" data-i18n="campus4.title">دورة إنشاء
-                    المحتوى
-                </h3>
-                <p class="text-gray-400 text-sm mb-2" data-i18n="campus4.subtitle">الفيديوهات الفيروسية وUGC</p>
-                <ul class="text-gray-300 text-xs space-y-1">
-                    <li data-i18n="campus4.point1">• تحرير الفيديو (CapCut, Premiere Pro)</li>
-                    <li data-i18n="campus4.point2">• إتقان الخوارزميات (TikTok, IG, YT)</li>
-                    <li data-i18n="campus4.point3">• المحتوى المولّد من المستخدمين (UGC)</li>
-                    <li data-i18n="campus4.point4">• بناء العلامة الشخصية</li>
-                    <li data-i18n="campus4.point5">• إدارة المؤثرين</li>
-                </ul>
-            </div>
-
-            <!-- 5. AI Automation Campus -->
-            <div
-                class="bg-[#111]/80 p-6 rounded-xl border border-matrix-green/30 hover:border-matrix-green transition-all hover:-translate-y-2 group">
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🤖</div>
-                <h3 class="text-lg font-bold mb-2 text-matrix-green" data-i18n="campus5.title">دورة أتمتة الذكاء
-                    الاصطناعي</h3>
-                <p class="text-gray-400 text-sm mb-2" data-i18n="campus5.subtitle">استخدام الذكاء الاصطناعي
-                    لتوفير
-                    الوقت وكسب المال</p>
-                <ul class="text-gray-300 text-xs space-y-1">
-                    <li data-i18n="campus5.point1">• إتقان هندسة الأوامر</li>
-                    <li data-i18n="campus5.point2">• أتمتة سير العمل (Zapier)</li>
-                    <li data-i18n="campus5.point3">• تحسين ChatGPT وClaude</li>
-                    <li data-i18n="campus5.point4">• خدمات وكالة الذكاء الاصطناعي</li>
-                    <li data-i18n="campus5.point5">• حلول أتمتة الأعمال</li>
-                </ul>
-            </div>
-
-            <!-- 6. Stocks Campus -->
-            <div
-                class="bg-[#111]/80 p-6 rounded-xl border border-matrix-green/30 hover:border-matrix-green transition-all hover:-translate-y-2 group">
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">📈</div>
-                <h3 class="text-lg font-bold mb-2 text-matrix-green" data-i18n="campus6.title">دورة الأسهم</h3>
-                <p class="text-gray-400 text-sm mb-2" data-i18n="campus6.subtitle">تداول سوق الأسهم التقليدي</p>
-                <ul class="text-gray-300 text-xs space-y-1">
-                    <li data-i18n="campus6.point1">• التحليل الفني والأنماط</li>
-                    <li data-i18n="campus6.point2">• استراتيجيات تداول الخيارات</li>
-                    <li data-i18n="campus6.point3">• فهم الاقتصاد الكلي</li>
-                    <li data-i18n="campus6.point4">• تحليل الأخبار وأحداث السوق</li>
-                    <li data-i18n="campus6.point5">• تقنيات الاستفادة من رأس المال</li>
-                </ul>
-            </div>
-
-            <!-- 7. Business Mastery Campus -->
-            <div
-                class="bg-[#111]/80 p-6 rounded-xl border border-matrix-green/30 hover:border-matrix-green transition-all hover:-translate-y-2 group">
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">💼</div>
-                <h3 class="text-lg font-bold mb-2 text-matrix-green" data-i18n="campus7.title">دورة إتقان
-                    الأعمال
-                </h3>
-                <p class="text-gray-400 text-sm mb-2" data-i18n="campus7.subtitle">توسيع وإدارة عملك</p>
-                <ul class="text-gray-300 text-xs space-y-1">
-                    <li data-i18n="campus7.point1">• استراتيجيات تحسين الضرائب</li>
-                    <li data-i18n="campus7.point2">• التوظيف وإدارة الفريق</li>
-                    <li data-i18n="campus7.point3">• إعداد الهيكل المؤسسي</li>
-                    <li data-i18n="campus7.point4">• LLC والولايات القضائية المواتية</li>
-                    <li data-i18n="campus7.point5">• عمليات الأعمال المتقدمة</li>
-                </ul>
-            </div>
-
-            <!-- 8. Fitness Campus -->
-            <div
-                class="bg-[#111]/80 p-6 rounded-xl border border-matrix-green/30 hover:border-matrix-green transition-all hover:-translate-y-2 group">
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">💪</div>
-                <h3 class="text-lg font-bold mb-2 text-matrix-green" data-i18n="campus8.title">دورة اللياقة
-                    البدنية
-                </h3>
-                <p class="text-gray-400 text-sm mb-2" data-i18n="campus8.subtitle">الصحة الجسدية والانضباط</p>
-                <ul class="text-gray-300 text-xs space-y-1">
-                    <li data-i18n="campus8.point1">• روتينات التدريب اليومية</li>
-                    <li data-i18n="campus8.point2">• التغذية وخطط الوجبات</li>
-                    <li data-i18n="campus8.point3">• تقنيات القرصنة البيولوجية</li>
-                    <li data-i18n="campus8.point4">• المكملات وأسلوب الحياة</li>
-                    <li data-i18n="campus8.point5">• تعزيز الطاقة والتستوستيرون</li>
-                </ul>
-            </div>
-
-            <!-- 9. Client Acquisition Campus -->
-            <div
-                class="bg-[#111]/80 p-6 rounded-xl border border-matrix-green/30 hover:border-matrix-green transition-all hover:-translate-y-2 group">
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🎯</div>
-                <h3 class="text-lg font-bold mb-2 text-matrix-green" data-i18n="campus9.title">دورة اكتساب
-                    العملاء
-                </h3>
-                <p class="text-gray-400 text-sm mb-2" data-i18n="campus9.subtitle">المبيعات والتوظيف</p>
-                <ul class="text-gray-300 text-xs space-y-1">
-                    <li data-i18n="campus9.point1">• استراتيجيات البريد الإلكتروني البارد</li>
-                    <li data-i18n="campus9.point2">• تقنيات المكالمات الباردة</li>
-                    <li data-i18n="campus9.point3">• إتمام الصفقات بفعالية</li>
-                    <li data-i18n="campus9.point4">• طرق البحث عن العملاء</li>
-                    <li data-i18n="campus9.point5">• مهارات مبيعات العمل الحر</li>
-                </ul>
+    <!-- Reviews Section -->
+    <section class="py-8 sm:py-12 px-4 max-w-6xl mx-auto relative z-10">
+        <div class="text-center mb-6">
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-matrix-green mb-3 text-glow" data-i18n="reviews.title">
+                ⭐ تقييمات العملاء
+            </h2>
+            <div class="flex items-center justify-center gap-2">
+                <div class="flex gap-1" id="average-stars">
+                    <span class="text-yellow-400 text-xl">★</span>
+                    <span class="text-yellow-400 text-xl">★</span>
+                    <span class="text-yellow-400 text-xl">★</span>
+                    <span class="text-yellow-400 text-xl">★</span>
+                    <span class="text-yellow-400 text-xl">★</span>
+                </div>
+                <span class="text-gray-300 text-base">(<span id="total-reviews">0</span> <span data-i18n="reviews.reviews">تقييم</span>)</span>
             </div>
         </div>
 
-        <!-- Recommendation Section -->
-        <div class="mt-12 bg-matrix-green/10 border border-matrix-green/30 rounded-xl p-6">
-            <h3 class="text-2xl font-bold text-matrix-green mb-4 text-center" data-i18n="recommend.title">💡 بأي
-                دورة يجب أن تبدأ؟</h3>
-            <div class="grid md:grid-cols-2 gap-4 text-sm">
-                <div class="bg-black/40 p-4 rounded-lg">
-                    <p class="text-matrix-green font-bold mb-2" data-i18n="recommend.free.title">🆓 بدون مال
-                        ($0):
-                    </p>
-                    <p class="text-gray-300" data-i18n="recommend.free.desc">ابدأ بـ كتابة الإعلانات أو إنشاء
-                        المحتوى</p>
-                    <p class="text-gray-400 text-xs mt-1" data-i18n="recommend.free.note">يتطلب وقتاً، تكلفة بدء
-                        منخفضة</p>
+        <!-- Add Review Form -->
+        <div class="max-w-2xl mx-auto mb-8 bg-[#111]/80 rounded-xl border border-matrix-green/30 p-4">
+            <h3 class="text-lg font-bold text-matrix-green mb-3 text-center" data-i18n="reviews.addReview">أضف تقييمك</h3>
+            <form id="review-form" class="space-y-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.yourName">اسمك:</label>
+                        <input type="text" id="reviewer-name" required
+                            class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-matrix-green focus:outline-none"
+                            data-i18n-placeholder="reviews.namePlaceholder"
+                            placeholder="أدخل اسمك">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.platform">من أين عرفت عنا؟</label>
+                        <select id="platform" required
+                            class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-matrix-green focus:outline-none">
+                            <option value="" data-i18n="reviews.selectPlatform">اختر المنصة</option>
+                            <option value="Instagram">📸 Instagram</option>
+                            <option value="Facebook">👥 Facebook</option>
+                            <option value="Twitter">🐦 Twitter/X</option>
+                            <option value="TikTok">🎵 TikTok</option>
+                            <option value="WhatsApp">💬 WhatsApp</option>
+                            <option value="Friend" data-i18n="reviews.friend">👤 صديق</option>
+                            <option value="Other" data-i18n="reviews.other">🌐 أخرى</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="bg-black/40 p-4 rounded-lg">
-                    <p class="text-matrix-green font-bold mb-2" data-i18n="recommend.paid.title">💰 بعض المال
-                        ($500+):</p>
-                    <p class="text-gray-300" data-i18n="recommend.paid.desc">ابدأ بـ التجارة الإلكترونية أو
-                        العملات
-                        الرقمية</p>
-                    <p class="text-gray-400 text-xs mt-1" data-i18n="recommend.paid.note">يتطلب رأس مال لكسب
-                        المال
-                    </p>
+                
+                <div>
+                    <label class="block text-gray-300 mb-2 text-sm text-center font-semibold" data-i18n="reviews.rating">التقييم:</label>
+                    <p class="text-center text-gray-400 text-xs mb-3" data-i18n="reviews.clickStars">اضغط على النجوم لاختيار تقييمك</p>
+                    <div class="flex gap-2 justify-center" id="star-rating">
+                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="1" title="سيء">★</span>
+                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="2" title="مقبول">★</span>
+                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="3" title="جيد">★</span>
+                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="4" title="ممتاز">★</span>
+                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="5" title="رائع">★</span>
+                    </div>
+                    <p class="text-center text-matrix-green text-sm mt-2 font-semibold" id="rating-text" style="min-height: 20px;"></p>
+                    <input type="hidden" id="rating-value" required>
+                </div>
+
+                <div>
+                    <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.comment">تعليقك (اختياري):</label>
+                    <textarea id="review-comment" rows="2"
+                        class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-matrix-green focus:outline-none resize-none"
+                        data-i18n-placeholder="reviews.commentPlaceholder"
+                        placeholder="شارك تجربتك معنا..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.image">أضف صورة (اختياري):</label>
+                    <div class="flex items-center gap-3">
+                        <label for="review-image" 
+                            class="cursor-pointer bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-300 hover:border-matrix-green transition-all flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            <span data-i18n="reviews.chooseImage">اختر صورة</span>
+                        </label>
+                        <input type="file" id="review-image" accept="image/jpeg,image/jpg,image/png,image/webp" class="hidden">
+                        <span id="image-name" class="text-gray-400 text-xs"></span>
+                    </div>
+                    <div id="image-preview" class="mt-2 hidden">
+                        <img id="preview-img" class="max-w-full h-24 rounded-lg border border-matrix-green/30">
+                        <button type="button" id="remove-image" class="mt-1 text-red-400 text-xs hover:text-red-300">
+                            ✕ <span data-i18n="reviews.removeImage">إزالة الصورة</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-matrix-green text-black font-bold py-2 rounded-lg hover:bg-green-400 transition-all transform hover:scale-105 text-sm"
+                    data-i18n="reviews.submit">
+                    إرسال التقييم
+                </button>
+            </form>
+        </div>
+
+        <!-- Reviews Display -->
+        <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <!-- Reviews will be added here dynamically -->
+        </div>
+        
+        <!-- Show More Button -->
+        <div class="text-center mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center" id="show-more-container" style="display: none;">
+            <button id="show-more-btn" 
+                class="bg-gray-800/50 text-matrix-green border border-matrix-green/50 font-semibold py-2 px-6 rounded-lg hover:bg-matrix-green hover:text-black transition-all text-sm"
+                data-i18n="reviews.showMore">
+                عرض المزيد
+            </button>
+        </div>
+        
+        <!-- Admin Controls (Hidden by default) -->
+        <div class="text-center mt-4" id="admin-controls" style="display: none;">
+            <div class="flex gap-3 justify-center flex-wrap">
+                <button onclick="toggleAdminMode()" 
+                    class="bg-red-900/30 text-red-400 border border-red-500/50 font-semibold py-1.5 px-4 rounded-lg hover:bg-red-900/50 transition-all text-xs">
+                    🗑️ <span data-i18n="reviews.clearAll">حذف جميع التقييمات</span>
+                </button>
+                <button onclick="startGiveaway()" 
+                    class="bg-matrix-green/30 text-matrix-green border border-matrix-green/50 font-semibold py-1.5 px-4 rounded-lg hover:bg-matrix-green/50 transition-all text-xs">
+                    🎁 <span data-i18n="reviews.giveaway">سحب على 4 فائزين</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Giveaway Modal - MUST BE HERE -->
+    <div id="giveaway-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 700px; background: #0a0a0a; border: 2px solid #39ff14; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeGiveawayModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #39ff14; font-size: 30px; cursor: pointer; line-height: 1;">&times;</button>
+            
+            <h2 style="text-align: center; color: #39ff14; font-size: 2rem; margin-bottom: 20px;">
+                🎉 سحب Giveaway 🎉
+            </h2>
+            
+            <div style="text-align: center; margin-bottom: 30px;">
+                <p style="color: #fff; font-size: 1.2rem; margin-bottom: 20px;">
+                    سيتم اختيار <span style="color: #39ff14; font-weight: bold;">4 فائزين</span> عشوائياً
+                </p>
+                <p style="color: #888; font-size: 0.9rem;">
+                    عدد التقييمات المؤهلة: <span id="eligible-count" style="color: #39ff14; font-weight: bold;">0</span>
+                </p>
+            </div>
+
+            <div id="spinning-wheel" style="display: none; text-align: center; margin: 40px 0;">
+                <div style="font-size: 4rem; animation: spin 1s linear infinite;">🎰</div>
+                <p style="color: #39ff14; font-size: 1.2rem; margin-top: 20px;">جاري السحب...</p>
+            </div>
+
+            <div id="winners-list" style="display: none;">
+                <h3 style="text-align: center; color: #39ff14; margin-bottom: 20px; font-size: 1.5rem;">
+                    🏆 الفائزون 🏆
+                </h3>
+                <div id="winners-container"></div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button onclick="copyWinners()" 
+                        style="background: #39ff14; color: #000; padding: 12px 30px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem;">
+                        📋 نسخ أسماء الفائزين
+                    </button>
                 </div>
             </div>
-            <h2 class="text-4xl md:text-5xl font-bold mb-8" data-i18n="footer.title">لا تضيع الفرصة</h2>
-            <p class="text-xl text-gray-400 mb-8" data-i18n="footer.subtitle">السعر سيرتفع قريباً. انضم للنخبة
-                الآن.
-            </p>
+
+            <div style="text-align: center; margin-top: 20px;" id="start-button-container">
+                <button onclick="runGiveaway()" 
+                    style="background: #39ff14; color: #000; padding: 15px 50px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.2rem; box-shadow: 0 5px 20px rgba(57, 255, 20, 0.3);">
+                    🎲 ابدأ السحب
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Guide Section -->
+    <section class="py-10 sm:py-20 px-3 sm:px-4 max-w-5xl mx-auto relative z-10">
+        
+        <!-- Main Title -->
+        <div class="text-center mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-matrix-green mb-4 text-glow" data-i18n="guide.title">
+                📚 دليل شامل لمحتويات The Real World
+            </h2>
+            <p class="text-lg sm:text-xl text-gray-300" data-i18n="guide.subtitle">ماذا ستحصل عليه عند الاشتراك؟</p>
+        </div>
+
+        <!-- Introduction -->
+        <div class="bg-gradient-to-r from-matrix-green/10 to-transparent border-r-4 border-matrix-green p-6 rounded-lg mb-10">
+            <p class="text-gray-300 leading-relaxed text-sm sm:text-base" data-i18n="guide.intro">عندما تشتري حساب <span class="text-matrix-green font-bold">The Real World</span>، فأنت لا تشتري مجرد كورس واحد، بل تدخل إلى منصة تعليمية متكاملة تحتوي على <span class="text-matrix-green font-bold">19 أسلوباً حديثاً</span> لتوليد الثروة. المنصة مقسمة إلى "كليات" (Campuses)، كل كلية تركز على مهارة معينة تدر الأموال.</p>
+        </div>
+
+        <!-- Campus Cards -->
+        <div class="space-y-6">
+
+            <!-- 1. E-Commerce Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">🛒</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus1.title">1. كلية التجارة الإلكترونية</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus1.subtitle">E-Commerce Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus1.desc">ستتعلم كيفية بيع المنتجات عبر الإنترنت دون أن تلمسها بيدك (الدروبشيبينغ). يعلمك الخبراء كيفية إيجاد "المنتجات الرابحة"، وبناء متجر احترافي، وتسويق هذه المنتجات باستخدام الإعلانات المدفوعة (TikTok Ads) أو الزيارات المجانية (Organic Viral Traffic).</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus1.forWho">للأشخاص الذين يملكون بعض رأس المال للمخاطرة أو لديهم قدرة عالية على صناعة فيديوهات فيرال.</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus1.tip">إذا كانت ميزانيتك محدودة (أقل من 500-1000$)، ركز على استراتيجية "TikTok Organic" لأنها لا تتطلب دفع أموال للإعلانات.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Copywriting Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">✍️</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus2.title">2. كلية الكتابة الإعلانية</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus2.subtitle">Copywriting Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus2.desc">فن بيع الكلام. ستتعلم كيف تكتب نصوصاً تبيع المنتجات، وكيف تكتب رسائل بريد إلكتروني تجعل الناس يشترون، وكيف تصيغ محتوى صفحات الهبوط. الأهم من ذلك، يعلمونك كيفية العثور على عملاء وشركات لتدفع لك مقابل كتابة هذه النصوص لهم.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus2.forWho">للمبتدئين الذين يملكون 0 دولار كرأس مال، ولكن لغتهم الإنجليزية قوية جداً.</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus2.tip">هذا هو أفضل مكان للبدء إذا كنت "مفلساً" ولكنك تجيد الإنجليزية. السر هنا ليس في "تعلم الكتابة" فقط، بل في تطبيق دروس "جلب العملاء".</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. AI & Content Creation Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">🤖</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus3.title">3. كلية الذكاء الاصطناعي وصناعة المحتوى</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus3.subtitle">AI & Content Creation Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus3.desc">هذا هو الكورس الأكثر طلباً حالياً. ينقسم إلى قسمين: <strong class="text-white">صناعة المحتوى</strong> (تعلم تحرير الفيديو والتصميم وكيفية جعل الفيديوهات تنتشر فيروسياً)، و<strong class="text-white">أتمتة الذكاء الاصطناعي</strong> (كيفية استخدام أدوات AI لبناء أنظمة للشركات - تخصص جديد ومربح جداً).</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus3.forWho">للمبدعين، ولمن يريد استغلال طفرة الذكاء الاصطناعي الحالية. مناسب جداً لمن لا يملك رأس مال كبير.</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus3.tip">سوق "وكالات أتمتة الذكاء الاصطناعي" (AAA) ينفجر حالياً. إذا كنت ذكياً تقنياً، توجه مباشرة لهذا القسم!</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Content Creation Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">🎬</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus4.title">4. كلية صناعة المحتوى</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus4.subtitle">Content Creation Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus4.desc">كيفية إنتاج وتحرير فيديوهات قصيرة (Shorts/Reels) تنتشر بسرعة البرق (Viral). ستتعلم المونتاج، التصميم، وكيفية خطف انتباه المشاهد في أول 3 ثوانٍ.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus4.forWho">للمبدعين، ولمن يحبون العمل على برامج المونتاج. هذه المهارة مطلوبة جداً سواء لعملك الخاص أو للعمل مع مشاهير السوشيال ميديا.</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus4.tip">الطلب على "محرري الفيديو" (Video Editors) هائل. يمكنك دمج هذه المهارة مع الذكاء الاصطناعي لإنتاج فيديوهات بجودة عالية في وقت قياسي.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Crypto Trading Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">📉</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus5.title">5. كلية تداول الكريبتو</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus5.subtitle">Crypto Trading Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus5.desc">المضاربة اليومية السريعة. كيف تقرأ الرسوم البيانية (التحليل الفني)، وكيف تربح من صعود وهبوط العملات الرقمية بشكل يومي.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus5.forWho">للأشخاص الذين يملكون أعصاباً حديدية ومالاً فائضاً للمخاطرة. هذا ليس عملاً، بل هو مهارة قنص الفرص.</p>
+                    </div>
+                    <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                        <p class="text-red-400 text-sm"><span class="font-bold" data-i18n="campus.warning">⚠️ تحذير:</span> <span data-i18n="campus5.warning">التداول اليومي عالي المخاطرة. لا تدخل هنا بمال تحتاجه لدفع إيجارك. ابدأ بمبالغ صغيرة جداً حتى تتقن الاستراتيجية.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Crypto Investing Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">₿</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus6.title">6. كلية الاستثمار في الكريبتو</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus6.subtitle">Crypto Investing Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus6.desc">كيف تكتشف العملات والمشاريع القوية قبل أن يرتفع سعرها (الاستثمار طويل الأمد). ستتعلم الفرق بين المشاريع الحقيقية والمشاريع الوهمية (Scams).</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus6.forWho">لمن لديه رأس مال ويريد تجميده لفترة (6 أشهر - سنة) ليحصل على عوائد ضخمة لاحقاً.</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus6.tip">هذه الكلية تعلمك الصبر. الشراء الصحيح والاحتفاظ (HODL) هو السر هنا، بعيداً عن توتر المضاربة اليومية.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. DeFi Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">🌐</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus7.title">7. كلية التمويل اللامركزي</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus7.subtitle">DeFi Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus7.desc">الجانب التقني المتقدم للكريبتو. كيف تستخدم منصات التبادل اللامركزي (DEXs) لتحقيق دخل سلبي من عملاتك، وما يعرف بـ "زراعة العائد" (Yield Farming).</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus7.forWho">للمستثمرين المتقدمين في الكريبتو. لا تدخل هنا إذا كنت لا تزال مبتدئاً في فهم البلوكتشين.</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus7.tip">هذا هو المستوى التالي بعد "الاستثمار". يمكنك تحقيق عوائد سنوية (APY) أعلى بكثير من البنوك التقليدية إذا تعلمت الاستراتيجيات هنا.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Stocks Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">📈</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus8.title">8. كلية الأسهم</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus8.subtitle">Stocks Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus8.desc">تداول الأسهم في الأسواق العالمية والخيارات (Options). يركزون على "التداول المتأرجح" (Swing Trading) الذي لا يتطلب الجلوس أمام الشاشة طوال اليوم.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus8.forWho">لمن يفضل الأسواق المنظمة والأكثر استقراراً مقارنة بالكريبتو، ولديه رأس مال مبدئي للاستثمار ($2000+).</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus8.tip">إذا كان لديك وظيفة، فهذا أفضل خيار لك لأن استراتيجية Swing Trading تتيح لك التداول دون التأثير على وقت عملك.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. Freelancing Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">💼</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus9.title">9. كلية العمل الحر</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus9.subtitle">Freelancing Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus9.desc">كيف تحول أي مهارة تمتلكها (تصميم، ترجمة، برمجة) إلى "بيزنس". يعلمك كيف ترفع أسعارك، وكيف تتفاوض، وكيف تجد عملاء خارج منصات العمل الحر الرخيصة.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus9.forWho">لأي شخص يريد الحصول على أول 1000$ له عبر الإنترنت بسرعة باستخدام مهاراته الحالية.</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus9.tip">استخدم هذه الكلية كـ "جسر". ابدأ هنا لتجمع رأس المال بسرعة، ثم استثمره لاحقاً في التجارة الإلكترونية أو الأسهم.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. Client Acquisition Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">🤝</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus10.title">10. كلية اكتساب العملاء</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus10.subtitle">Client Acquisition Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus10.desc">فن البيع والمراسلة الباردة. كيف تجد عملاء (Leads)، كيف تراسلهم، وكيف تقنعهم بدفع المال لك مقابل خدماتك.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus10.forWho">هذه "مهارة مساندة" ضرورية لكل من يعمل في التسويق أو العمل الحر. بدون عملاء، لا يوجد مال.</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus10.tip">ادرس هذه الكلية بالتوازي مع أي مهارة أخرى. فمهما كنت بارعاً في التصميم أو البرمجة، لن تربح شيئاً إذا لم تكن تعرف كيف "تبيع" نفسك.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. Affiliate Marketing Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">📢</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus11.title">11. كلية التسويق بالعمولة</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus11.subtitle">Affiliate Marketing Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus11.desc">كيفية تسويق منتجات الآخرين (بما في ذلك عضوية The Real World) مقابل عمولة. يركزون بقوة على استراتيجيات الفيديوهات القصيرة (TikTok/Reels).</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus11.forWho">للمبدعين في صناعة المحتوى الفيروسي (Viral Content) والذين لا يملكون منتجاً خاصاً بهم لبيعه.</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus11.tip">المنافسة هنا شرسة. لكي تنجح، يجب أن تكون مبدعاً جداً وتنتج كميات كبيرة من المحتوى يومياً.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12. Business Mastery Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">👔</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus12.title">12. كلية إدارة الأعمال</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus12.subtitle">Business Mastery Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus12.desc">كيف تدير أموالك، الضرائب، التوظيف، وكيف توسع شركتك. هذه دروس متقدمة في الإدارة المالية والهيكلة القانونية.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus12.forWho">للمستوى المتقدم فقط. لمن بدأ بالفعل في جني المال ويريد الانتقال من "مستقل" إلى "رجل أعمال".</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus12.tip">لا تضيع وقتك هنا إذا لم تكن قد كسبت أول دولار لك بعد. عد إليها لاحقاً عندما تحتاج لتوظيف فريق عمل.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 13. Fitness Campus -->
+            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+                <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
+                    <span class="text-4xl">💪</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus13.title">13. كلية اللياقة البدنية</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="campus13.subtitle">Fitness Campus</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus13.desc">نظام تدريب وتغذية مصمم خصيصاً لرواد الأعمال. الفكرة هي الحصول على أقصى طاقة جسدية وذهنية بأقل وقت ممكن في الجيم.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus13.forWho">لكل مشترك. "العقل السليم في الجسم السليم".</p>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus13.tip">لا تتجاهل هذا القسم. الانضباط في الجسد ينعكس مباشرة على انضباطك في المال والعمل.</span></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Golden Tips Section -->
+        <div class="mt-12 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-2xl p-6">
+            <h3 class="text-2xl font-bold text-yellow-400 mb-6 text-center" data-i18n="tips.title">⭐ نصائح ذهبية للمشترك الجديد</h3>
+            <div class="space-y-4">
+                <div class="bg-black/40 p-4 rounded-lg">
+                    <p class="text-white font-bold mb-2" data-i18n="tips.tip1.title">🚫 لا تكن "سائحاً"</p>
+                    <p class="text-gray-300 text-sm" data-i18n="tips.tip1.desc">أكبر خطأ يقع فيه المشتركون هو التنقل بين الكليات (أسبوع تجارة إلكترونية، وأسبوع كريبتو..). هذا يضمن فشلك. اختر مجالاً واحداً فقط والتزم به لمدة 3 أشهر على الأقل.</p>
+                </div>
+                <div class="bg-black/40 p-4 rounded-lg">
+                    <p class="text-white font-bold mb-2" data-i18n="tips.tip2.title">⚖️ حدد موقفك (المال مقابل الوقت)</p>
+                    <div class="grid md:grid-cols-2 gap-3 mt-2">
+                        <div class="bg-matrix-green/10 p-3 rounded">
+                            <p class="text-matrix-green font-semibold text-sm" data-i18n="tips.tip2.option1.title">لديك وقت ولا تملك مالاً؟</p>
+                            <p class="text-gray-300 text-xs" data-i18n="tips.tip2.option1.desc">اختر: الكتابة الإعلانية، العمل الحر، أو صناعة المحتوى</p>
+                        </div>
+                        <div class="bg-matrix-green/10 p-3 rounded">
+                            <p class="text-matrix-green font-semibold text-sm" data-i18n="tips.tip2.option2.title">لديك مال ولا تملك وقتاً؟</p>
+                            <p class="text-gray-300 text-xs" data-i18n="tips.tip2.option2.desc">اختر: التجارة الإلكترونية أو الاستثمار في الكريبتو/الأسهم</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-black/40 p-4 rounded-lg">
+                    <p class="text-white font-bold mb-2" data-i18n="tips.tip3.title">💪 تجاوز الشهر الأول</p>
+                    <p class="text-gray-300 text-sm" data-i18n="tips.tip3.desc">الشهر الأول هو الأصعب، ستشعر بضغط المعلومات. لا تستسلم. النتائج الحقيقية تظهر غالباً في الشهر الثاني أو الثالث من العمل الجاد.</p>
+                </div>
+            </div>
+            <div class="mt-6 text-center bg-matrix-green/20 p-4 rounded-lg">
+                <p class="text-matrix-green font-bold" data-i18n="tips.final">نحن نوفر لك "المفتاح" للدخول إلى هذا العالم، لكن "الجهد" يجب أن يأتي من طرفك. بالتوفيق في رحلتك نحو الثراء! 🚀</p>
+            </div>
+        </div>
+
+        <!-- Final CTA Section -->
+        <div class="mt-12 text-center">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-matrix-green text-glow" data-i18n="footer.title">لا تضيع الفرصة</h2>
+            <p class="text-lg sm:text-xl text-gray-400 mb-8" data-i18n="footer.subtitle">السعر سيرتفع قريباً. انضم للنخبة الآن.</p>
             <a href="https://wa.me/213782125821"
-                class="bg-matrix-green text-black font-bold text-2xl py-4 px-16 rounded-full hover:bg-green-400 transition-all transform hover:scale-105 matrix-glow shadow-lg inline-block"
+                class="bg-matrix-green text-black font-bold text-xl sm:text-2xl py-4 px-12 sm:px-16 rounded-full hover:bg-green-400 transition-all transform hover:scale-105 matrix-glow shadow-lg inline-block cta-pulse"
                 data-i18n="footer.cta">
-                ابدأ رحلتك الآن
+                🚀 ابدأ رحلتك الآن
             </a>
         </div>
     </section>
@@ -387,23 +1137,17 @@
     <div id="baridimob-modal" class="modal">
         <div class="modal-content crypto-modal">
             <span class="close-btn baridimob-close">&times;</span>
-            <h2>الدفع عبر BaridiMob</h2>
+            <h2 data-i18n="modal.baridimob.title">الدفع عبر BaridiMob</h2>
             <div class="crypto-product-info">
-                <p><strong><span data-i18n="modal.product">المنتج:</span></strong> <span id="baridimob-product-name">The
-                        Real World Account - Veteran
-                        Plan</span></p>
-                <p><strong><span data-i18n="modal.price">السعر:</span></strong> <span
-                        id="baridimob-price-dzd">3750</span> د.ج</p>
-                <p class="crypto-price-usd"><strong>المبلغ
-                        بالدولار:</strong> <span id="baridimob-price-usd">15</span> USDT</p>
+                <p><strong data-i18n="modal.product">المنتج:</strong> <span id="baridimob-product-name">The Real World Account - Veteran Plan</span></p>
+                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span id="baridimob-price-usd">15</span> USDT</p>
             </div>
 
             <div class="crypto-wallet-info">
-                <h3><span data-i18n="modal.paymentInfo">معلومات الدفع</span></h3>
+                <h3 data-i18n="modal.paymentInfo">معلومات الدفع</h3>
                 <div class="wallet-address-box">
                     <div style="text-align: center; width: 100%;">
-                        <p style="margin-bottom: 10px; color: var(--text-secondary);"><span
-                                data-i18n="modal.baridimob.ripLabel">RIP BaridiMob:</span></p>
+                        <p style="margin-bottom: 10px; color: var(--text-secondary);" data-i18n="modal.baridimob.rip">RIP BaridiMob:</p>
                         <code id="baridimob-rip" style="font-size: 1.2rem;">00799999002787548473</code>
                     </div>
                     <button class="copy-btn" onclick="copyBaridiMobRIP()">
@@ -418,21 +1162,18 @@
             </div>
 
             <div class="crypto-instructions">
-                <h3><span data-i18n="modal.instructions">تعليمات الدفع:</span></h3>
+                <h3 data-i18n="modal.instructions">تعليمات الدفع:</h3>
                 <ol>
                     <li data-i18n="modal.baridimob.step1">افتح تطبيق BaridiMob</li>
-                    <li data-i18n="modal.baridimob.step2">اختر "تحويل الأموال" أو "Virement" </li>
+                    <li data-i18n="modal.baridimob.step2">اختر "تحويل الأموال" أو "Virement"</li>
                     <li data-i18n="modal.baridimob.step3">اختر "RIP" كطريقة التحويل</li>
-                    <li data-i18n="modal.baridimob.step4">أدخل الـ RIP: <strong>00799999002787548473</strong>
-                    </li>
+                    <li data-i18n="modal.baridimob.step4">أدخل الـ RIP: <strong>00799999002787548473</strong></li>
                     <li data-i18n="modal.baridimob.step5">أدخل المبلغ المطلوب</li>
                     <li data-i18n="modal.baridimob.step6">أكمل عملية الدفع</li>
                     <li data-i18n="modal.baridimob.step7">احتفظ بإثبات الدفع</li>
                     <li data-i18n="modal.baridimob.step8">اضغط "تم الدفع" للتواصل معنا</li>
                 </ol>
-                <p class="warning-note"><span data-i18n="modal.baridimob.warning">⚠️ تأكد من إدخال الـ RIP بشكل
-                        صحيح
-                        !</span></p>
+                <p class="warning-note" data-i18n="modal.baridimob.warning">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!</p>
             </div>
 
             <button class="confirm-payment-btn" onclick="confirmBaridiMobPayment()">
@@ -449,84 +1190,285 @@
     <div id="crypto-modal" class="modal">
         <div class="modal-content crypto-modal">
             <span class="close-btn crypto-close">&times;</span>
-            <h2>الدفع بالعملات الرقمية</h2>
+            <h2 data-i18n="modal.crypto.title">الدفع بالعملات الرقمية</h2>
             <div class="crypto-product-info">
-                <p><strong><span data-i18n="modal.product">المنتج:</span></strong> <span id="crypto-product-name">The
-                        Real World Account - Veteran Plan</span>
-                </p>
+                <p><strong data-i18n="modal.product">المنتج:</strong> <span id="crypto-product-name">The Real World Account - Veteran Plan</span></p>
+                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span id="crypto-price-usd">15</span> USDT</p>
+            </div>
 
-                <p><strong><span data-i18n="modal.price">السعر:</span></strong> <span id="crypto-price-dzd">3750</span>
-                    د.ج</p>
+            <div class="network-selector">
+                <h3 data-i18n="modal.crypto.selectNetwork">اختر الشبكة:</h3>
+                <div class="network-buttons">
+                    <button class="network-btn active" data-network="TRC20"
+                        data-address="TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9">
+                        <strong>TRC20</strong>
+                        <span data-i18n="modal.crypto.lowFeesTRC">رسوم منخفضة (~1 USDT)</span>
+                    </button>
+                    <button class="network-btn" data-network="BEP20"
+                        data-address="0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0">
+                        <strong>BEP20 (BSC)</strong>
+                        <span data-i18n="modal.crypto.lowFeesBEP">رسوم منخفضة (~0.5 USDT)</span>
+                    </button>
+                </div>
+            </div>
 
-                <p class="crypto-price-usd"><strong>المبلغ بالدولار:</strong> <span id="crypto-price-usd">15</span> USDT
-                </p>
+            <div class="crypto-wallet-info">
+                <h3><span data-i18n="modal.crypto.walletAddress">عنوان المحفظة</span> (<span id="selected-network">TRC20</span>)</h3>
+                <div class="wallet-address-box">
+                    <code id="wallet-address">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
+                    <button class="copy-btn" onclick="copyWalletAddress()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span data-i18n="modal.copy">نسخ</span>
+                    </button>
+                </div>
+                <div class="qr-code-container">
+                    <img id="qr-code" src="" alt="QR Code">
+                    <p class="qr-note" data-i18n="modal.crypto.scanQR">امسح الكود بتطبيق المحفظة</p>
+                </div>
+            </div>
 
+            <div class="crypto-instructions">
+                <h3 data-i18n="modal.instructions">تعليمات الدفع:</h3>
+                <ol>
+                    <li data-i18n="modal.crypto.step1">اختر الشبكة المناسبة (TRC20 أو BEP20)</li>
+                    <li data-i18n="modal.crypto.step2">انسخ عنوان المحفظة أو امسح QR Code</li>
+                    <li data-i18n="modal.crypto.step3">افتح تطبيق Binance أو أي محفظة USDT</li>
+                    <li data-i18n="modal.crypto.step4">تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)</li>
+                    <li data-i18n="modal.crypto.step5">أرسل المبلغ المطلوب</li>
+                    <li data-i18n="modal.crypto.step6">احتفظ بـ Transaction ID</li>
+                    <li data-i18n="modal.crypto.step7">اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+                <p class="warning-note" data-i18n="modal.crypto.warning">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!</p>
+            </div>
 
-                <div class="network-selector">
-                    <h3><span data-i18n="modal.crypto.chooseNetwork">اختر الشبكة:</span></h3>
-                    <div class="network-buttons">
-                        <button class="network-btn active" data-network="TRC20"
-                            data-address="TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9">
-                            <strong>TRC20</strong>
-                            <span data-i18n="modal.crypto.lowFeesTRC">رسوم منخفضة (~1 USDT)</span>
-                        </button>
-                        <button class="network-btn" data-network="BEP20"
-                            data-address="0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0">
-                            <strong>BEP20 (BSC)</strong>
-                            <span data-i18n="modal.crypto.lowFeesBEP">رسوم منخفضة (~0.5 USDT)</span>
+            <button class="confirm-payment-btn" onclick="confirmCryptoPayment()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                </svg>
+                <span data-i18n="modal.confirmButton">تم الدفع - تواصل معنا</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- RedotPay Modal -->
+    <div id="redotpay-modal" class="modal">
+        <div class="modal-content crypto-modal">
+            <span class="close-btn redotpay-close">&times;</span>
+            <h2 data-i18n="modal.redotpay.title">الدفع عبر RedotPay</h2>
+            <div class="crypto-product-info">
+                <p><strong data-i18n="modal.product">المنتج:</strong> <span id="redotpay-product-name">The Real World Account - Veteran Plan</span></p>
+                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span id="redotpay-price-usd">15</span> USD</p>
+            </div>
+
+            <div class="crypto-wallet-info">
+                <h3 data-i18n="modal.paymentInfo">معلومات الدفع</h3>
+                <div class="wallet-address-box">
+                    <div style="text-align: center; width: 100%;">
+                        <p style="margin-bottom: 10px; color: var(--text-secondary);" data-i18n="modal.redotpay.idLabel">RedotPay ID:</p>
+                        <code id="redotpay-id" style="font-size: 1.3rem;">1117632168</code>
+                    </div>
+                    <button class="copy-btn" onclick="copyRedotPayID()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span data-i18n="modal.copy">نسخ</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="crypto-instructions">
+                <h3 data-i18n="modal.instructions">تعليمات الدفع:</h3>
+                <ol>
+                    <li data-i18n="modal.redotpay.step1">افتح تطبيق RedotPay</li>
+                    <li data-i18n="modal.redotpay.step2">اختر "Send" أو "إرسال"</li>
+                    <li data-i18n="modal.redotpay.step3">أدخل RedotPay ID: <strong>1117632168</strong></li>
+                    <li data-i18n="modal.redotpay.step4">أدخل المبلغ بالدولار</li>
+                    <li data-i18n="modal.redotpay.step5">أكمل عملية الإرسال</li>
+                    <li data-i18n="modal.redotpay.step6">احتفظ بإثبات التحويل</li>
+                    <li data-i18n="modal.redotpay.step7">اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+                <p class="warning-note" data-i18n="modal.redotpay.warning">⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!</p>
+            </div>
+
+            <button class="confirm-payment-btn" onclick="confirmRedotPayPayment()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                </svg>
+                <span data-i18n="modal.confirmButton">تم الدفع - تواصل معنا</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Social Buttons -->
+    <div class="floating-social-buttons">
+        <!-- WhatsApp Button -->
+        <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن The Real World Account" 
+           class="social-float whatsapp-float" 
+           target="_blank"
+           aria-label="Contact us on WhatsApp">
+            <span class="social-tooltip" data-i18n="whatsapp.tooltip">تحدث معنا الآن!</span>
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z"/>
+            </svg>
+        </a>
+
+        <!-- Instagram Button -->
+        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" 
+           class="social-float instagram-float" 
+           target="_blank"
+           aria-label="Follow us on Instagram">
+            <span class="social-tooltip" data-i18n="instagram.tooltip">تابعنا على Instagram!</span>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- Image Modal for Reviews -->
+    <div id="image-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 0; background: transparent; border: none;">
+            <span class="close-btn" onclick="closeImageModal()" style="position: absolute; top: 20px; right: 20px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; background: rgba(0,0,0,0.7); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</span>
+            <img id="modal-image" src="" alt="Review Image" style="max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 10px; box-shadow: 0 0 50px rgba(57, 255, 20, 0.5);">
+        </div>
+    </div>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init({
+                publicKey: "lNwV3VedQul6wNWTq",
+            });
+        })();
+    </script>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw",
+            authDomain: "the-real-world-review.firebaseapp.com",
+            projectId: "the-real-world-review",
+            storageBucket: "the-real-world-review.firebasestorage.app",
+            messagingSenderId: "324349726142",
+            appId: "1:324349726142:web:eff2cde07b569ed0a3bdef",
+            measurementId: "G-5FPYPJDSF4"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Make Firebase available globally
+        window.db = db;
+        window.firebaseModules = { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy };
+        
+        // Trigger reviews loading after Firebase is ready
+        window.dispatchEvent(new Event('firebaseReady'));
+    </script>
+
+    <!-- Giveaway Modal -->
+    <div id="giveaway-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px; background: #0a0a0a; border: 2px solid #39ff14; border-radius: 20px; padding: 40px;">
+            <span class="close-btn" onclick="closeGiveawayModal()" style="color: #39ff14; font-size: 30px;">&times;</span>
+            
+            <h2 style="text-align: center; color: #39ff14; font-size: 2rem; margin-bottom: 20px;">
+                🎉 سحب Giveaway 🎉
+            </h2>
+            
+            <div id="giveaway-content">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <p style="color: #fff; font-size: 1.2rem; margin-bottom: 20px;">
+                        سيتم اختيار <span style="color: #39ff14; font-weight: bold;">4 فائزين</span> عشوائياً
+                    </p>
+                    <p style="color: #888; font-size: 0.9rem;">
+                        عدد التقييمات المؤهلة: <span id="eligible-count" style="color: #39ff14; font-weight: bold;">0</span>
+                    </p>
+                </div>
+
+                <div id="spinning-wheel" style="display: none; text-align: center; margin: 40px 0;">
+                    <div style="font-size: 4rem; animation: spin 1s linear infinite;">🎰</div>
+                    <p style="color: #39ff14; font-size: 1.2rem; margin-top: 20px;">جاري السحب...</p>
+                </div>
+
+                <div id="winners-list" style="display: none;">
+                    <h3 style="text-align: center; color: #39ff14; margin-bottom: 20px; font-size: 1.5rem;">
+                        🏆 الفائزون 🏆
+                    </h3>
+                    <div id="winners-container"></div>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button onclick="copyWinners()" 
+                            style="background: #39ff14; color: #000; padding: 12px 30px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem;">
+                            📋 نسخ أسماء الفائزين
                         </button>
                     </div>
                 </div>
 
-                <div class="crypto-wallet-info">
-                    <h3><span data-i18n="modal.crypto.walletAddress">عنوان المحفظة</span> (<span
-                            id="selected-network">TRC20</span>)</h3>
-                    <div class="wallet-address-box">
-                        <code id="wallet-address">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
-                        <button class="copy-btn" onclick="copyWalletAddress()">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                            <span data-i18n="modal.copy">نسخ</span>
-                        </button>
-                    </div>
-                    <div class="qr-code-container">
-                        <img id="qr-code" src="" alt="QR Code">
-                        <p class="qr-note" data-i18n="modal.crypto.qrNote">امسح الكود بتطبيق المحفظة</p>
-                    </div>
+                <div style="text-align: center; margin-top: 20px;" id="start-button-container">
+                    <button onclick="runGiveaway()" 
+                        style="background: #39ff14; color: #000; padding: 15px 50px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.2rem; box-shadow: 0 5px 20px rgba(57, 255, 20, 0.3);">
+                        🎲 ابدأ السحب
+                    </button>
                 </div>
-
-                <div class="crypto-instructions">
-                    <h3><span data-i18n="modal.instructions">تعليمات الدفع:</span></h3>
-                    <ol>
-                        <li data-i18n="modal.crypto.step1">اختر الشبكة المناسبة (TRC20 أو BEP20)</li>
-                        <li data-i18n="modal.crypto.step2">انسخ عنوان المحفظة أو امسح QR Code</li>
-                        <li data-i18n="modal.crypto.step3">افتح تطبيق Binance أو أي محفظة USDT</li>
-                        <li data-i18n="modal.crypto.step4">تأكد من اختيار نفس الشبكة (<strong
-                                id="network-warning">TRC20</strong>)</li>
-                        <li data-i18n="modal.crypto.step5">أرسل المبلغ المطلوب</li>
-                        <li data-i18n="modal.crypto.step6">احتفظ بـ Transaction ID</li>
-                        <li data-i18n="modal.baridimob.step8">اضغط "تم الدفع" للتواصل معنا</li>
-                    </ol>
-                    <p class="warning-note"><span data-i18n="modal.crypto.warning">⚠️ تأكد من اختيار الشبكة
-                            الصحيحة وإلا
-                            ستفقد أموالك !</span></p>
-                </div>
-
-                <button class="confirm-payment-btn" onclick="confirmCryptoPayment()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
-                    </svg>
-                    <span data-i18n="modal.confirmButton">تم الدفع - تواصل معنا</span>
-                </button>
             </div>
         </div>
+    </div>
 
-        <script src="modal_functions.js"></script>
-        <script src="script.js"></script>
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .winner-card {
+            background: rgba(57, 255, 20, 0.1);
+            border: 2px solid #39ff14;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            animation: fadeInScale 0.5s ease;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .winner-number {
+            display: inline-block;
+            background: #39ff14;
+            color: #000;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+
+    <script src="modal_functions.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>

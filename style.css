@@ -20,9 +20,7 @@
 
 body {
     font-family: 'Tajawal', sans-serif;
-    background: linear-gradient(-45deg, #000000, #0a0a1a, #1a0a1a, #0a1a1a);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
+    background: #000000;
     color: var(--text-primary);
     line-height: 1.7;
     min-height: 100vh;
@@ -158,12 +156,18 @@ img {
 }
 
 .hero-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 40px;
     position: relative;
     z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero-text {
+    text-align: center;
 }
 
 .hero-text h1 {
@@ -172,12 +176,22 @@ img {
     font-weight: 800;
 }
 
+/* Smaller font for French to fit in one line */
+[lang="fr"] .hero-text h1 {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+}
+
+/* Smaller font for English to fit in one line */
+[lang="en"] .hero-text h1 {
+    font-size: clamp(2.2rem, 3.8vw, 3rem);
+}
+
 .animated-text {
     color: var(--accent);
     position: relative;
     display: inline-block;
     min-width: 280px;
-    text-align: right;
+    text-align: center;
     white-space: nowrap;
 }
 
@@ -186,6 +200,7 @@ img {
     position: absolute;
     right: -5px;
     animation: blink 0.7s infinite;
+    display: none; /* Hide the cursor */
 }
 
 @keyframes blink {
@@ -210,6 +225,7 @@ img {
 .hero-buttons {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 14px;
     margin-bottom: 30px;
 }
@@ -217,6 +233,7 @@ img {
 .trust-badges {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 18px;
 }
 
@@ -485,8 +502,9 @@ img {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    transform-style: preserve-3d;
-    transform: perspective(1000px);
+    transform-style: flat;
+    position: relative;
+    z-index: 1;
 }
 
 .product-image {
@@ -766,12 +784,18 @@ img {
     position: fixed;
     z-index: 1000;
     inset: 0;
-    background: rgba(9, 10, 20, 0.8);
+    background: rgba(9, 10, 20, 0.95);
+    backdrop-filter: blur(8px);
     align-items: center;
     justify-content: center;
     padding: 20px;
     opacity: 0;
     transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    display: none !important;
+    opacity: 0 !important;
 }
 
 .modal.show {
@@ -781,13 +805,60 @@ img {
 }
 
 .modal-content {
-    background: rgba(16, 19, 36, 0.95);
+    background: rgba(16, 19, 36, 0.98);
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    width: min(480px, 100%);
-    padding: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    width: min(600px, 95%);
+    padding: 32px;
     position: relative;
-    box-shadow: var(--shadow);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.review-modal-content {
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 28px;
+}
+
+.modal-title {
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.review-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.review-form input,
+.review-form select,
+.review-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(20, 24, 42, 0.8);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.review-form textarea {
+    resize: vertical;
+    min-height: 80px;
 }
 
 .close-btn {
@@ -1111,26 +1182,65 @@ img {
     }
 }
 
-/* Crypto Payment Button */
-.crypto-pay-btn {
-    margin-top: 10px;
-    background: rgba(15, 15, 35, 0.6);
-    color: var(--text-primary);
-    border: 2px solid rgba(255, 165, 0, 0.8);
-    padding: 14px;
-    border-radius: 50px;
-    font-weight: 700;
-    cursor: pointer;
+/* Payment Methods Row */
+.payment-methods-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0;
+    flex-wrap: wrap;
     position: relative;
-    box-shadow:
-        0 0 20px rgba(255, 165, 0, 0.6),
-        0 0 40px rgba(255, 165, 0, 0.4),
-        inset 0 0 20px rgba(255, 165, 0, 0.1);
-    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+/* Compact Payment Buttons */
+.payment-btn-compact {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1000;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.payment-btn-compact:hover {
+    transform: translateY(-2px);
+    cursor: pointer !important;
+}
+
+.payment-btn-compact:active {
+    transform: translateY(0);
+}
+
+.payment-btn-compact svg {
+    flex-shrink: 0;
+    pointer-events: none;
+}
+
+.payment-btn-compact span {
+    pointer-events: none;
+}
+
+/* Crypto Payment Button */
+.payment-btn-compact.crypto-pay-btn {
+    background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+    color: #000;
+    box-shadow: 0 3px 10px rgba(255, 165, 0, 0.3);
+}
+
+.payment-btn-compact.crypto-pay-btn:hover {
+    box-shadow: 0 5px 15px rgba(255, 165, 0, 0.5);
 }
 
 .crypto-pay-btn:hover {
@@ -1349,6 +1459,61 @@ img {
 }
 
 @media (max-width: 600px) {
+    .modal-content {
+        width: 95% !important;
+        max-width: 100% !important;
+        padding: 20px !important;
+        max-height: 90vh !important;
+    }
+    
+    .modal-content h2 {
+        font-size: 1.3rem !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .modal-content form {
+        gap: 12px !important;
+    }
+    
+    .modal-content input,
+    .modal-content select,
+    .modal-content textarea {
+        font-size: 16px !important; /* Prevents zoom on iOS */
+        padding: 12px !important;
+    }
+    
+    .modal-content label {
+        font-size: 0.9rem !important;
+    }
+    
+    #star-rating {
+        font-size: 24px !important;
+        gap: 6px !important;
+    }
+    
+    .close-btn {
+        font-size: 1.5rem !important;
+        top: 12px !important;
+        left: 12px !important;
+        padding: 4px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .btn.primary,
+    .btn.secondary {
+        padding: 14px 20px !important;
+        font-size: 1rem !important;
+        min-height: 48px !important; /* Better touch target */
+    }
+    
+    #image-preview img {
+        max-height: 120px !important;
+    }
+    
     .crypto-modal {
         max-height: 85vh;
     }
@@ -1417,25 +1582,14 @@ img {
 }
 
 /* RedotPay Button */
-.redotpay-btn {
-    margin-top: 10px;
-    background: rgba(15, 15, 35, 0.6);
-    color: var(--text-primary);
-    border: 2px solid rgba(76, 175, 80, 0.8);
-    padding: 14px;
-    border-radius: 50px;
-    font-weight: 700;
-    cursor: pointer;
-    position: relative;
-    box-shadow:
-        0 0 20px rgba(76, 175, 80, 0.6),
-        0 0 40px rgba(76, 175, 80, 0.4),
-        inset 0 0 20px rgba(76, 175, 80, 0.1);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+.payment-btn-compact.redotpay-btn {
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+}
+
+.payment-btn-compact.redotpay-btn:hover {
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.5);
 }
 
 .redotpay-btn:hover {
@@ -1448,25 +1602,14 @@ img {
 }
 
 /* BaridiMob Button */
-.baridimob-btn {
-    margin-top: 10px;
-    background: rgba(15, 15, 35, 0.6);
-    color: var(--text-primary);
-    border: 2px solid rgba(255, 193, 7, 0.8);
-    padding: 14px;
-    border-radius: 50px;
-    font-weight: 700;
-    cursor: pointer;
-    position: relative;
-    box-shadow:
-        0 0 20px rgba(255, 193, 7, 0.6),
-        0 0 40px rgba(255, 193, 7, 0.4),
-        inset 0 0 20px rgba(255, 193, 7, 0.1);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+.payment-btn-compact.baridimob-btn {
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
+}
+
+.payment-btn-compact.baridimob-btn:hover {
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.5);
 }
 
 .baridimob-btn:hover {
@@ -1705,4 +1848,103 @@ img {
         max-width: 150px !important;
         height: 100px !important;
     }
+}
+.star
+-rating {
+    display: flex;
+    gap: 8px;
+    font-size: 28px;
+    cursor: pointer;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.star-input {
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.star-input:hover {
+    transform: scale(1.1);
+}
+
+/* Image Upload Section */
+.image-upload-section {
+    margin: 10px 0;
+}
+
+.image-upload-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.image-upload-btn {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(20, 24, 42, 0.5);
+    transition: all 0.3s;
+    width: fit-content;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.image-upload-btn:hover {
+    border-color: var(--accent);
+    background: rgba(20, 24, 42, 0.7);
+}
+
+#review-image {
+    display: none;
+}
+
+.image-name {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.image-preview {
+    display: none;
+    margin-top: 8px;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.remove-image-btn {
+    margin-top: 6px;
+    padding: 5px 10px;
+    background: rgba(255, 59, 48, 0.2);
+    color: #ff3b30;
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+}
+
+.remove-image-btn:hover {
+    background: rgba(255, 59, 48, 0.3);
+}
+
+.image-note {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+.submit-review-btn {
+    padding: 12px;
+    font-size: 1rem;
+    margin-top: 6px;
+    width: 100%;
 }

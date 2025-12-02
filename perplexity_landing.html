@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perplexity AI Pro - محرك بحث ذكي بالذكاء الاصطناعي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(-45deg, #000814, #001d3d, #003566, #001233);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .perplexity-glow {
+            box-shadow: 0 0 10px #1FB6FF, 0 0 20px #1FB6FF;
+        }
+        .text-glow {
+            text-shadow: 0 0 5px #1FB6FF;
+        }
+        .cta-pulse {
+            animation: cta-pulse-animation 2s infinite;
+        }
+        @keyframes cta-pulse-animation {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 10px #1FB6FF, 0 0 20px #1FB6FF;
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px #1FB6FF, 0 0 40px #1FB6FF, 0 0 60px #1FB6FF;
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px #1FB6FF, 0 0 20px #1FB6FF;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <!-- Back to Home Button -->
+    <div class="absolute top-4 left-4 z-[100]">
+        <a href="index.html" class="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-full hover:bg-[#1FB6FF] hover:border-[#1FB6FF] transition-all">
+            <span data-i18n="nav.home">← الرئيسية</span>
+        </a>
+    </div>
+
+    <!-- Language Switcher -->
+    <div class="absolute top-4 right-4 z-[100] flex gap-2">
+        <button class="lang-btn active" data-lang="ar" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">العربية</button>
+        <button class="lang-btn" data-lang="en" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">EN</button>
+        <button class="lang-btn" data-lang="fr" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">FR</button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative z-10">
+        <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/perplexity-ai-icon.png" 
+             alt="Perplexity AI Pro" 
+             class="w-40 h-40 md:w-56 md:h-56 object-contain mb-8 animate-pulse"
+             style="filter: drop-shadow(0 0 20px #1FB6FF);">
+        
+        <h1 class="text-3xl sm:text-4xl md:text-6xl font-black mb-4 leading-tight text-[#1FB6FF] text-glow px-2" data-i18n="hero.title">
+            Perplexity AI Pro
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-gray-300 mb-4 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.subtitle">
+            محرك بحث ذكي مدعوم بالذكاء الاصطناعي
+        </p>
+        
+        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.price">
+            1200 د.ج للسنة الكاملة
+        </p>
+
+        <!-- Payment Methods Section -->
+        <div class="w-full max-w-4xl mx-auto mb-12 px-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-[#1FB6FF] mb-6" data-i18n="payment.title">طرق الدفع المتاحة</h2>
+
+            <div class="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-12">
+                <!-- RedotPay Button -->
+                <a href="javascript:void(0)" class="redotpay-btn flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer" data-product="Perplexity AI Pro" data-price="1200">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:shadow-[0_0_25px_rgba(220,38,38,0.8)] group-hover:scale-110 transition-all duration-300">
+                        <span class="text-white font-bold text-sm sm:text-lg">Redot</span>
+                    </div>
+                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">RedotPay</span>
+                </a>
+
+                <!-- USDT Button -->
+                <a href="javascript:void(0)" class="crypto-pay-btn flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer" data-product="Perplexity AI Pro" data-price="1200">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#1FB6FF] flex items-center justify-center shadow-[0_0_15px_rgba(31,182,255,0.5)] group-hover:shadow-[0_0_25px_rgba(31,182,255,0.8)] group-hover:scale-110 transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
+                            <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
+                            <path d="M12 12v8"></path>
+                        </svg>
+                    </div>
+                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">USDT</span>
+                </a>
+
+                <!-- BaridiMob Button -->
+                <a href="javascript:void(0)" class="baridimob-btn flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer" data-product="Perplexity AI Pro" data-price="1200">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.5)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                        </svg>
+                    </div>
+                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">BaridiMob</span>
+                </a>
+            </div>
+        </div>
+
+        <a href="https://wa.me/213782125821" 
+           class="bg-[#1FB6FF] text-white font-bold text-base sm:text-xl py-3 px-6 sm:px-8 rounded-full hover:bg-[#0D8ABC] transition-all transform hover:scale-105 perplexity-glow shadow-lg cta-pulse" data-i18n="cta.button">
+            اطلب الآن عبر WhatsApp
+        </a>
+    </section>
+
+    <!-- Description Section -->
+    <section class="py-12 px-4 max-w-6xl mx-auto relative z-10">
+        <!-- Main Title -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-5xl font-black text-[#1FB6FF] mb-4 text-glow">
+                🚀 Perplexity Pro (سنة كاملة) – المستقبل بين يديك الآن!
+            </h2>
+            <div class="flex flex-wrap justify-center gap-4 text-lg md:text-xl text-gray-300">
+                <span class="bg-[#1FB6FF]/20 px-4 py-2 rounded-full">✅ تفعيل فوري</span>
+                <span class="bg-[#1FB6FF]/20 px-4 py-2 rounded-full">🌐 بدون VPN</span>
+                <span class="bg-[#1FB6FF]/20 px-4 py-2 rounded-full">💳 بدون بطاقة بنكية</span>
+            </div>
+        </div>
+
+        <!-- Why This Subscription -->
+        <div class="bg-gradient-to-r from-[#1FB6FF]/10 to-transparent border-r-4 border-[#1FB6FF] p-6 rounded-lg mb-10">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#1FB6FF] mb-6">
+                🎯 لماذا هذا الاشتراك هو الأفضل لك؟
+            </h2>
+            <p class="text-gray-300 leading-relaxed text-base mb-6">
+                انسَ التعقيدات والقيود. نحن نقدم لك تجربة <strong>Perplexity Pro</strong> الأكمل والأسرع:
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-[#111]/50 p-4 rounded-xl">
+                    <h3 class="text-[#1FB6FF] font-bold mb-2">🌍 يعمل في كل مكان (Works Worldwide)</h3>
+                    <p class="text-gray-400 text-sm">لا توجد قيود جغرافية، استمتع بالوصول الكامل أينما كنت.</p>
+                </div>
+                
+                <div class="bg-[#111]/50 p-4 rounded-xl">
+                    <h3 class="text-[#1FB6FF] font-bold mb-2">⚡ تسليم فوري وتلقائي</h3>
+                    <p class="text-gray-400 text-sm">لا داعي للانتظار! سيصلك رابط التفعيل الذاتي (Self-activation link) في ثوانٍ بعد الدفع.</p>
+                </div>
+                
+                <div class="bg-[#111]/50 p-4 rounded-xl">
+                    <h3 class="text-[#1FB6FF] font-bold mb-2">🔓 بدون VPN</h3>
+                    <p class="text-gray-400 text-sm">اتصل مباشرة بالموقع واستفد من السرعة القصوى دون خطوات إضافية.</p>
+                </div>
+                
+                <div class="bg-[#111]/50 p-4 rounded-xl">
+                    <h3 class="text-[#1FB6FF] font-bold mb-2">💳 لا نحتاج بطاقتك</h3>
+                    <p class="text-gray-400 text-sm">التفعيل لا يتطلب إدخال أي معلومات بنكية أو فيزا كارد. خصوصيتك في أمان تام.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Features Section -->
+        <div class="bg-gradient-to-br from-[#1FB6FF]/10 to-transparent rounded-2xl border border-[#1FB6FF]/30 p-8 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#1FB6FF] mb-4 text-glow">
+                🔥 القوة التي ستمتلكها (Premium Perks)
+            </h2>
+            <p class="text-center text-gray-300 mb-10 text-base">
+                بمجرد التفعيل، ستفتح باباً على أحدث تقنيات الذكاء الاصطناعي في العالم:
+            </p>
+
+            <!-- Feature 1: Perplexity Labs -->
+            <div class="bg-[#111]/70 p-6 rounded-xl mb-6 border border-[#1FB6FF]/20">
+                <h3 class="text-2xl font-bold text-[#1FB6FF] mb-4">🆕 حصرياً: Perplexity Labs</h3>
+                <p class="text-gray-300 mb-4">حوّل أفكارك إلى واقع! يمكنك إنشاء:</p>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                    <li class="flex items-center gap-2 text-gray-300"><span class="text-[#1FB6FF]">📊</span> تقارير كاملة</li>
+                    <li class="flex items-center gap-2 text-gray-300"><span class="text-[#1FB6FF]">📈</span> جداول بيانات (Spreadsheets)</li>
+                    <li class="flex items-center gap-2 text-gray-300"><span class="text-[#1FB6FF]">🎛️</span> لوحات تحكم (Dashboards)</li>
+                    <li class="flex items-center gap-2 text-gray-300"><span class="text-[#1FB6FF]">🌐</span> تطبيقات ويب مصغرة (Mini Web Apps)</li>
+                </ul>
+                <p class="text-gray-400 text-sm italic">
+                    <strong>كيف؟</strong> سير عمل ذكي (AI Workflows) يستمر لعدة دقائق ليسلمك نتائج جاهزة ومتقنة.
+                </p>
+            </div>
+
+            <!-- Feature 2: AI Models -->
+            <div class="bg-[#111]/70 p-6 rounded-xl mb-6 border border-[#1FB6FF]/20">
+                <h3 class="text-2xl font-bold text-[#1FB6FF] mb-4">🧠 الوصول لأقوى الموديلات (Advanced AI Models)</h3>
+                <p class="text-gray-300 mb-4">لا تقيد نفسك بموديل واحد. بدّل بحرية بين عمالقة الذكاء الاصطناعي:</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
+                        <div class="text-2xl mb-1">🚀</div>
+                        <p class="text-white font-bold text-sm">GPT-5</p>
+                        <p class="text-gray-400 text-xs">The Next Gen</p>
+                    </div>
+                    <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
+                        <div class="text-2xl mb-1">💎</div>
+                        <p class="text-white font-bold text-sm">Gemini 2.5 Pro</p>
+                    </div>
+                    <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
+                        <div class="text-2xl mb-1">📝</div>
+                        <p class="text-white font-bold text-sm">Claude 4.0</p>
+                        <p class="text-gray-400 text-xs">Sonnet</p>
+                    </div>
+                    <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
+                        <div class="text-2xl mb-1">🤖</div>
+                        <p class="text-white font-bold text-sm">Grok 4</p>
+                        <p class="text-gray-400 text-xs">& More!</p>
+                    </div>
+                </div>
+                <p class="text-gray-400 text-sm mt-4 italic">*(بما في ذلك الإصدارات الأحدث فور توفرها)*</p>
+            </div>
+
+            <!-- Feature 3: File Analysis -->
+            <div class="bg-[#111]/70 p-6 rounded-xl mb-6 border border-[#1FB6FF]/20">
+                <h3 class="text-2xl font-bold text-[#1FB6FF] mb-4">📂 تحليل الملفات الاحترافي</h3>
+                <p class="text-gray-300">
+                    ارفع ملفات <strong>PDF</strong>، <strong>صور</strong>، أو ملفات <strong>CSV</strong> معقدة، ودع الذكاء الاصطناعي يحللها ويستخرج منها البيانات بدقة.
+                </p>
+            </div>
+
+            <!-- Feature 4: Additional Features -->
+            <div class="bg-[#111]/70 p-6 rounded-xl border border-[#1FB6FF]/20">
+                <h3 class="text-2xl font-bold text-[#1FB6FF] mb-4">➕ ميزات إضافية للمحترفين:</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#1FB6FF] text-xl">✅</span>
+                        <div>
+                            <strong class="text-white">300+ بحث احترافي يومياً (Pro Searches)</strong>
+                            <p class="text-gray-400 text-sm">بحث عميق ومتشعب</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#1FB6FF] text-xl">✅</span>
+                        <div>
+                            <strong class="text-white">API Credits</strong>
+                            <p class="text-gray-400 text-sm">رصيد شهري بقيمة 5$ للمطورين</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#1FB6FF] text-xl">✅</span>
+                        <strong class="text-white">بحث أساسي غير محدود</strong>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#1FB6FF] text-xl">✅</span>
+                        <strong class="text-white">دعم فني ذو أولوية</strong>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mt-8 text-center">
+                <p class="text-center text-gray-300 mb-2 text-lg">
+                    <span class="line-through text-gray-500">السعر الرسمي: $20/شهر ($240/سنة)</span>
+                </p>
+                <p class="text-[#1FB6FF] font-bold text-3xl mb-2">💰 سعرنا: 1200 د.ج للسنة الكاملة!</p>
+                <p class="text-gray-400 text-sm">وفّر أكثر من 20,000 دج سنوياً مقارنة بالسعر الرسمي</p>
+            </div>
+        </div>
+
+        <!-- How to Get Section -->
+        <div class="bg-[#111]/80 rounded-2xl border border-[#1FB6FF]/30 p-8">
+            <h3 class="text-2xl md:text-3xl font-bold text-[#1FB6FF] mb-4 text-center">
+                ⚙️ كيف يتم التفعيل؟ (How It Works)
+            </h3>
+            <p class="text-center text-gray-300 mb-8">سهولة مطلقة في 3 خطوات:</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center bg-[#1FB6FF]/5 p-6 rounded-xl border border-[#1FB6FF]/20">
+                    <div class="w-20 h-20 bg-[#1FB6FF] rounded-full flex items-center justify-center text-3xl font-bold text-black mx-auto mb-4 shadow-lg">
+                        1️⃣
+                    </div>
+                    <h4 class="text-[#1FB6FF] font-bold mb-3 text-lg">اطلب الخدمة</h4>
+                    <p class="text-gray-300 text-sm">
+                        اطلب الخدمة وسيصلك رابط التفعيل الذاتي فوراً
+                    </p>
+                </div>
+                
+                <div class="text-center bg-[#1FB6FF]/5 p-6 rounded-xl border border-[#1FB6FF]/20">
+                    <div class="w-20 h-20 bg-[#1FB6FF] rounded-full flex items-center justify-center text-3xl font-bold text-black mx-auto mb-4 shadow-lg">
+                        2️⃣
+                    </div>
+                    <h4 class="text-[#1FB6FF] font-bold mb-3 text-lg">اضغط على الرابط</h4>
+                    <p class="text-gray-300 text-sm">
+                        اضغط على الرابط وقم بتطبيقه على حسابك في Perplexity
+                    </p>
+                </div>
+                
+                <div class="text-center bg-[#1FB6FF]/5 p-6 rounded-xl border border-[#1FB6FF]/20">
+                    <div class="w-20 h-20 bg-[#1FB6FF] rounded-full flex items-center justify-center text-3xl font-bold text-black mx-auto mb-4 shadow-lg">
+                        3️⃣
+                    </div>
+                    <h4 class="text-[#1FB6FF] font-bold mb-3 text-lg">مبروك! 🎉</h4>
+                    <p class="text-gray-300 text-sm">
+                        استمتع بـ <strong>12 شهراً</strong> من الوصول الكامل (Pro Access) بدون انقطاع
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="py-12 px-4 max-w-4xl mx-auto text-center relative z-10">
+        <div class="bg-gradient-to-r from-[#1FB6FF]/20 to-transparent border-2 border-[#1FB6FF] rounded-2xl p-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#1FB6FF] mb-4" data-i18n="final.title">
+                🚀 ابدأ البحث الذكي اليوم
+            </h2>
+            <p class="text-xl text-gray-300 mb-6" data-i18n="final.subtitle">
+                احصل على Perplexity AI Pro بأفضل سعر في الجزائر!
+            </p>
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Perplexity AI Pro" 
+               class="bg-[#1FB6FF] text-white font-bold text-xl py-4 px-12 rounded-full hover:bg-[#0D8ABC] transition-all transform hover:scale-105 perplexity-glow shadow-lg inline-block cta-pulse" data-i18n="final.button">
+                🎯 اشترك الآن
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-600 text-sm border-t border-gray-900 relative z-10">
+        <span data-i18n="footer.text">&copy; 2024 Perplexity AI Pro. جميع الحقوق محفوظة.</span>
+    </footer>
+
+    <!-- Particles.js Configuration -->
+    <script>
+        if (typeof particlesJS !== 'undefined') {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 100, density: { enable: true, value_area: 800 } },
+                    color: { value: '#1FB6FF' },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1, opacity_min: 0.3, sync: false } },
+                    size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.3, sync: false } },
+                    line_linked: { enable: true, distance: 150, color: '#1FB6FF', opacity: 0.4, width: 1 },
+                    move: { enable: true, speed: 1, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                    modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+                },
+                retina_detect: true
+            });
+        }
+
+        // Language Switcher - handled by script.js
+    </script>
+
+    <!-- Payment Modals -->
+    <!-- Crypto/USDT Modal -->
+    <div id="crypto-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 500px; background: #0a0a0a; border: 2px solid #1FB6FF; border-radius: 15px; padding: 25px; position: relative; max-height: 85vh; overflow-y: auto;">
+            <button class="crypto-close" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #1FB6FF; font-size: 24px; cursor: pointer;">&times;</button>
+            
+            <h2 style="text-align: center; color: #1FB6FF; font-size: 1.5rem; margin-bottom: 15px;">الدفع بالعملات الرقمية</h2>
+            
+            <div style="background: rgba(31, 182, 255, 0.1); border: 1px solid #1FB6FF; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
+                <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>المنتج:</strong> <span id="crypto-product-name">Perplexity AI Pro</span></p>
+                <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>السعر:</strong> <span id="crypto-price-dzd">1200</span> د.ج</p>
+                <p style="color: #fff; font-size: 0.9rem;"><strong>المبلغ بالدولار:</strong> <span id="crypto-price-usd">6</span> USDT</p>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <p style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.85rem;">اختر الشبكة:</p>
+                <div style="display: flex; gap: 8px; justify-content: center;">
+                    <button class="network-btn active" data-network="TRC20" data-address="TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9" style="flex: 1; padding: 8px; background: #1FB6FF; color: #000; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">TRC20</button>
+                    <button class="network-btn" data-network="ERC20" data-address="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb" style="flex: 1; padding: 8px; background: #333; color: #fff; border: 1px solid #555; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">ERC20</button>
+                </div>
+            </div>
+
+            <div style="background: #111; border: 1px solid #1FB6FF; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
+                <p style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.85rem;">عنوان المحفظة (<span id="selected-network">TRC20</span>):</p>
+                <div style="display: flex; align-items: center; gap: 8px; background: #000; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
+                    <code id="wallet-address" style="color: #1FB6FF; font-size: 0.75rem; word-break: break-all; flex: 1;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
+                    <button class="copy-btn" onclick="copyWalletAddress()" style="background: #1FB6FF; color: #000; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.85rem;">نسخ</button>
+                </div>
+                <div style="text-align: center;">
+                    <img id="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9" alt="QR Code" style="max-width: 150px; border-radius: 8px;">
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.85rem; line-height: 1.6;">
+                <h3 style="color: #1FB6FF; margin-bottom: 10px; font-size: 1rem;">تعليمات الدفع:</h3>
+                <ol style="padding-right: 18px; margin: 0;">
+                    <li>انسخ عنوان المحفظة أو امسح رمز QR</li>
+                    <li>أرسل المبلغ المطلوب بالضبط</li>
+                    <li>تأكد من اختيار الشبكة الصحيحة (<span id="network-warning">TRC20</span>)</li>
+                    <li>احتفظ بإثبات الدفع (Transaction Hash)</li>
+                </ol>
+                <p style="color: #ff6b6b; margin-top: 10px; font-size: 0.8rem;">⚠️ تحذير: إرسال العملة على شبكة خاطئة سيؤدي لفقدان الأموال!</p>
+            </div>
+
+            <button onclick="confirmCryptoPayment()" style="width: 100%; background: #1FB6FF; color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <!-- RedotPay Modal -->
+    <div id="redotpay-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 500px; background: #0a0a0a; border: 2px solid #1FB6FF; border-radius: 15px; padding: 25px; position: relative; max-height: 85vh; overflow-y: auto;">
+            <button class="redotpay-close" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #1FB6FF; font-size: 24px; cursor: pointer;">&times;</button>
+            
+            <h2 style="text-align: center; color: #1FB6FF; font-size: 1.5rem; margin-bottom: 15px;">الدفع عبر RedotPay</h2>
+            
+            <div style="background: rgba(31, 182, 255, 0.1); border: 1px solid #1FB6FF; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
+                <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>المنتج:</strong> <span id="redotpay-product-name">Perplexity AI Pro</span></p>
+                <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>السعر:</strong> <span id="redotpay-price-dzd">1200</span> د.ج</p>
+                <p style="color: #fff; font-size: 0.9rem;"><strong>المبلغ بالدولار:</strong> <span id="redotpay-price-usd">6</span> USD</p>
+            </div>
+
+            <div style="background: #111; border: 1px solid #1FB6FF; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
+                <p style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.85rem;">RedotPay ID:</p>
+                <div style="display: flex; align-items: center; gap: 8px; background: #000; padding: 10px; border-radius: 6px;">
+                    <code id="redotpay-id" style="color: #1FB6FF; font-size: 1.1rem; flex: 1;">1117632168</code>
+                    <button onclick="copyRedotPayID()" style="background: #1FB6FF; color: #000; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.85rem;">نسخ</button>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.85rem; line-height: 1.6;">
+                <h3 style="color: #1FB6FF; margin-bottom: 10px; font-size: 1rem;">تعليمات الدفع:</h3>
+                <ol style="padding-right: 18px; margin: 0;">
+                    <li>افتح تطبيق RedotPay</li>
+                    <li>اختر "Send" أو "إرسال"</li>
+                    <li>أدخل RedotPay ID: <strong>1117632168</strong></li>
+                    <li>أدخل المبلغ المطلوب</li>
+                    <li>أكمل عملية الدفع واحتفظ بإثبات الدفع</li>
+                </ol>
+            </div>
+
+            <button onclick="confirmRedotPayPayment()" style="width: 100%; background: #1FB6FF; color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <!-- BaridiMob Modal -->
+    <div id="baridimob-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 500px; background: #0a0a0a; border: 2px solid #1FB6FF; border-radius: 15px; padding: 25px; position: relative; max-height: 85vh; overflow-y: auto;">
+            <button class="baridimob-close" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #1FB6FF; font-size: 24px; cursor: pointer;">&times;</button>
+            
+            <h2 style="text-align: center; color: #1FB6FF; font-size: 1.5rem; margin-bottom: 15px;">الدفع عبر BaridiMob</h2>
+            
+            <div style="background: rgba(31, 182, 255, 0.1); border: 1px solid #1FB6FF; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
+                <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>المنتج:</strong> <span id="baridimob-product-name">Perplexity AI Pro</span></p>
+                <p style="color: #fff; font-size: 0.9rem;"><strong>السعر:</strong> <span id="baridimob-price-dzd">1200</span> د.ج</p>
+            </div>
+
+            <div style="background: #111; border: 1px solid #1FB6FF; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
+                <p style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.85rem;">RIP BaridiMob:</p>
+                <div style="display: flex; align-items: center; gap: 8px; background: #000; padding: 10px; border-radius: 6px;">
+                    <code id="baridimob-rip" style="color: #1FB6FF; font-size: 0.95rem; flex: 1;">00799999002787548473</code>
+                    <button onclick="copyBaridiMobRIP()" style="background: #1FB6FF; color: #000; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.85rem;">نسخ</button>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.85rem; line-height: 1.6;">
+                <h3 style="color: #1FB6FF; margin-bottom: 10px; font-size: 1rem;">تعليمات الدفع:</h3>
+                <ol style="padding-right: 18px; margin: 0;">
+                    <li>افتح تطبيق BaridiMob</li>
+                    <li>اختر "تحويل الأموال" أو "Virement"</li>
+                    <li>اختر "RIP" كطريقة التحويل</li>
+                    <li>أدخل الـ RIP: <strong>00799999002787548473</strong></li>
+                    <li>أدخل المبلغ المطلوب</li>
+                    <li>أكمل عملية الدفع واحتفظ بإثبات الدفع</li>
+                </ol>
+                <p style="color: #ff6b6b; margin-top: 10px; font-size: 0.8rem;">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!</p>
+            </div>
+
+            <button onclick="confirmBaridiMobPayment()" style="width: 100%; background: #1FB6FF; color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <!-- Load script.js for payment modals -->
+    <script src="script.js"></script>
+</body>
+</html>

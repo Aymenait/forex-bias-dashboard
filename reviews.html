@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آراء العملاء - Market Algeriaa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .review-card {
+            transition: all 0.3s ease;
+        }
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .product-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .badge-trw {
+            background: linear-gradient(135deg, #39ff14, #2ecc71);
+            color: #000;
+        }
+        .badge-chatgpt {
+            background: linear-gradient(135deg, #10a37f, #0d8c6a);
+            color: #fff;
+        }
+        .badge-adobe {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button -->
+    <div class="absolute top-4 left-4 z-50">
+        <a href="index.html" class="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-full hover:bg-white/30 transition-all flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span data-i18n="back.home">الرئيسية</span>
+        </a>
+    </div>
+
+    <!-- Language Switcher -->
+    <div class="absolute top-4 right-4 z-50 flex gap-2">
+        <button onclick="changeLanguage('ar')" class="lang-btn active bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-full hover:bg-white/30 transition-all font-bold" data-lang="ar">
+            العربية
+        </button>
+        <button onclick="changeLanguage('en')" class="lang-btn bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-full hover:bg-white/30 transition-all font-bold" data-lang="en">
+            English
+        </button>
+        <button onclick="changeLanguage('fr')" class="lang-btn bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-full hover:bg-white/30 transition-all font-bold" data-lang="fr">
+            Français
+        </button>
+    </div>
+
+    <!-- Header -->
+    <div class="container mx-auto px-4 py-20">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-black text-white mb-4">
+                <span data-i18n="title">⭐ آراء عملائنا</span>
+            </h1>
+            <p class="text-xl text-white/90 mb-8" data-i18n="subtitle">
+                تقييمات حقيقية من عملاء راضين عن خدماتنا
+            </p>
+            
+            <!-- Stats -->
+            <div class="flex flex-wrap justify-center gap-8 mb-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white" id="total-reviews-count">0</div>
+                    <div class="text-white/80" data-i18n="stats.reviews">تقييم</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white flex items-center justify-center gap-2">
+                        <span id="average-rating">5.0</span>
+                        <span class="text-yellow-400">★</span>
+                    </div>
+                    <div class="text-white/80" data-i18n="stats.average">متوسط التقييم</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white">3</div>
+                    <div class="text-white/80" data-i18n="stats.products">منتجات</div>
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="filterReviews('all')" class="filter-btn active px-6 py-2 rounded-full bg-white text-purple-600 font-bold hover:bg-white/90 transition-all" data-i18n="filter.all">
+                    الكل
+                </button>
+                <button onclick="filterReviews('trw')" class="filter-btn px-6 py-2 rounded-full bg-white/20 text-white font-bold hover:bg-white/30 transition-all" data-i18n="filter.trw">
+                    The Real World
+                </button>
+                <button onclick="filterReviews('chatgpt')" class="filter-btn px-6 py-2 rounded-full bg-white/20 text-white font-bold hover:bg-white/30 transition-all" data-i18n="filter.chatgpt">
+                    ChatGPT Business
+                </button>
+                <button onclick="filterReviews('adobe')" class="filter-btn px-6 py-2 rounded-full bg-white/20 text-white font-bold hover:bg-white/30 transition-all" data-i18n="filter.adobe">
+                    Adobe Creative Cloud
+                </button>
+            </div>
+        </div>
+
+        <!-- Reviews Grid -->
+        <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+            <!-- Reviews will be loaded here -->
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent"></div>
+            <p class="text-white mt-4" data-i18n="loading">جاري تحميل التقييمات...</p>
+        </div>
+
+        <!-- No Reviews Message -->
+        <div id="no-reviews" class="text-center py-12 hidden">
+            <p class="text-white text-xl" data-i18n="no.reviews">لا توجد تقييمات بعد</p>
+        </div>
+
+        <!-- Show More Button -->
+        <div class="text-center mt-8" id="show-more-container" style="display: none;">
+            <button id="show-more-btn" onclick="loadMoreReviews()" 
+                class="bg-white text-purple-600 font-bold py-3 px-8 rounded-full hover:bg-white/90 transition-all" data-i18n="show.more">
+                عرض المزيد
+            </button>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4" onclick="closeImageModal()">
+        <button class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300">&times;</button>
+        <img id="modal-image" src="" alt="Review Image" class="max-w-full max-h-[90vh] rounded-lg">
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw",
+            authDomain: "the-real-world-review.firebaseapp.com",
+            projectId: "the-real-world-review",
+            storageBucket: "the-real-world-review.firebasestorage.app",
+            messagingSenderId: "324349726142",
+            appId: "1:324349726142:web:eff2cde07b569ed0a3bdef",
+            measurementId: "G-5FPYPJDSF4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.firebaseModules = { collection, getDocs, query, orderBy };
+        
+        window.dispatchEvent(new Event('firebaseReady'));
+    </script>
+
+    <script src="reviews-translations.js"></script>
+    <script src="reviews-page.js"></script>
+    
+    <style>
+        .lang-btn.active {
+            background: white !important;
+            color: #667eea !important;
+        }
+    </style>
+</body>
+</html>
