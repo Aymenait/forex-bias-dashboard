@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Compatibility Test - International Expansion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-value {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-compatible {
+            background: #4CAF50;
+        }
+
+        .status-warning {
+            background: #ff9800;
+        }
+
+        .status-error {
+            background: #f44336;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .info-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .feature-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+        }
+
+        .feature-supported {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .feature-unsupported {
+            border-left: 4px solid #f44336;
+        }
+
+        .feature-partial {
+            border-left: 4px solid #ff9800;
+        }
+
+        .recommendations {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .recommendations h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .recommendation-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .recommendation-severity {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .severity-critical {
+            background: #f44336;
+            color: white;
+        }
+
+        .severity-high {
+            background: #ff9800;
+            color: white;
+        }
+
+        .severity-medium {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .severity-low {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #757575;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .action-buttons {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .score-value {
+                font-size: 3rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Browser Compatibility Test</h1>
+        <p class="subtitle">International Expansion Feature - Task 10.2</p>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Running compatibility checks...</p>
+        </div>
+
+        <div id="results" style="display: none;">
+            <!-- Score Card -->
+            <div class="score-card">
+                <div class="score-label">Compatibility Score</div>
+                <div class="score-value" id="score">--</div>
+                <div class="status-badge" id="status-badge">Checking...</div>
+            </div>
+
+            <!-- Browser Information -->
+            <div class="section">
+                <h2>🖥️ Browser Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Browser</div>
+                        <div class="info-value" id="browser-name">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Version</div>
+                        <div class="info-value" id="browser-version">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Engine</div>
+                        <div class="info-value" id="browser-engine">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Platform</div>
+                        <div class="info-value" id="browser-platform">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Device Type</div>
+                        <div class="info-value" id="device-type">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Viewport</div>
+                        <div class="info-value" id="viewport-size">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Features -->
+            <div class="section">
+                <h2>⚙️ Core Features</h2>
+                <ul class="feature-list" id="core-features"></ul>
+            </div>
+
+            <!-- Storage Features -->
+            <div class="section">
+                <h2>💾 Storage Features</h2>
+                <ul class="feature-list" id="storage-features"></ul>
+            </div>
+
+            <!-- CSS Features -->
+            <div class="section">
+                <h2>🎨 CSS Features</h2>
+                <ul class="feature-list" id="css-features"></ul>
+            </div>
+
+            <!-- API Features -->
+            <div class="section">
+                <h2>🔌 API Features</h2>
+                <ul class="feature-list" id="api-features"></ul>
+            </div>
+
+            <!-- Recommendations -->
+            <div id="recommendations-section" style="display: none;">
+                <div class="recommendations">
+                    <h3>⚠️ Recommendations</h3>
+                    <div id="recommendations-list"></div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-primary" onclick="runTests()">🔄 Re-run Tests</button>
+                <button class="btn-success" onclick="exportReport()">📄 Export Report</button>
+                <button class="btn-secondary" onclick="window.print()">🖨️ Print</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="browser-compatibility-checker.js"></script>
+    <script>
+        let checker = null;
+        let results = null;
+
+        async function runTests() {
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+
+            // Create checker instance
+            checker = new BrowserCompatibilityChecker();
+
+            // Run all checks
+            results = await checker.runAllChecks();
+
+            // Generate report
+            const report = checker.generateReport();
+
+            // Display results
+            displayResults(results, report);
+
+            // Hide loading, show results
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function displayResults(results, report) {
+            // Display score
+            document.getElementById('score').textContent = report.summary.score;
+
+            // Display status badge
+            const statusBadge = document.getElementById('status-badge');
+            if (report.summary.compatible && report.summary.warnings.length === 0) {
+                statusBadge.textContent = '✅ Fully Compatible';
+                statusBadge.className = 'status-badge status-compatible';
+            } else if (report.summary.compatible) {
+                statusBadge.textContent = '⚠️ Compatible with Warnings';
+                statusBadge.className = 'status-badge status-warning';
+            } else {
+                statusBadge.textContent = '❌ Incompatible';
+                statusBadge.className = 'status-badge status-error';
+            }
+
+            // Display browser info
+            document.getElementById('browser-name').textContent = results.browser.name;
+            document.getElementById('browser-version').textContent = results.browser.version;
+            document.getElementById('browser-engine').textContent = results.browser.engine;
+            document.getElementById('browser-platform').textContent = results.browser.platform;
+            document.getElementById('device-type').textContent = results.browser.mobile ? 'Mobile' : 'Desktop';
+            document.getElementById('viewport-size').textContent = 
+                `${results.features.viewport.width} × ${results.features.viewport.height}`;
+
+            // Display core features
+            displayFeatureList('core-features', [
+                { name: 'Fetch API', supported: results.api.fetch?.supported },
+                { name: 'Promises', supported: results.api.promises?.supported },
+                { name: 'Async/Await', supported: results.api.promises?.asyncAwait },
+                { name: 'AbortController', supported: results.api.fetch?.abortController }
+            ]);
+
+            // Display storage features
+            displayFeatureList('storage-features', [
+                { name: 'localStorage Supported', supported: results.storage.supported },
+                { name: 'localStorage Available', supported: results.storage.available },
+                { name: 'Storage Quota API', supported: results.storage.quota !== null }
+            ]);
+
+            // Display CSS features
+            displayFeatureList('css-features', [
+                { name: 'Flexbox', supported: results.css.flexbox },
+                { name: 'CSS Grid', supported: results.css.grid },
+                { name: 'CSS Transitions', supported: results.css.transitions },
+                { name: 'CSS Transforms', supported: results.css.transforms },
+                { name: 'CSS Animations', supported: results.css.animations },
+                { name: 'Backdrop Filter', supported: results.css.backdropFilter },
+                { name: 'CSS Custom Properties', supported: results.css.customProperties }
+            ]);
+
+            // Display API features
+            displayFeatureList('api-features', [
+                { name: 'Performance API', supported: results.performance.supported },
+                { name: 'performance.now()', supported: results.performance.now },
+                { name: 'requestAnimationFrame', supported: results.api.requestAnimationFrame?.supported },
+                { name: 'Geolocation API', supported: results.api.geolocation?.supported },
+                { name: 'Touch Events', supported: results.features.touch?.supported }
+            ]);
+
+            // Display recommendations
+            if (report.recommendations.length > 0) {
+                document.getElementById('recommendations-section').style.display = 'block';
+                const recommendationsList = document.getElementById('recommendations-list');
+                recommendationsList.innerHTML = '';
+
+                report.recommendations.forEach(rec => {
+                    const item = document.createElement('div');
+                    item.className = 'recommendation-item';
+                    item.innerHTML = `
+                        <span class="recommendation-severity severity-${rec.severity}">${rec.severity.toUpperCase()}</span>
+                        <div><strong>Issue:</strong> ${rec.issue}</div>
+                        <div><strong>Solution:</strong> ${rec.solution}</div>
+                    `;
+                    recommendationsList.appendChild(item);
+                });
+            } else {
+                document.getElementById('recommendations-section').style.display = 'none';
+            }
+        }
+
+        function displayFeatureList(elementId, features) {
+            const list = document.getElementById(elementId);
+            list.innerHTML = '';
+
+            features.forEach(feature => {
+                const item = document.createElement('li');
+                item.className = 'feature-item';
+                
+                if (feature.supported === true) {
+                    item.classList.add('feature-supported');
+                    item.innerHTML = `
+                        <span class="feature-icon">✅</span>
+                        <span>${feature.name}</span>
+                    `;
+                } else if (feature.supported === false) {
+                    item.classList.add('feature-unsupported');
+                    item.innerHTML = `
+                        <span class="feature-icon">❌</span>
+                        <span>${feature.name}</span>
+                    `;
+                } else {
+                    item.classList.add('feature-partial');
+                    item.innerHTML = `
+                        <span class="feature-icon">⚠️</span>
+                        <span>${feature.name}: ${feature.supported}</span>
+                    `;
+                }
+
+                list.appendChild(item);
+            });
+        }
+
+        function exportReport() {
+            if (!results || !checker) {
+                alert('Please run tests first');
+                return;
+            }
+
+            const report = checker.generateReport();
+            
+            let markdown = `# Browser Compatibility Report\n`;
+            markdown += `## International Expansion Feature - Task 10.2\n\n`;
+            markdown += `**Date**: ${new Date().toLocaleString()}\n`;
+            markdown += `**Compatibility Score**: ${report.summary.score}/100\n`;
+            markdown += `**Status**: ${report.summary.compatible ? '✅ Compatible' : '❌ Incompatible'}\n\n`;
+            
+            markdown += `---\n\n`;
+            markdown += `### Browser Information\n\n`;
+            markdown += `- **Browser**: ${results.browser.name} ${results.browser.version}\n`;
+            markdown += `- **Engine**: ${results.browser.engine}\n`;
+            markdown += `- **Platform**: ${results.browser.platform}\n`;
+            markdown += `- **Device**: ${results.browser.mobile ? 'Mobile' : 'Desktop'}\n`;
+            markdown += `- **Viewport**: ${results.features.viewport.width} × ${results.features.viewport.height}\n\n`;
+
+            markdown += `### Core Features\n\n`;
+            markdown += `- Fetch API: ${results.api.fetch?.supported ? '✅' : '❌'}\n`;
+            markdown += `- Promises: ${results.api.promises?.supported ? '✅' : '❌'}\n`;
+            markdown += `- Async/Await: ${results.api.promises?.asyncAwait ? '✅' : '❌'}\n\n`;
+
+            markdown += `### Storage\n\n`;
+            markdown += `- localStorage Supported: ${results.storage.supported ? '✅' : '❌'}\n`;
+            markdown += `- localStorage Available: ${results.storage.available ? '✅' : '❌'}\n\n`;
+
+            markdown += `### CSS Features\n\n`;
+            markdown += `- Flexbox: ${results.css.flexbox ? '✅' : '❌'}\n`;
+            markdown += `- CSS Grid: ${results.css.grid ? '✅' : '❌'}\n`;
+            markdown += `- Transitions: ${results.css.transitions ? '✅' : '❌'}\n`;
+            markdown += `- Transforms: ${results.css.transforms ? '✅' : '❌'}\n\n`;
+
+            if (report.recommendations.length > 0) {
+                markdown += `### Recommendations\n\n`;
+                report.recommendations.forEach((rec, index) => {
+                    markdown += `${index + 1}. **[${rec.severity.toUpperCase()}]** ${rec.issue}\n`;
+                    markdown += `   - Solution: ${rec.solution}\n\n`;
+                });
+            }
+
+            markdown += `---\n\n`;
+            markdown += `**Report Generated**: ${new Date().toISOString()}\n`;
+
+            // Download as file
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `browser-compatibility-report-${new Date().toISOString().split('T')[0]}.md`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert('📄 Report exported successfully!');
+        }
+
+        // Run tests on page load
+        window.addEventListener('DOMContentLoaded', runTests);
+    </script>
+</body>
+</html>

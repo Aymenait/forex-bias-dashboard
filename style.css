@@ -545,6 +545,13 @@ img {
     padding: 8px 16px;
     font-weight: 700;
     font-size: 1.1rem;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+/* Smooth fade effect when prices update */
+.price-tag.updating {
+    opacity: 0.5;
+    transform: scale(0.98);
 }
 
 .price-options {
@@ -842,6 +849,18 @@ img {
         justify-content: center;
         width: 100%;
         margin-bottom: 8px;
+    }
+    
+    .currency-selector {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    
+    .currency-btn {
+        flex: 1;
+        justify-content: center;
     }
 
     /* الأزرار الثلاثة بجانب بعض */
@@ -1388,6 +1407,16 @@ img {
     box-shadow: 0 12px 30px rgba(37, 211, 102, 0.6);
 }
 
+.telegram-float {
+    background: linear-gradient(135deg, #0088cc, #229ED9);
+    color: white;
+}
+
+.telegram-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 30px rgba(34, 158, 217, 0.6);
+}
+
 .instagram-float {
     background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
     color: white;
@@ -1505,6 +1534,12 @@ img {
     flex-wrap: wrap;
     position: relative;
     z-index: 100;
+    transition: opacity 0.3s ease;
+}
+
+/* Smooth fade when payment methods update */
+.payment-methods-row.updating {
+    opacity: 0.6;
 }
 
 /* Compact Payment Buttons */
@@ -1936,6 +1971,19 @@ img {
         inset 0 0 30px rgba(255, 193, 7, 0.2);
 }
 
+/* Primary Payment Button - Visual Prominence */
+.payment-btn-compact.primary-payment {
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 15px rgba(255, 213, 111, 0.4);
+    transform: scale(1.05);
+    font-weight: 600;
+}
+
+.payment-btn-compact.primary-payment:hover {
+    box-shadow: 0 6px 20px rgba(255, 213, 111, 0.6);
+    transform: scale(1.07) translateY(-2px);
+}
+
 /* Language Switcher */
 .language-switcher {
     display: flex;
@@ -1968,11 +2016,72 @@ img {
     color: #1b1d32;
 }
 
+/* Currency Selector */
+.currency-selector {
+    display: flex;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.currency-btn {
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.currency-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.currency-btn.active {
+    background: var(--accent);
+    color: #1b1d32;
+}
+
+.currency-flag {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.currency-code {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Price transition animation */
+[data-price-dzd][data-price-usd] {
+    transition: opacity 0.2s ease;
+}
+
+[data-price-dzd][data-price-usd].updating {
+    opacity: 0.5;
+}
+
 @media (max-width: 900px) {
     .language-switcher {
         order: -1;
         width: 100%;
         justify-content: center;
+    }
+    
+    .currency-selector {
+        order: -1;
+        width: 100%;
+        justify-content: center;
+        margin-top: 8px;
     }
 }
 
@@ -2319,4 +2428,27 @@ img {
     .info-item {
         padding: 15px;
     }
+}
+
+
+/* Contact Choice Modal Styles */
+.contact-choice-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+.contact-choice-btn:active {
+    transform: translateY(-1px);
+}
+
+.whatsapp-choice:hover {
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5) !important;
+}
+
+.telegram-choice:hover {
+    box-shadow: 0 8px 25px rgba(34, 158, 217, 0.5) !important;
+}
+
+.instagram-choice:hover {
+    box-shadow: 0 8px 25px rgba(225, 48, 108, 0.5) !important;
 }

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Testing - International Expansion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .test-section h2 {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .test-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .results {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .results pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .currency-selector {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .currency-btn {
+            padding: 10px 20px;
+            border: 2px solid #fff;
+            background: transparent;
+            color: #fff;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .currency-btn.active {
+            background: #ffd700;
+            color: #000;
+            border-color: #ffd700;
+        }
+
+        .price-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .price-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-top: 10px;
+            transition: opacity 0.3s ease, transform 0.2s ease;
+        }
+
+        .price-tag.updating {
+            opacity: 0.5;
+            transform: scale(0.98);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
+        .status.pass {
+            background: #4CAF50;
+        }
+
+        .status.fail {
+            background: #f44336;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Performance Testing Dashboard</h1>
+
+        <!-- Currency Selector Test -->
+        <div class="test-section">
+            <h2>💱 Currency Selector</h2>
+            <div class="currency-selector">
+                <button class="currency-btn active" data-currency="DZD">🇩🇿 DZD</button>
+                <button class="currency-btn" data-currency="USD">🇺🇸 USD</button>
+            </div>
+            <div class="price-display">
+                <div class="price-card">
+                    <h3>Product 1</h3>
+                    <div class="price-tag" data-price-dzd="5000" data-price-usd="20">5000 د.ج</div>
+                </div>
+                <div class="price-card">
+                    <h3>Product 2</h3>
+                    <div class="price-tag" data-price-dzd="7500" data-price-usd="30">7500 د.ج</div>
+                </div>
+                <div class="price-card">
+                    <h3>Product 3</h3>
+                    <div class="price-tag" data-price-dzd="10000" data-price-usd="40">10000 د.ج</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Tests -->
+        <div class="test-section">
+            <h2>⚡ Performance Tests</h2>
+            <div class="test-controls">
+                <button class="btn-primary" onclick="runCurrencyToggleTest()">Test Currency Toggle Speed</button>
+                <button class="btn-secondary" onclick="runRapidClickTest()">Test Rapid Clicks</button>
+                <button class="btn-secondary" onclick="runGeolocationTest()">Test Geolocation API</button>
+                <button class="btn-primary" onclick="runAllTests()">Run All Tests</button>
+                <button class="btn-danger" onclick="clearResults()">Clear Results</button>
+            </div>
+            <div class="results" id="test-results">
+                <pre>Click a test button to start...</pre>
+            </div>
+        </div>
+
+        <!-- Manual Testing Checklist -->
+        <div class="test-section">
+            <h2>✅ Manual Testing Checklist</h2>
+            <div style="line-height: 2;">
+                <label><input type="checkbox"> Test from Algeria (VPN) - Should show DZD</label><br>
+                <label><input type="checkbox"> Test from other country (VPN) - Should show USD</label><br>
+                <label><input type="checkbox"> Test manual currency toggle</label><br>
+                <label><input type="checkbox"> Test on Chrome browser</label><br>
+                <label><input type="checkbox"> Test on Firefox browser</label><br>
+                <label><input type="checkbox"> Test on Safari browser</label><br>
+                <label><input type="checkbox"> Test on Edge browser</label><br>
+                <label><input type="checkbox"> Test on Desktop</label><br>
+                <label><input type="checkbox"> Test on Mobile</label><br>
+                <label><input type="checkbox"> Test on Tablet</label><br>
+                <label><input type="checkbox"> Test in Private Browsing (localStorage disabled)</label><br>
+                <label><input type="checkbox"> Test with slow connection (throttling)</label><br>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Dependencies -->
+    <script src="currency-config.js"></script>
+    <script src="currency-manager.js"></script>
+    <script src="payment-manager.js"></script>
+    <script src="international-expansion-init.js"></script>
+    <script src="performance-test.js"></script>
+
+    <script>
+        // Initialize managers
+        let currencyManager, paymentManager, performanceTester;
+
+        async function initializeSystem() {
+            currencyManager = new CurrencyManager();
+            paymentManager = new PaymentManager(PAYMENT_METHODS);
+            performanceTester = new PerformanceTester();
+
+            // Set initial currency
+            currencyManager.setCurrency('DZD');
+
+            // Setup currency selector
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const currency = btn.getAttribute('data-currency');
+                    handleCurrencyToggle(currency, currencyManager, paymentManager);
+                    
+                    // Update UI
+                    document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+
+            logResult('✅ System initialized successfully');
+        }
+
+        function logResult(message) {
+            const resultsDiv = document.getElementById('test-results');
+            const timestamp = new Date().toLocaleTimeString();
+            resultsDiv.innerHTML += `\n[${timestamp}] ${message}`;
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '<pre>Results cleared. Ready for new tests...</pre>';
+        }
+
+        async function runCurrencyToggleTest() {
+            logResult('\n🧪 Starting Currency Toggle Performance Test...');
+            const result = await performanceTester.testCurrencyTogglePerformance(currencyManager, paymentManager);
+            
+            logResult(`Average Time: ${result.avgTime}ms`);
+            logResult(`Max Time: ${result.maxTime}ms`);
+            logResult(`Min Time: ${result.minTime}ms`);
+            logResult(`Requirement: ${result.requirement}`);
+            logResult(`Status: ${result.passed ? '✅ PASSED' : '❌ FAILED'}`);
+        }
+
+        async function runRapidClickTest() {
+            logResult('\n🧪 Starting Rapid Click Test...');
+            const result = await performanceTester.testRapidToggleHandling(
+                handleCurrencyToggle, 
+                currencyManager, 
+                paymentManager
+            );
+            
+            logResult(`Rapid Clicks: ${result.rapidClicks}`);
+            logResult(`Total Time: ${result.totalTime}ms`);
+            logResult(`Final Currency: ${result.finalCurrency}`);
+            logResult(`Expected: ${result.expectedCurrency}`);
+            logResult(`Status: ${result.passed ? '✅ PASSED' : '❌ FAILED'}`);
+        }
+
+        async function runGeolocationTest() {
+            logResult('\n🧪 Starting Geolocation API Test...');
+            const result = await performanceTester.testGeolocationPerformance(currencyManager);
+            
+            logResult(`Response Time: ${result.responseTime}ms`);
+            logResult(`Requirement: ${result.requirement}`);
+            logResult(`Status: ${result.passed ? '✅ PASSED' : '❌ FAILED'}`);
+        }
+
+        async function runAllTests() {
+            logResult('\n🚀 Running All Performance Tests...');
+            logResult('═'.repeat(50));
+            
+            const managers = { currencyManager, paymentManager };
+            const results = await performanceTester.runAllTests(managers, handleCurrencyToggle);
+            
+            logResult('\n📊 Test Summary:');
+            const passed = results.filter(r => r.passed).length;
+            logResult(`${passed}/${results.length} tests passed`);
+            
+            if (passed === results.length) {
+                logResult('🎉 All tests passed!');
+            } else {
+                logResult('⚠️ Some tests failed. Review results above.');
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', initializeSystem);
+    </script>
+</body>
+</html>

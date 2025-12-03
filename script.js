@@ -1,46 +1,56 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 3D Tilt effect removed for better performance
+// Global variable for current product name
+let currentProductName = '';
 
-    const modal = document.getElementById('order-modal');
-    const closeBtn = document.querySelector('.close-btn');
-    const orderBtns = document.querySelectorAll('.order-btn');
-    const productNameInput = document.getElementById('product-name');
-    const orderForm = document.getElementById('order-form');
-
-    if (orderBtns.length > 0) {
-        orderBtns.forEach(button => {
-            button.addEventListener('click', () => {
-                const productName = button.getAttribute('data-product');
-                productNameInput.value = productName;
-                modal.style.display = 'flex';
-            });
-        });
+document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize International Expansion System
+    // This integrates Currency Manager, Payment Manager, and all UI components
+    let expansionSystem = null;
+    
+    try {
+        // Initialize the complete international expansion system
+        expansionSystem = await initInternationalExpansion();
+        console.log('✅ International expansion system ready');
+        
+        // Setup payment button event listeners
+        setupPaymentButtonListeners(expansionSystem.paymentManager);
+        
+    } catch (error) {
+        console.error('❌ Failed to initialize international expansion:', error);
     }
 
-    const hideModal = () => {
-        if (modal) {
-            modal.style.display = 'none';
-            if (productNameInput) productNameInput.value = '';
+    // 3D Tilt effect removed for better performance
+
+    // Contact Choice Modal
+    const contactChoiceModal = document.getElementById('contact-choice-modal');
+    const contactChoiceCloseBtn = document.querySelector('.contact-choice-close');
+    const orderBtns = document.querySelectorAll('.order-btn');
+
+    console.log('Order buttons found:', orderBtns.length);
+    
+    // Store product name when order button is clicked - but don't open modal yet
+    // The onclick handlers on the buttons will call orderProduct/orderAdobe/orderGamma
+    // which will open the contact choice modal
+    
+    const hideContactChoiceModal = () => {
+        if (contactChoiceModal) {
+            contactChoiceModal.style.opacity = '0';
+            setTimeout(() => {
+                contactChoiceModal.style.display = 'none';
+                contactChoiceModal.classList.add('hidden');
+                currentProductName = '';
+            }, 300);
         }
     };
 
-    if (closeBtn) {
-        closeBtn.addEventListener('click', hideModal);
+    if (contactChoiceCloseBtn) {
+        contactChoiceCloseBtn.addEventListener('click', hideContactChoiceModal);
     }
 
     window.addEventListener('click', (event) => {
-        if (modal && event.target === modal) {
-            hideModal();
+        if (contactChoiceModal && event.target === contactChoiceModal) {
+            hideContactChoiceModal();
         }
     });
-
-    if (orderForm) {
-        orderForm.addEventListener('submit', () => {
-            setTimeout(() => {
-                hideModal();
-            }, 1000);
-        });
-    }
 
     // Crypto Payment Modal - Only run if elements exist
     const cryptoModal = document.getElementById('crypto-modal');
@@ -67,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             currentCryptoProduct = button.getAttribute('data-product');
             const priceDZD = button.getAttribute('data-price');
-            const priceUSD = Math.ceil(priceDZD / 230); // تحويل من دينار إلى USDT
+            const priceUSD = button.getAttribute('data-price-usd') || Math.ceil(priceDZD / 230); // استخدام السعر الصحيح من data-price-usd
 
             document.getElementById('crypto-product-name').textContent = currentCryptoProduct;
             document.getElementById('crypto-price-dzd').textContent = priceDZD;
@@ -135,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('RedotPay button clicked!');
                 const productName = button.getAttribute('data-product');
                 const priceDZD = button.getAttribute('data-price');
-                const priceUSD = Math.ceil(priceDZD / 230); // تحويل من دينار إلى USD
+                const priceUSD = button.getAttribute('data-price-usd') || Math.ceil(priceDZD / 230); // استخدام السعر الصحيح من data-price-usd
 
                 document.getElementById('redotpay-product-name').textContent = productName;
                 document.getElementById('redotpay-price-dzd').textContent = priceDZD;
@@ -455,7 +465,13 @@ function copyWalletAddress() {
     navigator.clipboard.writeText(walletAddress).then(() => {
         const copyBtn = document.querySelector('.copy-btn');
         const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> تم النسخ';
+        const copiedTexts = {
+            ar: 'تم النسخ',
+            en: 'Copied',
+            fr: 'Copié'
+        };
+        const copiedText = copiedTexts[currentLang] || copiedTexts.ar;
+        copyBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> ${copiedText}`;
         setTimeout(() => {
             copyBtn.innerHTML = originalText;
         }, 2000);
@@ -468,7 +484,19 @@ function confirmCryptoPayment() {
     const priceUSD = document.getElementById('crypto-price-usd').textContent;
     const network = document.getElementById('selected-network').textContent;
 
-    const message = `مرحباً، قمت بالدفع بالكريبتو:
+    // Track Purchase event with Meta Pixel (USD for Crypto payments)
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Purchase', {
+            value: parseFloat(priceUSD),
+            currency: 'USD',
+            content_name: productName,
+            content_type: 'product'
+        });
+    }
+
+    const messages = {
+        ar: `مرحباً 👋
+قمت بالدفع بالكريبتو:
 
 📦 المنتج: ${productName}
 💰 المبلغ: ${priceUSD} USDT
@@ -477,8 +505,32 @@ function confirmCryptoPayment() {
 يرجى التحقق من الدفع وإرسال الحساب إلى:
 📧 الإيميل: [أدخل إيميلك هنا]
 
-شكراً لك!`;
+شكراً لك! 🙏`,
+        en: `Hello 👋
+I have paid with crypto:
 
+📦 Product: ${productName}
+💰 Amount: ${priceUSD} USDT
+🔗 Network: ${network}
+
+Please verify the payment and send the account to:
+📧 Email: [Enter your email here]
+
+Thank you! 🙏`,
+        fr: `Bonjour 👋
+J'ai payé avec crypto:
+
+📦 Produit: ${productName}
+💰 Montant: ${priceUSD} USDT
+🔗 Réseau: ${network}
+
+Veuillez vérifier le paiement et envoyer le compte à:
+📧 Email: [Entrez votre email ici]
+
+Merci! 🙏`
+    };
+
+    const message = messages[currentLang] || messages.ar;
     const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
@@ -491,7 +543,13 @@ function copyRedotPayID() {
     navigator.clipboard.writeText(redotpayID).then(() => {
         const copyBtn = document.querySelectorAll('.copy-btn')[1];
         const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> تم النسخ';
+        const copiedTexts = {
+            ar: 'تم النسخ',
+            en: 'Copied',
+            fr: 'Copié'
+        };
+        const copiedText = copiedTexts[currentLang] || copiedTexts.ar;
+        copyBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> ${copiedText}`;
         setTimeout(() => {
             copyBtn.innerHTML = originalText;
         }, 2000);
@@ -503,7 +561,19 @@ function confirmRedotPayPayment() {
     const productName = document.getElementById('redotpay-product-name').textContent;
     const priceUSD = document.getElementById('redotpay-price-usd').textContent;
 
-    const message = `مرحباً، قمت بالدفع عبر RedotPay:
+    // Track Purchase event with Meta Pixel (USD for RedotPay payments)
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Purchase', {
+            value: parseFloat(priceUSD),
+            currency: 'USD',
+            content_name: productName,
+            content_type: 'product'
+        });
+    }
+
+    const messages = {
+        ar: `مرحباً 👋
+قمت بالدفع عبر RedotPay:
 
 📦 المنتج: ${productName}
 💰 المبلغ: ${priceUSD} USD
@@ -512,8 +582,32 @@ function confirmRedotPayPayment() {
 يرجى التحقق من الدفع وإرسال الحساب إلى:
 📧 الإيميل: [أدخل إيميلك هنا]
 
-شكراً لك!`;
+شكراً لك! 🙏`,
+        en: `Hello 👋
+I have paid via RedotPay:
 
+📦 Product: ${productName}
+💰 Amount: ${priceUSD} USD
+💳 RedotPay ID: 1117632168
+
+Please verify the payment and send the account to:
+📧 Email: [Enter your email here]
+
+Thank you! 🙏`,
+        fr: `Bonjour 👋
+J'ai payé via RedotPay:
+
+📦 Produit: ${productName}
+💰 Montant: ${priceUSD} USD
+💳 RedotPay ID: 1117632168
+
+Veuillez vérifier le paiement et envoyer le compte à:
+📧 Email: [Entrez votre email ici]
+
+Merci! 🙏`
+    };
+
+    const message = messages[currentLang] || messages.ar;
     const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
@@ -527,7 +621,13 @@ function copyBaridiMobRIP() {
         const copyBtns = document.querySelectorAll('.copy-btn');
         const copyBtn = copyBtns[copyBtns.length - 1];
         const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> تم النسخ';
+        const copiedTexts = {
+            ar: 'تم النسخ',
+            en: 'Copied',
+            fr: 'Copié'
+        };
+        const copiedText = copiedTexts[currentLang] || copiedTexts.ar;
+        copyBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> ${copiedText}`;
         setTimeout(() => {
             copyBtn.innerHTML = originalText;
         }, 2000);
@@ -537,19 +637,55 @@ function copyBaridiMobRIP() {
 // Confirm BaridiMob payment
 function confirmBaridiMobPayment() {
     const productName = document.getElementById('baridimob-product-name').textContent;
-    const priceUSD = document.getElementById('baridimob-price-usd').textContent;
+    const priceDZD = document.getElementById('baridimob-price-dzd').textContent;
 
-    const message = `مرحباً، قمت بالدفع عبر BaridiMob:
+    // Track Purchase event with Meta Pixel (DZD for BaridiMob/CCP payments)
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Purchase', {
+            value: parseFloat(priceDZD),
+            currency: 'DZD',
+            content_name: productName,
+            content_type: 'product'
+        });
+    }
+
+    const messages = {
+        ar: `مرحباً 👋
+قمت بالدفع عبر BaridiMob:
 
 📦 المنتج: ${productName}
-💰 المبلغ: ${priceUSD} USDT
+💰 المبلغ: ${priceDZD} DZD
 💳 RIP: 00799999002787548473
 
 يرجى التحقق من الدفع وإرسال الحساب إلى:
 📧 الإيميل: [أدخل إيميلك هنا]
 
-شكراً لك!`;
+شكراً لك! 🙏`,
+        en: `Hello 👋
+I have paid via BaridiMob:
 
+📦 Product: ${productName}
+💰 Amount: ${priceDZD} DZD
+💳 RIP: 00799999002787548473
+
+Please verify the payment and send the account to:
+📧 Email: [Enter your email here]
+
+Thank you! 🙏`,
+        fr: `Bonjour 👋
+J'ai payé via BaridiMob:
+
+📦 Produit: ${productName}
+💰 Montant: ${priceDZD} DZD
+💳 RIP: 00799999002787548473
+
+Veuillez vérifier le paiement et envoyer le compte à:
+📧 Email: [Entrez votre email ici]
+
+Merci! 🙏`
+    };
+
+    const message = messages[currentLang] || messages.ar;
     const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
@@ -645,13 +781,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Review Form Submit
-    document.getElementById('review-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        if (!firebaseReady) {
-            alert('جاري التحميل... الرجاء المحاولة مرة أخرى');
-            return;
-        }
+    const reviewForm = document.getElementById('review-form');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!firebaseReady) {
+                alert('جاري التحميل... الرجاء المحاولة مرة أخرى');
+                return;
+            }
         
         // Check if user already reviewed
         if (hasUserReviewed()) {
@@ -715,6 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Check review status on page load
     updateReviewFormStatus();
+    }
 });
 
 function updateStarDisplay(rating) {
@@ -959,6 +1098,11 @@ function sendEmailNotification(review) {
 // Load Reviews from Firebase
 async function loadReviewsFromFirebase() {
     try {
+        if (!window.firebaseModules || !window.db) {
+            console.log('Firebase not ready yet');
+            return;
+        }
+        
         const { collection, getDocs, query, orderBy } = window.firebaseModules;
         const q = query(collection(window.db, 'reviews'), orderBy('timestamp', 'desc'));
         const querySnapshot = await getDocs(q);
@@ -1154,16 +1298,23 @@ async function toggleAdminMode() {
 
 // Scarcity Counter Management
 function updateSeatsCounter() {
+    const seatsRemainingEl = document.getElementById('seats-remaining');
+    const progressBar = document.getElementById('seats-progress');
+    
+    // Check if elements exist (they might not be on all pages)
+    if (!seatsRemainingEl || !progressBar) {
+        return;
+    }
+    
     const seatsRemaining = 12; // قم بتحديث هذا الرقم يدوياً حسب المبيعات
     const totalSeats = 15;
     const seatsTaken = totalSeats - seatsRemaining;
     const progressPercentage = (seatsTaken / totalSeats) * 100;
 
-    document.getElementById('seats-remaining').textContent = seatsRemaining;
-    document.getElementById('seats-progress').style.width = progressPercentage + '%';
+    seatsRemainingEl.textContent = seatsRemaining;
+    progressBar.style.width = progressPercentage + '%';
 
     // تغيير لون البار حسب الكمية المتبقية
-    const progressBar = document.getElementById('seats-progress');
     if (seatsRemaining <= 3) {
         progressBar.className = 'bg-gradient-to-r from-red-600 to-red-500 h-3 rounded-full transition-all duration-500';
     } else if (seatsRemaining <= 7) {
@@ -1182,7 +1333,8 @@ const translations = {
         'brand.tagline': 'حلول رقمية تعزز حضورك',
         'nav.products': 'منتجاتنا',
         'nav.reviews': '⭐ آراء العملاء',
-        'nav.contact': 'تواصل الآن',
+        'nav.contact': 'واتساب',
+        'nav.telegram': 'تيليجرام',
         'hero.title': 'منصتك المتكاملة لكل ما تحتاجه من',
         'hero.description': 'حسابات تعليمية، أدوات إبداعية، وحلول ذكاء اصطناعي مصممة لدعم أعمالك ومشاريعك بأفضل الأسعار وخدمة عملاء احترافية.',
         'hero.explore': 'استكشف المنتجات',
@@ -1205,6 +1357,8 @@ const translations = {
         'product.adobe.selectType': 'اختر نوع الحساب:',
         'product.adobe.shared': 'حساب مشترك',
         'product.adobe.personal': 'حساب شخصي (Keys)',
+        'product.adobe.oneMonth': 'شهر واحد',
+        'product.adobe.threeMonths': '3 أشهر',
         'product.adobe.shared.price1': 'شهر واحد: <strong>1500 د.ج</strong>',
         'product.adobe.shared.price2': '3 أشهر: <strong>3000 د.ج</strong>',
         'product.adobe.personal.price1': 'شهر واحد: <strong>3000 د.ج</strong>',
@@ -1302,6 +1456,15 @@ const translations = {
         'footer.rights': 'جميع الحقوق محفوظة',
         'footer.instagram': 'إنستغرام',
         'footer.whatsapp': 'واتساب',
+        'footer.telegram': 'تيليجرام',
+        'contact.whatsapp': 'تواصل عبر واتساب',
+        'contact.telegram': 'تواصل عبر تيليجرام',
+        'contact.instagram': 'تابعنا على إنستغرام',
+        'modal.chooseContact': 'اختر وسيلة التواصل',
+        'modal.chooseContactDesc': 'اختر الطريقة المفضلة لديك لإتمام الطلب',
+        'modal.whatsapp': 'واتساب',
+        'modal.telegram': 'تيليجرام',
+        'modal.instagram': 'إنستغرام',
         'modal.product': 'المنتج:',
         'modal.price': 'السعر:',
         'modal.amountUSD': 'المبلغ بالدولار:',
@@ -1379,6 +1542,14 @@ const translations = {
         'modal.baridimob.step7': 'احتفظ بإثبات الدفع',
         'modal.baridimob.step8': 'اضغط "تم الدفع" للتواصل معنا',
         'modal.baridimob.warning': '⚠️ تأكد من إدخال الـ RIP بشكل صحيح !',
+        'currency.selector.title': 'اختر العملة',
+        'currency.dzd': 'دينار جزائري',
+        'currency.usd': 'دولار أمريكي',
+        'currency.error.geolocation': 'تعذر تحديد موقعك. تم اختيار الدولار الأمريكي كعملة افتراضية.',
+        'currency.error.storage': 'تعذر حفظ تفضيلات العملة. سيتم استخدام الإعدادات الافتراضية.',
+        'currency.success.changed': 'تم تغيير العملة بنجاح',
+        'service.international': 'خدماتنا متاحة دولياً',
+        'service.instant.delivery': 'تسليم فوري للمنتجات الرقمية',
         'campuses.title': 'جميع الدورات التسعة متضمنة',
         'campuses.subtitle': 'وصول كامل لكل دورة ومهارة',
         'campus1.title': 'دورة التجارة الإلكترونية',
@@ -1596,13 +1767,14 @@ const translations = {
         'modal.crypto.lowFeesBEP': 'رسوم منخفضة (~0.5 USDT)',
         'modal.crypto.walletAddress': 'عنوان المحفظة',
         'modal.crypto.qrNote': 'امسح الكود بتطبيق المحفظة',
-        'modal.crypto.step1': 'اختر الشبكة المناسبة (TRC20 أو BEP20)',
-        'modal.crypto.step2': 'انسخ عنوان المحفظة أو امسح QR Code',
+        'modal.crypto.step1': 'اختر طريقة الدفع (TRC20، BEP20، أو Binance ID)',
+        'modal.crypto.step2': 'انسخ عنوان المحفظة أو Binance ID أو امسح QR Code',
         'modal.crypto.step3': 'افتح تطبيق Binance أو أي محفظة USDT',
-        'modal.crypto.step4': 'تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)',
+        'modal.crypto.step4': 'تأكد من اختيار نفس الطريقة (<strong id="network-warning">TRC20</strong>)',
         'modal.crypto.step5': 'أرسل المبلغ المطلوب',
         'modal.crypto.step6': 'احتفظ بـ Transaction ID',
-        'modal.crypto.warning': '⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك !',
+        'modal.crypto.binanceIdLabel': 'معرف Binance',
+        'modal.crypto.warning': '⚠️ تأكد من اختيار الطريقة الصحيحة وإلا ستفقد أموالك !',
         'modal.redotpay.idLabel': 'RedotPay ID:',
         'modal.redotpay.step1': 'افتح تطبيق RedotPay',
         'modal.redotpay.step2': 'اختر "Send" أو "إرسال"',
@@ -1616,7 +1788,8 @@ const translations = {
         'brand.tagline': 'Digital Solutions That Boost Your Presence',
         'nav.products': 'Our Products',
         'nav.reviews': '⭐ Customer Reviews',
-        'nav.contact': 'Contact Now',
+        'nav.contact': 'WhatsApp',
+        'nav.telegram': 'Telegram',
         'hero.title': 'Your Platform for Everything You Need',
         'hero.description': 'Educational accounts, creative tools, and AI solutions designed to support your business and projects at the best prices with professional customer service.',
         'hero.explore': 'Explore Products',
@@ -1639,6 +1812,8 @@ const translations = {
         'product.adobe.selectType': 'Select Account Type:',
         'product.adobe.shared': 'Shared Account',
         'product.adobe.personal': 'Personal Account (Keys)',
+        'product.adobe.oneMonth': '1 Month',
+        'product.adobe.threeMonths': '3 Months',
         'product.adobe.shared.price1': '1 Month: <strong>1500 DZD</strong>',
         'product.adobe.shared.price2': '3 Months: <strong>3000 DZD</strong>',
         'product.adobe.personal.price1': '1 Month: <strong>3000 DZD</strong>',
@@ -1788,6 +1963,15 @@ const translations = {
         'footer.rights': 'All rights reserved',
         'footer.instagram': 'Instagram',
         'footer.whatsapp': 'WhatsApp',
+        'footer.telegram': 'Telegram',
+        'contact.whatsapp': 'Contact via WhatsApp',
+        'contact.telegram': 'Contact via Telegram',
+        'contact.instagram': 'Follow us on Instagram',
+        'modal.chooseContact': 'Choose Contact Method',
+        'modal.chooseContactDesc': 'Choose your preferred way to complete the order',
+        'modal.whatsapp': 'WhatsApp',
+        'modal.telegram': 'Telegram',
+        'modal.instagram': 'Instagram',
         'modal.product': 'Product:',
         'modal.price': 'Price:',
         'modal.priceInUSD': 'Amount in USD:',
@@ -2044,13 +2228,14 @@ const translations = {
         'modal.crypto.lowFeesBEP': 'Low fees (~0.5 USDT)',
         'modal.crypto.walletAddress': 'Wallet Address',
         'modal.crypto.qrNote': 'Scan code with wallet app',
-        'modal.crypto.step1': 'Choose the appropriate network (TRC20 or BEP20)',
-        'modal.crypto.step2': 'Copy wallet address or scan QR Code',
+        'modal.crypto.step1': 'Choose payment method (TRC20, BEP20, or Binance ID)',
+        'modal.crypto.step2': 'Copy wallet address or Binance ID or scan QR Code',
         'modal.crypto.step3': 'Open Binance app or any USDT wallet',
-        'modal.crypto.step4': 'Make sure to select the same network (<strong id="network-warning">TRC20</strong>)',
+        'modal.crypto.step4': 'Make sure to select the same method (<strong id="network-warning">TRC20</strong>)',
         'modal.crypto.step5': 'Send the required amount',
         'modal.crypto.step6': 'Keep the Transaction ID',
-        'modal.crypto.warning': '⚠️ Make sure to select the correct network or you will lose your funds!',
+        'modal.crypto.binanceIdLabel': 'Binance ID',
+        'modal.crypto.warning': '⚠️ Make sure to select the correct method or you will lose your funds!',
         'modal.redotpay.idLabel': 'RedotPay ID:',
         'modal.redotpay.step1': 'Open RedotPay app',
         'modal.redotpay.step2': 'Choose "Send"',
@@ -2059,12 +2244,21 @@ const translations = {
         'modal.redotpay.step5': 'Complete the sending process',
         'modal.redotpay.step6': 'Keep proof of transfer',
         'modal.redotpay.warning': '⚠️ Make sure to enter RedotPay ID correctly!',
+        'currency.selector.title': 'Select Currency',
+        'currency.dzd': 'Algerian Dinar',
+        'currency.usd': 'US Dollar',
+        'currency.error.geolocation': 'Unable to detect your location. US Dollar selected as default currency.',
+        'currency.error.storage': 'Unable to save currency preferences. Default settings will be used.',
+        'currency.success.changed': 'Currency changed successfully',
+        'service.international': 'Our services are available internationally',
+        'service.instant.delivery': 'Instant delivery for digital products',
     },
     fr: {
         'brand.tagline': 'Solutions Numériques Qui Renforcent Votre Présence',
         'nav.products': 'Nos Produits',
         'nav.reviews': '⭐ Avis Clients',
-        'nav.contact': 'Contactez-nous',
+        'nav.contact': 'WhatsApp',
+        'nav.telegram': 'Telegram',
         'hero.title': 'Votre Plateforme pour Tout ce Dont Vous Avez Besoin',
         'hero.description': 'Comptes éducatifs, outils créatifs et solutions IA conçus pour soutenir votre entreprise et vos projets aux meilleurs prix avec un service client professionnel.',
         'hero.explore': 'Explorer les Produits',
@@ -2087,6 +2281,8 @@ const translations = {
         'product.adobe.selectType': 'Sélectionnez le Type de Compte:',
         'product.adobe.shared': 'Compte Partagé',
         'product.adobe.personal': 'Compte Personnel (Keys)',
+        'product.adobe.oneMonth': '1 Mois',
+        'product.adobe.threeMonths': '3 Mois',
         'product.adobe.shared.price1': '1 Mois: <strong>1500 DZD</strong>',
         'product.adobe.shared.price2': '3 Mois: <strong>3000 DZD</strong>',
         'product.adobe.personal.price1': '1 Mois: <strong>3000 DZD</strong>',
@@ -2231,6 +2427,15 @@ const translations = {
         'footer.rights': 'Tous droits réservés',
         'footer.instagram': 'Instagram',
         'footer.whatsapp': 'WhatsApp',
+        'footer.telegram': 'Telegram',
+        'contact.whatsapp': 'Contactez via WhatsApp',
+        'contact.telegram': 'Contactez via Telegram',
+        'contact.instagram': 'Suivez-nous sur Instagram',
+        'modal.chooseContact': 'Choisissez le Moyen de Contact',
+        'modal.chooseContactDesc': 'Choisissez votre méthode préférée pour finaliser la commande',
+        'modal.whatsapp': 'WhatsApp',
+        'modal.telegram': 'Telegram',
+        'modal.instagram': 'Instagram',
         'modal.product': 'Produit:',
         'modal.price': 'Prix:',
         'modal.priceInUSD': 'Montant en USD:',
@@ -2270,6 +2475,14 @@ const translations = {
         'modal.baridimob.step7': 'Garder la preuve de paiement',
         'modal.baridimob.step8': 'Cliquer sur "Paiement Effectué" pour nous contacter',
         'modal.baridimob.warning': '⚠️ Assurez-vous d\'entrer correctement le RIP!',
+        'currency.selector.title': 'Sélectionner la Devise',
+        'currency.dzd': 'Dinar Algérien',
+        'currency.usd': 'Dollar Américain',
+        'currency.error.geolocation': 'Impossible de détecter votre emplacement. Dollar américain sélectionné par défaut.',
+        'currency.error.storage': 'Impossible de sauvegarder les préférences de devise. Les paramètres par défaut seront utilisés.',
+        'currency.success.changed': 'Devise changée avec succès',
+        'service.international': 'Nos services sont disponibles internationalement',
+        'service.instant.delivery': 'Livraison instantanée pour les produits numériques',
         'campuses.title': 'Les Neuf Cours Inclus',
         'campuses.subtitle': 'Accès complet à chaque cours et compétence',
         'campus1.title': 'Cours E-commerce',
@@ -2487,13 +2700,14 @@ const translations = {
         'modal.crypto.lowFeesBEP': 'Frais réduits (~0.5 USDT)',
         'modal.crypto.walletAddress': 'Adresse du Portefeuille',
         'modal.crypto.qrNote': 'Scanner le code avec l\'application wallet',
-        'modal.crypto.step1': 'Choisir le réseau approprié (TRC20 ou BEP20)',
-        'modal.crypto.step2': 'Copier l\'adresse du portefeuille ou scanner le code QR',
+        'modal.crypto.step1': 'Choisir la méthode de paiement (TRC20, BEP20, ou ID Binance)',
+        'modal.crypto.step2': 'Copier l\'adresse du portefeuille ou ID Binance ou scanner le code QR',
         'modal.crypto.step3': 'Ouvrir l\'application Binance ou tout portefeuille USDT',
-        'modal.crypto.step4': 'Assurez-vous de sélectionner le même réseau (<strong id="network-warning">TRC20</strong>)',
+        'modal.crypto.step4': 'Assurez-vous de sélectionner la même méthode (<strong id="network-warning">TRC20</strong>)',
         'modal.crypto.step5': 'Envoyer le montant requis',
         'modal.crypto.step6': 'Garder l\'ID de transaction',
-        'modal.crypto.warning': '⚠️ Assurez-vous de sélectionner le bon réseau ou vous perdrez vos fonds!',
+        'modal.crypto.binanceIdLabel': 'ID Binance',
+        'modal.crypto.warning': '⚠️ Assurez-vous de sélectionner la bonne méthode ou vous perdrez vos fonds!',
         'modal.redotpay.idLabel': 'ID RedotPay:',
         'modal.redotpay.step1': 'Ouvrir l\'application RedotPay',
         'modal.redotpay.step2': 'Choisir "Send" ou "Envoyer"',
@@ -3153,6 +3367,33 @@ window.openAddReviewModal = openAddReviewModal;
 window.closeAddReviewModal = closeAddReviewModal;
 
 
+// Adobe Account Type Selection
+function selectAdobeType(type) {
+    const buttons = document.querySelectorAll('.adobe-type-btn');
+    buttons.forEach(btn => {
+        if (btn.getAttribute('data-type') === type) {
+            btn.classList.add('active');
+            btn.style.border = '2px solid var(--accent)';
+            btn.style.background = 'rgba(255, 213, 111, 0.15)';
+            btn.style.color = 'var(--text-primary)';
+        } else {
+            btn.classList.remove('active');
+            btn.style.border = '2px solid var(--border-color)';
+            btn.style.background = 'transparent';
+            btn.style.color = 'var(--text-secondary)';
+        }
+    });
+
+    // Show/hide prices
+    if (type === 'shared') {
+        document.getElementById('adobe-prices-shared').style.display = 'block';
+        document.getElementById('adobe-prices-personal').style.display = 'none';
+    } else {
+        document.getElementById('adobe-prices-shared').style.display = 'none';
+        document.getElementById('adobe-prices-personal').style.display = 'block';
+    }
+}
+
 // Gamma.AI Account Type Selection
 function selectGammaType(type) {
     const buttons = document.querySelectorAll('.gamma-type-btn');
@@ -3180,21 +3421,85 @@ function selectGammaType(type) {
     }
 }
 
+// Order Adobe with selected type
+function orderAdobe() {
+    const activeBtn = document.querySelector('.adobe-type-btn.active');
+    const type = activeBtn ? activeBtn.getAttribute('data-type') : 'shared';
+    const productName = type === 'shared' ? 'Adobe Creative Cloud - Shared' : 'Adobe Creative Cloud - Personal';
+    
+    // Store product name and open contact choice modal
+    currentProductName = productName;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
 // Order Gamma with selected type
 function orderGamma() {
     const activeBtn = document.querySelector('.gamma-type-btn.active');
     const type = activeBtn ? activeBtn.getAttribute('data-type') : 'shared';
     const productName = type === 'shared' ? 'Gamma.AI - Shared' : 'Gamma.AI - Personal';
-    const price = type === 'shared' ? '1200' : '2000';
     
-    // Update order button data
-    const orderBtn = document.querySelector('#gamma-card .order-btn');
-    if (orderBtn) {
-        orderBtn.setAttribute('data-product', productName);
-        orderBtn.setAttribute('data-price', price);
+    // Store product name and open contact choice modal
+    currentProductName = productName;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+// Generic order function for products without special options
+function orderProduct(productName) {
+    // Store product name and open contact choice modal
+    currentProductName = productName;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+// Contact via selected platform
+function contactVia(platform) {
+    // Multilingual messages
+    const messages = {
+        ar: `مرحباً 👋\nأريد طلب: ${currentProductName}\n\nشكراً 🙏`,
+        en: `Hello 👋\nI would like to order: ${currentProductName}\n\nThank you 🙏`,
+        fr: `Bonjour 👋\nJe voudrais commander: ${currentProductName}\n\nMerci 🙏`
+    };
+    
+    const message = messages[currentLang] || messages.ar;
+    
+    // Open the selected platform
+    if (platform === 'whatsapp') {
+        window.open(`https://wa.me/213782125821?text=${encodeURIComponent(message)}`, '_blank');
+    } else if (platform === 'telegram') {
+        window.open(`https://t.me/+213656165400?text=${encodeURIComponent(message)}`, '_blank');
+    } else if (platform === 'instagram') {
+        window.open('https://www.instagram.com/market_algeriaa', '_blank');
     }
     
-    // Open WhatsApp
-    const message = `مرحباً، أريد طلب ${productName}`;
-    window.open(`https://wa.me/213782125821?text=${encodeURIComponent(message)}`, '_blank');
+    // Close the modal
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.classList.add('hidden');
+        }, 300);
+    }
 }
+
+// Make order functions globally available
+window.orderAdobe = orderAdobe;
+window.orderGamma = orderGamma;
+window.contactVia = contactVia;
+window.orderProduct = orderProduct;
+window.selectAdobeType = selectAdobeType;
+window.selectGammaType = selectGammaType;

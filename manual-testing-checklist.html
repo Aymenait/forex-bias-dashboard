@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Testing Checklist - International Expansion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-status {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: normal;
+        }
+
+        .status-pending {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .status-complete {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item:hover {
+            background: #f0f0f0;
+        }
+
+        .checklist-item.completed {
+            background: #e8f5e9;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checklist-item label {
+            cursor: pointer;
+            flex-grow: 1;
+            user-select: none;
+        }
+
+        .checklist-item.completed label {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            resize: vertical;
+            margin-top: 10px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #757575;
+            color: white;
+        }
+
+        .summary {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .summary h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .summary-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .timestamp {
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .action-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Manual Testing Checklist</h1>
+        <p class="subtitle">International Expansion Feature - Tasks 10.1 & 10.2</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar">0%</div>
+        </div>
+
+        <!-- Task 10.1: Geographic Location Testing -->
+        <div class="section" data-section="task-10-1">
+            <h2>
+                🌍 Task 10.1: Geographic Location Testing
+                <span class="section-status status-pending" id="status-10-1">0/4 Complete</span>
+            </h2>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-algeria" data-section="task-10-1">
+                <label for="test-algeria">
+                    <strong>Test from Algeria (VPN)</strong><br>
+                    Connect VPN to Algeria → Clear cache → Load website → Verify DZD currency and local payment methods (CCP, BaridiMob)
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-international" data-section="task-10-1">
+                <label for="test-international">
+                    <strong>Test from Other Country (VPN)</strong><br>
+                    Connect VPN to USA/France/UK → Clear cache → Load website → Verify USD currency and international payment methods (Binance, Crypto)
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-manual-toggle" data-section="task-10-1">
+                <label for="test-manual-toggle">
+                    <strong>Test Manual Currency Toggle</strong><br>
+                    Click currency selector → Verify smooth transition → Check prices update → Verify payment methods change → Reload page to confirm persistence
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-geolocation-failure" data-section="task-10-1">
+                <label for="test-geolocation-failure">
+                    <strong>Test Geolocation Failure Handling</strong><br>
+                    Block ipapi.co in DevTools → Clear cache → Reload → Verify fallback to USD with no errors
+                </label>
+            </div>
+
+            <textarea class="notes-area" id="notes-10-1" placeholder="Notes for Task 10.1..."></textarea>
+        </div>
+
+        <!-- Task 10.2: Browser and Device Testing -->
+        <div class="section" data-section="task-10-2">
+            <h2>
+                🖥️ Task 10.2: Browser and Device Testing
+                <span class="section-status status-pending" id="status-10-2">0/11 Complete</span>
+            </h2>
+
+            <h3 style="margin-top: 15px; color: #666;">Desktop Browsers</h3>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-chrome" data-section="task-10-2">
+                <label for="test-chrome">
+                    <strong>Chrome (Desktop)</strong><br>
+                    Test currency selector, price updates, payment buttons, modals, console errors, localStorage, performance (< 200ms)
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-firefox" data-section="task-10-2">
+                <label for="test-firefox">
+                    <strong>Firefox (Desktop)</strong><br>
+                    Test all functionality, CSS Grid/Flexbox layout, font rendering
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-safari" data-section="task-10-2">
+                <label for="test-safari">
+                    <strong>Safari (Mac)</strong><br>
+                    Test all functionality, backdrop-filter effects, touch events (iOS)
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-edge" data-section="task-10-2">
+                <label for="test-edge">
+                    <strong>Edge (Windows)</strong><br>
+                    Test all functionality, modern CSS features, compatibility
+                </label>
+            </div>
+
+            <h3 style="margin-top: 20px; color: #666;">Mobile Devices</h3>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-iphone" data-section="task-10-2">
+                <label for="test-iphone">
+                    <strong>iPhone (Safari)</strong><br>
+                    Test responsive design, touch interactions, portrait/landscape, tap targets (min 44x44px), page load (< 5s)
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-android" data-section="task-10-2">
+                <label for="test-android">
+                    <strong>Android Phone (Chrome)</strong><br>
+                    Test responsive design, touch interactions, back button, performance
+                </label>
+            </div>
+
+            <h3 style="margin-top: 20px; color: #666;">Tablets</h3>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-ipad" data-section="task-10-2">
+                <label for="test-ipad">
+                    <strong>iPad</strong><br>
+                    Test layout adaptation, currency selector accessibility, product grid, touch targets
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-android-tablet" data-section="task-10-2">
+                <label for="test-android-tablet">
+                    <strong>Android Tablet</strong><br>
+                    Test layout adaptation, all interactive elements
+                </label>
+            </div>
+
+            <h3 style="margin-top: 20px; color: #666;">Private Browsing Mode</h3>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-chrome-incognito" data-section="task-10-2">
+                <label for="test-chrome-incognito">
+                    <strong>Chrome Incognito</strong><br>
+                    Test with localStorage disabled → Verify system works without persistence → No errors
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-firefox-private" data-section="task-10-2">
+                <label for="test-firefox-private">
+                    <strong>Firefox Private Window</strong><br>
+                    Test with localStorage disabled → Verify system works without persistence → No errors
+                </label>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="test-safari-private" data-section="task-10-2">
+                <label for="test-safari-private">
+                    <strong>Safari Private Browsing</strong><br>
+                    Test with strict localStorage restrictions → Verify system works → No errors
+                </label>
+            </div>
+
+            <textarea class="notes-area" id="notes-10-2" placeholder="Notes for Task 10.2..."></textarea>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary">
+            <h3>📊 Testing Summary</h3>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-value" id="total-completed">0</div>
+                    <div class="summary-label">Tests Completed</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value" id="total-remaining">15</div>
+                    <div class="summary-label">Tests Remaining</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value" id="completion-percentage">0%</div>
+                    <div class="summary-label">Completion</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn-primary" onclick="saveProgress()">💾 Save Progress</button>
+            <button class="btn-success" onclick="exportReport()">📄 Export Report</button>
+            <button class="btn-danger" onclick="resetAll()">🔄 Reset All</button>
+            <button class="btn-secondary" onclick="window.print()">🖨️ Print</button>
+        </div>
+
+        <div class="timestamp" id="lastSaved"></div>
+    </div>
+
+    <script>
+        // Load saved progress
+        function loadProgress() {
+            const saved = localStorage.getItem('manual-testing-progress');
+            if (saved) {
+                const data = JSON.parse(saved);
+                
+                // Restore checkboxes
+                Object.keys(data.checkboxes).forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = data.checkboxes[id];
+                        updateCheckboxState(checkbox);
+                    }
+                });
+
+                // Restore notes
+                Object.keys(data.notes).forEach(id => {
+                    const textarea = document.getElementById(id);
+                    if (textarea) {
+                        textarea.value = data.notes[id];
+                    }
+                });
+
+                // Update timestamp
+                if (data.timestamp) {
+                    document.getElementById('lastSaved').textContent = 
+                        `Last saved: ${new Date(data.timestamp).toLocaleString()}`;
+                }
+            }
+            updateProgress();
+        }
+
+        // Save progress
+        function saveProgress() {
+            const checkboxes = {};
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                checkboxes[cb.id] = cb.checked;
+            });
+
+            const notes = {};
+            document.querySelectorAll('.notes-area').forEach(ta => {
+                notes[ta.id] = ta.value;
+            });
+
+            const data = {
+                checkboxes,
+                notes,
+                timestamp: new Date().toISOString()
+            };
+
+            localStorage.setItem('manual-testing-progress', JSON.stringify(data));
+            
+            document.getElementById('lastSaved').textContent = 
+                `Last saved: ${new Date().toLocaleString()}`;
+            
+            alert('✅ Progress saved successfully!');
+        }
+
+        // Update checkbox state
+        function updateCheckboxState(checkbox) {
+            const item = checkbox.closest('.checklist-item');
+            if (checkbox.checked) {
+                item.classList.add('completed');
+            } else {
+                item.classList.remove('completed');
+            }
+        }
+
+        // Update progress
+        function updateProgress() {
+            const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            const total = allCheckboxes.length;
+            const completed = checkedBoxes.length;
+            const percentage = Math.round((completed / total) * 100);
+
+            // Update progress bar
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+
+            // Update summary
+            document.getElementById('total-completed').textContent = completed;
+            document.getElementById('total-remaining').textContent = total - completed;
+            document.getElementById('completion-percentage').textContent = percentage + '%';
+
+            // Update section statuses
+            updateSectionStatus('task-10-1');
+            updateSectionStatus('task-10-2');
+        }
+
+        // Update section status
+        function updateSectionStatus(sectionId) {
+            const checkboxes = document.querySelectorAll(`input[data-section="${sectionId}"]`);
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const total = checkboxes.length;
+            
+            const statusElement = document.getElementById(`status-${sectionId}`);
+            statusElement.textContent = `${checked}/${total} Complete`;
+            
+            if (checked === total) {
+                statusElement.classList.remove('status-pending');
+                statusElement.classList.add('status-complete');
+            } else {
+                statusElement.classList.remove('status-complete');
+                statusElement.classList.add('status-pending');
+            }
+        }
+
+        // Export report
+        function exportReport() {
+            const checkboxes = {};
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                checkboxes[cb.id] = cb.checked;
+            });
+
+            const notes = {};
+            document.querySelectorAll('.notes-area').forEach(ta => {
+                notes[ta.id] = ta.value;
+            });
+
+            const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const total = allCheckboxes.length;
+            const completed = checkedBoxes.length;
+            const percentage = Math.round((completed / total) * 100);
+
+            let report = `# Manual Testing Report\n`;
+            report += `## International Expansion Feature\n\n`;
+            report += `**Date**: ${new Date().toLocaleDateString()}\n`;
+            report += `**Completion**: ${completed}/${total} tests (${percentage}%)\n\n`;
+            
+            report += `---\n\n`;
+            report += `### Task 10.1: Geographic Location Testing\n\n`;
+            report += `- [${checkboxes['test-algeria'] ? 'x' : ' '}] Test from Algeria (VPN)\n`;
+            report += `- [${checkboxes['test-international'] ? 'x' : ' '}] Test from Other Country (VPN)\n`;
+            report += `- [${checkboxes['test-manual-toggle'] ? 'x' : ' '}] Test Manual Currency Toggle\n`;
+            report += `- [${checkboxes['test-geolocation-failure'] ? 'x' : ' '}] Test Geolocation Failure Handling\n\n`;
+            
+            if (notes['notes-10-1']) {
+                report += `**Notes**: ${notes['notes-10-1']}\n\n`;
+            }
+
+            report += `### Task 10.2: Browser and Device Testing\n\n`;
+            report += `#### Desktop Browsers\n`;
+            report += `- [${checkboxes['test-chrome'] ? 'x' : ' '}] Chrome\n`;
+            report += `- [${checkboxes['test-firefox'] ? 'x' : ' '}] Firefox\n`;
+            report += `- [${checkboxes['test-safari'] ? 'x' : ' '}] Safari\n`;
+            report += `- [${checkboxes['test-edge'] ? 'x' : ' '}] Edge\n\n`;
+            
+            report += `#### Mobile Devices\n`;
+            report += `- [${checkboxes['test-iphone'] ? 'x' : ' '}] iPhone\n`;
+            report += `- [${checkboxes['test-android'] ? 'x' : ' '}] Android Phone\n\n`;
+            
+            report += `#### Tablets\n`;
+            report += `- [${checkboxes['test-ipad'] ? 'x' : ' '}] iPad\n`;
+            report += `- [${checkboxes['test-android-tablet'] ? 'x' : ' '}] Android Tablet\n\n`;
+            
+            report += `#### Private Browsing\n`;
+            report += `- [${checkboxes['test-chrome-incognito'] ? 'x' : ' '}] Chrome Incognito\n`;
+            report += `- [${checkboxes['test-firefox-private'] ? 'x' : ' '}] Firefox Private\n`;
+            report += `- [${checkboxes['test-safari-private'] ? 'x' : ' '}] Safari Private\n\n`;
+            
+            if (notes['notes-10-2']) {
+                report += `**Notes**: ${notes['notes-10-2']}\n\n`;
+            }
+
+            report += `---\n\n`;
+            report += `**Overall Status**: ${percentage === 100 ? '✅ COMPLETE' : '⏳ IN PROGRESS'}\n`;
+
+            // Download as file
+            const blob = new Blob([report], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `manual-testing-report-${new Date().toISOString().split('T')[0]}.md`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert('📄 Report exported successfully!');
+        }
+
+        // Reset all
+        function resetAll() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                localStorage.removeItem('manual-testing-progress');
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                    updateCheckboxState(cb);
+                });
+                document.querySelectorAll('.notes-area').forEach(ta => {
+                    ta.value = '';
+                });
+                document.getElementById('lastSaved').textContent = '';
+                updateProgress();
+                alert('🔄 All progress has been reset.');
+            }
+        }
+
+        // Event listeners
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateCheckboxState(this);
+                updateProgress();
+                saveProgress(); // Auto-save on change
+            });
+        });
+
+        document.querySelectorAll('.notes-area').forEach(textarea => {
+            textarea.addEventListener('blur', saveProgress); // Auto-save on blur
+        });
+
+        // Auto-save every 30 seconds
+        setInterval(saveProgress, 30000);
+
+        // Load progress on page load
+        window.addEventListener('DOMContentLoaded', loadProgress);
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Payment Buttons</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            padding: 40px;
+            background: #1b1d32;
+            color: #fff;
+        }
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+        h2 {
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        .payment-methods-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Payment Buttons Display Test</h1>
+    
+    <div class="test-section">
+        <h2>DZD Currency (Local Payment Methods)</h2>
+        <p>Should show: BaridiMob (primary), CCP, Crypto</p>
+        <div id="dzd-container" class="payment-methods-row"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>USD Currency (International Payment Methods)</h2>
+        <p>Should show: Binance (primary), RedotPay, Crypto</p>
+        <div id="usd-container" class="payment-methods-row"></div>
+    </div>
+
+    <script type="module">
+        import PaymentManager from './payment-manager.js';
+        import { PAYMENT_METHODS } from './currency-config.js';
+
+        // Create payment manager
+        const manager = new PaymentManager(PAYMENT_METHODS);
+
+        // Test product
+        const testProduct = {
+            id: 'test',
+            name: 'Test Product',
+            price_dzd: 1500,
+            price_usd: 10
+        };
+
+        // Display DZD buttons
+        const dzdContainer = document.getElementById('dzd-container');
+        manager.displayPaymentButtons(testProduct, 'DZD', dzdContainer);
+
+        // Display USD buttons
+        const usdContainer = document.getElementById('usd-container');
+        manager.displayPaymentButtons(testProduct, 'USD', usdContainer);
+
+        console.log('✅ Payment buttons displayed successfully');
+        console.log('DZD methods:', manager.getAvailablePaymentMethods('DZD').map(m => m.name));
+        console.log('USD methods:', manager.getAvailablePaymentMethods('USD').map(m => m.name));
+    </script>
+</body>
+</html>
