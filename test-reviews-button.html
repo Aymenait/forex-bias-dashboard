@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار زر التعليقات</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="text-white text-4xl mb-8">اختبار زر إضافة التقييم</h1>
+        
+        <!-- Language Buttons -->
+        <div class="flex gap-3 justify-center mb-8">
+            <button onclick="changeLanguage('ar')" class="bg-white px-4 py-2 rounded-full font-bold">العربية</button>
+            <button onclick="changeLanguage('en')" class="bg-white px-4 py-2 rounded-full font-bold">English</button>
+            <button onclick="changeLanguage('fr')" class="bg-white px-4 py-2 rounded-full font-bold">Français</button>
+        </div>
+        
+        <!-- Add Review Button -->
+        <button id="add-review-btn" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-3 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span id="add-review-btn-text">⭐ شارك تجربتك معنا</span>
+        </button>
+        
+        <div id="status" class="mt-8 text-white text-xl"></div>
+    </div>
+
+    <!-- Modal -->
+    <div id="add-review-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 relative">
+            <button onclick="closeModal()" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 text-3xl font-bold">
+                &times;
+            </button>
+            
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">نموذج التقييم</h2>
+            <p class="text-center text-gray-600">الزر يعمل! ✅</p>
+            
+            <button onclick="closeModal()" class="w-full mt-6 bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-700">
+                إغلاق
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Open modal
+        function openModal() {
+            console.log('Opening modal...');
+            const modal = document.getElementById('add-review-modal');
+            const status = document.getElementById('status');
+            
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                status.textContent = '✅ الزر يعمل! النموذج مفتوح';
+                status.style.color = '#4ade80';
+            } else {
+                status.textContent = '❌ خطأ: النموذج غير موجود';
+                status.style.color = '#ef4444';
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('add-review-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // Change language
+        function changeLanguage(lang) {
+            const btnText = document.getElementById('add-review-btn-text');
+            const buttonTexts = {
+                ar: '⭐ شارك تجربتك معنا',
+                en: '⭐ Share Your Experience',
+                fr: '⭐ Partagez Votre Expérience'
+            };
+            
+            if (btnText) {
+                btnText.textContent = buttonTexts[lang] || buttonTexts.ar;
+            }
+            
+            // Update direction
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+            }
+        }
+
+        // Add event listener
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('add-review-btn');
+            const status = document.getElementById('status');
+            
+            if (btn) {
+                console.log('Button found, adding event listener...');
+                btn.addEventListener('click', () => {
+                    console.log('Button clicked!');
+                    openModal();
+                });
+                status.textContent = '✅ الزر جاهز - اضغط عليه';
+                status.style.color = '#4ade80';
+            } else {
+                console.error('Button not found!');
+                status.textContent = '❌ خطأ: الزر غير موجود';
+                status.style.color = '#ef4444';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Market Algeriaa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="font-cairo bg-gray-900 text-white min-h-screen">
+    
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- صفحة تسجيل الدخول - Login Page -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="login-page" class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-2xl p-8 w-full max-w-md shadow-2xl">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">🔐</div>
+                <h1 class="text-2xl font-bold">لوحة التحكم</h1>
+                <p class="text-gray-400 mt-2">Market Algeriaa Admin</p>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label class="block text-gray-300 mb-2">كلمة المرور</label>
+                    <input type="password" id="admin-password" 
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none text-white"
+                        placeholder="أدخل كلمة المرور">
+                </div>
+                
+                <button type="submit" 
+                    class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 rounded-lg hover:opacity-90 transition-all">
+                    دخول 🚀
+                </button>
+                
+                <p id="login-error" class="text-red-400 text-center hidden">كلمة المرور غير صحيحة</p>
+            </form>
+            
+            <!-- Help -->
+            <div class="mt-6 text-center text-gray-500 text-sm">
+                <p>كلمة المرور الافتراضية: <code class="bg-gray-700 px-2 py-1 rounded">admin123</code></p>
+                <p class="mt-2">يمكنك تغييرها من الإعدادات</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- لوحة التحكم الرئيسية - Main Dashboard -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="dashboard-page" class="hidden">
+        
+        <!-- Header -->
+        <header class="bg-gray-800 border-b border-gray-700 px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <span class="text-2xl">🎛️</span>
+                    <div>
+                        <h1 class="text-xl font-bold">لوحة التحكم</h1>
+                        <p class="text-gray-400 text-sm">Market Algeriaa</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <a href="index.html" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        👁️ عرض الموقع
+                    </a>
+                    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors">
+                        خروج 🚪
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="bg-gray-800 border-b border-gray-700 px-6">
+            <div class="flex gap-1">
+                <button onclick="showTab('overview')" class="tab-btn active px-6 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors" data-tab="overview">
+                    📊 نظرة عامة
+                </button>
+                <button onclick="showTab('reviews')" class="tab-btn px-6 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors" data-tab="reviews">
+                    ⭐ التقييمات
+                </button>
+                <button onclick="showTab('settings')" class="tab-btn px-6 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors" data-tab="settings">
+                    ⚙️ الإعدادات
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="p-6">
+            
+            <!-- ═══════════ Overview Tab ═══════════ -->
+            <div id="tab-overview" class="tab-content">
+                <h2 class="text-2xl font-bold mb-6">📊 نظرة عامة</h2>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl p-6">
+                        <div class="text-4xl mb-2">⭐</div>
+                        <div class="text-3xl font-bold" id="stat-total-reviews">0</div>
+                        <div class="text-purple-200">إجمالي التقييمات</div>
+                    </div>
+                    
+                    <div class="stat-card bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-6">
+                        <div class="text-4xl mb-2">📈</div>
+                        <div class="text-3xl font-bold" id="stat-average">0.0</div>
+                        <div class="text-yellow-100">متوسط التقييم</div>
+                    </div>
+                    
+                    <div class="stat-card bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6">
+                        <div class="text-4xl mb-2">📦</div>
+                        <div class="text-3xl font-bold" id="stat-products">10</div>
+                        <div class="text-green-100">المنتجات</div>
+                    </div>
+                    
+                    <div class="stat-card bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6">
+                        <div class="text-4xl mb-2">🕐</div>
+                        <div class="text-3xl font-bold" id="stat-today">0</div>
+                        <div class="text-blue-100">تقييمات اليوم</div>
+                    </div>
+                </div>
+                
+                <!-- Recent Reviews -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4">🕐 آخر التقييمات</h3>
+                    <div id="recent-reviews" class="space-y-4">
+                        <p class="text-gray-400">جاري التحميل...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ═══════════ Reviews Tab ═══════════ -->
+            <div id="tab-reviews" class="tab-content hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold">⭐ إدارة التقييمات</h2>
+                    <div class="flex gap-4">
+                        <!-- Search -->
+                        <input type="text" id="search-reviews" placeholder="🔍 بحث..."
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                        
+                        <!-- Filter -->
+                        <select id="filter-product" 
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <option value="all">جميع المنتجات</option>
+                            <option value="The Real World">The Real World</option>
+                            <option value="ChatGPT Business">ChatGPT Business</option>
+                            <option value="Adobe Creative Cloud">Adobe Creative Cloud</option>
+                            <option value="Netflix Premium">Netflix Premium</option>
+                            <option value="TradingView Premium">TradingView Premium</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Reviews Table -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-700">
+                            <tr>
+                                <th class="text-right px-6 py-4">الاسم</th>
+                                <th class="text-right px-6 py-4">المنتج</th>
+                                <th class="text-right px-6 py-4">التقييم</th>
+                                <th class="text-right px-6 py-4">التعليق</th>
+                                <th class="text-right px-6 py-4">المصدر</th>
+                                <th class="text-right px-6 py-4">التاريخ</th>
+                                <th class="text-center px-6 py-4">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reviews-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center py-8 text-gray-400">جاري التحميل...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination Info -->
+                <div class="mt-4 text-gray-400 text-center">
+                    <span id="reviews-count">0</span> تقييم
+                </div>
+            </div>
+            
+            <!-- ═══════════ Settings Tab ═══════════ -->
+            <div id="tab-settings" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-6">⚙️ الإعدادات</h2>
+                
+                <div class="max-w-2xl space-y-6">
+                    <!-- Change Password -->
+                    <div class="bg-gray-800 rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4">🔑 تغيير كلمة المرور</h3>
+                        <form id="change-password-form" class="space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">كلمة المرور الحالية</label>
+                                <input type="password" id="current-password" 
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">كلمة المرور الجديدة</label>
+                                <input type="password" id="new-password" 
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">تأكيد كلمة المرور الجديدة</label>
+                                <input type="password" id="confirm-password" 
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <button type="submit" 
+                                class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg transition-colors">
+                                حفظ كلمة المرور
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="bg-gray-800 rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4">🔗 روابط سريعة</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="index.html" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-center transition-colors">
+                                🏠 الصفحة الرئيسية
+                            </a>
+                            <a href="reviews.html" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-center transition-colors">
+                                ⭐ صفحة التقييمات
+                            </a>
+                            <a href="https://console.firebase.google.com" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-center transition-colors">
+                                🔥 Firebase Console
+                            </a>
+                            <a href="https://wa.me/213782125821" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-center transition-colors">
+                                💬 WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Info -->
+                    <div class="bg-gray-800 rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4">ℹ️ معلومات</h3>
+                        <div class="space-y-2 text-gray-400">
+                            <p>📌 الإصدار: 1.0.0</p>
+                            <p>👨‍💻 تم التطوير بواسطة: Cursor AI</p>
+                            <p>📅 آخر تحديث: <span id="last-update"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full text-center">
+            <div class="text-6xl mb-4">⚠️</div>
+            <h3 class="text-2xl font-bold mb-2">تأكيد الحذف</h3>
+            <p class="text-gray-400 mb-6">هل أنت متأكد من حذف هذا التقييم؟<br>لا يمكن التراجع عن هذا الإجراء.</p>
+            <div class="flex gap-4 justify-center">
+                <button onclick="closeDeleteModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                    إلغاء
+                </button>
+                <button onclick="confirmDelete()" class="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
+                    حذف 🗑️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300">
+        <span id="toast-message">تم بنجاح!</span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, deleteDoc, doc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw",
+            authDomain: "the-real-world-review.firebaseapp.com",
+            projectId: "the-real-world-review",
+            storageBucket: "the-real-world-review.firebasestorage.app",
+            messagingSenderId: "324349726142",
+            appId: "1:324349726142:web:eff2cde07b569ed0a3bdef"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Make Firebase available globally
+        window.db = db;
+        window.firebaseModules = { collection, getDocs, deleteDoc, doc, query, orderBy };
+        
+        // Signal that Firebase is ready
+        window.dispatchEvent(new Event('firebaseReady'));
+    </script>
+
+    <script src="admin.js"></script>
+</body>
+</html>
+

@@ -2452,3 +2452,287 @@ img {
 .instagram-choice:hover {
     box-shadow: 0 8px 25px rgba(225, 48, 108, 0.5) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   تحسينات الهاتف - Mobile Improvements
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════ Hamburger Menu Button ═══════════ */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 10px;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.hamburger-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.hamburger-line {
+    width: 22px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Hamburger Animation when Open */
+.hamburger-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ═══════════ Mobile Navigation ═══════════ */
+@media (max-width: 768px) {
+    /* Show Hamburger Button */
+    .hamburger-btn {
+        display: flex;
+    }
+
+    /* Mobile Menu Overlay */
+    .nav-actions {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 85%;
+        max-width: 320px;
+        height: 100vh;
+        background: linear-gradient(135deg, #1b1d32 0%, #2d1f4e 100%);
+        flex-direction: column;
+        padding: 80px 25px 30px;
+        gap: 20px;
+        z-index: 1000;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+        overflow-y: auto;
+    }
+
+    .nav-actions.active {
+        right: 0;
+    }
+
+    /* Mobile Menu Items */
+    .nav-actions .language-switcher {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .nav-actions .lang-btn {
+        width: 100%;
+        padding: 14px 20px;
+        justify-content: center;
+        font-size: 1rem;
+        border-radius: 10px;
+    }
+
+    .nav-actions .currency-selector {
+        width: 100%;
+        gap: 10px;
+    }
+
+    .nav-actions .currency-btn {
+        flex: 1;
+        padding: 14px;
+        justify-content: center;
+        font-size: 1rem;
+        border-radius: 10px;
+    }
+
+    .nav-actions .nav-buttons-row {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .nav-actions .nav-buttons-row .btn {
+        width: 100%;
+        padding: 16px 20px;
+        justify-content: center;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        min-height: 52px;
+    }
+
+    /* Mobile Overlay Background */
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(3px);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Improve Nav Bar Layout */
+    .nav-bar {
+        justify-content: space-between;
+        padding: 15px 0;
+    }
+
+    .brand {
+        flex: 1;
+    }
+}
+
+/* ═══════════ تحسين أزرار الدفع - Payment Buttons ═══════════ */
+@media (max-width: 768px) {
+    .payment-methods-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .payment-btn-compact {
+        min-height: 48px !important;
+        min-width: 100px !important;
+        padding: 12px 16px !important;
+        font-size: 0.95rem !important;
+        flex: 1 1 calc(50% - 4px);
+    }
+
+    .payment-btn-compact svg {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .payment-btn-compact span {
+        font-size: 0.9rem !important;
+    }
+}
+
+/* ═══════════ تحسين Touch Targets ═══════════ */
+@media (max-width: 768px) {
+    /* جميع الأزرار */
+    .btn,
+    button:not(.hamburger-btn) {
+        min-height: 48px;
+        padding: 14px 20px;
+    }
+
+    /* أزرار الدفع */
+    .crypto-pay-btn,
+    .redotpay-btn,
+    .baridimob-btn {
+        min-height: 48px !important;
+        padding: 12px 16px !important;
+    }
+
+    /* زر الطلب */
+    .order-btn {
+        min-height: 52px !important;
+        font-size: 1.1rem !important;
+        padding: 14px 24px !important;
+    }
+
+    /* روابط التنقل */
+    .nav-buttons-row a {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* أزرار اللغة */
+    .lang-btn {
+        min-height: 44px;
+        padding: 12px 16px;
+    }
+
+    /* أزرار العملة */
+    .currency-btn {
+        min-height: 44px;
+        padding: 10px 14px;
+    }
+
+    /* بطاقات المنتجات */
+    .product-card {
+        padding: 20px 15px;
+    }
+
+    .product-card .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* تحسين المسافات */
+    .product-features li {
+        padding: 8px 0;
+        font-size: 0.95rem;
+    }
+
+    /* Footer Links */
+    footer a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        padding: 10px;
+    }
+
+    /* Contact Buttons */
+    .contact-actions .btn {
+        min-height: 52px !important;
+    }
+
+    /* Floating Buttons */
+    .floating-buttons a {
+        min-width: 50px;
+        min-height: 50px;
+    }
+}
+
+/* ═══════════ تحسينات إضافية للهاتف ═══════════ */
+@media (max-width: 480px) {
+    /* شاشات صغيرة جداً */
+    .payment-btn-compact {
+        flex: 1 1 100%;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+    }
+
+    .trust-badges {
+        gap: 10px;
+    }
+
+    .badge {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    .badge strong {
+        font-size: 1.1rem;
+    }
+}

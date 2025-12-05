@@ -41,6 +41,40 @@
     </style>
 </head>
 <body>
+    <!-- Define functions first -->
+    <script>
+        // Close modal function - defined early
+        window.closeAddReviewModal = function() {
+            console.log('Closing modal...');
+            const modal = document.getElementById('add-review-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                
+                // Reset form
+                const form = document.getElementById('add-review-form');
+                if (form) form.reset();
+                
+                const ratingInput = document.getElementById('review-rating');
+                if (ratingInput) ratingInput.value = '';
+                
+                document.querySelectorAll('.star-input').forEach(star => {
+                    star.textContent = '☆';
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-gray-300');
+                });
+            }
+        };
+        
+        window.closeAddReviewModalOnBackdrop = function(event) {
+            if (event.target.id === 'add-review-modal') {
+                window.closeAddReviewModal();
+            }
+        };
+        
+        console.log('Modal functions defined');
+    </script>
+    
     <!-- Back to Home Button -->
     <div class="absolute top-4 left-4 z-50">
         <a href="index.html" class="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-full hover:bg-white/30 transition-all flex items-center gap-2">
@@ -93,6 +127,16 @@
                 </div>
             </div>
 
+            <!-- Add Review Button -->
+            <div class="mb-6">
+                <button id="add-review-btn" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-3 mx-auto cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    <span id="add-review-btn-text" data-i18n="addReview.shareExperience">⭐ شارك تجربتك معنا</span>
+                </button>
+            </div>
+
             <!-- Filter Buttons -->
             <div class="flex flex-wrap justify-center gap-3">
                 <button onclick="filterReviews('all')" class="filter-btn active px-6 py-2 rounded-full bg-white text-purple-600 font-bold hover:bg-white/90 transition-all" data-i18n="filter.all">
@@ -141,6 +185,84 @@
         <img id="modal-image" src="" alt="Review Image" class="max-w-full max-h-[90vh] rounded-lg">
     </div>
 
+    <!-- Add Review Modal -->
+    <div id="add-review-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeAddReviewModalOnBackdrop(event)">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 relative" onclick="event.stopPropagation()">
+            <button onclick="closeAddReviewModal()" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 text-3xl font-bold">
+                &times;
+            </button>
+            
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center" data-i18n="addReview.title">أضف تقييمك</h2>
+            
+            <form id="add-review-form" class="space-y-6">
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2" data-i18n="addReview.name">الاسم:</label>
+                    <input type="text" id="review-name" required 
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                        placeholder="أدخل اسمك">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2" data-i18n="addReview.product">المنتج:</label>
+                    <select id="review-product" required 
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                        <option value="The Real World">The Real World</option>
+                        <option value="ChatGPT Business">ChatGPT Business</option>
+                        <option value="Adobe Creative Cloud">Adobe Creative Cloud</option>
+                        <option value="Gamma.AI">Gamma.AI</option>
+                        <option value="Canva Pro">Canva Pro</option>
+                        <option value="CapCut Pro">CapCut Pro</option>
+                        <option value="Netflix Premium">Netflix Premium</option>
+                        <option value="Perplexity AI Pro">Perplexity AI Pro</option>
+                        <option value="TradingView Premium">TradingView Premium</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2" data-i18n="addReview.source">من أين عرفت عنا؟</label>
+                    <select id="review-source" required 
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                        <option value="" data-i18n="addReview.selectSource">اختر المصدر</option>
+                        <option value="Instagram">📸 Instagram</option>
+                        <option value="Facebook">👥 Facebook</option>
+                        <option value="Twitter">🐦 Twitter/X</option>
+                        <option value="TikTok">🎵 TikTok</option>
+                        <option value="WhatsApp">💬 WhatsApp</option>
+                        <option value="YouTube">📺 YouTube</option>
+                        <option value="Google">🔍 Google</option>
+                        <option value="Friend" data-i18n="addReview.friend">👤 صديق</option>
+                        <option value="Other" data-i18n="addReview.other">🌐 أخرى</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2" data-i18n="addReview.rating">التقييم:</label>
+                    <div id="star-rating" class="flex gap-2 text-5xl cursor-pointer justify-center">
+                        <span class="star-input text-gray-300 hover:text-yellow-400 transition-colors" data-rating="1">☆</span>
+                        <span class="star-input text-gray-300 hover:text-yellow-400 transition-colors" data-rating="2">☆</span>
+                        <span class="star-input text-gray-300 hover:text-yellow-400 transition-colors" data-rating="3">☆</span>
+                        <span class="star-input text-gray-300 hover:text-yellow-400 transition-colors" data-rating="4">☆</span>
+                        <span class="star-input text-gray-300 hover:text-yellow-400 transition-colors" data-rating="5">☆</span>
+                    </div>
+                    <input type="hidden" id="review-rating" required>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2" data-i18n="addReview.comment">التعليق:</label>
+                    <textarea id="review-comment" required rows="4" 
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                        placeholder="شارك تجربتك معنا..."></textarea>
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 rounded-lg hover:scale-105 transition-all shadow-lg" 
+                    data-i18n="addReview.submit">
+                    إرسال التقييم
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -165,8 +287,47 @@
         window.dispatchEvent(new Event('firebaseReady'));
     </script>
 
-    <script src="reviews-translations.js"></script>
-    <script src="reviews-page.js"></script>
+    <script src="reviews-translations.js?v=3"></script>
+    <script src="reviews-page.js?v=3"></script>
+    
+    <!-- Inline Script for Button -->
+    <script>
+        console.log('Inline script loaded');
+        
+        // Wait for DOM
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initButton);
+        } else {
+            initButton();
+        }
+        
+        function initButton() {
+            console.log('Initializing button...');
+            const btn = document.getElementById('add-review-btn');
+            console.log('Button element:', btn);
+            
+            if (btn) {
+                btn.onclick = function() {
+                    console.log('Button clicked via onclick!');
+                    const modal = document.getElementById('add-review-modal');
+                    console.log('Modal element:', modal);
+                    if (modal) {
+                        modal.classList.remove('hidden');
+                        modal.classList.add('flex');
+                        console.log('Modal opened');
+                    } else {
+                        console.error('Modal not found!');
+                    }
+                };
+                console.log('Button onclick set successfully');
+            } else {
+                console.error('Button not found!');
+            }
+            
+        }
+        
+        // Modal functions already defined at top of body
+    </script>
     
     <style>
         .lang-btn.active {

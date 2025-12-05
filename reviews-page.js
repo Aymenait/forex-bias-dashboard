@@ -1,122 +1,310 @@
-// Reviews Page Script
+// Reviews Page JavaScript
+// Note: currentLang is defined in reviews-translations.js
+
 let allReviews = [];
 let displayedReviews = 0;
+const reviewsPerPage = 12;
 let currentFilter = 'all';
-const reviewsPerPage = 9;
 
-// Product mapping - Add new products here
-const productInfo = {
-    'The Real World Account': { 
-        name: 'The Real World', 
-        class: 'badge-trw', 
-        collection: 'reviews',
-        filter: 'trw'
-    },
-    'ChatGPT Business': { 
-        name: 'ChatGPT Business', 
-        class: 'badge-chatgpt', 
-        collection: 'chatgpt-reviews',
-        filter: 'chatgpt'
-    },
-    'Adobe Creative Cloud': { 
-        name: 'Adobe CC', 
-        class: 'badge-adobe', 
-        collection: 'adobe-reviews',
-        filter: 'adobe'
+// Open Add Review Modal
+window.openAddReviewModal = function() {
+    const modal = document.getElementById('add-review-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
     }
-    // To add a new product:
-    // 'Product Name': { 
-    //     name: 'Display Name', 
-    //     class: 'badge-custom', 
-    //     collection: 'firebase-collection-name',
-    //     filter: 'filter-key'
-    // }
 };
 
-window.addEventListener('firebaseReady', async function() {
-    await loadAllReviews();
-});
-
-async function loadAllReviews() {
-    const loading = document.getElementById('loading');
-    const noReviews = document.getElementById('no-reviews');
+// Close Add Review Modal
+window.closeAddReviewModal = function() {
+    const modal = document.getElementById('add-review-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
     
-    try {
-        allReviews = [];
-        
-        // Dynamically load reviews from all products
-        for (const [productName, info] of Object.entries(productInfo)) {
-            const reviews = await loadFromCollection(info.collection, productName);
-            allReviews.push(...reviews);
-        }
-        
-        // Sort by timestamp (newest first)
-        allReviews.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        
-        loading.style.display = 'none';
-        
-        if (allReviews.length === 0) {
-            noReviews.classList.remove('hidden');
-        } else {
-            displayReviews();
-            updateStats();
-            updateProductCount();
-        }
-    } catch (error) {
-        console.error('Error loading reviews:', error);
-        loading.style.display = 'none';
-        noReviews.classList.remove('hidden');
-    }
+    // Reset form
+    const form = document.getElementById('add-review-form');
+    if (form) form.reset();
+    
+    const ratingInput = document.getElementById('review-rating');
+    if (ratingInput) ratingInput.value = '';
+    
+    document.querySelectorAll('.star-input').forEach(star => {
+        star.textContent = '☆';
+        star.classList.remove('text-yellow-400');
+        star.classList.add('text-gray-300');
+    });
 }
 
-function updateProductCount() {
-    const productCount = Object.keys(productInfo).length;
-    const productCountElement = document.querySelector('.text-center .text-4xl.font-bold.text-white:last-of-type');
-    if (productCountElement) {
-        productCountElement.textContent = productCount;
+// Close modal when clicking on backdrop
+window.closeAddReviewModalOnBackdrop = function(event) {
+    if (event.target.id === 'add-review-modal') {
+        window.closeAddReviewModal();
     }
-}
+};
 
-async function loadFromCollection(collectionName, productName) {
-    try {
-        const { collection, getDocs, query, orderBy } = window.firebaseModules;
-        const reviewsQuery = query(collection(window.db, collectionName), orderBy('timestamp', 'desc'));
-        const querySnapshot = await getDocs(reviewsQuery);
-        
-        const reviews = [];
-        querySnapshot.forEach((doc) => {
-            reviews.push({
-                id: doc.id,
-                ...doc.data(),
-                product: productName
+// Initialize star rating
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Reviews page loaded');
+    
+    // Add event listener to Add Review button
+    const addReviewBtn = document.getElementById('add-review-btn');
+    console.log('Add Review Button:', addReviewBtn);
+    
+    if (addReviewBtn) {
+        console.log('Adding click event listener to button');
+        addReviewBtn.addEventListener('click', function() {
+            console.log('Button clicked!');
+            window.openAddReviewModal();
+        });
+    } else {
+        console.error('Add Review Button not found!');
+    }
+    
+    const starInputs = document.querySelectorAll('.star-input');
+    
+    starInputs.forEach(star => {
+        star.addEventListener('click', () => {
+            const rating = parseInt(star.getAttribute('data-rating'));
+            document.getElementById('review-rating').value = rating;
+            
+            // Update star display
+            starInputs.forEach((s, index) => {
+                if (index < rating) {
+                    s.textContent = '★';
+                    s.classList.remove('text-gray-300');
+                    s.classList.add('text-yellow-400');
+                } else {
+                    s.textContent = '☆';
+                    s.classList.remove('text-yellow-400');
+                    s.classList.add('text-gray-300');
+                }
             });
         });
         
-        return reviews;
+        // Hover effect
+        star.addEventListener('mouseenter', () => {
+            const rating = parseInt(star.getAttribute('data-rating'));
+            starInputs.forEach((s, index) => {
+                if (index < rating) {
+                    s.classList.add('text-yellow-400');
+                }
+            });
+        });
+        
+        star.addEventListener('mouseleave', () => {
+            const currentRating = parseInt(document.getElementById('review-rating').value) || 0;
+            starInputs.forEach((s, index) => {
+                if (index >= currentRating) {
+                    s.classList.remove('text-yellow-400');
+                    s.classList.add('text-gray-300');
+                }
+            });
+        });
+    });
+    
+    // Handle form submission
+    const form = document.getElementById('add-review-form');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('review-name').value;
+            const product = document.getElementById('review-product').value;
+            const source = document.getElementById('review-source').value;
+            const rating = parseInt(document.getElementById('review-rating').value);
+            const comment = document.getElementById('review-comment').value;
+            
+            if (!rating) {
+                alert(currentLang === 'ar' ? 'الرجاء اختيار التقييم' : currentLang === 'fr' ? 'Veuillez sélectionner une note' : 'Please select a rating');
+                return;
+            }
+            
+            if (!source) {
+                alert(currentLang === 'ar' ? 'الرجاء اختيار من أين عرفت عنا' : currentLang === 'fr' ? 'Veuillez sélectionner comment vous nous avez trouvé' : 'Please select how you found us');
+                return;
+            }
+            
+            try {
+                if (window.db && window.firebaseModules) {
+                    const { collection, addDoc } = window.firebaseModules;
+                    
+                    // Import serverTimestamp
+                    const { serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                    
+                    let collectionName = 'reviews';
+                    if (product.includes('ChatGPT')) collectionName = 'chatgpt-reviews';
+                    else if (product.includes('Adobe')) collectionName = 'adobe-reviews';
+                    else if (product.includes('Gamma')) collectionName = 'gamma-reviews';
+                    else if (product.includes('Canva')) collectionName = 'canva-reviews';
+                    else if (product.includes('CapCut')) collectionName = 'capcut-reviews';
+                    else if (product.includes('Netflix')) collectionName = 'netflix-reviews';
+                    else if (product.includes('Perplexity')) collectionName = 'perplexity-reviews';
+                    else if (product.includes('TradingView')) collectionName = 'tradingview-reviews';
+                    
+                    const reviewData = {
+                        name: name,
+                        platform: source,
+                        product: product,
+                        rating: rating,
+                        comment: comment,
+                        source: source,
+                        timestamp: serverTimestamp(),
+                        approved: false
+                    };
+                    
+                    await addDoc(collection(window.db, collectionName), reviewData);
+                    
+                    const successMsg = currentLang === 'ar' ? 'شكراً! تم إرسال تقييمك بنجاح. سيتم مراجعته قريباً.' : 
+                                       currentLang === 'fr' ? 'Merci! Votre avis a été soumis avec succès. Il sera examiné bientôt.' :
+                                       'Thank you! Your review has been submitted successfully. It will be reviewed soon.';
+                    alert(successMsg);
+                    
+                    window.closeAddReviewModal();
+                    
+                    // Reload reviews
+                    setTimeout(() => {
+                        loadReviews();
+                    }, 1000);
+                } else {
+                    throw new Error('Firebase not ready');
+                }
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                const errorMsg = currentLang === 'ar' ? 'حدث خطأ. الرجاء المحاولة مرة أخرى.' :
+                                currentLang === 'fr' ? 'Une erreur s\'est produite. Veuillez réessayer.' :
+                                'An error occurred. Please try again.';
+                alert(errorMsg);
+            }
+        });
+    }
+    
+    // Load reviews on page load
+    loadReviews();
+});
+
+// Load reviews from Firebase
+async function loadReviews() {
+    const loading = document.getElementById('loading');
+    const container = document.getElementById('reviews-container');
+    const noReviews = document.getElementById('no-reviews');
+    
+    loading.classList.remove('hidden');
+    
+    try {
+        if (!window.db || !window.firebaseModules) {
+            await new Promise(resolve => {
+                const timeout = setTimeout(() => {
+                    console.log('Firebase timeout');
+                    resolve();
+                }, 3000);
+                
+                window.addEventListener('firebaseReady', () => {
+                    clearTimeout(timeout);
+                    resolve();
+                }, { once: true });
+            });
+        }
+
+        allReviews = [];
+        
+        if (window.db && window.firebaseModules) {
+            const { collection, getDocs } = window.firebaseModules;
+            
+            const collections = [
+                'reviews', 
+                'chatgpt-reviews', 
+                'adobe-reviews',
+                'gamma-reviews',
+                'canva-reviews',
+                'capcut-reviews',
+                'netflix-reviews',
+                'perplexity-reviews',
+                'tradingview-reviews'
+            ];
+            
+            for (const collectionName of collections) {
+                try {
+                    const querySnapshot = await getDocs(collection(window.db, collectionName));
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        if (data.rating && data.name) {
+                            allReviews.push({
+                                id: doc.id,
+                                name: data.name,
+                                product: data.product || collectionName.replace('-reviews', ''),
+                                rating: data.rating,
+                                comment: data.comment || '',
+                                platform: data.platform || data.source || 'Unknown',
+                                date: data.timestamp?.toDate?.()?.toLocaleDateString('ar-DZ') || new Date().toLocaleDateString('ar-DZ'),
+                                image: data.image || null
+                            });
+                        }
+                    });
+                } catch (err) {
+                    console.log(`Collection ${collectionName} not found:`, err.message);
+                }
+            }
+        }
+        
+        // Sort by date (newest first)
+        allReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Update stats
+        updateStats();
+        
+        // Display reviews
+        displayedReviews = 0;
+        container.innerHTML = '';
+        displayReviews();
+        
     } catch (error) {
-        console.error(`Error loading ${collectionName}:`, error);
-        return [];
+        console.error('Error loading reviews:', error);
+    } finally {
+        loading.classList.add('hidden');
     }
 }
 
+// Update statistics
+function updateStats() {
+    const totalCount = document.getElementById('total-reviews-count');
+    const avgRating = document.getElementById('average-rating');
+    
+    if (allReviews.length > 0) {
+        const average = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
+        totalCount.textContent = allReviews.length;
+        avgRating.textContent = average.toFixed(1);
+    } else {
+        totalCount.textContent = '0';
+        avgRating.textContent = '5.0';
+    }
+}
+
+// Display reviews
 function displayReviews() {
     const container = document.getElementById('reviews-container');
     const showMoreContainer = document.getElementById('show-more-container');
+    const noReviews = document.getElementById('no-reviews');
     
-    // Filter reviews dynamically
-    const filteredReviews = currentFilter === 'all' 
-        ? allReviews 
-        : allReviews.filter(r => {
-            const productName = getProductByFilter(currentFilter);
-            return productName ? r.product === productName : true;
+    let filteredReviews = allReviews;
+    
+    if (currentFilter !== 'all') {
+        filteredReviews = allReviews.filter(r => {
+            const product = r.product.toLowerCase();
+            if (currentFilter === 'trw') return product.includes('real world');
+            if (currentFilter === 'chatgpt') return product.includes('chatgpt');
+            if (currentFilter === 'adobe') return product.includes('adobe');
+            return true;
         });
-    
-    // Clear container if starting fresh
-    if (displayedReviews === 0) {
-        container.innerHTML = '';
     }
     
-    // Get reviews to show
+    if (filteredReviews.length === 0) {
+        noReviews.classList.remove('hidden');
+        showMoreContainer.style.display = 'none';
+        return;
+    }
+    
+    noReviews.classList.add('hidden');
+    
     const reviewsToShow = filteredReviews.slice(displayedReviews, displayedReviews + reviewsPerPage);
     
     reviewsToShow.forEach(review => {
@@ -126,72 +314,62 @@ function displayReviews() {
     
     displayedReviews += reviewsToShow.length;
     
-    // Show/hide "Show More" button
-    if (displayedReviews >= filteredReviews.length) {
-        showMoreContainer.style.display = 'none';
-    } else {
+    if (displayedReviews < filteredReviews.length) {
         showMoreContainer.style.display = 'block';
+    } else {
+        showMoreContainer.style.display = 'none';
     }
 }
 
+// Create review card
 function createReviewCard(review) {
     const card = document.createElement('div');
     card.className = 'review-card bg-white rounded-2xl p-6 shadow-lg';
     
-    const productClass = productInfo[review.product]?.class || 'badge-trw';
-    const productName = productInfo[review.product]?.name || review.product;
-    const initial = review.name.charAt(0).toUpperCase();
-    const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+    const stars = '⭐'.repeat(review.rating);
+    const productBadge = getProductBadge(review.product);
     
     card.innerHTML = `
         <div class="flex items-start justify-between mb-4">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                    ${initial}
-                </div>
-                <div>
-                    <h3 class="font-bold text-gray-800">${escapeHtml(review.name)}</h3>
-                    <div class="text-yellow-400 text-sm">${stars}</div>
-                </div>
+            <div>
+                <h3 class="font-bold text-lg text-gray-800">${escapeHtml(review.name)}</h3>
+                <div class="text-yellow-400 text-sm">${stars}</div>
             </div>
-            <span class="product-badge ${productClass}">${productName}</span>
+            ${productBadge}
         </div>
-        
-        ${review.comment ? `<p class="text-gray-600 mb-3 leading-relaxed">${escapeHtml(review.comment)}</p>` : ''}
-        
-        ${review.image ? `
-            <div class="mb-3">
-                <img src="${review.image}" 
-                     alt="Review image" 
-                     class="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                     onclick="openImageModal('${review.image}')">
-            </div>
-        ` : ''}
-        
+        <p class="text-gray-600 mb-4 leading-relaxed">${escapeHtml(review.comment)}</p>
+        ${review.image ? `<img src="${review.image}" alt="Review" class="w-full rounded-lg mb-4 cursor-pointer" onclick="openImageModal('${review.image}')">` : ''}
         <div class="flex items-center justify-between text-sm text-gray-500">
-            <span>${review.platform || translate('platform.client')}</span>
-            <span>${formatDate(review.timestamp)}</span>
+            <span>📍 ${escapeHtml(review.platform)}</span>
+            <span>📅 ${review.date}</span>
         </div>
     `;
     
     return card;
 }
 
-function updateStats() {
-    const totalCount = allReviews.length;
-    const avgRating = totalCount > 0 
-        ? (allReviews.reduce((sum, r) => sum + r.rating, 0) / totalCount).toFixed(1)
-        : 5.0;
-    
-    document.getElementById('total-reviews-count').textContent = totalCount;
-    document.getElementById('average-rating').textContent = avgRating;
+// Get product badge
+function getProductBadge(product) {
+    const productLower = product.toLowerCase();
+    if (productLower.includes('real world')) {
+        return '<span class="product-badge badge-trw">The Real World</span>';
+    } else if (productLower.includes('chatgpt')) {
+        return '<span class="product-badge badge-chatgpt">ChatGPT</span>';
+    } else if (productLower.includes('adobe')) {
+        return '<span class="product-badge badge-adobe">Adobe</span>';
+    }
+    return `<span class="product-badge" style="background: #667eea; color: white;">${escapeHtml(product)}</span>`;
 }
 
-function filterReviews(filter) {
+// Filter reviews
+window.filterReviews = function(filter) {
     currentFilter = filter;
     displayedReviews = 0;
     
-    // Update button styles
+    const container = document.getElementById('reviews-container');
+    container.innerHTML = '';
+    
+    // Update active button
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active', 'bg-white', 'text-purple-600');
         btn.classList.add('bg-white/20', 'text-white');
@@ -200,54 +378,75 @@ function filterReviews(filter) {
     event.target.classList.remove('bg-white/20', 'text-white');
     event.target.classList.add('active', 'bg-white', 'text-purple-600');
     
-    // Clear and redisplay
-    document.getElementById('reviews-container').innerHTML = '';
     displayReviews();
 }
 
-// Helper function to get product by filter key
-function getProductByFilter(filterKey) {
-    for (const [productName, info] of Object.entries(productInfo)) {
-        if (info.filter === filterKey) {
-            return productName;
-        }
-    }
-    return null;
-}
-
-function loadMoreReviews() {
+// Load more reviews
+window.loadMoreReviews = function() {
     displayReviews();
-}
+};
 
-function openImageModal(imageSrc) {
+// Open image modal
+window.openImageModal = function(imageSrc) {
     const modal = document.getElementById('image-modal');
-    const modalImg = document.getElementById('modal-image');
+    const modalImage = document.getElementById('modal-image');
+    modalImage.src = imageSrc;
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-    modalImg.src = imageSrc;
 }
 
-function closeImageModal() {
+// Close image modal
+window.closeImageModal = function() {
     const modal = document.getElementById('image-modal');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
-}
+};
 
-function formatDate(timestamp) {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return translate('date.today');
-    if (diffDays === 1) return translate('date.yesterday');
-    if (diffDays < 7) return translate('date.days').replace('{0}', diffDays);
-    if (diffDays < 30) return translate('date.weeks').replace('{0}', Math.floor(diffDays / 7));
-    return translate('date.months').replace('{0}', Math.floor(diffDays / 30));
-}
-
+// Escape HTML
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// Change language - Use the one from reviews-translations.js
+// This function extends the base changeLanguage with reviews-specific updates
+const baseChangeLanguage = window.changeLanguage;
+window.changeLanguage = function(lang) {
+    currentLang = lang;
+    localStorage.setItem('language', lang);
+    localStorage.setItem('preferredLanguage', lang);
+    
+    // Update active button
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-lang') === lang) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Update direction
+    if (lang === 'ar') {
+        document.documentElement.setAttribute('dir', 'rtl');
+        document.documentElement.setAttribute('lang', 'ar');
+    } else {
+        document.documentElement.setAttribute('dir', 'ltr');
+        document.documentElement.setAttribute('lang', lang);
+    }
+    
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const translation = reviewsTranslations[lang] ? reviewsTranslations[lang][key] : null;
+        if (translation) {
+            element.textContent = translation;
+        }
+    });
+    
+    // Reload reviews to update date format
+    if (window.allReviews && window.allReviews.length > 0) {
+        displayedReviews = 0;
+        document.getElementById('reviews-container').innerHTML = '';
+        displayReviews();
+    }
 }

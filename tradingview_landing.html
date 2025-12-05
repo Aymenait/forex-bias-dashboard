@@ -3,11 +3,866 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TradingView Premium - قريباً | Market Algeriaa</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/8D1hNuQ.png">
-    <link rel="stylesheet" href="style.css">
+    <title>TradingView Premium - حساب شخصي لمدة 30 يوم</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(-45deg, #000000, #0a1628, #0a0a1a, #1a1a2e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .tv-glow {
+            box-shadow: 0 0 10px #2962FF, 0 0 20px #2962FF;
+        }
+        .text-glow {
+            text-shadow: 0 0 5px #2962FF;
+        }
+        .cta-pulse {
+            animation: cta-pulse-animation 2s infinite;
+        }
+        @keyframes cta-pulse-animation {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 10px #2962FF, 0 0 20px #2962FF;
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px #2962FF, 0 0 40px #2962FF, 0 0 60px #2962FF;
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px #2962FF, 0 0 20px #2962FF;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- المحتوى سيتم إضافته عند الإطلاق -->
+    <div id="particles-js"></div>
+
+    <!-- Back to Home Button -->
+    <div class="absolute top-4 left-4 z-[100]">
+        <a href="index.html" class="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-full hover:bg-[#2962FF] hover:border-[#2962FF] transition-all">
+            <span data-i18n="nav.home">← الرئيسية</span>
+        </a>
+    </div>
+
+    <!-- Language Switcher -->
+    <div class="absolute top-4 right-4 z-[100] flex gap-2">
+        <button class="lang-btn active" data-lang="ar" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">العربية</button>
+        <button class="lang-btn" data-lang="en" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">EN</button>
+        <button class="lang-btn" data-lang="fr" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">FR</button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative z-10">
+        <div class="w-48 h-48 md:w-64 md:h-64 mb-8 flex items-center justify-center" style="background: linear-gradient(135deg, #131722 0%, #1e222d 100%); border-radius: 20px; box-shadow: 0 0 30px rgba(41, 98, 255, 0.3);">
+            <img src="https://www.tradingview.com/static/images/logo-preview.png" alt="TradingView" class="w-40 md:w-52 object-contain">
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl md:text-6xl font-black mb-4 leading-tight text-[#2962FF] text-glow px-2" data-i18n="hero.title">
+            TradingView Premium - حساب شخصي
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-gray-300 mb-4 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.subtitle">
+            منصة تحليل فني احترافية للمتداولين المحترفين
+        </p>
+        
+        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.price">
+            فقط بـ 1500 دج / 30 يوم
+        </p>
+
+        <!-- Payment Methods Section -->
+        <div class="w-full max-w-4xl mx-auto mb-12 px-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-[#2962FF] mb-6" data-i18n="payment.title">طرق الدفع المتاحة</h2>
+
+            <div class="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-12">
+                <!-- RedotPay Button -->
+                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:shadow-[0_0_25px_rgba(220,38,38,0.8)] group-hover:scale-110 transition-all duration-300">
+                        <span class="text-white font-bold text-sm sm:text-lg">Redot</span>
+                    </div>
+                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">RedotPay</span>
+                </a>
+
+                <!-- USDT Button -->
+                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#2962FF] flex items-center justify-center shadow-[0_0_15px_rgba(41,98,255,0.5)] group-hover:shadow-[0_0_25px_rgba(41,98,255,0.8)] group-hover:scale-110 transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
+                            <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
+                            <path d="M12 12v8"></path>
+                        </svg>
+                    </div>
+                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">USDT</span>
+                </a>
+
+                <!-- BaridiMob Button -->
+                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.5)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                        </svg>
+                    </div>
+                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">BaridiMob</span>
+                </a>
+            </div>
+        </div>
+
+        <a href="https://wa.me/213782125821" 
+           class="bg-[#2962FF] text-white font-bold text-base sm:text-xl py-3 px-6 sm:px-8 rounded-full hover:bg-[#1E53E5] transition-all transform hover:scale-105 tv-glow shadow-lg cta-pulse" data-i18n="cta.button">
+            اطلب الآن عبر WhatsApp
+        </a>
+    </section>
+
+
+    <!-- Description Section -->
+    <section class="py-12 px-4 max-w-6xl mx-auto relative z-10">
+        <!-- Warranty & Support Banner -->
+        <div class="bg-gradient-to-r from-green-500/20 to-green-600/10 border border-green-500/50 rounded-2xl p-6 mb-10 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-green-400 mb-2" data-i18n="warranty.title">
+                🛡️ الضمان والدعم: 24/7
+            </h2>
+            <p class="text-gray-300" data-i18n="warranty.desc">دعم فني متواصل على مدار الساعة</p>
+        </div>
+
+        <div class="bg-gradient-to-r from-[#2962FF]/10 to-transparent border-r-4 border-[#2962FF] p-6 rounded-lg mb-10">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#2962FF] mb-4" data-i18n="desc.title">
+                حساب TradingView Premium شخصي
+            </h2>
+            <p class="text-gray-300 leading-relaxed text-base mb-4" data-i18n="desc.subtitle">
+                حساب شخصي وليس مشترك - يمكنك تغيير كلمة المرور
+            </p>
+            <p class="text-gray-300 leading-relaxed text-base" data-i18n="desc.text">
+                احصل على وصول كامل إلى جميع أدوات TradingView Premium للتحليل الفني المتقدم مع بيانات السوق في الوقت الفعلي.
+            </p>
+        </div>
+
+        <!-- Key Features Section -->
+        <div class="bg-gradient-to-br from-[#2962FF]/10 to-transparent rounded-2xl border border-[#2962FF]/30 p-8 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#2962FF] mb-8 text-glow" data-i18n="features.title">
+                ✨ المميزات الرئيسية
+            </h2>
+            <p class="text-center text-gray-300 mb-10 text-lg">
+                <span data-i18n="features.duration">مدة الاشتراك:</span> <span class="text-[#2962FF] font-bold text-2xl" data-i18n="features.duration.value">30 يوم</span>
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Feature 1 -->
+                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
+                    <div class="text-3xl flex-shrink-0">📊</div>
+                    <div>
+                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature1.title">8 شارتات في نافذة واحدة</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="feature1.desc">Charts: Up to 8 charts in a single window</p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
+                    <div class="text-3xl flex-shrink-0">📈</div>
+                    <div>
+                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature2.title">25 مؤشر لكل شارت</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="feature2.desc">Indicators: Up to 25 indicators per chart</p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
+                    <div class="text-3xl flex-shrink-0">🔔</div>
+                    <div>
+                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature3.title">400 تنبيه</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="feature3.desc">Alerts: Up to 400 alerts, including server-side alerts</p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
+                    <div class="text-3xl flex-shrink-0">📜</div>
+                    <div>
+                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature4.title">بيانات تاريخية موسعة</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="feature4.desc">Extended historical data for backtesting strategies</p>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
+                    <div class="text-3xl flex-shrink-0">🚫</div>
+                    <div>
+                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature5.title">بدون إعلانات</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="feature5.desc">Ad-free experience with faster loading speed</p>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
+                    <div class="text-3xl flex-shrink-0">🎨</div>
+                    <div>
+                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature6.title">تخصيص غير محدود</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="feature6.desc">Unlimited layout customization & saving chart templates</p>
+                    </div>
+                </div>
+
+                <!-- Feature 7 -->
+                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
+                    <div class="text-3xl flex-shrink-0">🔒</div>
+                    <div>
+                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature7.title">يمكن تغيير كلمة المرور</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="feature7.desc">Password can be changed - Personal use (not shared)</p>
+                    </div>
+                </div>
+
+                <!-- Feature 8 -->
+                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
+                    <div class="text-3xl flex-shrink-0">💬</div>
+                    <div>
+                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature8.title">دعم 24/7</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="feature8.desc">Warranty & Support: 24/7</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ideal For Section -->
+        <div class="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/30 rounded-2xl p-8 mb-12">
+            <h3 class="text-2xl font-bold text-purple-400 mb-6 text-center" data-i18n="ideal.title">
+                🎯 مثالي لـ
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-black/40 p-5 rounded-lg">
+                    <h4 class="text-[#2962FF] font-bold mb-3 text-lg" data-i18n="ideal.pro.title">👨‍💼 المتداولين المحترفين</h4>
+                    <p class="text-gray-300 text-sm" data-i18n="ideal.pro.desc">
+                        Ideal for professional traders who need multiple charts simultaneously
+                    </p>
+                </div>
+                
+                <div class="bg-black/40 p-5 rounded-lg">
+                    <h4 class="text-[#2962FF] font-bold mb-3 text-lg" data-i18n="ideal.multi.title">📱 التداول متعدد الأطر الزمنية</h4>
+                    <p class="text-gray-300 text-sm" data-i18n="ideal.multi.desc">
+                        Optimised for multi-timeframe trading strategies
+                    </p>
+                </div>
+                
+                <div class="bg-black/40 p-5 rounded-lg">
+                    <h4 class="text-[#2962FF] font-bold mb-3 text-lg" data-i18n="ideal.alerts.title">🔔 تنبيهات متقدمة</h4>
+                    <p class="text-gray-300 text-sm" data-i18n="ideal.alerts.desc">
+                        Reduce the risk of missing signals with advanced alert systems
+                    </p>
+                </div>
+                
+                <div class="bg-black/40 p-5 rounded-lg">
+                    <h4 class="text-[#2962FF] font-bold mb-3 text-lg" data-i18n="ideal.smooth.title">⚡ تجربة سلسة</h4>
+                    <p class="text-gray-300 text-sm" data-i18n="ideal.smooth.desc">
+                        Smooth, uninterrupted experience without ads
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Pricing Section -->
+        <div class="bg-gradient-to-br from-[#2962FF]/20 to-[#2962FF]/5 rounded-2xl border-2 border-[#2962FF] p-8 mb-12">
+            <h3 class="text-2xl font-bold text-[#2962FF] mb-6 text-center" data-i18n="pricing.title">
+                💰 الأسعار
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                <div class="bg-black/40 p-6 rounded-lg text-center">
+                    <div class="text-4xl mb-3">🇩🇿</div>
+                    <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.dzd">1500 دج</h4>
+                    <p class="text-gray-400 text-sm" data-i18n="pricing.duration">لمدة 30 يوم</p>
+                </div>
+                
+                <div class="bg-black/40 p-6 rounded-lg text-center">
+                    <div class="text-4xl mb-3">💵</div>
+                    <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.usdt">6 USD</h4>
+                    <p class="text-gray-400 text-sm" data-i18n="pricing.duration">لمدة 30 يوم</p>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <p class="text-[#2962FF] font-bold text-xl mb-2" data-i18n="pricing.best">🎯 أفضل سعر في السوق!</p>
+                <p class="text-gray-400 text-sm" data-i18n="pricing.guarantee">مع ضمان الوصول الكامل لمدة 30 يوم</p>
+            </div>
+        </div>
+
+        <!-- How to Get Section -->
+        <div class="bg-[#111]/80 rounded-2xl border border-[#2962FF]/30 p-8">
+            <h3 class="text-2xl font-bold text-[#2962FF] mb-6 text-center" data-i18n="howto.title">
+                📝 كيف تحصل على حسابك؟ (3 خطوات بسيطة)
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-[#2962FF] rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4">
+                        1
+                    </div>
+                    <h4 class="text-[#2962FF] font-bold mb-2" data-i18n="howto.step1.title">اطلب الآن</h4>
+                    <p class="text-gray-300 text-sm" data-i18n="howto.step1.desc">
+                        تواصل معنا عبر WhatsApp واختر طريقة الدفع المناسبة لك
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-[#2962FF] rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4">
+                        2
+                    </div>
+                    <h4 class="text-[#2962FF] font-bold mb-2" data-i18n="howto.step2.title">ادفع بأمان</h4>
+                    <p class="text-gray-300 text-sm" data-i18n="howto.step2.desc">
+                        اختر من بين RedotPay، USDT، أو BaridiMob وأكمل الدفع
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-[#2962FF] rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4">
+                        3
+                    </div>
+                    <h4 class="text-[#2962FF] font-bold mb-2" data-i18n="howto.step3.title">ابدأ التداول</h4>
+                    <p class="text-gray-300 text-sm" data-i18n="howto.step3.desc">
+                        استلم بيانات الحساب فوراً وابدأ التحليل الفني
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Final CTA Section -->
+    <section class="py-12 px-4 max-w-4xl mx-auto text-center relative z-10">
+        <div class="bg-gradient-to-r from-[#2962FF]/20 to-transparent border-2 border-[#2962FF] rounded-2xl p-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#2962FF] mb-4" data-i18n="final.title">
+                📈 ابدأ التداول الاحترافي اليوم
+            </h2>
+            <p class="text-xl text-gray-300 mb-6" data-i18n="final.subtitle">
+                احصل على TradingView Premium بأفضل سعر!
+            </p>
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في TradingView Premium" 
+               class="bg-[#2962FF] text-white font-bold text-xl py-4 px-12 rounded-full hover:bg-[#1E53E5] transition-all transform hover:scale-105 tv-glow shadow-lg inline-block cta-pulse" data-i18n="final.button">
+                🚀 اشترك الآن
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-600 text-sm border-t border-gray-900 relative z-10">
+        <span data-i18n="footer.text">&copy; 2024 TradingView Premium. جميع الحقوق محفوظة.</span>
+    </footer>
+
+    <!-- Payment Modals -->
+    <!-- BaridiMob Modal -->
+    <div id="baridimob-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #2962FF; border-radius: 20px; padding: 40px; position: relative;">
+            <button onclick="closeBaridiMobModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #2962FF; font-size: 30px; cursor: pointer;">&times;</button>
+            
+            <h2 id="baridimob-title" style="text-align: center; color: #2962FF; font-size: 2rem; margin-bottom: 20px;">الدفع عبر BaridiMob</h2>
+            
+            <div style="background: rgba(41, 98, 255, 0.1); border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="baridimob-product">المنتج:</strong> TradingView Premium (30 يوم)</p>
+                <p style="color: #fff;"><strong id="baridimob-price">السعر:</strong> <span id="baridimob-price-value">1500 دج</span></p>
+            </div>
+
+            <div style="background: #111; border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p id="baridimob-rip-label" style="color: #888; margin-bottom: 10px; text-align: center;">RIP BaridiMob:</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
+                    <code id="baridimob-rip" style="color: #2962FF; font-size: 1.2rem;">00799999002787548473</code>
+                    <button id="baridimob-copy" onclick="copyBaridiMobRIP()" style="background: #2962FF; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">
+                <h3 id="baridimob-instructions-title" style="color: #2962FF; margin-bottom: 15px;">تعليمات الدفع:</h3>
+                <ol id="baridimob-instructions" style="padding-right: 20px;">
+                    <li>افتح تطبيق BaridiMob</li>
+                    <li>اختر "تحويل الأموال" أو "Virement"</li>
+                    <li>اختر "RIP" كطريقة التحويل</li>
+                    <li>أدخل الـ RIP: <strong>00799999002787548473</strong></li>
+                    <li>أدخل المبلغ: <strong>1500 دج</strong></li>
+                    <li>أكمل عملية الدفع</li>
+                    <li>احتفظ بإثبات الدفع</li>
+                    <li>اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+                <p id="baridimob-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!</p>
+            </div>
+
+            <button id="baridimob-button" onclick="confirmBaridiMobPayment()" style="width: 100%; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+
+    <!-- USDT/Crypto Modal -->
+    <div id="crypto-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #2962FF; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeCryptoModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #2962FF; font-size: 30px; cursor: pointer;">&times;</button>
+            
+            <h2 id="crypto-title" style="text-align: center; color: #2962FF; font-size: 2rem; margin-bottom: 20px;">الدفع بالعملات الرقمية</h2>
+            
+            <div style="background: rgba(41, 98, 255, 0.1); border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> TradingView Premium (30 يوم)</p>
+                <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">6 USDT</span></p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3 id="crypto-select-network" style="color: #2962FF; margin-bottom: 15px;">اختر الشبكة:</h3>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="selectNetwork('TRC20', 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9')" style="flex: 1; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                        TRC20<br><span id="crypto-fees1" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~1 USDT)</span>
+                    </button>
+                    <button onclick="selectNetwork('BEP20', '0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0')" style="flex: 1; background: #333; color: #fff; border: 1px solid #2962FF; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                        BEP20 (BSC)<br><span id="crypto-fees2" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~0.5 USDT)</span>
+                    </button>
+                </div>
+            </div>
+
+            <div style="background: #111; border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p id="crypto-wallet-label" style="color: #888; margin-bottom: 10px; text-align: center;">عنوان المحفظة (<span id="selected-network">TRC20</span>):</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <code id="wallet-address" style="color: #2962FF; font-size: 0.9rem; word-break: break-all;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
+                    <button id="crypto-copy" onclick="copyWalletAddress()" style="background: #2962FF; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">نسخ</button>
+                </div>
+                <div style="text-align: center;">
+                    <img id="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9" alt="QR Code" style="max-width: 200px; border-radius: 10px;">
+                    <p id="crypto-qr-text" style="color: #888; font-size: 0.85rem; margin-top: 10px;">امسح الكود بتطبيق المحفظة</p>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">
+                <h3 id="crypto-instructions-title" style="color: #2962FF; margin-bottom: 15px;">تعليمات الدفع:</h3>
+                <ol id="crypto-instructions" style="padding-right: 20px;">
+                    <li>اختر الشبكة المناسبة (TRC20 أو BEP20)</li>
+                    <li>انسخ عنوان المحفظة أو امسح QR Code</li>
+                    <li>افتح تطبيق Binance أو أي محفظة USDT</li>
+                    <li>تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)</li>
+                    <li>أرسل المبلغ: <strong>6 USDT</strong></li>
+                    <li>احتفظ بـ Transaction ID</li>
+                    <li>اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+                <p id="crypto-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!</p>
+            </div>
+
+            <button id="crypto-button" onclick="confirmCryptoPayment()" style="width: 100%; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+
+    <!-- RedotPay Modal -->
+    <div id="redotpay-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #2962FF; border-radius: 20px; padding: 40px; position: relative;">
+            <button onclick="closeRedotPayModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #2962FF; font-size: 30px; cursor: pointer;">&times;</button>
+            
+            <h2 id="redotpay-title" style="text-align: center; color: #2962FF; font-size: 2rem; margin-bottom: 20px;">الدفع عبر RedotPay</h2>
+            
+            <div style="background: rgba(41, 98, 255, 0.1); border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="redotpay-product">المنتج:</strong> TradingView Premium (30 يوم)</p>
+                <p style="color: #fff;"><strong id="redotpay-price">السعر:</strong> <span id="redotpay-price-value">6 USD</span></p>
+            </div>
+
+            <div style="background: #111; border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p id="redotpay-id-label" style="color: #888; margin-bottom: 10px; text-align: center;">RedotPay ID:</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
+                    <code id="redotpay-id" style="color: #2962FF; font-size: 1.3rem;">1117632168</code>
+                    <button id="redotpay-copy" onclick="copyRedotPayID()" style="background: #2962FF; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">
+                <h3 id="redotpay-instructions-title" style="color: #2962FF; margin-bottom: 15px;">تعليمات الدفع:</h3>
+                <ol id="redotpay-instructions" style="padding-right: 20px;">
+                    <li>افتح تطبيق RedotPay</li>
+                    <li>اختر "Send" أو "إرسال"</li>
+                    <li>أدخل RedotPay ID: <strong>1117632168</strong></li>
+                    <li>أدخل المبلغ: <strong>6 USD</strong></li>
+                    <li>أكمل عملية الإرسال</li>
+                    <li>احتفظ بإثبات التحويل</li>
+                    <li>اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+                <p id="redotpay-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!</p>
+            </div>
+
+            <button id="redotpay-button" onclick="confirmRedotPayPayment()" style="width: 100%; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Social Buttons -->
+    <div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
+        <!-- WhatsApp Button -->
+        <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن TradingView Premium" 
+           class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
+           style="box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); animation: pulse-whatsapp 2s infinite;">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
+                <path d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z"/>
+            </svg>
+        </a>
+
+        <!-- Instagram Button -->
+        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" 
+           target="_blank"
+           class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
+           style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); animation: pulse-instagram 2s infinite;">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+        </a>
+    </div>
+
+    <style>
+        @keyframes pulse-whatsapp {
+            0% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+            50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1); }
+            100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+        }
+        @keyframes pulse-instagram {
+            0% { box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); }
+            50% { box-shadow: 0 4px 30px rgba(225, 48, 108, 0.7), 0 0 0 10px rgba(225, 48, 108, 0.1); }
+            100% { box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); }
+        }
+    </style>
+
+
+    <script>
+        // Particles.js configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#2962FF' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#2962FF',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Payment Modal Functions
+        function openBaridiMobModal() {
+            document.getElementById('baridimob-modal').style.display = 'flex';
+        }
+        function closeBaridiMobModal() {
+            document.getElementById('baridimob-modal').style.display = 'none';
+        }
+        function copyBaridiMobRIP() {
+            const rip = document.getElementById('baridimob-rip').textContent;
+            navigator.clipboard.writeText(rip);
+            alert('تم نسخ RIP بنجاح!');
+        }
+        function confirmBaridiMobPayment() {
+            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر BaridiMob لـ TradingView Premium', '_blank');
+        }
+
+        function openCryptoModal() {
+            document.getElementById('crypto-modal').style.display = 'flex';
+        }
+        function closeCryptoModal() {
+            document.getElementById('crypto-modal').style.display = 'none';
+        }
+        function selectNetwork(network, address) {
+            document.getElementById('selected-network').textContent = network;
+            document.getElementById('network-warning').textContent = network;
+            document.getElementById('wallet-address').textContent = address;
+            document.getElementById('qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + address;
+        }
+        function copyWalletAddress() {
+            const address = document.getElementById('wallet-address').textContent;
+            navigator.clipboard.writeText(address);
+            alert('تم نسخ عنوان المحفظة بنجاح!');
+        }
+        function confirmCryptoPayment() {
+            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر USDT لـ TradingView Premium', '_blank');
+        }
+
+        function openRedotPayModal() {
+            document.getElementById('redotpay-modal').style.display = 'flex';
+        }
+        function closeRedotPayModal() {
+            document.getElementById('redotpay-modal').style.display = 'none';
+        }
+        function copyRedotPayID() {
+            const id = document.getElementById('redotpay-id').textContent;
+            navigator.clipboard.writeText(id);
+            alert('تم نسخ RedotPay ID بنجاح!');
+        }
+        function confirmRedotPayPayment() {
+            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر RedotPay لـ TradingView Premium', '_blank');
+        }
+
+        // Add click events to payment buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentButtons = document.querySelectorAll('.flex.flex-col.items-center.gap-2');
+            if (paymentButtons.length >= 3) {
+                paymentButtons[0].addEventListener('click', openRedotPayModal);
+                paymentButtons[1].addEventListener('click', openCryptoModal);
+                paymentButtons[2].addEventListener('click', openBaridiMobModal);
+            }
+        });
+
+        // Language Switcher
+        const translations = {
+            ar: {
+                'nav.home': '← الرئيسية',
+                'hero.title': 'TradingView Premium - حساب شخصي',
+                'hero.subtitle': 'منصة تحليل فني احترافية للمتداولين المحترفين',
+                'hero.price': 'فقط بـ 1500 دج / 30 يوم',
+                'payment.title': 'طرق الدفع المتاحة',
+                'cta.button': 'اطلب الآن عبر WhatsApp',
+                'warranty.title': '🛡️ الضمان والدعم: 24/7',
+                'warranty.desc': 'دعم فني متواصل على مدار الساعة',
+                'desc.title': 'حساب TradingView Premium شخصي',
+                'desc.subtitle': 'حساب شخصي وليس مشترك - يمكنك تغيير كلمة المرور',
+                'desc.text': 'احصل على وصول كامل إلى جميع أدوات TradingView Premium للتحليل الفني المتقدم مع بيانات السوق في الوقت الفعلي.',
+                'features.title': '✨ المميزات الرئيسية',
+                'features.duration': 'مدة الاشتراك:',
+                'features.duration.value': '30 يوم',
+                'feature1.title': '8 شارتات في نافذة واحدة',
+                'feature1.desc': 'Charts: Up to 8 charts in a single window',
+                'feature2.title': '25 مؤشر لكل شارت',
+                'feature2.desc': 'Indicators: Up to 25 indicators per chart',
+                'feature3.title': '400 تنبيه',
+                'feature3.desc': 'Alerts: Up to 400 alerts, including server-side alerts',
+                'feature4.title': 'بيانات تاريخية موسعة',
+                'feature4.desc': 'Extended historical data for backtesting strategies',
+                'feature5.title': 'بدون إعلانات',
+                'feature5.desc': 'Ad-free experience with faster loading speed',
+                'feature6.title': 'تخصيص غير محدود',
+                'feature6.desc': 'Unlimited layout customization & saving chart templates',
+                'feature7.title': 'يمكن تغيير كلمة المرور',
+                'feature7.desc': 'Password can be changed - Personal use (not shared)',
+                'feature8.title': 'دعم 24/7',
+                'feature8.desc': 'Warranty & Support: 24/7',
+                'ideal.title': '🎯 مثالي لـ',
+                'ideal.pro.title': '👨‍💼 المتداولين المحترفين',
+                'ideal.pro.desc': 'Ideal for professional traders who need multiple charts simultaneously',
+                'ideal.multi.title': '📱 التداول متعدد الأطر الزمنية',
+                'ideal.multi.desc': 'Optimised for multi-timeframe trading strategies',
+                'ideal.alerts.title': '🔔 تنبيهات متقدمة',
+                'ideal.alerts.desc': 'Reduce the risk of missing signals with advanced alert systems',
+                'ideal.smooth.title': '⚡ تجربة سلسة',
+                'ideal.smooth.desc': 'Smooth, uninterrupted experience without ads',
+                'pricing.title': '💰 الأسعار',
+                'pricing.dzd': '1500 دج',
+                'pricing.usdt': '6 USD',
+                'pricing.duration': 'لمدة 30 يوم',
+                'pricing.best': '🎯 أفضل سعر في السوق!',
+                'pricing.guarantee': 'مع ضمان الوصول الكامل لمدة 30 يوم',
+                'howto.title': '📝 كيف تحصل على حسابك؟ (3 خطوات بسيطة)',
+                'howto.step1.title': 'اطلب الآن',
+                'howto.step1.desc': 'تواصل معنا عبر WhatsApp واختر طريقة الدفع المناسبة لك',
+                'howto.step2.title': 'ادفع بأمان',
+                'howto.step2.desc': 'اختر من بين RedotPay، USDT، أو BaridiMob وأكمل الدفع',
+                'howto.step3.title': 'ابدأ التداول',
+                'howto.step3.desc': 'استلم بيانات الحساب فوراً وابدأ التحليل الفني',
+                'final.title': '📈 ابدأ التداول الاحترافي اليوم',
+                'final.subtitle': 'احصل على TradingView Premium بأفضل سعر!',
+                'final.button': '🚀 اشترك الآن',
+                'footer.text': '© 2024 TradingView Premium. جميع الحقوق محفوظة.'
+            },
+            en: {
+                'nav.home': '← Home',
+                'hero.title': 'TradingView Premium - Personal Account',
+                'hero.subtitle': 'Professional technical analysis platform for traders',
+                'hero.price': 'Only 1500 DZD / 30 Days',
+                'payment.title': 'Available Payment Methods',
+                'cta.button': 'Order Now via WhatsApp',
+                'warranty.title': '🛡️ Warranty & Support: 24/7',
+                'warranty.desc': 'Round-the-clock technical support',
+                'desc.title': 'Personal TradingView Premium Account',
+                'desc.subtitle': 'Personal account (not shared) - Password can be changed',
+                'desc.text': 'Get full access to all TradingView Premium tools for advanced technical analysis with real-time market data.',
+                'features.title': '✨ Key Features',
+                'features.duration': 'Subscription Duration:',
+                'features.duration.value': '30 Days',
+                'feature1.title': '8 Charts in One Window',
+                'feature1.desc': 'Charts: Up to 8 charts in a single window',
+                'feature2.title': '25 Indicators per Chart',
+                'feature2.desc': 'Indicators: Up to 25 indicators per chart',
+                'feature3.title': '400 Alerts',
+                'feature3.desc': 'Alerts: Up to 400 alerts, including server-side alerts',
+                'feature4.title': 'Extended Historical Data',
+                'feature4.desc': 'Extended historical data for backtesting strategies',
+                'feature5.title': 'Ad-Free',
+                'feature5.desc': 'Ad-free experience with faster loading speed',
+                'feature6.title': 'Unlimited Customization',
+                'feature6.desc': 'Unlimited layout customization & saving chart templates',
+                'feature7.title': 'Password Can Be Changed',
+                'feature7.desc': 'Password can be changed - Personal use (not shared)',
+                'feature8.title': '24/7 Support',
+                'feature8.desc': 'Warranty & Support: 24/7',
+                'ideal.title': '🎯 Ideal For',
+                'ideal.pro.title': '👨‍💼 Professional Traders',
+                'ideal.pro.desc': 'Ideal for professional traders who need multiple charts simultaneously',
+                'ideal.multi.title': '📱 Multi-Timeframe Trading',
+                'ideal.multi.desc': 'Optimised for multi-timeframe trading strategies',
+                'ideal.alerts.title': '🔔 Advanced Alerts',
+                'ideal.alerts.desc': 'Reduce the risk of missing signals with advanced alert systems',
+                'ideal.smooth.title': '⚡ Smooth Experience',
+                'ideal.smooth.desc': 'Smooth, uninterrupted experience without ads',
+                'pricing.title': '💰 Pricing',
+                'pricing.dzd': '1500 DZD',
+                'pricing.usdt': '6 USD',
+                'pricing.duration': 'For 30 Days',
+                'pricing.best': '🎯 Best Price in the Market!',
+                'pricing.guarantee': 'With full access guarantee for 30 days',
+                'howto.title': '📝 How to Get Your Account? (3 Simple Steps)',
+                'howto.step1.title': 'Order Now',
+                'howto.step1.desc': 'Contact us via WhatsApp and choose your preferred payment method',
+                'howto.step2.title': 'Pay Securely',
+                'howto.step2.desc': 'Choose from RedotPay, USDT, or BaridiMob and complete payment',
+                'howto.step3.title': 'Start Trading',
+                'howto.step3.desc': 'Receive account details instantly and start technical analysis',
+                'final.title': '📈 Start Professional Trading Today',
+                'final.subtitle': 'Get TradingView Premium at the Best Price!',
+                'final.button': '🚀 Subscribe Now',
+                'footer.text': '© 2024 TradingView Premium. All rights reserved.'
+            },
+            fr: {
+                'nav.home': '← Accueil',
+                'hero.title': 'TradingView Premium - Compte Personnel',
+                'hero.subtitle': 'Plateforme d\'analyse technique professionnelle pour traders',
+                'hero.price': 'Seulement 1500 DZD / 30 Jours',
+                'payment.title': 'Méthodes de Paiement Disponibles',
+                'cta.button': 'Commander Maintenant via WhatsApp',
+                'warranty.title': '🛡️ Garantie & Support: 24/7',
+                'warranty.desc': 'Support technique disponible 24h/24',
+                'desc.title': 'Compte TradingView Premium Personnel',
+                'desc.subtitle': 'Compte personnel (non partagé) - Mot de passe modifiable',
+                'desc.text': 'Accédez à tous les outils TradingView Premium pour une analyse technique avancée avec des données de marché en temps réel.',
+                'features.title': '✨ Caractéristiques Clés',
+                'features.duration': 'Durée d\'Abonnement:',
+                'features.duration.value': '30 Jours',
+                'feature1.title': '8 Graphiques dans Une Fenêtre',
+                'feature1.desc': 'Charts: Jusqu\'à 8 graphiques dans une seule fenêtre',
+                'feature2.title': '25 Indicateurs par Graphique',
+                'feature2.desc': 'Indicators: Jusqu\'à 25 indicateurs par graphique',
+                'feature3.title': '400 Alertes',
+                'feature3.desc': 'Alertes: Jusqu\'à 400 alertes, y compris les alertes côté serveur',
+                'feature4.title': 'Données Historiques Étendues',
+                'feature4.desc': 'Données historiques étendues pour le backtesting',
+                'feature5.title': 'Sans Publicité',
+                'feature5.desc': 'Expérience sans publicité avec chargement plus rapide',
+                'feature6.title': 'Personnalisation Illimitée',
+                'feature6.desc': 'Personnalisation illimitée et sauvegarde des modèles',
+                'feature7.title': 'Mot de Passe Modifiable',
+                'feature7.desc': 'Le mot de passe peut être changé - Usage personnel',
+                'feature8.title': 'Support 24/7',
+                'feature8.desc': 'Garantie & Support: 24/7',
+                'ideal.title': '🎯 Idéal Pour',
+                'ideal.pro.title': '👨‍💼 Traders Professionnels',
+                'ideal.pro.desc': 'Idéal pour les traders professionnels ayant besoin de plusieurs graphiques',
+                'ideal.multi.title': '📱 Trading Multi-Timeframe',
+                'ideal.multi.desc': 'Optimisé pour les stratégies de trading multi-timeframe',
+                'ideal.alerts.title': '🔔 Alertes Avancées',
+                'ideal.alerts.desc': 'Réduisez le risque de manquer des signaux avec des alertes avancées',
+                'ideal.smooth.title': '⚡ Expérience Fluide',
+                'ideal.smooth.desc': 'Expérience fluide et ininterrompue sans publicités',
+                'pricing.title': '💰 Tarifs',
+                'pricing.dzd': '1500 DZD',
+                'pricing.usdt': '6 USD',
+                'pricing.duration': 'Pour 30 Jours',
+                'pricing.best': '🎯 Meilleur Prix du Marché!',
+                'pricing.guarantee': 'Avec garantie d\'accès complet pendant 30 jours',
+                'howto.title': '📝 Comment Obtenir Votre Compte? (3 Étapes Simples)',
+                'howto.step1.title': 'Commander Maintenant',
+                'howto.step1.desc': 'Contactez-nous via WhatsApp et choisissez votre méthode de paiement',
+                'howto.step2.title': 'Payer en Sécurité',
+                'howto.step2.desc': 'Choisissez parmi RedotPay, USDT ou BaridiMob et complétez le paiement',
+                'howto.step3.title': 'Commencer le Trading',
+                'howto.step3.desc': 'Recevez les détails du compte instantanément et commencez l\'analyse',
+                'final.title': '📈 Commencez le Trading Professionnel Aujourd\'hui',
+                'final.subtitle': 'Obtenez TradingView Premium au Meilleur Prix!',
+                'final.button': '🚀 S\'Abonner Maintenant',
+                'footer.text': '© 2024 TradingView Premium. Tous droits réservés.'
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                    btn.style.background = 'rgba(41, 98, 255, 0.3)';
+                    btn.style.borderColor = '#2962FF';
+                } else {
+                    btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                }
+            });
+
+            // Update HTML lang and dir attributes
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            // Save language preference to localStorage
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Load saved language on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
+            changeLanguage(savedLang);
+        });
+
+        // Language button click handlers
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+    </script>
 </body>
 </html>

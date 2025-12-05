@@ -187,12 +187,27 @@ const PRODUCTS = {
   'tradingview': {
     id: 'tradingview',
     name: 'TradingView Premium',
-    price_dzd: 2000,
+    price_dzd: 1500,
     price_usd: 6,
     description: {
       ar: 'حساب TradingView Premium للتحليل المالي',
       en: 'TradingView Premium account for financial analysis',
       fr: 'Compte TradingView Premium pour analyse financière'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'cursor': {
+    id: 'cursor',
+    name: 'Cursor AI - 7 Days',
+    price_dzd: 700,
+    price_usd: 3,
+    description: {
+      ar: 'محرر أكواد ذكي بالذكاء الاصطناعي لمدة 7 أيام',
+      en: 'AI-powered smart code editor for 7 days',
+      fr: 'Éditeur de code IA intelligent pour 7 jours'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],

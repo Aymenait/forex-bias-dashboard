@@ -70,13 +70,20 @@
         <nav class="container nav-bar">
             <div class="brand">
                 <img src="https://i.imgur.com/8D1hNuQ.png" alt="Market Algeriaa Logo" class="logo" width="70"
-                    height="70" loading="eager">
+                    height="70" loading="eager" id="secret-logo" style="cursor: pointer;">
                 <div class="brand-text">
                     <span class="brand-name">Market Algeriaa</span>
                     <span class="brand-tagline" data-i18n="brand.tagline">حلول رقمية تعزز حضورك</span>
                 </div>
             </div>
-            <div class="nav-actions">
+            <!-- Hamburger Menu Button (Mobile) -->
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="فتح القائمة">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+            <div class="nav-actions" id="nav-actions">
                 <div class="language-switcher">
                     <button class="lang-btn active" data-lang="ar">العربية</button>
                     <button class="lang-btn" data-lang="en">English</button>
@@ -517,6 +524,58 @@
                             الآن</button>
                     </div>
 
+                    <!-- TradingView Premium -->
+                    <div class="product-card fade-in">
+                        <div class="product-image"
+                            style="background: linear-gradient(135deg, #131722 0%, #1e222d 100%); background-image: url('https://www.tradingview.com/static/images/logo-preview.png'); background-size: 80%; background-position: center; background-repeat: no-repeat;"
+                            role="img" aria-label="TradingView Premium">
+                        </div>
+                        <h3>TradingView Premium</h3>
+                        <p class="description" data-i18n="product.tradingview.desc">منصة تحليل فني احترافية للمتداولين
+                            مع مؤشرات متقدمة وبيانات في الوقت الفعلي.</p>
+                        <div class="price-tag" data-price-dzd="1500" data-price-usd="6">1500 د.ج</div>
+
+                        <div class="payment-methods-row">
+                            <button class="payment-btn-compact crypto-pay-btn" data-product="TradingView Premium"
+                                data-price="1500" data-price-usd="6">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
+                                </svg>
+                                <span>USDT</span>
+                            </button>
+                            <button class="payment-btn-compact redotpay-btn" data-product="TradingView Premium"
+                                data-price="1500" data-price-usd="6">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                </svg>
+                                <span>RedotPay</span>
+                            </button>
+                            <button class="payment-btn-compact baridimob-btn" data-product="TradingView Premium"
+                                data-price="1500" data-price-usd="6">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
+                                </svg>
+                                <span>BaridiMob</span>
+                            </button>
+                        </div>
+
+                        <ul class="product-features">
+                            <li data-i18n="product.tradingview.feature1">مؤشرات متقدمة غير محدودة</li>
+                            <li data-i18n="product.tradingview.feature2">بيانات في الوقت الفعلي</li>
+                            <li data-i18n="product.tradingview.feature3">تنبيهات مخصصة وأدوات رسم احترافية</li>
+                        </ul>
+                        <a href="tradingview_landing.html" class="discover-btn" data-i18n="product.discoverMore"
+                            style="display: block; width: 100%; padding: 12px; background: linear-gradient(135deg, #ffd56f, #ffb347); color: #1b1d32; text-align: center; border-radius: 8px; font-weight: bold; margin-bottom: 10px; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255, 181, 71, 0.3);"
+                            onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 6px 20px rgba(255, 181, 71, 0.5)'"
+                            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(255, 181, 71, 0.3)'">اكتشف
+                            المزيد</a>
+                        <button class="order-btn" data-product="TradingView Premium" data-i18n="product.orderNow" onclick="orderProduct('TradingView Premium')">اطلب
+                            الآن</button>
+                    </div>
+
                     <!-- Perplexity AI Pro -->
                     <div class="product-card fade-in">
                         <div class="product-image" style="background: #000; position: relative; overflow: hidden;"
@@ -630,31 +689,24 @@
                         </button>
                     </div>
 
-                    <!-- TradingView Premium - Coming Soon -->
+                    <!-- Cursor AI - Coming Soon -->
                     <div class="product-card fade-in" style="position: relative; opacity: 0.9;">
                         <div class="coming-soon-badge"
                             style="position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, #ff6b6b, #ff8e53); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; z-index: 10; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5); animation: pulse 2s infinite;">
                             <span data-i18n="product.comingSoon">قريباً</span>
                         </div>
                         <div class="product-image"
-                            style="background: linear-gradient(135deg, #2962FF 0%, #1E53E5 100%); display: flex; align-items: center; justify-content: center; filter: grayscale(20%);"
-                            role="img" aria-label="TradingView Premium">
-                            <svg width="120" height="120" viewBox="0 0 200 200" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white"
-                                    font-size="45" font-weight="900" font-family="Arial, sans-serif">📈</text>
-                            </svg>
+                            style="background: linear-gradient(135deg, #0F0F0F 0%, #1a1a2e 100%); background-image: url('https://cursor.sh/brand/icon.svg'); background-size: 60%; background-position: center; background-repeat: no-repeat; filter: grayscale(20%);"
+                            role="img" aria-label="Cursor AI">
                         </div>
-                        <h3>TradingView Premium</h3>
-                        <p class="description" data-i18n="product.tradingview.desc">منصة تحليل فني احترافية للمتداولين
-                            مع مؤشرات متقدمة وبيانات في الوقت الفعلي.</p>
-                        <div class="price-tag" style="opacity: 0.6;">
-                            <span data-i18n="product.tradingview.price">السعر قريباً</span>
-                        </div>
+                        <h3>Cursor AI - 7 Days</h3>
+                        <p class="description" data-i18n="product.cursor.desc">محرر أكواد ذكي مدعوم بالذكاء الاصطناعي لمدة 7 أيام.</p>
+                        <div class="price-tag" style="opacity: 0.6;" data-price-dzd="700" data-price-usd="3">700 د.ج</div>
+
                         <ul class="product-features" style="opacity: 0.7;">
-                            <li data-i18n="product.tradingview.feature1">مؤشرات متقدمة غير محدودة</li>
-                            <li data-i18n="product.tradingview.feature2">بيانات في الوقت الفعلي</li>
-                            <li data-i18n="product.tradingview.feature3">تنبيهات مخصصة وأدوات رسم احترافية</li>
+                            <li data-i18n="product.cursor.feature1">إكمال تلقائي ذكي للكود</li>
+                            <li data-i18n="product.cursor.feature2">دعم متعدد اللغات البرمجية</li>
+                            <li data-i18n="product.cursor.feature3">تصحيح وتحسين الكود بالذكاء الاصطناعي</li>
                         </ul>
                         <button class="order-btn" disabled
                             style="opacity: 0.5; cursor: not-allowed; background: rgba(100, 100, 100, 0.3); border-color: rgba(150, 150, 150, 0.5); box-shadow: none;">
@@ -1391,8 +1443,7 @@
     <!-- Firebase SDK for Reviews -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+        import { getFirestore, collection, getDocs, addDoc, serverTimestamp, query, orderBy, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw",
@@ -1404,17 +1455,33 @@
             measurementId: "G-5FPYPJDSF4"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
+        try {
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
 
-        // Make db and storage available globally
-        window.db = db;
-        window.storage = storage;
-        window.firebaseModules = { collection, getDocs };
+            // Make db available globally
+            window.db = db;
+            window.storage = null; // Storage not needed for now
+            window.firebaseModules = { 
+                collection, 
+                getDocs, 
+                addDoc, 
+                serverTimestamp, 
+                query, 
+                orderBy, 
+                doc, 
+                deleteDoc
+            };
 
-        // Trigger event when Firebase is ready
-        window.dispatchEvent(new Event('firebaseReady'));
+            window.firebaseReady = true;
+            window.dispatchEvent(new Event('firebaseReady'));
+            console.log('✅ Firebase initialized (without Storage)');
+        } catch (error) {
+            console.warn('⚠️ Firebase initialization failed, using local reviews only:', error.message);
+            window.firebaseReady = false;
+            window.db = null;
+            window.storage = null;
+        }
 
         // Load TRW reviews
         async function loadTRWReviews() {
@@ -1498,6 +1565,94 @@
     <script>
         // Adobe Account Type Selection
 
+    </script>
+
+    <!-- Secret Admin Access - 5 clicks on logo -->
+    <script>
+        (function() {
+            let clickCount = 0;
+            let clickTimer = null;
+            const logo = document.getElementById('secret-logo');
+            
+            if (logo) {
+                logo.addEventListener('click', function() {
+                    clickCount++;
+                    
+                    // Reset counter after 2 seconds of no clicks
+                    clearTimeout(clickTimer);
+                    clickTimer = setTimeout(() => {
+                        clickCount = 0;
+                    }, 2000);
+                    
+                    // After 5 clicks, go to admin
+                    if (clickCount >= 5) {
+                        clickCount = 0;
+                        window.location.href = 'admin.html';
+                    }
+                });
+            }
+        })();
+    </script>
+
+    <!-- Mobile Hamburger Menu -->
+    <script>
+        (function() {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const navActions = document.getElementById('nav-actions');
+            
+            // Create overlay element
+            const overlay = document.createElement('div');
+            overlay.className = 'mobile-overlay';
+            document.body.appendChild(overlay);
+            
+            function toggleMenu() {
+                hamburgerBtn.classList.toggle('active');
+                navActions.classList.toggle('active');
+                overlay.classList.toggle('active');
+                
+                // Prevent body scroll when menu is open
+                if (navActions.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            }
+            
+            function closeMenu() {
+                hamburgerBtn.classList.remove('active');
+                navActions.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            // Toggle on hamburger click
+            if (hamburgerBtn) {
+                hamburgerBtn.addEventListener('click', toggleMenu);
+            }
+            
+            // Close on overlay click
+            overlay.addEventListener('click', closeMenu);
+            
+            // Close on nav link click
+            const navLinks = navActions.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+            
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navActions.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+            
+            // Close on window resize (if larger than mobile)
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    closeMenu();
+                }
+            });
+        })();
     </script>
 </body>
 

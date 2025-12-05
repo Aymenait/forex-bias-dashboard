@@ -1399,10 +1399,13 @@ const translations = {
         'product.perplexity.feature2': 'إجابات مع مصادر موثوقة',
         'product.perplexity.feature3': 'استخدام غير محدود للنماذج المتقدمة',
         'product.tradingview.desc': 'منصة تحليل فني احترافية للمتداولين مع مؤشرات متقدمة وبيانات في الوقت الفعلي.',
-        'product.tradingview.price': 'السعر قريباً',
         'product.tradingview.feature1': 'مؤشرات متقدمة غير محدودة',
         'product.tradingview.feature2': 'بيانات في الوقت الفعلي',
         'product.tradingview.feature3': 'تنبيهات مخصصة وأدوات رسم احترافية',
+        'product.cursor.desc': 'محرر أكواد ذكي مدعوم بالذكاء الاصطناعي لمدة 7 أيام.',
+        'product.cursor.feature1': 'إكمال تلقائي ذكي للكود',
+        'product.cursor.feature2': 'دعم متعدد اللغات البرمجية',
+        'product.cursor.feature3': 'تصحيح وتحسين الكود بالذكاء الاصطناعي',
         'product.comingSoon': 'قريباً',
         'product.orderNow': 'اطلب الآن',
         'product.discoverMore': 'اكتشف المزيد',
@@ -1854,10 +1857,13 @@ const translations = {
         'product.perplexity.feature2': 'Answers with reliable sources',
         'product.perplexity.feature3': 'Unlimited access to advanced models',
         'product.tradingview.desc': 'Professional technical analysis platform for traders with advanced indicators and real-time data.',
-        'product.tradingview.price': 'Price Coming Soon',
         'product.tradingview.feature1': 'Unlimited advanced indicators',
         'product.tradingview.feature2': 'Real-time market data',
         'product.tradingview.feature3': 'Custom alerts and professional drawing tools',
+        'product.cursor.desc': 'AI-powered smart code editor for 7 days.',
+        'product.cursor.feature1': 'Intelligent code auto-completion',
+        'product.cursor.feature2': 'Multi-language programming support',
+        'product.cursor.feature3': 'AI-powered code fixing and optimization',
         'product.comingSoon': 'Coming Soon',
         'product.orderNow': 'Order Now',
         'product.discoverMore': 'Discover More',
@@ -2323,10 +2329,13 @@ const translations = {
         'product.perplexity.feature2': 'Réponses avec sources fiables',
         'product.perplexity.feature3': 'Accès illimité aux modèles avancés',
         'product.tradingview.desc': 'Plateforme d\'analyse technique professionnelle pour traders avec indicateurs avancés et données en temps réel.',
-        'product.tradingview.price': 'Prix Bientôt',
         'product.tradingview.feature1': 'Indicateurs avancés illimités',
         'product.tradingview.feature2': 'Données de marché en temps réel',
         'product.tradingview.feature3': 'Alertes personnalisées et outils de dessin professionnels',
+        'product.cursor.desc': 'Éditeur de code IA intelligent pour 7 jours.',
+        'product.cursor.feature1': 'Auto-complétion de code intelligente',
+        'product.cursor.feature2': 'Support multi-langages de programmation',
+        'product.cursor.feature3': 'Correction et optimisation du code par IA',
         'product.comingSoon': 'Bientôt',
         'product.orderNow': 'Commander',
         'product.discoverMore': 'Découvrir Plus',
@@ -3022,28 +3031,45 @@ async function loadAllReviews() {
 
 // Display reviews on homepage
 async function displayHomepageReviews() {
-    const reviews = await loadAllReviews();
-    const reviewsGrid = document.getElementById('reviews-grid');
-    
-    if (!reviewsGrid) return;
-    
-    // Calculate average rating
-    const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
-    const totalReviews = reviews.length;
-    
-    // Update average rating display
-    document.getElementById('average-rating-number').textContent = avgRating.toFixed(1);
-    document.getElementById('total-reviews-count').textContent = totalReviews;
-    updateStars('average-stars', avgRating);
-    
-    // Display first 6 reviews
-    const displayReviews = reviews.slice(0, 6);
-    reviewsGrid.innerHTML = '';
-    
-    displayReviews.forEach(review => {
-        const reviewCard = createReviewCard(review);
-        reviewsGrid.appendChild(reviewCard);
-    });
+    try {
+        const reviews = await loadAllReviews();
+        const reviewsGrid = document.getElementById('reviews-grid');
+        
+        if (!reviewsGrid) {
+            console.warn('reviews-grid element not found');
+            return;
+        }
+        
+        if (!reviews || reviews.length === 0) {
+            console.warn('No reviews to display');
+            return;
+        }
+        
+        // Calculate average rating
+        const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+        const totalReviews = reviews.length;
+        
+        // Update average rating display
+        const avgRatingElement = document.getElementById('average-rating-number');
+        const totalReviewsElement = document.getElementById('total-reviews-count');
+        
+        if (avgRatingElement) avgRatingElement.textContent = avgRating.toFixed(1);
+        if (totalReviewsElement) totalReviewsElement.textContent = totalReviews;
+        updateStars('average-stars', avgRating);
+        
+        // Display first 6 reviews
+        const displayReviews = reviews.slice(0, 6);
+        reviewsGrid.innerHTML = '';
+        
+        displayReviews.forEach(review => {
+            const reviewCard = createReviewCard(review);
+            reviewsGrid.appendChild(reviewCard);
+        });
+        
+        console.log(`✅ Displayed ${displayReviews.length} reviews`);
+    } catch (error) {
+        console.error('Error displaying reviews:', error);
+    }
 }
 
 // Create review card element
@@ -3274,26 +3300,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
+            // Show loading message
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = currentLang === 'ar' ? 'جاري الإرسال...' : currentLang === 'fr' ? 'Envoi en cours...' : 'Submitting...';
+            
             try {
                 let imageUrl = null;
                 
                 // Upload image if provided
-                if (imageFile && window.storage) {
+                if (imageFile && window.storage && window.firebaseModules) {
                     try {
-                        const { ref, uploadBytes, getDownloadURL } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
+                        console.log('Attempting to upload image...');
+                        const { ref, uploadBytes, getDownloadURL } = window.firebaseModules;
                         const storageRef = ref(window.storage, `reviews/${Date.now()}_${imageFile.name}`);
                         const snapshot = await uploadBytes(storageRef, imageFile);
                         imageUrl = await getDownloadURL(snapshot.ref);
-                        console.log('Image uploaded:', imageUrl);
+                        console.log('Image uploaded successfully:', imageUrl);
                     } catch (imgError) {
                         console.error('Error uploading image:', imgError);
-                        // Continue without image
+                        console.log('Continuing without image...');
+                        // Show warning but continue
+                        const warningMsg = currentLang === 'ar' 
+                            ? 'تعذر رفع الصورة، سيتم إرسال التقييم بدون صورة.' 
+                            : currentLang === 'fr' 
+                            ? 'Impossible de télécharger l\'image, l\'avis sera envoyé sans image.'
+                            : 'Failed to upload image, review will be submitted without image.';
+                        console.warn(warningMsg);
                     }
                 }
                 
                 // Send to Firebase
-                if (window.db) {
-                    const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                if (window.db && window.firebaseModules) {
+                    console.log('Sending review to Firebase...');
+                    const { collection, addDoc, serverTimestamp } = window.firebaseModules;
                     
                     let collectionName = 'reviews';
                     if (product.includes('ChatGPT')) collectionName = 'chatgpt-reviews';
@@ -3327,6 +3368,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Save timestamp to prevent multiple reviews in 24 hours
                 localStorage.setItem('lastReviewTime', Date.now().toString());
                 
+                console.log('Review submitted successfully!');
+                
                 // Show success message
                 const successMsg = currentLang === 'ar' ? 'شكراً! تم إرسال تقييمك بنجاح. سيتم مراجعته قريباً.' : 
                                    currentLang === 'fr' ? 'Merci! Votre avis a été soumis avec succès. Il sera examiné bientôt.' :
@@ -3346,6 +3389,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 currentLang === 'fr' ? 'Une erreur s\'est produite. Veuillez réessayer.' :
                                 'An error occurred. Please try again.';
                 alert(errorMsg);
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
             }
         });
     }
