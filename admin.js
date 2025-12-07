@@ -4272,3 +4272,295 @@ window.updateProfitCharts = updateProfitCharts;
 window.exportAccountingReport = exportAccountingReport;
 window.handleDateFilterChange = handleDateFilterChange;
 
+// ═══════════════════════════════════════════════════════════════════════════
+// إحصائيات الزوار - Visitor Statistics
+// ═══════════════════════════════════════════════════════════════════════════
+
+let allVisitors = [];
+let visitorsDailyChart = null;
+let visitorsDeviceChart = null;
+
+/**
+ * تحميل إحصائيات الزوار من Firebase
+ */
+async function loadVisitorStats() {
+    try {
+        if (!window.db || !window.firebaseModules) {
+            console.warn('⚠️ Firebase غير متاح');
+            showToast('Firebase غير متاح', 'error');
+            return;
+        }
+
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+        const q = query(collection(window.db, 'visitors'), orderBy('timestamp', 'desc'));
+        const querySnapshot = await getDocs(q);
+        
+        allVisitors = [];
+        querySnapshot.forEach(doc => {
+            allVisitors.push({ id: doc.id, ...doc.data() });
+        });
+
+        console.log(`📊 تم تحميل ${allVisitors.length} زيارة`);
+        
+        updateVisitorStats();
+        updateVisitorCharts();
+        
+        showToast(`✅ تم تحميل إحصائيات ${allVisitors.length} زيارة`, 'success');
+    } catch (error) {
+        console.error('خطأ في تحميل إحصائيات الزوار:', error);
+        showToast('خطأ في تحميل إحصائيات الزوار', 'error');
+    }
+}
+
+/**
+ * تحديث إحصائيات الزوار (يومي، أسبوعي، شهري)
+ */
+function updateVisitorStats() {
+    const now = new Date();
+    const today = now.toISOString().split('T')[0];
+    
+    // بداية الأسبوع (الأحد)
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+    
+    // بداية الشهر
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    // حساب الزوار
+    let todayCount = 0;
+    let weekCount = 0;
+    let monthCount = 0;
+
+    allVisitors.forEach(visitor => {
+        let visitorDate;
+        
+        // التعامل مع التاريخ بأشكال مختلفة
+        if (visitor.date) {
+            visitorDate = new Date(visitor.date);
+        } else if (visitor.timestamp && visitor.timestamp.toDate) {
+            visitorDate = visitor.timestamp.toDate();
+        } else if (visitor.timestamp) {
+            visitorDate = new Date(visitor.timestamp);
+        } else {
+            return;
+        }
+
+        const visitorDateStr = visitorDate.toISOString().split('T')[0];
+        
+        // زوار اليوم
+        if (visitorDateStr === today) {
+            todayCount++;
+        }
+        
+        // زوار الأسبوع
+        if (visitorDate >= startOfWeek) {
+            weekCount++;
+        }
+        
+        // زوار الشهر
+        if (visitorDate >= startOfMonth) {
+            monthCount++;
+        }
+    });
+
+    // تحديث العناصر في الواجهة
+    const todayEl = document.getElementById('visitors-today');
+    const weekEl = document.getElementById('visitors-week');
+    const monthEl = document.getElementById('visitors-month');
+    const totalEl = document.getElementById('visitors-total');
+
+    if (todayEl) todayEl.textContent = todayCount.toLocaleString('ar-DZ');
+    if (weekEl) weekEl.textContent = weekCount.toLocaleString('ar-DZ');
+    if (monthEl) monthEl.textContent = monthCount.toLocaleString('ar-DZ');
+    if (totalEl) totalEl.textContent = allVisitors.length.toLocaleString('ar-DZ');
+}
+
+/**
+ * تحديث الرسوم البيانية للزوار
+ */
+function updateVisitorCharts() {
+    updateDailyVisitorsChart();
+    updateDeviceChart();
+}
+
+/**
+ * رسم بياني للزوار اليومي (آخر 7 أيام)
+ */
+function updateDailyVisitorsChart() {
+    const canvas = document.getElementById('visitors-daily-chart');
+    if (!canvas) return;
+
+    // تدمير الرسم البياني القديم إن وجد
+    if (visitorsDailyChart) {
+        visitorsDailyChart.destroy();
+    }
+
+    // إعداد البيانات لآخر 7 أيام
+    const days = [];
+    const counts = [];
+    const now = new Date();
+
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date(now);
+        date.setDate(now.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        
+        // اسم اليوم بالعربية
+        const dayName = date.toLocaleDateString('ar-DZ', { weekday: 'short' });
+        days.push(dayName);
+
+        // عدد الزوار في هذا اليوم
+        const count = allVisitors.filter(v => {
+            if (v.date) return v.date === dateStr;
+            if (v.timestamp && v.timestamp.toDate) {
+                return v.timestamp.toDate().toISOString().split('T')[0] === dateStr;
+            }
+            return false;
+        }).length;
+        
+        counts.push(count);
+    }
+
+    // إنشاء الرسم البياني
+    const ctx = canvas.getContext('2d');
+    visitorsDailyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: days,
+            datasets: [{
+                label: 'عدد الزوار',
+                data: counts,
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(147, 51, 234, 0.7)',
+                    'rgba(34, 197, 94, 0.7)',
+                    'rgba(249, 115, 22, 0.7)',
+                    'rgba(236, 72, 153, 0.7)',
+                    'rgba(14, 165, 233, 0.7)',
+                    'rgba(168, 85, 247, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(59, 130, 246, 1)',
+                    'rgba(147, 51, 234, 1)',
+                    'rgba(34, 197, 94, 1)',
+                    'rgba(249, 115, 22, 1)',
+                    'rgba(236, 72, 153, 1)',
+                    'rgba(14, 165, 233, 1)',
+                    'rgba(168, 85, 247, 1)'
+                ],
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#9ca3af',
+                        stepSize: 1
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#9ca3af'
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+}
+
+/**
+ * رسم بياني لنوع الجهاز (موبايل vs ديسكتوب)
+ */
+function updateDeviceChart() {
+    const canvas = document.getElementById('visitors-device-chart');
+    if (!canvas) return;
+
+    // تدمير الرسم البياني القديم إن وجد
+    if (visitorsDeviceChart) {
+        visitorsDeviceChart.destroy();
+    }
+
+    // حساب عدد زوار الموبايل والديسكتوب
+    let mobileCount = 0;
+    let desktopCount = 0;
+
+    allVisitors.forEach(visitor => {
+        if (visitor.isMobile) {
+            mobileCount++;
+        } else {
+            desktopCount++;
+        }
+    });
+
+    // إنشاء الرسم البياني
+    const ctx = canvas.getContext('2d');
+    visitorsDeviceChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['📱 موبايل', '💻 ديسكتوب'],
+            datasets: [{
+                data: [mobileCount, desktopCount],
+                backgroundColor: [
+                    'rgba(147, 51, 234, 0.8)',
+                    'rgba(59, 130, 246, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(147, 51, 234, 1)',
+                    'rgba(59, 130, 246, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#9ca3af',
+                        font: {
+                            size: 14
+                        },
+                        padding: 20
+                    }
+                }
+            }
+        }
+    });
+}
+
+// تحميل إحصائيات الزوار عند فتح تبويب التحليلات
+const originalShowTabForVisitors = window.showTab;
+window.showTab = function(tabName) {
+    originalShowTabForVisitors(tabName);
+    
+    // تحميل إحصائيات الزوار عند فتح تبويب التحليلات
+    if (tabName === 'analytics' && allVisitors.length === 0) {
+        loadVisitorStats();
+    }
+};
+
+// جعل وظائف الزوار متاحة عالمياً
+window.loadVisitorStats = loadVisitorStats;
+window.updateVisitorStats = updateVisitorStats;
+window.updateVisitorCharts = updateVisitorCharts;
+

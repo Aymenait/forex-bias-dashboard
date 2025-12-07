@@ -1521,6 +1521,48 @@
             window.firebaseReady = true;
             window.dispatchEvent(new Event('firebaseReady'));
             console.log('✅ Firebase initialized (without Storage)');
+
+            // ═══════════════════════════════════════════════════════════════
+            // نظام تتبع الزوار - Visitor Tracking System
+            // ═══════════════════════════════════════════════════════════════
+            async function trackVisitor() {
+                try {
+                    // التحقق من عدم تكرار التسجيل في نفس الجلسة
+                    const sessionKey = 'visitor_tracked_' + new Date().toDateString();
+                    if (sessionStorage.getItem(sessionKey)) {
+                        console.log('📊 تم تسجيل الزيارة مسبقاً في هذه الجلسة');
+                        return;
+                    }
+
+                    // جمع معلومات الزائر
+                    const visitorData = {
+                        timestamp: serverTimestamp(),
+                        date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+                        time: new Date().toLocaleTimeString('ar-DZ'),
+                        userAgent: navigator.userAgent,
+                        language: navigator.language,
+                        platform: navigator.platform,
+                        screenWidth: window.screen.width,
+                        screenHeight: window.screen.height,
+                        referrer: document.referrer || 'direct',
+                        page: window.location.pathname,
+                        isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                    };
+
+                    // حفظ في Firebase
+                    await addDoc(collection(db, 'visitors'), visitorData);
+                    
+                    // تسجيل أن الزيارة تمت في هذه الجلسة
+                    sessionStorage.setItem(sessionKey, 'true');
+                    
+                    console.log('✅ تم تسجيل الزيارة بنجاح');
+                } catch (error) {
+                    console.warn('⚠️ فشل تسجيل الزيارة:', error.message);
+                }
+            }
+
+            // تسجيل الزيارة بعد تحميل الصفحة
+            trackVisitor();
         } catch (error) {
             console.warn('⚠️ Firebase initialization failed, using local reviews only:', error.message);
             window.firebaseReady = false;
