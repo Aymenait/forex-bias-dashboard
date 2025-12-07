@@ -1406,6 +1406,13 @@ const translations = {
         'product.cursor.feature1': 'إكمال تلقائي ذكي للكود',
         'product.cursor.feature2': 'دعم متعدد اللغات البرمجية',
         'product.cursor.feature3': 'تصحيح وتحسين الكود بالذكاء الاصطناعي',
+        'product.cursor.selectType': 'اختر المدة:',
+        'product.cursor.7days': 'تجربة 7 أيام',
+        'product.cursor.30days': '30 يوم حساب مشترك برو',
+        'product.cursor.notAvailable': 'غير متوفر بعد',
+        'product.unavailable': '❌ غير متوفر حالياً',
+        'product.unavailableBtn': '❌ غير متوفر',
+        'product.unavailableAlert': 'عذراً، هذا المنتج غير متوفر حالياً. يرجى المحاولة لاحقاً.',
         'product.comingSoon': 'قريباً',
         'product.orderNow': 'اطلب الآن',
         'product.discoverMore': 'اكتشف المزيد',
@@ -1864,6 +1871,13 @@ const translations = {
         'product.cursor.feature1': 'Intelligent code auto-completion',
         'product.cursor.feature2': 'Multi-language programming support',
         'product.cursor.feature3': 'AI-powered code fixing and optimization',
+        'product.cursor.selectType': 'Select Duration:',
+        'product.cursor.7days': '7 DAYS TRIAL',
+        'product.cursor.30days': '30 D PRO SHARED',
+        'product.cursor.notAvailable': 'Not Available Yet',
+        'product.unavailable': '❌ Currently Unavailable',
+        'product.unavailableBtn': '❌ Unavailable',
+        'product.unavailableAlert': 'Sorry, this product is currently unavailable. Please try again later.',
         'product.comingSoon': 'Coming Soon',
         'product.orderNow': 'Order Now',
         'product.discoverMore': 'Discover More',
@@ -1871,7 +1885,7 @@ const translations = {
         'product.payRedotPay': 'Pay with RedotPay',
         'product.payBaridiMob': 'Pay with BaridiMob',
         'product.soldOut': 'Sold Out',
-        'currency': 'DZD',
+        'currency': 'DA',
         'slider.from': 'from',
         'slider.month': 'month',
         'perMonth': 'per month',
@@ -2336,6 +2350,13 @@ const translations = {
         'product.cursor.feature1': 'Auto-complétion de code intelligente',
         'product.cursor.feature2': 'Support multi-langages de programmation',
         'product.cursor.feature3': 'Correction et optimisation du code par IA',
+        'product.cursor.selectType': 'Sélectionner la durée:',
+        'product.cursor.7days': 'Essai 7 jours',
+        'product.cursor.30days': '30 jours compte partagé pro',
+        'product.cursor.notAvailable': 'Pas encore disponible',
+        'product.unavailable': '❌ Actuellement Indisponible',
+        'product.unavailableBtn': '❌ Indisponible',
+        'product.unavailableAlert': 'Désolé, ce produit est actuellement indisponible. Veuillez réessayer plus tard.',
         'product.comingSoon': 'Bientôt',
         'product.orderNow': 'Commander',
         'product.discoverMore': 'Découvrir Plus',
@@ -2343,7 +2364,7 @@ const translations = {
         'product.payRedotPay': 'Payer avec RedotPay',
         'product.payBaridiMob': 'Payer avec BaridiMob',
         'product.soldOut': 'Épuisé',
-        'currency': 'DZD',
+        'currency': 'DA',
         'slider.from': 'à partir de',
         'slider.month': 'mois',
         'perMonth': 'par mois',
@@ -2393,7 +2414,7 @@ const translations = {
         'modal.redotpay.warning': '💳 Assurez-vous d\'entrer l\'ID correctement!',
         'product.payBaridiMob': 'Payer avec BaridiMob',
         'product.soldOut': 'Épuisé',
-        'currency': 'DZD',
+        'currency': 'DA',
         'perMonth': 'par mois',
         'contact.title': 'Prêt à Démarrer Votre Prochain Projet',
         'contact.description': 'Contactez-nous maintenant via les canaux disponibles pour une consultation gratuite et déterminer le meilleur forfait pour vous.',
@@ -2764,8 +2785,92 @@ function changeLanguage(lang) {
         window.updateAnimatedText();
     }
 
+    // Update price displays with correct currency symbol
+    updatePriceDisplays(lang);
+
     // Save preference
     localStorage.setItem('preferredLanguage', lang);
+}
+
+// Update all price displays with correct currency symbol
+function updatePriceDisplays(lang) {
+    const currencySymbols = {
+        ar: 'د.ج',
+        en: 'DA',
+        fr: 'DA'
+    };
+    const symbol = currencySymbols[lang] || currencySymbols.ar;
+    
+    // Update price-tag elements
+    document.querySelectorAll('.price-tag[data-price-dzd]').forEach(element => {
+        const priceDZD = element.getAttribute('data-price-dzd');
+        if (priceDZD) {
+            const formattedPrice = Number(priceDZD).toLocaleString();
+            element.textContent = `${formattedPrice} ${symbol}`;
+        }
+    });
+    
+    // Update status badges (Coming Soon, Unavailable)
+    updateStatusBadges(lang);
+}
+
+// Update status badges based on current language
+function updateStatusBadges(lang) {
+    const statusTexts = {
+        unavailable: {
+            ar: { badge: '❌ غير متوفر حالياً', btn: '❌ غير متوفر' },
+            en: { badge: '❌ Currently Unavailable', btn: '❌ Unavailable' },
+            fr: { badge: '❌ Actuellement Indisponible', btn: '❌ Indisponible' }
+        },
+        coming_soon: {
+            ar: { badge: '🔜 قريباً', btn: '🔜 قريباً' },
+            en: { badge: '🔜 Coming Soon', btn: '🔜 Coming Soon' },
+            fr: { badge: '🔜 Bientôt', btn: '🔜 Bientôt' }
+        }
+    };
+    
+    // Helper to detect status from text content
+    function detectStatusFromText(text) {
+        if (!text) return null;
+        const lowerText = text.toLowerCase();
+        if (lowerText.includes('غير متوفر') || lowerText.includes('unavailable') || lowerText.includes('indisponible')) {
+            return 'unavailable';
+        }
+        if (lowerText.includes('قريب') || lowerText.includes('coming') || lowerText.includes('bientôt') || lowerText.includes('bientot')) {
+            return 'coming_soon';
+        }
+        return null;
+    }
+    
+    // Update dynamic status badges (created by Firebase)
+    document.querySelectorAll('.status-badge').forEach(badge => {
+        let status = badge.getAttribute('data-status');
+        if (!status) {
+            status = detectStatusFromText(badge.textContent);
+        }
+        if (status) {
+            const texts = statusTexts[status]?.[lang] || statusTexts[status]?.ar;
+            if (texts) {
+                badge.textContent = texts.badge;
+                badge.setAttribute('data-status', status);
+            }
+        }
+    });
+    
+    // Update disabled order buttons with data-status
+    document.querySelectorAll('.order-btn[disabled]').forEach(btn => {
+        let status = btn.getAttribute('data-status');
+        if (!status) {
+            status = detectStatusFromText(btn.textContent);
+        }
+        if (status) {
+            const texts = statusTexts[status]?.[lang] || statusTexts[status]?.ar;
+            if (texts) {
+                btn.textContent = texts.btn;
+                btn.setAttribute('data-status', status);
+            }
+        }
+    });
 }
 
 // Initialize language on page load
@@ -2985,7 +3090,8 @@ async function loadAllReviews() {
                 'capcut-reviews',
                 'netflix-reviews',
                 'perplexity-reviews',
-                'tradingview-reviews'
+                'tradingview-reviews',
+                'cursor-reviews'
             ];
             
             for (const collectionName of collections) {
@@ -3110,6 +3216,7 @@ function getProductEmoji(product) {
     if (product.includes('Netflix')) return '🎬';
     if (product.includes('Perplexity')) return '🔍';
     if (product.includes('TradingView')) return '📈';
+    if (product.includes('Cursor')) return '💻';
     return '👤';
 }
 
@@ -3468,6 +3575,33 @@ function selectGammaType(type) {
     }
 }
 
+// Cursor AI Duration Selection
+function selectCursorType(type) {
+    const buttons = document.querySelectorAll('.cursor-type-btn');
+    buttons.forEach(btn => {
+        if (btn.getAttribute('data-type') === type) {
+            btn.classList.add('active');
+            btn.style.border = '2px solid var(--accent)';
+            btn.style.background = 'rgba(255, 213, 111, 0.15)';
+            btn.style.color = 'var(--text-primary)';
+        } else {
+            btn.classList.remove('active');
+            btn.style.border = '2px solid var(--border-color)';
+            btn.style.background = 'transparent';
+            btn.style.color = 'var(--text-secondary)';
+        }
+    });
+
+    // Show/hide prices
+    if (type === '7days') {
+        document.getElementById('cursor-prices-7days').style.display = 'block';
+        document.getElementById('cursor-prices-30days').style.display = 'none';
+    } else {
+        document.getElementById('cursor-prices-7days').style.display = 'none';
+        document.getElementById('cursor-prices-30days').style.display = 'block';
+    }
+}
+
 // Order Adobe with selected type
 function orderAdobe() {
     const activeBtn = document.querySelector('.adobe-type-btn.active');
@@ -3550,3 +3684,46 @@ window.contactVia = contactVia;
 window.orderProduct = orderProduct;
 window.selectAdobeType = selectAdobeType;
 window.selectGammaType = selectGammaType;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Scroll Reveal Animation (Parallax removed for better performance)
+// ═══════════════════════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Scroll Reveal Animation
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all fade-in elements
+    document.querySelectorAll('.fade-in').forEach(el => {
+        observer.observe(el);
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && href.length > 1) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const targetPosition = target.offsetTop - 20;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+});

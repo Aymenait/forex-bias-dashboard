@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
 
     <!-- Primary Meta Tags -->
     <title>Market Algeriaa | حلول رقمية احترافية - حسابات تعليمية وأدوات إبداعية</title>
@@ -40,8 +41,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://i.imgur.com">
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" as="style">
+    <link rel="preload" href="https://fonts.gstatic.com/s/tajawal/v9/Iurf6YBj_oCad4k1l5qjHrRpiZtJp.woff2" as="font" type="font/woff2" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=final">
+    <!-- 8. Preload critical images for faster loading -->
+    <link rel="preload" href="https://i.imgur.com/8D1hNuQ.png" as="image">
+    <link rel="preload" href="https://i.imgur.com/hEiJhso.gif" as="image">
+    <link rel="preload" href="https://i.imgur.com/my0lNcf.gif" as="image">
+    <link rel="preload" href="https://i.imgur.com/FDZBdd9.gif" as="image">
+
+    <link rel="stylesheet" href="style.css?v=final2">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-TC92T0WQ45"></script>
@@ -76,6 +87,9 @@
                     <span class="brand-tagline" data-i18n="brand.tagline">حلول رقمية تعزز حضورك</span>
                 </div>
             </div>
+            <!-- Reviews Button (Mobile - Always Visible) -->
+            <a href="reviews.html" class="mobile-reviews-btn" data-i18n="nav.reviews">⭐ آراء العملاء</a>
+            
             <!-- Hamburger Menu Button (Mobile) -->
             <button class="hamburger-btn" id="hamburger-btn" aria-label="فتح القائمة">
                 <span class="hamburger-line"></span>
@@ -637,9 +651,11 @@
                             style="position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, #00c4cc, #7c2ae8); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; z-index: 10; box-shadow: 0 4px 15px rgba(0, 196, 204, 0.5);">
                             <span data-i18n="product.comingSoon">قريباً</span>
                         </div>
-                        <div class="product-image"
-                            style="background-image: url('https://i.imgur.com/DvPmjNv.gif'); background-size: cover; background-position: center; filter: grayscale(20%);"
-                            role="img" aria-label="Canva Pro"></div>
+                        <div class="product-image" style="position: relative; overflow: hidden; filter: grayscale(20%);" role="img" aria-label="Canva Pro">
+                            <video autoplay loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                                <source src="https://i.imgur.com/DvPmjNv.mp4" type="video/mp4">
+                            </video>
+                        </div>
                         <h3>Canva Pro</h3>
                         <p class="description" data-i18n="product.canva.desc">اشتراك Canva Pro الكامل مع جميع المميزات
                             الاحترافية للتصميم والإبداع.</p>
@@ -696,12 +712,40 @@
                             <span data-i18n="product.comingSoon">قريباً</span>
                         </div>
                         <div class="product-image"
-                            style="background: linear-gradient(135deg, #0F0F0F 0%, #1a1a2e 100%); background-image: url('https://cursor.sh/brand/icon.svg'); background-size: 60%; background-position: center; background-repeat: no-repeat; filter: grayscale(20%);"
-                            role="img" aria-label="Cursor AI">
+                            style="background: linear-gradient(135deg, #0F0F0F 0%, #1a1a2e 100%); background-image: url('https://cursor.com/favicon.svg'); background-size: 60%; background-position: center; background-repeat: no-repeat;"
+                            role="img" aria-label="Cursor">
                         </div>
-                        <h3>Cursor AI - 7 Days</h3>
-                        <p class="description" data-i18n="product.cursor.desc">محرر أكواد ذكي مدعوم بالذكاء الاصطناعي لمدة 7 أيام.</p>
-                        <div class="price-tag" style="opacity: 0.6;" data-price-dzd="700" data-price-usd="3">700 د.ج</div>
+                        <h3>Cursor AI</h3>
+                        <p class="description" data-i18n="product.cursor.desc">محرر أكواد ذكي مدعوم بالذكاء الاصطناعي.</p>
+
+                        <!-- Account Type Selection -->
+                        <div class="cursor-account-type" style="margin: 16px 0;">
+                            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;"
+                                data-i18n="product.cursor.selectType">اختر المدة:</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="cursor-type-btn" data-type="7days"
+                                    onclick="selectCursorType('7days')"
+                                    style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    <span data-i18n="product.cursor.7days">7 DAYS TRIAL</span>
+                                </button>
+                                <button class="cursor-type-btn active" data-type="30days"
+                                    onclick="selectCursorType('30days')"
+                                    style="flex: 1; padding: 10px; border: 2px solid var(--accent); background: rgba(255, 213, 111, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    <span data-i18n="product.cursor.30days">30 D PRO SHARED</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Prices (will change based on selection) -->
+                        <div class="cursor-prices" id="cursor-prices-7days" style="display: none;">
+                            <div style="opacity: 0.6; color: var(--text-secondary); font-size: 0.95rem; font-weight: 600;">
+                                <span data-i18n="product.cursor.notAvailable">غير متوفر بعد</span>
+                            </div>
+                        </div>
+
+                        <div class="cursor-prices" id="cursor-prices-30days">
+                            <div class="price-tag" style="opacity: 0.6;" data-price-dzd="2500" data-price-usd="10">2500 د.ج</div>
+                        </div>
 
                         <ul class="product-features" style="opacity: 0.7;">
                             <li data-i18n="product.cursor.feature1">إكمال تلقائي ذكي للكود</li>
@@ -784,6 +828,7 @@
                             <option value="Netflix Premium">Netflix Premium</option>
                             <option value="Perplexity AI Pro">Perplexity AI Pro</option>
                             <option value="TradingView Premium">TradingView Premium</option>
+                            <option value="Cursor AI">Cursor AI</option>
                         </select>
                     </div>
 
@@ -1483,6 +1528,190 @@
             window.storage = null;
         }
 
+        // ═══════════════════════════════════════════════════════════════
+        // تحميل حالة توفر المنتجات من Firebase
+        // ═══════════════════════════════════════════════════════════════
+        async function loadProductAvailability() {
+            console.log('🔄 بدء تحميل حالة توفر المنتجات...');
+            if (!window.db) {
+                console.log('❌ Firebase غير متاح');
+                return;
+            }
+            
+            try {
+                const { collection, getDocs } = window.firebaseModules;
+                console.log('🔍 جاري البحث عن المنتجات في Firebase...');
+                const querySnapshot = await getDocs(collection(window.db, 'products'));
+                console.log(`📦 تم العثور على ${querySnapshot.size} منتج`);
+                
+                // خريطة أسماء المنتجات مع معرفاتها (تشمل كل التنويعات)
+                const productNameToId = {
+                    'The Real World Account': 'trw',
+                    'Adobe Creative Cloud': 'adobe',
+                    'Adobe Creative Cloud - Shared': 'adobe',
+                    'Adobe Creative Cloud - Personal': 'adobe',
+                    'ChatGPT Business': 'chatgpt',
+                    'Netflix Premium': 'netflix',
+                    'TradingView Premium': 'tradingview',
+                    'Cursor AI': 'cursor',
+                    'Cursor AI - 7 Days': 'cursor',
+                    'Cursor AI - 30 Days': 'cursor',
+                    'Gamma.AI': 'gamma',
+                    'Gamma.AI - Shared': 'gamma',
+                    'Gamma.AI - Personal': 'gamma',
+                    'CapCut Pro': 'capcut',
+                    'Canva Pro': 'canva',
+                    'Perplexity AI Pro': 'perplexity'
+                };
+                
+                querySnapshot.forEach((doc) => {
+                    const product = doc.data();
+                    const productId = doc.id;
+                    
+                    // تحديد حالة المنتج (دعم النظام الجديد والقديم)
+                    const productStatus = product.status || (product.available === false ? 'unavailable' : 'available');
+                    
+                    console.log(`📦 منتج ${product.name}: حالة = ${productStatus}`);
+                    
+                    // البحث عن بطاقات المنتج بالاسم
+                    const productCards = document.querySelectorAll('.product-card');
+                    productCards.forEach(card => {
+                        // الحصول على عنوان المنتج من البطاقة
+                        const cardTitle = card.querySelector('h3')?.textContent?.trim() || '';
+                        const productName = product.name || '';
+                        
+                        // مطابقة بسيطة باستخدام العنوان
+                        const matchFound = cardTitle.toLowerCase().includes(productName.toLowerCase()) ||
+                                           productName.toLowerCase().includes(cardTitle.toLowerCase()) ||
+                                           cardTitle === productName;
+                        
+                        if (matchFound) {
+                            console.log(`✅ تحديث "${cardTitle}" إلى "${productStatus}"`);
+                            
+                            // الحصول على الترجمات حسب اللغة الحالية
+                            const lang = window.currentLang || localStorage.getItem('preferredLanguage') || 'ar';
+                            
+                            // إزالة جميع الشارات الموجودة (الثابتة والديناميكية)
+                            const existingBadges = card.querySelectorAll('.coming-soon-badge, .unavailable-badge, .status-badge');
+                            existingBadges.forEach(badge => badge.remove());
+                            
+                            // إعادة تفعيل البطاقة
+                            card.style.opacity = '1';
+                            
+                            // إذا كان المنتج متوفراً - تفعيل كل شيء
+                            if (productStatus === 'available') {
+                                // إعادة تفعيل زر الطلب
+                                const orderBtn = card.querySelector('.order-btn');
+                                if (orderBtn) {
+                                    orderBtn.disabled = false;
+                                    orderBtn.style.opacity = '1';
+                                    orderBtn.style.cursor = 'pointer';
+                                    // إعادة النص الأصلي للزر
+                                    const btnTexts = { ar: 'اطلب الآن', en: 'Order Now', fr: 'Commander' };
+                                    orderBtn.innerHTML = btnTexts[lang] || btnTexts.ar;
+                                    orderBtn.onclick = null; // إزالة onclick المعطل
+                                }
+                                
+                                // إعادة تفعيل أزرار الدفع
+                                const paymentBtns = card.querySelectorAll('.payment-btn-compact');
+                                paymentBtns.forEach(btn => {
+                                    btn.disabled = false;
+                                    btn.style.opacity = '1';
+                                    btn.style.cursor = 'pointer';
+                                    btn.onclick = null;
+                                });
+                                
+                                // إزالة الفلتر الرمادي
+                                const productImage = card.querySelector('.product-image');
+                                if (productImage) {
+                                    productImage.style.filter = 'none';
+                                }
+                            } else {
+                                // المنتج غير متوفر أو قريباً
+                                const statusTexts = {
+                                    unavailable: {
+                                        ar: { badge: '❌ غير متوفر حالياً', btn: '❌ غير متوفر', alert: 'عذراً، هذا المنتج غير متوفر حالياً.' },
+                                        en: { badge: '❌ Currently Unavailable', btn: '❌ Unavailable', alert: 'Sorry, this product is currently unavailable.' },
+                                        fr: { badge: '❌ Actuellement Indisponible', btn: '❌ Indisponible', alert: 'Désolé, ce produit est actuellement indisponible.' }
+                                    },
+                                    coming_soon: {
+                                        ar: { badge: '🔜 قريباً', btn: '🔜 قريباً', alert: 'هذا المنتج سيتوفر قريباً!' },
+                                        en: { badge: '🔜 Coming Soon', btn: '🔜 Coming Soon', alert: 'This product is coming soon!' },
+                                        fr: { badge: '🔜 Bientôt', btn: '🔜 Bientôt', alert: 'Ce produit sera bientôt disponible!' }
+                                    }
+                                };
+                                const texts = statusTexts[productStatus][lang] || statusTexts[productStatus].ar;
+                                const badgeColor = productStatus === 'unavailable' ? 
+                                    'linear-gradient(135deg, #e50914, #b20710)' : 
+                                    'linear-gradient(135deg, #f59e0b, #d97706)';
+                                
+                                // إضافة شارة جديدة
+                                const badge = document.createElement('div');
+                                badge.className = 'status-badge';
+                                badge.setAttribute('data-status', productStatus);
+                                badge.innerHTML = texts.badge;
+                                badge.style.cssText = `
+                                    position: absolute;
+                                    top: 20px;
+                                    right: 20px;
+                                    background: ${badgeColor};
+                                    color: white;
+                                    padding: 10px 20px;
+                                    border-radius: 25px;
+                                    font-weight: 700;
+                                    font-size: 0.9rem;
+                                    z-index: 10;
+                                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                                    animation: pulse 2s infinite;
+                                `;
+                                card.style.position = 'relative';
+                                card.insertBefore(badge, card.firstChild);
+                                
+                                // تعطيل زر الطلب
+                                const orderBtn = card.querySelector('.order-btn');
+                                if (orderBtn) {
+                                    orderBtn.disabled = true;
+                                    orderBtn.setAttribute('data-status', productStatus);
+                                    orderBtn.style.opacity = '0.5';
+                                    orderBtn.style.cursor = 'not-allowed';
+                                    orderBtn.innerHTML = texts.btn;
+                                    orderBtn.onclick = (e) => {
+                                        e.preventDefault();
+                                        alert(texts.alert);
+                                    };
+                                }
+                                
+                                // تعطيل أزرار الدفع
+                                const paymentBtns = card.querySelectorAll('.payment-btn-compact');
+                                paymentBtns.forEach(btn => {
+                                    btn.disabled = true;
+                                    btn.style.opacity = '0.5';
+                                    btn.style.cursor = 'not-allowed';
+                                    btn.onclick = (e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    };
+                                });
+                                
+                                // تأثير رمادي للمنتجات غير المتوفرة فقط
+                                if (productStatus === 'unavailable') {
+                                    const productImage = card.querySelector('.product-image');
+                                    if (productImage) {
+                                        productImage.style.filter = 'grayscale(50%)';
+                                    }
+                                    card.style.opacity = '0.8';
+                                }
+                            }
+                        }
+                    });
+                });
+                
+                console.log('✅ تم تحميل حالة توفر المنتجات');
+            } catch (error) {
+                console.error('❌ خطأ في تحميل حالة توفر المنتجات:', error);
+            }
+        }
+
         // Load TRW reviews
         async function loadTRWReviews() {
             try {
@@ -1555,11 +1784,24 @@
             });
         }
 
-        // Load reviews when Firebase is ready
-        window.addEventListener('firebaseReady', () => {
+        // Load reviews and product availability when Firebase is ready
+        async function initializeAll() {
+            console.log('🚀 بدء تحميل البيانات...');
+            await loadProductAvailability(); // تحميل حالة توفر المنتجات أولاً
             loadTRWReviews();
             loadChatGPTReviews();
-        });
+        }
+        
+        // Check if Firebase is already ready
+        if (window.firebaseReady) {
+            console.log('✅ Firebase جاهز، بدء التحميل...');
+            initializeAll();
+        } else {
+            window.addEventListener('firebaseReady', () => {
+                console.log('✅ Firebase أصبح جاهزاً، بدء التحميل...');
+                initializeAll();
+            });
+        }
     </script>
 
     <script>
@@ -1606,15 +1848,20 @@
             document.body.appendChild(overlay);
             
             function toggleMenu() {
-                hamburgerBtn.classList.toggle('active');
-                navActions.classList.toggle('active');
-                overlay.classList.toggle('active');
+                const isActive = navActions.classList.contains('active');
                 
-                // Prevent body scroll when menu is open
-                if (navActions.classList.contains('active')) {
-                    document.body.style.overflow = 'hidden';
-                } else {
+                if (isActive) {
+                    // Close menu
+                    hamburgerBtn.classList.remove('active');
+                    navActions.classList.remove('active');
+                    overlay.classList.remove('active');
                     document.body.style.overflow = '';
+                } else {
+                    // Open menu
+                    hamburgerBtn.classList.add('active');
+                    navActions.classList.add('active');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
                 }
             }
             

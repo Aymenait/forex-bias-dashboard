@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
 
 :root {
+    /* Colors */
     --bg-dark: #0b0d17;
     --bg-light: #121525;
     --accent: #ffd56f;
@@ -10,6 +11,34 @@
     --card-bg: rgba(20, 24, 42, 0.75);
     --border-color: rgba(255, 255, 255, 0.08);
     --shadow: 0 24px 60px rgba(15, 17, 35, 0.45);
+    
+    /* Spacing System */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-full: 999px;
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Product Colors */
+    --color-chatgpt: #10a37f;
+    --color-adobe: #ff0000;
+    --color-trw: #39ff14;
+    --color-netflix: #e50914;
+    --color-tradingview: #2962FF;
+    --color-perplexity: #1FB6FF;
 }
 
 * {
@@ -64,9 +93,16 @@ img {
 
 .site-header {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     padding-bottom: 80px;
     z-index: 1;
+}
+
+/* On mobile, site-header needs higher z-index for the mobile menu */
+@media (max-width: 768px) {
+    .site-header {
+        z-index: 100000;
+    }
 }
 
 .nav-bar {
@@ -77,6 +113,7 @@ img {
     position: relative;
     z-index: 2;
 }
+
 
 .brand {
     display: flex;
@@ -356,10 +393,21 @@ img {
 .badge {
     background: rgba(19, 23, 46, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
+    border-radius: var(--radius-lg);
     padding: 18px 22px;
     text-align: center;
     min-width: 120px;
+    transition: all var(--transition-base);
+    animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 .badge strong {
@@ -423,6 +471,12 @@ img {
 
 .section {
     padding: 90px 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure products section doesn't overlap navigation */
+#products {
     position: relative;
     z-index: 1;
 }
@@ -492,6 +546,8 @@ img {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 26px;
+    position: relative;
+    z-index: 1;
 }
 
 /* For tablets - 2 columns */
@@ -503,7 +559,7 @@ img {
 
 .product-card {
     background: rgba(19, 22, 41, 0.78);
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     border: 1px solid rgba(255, 255, 255, 0.06);
     padding: 20px;
     box-shadow: var(--shadow);
@@ -511,16 +567,27 @@ img {
     flex-direction: column;
     gap: 14px;
     position: relative;
-    z-index: 1;
+    z-index: 1 !important;
+    transition: all var(--transition-base);
+    transform: translateY(0);
+}
+
+
+.product-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 32px 80px rgba(15, 17, 35, 0.6);
+    border-color: rgba(255, 213, 111, 0.2);
 }
 
 .product-image {
+    display: block;
     width: 100%;
     height: 180px;
+    min-height: 180px;
     border-radius: 12px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
     border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
@@ -940,81 +1007,74 @@ img {
         display: none !important;
     }
 
-    /* Products Grid - محسّن للموبايل */
+    /* Products Grid - محسّن للموبايل - بطاقات مضغوطة */
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 0 10px;
+        gap: 8px;
+        padding: 0 8px;
     }
 
     .product-card {
-        padding: 12px;
-        border-radius: 12px;
-        gap: 8px;
+        padding: 10px;
+        border-radius: 10px;
+        gap: 6px;
     }
 
     .product-image {
-        height: 140px;
+        height: 110px;
         border-radius: 8px;
+        /* الصور تبقى مرئية */
     }
 
     .product-card h3 {
-        font-size: 1rem;
+        font-size: 0.85rem;
         margin: 0;
         line-height: 1.2;
         font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .product-card .description {
-        font-size: 0.8rem;
-        line-height: 1.3;
+        font-size: 0.7rem;
+        line-height: 1.2;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        margin: 0;
     }
 
     .product-features {
-        gap: 4px;
-        font-size: 0.75rem;
+        display: none; /* إخفاء المميزات لتقصير البطاقة */
     }
 
     .price-tag {
-        padding: 6px 12px;
-        font-size: 0.95rem;
+        padding: 4px 10px;
+        font-size: 0.8rem;
         font-weight: 700;
     }
 
     .payment-methods-row {
-        gap: 6px;
-        flex-wrap: wrap;
+        display: none; /* إخفاء طرق الدفع لتقصير البطاقة */
     }
     
     .payment-btn-compact {
-        flex: 1;
-        min-width: 75px;
-        padding: 8px 6px !important;
-        font-size: 0.7rem !important;
-    }
-    
-    .payment-btn-compact svg {
-        width: 12px !important;
-        height: 12px !important;
+        display: none;
     }
 
     .discover-btn {
-        padding: 8px !important;
-        font-size: 0.8rem !important;
-        margin-bottom: 4px !important;
+        display: none; /* إخفاء زر اكتشف المزيد */
     }
 
     .order-btn {
-        padding: 10px 14px;
-        font-size: 0.85rem;
+        padding: 8px 12px;
+        font-size: 0.75rem;
         font-weight: 700;
-        border-radius: 25px;
+        border-radius: 20px;
         width: 100%;
-        margin-top: 8px;
+        margin-top: 4px;
         border-width: 1.5px;
     }
     
@@ -1201,10 +1261,22 @@ img {
     color: var(--text-secondary);
     cursor: pointer;
     transition: color 0.3s ease;
+    background: transparent;
+    border: none;
+    padding: 8px;
+    z-index: 10001;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
 }
 
 .close-btn:hover {
     color: var(--accent);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
 }
 
 #order-form {
@@ -1384,6 +1456,7 @@ img {
     gap: 15px;
     z-index: 999;
 }
+
 
 .social-float {
     width: 60px;
@@ -2457,6 +2530,35 @@ img {
    تحسينات الهاتف - Mobile Improvements
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* ═══════════ Mobile Reviews Button (Always Visible) ═══════════ */
+.mobile-reviews-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    color: #1b1d32;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(255, 213, 111, 0.4);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.mobile-reviews-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 213, 111, 0.5);
+}
+
+@media (max-width: 768px) {
+    .mobile-reviews-btn {
+        display: flex;
+    }
+}
+
 /* ═══════════ Hamburger Menu Button ═══════════ */
 .hamburger-btn {
     display: none;
@@ -2515,18 +2617,38 @@ img {
         width: 85%;
         max-width: 320px;
         height: 100vh;
-        background: linear-gradient(135deg, #1b1d32 0%, #2d1f4e 100%);
+        background: #1b1d32;
+        background-color: #1b1d32;
+        background-image: linear-gradient(135deg, #1b1d32 0%, #2d1f4e 100%);
         flex-direction: column;
         padding: 80px 25px 30px;
         gap: 20px;
-        z-index: 1000;
+        z-index: 99999 !important;
         transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.8);
         overflow-y: auto;
+        opacity: 1;
+        visibility: visible;
+        display: flex;
+        pointer-events: none;
     }
 
     .nav-actions.active {
         right: 0;
+        pointer-events: auto !important;
+    }
+    
+    /* تأكد من أن جميع العناصر داخل القائمة قابلة للنقر */
+    .nav-actions.active * {
+        pointer-events: auto !important;
+    }
+    
+    .nav-actions.active .lang-btn,
+    .nav-actions.active .currency-btn,
+    .nav-actions.active .btn {
+        position: relative;
+        z-index: 99999 !important;
+        cursor: pointer !important;
     }
 
     /* Mobile Menu Items */
@@ -2579,17 +2701,18 @@ img {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(3px);
-        z-index: 999;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 99998 !important;
         opacity: 0;
         visibility: hidden;
-        transition: all 0.3s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        pointer-events: none;
     }
 
     .mobile-overlay.active {
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
     }
 
     /* Improve Nav Bar Layout */
@@ -2709,11 +2832,104 @@ img {
 
 /* ═══════════ تحسينات إضافية للهاتف ═══════════ */
 @media (max-width: 480px) {
-    /* شاشات صغيرة جداً */
-    .payment-btn-compact {
-        flex: 1 1 100%;
+    /* ═══════ 2. تحسين بطاقات المنتجات - عمودين مضغوطين ═══════ */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px;
+    }
+    
+    .product-card {
+        padding: 8px;
+        gap: 4px;
+    }
+    
+    .product-image {
+        height: 90px !important;
+        border-radius: 6px;
+        /* الصور تبقى مرئية */
+    }
+    
+    .product-card h3 {
+        font-size: 0.75rem;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .product-card .description {
+        display: none; /* إخفاء الوصف على الشاشات الصغيرة */
+    }
+    
+    .product-features {
+        display: none;
+    }
+    
+    .price-tag {
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .order-btn {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+        margin-top: 2px;
     }
 
+    /* ═══════ 4. تحسين أزرار الدفع ═══════ */
+    .payment-methods-row {
+        display: none !important;
+    }
+    
+    .payment-btn-compact {
+        width: 100% !important;
+        flex: none !important;
+        padding: 14px 20px !important;
+        font-size: 1rem !important;
+        justify-content: center;
+        min-height: 50px !important;
+        border-radius: 12px !important;
+    }
+    
+    .payment-btn-compact svg {
+        width: 20px !important;
+        height: 20px !important;
+    }
+    
+    .payment-btn-compact span,
+    .payment-btn-compact div {
+        font-size: 1rem !important;
+    }
+
+    /* ═══════ 7. تحسين Trust Badges ═══════ */
+    .trust-badges {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        width: 100%;
+    }
+
+    .badge {
+        padding: 14px 8px;
+        text-align: center;
+        border-radius: 12px;
+        background: rgba(19, 23, 46, 0.8);
+    }
+
+    .badge strong {
+        font-size: 1.3rem;
+        display: block;
+        margin-bottom: 4px;
+        color: var(--accent);
+    }
+
+    .badge span {
+        font-size: 0.7rem;
+        line-height: 1.2;
+        display: block;
+    }
+
+    /* Hero Buttons */
     .hero-buttons {
         flex-direction: column;
         gap: 12px;
@@ -2721,18 +2937,14 @@ img {
 
     .hero-buttons .btn {
         width: 100%;
+        padding: 16px;
+        font-size: 1rem;
     }
-
-    .trust-badges {
-        gap: 10px;
-    }
-
-    .badge {
-        padding: 10px 12px;
-        font-size: 0.85rem;
-    }
-
-    .badge strong {
-        font-size: 1.1rem;
+    
+    /* تحسين زر الطلب */
+    .order-btn {
+        padding: 16px !important;
+        font-size: 1.1rem !important;
+        margin-top: 12px;
     }
 }

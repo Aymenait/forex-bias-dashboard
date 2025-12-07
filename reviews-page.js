@@ -11,6 +11,7 @@ window.openAddReviewModal = function() {
     const modal = document.getElementById('add-review-modal');
     if (modal) {
         modal.classList.remove('hidden');
+        modal.classList.add('show');
         modal.classList.add('flex');
     }
 };
@@ -18,21 +19,27 @@ window.openAddReviewModal = function() {
 // Close Add Review Modal
 window.closeAddReviewModal = function() {
     const modal = document.getElementById('add-review-modal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    
-    // Reset form
-    const form = document.getElementById('add-review-form');
-    if (form) form.reset();
-    
-    const ratingInput = document.getElementById('review-rating');
-    if (ratingInput) ratingInput.value = '';
-    
-    document.querySelectorAll('.star-input').forEach(star => {
-        star.textContent = '☆';
-        star.classList.remove('text-yellow-400');
-        star.classList.add('text-gray-300');
-    });
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('show');
+        modal.classList.remove('flex');
+        
+        // Reset form
+        const form = document.getElementById('add-review-form');
+        if (form) form.reset();
+        
+        // Reset rating
+        const ratingInput = document.getElementById('review-rating');
+        if (ratingInput) ratingInput.value = '';
+        
+        // Reset stars
+        document.querySelectorAll('.star-input').forEach(star => {
+            star.textContent = '☆';
+            star.style.color = 'var(--text-secondary)';
+            star.classList.remove('text-yellow-400');
+            star.classList.add('text-gray-300');
+        });
+    }
 }
 
 // Close modal when clicking on backdrop
@@ -140,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     else if (product.includes('Netflix')) collectionName = 'netflix-reviews';
                     else if (product.includes('Perplexity')) collectionName = 'perplexity-reviews';
                     else if (product.includes('TradingView')) collectionName = 'tradingview-reviews';
+                    else if (product.includes('Cursor')) collectionName = 'cursor-reviews';
                     
                     const reviewData = {
                         name: name,
@@ -208,7 +216,7 @@ async function loadReviews() {
         allReviews = [];
         
         if (window.db && window.firebaseModules) {
-            const { collection, getDocs } = window.firebaseModules;
+            const { collection, getDocs, query: firebaseQuery, orderBy: firebaseOrderBy, limit: firebaseLimit } = window.firebaseModules;
             
             const collections = [
                 'reviews', 
@@ -219,35 +227,76 @@ async function loadReviews() {
                 'capcut-reviews',
                 'netflix-reviews',
                 'perplexity-reviews',
-                'tradingview-reviews'
+                'tradingview-reviews',
+                'cursor-reviews'
             ];
             
-            for (const collectionName of collections) {
+            // Load all collections in parallel for better performance
+            
+            const collectionPromises = collections.map(async (collectionName) => {
                 try {
-                    const querySnapshot = await getDocs(collection(window.db, collectionName));
+                    // Use query with orderBy and limit for better performance
+                    const q = firebaseQuery(
+                        collection(window.db, collectionName),
+                        firebaseOrderBy('timestamp', 'desc'),
+                        firebaseLimit(100) // Limit to 100 reviews per collection for faster loading
+                    );
+                    const querySnapshot = await getDocs(q);
+                    const reviews = [];
                     querySnapshot.forEach((doc) => {
                         const data = doc.data();
                         if (data.rating && data.name) {
-                            allReviews.push({
+                            reviews.push({
                                 id: doc.id,
                                 name: data.name,
                                 product: data.product || collectionName.replace('-reviews', ''),
                                 rating: data.rating,
                                 comment: data.comment || '',
                                 platform: data.platform || data.source || 'Unknown',
-                                date: data.timestamp?.toDate?.()?.toLocaleDateString('ar-DZ') || new Date().toLocaleDateString('ar-DZ'),
+                                timestamp: data.timestamp?.toDate?.() || new Date(),
                                 image: data.image || null
                             });
                         }
                     });
+                    return reviews;
                 } catch (err) {
-                    console.log(`Collection ${collectionName} not found:`, err.message);
+                    // If query fails (e.g., no index), try without orderBy
+                    try {
+                        const querySnapshot = await getDocs(collection(window.db, collectionName));
+                        const reviews = [];
+                        querySnapshot.forEach((doc) => {
+                            const data = doc.data();
+                            if (data.rating && data.name) {
+                                reviews.push({
+                                    id: doc.id,
+                                    name: data.name,
+                                    product: data.product || collectionName.replace('-reviews', ''),
+                                    rating: data.rating,
+                                    comment: data.comment || '',
+                                    platform: data.platform || data.source || 'Unknown',
+                                    timestamp: data.timestamp?.toDate?.() || new Date(),
+                                    image: data.image || null
+                                });
+                            }
+                        });
+                        return reviews;
+                    } catch (err2) {
+                        console.log(`Collection ${collectionName} not found:`, err2.message);
+                        return [];
+                    }
                 }
-            }
+            });
+            
+            // Wait for all collections to load in parallel
+            const results = await Promise.all(collectionPromises);
+            allReviews = results.flat();
         }
         
         // Sort by date (newest first)
-        allReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+        allReviews.sort((a, b) => b.timestamp - a.timestamp);
+        
+        // Format dates based on current language
+        formatReviewDates();
         
         // Update stats
         updateStats();
@@ -293,6 +342,13 @@ function displayReviews() {
             if (currentFilter === 'trw') return product.includes('real world');
             if (currentFilter === 'chatgpt') return product.includes('chatgpt');
             if (currentFilter === 'adobe') return product.includes('adobe');
+            if (currentFilter === 'gamma') return product.includes('gamma');
+            if (currentFilter === 'netflix') return product.includes('netflix');
+            if (currentFilter === 'perplexity') return product.includes('perplexity');
+            if (currentFilter === 'tradingview') return product.includes('tradingview');
+            if (currentFilter === 'canva') return product.includes('canva');
+            if (currentFilter === 'capcut') return product.includes('capcut');
+            if (currentFilter === 'cursor') return product.includes('cursor');
             return true;
         });
     }
@@ -321,25 +377,43 @@ function displayReviews() {
     }
 }
 
+// Create professional star icon
+function createStarIcon(filled = true) {
+    if (filled) {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>`;
+    } else {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>`;
+    }
+}
+
 // Create review card
 function createReviewCard(review) {
     const card = document.createElement('div');
-    card.className = 'review-card bg-white rounded-2xl p-6 shadow-lg';
+    card.className = 'review-card';
     
-    const stars = '⭐'.repeat(review.rating);
+    // Create professional stars
+    let starsHTML = '';
+    for (let i = 1; i <= 5; i++) {
+        starsHTML += createStarIcon(i <= review.rating);
+    }
+    
     const productBadge = getProductBadge(review.product);
     
     card.innerHTML = `
-        <div class="flex items-start justify-between mb-4">
+        <div class="review-header">
             <div>
-                <h3 class="font-bold text-lg text-gray-800">${escapeHtml(review.name)}</h3>
-                <div class="text-yellow-400 text-sm">${stars}</div>
+                <h3 class="review-name">${escapeHtml(review.name)}</h3>
+                <div class="review-rating">${starsHTML}</div>
             </div>
             ${productBadge}
         </div>
-        <p class="text-gray-600 mb-4 leading-relaxed">${escapeHtml(review.comment)}</p>
-        ${review.image ? `<img src="${review.image}" alt="Review" class="w-full rounded-lg mb-4 cursor-pointer" onclick="openImageModal('${review.image}')">` : ''}
-        <div class="flex items-center justify-between text-sm text-gray-500">
+        <p class="review-comment">${escapeHtml(review.comment)}</p>
+        ${review.image ? `<img src="${review.image}" alt="Review" class="review-image" onclick="openImageModal('${review.image}')">` : ''}
+        <div class="review-meta">
             <span>📍 ${escapeHtml(review.platform)}</span>
             <span>📅 ${review.date}</span>
         </div>
@@ -357,6 +431,18 @@ function getProductBadge(product) {
         return '<span class="product-badge badge-chatgpt">ChatGPT</span>';
     } else if (productLower.includes('adobe')) {
         return '<span class="product-badge badge-adobe">Adobe</span>';
+    } else if (productLower.includes('gamma')) {
+        return '<span class="product-badge badge-gamma">Gamma.AI</span>';
+    } else if (productLower.includes('netflix')) {
+        return '<span class="product-badge badge-netflix">Netflix</span>';
+    } else if (productLower.includes('perplexity')) {
+        return '<span class="product-badge badge-perplexity">Perplexity</span>';
+    } else if (productLower.includes('tradingview')) {
+        return '<span class="product-badge badge-tradingview">TradingView</span>';
+    } else if (productLower.includes('canva')) {
+        return '<span class="product-badge badge-canva">Canva</span>';
+    } else if (productLower.includes('capcut')) {
+        return '<span class="product-badge badge-capcut">CapCut</span>';
     }
     return `<span class="product-badge" style="background: #667eea; color: white;">${escapeHtml(product)}</span>`;
 }
@@ -402,6 +488,29 @@ window.closeImageModal = function() {
     modal.classList.remove('flex');
 };
 
+// Format review dates based on current language
+function formatReviewDates() {
+    const lang = currentLang || 'ar';
+    const locale = lang === 'ar' ? 'ar-DZ' : lang === 'fr' ? 'fr-FR' : 'en-US';
+    
+    allReviews.forEach(review => {
+        if (review.timestamp) {
+            const date = review.timestamp instanceof Date ? review.timestamp : new Date(review.timestamp);
+            review.date = date.toLocaleDateString(locale, { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        } else {
+            review.date = new Date().toLocaleDateString(locale, { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+    });
+}
+
 // Escape HTML
 function escapeHtml(text) {
     const div = document.createElement('div');
@@ -445,6 +554,9 @@ window.changeLanguage = function(lang) {
     
     // Reload reviews to update date format
     if (window.allReviews && window.allReviews.length > 0) {
+        // Update date format for all reviews
+        formatReviewDates();
+        
         displayedReviews = 0;
         document.getElementById('reviews-container').innerHTML = '';
         displayReviews();

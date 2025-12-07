@@ -13,8 +13,8 @@
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <!-- صفحة تسجيل الدخول - Login Page -->
     <!-- ═══════════════════════════════════════════════════════════════ -->
-    <div id="login-page" class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-gray-800 rounded-2xl p-8 w-full max-w-md shadow-2xl">
+    <div id="login-page" class="min-h-screen flex items-center justify-center p-4" style="background: var(--bg-dark);">
+        <div class="rounded-2xl p-8 w-full max-w-md shadow-2xl" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
             <!-- Logo -->
             <div class="text-center mb-8">
                 <div class="text-6xl mb-4">🔐</div>
@@ -75,15 +75,42 @@
         </header>
 
         <!-- Navigation Tabs -->
-        <nav class="bg-gray-800 border-b border-gray-700 px-6">
-            <div class="flex gap-1">
-                <button onclick="showTab('overview')" class="tab-btn active px-6 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors" data-tab="overview">
+        <nav class="px-6 overflow-x-auto" style="background: var(--card-bg); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+            <div class="flex gap-1 min-w-max">
+                <button onclick="showTab('overview')" class="tab-btn active px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="overview">
                     📊 نظرة عامة
                 </button>
-                <button onclick="showTab('reviews')" class="tab-btn px-6 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors" data-tab="reviews">
+                <button onclick="showTab('products')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="products">
+                    📦 المنتجات
+                </button>
+                <button onclick="showTab('orders')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="orders">
+                    🛒 الطلبات
+                </button>
+                <button onclick="showTab('reviews')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="reviews">
                     ⭐ التقييمات
                 </button>
-                <button onclick="showTab('settings')" class="tab-btn px-6 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors" data-tab="settings">
+                <button onclick="showTab('customers')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="customers">
+                    👥 العملاء
+                </button>
+                <button onclick="showTab('analytics')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="analytics">
+                    📈 التحليلات
+                </button>
+                <button onclick="showTab('content')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="content">
+                    📝 المحتوى
+                </button>
+                <button onclick="showTab('integrations')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="integrations">
+                    🔗 التكاملات
+                </button>
+                <button onclick="showTab('tools')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="tools">
+                    🛠️ الأدوات
+                </button>
+                <button onclick="showTab('accounting')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="accounting">
+                    💰 المحاسبة
+                </button>
+                <button onclick="showTab('security')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="security">
+                    🔒 الأمان
+                </button>
+                <button onclick="showTab('settings')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="settings">
                     ⚙️ الإعدادات
                 </button>
             </div>
@@ -98,33 +125,33 @@
                 
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="stat-card bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl p-6">
-                        <div class="text-4xl mb-2">⭐</div>
-                        <div class="text-3xl font-bold" id="stat-total-reviews">0</div>
-                        <div class="text-purple-200">إجمالي التقييمات</div>
+                    <div class="stat-card rounded-xl p-6">
+                        <div class="text-4xl mb-2" style="color: var(--accent);">⭐</div>
+                        <div class="text-3xl font-bold" id="stat-total-reviews" style="color: var(--accent);">0</div>
+                        <div style="color: var(--text-secondary);">إجمالي التقييمات</div>
                     </div>
                     
-                    <div class="stat-card bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-6">
-                        <div class="text-4xl mb-2">📈</div>
-                        <div class="text-3xl font-bold" id="stat-average">0.0</div>
-                        <div class="text-yellow-100">متوسط التقييم</div>
+                    <div class="stat-card rounded-xl p-6">
+                        <div class="text-4xl mb-2" style="color: var(--accent);">📈</div>
+                        <div class="text-3xl font-bold" id="stat-average" style="color: var(--accent);">0.0</div>
+                        <div style="color: var(--text-secondary);">متوسط التقييم</div>
                     </div>
                     
-                    <div class="stat-card bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6">
-                        <div class="text-4xl mb-2">📦</div>
-                        <div class="text-3xl font-bold" id="stat-products">10</div>
-                        <div class="text-green-100">المنتجات</div>
+                    <div class="stat-card rounded-xl p-6">
+                        <div class="text-4xl mb-2" style="color: var(--accent);">📦</div>
+                        <div class="text-3xl font-bold" id="stat-products" style="color: var(--accent);">10</div>
+                        <div style="color: var(--text-secondary);">المنتجات</div>
                     </div>
                     
-                    <div class="stat-card bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6">
-                        <div class="text-4xl mb-2">🕐</div>
-                        <div class="text-3xl font-bold" id="stat-today">0</div>
-                        <div class="text-blue-100">تقييمات اليوم</div>
+                    <div class="stat-card rounded-xl p-6">
+                        <div class="text-4xl mb-2" style="color: var(--accent);">🕐</div>
+                        <div class="text-3xl font-bold" id="stat-today" style="color: var(--accent);">0</div>
+                        <div style="color: var(--text-secondary);">تقييمات اليوم</div>
                     </div>
                 </div>
                 
                 <!-- Recent Reviews -->
-                <div class="bg-gray-800 rounded-xl p-6">
+                <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <h3 class="text-xl font-bold mb-4">🕐 آخر التقييمات</h3>
                     <div id="recent-reviews" class="space-y-4">
                         <p class="text-gray-400">جاري التحميل...</p>
@@ -155,9 +182,9 @@
                 </div>
                 
                 <!-- Reviews Table -->
-                <div class="bg-gray-800 rounded-xl overflow-hidden">
+                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <table class="w-full">
-                        <thead class="bg-gray-700">
+                        <thead style="background: rgba(255, 255, 255, 0.05);">
                             <tr>
                                 <th class="text-right px-6 py-4">الاسم</th>
                                 <th class="text-right px-6 py-4">المنتج</th>
@@ -179,6 +206,653 @@
                 <!-- Pagination Info -->
                 <div class="mt-4 text-gray-400 text-center">
                     <span id="reviews-count">0</span> تقييم
+                </div>
+            </div>
+            
+            <!-- ═══════════ Products Tab ═══════════ -->
+            <div id="tab-products" class="tab-content hidden">
+                <!-- Header with Search & Filter -->
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+                    <h2 class="text-2xl font-bold">📦 إدارة المنتجات</h2>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <!-- Search -->
+                        <input type="text" id="search-products" placeholder="🔍 بحث عن منتج..."
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none w-48">
+                        <!-- Filter by Category -->
+                        <select id="filter-category" 
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <option value="all">جميع الفئات</option>
+                            <option value="subscriptions">اشتراكات</option>
+                            <option value="accounts">حسابات</option>
+                            <option value="tools">أدوات</option>
+                            <option value="courses">كورسات</option>
+                            <option value="other">أخرى</option>
+                        </select>
+                        <!-- Filter by Availability -->
+                        <select id="filter-availability" 
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <option value="all">الكل</option>
+                            <option value="available">متوفر</option>
+                            <option value="unavailable">غير متوفر</option>
+                            <option value="coming_soon">قريباً</option>
+                        </select>
+                        <button onclick="openProductModal()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            ➕ إضافة منتج جديد
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Products Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="text-2xl font-bold" id="stat-products-total" style="color: var(--accent);">0</div>
+                        <div class="text-gray-400 text-sm">إجمالي المنتجات</div>
+                    </div>
+                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="text-2xl font-bold text-green-400" id="stat-products-available">0</div>
+                        <div class="text-gray-400 text-sm">✅ متوفر</div>
+                    </div>
+                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="text-2xl font-bold text-red-400" id="stat-products-unavailable">0</div>
+                        <div class="text-gray-400 text-sm">❌ غير متوفر</div>
+                    </div>
+                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="text-2xl font-bold text-yellow-400" id="stat-products-coming-soon">0</div>
+                        <div class="text-gray-400 text-sm">🔜 قريباً</div>
+                    </div>
+                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="text-2xl font-bold text-blue-400" id="stat-products-sales">0</div>
+                        <div class="text-gray-400 text-sm">إجمالي المبيعات</div>
+                    </div>
+                </div>
+                
+                <!-- Products Table -->
+                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="overflow-x-auto">
+                        <table class="w-full" id="products-table">
+                            <thead style="background: rgba(255, 255, 255, 0.05);">
+                                <tr>
+                                    <th class="text-right px-4 py-4 w-12">⬍</th>
+                                    <th class="text-right px-4 py-4">الصورة</th>
+                                    <th class="text-right px-4 py-4">المنتج</th>
+                                    <th class="text-right px-4 py-4">الفئة</th>
+                                    <th class="text-right px-4 py-4">السعر</th>
+                                    <th class="text-right px-4 py-4">المخزون</th>
+                                    <th class="text-center px-4 py-4">التوفر</th>
+                                    <th class="text-center px-4 py-4">الحالة</th>
+                                    <th class="text-center px-4 py-4">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <tr>
+                                    <td colspan="9" class="text-center py-8 text-gray-400">جاري التحميل...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Drag & Drop Hint -->
+                <p class="text-gray-500 text-sm mt-3 text-center">💡 اسحب وأفلت الصفوف لتغيير ترتيب المنتجات</p>
+            </div>
+            
+            <!-- ═══════════ Orders Tab ═══════════ -->
+            <div id="tab-orders" class="tab-content hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold">🛒 إدارة الطلبات</h2>
+                    <div class="flex gap-4">
+                        <select id="filter-order-status" 
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <option value="all">جميع الحالات</option>
+                            <option value="pending">قيد الانتظار</option>
+                            <option value="confirmed">مؤكدة</option>
+                            <option value="delivered">تم التسليم</option>
+                            <option value="cancelled">ملغاة</option>
+                        </select>
+                        <input type="text" id="search-orders" placeholder="🔍 بحث..."
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                </div>
+                
+                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <table class="w-full">
+                        <thead style="background: rgba(255, 255, 255, 0.05);">
+                            <tr>
+                                <th class="text-right px-6 py-4">رقم الطلب</th>
+                                <th class="text-right px-6 py-4">المنتج</th>
+                                <th class="text-right px-6 py-4">العميل</th>
+                                <th class="text-right px-6 py-4">المبلغ</th>
+                                <th class="text-right px-6 py-4">طريقة الدفع</th>
+                                <th class="text-right px-6 py-4">الحالة</th>
+                                <th class="text-right px-6 py-4">التاريخ</th>
+                                <th class="text-center px-6 py-4">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            <tr>
+                                <td colspan="8" class="text-center py-8 text-gray-400">لا توجد طلبات</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- ═══════════ Customers Tab ═══════════ -->
+            <div id="tab-customers" class="tab-content hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold">👥 إدارة العملاء</h2>
+                    <input type="text" id="search-customers" placeholder="🔍 بحث..."
+                        class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                
+                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <table class="w-full">
+                        <thead style="background: rgba(255, 255, 255, 0.05);">
+                            <tr>
+                                <th class="text-right px-6 py-4">الاسم</th>
+                                <th class="text-right px-6 py-4">البريد الإلكتروني</th>
+                                <th class="text-right px-6 py-4">الهاتف</th>
+                                <th class="text-right px-6 py-4">عدد الطلبات</th>
+                                <th class="text-right px-6 py-4">إجمالي المشتريات</th>
+                                <th class="text-right px-6 py-4">آخر طلب</th>
+                                <th class="text-center px-6 py-4">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center py-8 text-gray-400">لا يوجد عملاء</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- ═══════════ Analytics Tab ═══════════ -->
+            <div id="tab-analytics" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-6">📈 التحليلات والإحصائيات</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card rounded-xl p-6">
+                        <div class="text-4xl mb-2" style="color: var(--accent);">💰</div>
+                        <div class="text-3xl font-bold" id="stat-total-revenue" style="color: var(--accent);">0</div>
+                        <div style="color: var(--text-secondary);">إجمالي الإيرادات</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-6">
+                        <div class="text-4xl mb-2" style="color: var(--accent);">🛒</div>
+                        <div class="text-3xl font-bold" id="stat-total-orders" style="color: var(--accent);">0</div>
+                        <div style="color: var(--text-secondary);">إجمالي الطلبات</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-6">
+                        <div class="text-4xl mb-2" style="color: var(--accent);">👥</div>
+                        <div class="text-3xl font-bold" id="stat-total-customers" style="color: var(--accent);">0</div>
+                        <div style="color: var(--text-secondary);">إجمالي العملاء</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-6">
+                        <div class="text-4xl mb-2" style="color: var(--accent);">📊</div>
+                        <div class="text-3xl font-bold" id="stat-avg-order" style="color: var(--accent);">0</div>
+                        <div style="color: var(--text-secondary);">متوسط الطلب</div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">📈 المبيعات حسب المنتج</h3>
+                        <canvas id="sales-by-product-chart"></canvas>
+                    </div>
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">📅 المبيعات حسب التاريخ</h3>
+                        <canvas id="sales-by-date-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <h3 class="text-xl font-bold mb-4">📊 طرق الدفع</h3>
+                    <canvas id="payment-methods-chart"></canvas>
+                </div>
+            </div>
+            
+            <!-- ═══════════ Content Tab ═══════════ -->
+            <div id="tab-content" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-6">📝 إدارة المحتوى</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">🌐 الترجمة</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">اللغة</label>
+                                <select id="translation-lang" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                                    <option value="ar">العربية</option>
+                                    <option value="en">English</option>
+                                    <option value="fr">Français</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">المفتاح</label>
+                                <input type="text" id="translation-key" placeholder="مثال: welcome_message"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">النص</label>
+                                <textarea id="translation-value" rows="4" placeholder="أدخل النص المترجم"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                            </div>
+                            <button onclick="saveTranslation()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                                حفظ الترجمة
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">🎨 المظهر</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">اللون الأساسي</label>
+                                <input type="color" id="primary-color" value="#ffd56f"
+                                    class="w-full h-12 bg-gray-700 border border-gray-600 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">اللون الثانوي</label>
+                                <input type="color" id="secondary-color" value="#ffb347"
+                                    class="w-full h-12 bg-gray-700 border border-gray-600 rounded-lg">
+                            </div>
+                            <button onclick="saveTheme()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                                حفظ المظهر
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ═══════════ Integrations Tab ═══════════ -->
+            <div id="tab-integrations" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-6">🔗 التكاملات</h2>
+                
+                <div class="space-y-6">
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">💳 طرق الدفع</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">BaridiMob RIP</label>
+                                <input type="text" id="baridimob-rip" value="00799999002787548473"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">RedotPay ID</label>
+                                <input type="text" id="redotpay-id" value="1117632168"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">USDT TRC20 Address</label>
+                                <input type="text" id="usdt-trc20" value="TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <button onclick="savePaymentMethods()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                                حفظ طرق الدفع
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">💬 التواصل</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">WhatsApp Number</label>
+                                <input type="text" id="whatsapp-number" value="213782125821"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">Telegram Username</label>
+                                <input type="text" id="telegram-username" placeholder="@username"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <button onclick="saveContactInfo()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                                حفظ معلومات التواصل
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">📊 Meta Pixel</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">Pixel ID</label>
+                                <input type="text" id="meta-pixel-id" value="2046893892791206"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="meta-pixel-enabled" checked class="w-5 h-5">
+                                <label for="meta-pixel-enabled" class="text-gray-300">تفعيل Meta Pixel</label>
+                            </div>
+                            <button onclick="saveMetaPixel()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                                حفظ إعدادات Meta Pixel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ═══════════ Tools Tab ═══════════ -->
+            <div id="tab-tools" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-6">🛠️ الأدوات</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">💾 النسخ الاحتياطي</h3>
+                        <p class="text-gray-400 mb-4">إنشاء نسخة احتياطية من جميع البيانات</p>
+                        <button onclick="backupData()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            📥 تصدير البيانات
+                        </button>
+                    </div>
+                    
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">📤 الاستيراد</h3>
+                        <p class="text-gray-400 mb-4">استيراد بيانات من ملف JSON</p>
+                        <input type="file" id="import-file" accept=".json" class="hidden">
+                        <button onclick="document.getElementById('import-file').click()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            📤 استيراد البيانات
+                        </button>
+                    </div>
+                    
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">🔧 وضع الصيانة</h3>
+                        <p class="text-gray-400 mb-4">تفعيل/تعطيل وضع الصيانة</p>
+                        <div class="flex items-center gap-2 mb-4">
+                            <input type="checkbox" id="maintenance-mode" class="w-5 h-5">
+                            <label for="maintenance-mode" class="text-gray-300">تفعيل وضع الصيانة</label>
+                        </div>
+                        <button onclick="toggleMaintenanceMode()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            حفظ
+                        </button>
+                    </div>
+                    
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">🎟️ أكواد الخصم</h3>
+                        <p class="text-gray-400 mb-4">إدارة أكواد الخصم والترويج</p>
+                        <button onclick="openPromoCodeModal()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            ➕ إضافة كود خصم
+                        </button>
+                    </div>
+                    
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">📊 تصدير التقارير</h3>
+                        <p class="text-gray-400 mb-4">تصدير التقارير بصيغة CSV</p>
+                        <button onclick="exportReports()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            📊 تصدير CSV
+                        </button>
+                    </div>
+                    
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">📦 إدارة المخزون</h3>
+                        <p class="text-gray-400 mb-4">تتبع المخزون للمنتجات</p>
+                        <button onclick="showTab('products')" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            عرض المنتجات
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ═══════════ Security Tab ═══════════ -->
+            <div id="tab-security" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-6">🔒 الأمان والسجلات</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">📋 سجل الأنشطة</h3>
+                        <div id="activity-log" class="space-y-2 max-h-96 overflow-y-auto">
+                            <p class="text-gray-400">جاري التحميل...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4">🔐 إعدادات الأمان</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-300">تسجيل الخروج التلقائي</span>
+                                <input type="checkbox" id="auto-logout" checked class="w-5 h-5">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">مدة الجلسة (بالدقائق)</label>
+                                <input type="number" id="session-timeout" value="60" min="5" max="480"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-300">تسجيل جميع الأنشطة</span>
+                                <input type="checkbox" id="log-all-activities" checked class="w-5 h-5">
+                            </div>
+                            <button onclick="saveSecuritySettings()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                                حفظ الإعدادات
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <h3 class="text-xl font-bold mb-4">📊 إحصائيات الجلسات</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="text-center p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                            <div class="text-2xl font-bold" id="stat-active-sessions">0</div>
+                            <div class="text-gray-400 text-sm">جلسات نشطة</div>
+                        </div>
+                        <div class="text-center p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                            <div class="text-2xl font-bold" id="stat-total-logins">0</div>
+                            <div class="text-gray-400 text-sm">إجمالي تسجيلات الدخول</div>
+                        </div>
+                        <div class="text-center p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                            <div class="text-2xl font-bold" id="stat-failed-logins">0</div>
+                            <div class="text-gray-400 text-sm">محاولات فاشلة</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ═══════════ Accounting Tab ═══════════ -->
+            <div id="tab-accounting" class="tab-content hidden">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+                    <h2 class="text-2xl font-bold">💰 المحاسبة والأرباح</h2>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <!-- Date Filter -->
+                        <select id="accounting-date-filter" 
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <option value="all">كل الفترات</option>
+                            <option value="today">اليوم</option>
+                            <option value="week">هذا الأسبوع</option>
+                            <option value="month">هذا الشهر</option>
+                            <option value="year">هذه السنة</option>
+                            <option value="custom">تاريخ مخصص</option>
+                        </select>
+                        <!-- Custom Date Range (hidden by default) -->
+                        <div id="custom-date-range" class="hidden flex gap-2">
+                            <input type="date" id="accounting-date-from" 
+                                class="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <span class="text-gray-400 self-center">إلى</span>
+                            <input type="date" id="accounting-date-to" 
+                                class="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
+                        <!-- Currency Toggle -->
+                        <select id="accounting-currency" 
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <option value="both">عرض الكل</option>
+                            <option value="dzd">DZD فقط</option>
+                            <option value="usd">USD فقط</option>
+                        </select>
+                        <!-- USD Rate -->
+                        <div class="flex items-center gap-1 bg-gray-800 rounded-lg px-2 py-1 border border-gray-700">
+                            <span class="text-xs text-gray-400">💵 $1 =</span>
+                            <input type="number" id="usd-rate-input" 
+                                class="w-16 px-1 py-1 bg-transparent text-yellow-400 font-bold text-sm text-center focus:outline-none"
+                                onchange="updateUsdRate(this.value)">
+                            <span class="text-xs text-gray-400">د.ج</span>
+                        </div>
+                        <!-- Action Buttons -->
+                        <button onclick="openPurchaseModal()" class="px-3 py-2 rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm">
+                            📥 شراء
+                        </button>
+                        <button onclick="openSaleModal()" class="px-3 py-2 rounded-lg transition-colors bg-green-600 hover:bg-green-700 text-white font-bold text-sm">
+                            📤 بيع
+                        </button>
+                        <button onclick="openExpenseModal()" class="px-3 py-2 rounded-lg transition-colors bg-red-600 hover:bg-red-700 text-white font-bold text-sm">
+                            💸 مصروف
+                        </button>
+                        <button onclick="openMonthlyReportModal()" class="px-3 py-2 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700; font-size: 0.875rem;">
+                            📊 التقرير الشهري
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Accounting Stats Cards - Row 1: المبيعات -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                    <div class="stat-card rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">💵</div>
+                        <div class="text-lg font-bold text-green-400" id="stat-total-revenue-acc">0 د.ج</div>
+                        <div class="text-gray-400 text-xs">إيرادات المبيعات</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">📦</div>
+                        <div class="text-lg font-bold text-blue-400" id="stat-total-cost-acc">0 د.ج</div>
+                        <div class="text-gray-400 text-xs">تكلفة المنتجات</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">📢</div>
+                        <div class="text-lg font-bold text-orange-400" id="stat-business-expenses">0 د.ج</div>
+                        <div class="text-gray-400 text-xs">مصاريف العمل</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">👤</div>
+                        <div class="text-lg font-bold text-purple-400" id="stat-personal-expenses">0 د.ج</div>
+                        <div class="text-gray-400 text-xs">مصاريف شخصية</div>
+                    </div>
+                </div>
+                
+                <!-- Accounting Stats Cards - Row 2: الأرباح -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                    <div class="stat-card rounded-xl p-3 text-center" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));">
+                        <div class="text-2xl mb-1">💼</div>
+                        <div class="text-lg font-bold text-green-400" id="stat-gross-profit">0 د.ج</div>
+                        <div class="text-gray-400 text-xs">ربح المنتجات</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-3 text-center" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));">
+                        <div class="text-2xl mb-1">🏢</div>
+                        <div class="text-lg font-bold text-blue-400" id="stat-net-business-profit">0 د.ج</div>
+                        <div class="text-gray-400 text-xs">ربح العمل الصافي</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-3 text-center" style="background: linear-gradient(135deg, rgba(255, 213, 111, 0.15), rgba(255, 213, 111, 0.05));">
+                        <div class="text-2xl mb-1">💰</div>
+                        <div class="text-lg font-bold" id="stat-net-profit" style="color: var(--accent);">0 د.ج</div>
+                        <div class="text-gray-400 text-xs">المتبقي (بعد المصاريف)</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">📊</div>
+                        <div class="text-lg font-bold text-cyan-400" id="stat-profit-margin">0%</div>
+                        <div class="text-gray-400 text-xs">هامش الربح</div>
+                    </div>
+                </div>
+                
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-lg font-bold mb-4">📈 الأرباح عبر الزمن</h3>
+                        <canvas id="profit-over-time-chart"></canvas>
+                    </div>
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-lg font-bold mb-4">🥧 توزيع الأرباح حسب المنتج</h3>
+                        <canvas id="profit-by-product-chart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Accounting Table -->
+                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm" id="accounting-table">
+                            <thead style="background: rgba(255, 255, 255, 0.05);">
+                                <tr>
+                                    <th class="text-right px-3 py-3">المنتج</th>
+                                    <th class="text-center px-2 py-3 text-blue-400">📥 مشتراة</th>
+                                    <th class="text-center px-2 py-3 text-green-400">📤 مباعة</th>
+                                    <th class="text-center px-2 py-3 text-yellow-400">📦 متبقي</th>
+                                    <th class="text-right px-2 py-3">تكلفة الشراء</th>
+                                    <th class="text-right px-2 py-3">إيرادات البيع</th>
+                                    <th class="text-right px-2 py-3 text-green-400">💰 الربح</th>
+                                    <th class="text-center px-2 py-3">هامش</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accounting-table-body">
+                                <tr>
+                                    <td colspan="8" class="text-center py-8 text-gray-400">جاري التحميل...</td>
+                                </tr>
+                            </tbody>
+                            <tfoot id="accounting-table-footer" style="background: rgba(255, 213, 111, 0.1); font-weight: bold;">
+                                <tr>
+                                    <td class="px-3 py-3 text-right">الإجمالي</td>
+                                    <td class="px-2 py-3 text-center" id="footer-total-purchased">0</td>
+                                    <td class="px-2 py-3 text-center" id="footer-total-sold">0</td>
+                                    <td class="px-2 py-3 text-center" id="footer-total-remaining">0</td>
+                                    <td class="px-2 py-3 text-right" id="footer-total-cost">0</td>
+                                    <td class="px-2 py-3 text-right" id="footer-total-revenue">0</td>
+                                    <td class="px-2 py-3 text-right" id="footer-total-profit">0</td>
+                                    <td class="px-2 py-3 text-center" id="footer-avg-margin">0%</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Expenses Section -->
+                <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Business Expenses -->
+                    <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-orange-400">📢 مصاريف العمل</h3>
+                            <span class="text-sm text-gray-400" id="business-expenses-total">0 د.ج</span>
+                        </div>
+                        <div id="business-expenses-list" class="space-y-2 max-h-64 overflow-y-auto">
+                            <p class="text-gray-500 text-sm text-center py-4">لا توجد مصاريف</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Personal Expenses -->
+                    <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-purple-400">👤 مصاريف شخصية</h3>
+                            <span class="text-sm text-gray-400" id="personal-expenses-total">0 د.ج</span>
+                        </div>
+                        <div id="personal-expenses-list" class="space-y-2 max-h-64 overflow-y-auto">
+                            <p class="text-gray-500 text-sm text-center py-4">لا توجد مصاريف</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Transactions Log -->
+                <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Purchases Log -->
+                    <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-blue-400">📥 سجل المشتريات</h3>
+                            <span class="text-sm text-gray-400" id="purchases-count">0 عملية</span>
+                        </div>
+                        <div id="purchases-log" class="space-y-2 max-h-72 overflow-y-auto">
+                            <p class="text-gray-500 text-sm text-center py-4">لا توجد عمليات شراء</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Sales Log -->
+                    <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-green-400">📤 سجل المبيعات</h3>
+                            <span class="text-sm text-gray-400" id="sales-count">0 عملية</span>
+                        </div>
+                        <div id="sales-log" class="space-y-2 max-h-72 overflow-y-auto">
+                            <p class="text-gray-500 text-sm text-center py-4">لا توجد عمليات بيع</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Suppliers Summary -->
+                <div class="mt-6 rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <h3 class="text-lg font-bold mb-4">🏪 ملخص الموردين</h3>
+                    <div id="suppliers-summary" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <p class="text-gray-400">جاري التحميل...</p>
+                    </div>
                 </div>
             </div>
             
@@ -207,36 +881,36 @@
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                             </div>
                             <button type="submit" 
-                                class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg transition-colors">
+                                class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                                 حفظ كلمة المرور
                             </button>
                         </form>
                     </div>
                     
                     <!-- Quick Links -->
-                    <div class="bg-gray-800 rounded-xl p-6">
-                        <h3 class="text-xl font-bold mb-4">🔗 روابط سريعة</h3>
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--accent);">🔗 روابط سريعة</h3>
                         <div class="grid grid-cols-2 gap-4">
-                            <a href="index.html" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-center transition-colors">
+                            <a href="index.html" target="_blank" class="p-4 rounded-lg text-center transition-colors" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
                                 🏠 الصفحة الرئيسية
                             </a>
-                            <a href="reviews.html" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-center transition-colors">
+                            <a href="reviews.html" target="_blank" class="p-4 rounded-lg text-center transition-colors" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
                                 ⭐ صفحة التقييمات
                             </a>
-                            <a href="https://console.firebase.google.com" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-center transition-colors">
+                            <a href="https://console.firebase.google.com" target="_blank" class="p-4 rounded-lg text-center transition-colors" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
                                 🔥 Firebase Console
                             </a>
-                            <a href="https://wa.me/213782125821" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-center transition-colors">
+                            <a href="https://wa.me/213782125821" target="_blank" class="p-4 rounded-lg text-center transition-colors" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
                                 💬 WhatsApp
                             </a>
                         </div>
                     </div>
                     
                     <!-- Info -->
-                    <div class="bg-gray-800 rounded-xl p-6">
-                        <h3 class="text-xl font-bold mb-4">ℹ️ معلومات</h3>
+                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--accent);">ℹ️ معلومات</h3>
                         <div class="space-y-2 text-gray-400">
-                            <p>📌 الإصدار: 1.0.0</p>
+                            <p>📌 الإصدار: 2.0.0</p>
                             <p>👨‍💻 تم التطوير بواسطة: Cursor AI</p>
                             <p>📅 آخر تحديث: <span id="last-update"></span></p>
                         </div>
@@ -249,17 +923,557 @@
 
     <!-- Delete Confirmation Modal -->
     <div id="delete-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full text-center">
+        <div class="rounded-2xl p-8 max-w-md w-full text-center" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
             <div class="text-6xl mb-4">⚠️</div>
             <h3 class="text-2xl font-bold mb-2">تأكيد الحذف</h3>
-            <p class="text-gray-400 mb-6">هل أنت متأكد من حذف هذا التقييم؟<br>لا يمكن التراجع عن هذا الإجراء.</p>
+            <p class="text-gray-400 mb-6" id="delete-modal-message">هل أنت متأكد من حذف هذا العنصر؟<br>لا يمكن التراجع عن هذا الإجراء.</p>
             <div class="flex gap-4 justify-center">
                 <button onclick="closeDeleteModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
                     إلغاء
                 </button>
-                <button onclick="confirmDelete()" class="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
+                <button onclick="confirmDelete()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--danger); color: white; font-weight: 700;">
                     حذف 🗑️
                 </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-6 max-w-4xl w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
+            <h3 class="text-2xl font-bold mb-6" id="product-modal-title">إضافة منتج جديد</h3>
+            <form id="product-form" class="space-y-4">
+                <!-- Row 1: ID, Name, Category -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-gray-300 mb-2">معرف المنتج (ID) <span class="text-red-400">*</span></label>
+                        <input type="text" id="product-id" required placeholder="مثال: trw"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">اسم المنتج <span class="text-red-400">*</span></label>
+                        <input type="text" id="product-name" required placeholder="اسم المنتج"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">الفئة</label>
+                        <select id="product-category"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <option value="subscriptions">اشتراكات</option>
+                            <option value="accounts">حسابات</option>
+                            <option value="tools">أدوات</option>
+                            <option value="courses">كورسات</option>
+                            <option value="other">أخرى</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Row 2: Selling Prices -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-gray-300 mb-2">سعر البيع (DZD) <span class="text-red-400">*</span></label>
+                        <input type="number" id="product-price-dzd" required min="0" step="0.01" placeholder="0"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">السعر القديم (DZD)</label>
+                        <input type="number" id="product-old-price-dzd" min="0" step="0.01" placeholder="اختياري"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">سعر البيع (USD) <span class="text-red-400">*</span></label>
+                        <input type="number" id="product-price-usd" required min="0" step="0.01" placeholder="0"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">السعر القديم (USD)</label>
+                        <input type="number" id="product-old-price-usd" min="0" step="0.01" placeholder="اختياري"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                </div>
+                
+                <!-- Row 2.5: Cost Prices & Supplier -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-lg" style="background: rgba(139, 92, 246, 0.1); border: 1px dashed rgba(139, 92, 246, 0.3);">
+                    <div>
+                        <label class="block text-gray-300 mb-2">💰 سعر الشراء (DZD)</label>
+                        <input type="number" id="product-cost-dzd" min="0" step="0.01" placeholder="تكلفة الشراء"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">💵 سعر الشراء (USD)</label>
+                        <input type="number" id="product-cost-usd" min="0" step="0.01" placeholder="تكلفة الشراء"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">🏪 اسم المورد</label>
+                        <input type="text" id="product-supplier" placeholder="من أين اشتريت؟"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                </div>
+                
+                <!-- Row 3: Stock & Image -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-gray-300 mb-2">المخزون (عدد الحسابات)</label>
+                        <input type="number" id="product-stock" min="0" placeholder="غير محدود إذا فارغ"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-gray-300 mb-2">رابط الصورة</label>
+                        <div class="flex gap-2">
+                            <input type="url" id="product-image" placeholder="https://i.imgur.com/..."
+                                class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <div id="product-image-preview" class="w-12 h-12 bg-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
+                                <span class="text-gray-400 text-xs">معاينة</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Row 4: Features -->
+                <div>
+                    <label class="block text-gray-300 mb-2">المميزات (سطر لكل ميزة)</label>
+                    <textarea id="product-features" rows="3" placeholder="✅ ميزة 1&#10;✅ ميزة 2&#10;✅ ميزة 3"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                </div>
+                
+                <!-- Row 5: WhatsApp Message -->
+                <div>
+                    <label class="block text-gray-300 mb-2">رسالة WhatsApp المخصصة</label>
+                    <input type="text" id="product-whatsapp-msg" placeholder="مرحباً، أريد شراء {product_name}"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    <p class="text-gray-500 text-xs mt-1">استخدم {product_name} لإدراج اسم المنتج تلقائياً</p>
+                </div>
+                
+                <!-- Row 6: Descriptions -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-gray-300 mb-2">الوصف (عربي)</label>
+                        <textarea id="product-desc-ar" rows="3" placeholder="وصف المنتج بالعربية"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">الوصف (إنجليزي)</label>
+                        <textarea id="product-desc-en" rows="3" placeholder="Product description in English"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">الوصف (فرنسي)</label>
+                        <textarea id="product-desc-fr" rows="3" placeholder="Description du produit en français"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Row 7: Status Checkboxes -->
+                <div class="flex flex-wrap items-center gap-6 p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="product-available" checked class="w-5 h-5 accent-green-500">
+                        <label for="product-available" class="text-gray-300">✅ متوفر للبيع</label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="product-active" checked class="w-5 h-5 accent-purple-500">
+                        <label for="product-active" class="text-gray-300">👁️ المنتج نشط (مرئي)</label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="product-featured" class="w-5 h-5 accent-yellow-500">
+                        <label for="product-featured" class="text-gray-300">⭐ منتج مميز</label>
+                    </div>
+                </div>
+                
+                <!-- Buttons -->
+                <div class="flex gap-4 justify-end pt-4 border-t border-gray-700">
+                    <button type="button" onclick="closeProductModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                        إلغاء
+                    </button>
+                    <button type="submit" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        💾 حفظ المنتج
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Product Preview Modal -->
+    <div id="product-preview-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-6 max-w-lg w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">👁️ معاينة المنتج</h3>
+                <button onclick="closePreviewModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div id="product-preview-content" class="space-y-4">
+                <!-- Preview content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Promo Code Modal -->
+    <div id="promo-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-8 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+            <h3 class="text-2xl font-bold mb-6">إضافة كود خصم</h3>
+            <form id="promo-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-300 mb-2">رمز الكود</label>
+                    <input type="text" id="promo-code" required
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-2">نسبة الخصم (%)</label>
+                    <input type="number" id="promo-discount" required min="0" max="100"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-2">تاريخ الانتهاء</label>
+                    <input type="date" id="promo-expiry"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-2">الحد الأقصى للاستخدام</label>
+                    <input type="number" id="promo-max-uses" min="1"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                <div class="flex gap-4 justify-end">
+                    <button type="button" onclick="closePromoModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                        إلغاء
+                    </button>
+                    <button type="submit" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        حفظ
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Order Details Modal -->
+    <div id="order-details-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-8 max-w-2xl w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y-auto;">
+            <h3 class="text-2xl font-bold mb-6">تفاصيل الطلب</h3>
+            <div id="order-details-content" class="space-y-4">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            <div class="flex gap-4 justify-end mt-6">
+                <button onclick="closeOrderDetailsModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                    إغلاق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Modal (تسجيل شراء من المورد) -->
+    <div id="purchase-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-5 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
+            <h3 class="text-xl font-bold mb-4 text-blue-400">📥 تسجيل شراء من المورد</h3>
+            <form id="purchase-form" class="space-y-3">
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">المنتج <span class="text-red-400">*</span></label>
+                    <select id="purchase-product" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <option value="">-- اختر المنتج --</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">الكمية المشتراة <span class="text-red-400">*</span></label>
+                        <input type="number" id="purchase-quantity" required min="1" value="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">سعر الوحدة <span class="text-red-400">*</span></label>
+                        <input type="number" id="purchase-unit-price" required min="0" step="0.01" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">العملة</label>
+                        <select id="purchase-currency" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                            <option value="DZD">🇩🇿 DZD</option>
+                            <option value="USD">🇺🇸 USD</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">الإجمالي</label>
+                        <input type="text" id="purchase-total" readonly class="w-full px-3 py-2 bg-gray-600 border border-gray-600 rounded-lg text-sm text-yellow-400 font-bold">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">اسم المورد</label>
+                        <input type="text" id="purchase-supplier" placeholder="من أين اشتريت؟" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">📅 تاريخ الشراء</label>
+                        <input type="date" id="purchase-date" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">ملاحظات</label>
+                    <input type="text" id="purchase-notes" placeholder="ملاحظات..." class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                </div>
+                <div class="flex gap-3 pt-3 border-t border-gray-700">
+                    <button type="button" onclick="closePurchaseModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-bold">💾 حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sale Modal (تسجيل بيع للعميل) -->
+    <div id="sale-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-5 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
+            <h3 class="text-xl font-bold mb-4 text-green-400">📤 تسجيل بيع للعميل</h3>
+            <form id="sale-form" class="space-y-3">
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">المنتج <span class="text-red-400">*</span></label>
+                    <select id="sale-product" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <option value="">-- اختر المنتج --</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">الكمية</label>
+                        <input type="number" id="sale-quantity" value="1" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">سعر البيع <span class="text-red-400">*</span></label>
+                        <input type="number" id="sale-amount" required min="0" step="0.01" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">العملة</label>
+                        <select id="sale-currency" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                            <option value="DZD">🇩🇿 DZD</option>
+                            <option value="USD">🇺🇸 USD</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">طريقة الدفع</label>
+                        <select id="sale-payment-method" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                            <option value="BaridiMob">BaridiMob</option>
+                            <option value="USDT">USDT</option>
+                            <option value="Binance">Binance</option>
+                            <option value="RedotPay">RedotPay</option>
+                            <option value="Cash">نقداً</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">اسم العميل</label>
+                        <input type="text" id="sale-customer-name" placeholder="المشتري" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">التواصل</label>
+                        <input type="text" id="sale-customer-contact" placeholder="هاتف/بريد" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">📅 تاريخ البيع</label>
+                        <input type="date" id="sale-date" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">ملاحظات</label>
+                        <input type="text" id="sale-notes" placeholder="ملاحظات..." class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-3 border-t border-gray-700">
+                    <button type="button" onclick="closeSaleModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm font-bold">💾 حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Expense Modal (تسجيل مصروف) -->
+    <div id="expense-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-5 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto;">
+            <h3 class="text-xl font-bold mb-4 text-red-400">💸 تسجيل مصروف جديد</h3>
+            <form id="expense-form" class="space-y-3">
+                <!-- Expense Type -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button type="button" onclick="setExpenseType('business')" id="expense-type-business" 
+                        class="px-4 py-3 rounded-lg border-2 border-orange-500 bg-orange-500/20 text-orange-400 font-bold text-sm transition-all">
+                        🏢 مصاريف العمل
+                    </button>
+                    <button type="button" onclick="setExpenseType('personal')" id="expense-type-personal"
+                        class="px-4 py-3 rounded-lg border-2 border-gray-600 bg-transparent text-gray-400 font-bold text-sm transition-all">
+                        👤 مصاريف شخصية
+                    </button>
+                </div>
+                <input type="hidden" id="expense-type" value="business">
+                
+                <!-- Category -->
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">الفئة <span class="text-red-400">*</span></label>
+                    <select id="expense-category" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <!-- Business Categories -->
+                        <optgroup label="📢 مصاريف العمل" id="business-categories">
+                            <option value="ads_facebook">📘 إعلانات Facebook</option>
+                            <option value="ads_instagram">📸 إعلانات Instagram</option>
+                            <option value="ads_tiktok">🎵 إعلانات TikTok</option>
+                            <option value="ads_other">📢 إعلانات أخرى</option>
+                            <option value="tools">🛠️ أدوات وبرامج</option>
+                            <option value="hosting">🌐 استضافة ودومين</option>
+                            <option value="fees">💳 عمولات ورسوم</option>
+                            <option value="internet">📶 إنترنت</option>
+                            <option value="phone">📱 هاتف للعمل</option>
+                            <option value="business_other">📋 أخرى (عمل)</option>
+                        </optgroup>
+                        <!-- Personal Categories -->
+                        <optgroup label="👤 مصاريف شخصية" id="personal-categories" class="hidden">
+                            <option value="food">🍔 طعام وشراب</option>
+                            <option value="clothes">👕 ملابس</option>
+                            <option value="transport">🚗 تنقل ومواصلات</option>
+                            <option value="health">💊 صحة وأدوية</option>
+                            <option value="entertainment">🎮 ترفيه</option>
+                            <option value="education">📚 تعليم وكورسات</option>
+                            <option value="bills">🏠 فواتير (كهرباء، ماء)</option>
+                            <option value="rent">🏠 إيجار</option>
+                            <option value="personal_other">📋 أخرى (شخصي)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <!-- Amount -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">المبلغ <span class="text-red-400">*</span></label>
+                        <input type="number" id="expense-amount" required min="0" step="0.01" 
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">العملة</label>
+                        <select id="expense-currency" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                            <option value="DZD">🇩🇿 DZD</option>
+                            <option value="USD">🇺🇸 USD</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Description -->
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">الوصف</label>
+                    <input type="text" id="expense-description" placeholder="وصف المصروف..." 
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                </div>
+                
+                <!-- Date -->
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">التاريخ</label>
+                    <input type="date" id="expense-date" 
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                </div>
+                
+                <!-- Buttons -->
+                <div class="flex gap-3 pt-3 border-t border-gray-700">
+                    <button type="button" onclick="closeExpenseModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-bold">💾 حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Monthly Report Modal -->
+    <div id="monthly-report-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-6 max-w-4xl w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); max-height: 95vh; overflow-y: auto;">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">📊 التقرير الشهري</h3>
+                <div class="flex gap-2">
+                    <select id="report-month" class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <option value="0">يناير</option>
+                        <option value="1">فبراير</option>
+                        <option value="2">مارس</option>
+                        <option value="3">أبريل</option>
+                        <option value="4">مايو</option>
+                        <option value="5">يونيو</option>
+                        <option value="6">يوليو</option>
+                        <option value="7">أغسطس</option>
+                        <option value="8">سبتمبر</option>
+                        <option value="9">أكتوبر</option>
+                        <option value="10">نوفمبر</option>
+                        <option value="11">ديسمبر</option>
+                    </select>
+                    <select id="report-year" class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    </select>
+                    <button onclick="generateMonthlyReport()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-bold">
+                        🔄 تحديث
+                    </button>
+                    <button onclick="closeMonthlyReportModal()" class="px-3 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg">✕</button>
+                </div>
+            </div>
+            
+            <!-- Report Content -->
+            <div id="monthly-report-content" class="space-y-6">
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="rounded-xl p-4 text-center bg-green-600/10 border border-green-600/30">
+                        <div class="text-green-400 text-2xl font-bold" id="report-revenue">0 د.ج</div>
+                        <div class="text-gray-400 text-sm">💵 الإيرادات</div>
+                    </div>
+                    <div class="rounded-xl p-4 text-center bg-blue-600/10 border border-blue-600/30">
+                        <div class="text-blue-400 text-2xl font-bold" id="report-product-cost">0 د.ج</div>
+                        <div class="text-gray-400 text-sm">📦 تكلفة المنتجات</div>
+                    </div>
+                    <div class="rounded-xl p-4 text-center bg-orange-600/10 border border-orange-600/30">
+                        <div class="text-orange-400 text-2xl font-bold" id="report-business-exp">0 د.ج</div>
+                        <div class="text-gray-400 text-sm">📢 مصاريف العمل</div>
+                    </div>
+                    <div class="rounded-xl p-4 text-center bg-purple-600/10 border border-purple-600/30">
+                        <div class="text-purple-400 text-2xl font-bold" id="report-personal-exp">0 د.ج</div>
+                        <div class="text-gray-400 text-sm">👤 مصاريف شخصية</div>
+                    </div>
+                </div>
+                
+                <!-- Profit Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05)); border: 1px solid rgba(34, 197, 94, 0.3);">
+                        <div class="text-3xl mb-2">💼</div>
+                        <div class="text-green-400 text-2xl font-bold" id="report-gross-profit">0 د.ج</div>
+                        <div class="text-gray-400 text-sm">ربح المنتجات</div>
+                        <div class="text-gray-500 text-xs mt-1">الإيرادات - تكلفة المنتجات</div>
+                    </div>
+                    <div class="rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3);">
+                        <div class="text-3xl mb-2">🏢</div>
+                        <div class="text-blue-400 text-2xl font-bold" id="report-net-business">0 د.ج</div>
+                        <div class="text-gray-400 text-sm">ربح العمل الصافي</div>
+                        <div class="text-gray-500 text-xs mt-1">بعد خصم مصاريف العمل</div>
+                    </div>
+                    <div class="rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(255, 213, 111, 0.2), rgba(255, 213, 111, 0.05)); border: 1px solid rgba(255, 213, 111, 0.4);">
+                        <div class="text-3xl mb-2">💰</div>
+                        <div class="text-2xl font-bold" id="report-net-total" style="color: var(--accent);">0 د.ج</div>
+                        <div class="text-gray-400 text-sm">المتبقي (الادخار)</div>
+                        <div class="text-gray-500 text-xs mt-1">بعد كل المصاريف</div>
+                    </div>
+                </div>
+                
+                <!-- Detailed Breakdown -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Sales Breakdown -->
+                    <div class="rounded-xl p-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                        <h4 class="text-lg font-bold mb-3 text-green-400">💵 تفاصيل المبيعات</h4>
+                        <div id="report-sales-breakdown" class="space-y-2 max-h-48 overflow-y-auto">
+                            <p class="text-gray-500 text-sm">جاري التحميل...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Expenses Breakdown -->
+                    <div class="rounded-xl p-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                        <h4 class="text-lg font-bold mb-3 text-red-400">💸 تفاصيل المصاريف</h4>
+                        <div id="report-expenses-breakdown" class="space-y-2 max-h-48 overflow-y-auto">
+                            <p class="text-gray-500 text-sm">جاري التحميل...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="rounded-xl p-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                        <h4 class="text-lg font-bold mb-3">📊 توزيع الإيرادات</h4>
+                        <canvas id="report-revenue-chart"></canvas>
+                    </div>
+                    <div class="rounded-xl p-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                        <h4 class="text-lg font-bold mb-3">📉 توزيع المصاريف</h4>
+                        <canvas id="report-expenses-chart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -272,7 +1486,21 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, getDocs, deleteDoc, doc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { 
+            getFirestore, 
+            collection, 
+            getDocs, 
+            getDoc,
+            addDoc,
+            updateDoc,
+            deleteDoc, 
+            doc, 
+            query, 
+            orderBy,
+            where,
+            setDoc,
+            serverTimestamp
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw",
@@ -288,11 +1516,30 @@
 
         // Make Firebase available globally
         window.db = db;
-        window.firebaseModules = { collection, getDocs, deleteDoc, doc, query, orderBy };
+        window.firebaseModules = { 
+            collection, 
+            getDocs, 
+            getDoc,
+            addDoc,
+            updateDoc,
+            deleteDoc, 
+            doc, 
+            query, 
+            orderBy,
+            where,
+            setDoc,
+            serverTimestamp
+        };
         
         // Signal that Firebase is ready
         window.dispatchEvent(new Event('firebaseReady'));
     </script>
+    
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Currency Config for Products -->
+    <script src="currency-config.js"></script>
 
     <script src="admin.js"></script>
 </body>

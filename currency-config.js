@@ -2,7 +2,11 @@
 const CURRENCIES = {
   DZD: {
     code: 'DZD',
-    symbol: 'د.ج',
+    symbol: {
+      ar: 'د.ج',
+      en: 'DA',
+      fr: 'DA'
+    },
     flag: '🇩🇿',
     name: {
       ar: 'دينار جزائري',
@@ -13,7 +17,11 @@ const CURRENCIES = {
   },
   USD: {
     code: 'USD',
-    symbol: '$',
+    symbol: {
+      ar: '$',
+      en: '$',
+      fr: '$'
+    },
     flag: '🇺🇸',
     name: {
       ar: 'دولار أمريكي',
@@ -23,6 +31,17 @@ const CURRENCIES = {
     countries: [] // default for all other countries
   }
 };
+
+// Helper function to get currency symbol based on language
+function getCurrencySymbol(currencyCode, lang = 'ar') {
+  const currency = CURRENCIES[currencyCode];
+  if (!currency) return currencyCode;
+  
+  if (typeof currency.symbol === 'object') {
+    return currency.symbol[lang] || currency.symbol.ar;
+  }
+  return currency.symbol;
+}
 
 // Payment Methods Configuration
 const PAYMENT_METHODS = {
