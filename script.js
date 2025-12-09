@@ -27,9 +27,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     console.log('Order buttons found:', orderBtns.length);
     
-    // Store product name when order button is clicked - but don't open modal yet
-    // The onclick handlers on the buttons will call orderProduct/orderAdobe/orderGamma
-    // which will open the contact choice modal
+    // Add click event listeners to order buttons
+    // This ensures the onclick handlers work properly on mobile
+    orderBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const onclickAttr = this.getAttribute('onclick');
+            if (onclickAttr) {
+                // Execute the onclick attribute
+                try {
+                    eval(onclickAttr);
+                } catch (err) {
+                    console.error('Error executing onclick:', err);
+                }
+            } else {
+                // Fallback: get product name from data attribute
+                const productName = this.getAttribute('data-product');
+                if (productName && typeof orderProduct === 'function') {
+                    orderProduct(productName);
+                }
+            }
+        });
+    });
     
     const hideContactChoiceModal = () => {
         if (contactChoiceModal) {
@@ -3708,6 +3727,70 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.fade-in').forEach(el => {
         observer.observe(el);
     });
+    
+    // ═══════════════════════════════════════════════════════════════
+    // مؤشر التمرير الأفقي لبطاقات المنتجات - Product Cards Scroll Indicator
+    // ═══════════════════════════════════════════════════════════════
+    function initProductScrollIndicator() {
+        const productGrid = document.querySelector('.product-grid');
+        const scrollDotsContainer = document.getElementById('scroll-dots');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        
+        if (!productGrid || !scrollDotsContainer || !scrollIndicator) return;
+        
+        // Get all product cards
+        const productCards = productGrid.querySelectorAll('.product-card');
+        if (productCards.length === 0) return;
+        
+        // Create dots for each product card
+        scrollDotsContainer.innerHTML = '';
+        productCards.forEach((card, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'scroll-indicator-dot' + (index === 0 ? ' active' : '');
+            dot.dataset.index = index;
+            dot.addEventListener('click', () => {
+                // Scroll to the clicked card
+                const cardWidth = card.offsetWidth + 16; // card width + gap
+                productGrid.scrollTo({
+                    left: cardWidth * index,
+                    behavior: 'smooth'
+                });
+            });
+            scrollDotsContainer.appendChild(dot);
+        });
+        
+        // Update active dot on scroll
+        let scrollTimeout;
+        productGrid.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollPosition = productGrid.scrollLeft;
+                const cardWidth = productCards[0].offsetWidth + 16;
+                const activeIndex = Math.round(scrollPosition / cardWidth);
+                
+                // Update dots
+                const dots = scrollDotsContainer.querySelectorAll('.scroll-indicator-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === activeIndex);
+                });
+            }, 50);
+        });
+        
+        // Hide indicator on desktop
+        function checkScreenSize() {
+            if (window.innerWidth > 768) {
+                scrollIndicator.style.display = 'none';
+            } else {
+                scrollIndicator.style.display = 'flex';
+            }
+        }
+        
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+    }
+    
+    // Initialize scroll indicator
+    initProductScrollIndicator();
     
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

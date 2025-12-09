@@ -758,6 +758,17 @@
                         </button>
                     </div>
                 </div>
+                
+                <!-- مؤشر التمرير للموبايل -->
+                <div class="scroll-indicator" id="scroll-indicator">
+                    <div class="scroll-indicator-dots" id="scroll-dots">
+                        <!-- سيتم إضافة النقاط بواسطة JavaScript -->
+                    </div>
+                    <div class="scroll-hint">
+                        <span class="scroll-hint-icon">←</span>
+                        <span data-i18n="scroll.hint">اسحب للمزيد</span>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1527,6 +1538,12 @@
             // ═══════════════════════════════════════════════════════════════
             async function trackVisitor() {
                 try {
+                    // استثناء المسؤول من عداد الزوار
+                    if (localStorage.getItem('isAdmin') === 'true') {
+                        console.log('👤 المسؤول مستثنى من عداد الزوار');
+                        return;
+                    }
+                    
                     // التحقق من عدم تكرار التسجيل في نفس الجلسة
                     const sessionKey = 'visitor_tracked_' + new Date().toDateString();
                     if (sessionStorage.getItem(sessionKey)) {
@@ -1926,6 +1943,24 @@
             const navLinks = navActions.querySelectorAll('a');
             navLinks.forEach(link => {
                 link.addEventListener('click', closeMenu);
+            });
+            
+            // Close on language button click (mobile)
+            const langBtns = navActions.querySelectorAll('.lang-btn');
+            langBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // تأخير صغير لإتاحة الوقت لتغيير اللغة ثم إغلاق القائمة
+                    setTimeout(closeMenu, 150);
+                });
+            });
+            
+            // Close on currency button click (mobile)
+            const currencyBtns = navActions.querySelectorAll('.currency-btn');
+            currencyBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // تأخير صغير لإتاحة الوقت لتغيير العملة ثم إغلاق القائمة
+                    setTimeout(closeMenu, 150);
+                });
             });
             
             // Close on escape key

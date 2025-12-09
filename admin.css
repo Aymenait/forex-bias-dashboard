@@ -187,58 +187,350 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   التجاوب - Responsive
+   التجاوب الشامل للموبايل - Comprehensive Mobile Responsive
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@media (max-width: 768px) {
-    /* إخفاء بعض الأعمدة في الجدول */
-    table th:nth-child(4),
-    table td:nth-child(4),
-    table th:nth-child(5),
-    table td:nth-child(5) {
-        display: none;
-    }
-    
-    /* تصغير البطاقات */
-    .stat-card {
-        padding: 1rem;
-    }
-    
-    .stat-card .text-4xl {
-        font-size: 1.5rem;
-    }
-    
-    .stat-card .text-3xl {
-        font-size: 1.25rem;
+/* ═══════════ شاشات متوسطة (أقل من 1024px) ═══════════ */
+@media (max-width: 1024px) {
+    main {
+        padding: 1rem !important;
     }
 }
 
-@media (max-width: 640px) {
-    /* تصغير الجدول أكثر */
+/* ═══════════ شاشات الهاتف (أقل من 768px) ═══════════ */
+@media (max-width: 768px) {
+    
+    /* ─── Header ─── */
+    header {
+        padding: 12px 16px !important;
+    }
+    
+    header > div {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    header h1 {
+        font-size: 1.1rem !important;
+    }
+    
+    header p {
+        font-size: 0.75rem !important;
+    }
+    
+    header .flex.items-center.gap-4:last-child {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    header a, header button {
+        font-size: 0.8rem !important;
+        padding: 8px 12px !important;
+    }
+    
+    /* ─── Navigation Tabs (تحسين جذري) ─── */
+    nav {
+        padding: 0 8px !important;
+    }
+    
+    nav > div {
+        gap: 0 !important;
+        padding-bottom: 8px;
+    }
+    
+    .tab-btn {
+        padding: 10px 12px !important;
+        font-size: 0.75rem !important;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 70px;
+        text-align: center;
+    }
+    
+    /* ─── Main Content ─── */
+    main {
+        padding: 12px !important;
+    }
+    
+    main h2 {
+        font-size: 1.25rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* ─── Stat Cards Grid ─── */
+    .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+    
+    .stat-card {
+        padding: 12px !important;
+        border-radius: 12px !important;
+    }
+    
+    .stat-card .text-4xl {
+        font-size: 1.5rem !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .stat-card .text-3xl {
+        font-size: 1.1rem !important;
+    }
+    
+    .stat-card > div:last-child {
+        font-size: 0.7rem !important;
+    }
+    
+    /* ─── Cards & Containers ─── */
+    .rounded-xl {
+        border-radius: 12px !important;
+    }
+    
+    .rounded-xl.p-6 {
+        padding: 12px !important;
+    }
+    
+    /* ─── Tables ─── */
+    .overflow-x-auto {
+        margin: 0 -12px;
+        padding: 0 12px;
+    }
+    
+    table {
+        font-size: 0.75rem !important;
+    }
+    
+    table th, table td {
+        padding: 8px 6px !important;
+        white-space: nowrap;
+    }
+    
+    /* إخفاء أعمدة غير ضرورية */
+    table th:nth-child(4),
+    table td:nth-child(4),
+    table th:nth-child(5),
+    table td:nth-child(5),
     table th:nth-child(6),
     table td:nth-child(6) {
         display: none;
     }
     
+    /* ─── Buttons ─── */
+    button {
+        font-size: 0.8rem !important;
+        padding: 8px 12px !important;
+    }
+    
+    .action-btn {
+        padding: 6px 8px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    /* ─── Forms ─── */
+    input, select, textarea {
+        font-size: 16px !important; /* يمنع zoom على iOS */
+        padding: 10px 12px !important;
+    }
+    
+    /* ─── Filters Row ─── */
+    .flex.items-center.justify-between {
+        flex-direction: column !important;
+        gap: 12px !important;
+        align-items: stretch !important;
+    }
+    
+    .flex.gap-4 {
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+    
+    .flex.gap-4 input,
+    .flex.gap-4 select,
+    .flex.gap-4 button {
+        width: 100% !important;
+    }
+    
+    /* ─── Modals ─── */
+    #delete-modal > div,
+    #product-modal > div,
+    #review-modal > div {
+        margin: 16px !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        width: calc(100% - 32px) !important;
+        max-width: none !important;
+    }
+    
+    #delete-modal h3,
+    #product-modal h3 {
+        font-size: 1.1rem !important;
+    }
+    
+    /* ─── Product Modal Form ─── */
+    #product-modal form > div {
+        flex-direction: column !important;
+    }
+    
+    #product-modal .grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* ─── Recent Reviews ─── */
+    #recent-reviews > div {
+        padding: 10px !important;
+    }
+    
+    /* ─── Toast ─── */
+    #toast {
+        left: 16px !important;
+        right: 16px !important;
+        bottom: 16px !important;
+        max-width: none !important;
+    }
+}
+
+/* ═══════════ شاشات صغيرة جداً (أقل من 480px) ═══════════ */
+@media (max-width: 480px) {
+    
+    /* ─── Header مضغوط أكثر ─── */
+    header {
+        padding: 10px 12px !important;
+    }
+    
+    header .text-2xl {
+        font-size: 1.25rem !important;
+    }
+    
+    /* ─── Navigation كـ Grid ─── */
+    nav > div {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 4px !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .tab-btn {
+        padding: 8px 4px !important;
+        font-size: 0.65rem !important;
+        min-width: unset !important;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .tab-btn.active {
+        background: rgba(255, 213, 111, 0.15) !important;
+        border-bottom: none !important;
+        border: 1px solid var(--accent) !important;
+    }
+    
+    /* ─── Stat Cards كـ 2 أعمدة ─── */
+    .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+    
+    .stat-card {
+        padding: 10px !important;
+    }
+    
+    .stat-card .text-4xl {
+        font-size: 1.25rem !important;
+    }
+    
+    .stat-card .text-3xl {
+        font-size: 1rem !important;
+    }
+    
+    .stat-card > div:last-child {
+        font-size: 0.65rem !important;
+    }
+    
+    /* ─── Tables أصغر ─── */
     table th, table td {
-        padding: 0.75rem 0.5rem;
-        font-size: 0.875rem;
+        padding: 6px 4px !important;
+        font-size: 0.7rem !important;
     }
     
-    /* تكديس عناصر الفلترة */
-    #tab-reviews > div:first-child {
-        flex-direction: column;
-        gap: 1rem;
+    /* إخفاء المزيد من الأعمدة */
+    table th:nth-child(3),
+    table td:nth-child(3) {
+        display: none;
     }
     
-    #tab-reviews > div:first-child > div {
-        width: 100%;
-        flex-direction: column;
+    /* ─── Action Buttons مضغوطة ─── */
+    td .flex.gap-2 {
+        flex-direction: column !important;
+        gap: 4px !important;
     }
     
-    #tab-reviews input,
-    #tab-reviews select {
-        width: 100%;
+    .action-btn {
+        padding: 4px 6px !important;
+        font-size: 0.65rem !important;
+        width: 100% !important;
+    }
+    
+    /* ─── Section Headers ─── */
+    main h2 {
+        font-size: 1.1rem !important;
+    }
+    
+    main h3 {
+        font-size: 1rem !important;
+    }
+    
+    /* ─── Forms مضغوطة ─── */
+    .space-y-4 > div {
+        margin-bottom: 12px !important;
+    }
+    
+    label {
+        font-size: 0.8rem !important;
+        margin-bottom: 4px !important;
+    }
+    
+    /* ─── Modals أصغر ─── */
+    #delete-modal > div,
+    #product-modal > div {
+        padding: 16px !important;
+    }
+    
+    #delete-modal .flex.gap-4,
+    #product-modal .flex.gap-4 {
+        flex-direction: column !important;
+    }
+    
+    #delete-modal button,
+    #product-modal button[type="submit"] {
+        width: 100% !important;
+    }
+}
+
+/* ═══════════ تحسينات عامة للمس ═══════════ */
+@media (hover: none) and (pointer: coarse) {
+    /* أزرار أكبر للمس */
+    button, .tab-btn, .action-btn, a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* إزالة hover effects */
+    .stat-card:hover {
+        transform: none;
+    }
+    
+    tbody tr:hover {
+        background: transparent !important;
+    }
+    
+    /* تحسين scroll */
+    .overflow-x-auto {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    
+    .overflow-x-auto::-webkit-scrollbar {
+        display: none;
     }
 }
 
@@ -547,6 +839,26 @@ input:checked + .toggle-slider:before {
     
     .action-btn {
         width: 100%;
+    }
+    
+    /* تحسين المنتجات للموبايل */
+    .product-table-image {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    
+    .toggle-switch {
+        width: 36px !important;
+        height: 20px !important;
+    }
+    
+    .toggle-slider:before {
+        width: 14px !important;
+        height: 14px !important;
+    }
+    
+    input:checked + .toggle-slider:before {
+        transform: translateX(-16px) !important;
     }
 }
 

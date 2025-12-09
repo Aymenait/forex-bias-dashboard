@@ -20,6 +20,7 @@ let allOrders = [];            // جميع الطلبات
 let allCustomers = [];         // جميع العملاء
 let allPurchases = [];         // جميع عمليات الشراء
 let allExpenses = [];          // جميع المصاريف
+let allSuppliers = [];         // جميع الموردين ومصادر السلع
 let reviewToDelete = null;     // التقييم المراد حذفه
 const DEFAULT_PASSWORD = 'admin123';  // كلمة المرور الافتراضية
 
@@ -1115,9 +1116,86 @@ function showDashboard() {
 }
 
 /**
+ * جلب كلمة المرور من Firebase
+ */
+async function getAdminPasswordFromFirebase() {
+    console.log('🔐 جاري جلب كلمة المرور...');
+    
+    try {
+        // أولاً: محاولة جلب من Firebase
+        if (window.db && window.firebaseModules && window.firebaseModules.getDoc) {
+            const { doc, getDoc } = window.firebaseModules;
+            const docRef = doc(window.db, 'settings', 'adminPassword');
+            
+            console.log('📡 جاري الاتصال بـ Firebase...');
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+                const firebasePassword = docSnap.data().password;
+                console.log('✅ تم جلب كلمة المرور من Firebase بنجاح');
+                // تحديث النسخة المحلية
+                localStorage.setItem('adminPassword', firebasePassword);
+                return firebasePassword;
+            } else {
+                console.log('📭 لا توجد كلمة مرور في Firebase، جاري إنشاء واحدة...');
+                // إذا لم توجد في Firebase، نحفظ المحلية أو الافتراضية هناك
+                const localPassword = localStorage.getItem('adminPassword') || DEFAULT_PASSWORD;
+                await saveAdminPasswordToFirebase(localPassword);
+                return localPassword;
+            }
+        }
+        
+        // ثانياً: استخدام localStorage كبديل
+        console.warn('⚠️ Firebase غير متاح، استخدام كلمة المرور المحلية');
+        return localStorage.getItem('adminPassword') || DEFAULT_PASSWORD;
+        
+    } catch (error) {
+        console.error('❌ خطأ في جلب كلمة المرور من Firebase:', error);
+        return localStorage.getItem('adminPassword') || DEFAULT_PASSWORD;
+    }
+}
+
+/**
+ * حفظ كلمة المرور في Firebase
+ */
+async function saveAdminPasswordToFirebase(newPassword) {
+    console.log('💾 جاري حفظ كلمة المرور الجديدة...');
+    
+    // دائماً نحفظ محلياً أولاً
+    localStorage.setItem('adminPassword', newPassword);
+    console.log('💿 تم حفظ كلمة المرور محلياً');
+    
+    try {
+        if (!window.db || !window.firebaseModules || !window.firebaseModules.setDoc) {
+            console.warn('⚠️ Firebase غير متاح، تم الحفظ محلياً فقط');
+            return false;
+        }
+        
+        const { doc, setDoc, serverTimestamp } = window.firebaseModules;
+        const docRef = doc(window.db, 'settings', 'adminPassword');
+        
+        console.log('📡 جاري الحفظ في Firebase...');
+        
+        await setDoc(docRef, {
+            password: newPassword,
+            updatedAt: serverTimestamp()
+        }, { merge: true });
+        
+        console.log('✅ تم حفظ كلمة المرور في Firebase بنجاح!');
+        console.log('🔑 كلمة المرور الجديدة:', newPassword);
+        return true;
+        
+    } catch (error) {
+        console.error('❌ خطأ في حفظ كلمة المرور في Firebase:', error);
+        console.log('⚠️ كلمة المرور محفوظة محلياً فقط');
+        return false;
+    }
+}
+
+/**
  * معالجة تسجيل الدخول
  */
-function handleLogin(event) {
+async function handleLogin(event) {
     event.preventDefault();
     
     try {
@@ -1128,7 +1206,9 @@ function handleLogin(event) {
         }
         
         const password = passwordInput.value;
-        const savedPassword = localStorage.getItem('adminPassword') || DEFAULT_PASSWORD;
+        
+        // جلب كلمة المرور من Firebase
+        const savedPassword = await getAdminPasswordFromFirebase();
         
         console.log('محاولة تسجيل الدخول...');
         
@@ -1136,6 +1216,9 @@ function handleLogin(event) {
             // تسجيل الدخول بنجاح
             console.log('كلمة المرور صحيحة، تسجيل الدخول...');
             sessionStorage.setItem('adminLoggedIn', 'true');
+            
+            // وضع علامة المسؤول لاستثنائه من عداد الزوار
+            localStorage.setItem('isAdmin', 'true');
             
             const errorElement = document.getElementById('login-error');
             if (errorElement) {
@@ -1460,18 +1543,23 @@ async function confirmDelete() {
 /**
  * معالجة تغيير كلمة المرور
  */
-function handleChangePassword(event) {
+async function handleChangePassword(event) {
     event.preventDefault();
+    
+    console.log('🔄 بدء عملية تغيير كلمة المرور...');
     
     const currentPassword = document.getElementById('current-password').value;
     const newPassword = document.getElementById('new-password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
     
-    const savedPassword = localStorage.getItem('adminPassword') || DEFAULT_PASSWORD;
+    // جلب كلمة المرور الحالية من Firebase
+    const savedPassword = await getAdminPasswordFromFirebase();
+    console.log('📋 كلمة المرور المحفوظة:', savedPassword);
     
     // التحقق من كلمة المرور الحالية
     if (currentPassword !== savedPassword) {
         showToast('كلمة المرور الحالية غير صحيحة', 'error');
+        console.log('❌ كلمة المرور الحالية خاطئة');
         return;
     }
     
@@ -1487,13 +1575,27 @@ function handleChangePassword(event) {
         return;
     }
     
-    // حفظ كلمة المرور الجديدة
-    localStorage.setItem('adminPassword', newPassword);
+    // حفظ كلمة المرور الجديدة في Firebase
+    const success = await saveAdminPasswordToFirebase(newPassword);
+    
+    // التحقق من نجاح الحفظ بقراءة كلمة المرور مرة أخرى
+    const verifyPassword = await getAdminPasswordFromFirebase();
+    console.log('🔍 التحقق - كلمة المرور بعد الحفظ:', verifyPassword);
+    
+    if (verifyPassword === newPassword) {
+        console.log('✅ تم التحقق من نجاح تغيير كلمة المرور!');
+    } else {
+        console.error('⚠️ تحذير: كلمة المرور المحفوظة لا تتطابق مع الجديدة!');
+    }
     
     // مسح الحقول
     document.getElementById('change-password-form').reset();
     
-    showToast('تم تغيير كلمة المرور بنجاح 🔑');
+    if (success) {
+        showToast('تم تغيير كلمة المرور بنجاح وحفظها في السحابة 🔑☁️');
+    } else {
+        showToast('تم تغيير كلمة المرور محلياً فقط (Firebase غير متاح) 🔑');
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -4563,4 +4665,267 @@ window.showTab = function(tabName) {
 window.loadVisitorStats = loadVisitorStats;
 window.updateVisitorStats = updateVisitorStats;
 window.updateVisitorCharts = updateVisitorCharts;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// وظائف الموردين ومصادر السلع - Suppliers Management
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * تحميل الموردين من Firebase
+ */
+async function loadSuppliers() {
+    try {
+        if (!window.db || !window.firebaseModules) {
+            console.warn('⚠️ Firebase غير متاح');
+            return;
+        }
+
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+        const q = query(collection(window.db, 'suppliers'), orderBy('timestamp', 'desc'));
+        const querySnapshot = await getDocs(q);
+        
+        allSuppliers = [];
+        querySnapshot.forEach(doc => {
+            allSuppliers.push({ id: doc.id, ...doc.data() });
+        });
+
+        console.log(`📦 تم تحميل ${allSuppliers.length} مورد`);
+        
+        displaySuppliersTable();
+        updateSuppliersStats();
+        
+    } catch (error) {
+        console.error('خطأ في تحميل الموردين:', error);
+        showToast('خطأ في تحميل الموردين', 'error');
+    }
+}
+
+/**
+ * عرض جدول الموردين
+ */
+function displaySuppliersTable() {
+    const tbody = document.getElementById('suppliers-table-body');
+    if (!tbody) return;
+
+    if (allSuppliers.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center p-8 text-gray-400">
+                    <div class="text-4xl mb-2">📦</div>
+                    لا يوجد موردين مسجلين حتى الآن
+                    <br><small>اضغط على "إضافة مورد/مصدر جديد" للبدء</small>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = allSuppliers.map(supplier => `
+        <tr class="border-b border-gray-700/50 hover:bg-gray-800/30 transition-colors">
+            <td class="p-4">
+                <div class="font-bold text-amber-400">${supplier.productName || '-'}</div>
+            </td>
+            <td class="p-4">
+                <span class="px-2 py-1 rounded text-xs" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">
+                    🌍 ${supplier.source || '-'}
+                </span>
+            </td>
+            <td class="p-4 text-gray-300">${supplier.supplierName || '-'}</td>
+            <td class="p-4">
+                <span class="font-bold text-green-400">
+                    ${supplier.purchasePrice ? supplier.purchasePrice.toLocaleString() : '0'} ${supplier.currency || 'USD'}
+                </span>
+            </td>
+            <td class="p-4 text-gray-400 text-sm">${supplier.contact || '-'}</td>
+            <td class="p-4 text-gray-400 text-sm max-w-xs truncate" title="${supplier.notes || ''}">${supplier.notes || '-'}</td>
+            <td class="p-4 text-center">
+                <div class="flex gap-2 justify-center">
+                    <button onclick="editSupplier('${supplier.id}')" 
+                        class="px-3 py-1 bg-blue-600/30 hover:bg-blue-600 text-blue-400 hover:text-white rounded text-sm transition-all"
+                        title="تعديل">✏️</button>
+                    <button onclick="deleteSupplier('${supplier.id}')" 
+                        class="px-3 py-1 bg-red-600/30 hover:bg-red-600 text-red-400 hover:text-white rounded text-sm transition-all"
+                        title="حذف">🗑️</button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+/**
+ * تحديث إحصائيات الموردين
+ */
+function updateSuppliersStats() {
+    // إجمالي الموردين
+    const totalCount = document.getElementById('total-suppliers-count');
+    if (totalCount) totalCount.textContent = allSuppliers.length;
+
+    // عدد المصادر المختلفة
+    const uniqueSources = new Set(allSuppliers.map(s => s.source).filter(Boolean));
+    const sourcesCount = document.getElementById('total-sources-count');
+    if (sourcesCount) sourcesCount.textContent = uniqueSources.size;
+
+    // عدد المنتجات المسجلة
+    const uniqueProducts = new Set(allSuppliers.map(s => s.productName).filter(Boolean));
+    const productsCount = document.getElementById('total-products-suppliers');
+    if (productsCount) productsCount.textContent = uniqueProducts.size;
+}
+
+/**
+ * فتح نافذة إضافة مورد
+ */
+function openSupplierModal() {
+    const modal = document.getElementById('supplier-modal');
+    const form = document.getElementById('supplier-form');
+    
+    if (!modal) return;
+    
+    // إعادة تعيين النموذج
+    if (form) form.reset();
+    document.getElementById('supplier-id').value = '';
+    
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+/**
+ * إغلاق نافذة المورد
+ */
+function closeSupplierModal() {
+    const modal = document.getElementById('supplier-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+/**
+ * تعديل مورد موجود
+ */
+function editSupplier(supplierId) {
+    const supplier = allSuppliers.find(s => s.id === supplierId);
+    if (!supplier) {
+        showToast('لم يتم العثور على المورد', 'error');
+        return;
+    }
+
+    // ملء النموذج بالبيانات
+    document.getElementById('supplier-id').value = supplier.id;
+    document.getElementById('supplier-product-name').value = supplier.productName || '';
+    document.getElementById('supplier-source').value = supplier.source || '';
+    document.getElementById('supplier-name').value = supplier.supplierName || '';
+    document.getElementById('supplier-price').value = supplier.purchasePrice || '';
+    document.getElementById('supplier-currency').value = supplier.currency || 'USD';
+    document.getElementById('supplier-contact').value = supplier.contact || '';
+    document.getElementById('supplier-notes').value = supplier.notes || '';
+
+    // فتح النافذة
+    const modal = document.getElementById('supplier-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+/**
+ * حفظ المورد (إضافة أو تعديل)
+ */
+async function saveSupplier(event) {
+    event.preventDefault();
+    
+    const supplierId = document.getElementById('supplier-id').value;
+    const productName = document.getElementById('supplier-product-name').value.trim();
+    const source = document.getElementById('supplier-source').value.trim();
+    const supplierName = document.getElementById('supplier-name').value.trim();
+    const purchasePrice = parseFloat(document.getElementById('supplier-price').value) || 0;
+    const currency = document.getElementById('supplier-currency').value;
+    const contact = document.getElementById('supplier-contact').value.trim();
+    const notes = document.getElementById('supplier-notes').value.trim();
+
+    if (!productName || !source) {
+        showToast('يرجى ملء الحقول المطلوبة', 'error');
+        return;
+    }
+
+    try {
+        const { addDoc, updateDoc, doc, collection, serverTimestamp } = window.firebaseModules;
+
+        const supplierData = {
+            productName,
+            source,
+            supplierName,
+            purchasePrice,
+            currency,
+            contact,
+            notes,
+            updatedAt: serverTimestamp()
+        };
+
+        if (supplierId) {
+            // تعديل مورد موجود
+            const docRef = doc(window.db, 'suppliers', supplierId);
+            await updateDoc(docRef, supplierData);
+            showToast('✅ تم تحديث المورد بنجاح');
+            logActivity('supplier', 'updated', productName);
+        } else {
+            // إضافة مورد جديد
+            supplierData.timestamp = serverTimestamp();
+            await addDoc(collection(window.db, 'suppliers'), supplierData);
+            showToast('✅ تم إضافة المورد بنجاح');
+            logActivity('supplier', 'created', productName);
+        }
+
+        closeSupplierModal();
+        await loadSuppliers();
+
+    } catch (error) {
+        console.error('خطأ في حفظ المورد:', error);
+        showToast('خطأ في حفظ المورد', 'error');
+    }
+}
+
+/**
+ * حذف مورد
+ */
+async function deleteSupplier(supplierId) {
+    const supplier = allSuppliers.find(s => s.id === supplierId);
+    if (!supplier) return;
+
+    if (!confirm(`هل أنت متأكد من حذف "${supplier.productName}"؟`)) {
+        return;
+    }
+
+    try {
+        const { deleteDoc, doc } = window.firebaseModules;
+        await deleteDoc(doc(window.db, 'suppliers', supplierId));
+        
+        showToast('✅ تم حذف المورد بنجاح');
+        logActivity('supplier', 'deleted', supplier.productName);
+        
+        await loadSuppliers();
+
+    } catch (error) {
+        console.error('خطأ في حذف المورد:', error);
+        showToast('خطأ في حذف المورد', 'error');
+    }
+}
+
+// تحميل الموردين عند فتح تبويب الموردين
+const originalShowTabForSuppliers = window.showTab;
+window.showTab = function(tabName) {
+    originalShowTabForSuppliers(tabName);
+    
+    // تحميل الموردين عند فتح تبويب الموردين
+    if (tabName === 'suppliers' && allSuppliers.length === 0) {
+        loadSuppliers();
+    }
+};
+
+// جعل وظائف الموردين متاحة عالمياً
+window.loadSuppliers = loadSuppliers;
+window.openSupplierModal = openSupplierModal;
+window.closeSupplierModal = closeSupplierModal;
+window.saveSupplier = saveSupplier;
+window.editSupplier = editSupplier;
+window.deleteSupplier = deleteSupplier;
 
