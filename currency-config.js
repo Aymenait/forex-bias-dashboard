@@ -161,8 +161,8 @@ const PRODUCTS = {
   'canva': {
     id: 'canva',
     name: 'Canva Pro',
-    price_dzd: 1200,
-    price_usd: 6,
+    price_dzd: 600,
+    price_usd: 3,
     description: {
       ar: 'حساب Canva Pro للتصميم',
       en: 'Canva Pro account for design',

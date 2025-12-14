@@ -8,20 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Cairo', sans-serif;
-            background: linear-gradient(-45deg, #000000, #0a1628, #0a0a1a, #1a1a2e);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(41, 98, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(41, 98, 255, 0.05) 0px, transparent 50%);
             color: white;
             min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.6;
         }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        
         #particles-js {
             position: fixed;
             width: 100%;
@@ -30,28 +34,513 @@
             left: 0;
             z-index: 0;
             pointer-events: none;
+            opacity: 0.3;
         }
-        .tv-glow {
-            box-shadow: 0 0 10px #2962FF, 0 0 20px #2962FF;
+        
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
-        .text-glow {
-            text-shadow: 0 0 5px #2962FF;
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(41, 98, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(41, 98, 255, 0.2);
         }
-        .cta-pulse {
-            animation: cta-pulse-animation 2s infinite;
+        
+        /* Hero Section */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 80px;
         }
-        @keyframes cta-pulse-animation {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 10px #2962FF, 0 0 20px #2962FF;
+        
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .product-logo-container {
+            margin-bottom: 32px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #2962FF, #1e40af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .price-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(41, 98, 255, 0.2), rgba(30, 64, 175, 0.2));
+            border: 2px solid rgba(41, 98, 255, 0.3);
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: #2962FF;
+            margin: 32px 0;
+            box-shadow: 0 8px 24px rgba(41, 98, 255, 0.2);
+        }
+        
+        /* Payment Methods Cards */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 48px auto;
+        }
+        
+        .payment-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(41, 98, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .payment-card:hover::before {
+            left: 100%;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(41, 98, 255, 0.5);
+            box-shadow: 0 12px 40px rgba(41, 98, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .payment-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .payment-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #2962FF, #1e40af);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 18px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(41, 98, 255, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(41, 98, 255, 0.5);
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 48px;
+            background: linear-gradient(135deg, #2962FF, #1e40af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(41, 98, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(41, 98, 255, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2962FF;
+            margin-bottom: 12px;
+        }
+        
+        .feature-text {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(41, 98, 255, 0.2);
+            border-color: rgba(41, 98, 255, 0.5);
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .lang-btn.active,
+        .lang-btn:hover {
+            background: rgba(41, 98, 255, 0.2);
+            border-color: rgba(41, 98, 255, 0.5);
+        }
+        
+        /* Responsive Mobile Styles - Compact Design */
+        @media (max-width: 768px) {
+            .hero-container {
+                padding: 70px 15px 30px !important;
+                min-height: auto !important;
             }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 20px #2962FF, 0 0 40px #2962FF, 0 0 60px #2962FF;
+            
+            .product-logo-container {
+                margin-bottom: 16px !important;
             }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 10px #2962FF, 0 0 20px #2962FF;
+            
+            .product-logo-container img {
+                max-width: 80px !important;
+                height: auto !important;
+            }
+            
+            .hero-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.3 !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.875rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.4 !important;
+            }
+            
+            .price-badge {
+                font-size: 1rem !important;
+                padding: 8px 16px !important;
+                margin: 12px 0 !important;
+            }
+            
+            .payment-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+                margin: 20px auto !important;
+                max-width: 100% !important;
+            }
+            
+            .payment-card {
+                padding: 12px 8px !important;
+            }
+            
+            .payment-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 6px !important;
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .payment-label {
+                font-size: 0.75rem !important;
+            }
+            
+            .cta-button {
+                font-size: 0.9rem !important;
+                padding: 12px 24px !important;
+                width: 100%;
+                max-width: 100% !important;
+                margin-top: 16px !important;
+            }
+            
+            .section {
+                padding: 12px 15px !important;
+            }
+            
+            .section-title {
+                font-size: 1.1rem !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 8px !important;
+            }
+            
+            .feature-card {
+                padding: 12px 10px !important;
+            }
+            
+            .feature-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .feature-title {
+                font-size: 1rem !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .feature-text {
+                font-size: 0.75rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .glass-card {
+                padding: 12px 10px !important;
+                margin-bottom: 12px !important;
+            }
+            
+            .nav-container {
+                padding: 8px 12px !important;
+            }
+            
+            .back-btn {
+                padding: 6px 12px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            .lang-btn {
+                padding: 4px 8px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            /* Reduce spacing in hero content */
+            .hero-content > * {
+                margin-bottom: 8px !important;
+            }
+            
+            /* Show 2 columns on mobile for better content visibility */
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            
+            /* Compact feature cards to show more content */
+            .feature-card {
+                padding: 10px 8px !important;
+                min-height: auto !important;
+            }
+            
+            .feature-icon {
+                font-size: 1.5rem !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .feature-title {
+                font-size: 0.85rem !important;
+                margin-bottom: 4px !important;
+                line-height: 1.3 !important;
+            }
+            
+            .feature-text {
+                font-size: 0.7rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .feature-card ul li {
+                font-size: 0.65rem !important;
+                margin-bottom: 3px !important;
+                line-height: 1.3 !important;
+            }
+            
+            /* Compact sections */
+            .section {
+                padding: 16px 12px !important;
+            }
+            
+            .section-title {
+                font-size: 1.15rem !important;
+                margin-bottom: 12px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem !important;
+            }
+            
+            .price-badge {
+                font-size: 1.1rem !important;
+                padding: 10px 20px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem !important;
+            }
+            
+            .payment-card {
+                padding: 16px 12px;
+            }
+        }
+        
+        /* Payment Modals Mobile Responsive */
+        @media (max-width: 768px) {
+            .modal div[style*="max-width"] {
+                max-width: 95% !important;
+                width: 95% !important;
+                padding: 20px 15px !important;
+                margin: 10px !important;
+            }
+            
+            .modal h2 {
+                font-size: 1.25rem !important;
+            }
+            
+            .modal code {
+                font-size: 0.85rem !important;
+                word-break: break-all;
+            }
+            
+            .modal button {
+                font-size: 0.9rem !important;
+                padding: 10px 20px !important;
+            }
+            
+            #qr-code {
+                max-width: 120px !important;
             }
         }
     </style>
@@ -59,307 +548,287 @@
 <body>
     <div id="particles-js"></div>
 
-    <!-- Back to Home Button -->
-    <div class="absolute top-4 left-4 z-[100]">
-        <a href="index.html" class="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-full hover:bg-[#2962FF] hover:border-[#2962FF] transition-all">
-            <span data-i18n="nav.home">← الرئيسية</span>
-        </a>
-    </div>
-
-    <!-- Language Switcher -->
-    <div class="absolute top-4 right-4 z-[100] flex gap-2">
-        <button class="lang-btn active" data-lang="ar" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">العربية</button>
-        <button class="lang-btn" data-lang="en" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">EN</button>
-        <button class="lang-btn" data-lang="fr" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">FR</button>
-    </div>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <a href="index.html" class="back-btn" data-i18n="nav.home">← الرئيسية</a>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="ar">العربية</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative z-10">
-        <div class="w-48 h-48 md:w-64 md:h-64 mb-8 flex items-center justify-center" style="background: linear-gradient(135deg, #131722 0%, #1e222d 100%); border-radius: 20px; box-shadow: 0 0 30px rgba(41, 98, 255, 0.3);">
-            <img src="https://www.tradingview.com/static/images/logo-preview.png" alt="TradingView" class="w-40 md:w-52 object-contain">
-        </div>
-        
-        <h1 class="text-3xl sm:text-4xl md:text-6xl font-black mb-4 leading-tight text-[#2962FF] text-glow px-2" data-i18n="hero.title">
-            TradingView Premium - حساب شخصي
-        </h1>
-        
-        <p class="text-xl md:text-2xl text-gray-300 mb-4 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.subtitle">
-            منصة تحليل فني احترافية للمتداولين المحترفين
-        </p>
-        
-        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.price">
-            فقط بـ 1500 دج / 30 يوم
-        </p>
+    <section class="hero-container" style="position: relative;">
+        <div class="hero-content" style="position: relative; z-index: 10;">
+            <div class="product-logo-container">
+                <div class="w-48 h-48 md:w-64 md:h-64 mx-auto flex items-center justify-center glass-card" style="background: linear-gradient(135deg, rgba(19, 23, 34, 0.8), rgba(30, 34, 45, 0.8));">
+                    <img src="https://www.tradingview.com/static/images/logo-preview.png" alt="TradingView" class="w-40 md:w-52 object-contain">
+                </div>
+            </div>
+            
+            <h1 class="hero-title" data-i18n="hero.title">
+                TradingView Premium - حساب شخصي
+            </h1>
+            
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+                منصة تحليل فني احترافية للمتداولين المحترفين
+            </p>
+            
+            <div class="price-badge" data-i18n="hero.price">
+                فقط بـ 1500 دج / 30 يوم
+            </div>
 
-        <!-- Payment Methods Section -->
-        <div class="w-full max-w-4xl mx-auto mb-12 px-4">
-            <h2 class="text-xl sm:text-2xl font-bold text-[#2962FF] mb-6" data-i18n="payment.title">طرق الدفع المتاحة</h2>
-
-            <div class="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-12">
-                <!-- RedotPay Button -->
-                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:shadow-[0_0_25px_rgba(220,38,38,0.8)] group-hover:scale-110 transition-all duration-300">
-                        <span class="text-white font-bold text-sm sm:text-lg">Redot</span>
+            <!-- Payment Methods -->
+            <div class="payment-grid">
+                <div class="payment-card" onclick="openRedotPayModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                        <span style="color: white; font-weight: 700;">Redot</span>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">RedotPay</span>
-                </a>
+                    <div class="payment-label">RedotPay</div>
+                </div>
 
-                <!-- USDT Button -->
-                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#2962FF] flex items-center justify-center shadow-[0_0_15px_rgba(41,98,255,0.5)] group-hover:shadow-[0_0_25px_rgba(41,98,255,0.8)] group-hover:scale-110 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <div class="payment-card" onclick="openCryptoModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #2962FF, #1e40af);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
                             <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
                             <path d="M12 12v8"></path>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">USDT</span>
-                </a>
+                    <div class="payment-label">USDT</div>
+                </div>
 
-                <!-- BaridiMob Button -->
-                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.5)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                <div class="payment-card" onclick="openBaridiMobModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #ffffff, #e5e5e5);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
                             <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                             <line x1="2" y1="10" x2="22" y2="10"></line>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">BaridiMob</span>
-                </a>
+                    <div class="payment-label">BaridiMob</div>
+                </div>
             </div>
-        </div>
 
-        <a href="https://wa.me/213782125821" 
-           class="bg-[#2962FF] text-white font-bold text-base sm:text-xl py-3 px-6 sm:px-8 rounded-full hover:bg-[#1E53E5] transition-all transform hover:scale-105 tv-glow shadow-lg cta-pulse" data-i18n="cta.button">
-            اطلب الآن عبر WhatsApp
-        </a>
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في TradingView Premium" 
+               class="cta-button" data-i18n="cta.button">
+                اطلب الآن عبر WhatsApp
+            </a>
+        </div>
     </section>
 
 
     <!-- Description Section -->
-    <section class="py-12 px-4 max-w-6xl mx-auto relative z-10">
-        <!-- Warranty & Support Banner -->
-        <div class="bg-gradient-to-r from-green-500/20 to-green-600/10 border border-green-500/50 rounded-2xl p-6 mb-10 text-center">
-            <h2 class="text-2xl md:text-3xl font-bold text-green-400 mb-2" data-i18n="warranty.title">
-                🛡️ الضمان والدعم: 24/7
-            </h2>
-            <p class="text-gray-300" data-i18n="warranty.desc">دعم فني متواصل على مدار الساعة</p>
-        </div>
+    <section class="section mobile-section">
+        <div class="max-w-6xl mx-auto">
+            <div class="glass-card p-6 mb-8 text-center">
+                <h2 class="text-2xl md:text-3xl font-bold text-green-400 mb-2" data-i18n="warranty.title">
+                    🛡️ الضمان والدعم: 24/7
+                </h2>
+                <p class="feature-text" data-i18n="warranty.desc">دعم فني متواصل على مدار الساعة</p>
+            </div>
 
-        <div class="bg-gradient-to-r from-[#2962FF]/10 to-transparent border-r-4 border-[#2962FF] p-6 rounded-lg mb-10">
-            <h2 class="text-2xl md:text-3xl font-bold text-[#2962FF] mb-4" data-i18n="desc.title">
-                حساب TradingView Premium شخصي
-            </h2>
-            <p class="text-gray-300 leading-relaxed text-base mb-4" data-i18n="desc.subtitle">
-                حساب شخصي وليس مشترك - يمكنك تغيير كلمة المرور
-            </p>
-            <p class="text-gray-300 leading-relaxed text-base" data-i18n="desc.text">
-                احصل على وصول كامل إلى جميع أدوات TradingView Premium للتحليل الفني المتقدم مع بيانات السوق في الوقت الفعلي.
-            </p>
+            <div class="glass-card p-8 md:p-12 mb-10">
+                <h2 class="section-title" data-i18n="desc.title">
+                    حساب TradingView Premium شخصي
+                </h2>
+                <p class="hero-subtitle text-center mb-6" data-i18n="desc.subtitle">
+                    حساب شخصي وليس مشترك - يمكنك تغيير كلمة المرور
+                </p>
+                <p class="feature-text text-center max-w-3xl mx-auto" data-i18n="desc.text">
+                    احصل على وصول كامل إلى جميع أدوات TradingView Premium للتحليل الفني المتقدم مع بيانات السوق في الوقت الفعلي.
+                </p>
+            </div>
         </div>
+    </section>
 
         <!-- Key Features Section -->
-        <div class="bg-gradient-to-br from-[#2962FF]/10 to-transparent rounded-2xl border border-[#2962FF]/30 p-8 mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#2962FF] mb-8 text-glow" data-i18n="features.title">
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="features.title">
                 ✨ المميزات الرئيسية
             </h2>
-            <p class="text-center text-gray-300 mb-10 text-lg">
+            <p class="hero-subtitle text-center mb-10">
                 <span data-i18n="features.duration">مدة الاشتراك:</span> <span class="text-[#2962FF] font-bold text-2xl" data-i18n="features.duration.value">30 يوم</span>
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Feature 1 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">📊</div>
-                    <div>
-                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature1.title">8 شارتات في نافذة واحدة</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature1.desc">Charts: Up to 8 charts in a single window</p>
-                    </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title" data-i18n="feature1.title">8 شارتات في نافذة واحدة</h3>
+                    <p class="feature-text" data-i18n="feature1.desc">Charts: Up to 8 charts in a single window</p>
                 </div>
 
-                <!-- Feature 2 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">📈</div>
-                    <div>
-                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature2.title">25 مؤشر لكل شارت</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature2.desc">Indicators: Up to 25 indicators per chart</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title" data-i18n="feature2.title">25 مؤشر لكل شارت</h3>
+                    <p class="feature-text" data-i18n="feature2.desc">Indicators: Up to 25 indicators per chart</p>
                 </div>
 
-                <!-- Feature 3 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🔔</div>
-                    <div>
-                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature3.title">400 تنبيه</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature3.desc">Alerts: Up to 400 alerts, including server-side alerts</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h3 class="feature-title" data-i18n="feature3.title">400 تنبيه</h3>
+                    <p class="feature-text" data-i18n="feature3.desc">Alerts: Up to 400 alerts, including server-side alerts</p>
                 </div>
 
-                <!-- Feature 4 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">📜</div>
-                    <div>
-                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature4.title">بيانات تاريخية موسعة</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature4.desc">Extended historical data for backtesting strategies</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📜</div>
+                    <h3 class="feature-title" data-i18n="feature4.title">بيانات تاريخية موسعة</h3>
+                    <p class="feature-text" data-i18n="feature4.desc">Extended historical data for backtesting strategies</p>
                 </div>
 
-                <!-- Feature 5 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🚫</div>
-                    <div>
-                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature5.title">بدون إعلانات</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature5.desc">Ad-free experience with faster loading speed</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚫</div>
+                    <h3 class="feature-title" data-i18n="feature5.title">بدون إعلانات</h3>
+                    <p class="feature-text" data-i18n="feature5.desc">Ad-free experience with faster loading speed</p>
                 </div>
 
-                <!-- Feature 6 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🎨</div>
-                    <div>
-                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature6.title">تخصيص غير محدود</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature6.desc">Unlimited layout customization & saving chart templates</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title" data-i18n="feature6.title">تخصيص غير محدود</h3>
+                    <p class="feature-text" data-i18n="feature6.desc">Unlimited layout customization & saving chart templates</p>
                 </div>
 
-                <!-- Feature 7 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🔒</div>
-                    <div>
-                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature7.title">يمكن تغيير كلمة المرور</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature7.desc">Password can be changed - Personal use (not shared)</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title" data-i18n="feature7.title">يمكن تغيير كلمة المرور</h3>
+                    <p class="feature-text" data-i18n="feature7.desc">Password can be changed - Personal use (not shared)</p>
                 </div>
 
-                <!-- Feature 8 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">💬</div>
-                    <div>
-                        <h3 class="text-[#2962FF] font-bold mb-1" data-i18n="feature8.title">دعم 24/7</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature8.desc">Warranty & Support: 24/7</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title" data-i18n="feature8.title">دعم 24/7</h3>
+                    <p class="feature-text" data-i18n="feature8.desc">Warranty & Support: 24/7</p>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Ideal For Section -->
-        <div class="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/30 rounded-2xl p-8 mb-12">
-            <h3 class="text-2xl font-bold text-purple-400 mb-6 text-center" data-i18n="ideal.title">
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="ideal.title">
                 🎯 مثالي لـ
-            </h3>
+            </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-black/40 p-5 rounded-lg">
-                    <h4 class="text-[#2962FF] font-bold mb-3 text-lg" data-i18n="ideal.pro.title">👨‍💼 المتداولين المحترفين</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="ideal.pro.desc">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍💼</div>
+                    <h4 class="feature-title" data-i18n="ideal.pro.title">المتداولين المحترفين</h4>
+                    <p class="feature-text" data-i18n="ideal.pro.desc">
                         Ideal for professional traders who need multiple charts simultaneously
                     </p>
                 </div>
                 
-                <div class="bg-black/40 p-5 rounded-lg">
-                    <h4 class="text-[#2962FF] font-bold mb-3 text-lg" data-i18n="ideal.multi.title">📱 التداول متعدد الأطر الزمنية</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="ideal.multi.desc">
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4 class="feature-title" data-i18n="ideal.multi.title">التداول متعدد الأطر الزمنية</h4>
+                    <p class="feature-text" data-i18n="ideal.multi.desc">
                         Optimised for multi-timeframe trading strategies
                     </p>
                 </div>
                 
-                <div class="bg-black/40 p-5 rounded-lg">
-                    <h4 class="text-[#2962FF] font-bold mb-3 text-lg" data-i18n="ideal.alerts.title">🔔 تنبيهات متقدمة</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="ideal.alerts.desc">
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h4 class="feature-title" data-i18n="ideal.alerts.title">تنبيهات متقدمة</h4>
+                    <p class="feature-text" data-i18n="ideal.alerts.desc">
                         Reduce the risk of missing signals with advanced alert systems
                     </p>
                 </div>
                 
-                <div class="bg-black/40 p-5 rounded-lg">
-                    <h4 class="text-[#2962FF] font-bold mb-3 text-lg" data-i18n="ideal.smooth.title">⚡ تجربة سلسة</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="ideal.smooth.desc">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4 class="feature-title" data-i18n="ideal.smooth.title">تجربة سلسة</h4>
+                    <p class="feature-text" data-i18n="ideal.smooth.desc">
                         Smooth, uninterrupted experience without ads
                     </p>
                 </div>
             </div>
-        </div>
+        </section>
 
 
         <!-- Pricing Section -->
-        <div class="bg-gradient-to-br from-[#2962FF]/20 to-[#2962FF]/5 rounded-2xl border-2 border-[#2962FF] p-8 mb-12">
-            <h3 class="text-2xl font-bold text-[#2962FF] mb-6 text-center" data-i18n="pricing.title">
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="pricing.title">
                 💰 الأسعار
-            </h3>
+            </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                <div class="bg-black/40 p-6 rounded-lg text-center">
-                    <div class="text-4xl mb-3">🇩🇿</div>
-                    <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.dzd">1500 دج</h4>
-                    <p class="text-gray-400 text-sm" data-i18n="pricing.duration">لمدة 30 يوم</p>
+            <div class="payment-grid">
+                <div class="payment-card">
+                    <div class="payment-icon" style="font-size: 3rem;">🇩🇿</div>
+                    <div class="payment-label">
+                        <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.dzd">1500 دج</h4>
+                        <p class="feature-text" data-i18n="pricing.duration">لمدة 30 يوم</p>
+                    </div>
                 </div>
                 
-                <div class="bg-black/40 p-6 rounded-lg text-center">
-                    <div class="text-4xl mb-3">💵</div>
-                    <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.usdt">6 USD</h4>
-                    <p class="text-gray-400 text-sm" data-i18n="pricing.duration">لمدة 30 يوم</p>
+                <div class="payment-card">
+                    <div class="payment-icon" style="font-size: 3rem;">💵</div>
+                    <div class="payment-label">
+                        <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.usdt">6 USD</h4>
+                        <p class="feature-text" data-i18n="pricing.duration">لمدة 30 يوم</p>
+                    </div>
                 </div>
             </div>
 
             <div class="mt-8 text-center">
                 <p class="text-[#2962FF] font-bold text-xl mb-2" data-i18n="pricing.best">🎯 أفضل سعر في السوق!</p>
-                <p class="text-gray-400 text-sm" data-i18n="pricing.guarantee">مع ضمان الوصول الكامل لمدة 30 يوم</p>
+                <p class="feature-text" data-i18n="pricing.guarantee">مع ضمان الوصول الكامل لمدة 30 يوم</p>
             </div>
-        </div>
+        </section>
 
         <!-- How to Get Section -->
-        <div class="bg-[#111]/80 rounded-2xl border border-[#2962FF]/30 p-8">
-            <h3 class="text-2xl font-bold text-[#2962FF] mb-6 text-center" data-i18n="howto.title">
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="howto.title">
                 📝 كيف تحصل على حسابك؟ (3 خطوات بسيطة)
-            </h3>
+            </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-[#2962FF] rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon" style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2962FF, #1E53E5); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
                         1
                     </div>
-                    <h4 class="text-[#2962FF] font-bold mb-2" data-i18n="howto.step1.title">اطلب الآن</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="howto.step1.desc">
+                    <h4 class="feature-title" data-i18n="howto.step1.title">اطلب الآن</h4>
+                    <p class="feature-text" data-i18n="howto.step1.desc">
                         تواصل معنا عبر WhatsApp واختر طريقة الدفع المناسبة لك
                     </p>
                 </div>
                 
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-[#2962FF] rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon" style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2962FF, #1E53E5); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
                         2
                     </div>
-                    <h4 class="text-[#2962FF] font-bold mb-2" data-i18n="howto.step2.title">ادفع بأمان</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="howto.step2.desc">
+                    <h4 class="feature-title" data-i18n="howto.step2.title">ادفع بأمان</h4>
+                    <p class="feature-text" data-i18n="howto.step2.desc">
                         اختر من بين RedotPay، USDT، أو BaridiMob وأكمل الدفع
                     </p>
                 </div>
                 
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-[#2962FF] rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon" style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2962FF, #1E53E5); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
                         3
                     </div>
-                    <h4 class="text-[#2962FF] font-bold mb-2" data-i18n="howto.step3.title">ابدأ التداول</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="howto.step3.desc">
+                    <h4 class="feature-title" data-i18n="howto.step3.title">ابدأ التداول</h4>
+                    <p class="feature-text" data-i18n="howto.step3.desc">
                         استلم بيانات الحساب فوراً وابدأ التحليل الفني
                     </p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
 
     <!-- Final CTA Section -->
-    <section class="py-12 px-4 max-w-4xl mx-auto text-center relative z-10">
-        <div class="bg-gradient-to-r from-[#2962FF]/20 to-transparent border-2 border-[#2962FF] rounded-2xl p-8">
-            <h2 class="text-3xl md:text-4xl font-bold text-[#2962FF] mb-4" data-i18n="final.title">
-                📈 ابدأ التداول الاحترافي اليوم
-            </h2>
-            <p class="text-xl text-gray-300 mb-6" data-i18n="final.subtitle">
-                احصل على TradingView Premium بأفضل سعر!
-            </p>
-            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في TradingView Premium" 
-               class="bg-[#2962FF] text-white font-bold text-xl py-4 px-12 rounded-full hover:bg-[#1E53E5] transition-all transform hover:scale-105 tv-glow shadow-lg inline-block cta-pulse" data-i18n="final.button">
-                🚀 اشترك الآن
-            </a>
+    <section class="section mobile-section">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="glass-card p-8 md:p-12">
+                <h2 class="section-title mb-6" data-i18n="final.title">
+                    📈 ابدأ التداول الاحترافي اليوم
+                </h2>
+                <p class="hero-subtitle mb-8" data-i18n="final.subtitle">
+                    احصل على TradingView Premium بأفضل سعر!
+                </p>
+                <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في TradingView Premium" 
+                   class="cta-button" data-i18n="final.button">
+                    🚀 اشترك الآن
+                </a>
+            </div>
         </div>
     </section>
 

@@ -8,20 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Cairo', sans-serif;
-            background: linear-gradient(-45deg, #000000, #0a1a0a, #0a1a1a, #001a0a);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(16, 163, 127, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(13, 140, 106, 0.05) 0px, transparent 50%);
             color: white;
             min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.6;
         }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        
         #particles-js {
             position: fixed;
             width: 100%;
@@ -30,28 +34,513 @@
             left: 0;
             z-index: 0;
             pointer-events: none;
+            opacity: 0.3;
         }
-        .chatgpt-glow {
-            box-shadow: 0 0 10px #10a37f, 0 0 20px #10a37f;
+        
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
-        .text-glow {
-            text-shadow: 0 0 5px #10a37f;
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(16, 163, 127, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(16, 163, 127, 0.2);
         }
-        .cta-pulse {
-            animation: cta-pulse-animation 2s infinite;
+        
+        /* Hero Section */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 80px;
         }
-        @keyframes cta-pulse-animation {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 10px #10a37f, 0 0 20px #10a37f;
+        
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .product-logo-container {
+            margin-bottom: 32px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #10a37f, #0d8c6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .price-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(16, 163, 127, 0.2), rgba(13, 140, 106, 0.2));
+            border: 2px solid rgba(16, 163, 127, 0.3);
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: #10a37f;
+            margin: 32px 0;
+            box-shadow: 0 8px 24px rgba(16, 163, 127, 0.2);
+        }
+        
+        /* Payment Methods Cards */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 48px auto;
+        }
+        
+        .payment-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(16, 163, 127, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .payment-card:hover::before {
+            left: 100%;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(16, 163, 127, 0.5);
+            box-shadow: 0 12px 40px rgba(16, 163, 127, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .payment-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .payment-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10a37f, #0d8c6a);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 18px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(16, 163, 127, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(16, 163, 127, 0.5);
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 48px;
+            background: linear-gradient(135deg, #10a37f, #0d8c6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(16, 163, 127, 0.3);
+            box-shadow: 0 12px 40px rgba(16, 163, 127, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #10a37f;
+            margin-bottom: 12px;
+        }
+        
+        .feature-text {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(16, 163, 127, 0.2);
+            border-color: rgba(16, 163, 127, 0.5);
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .lang-btn.active,
+        .lang-btn:hover {
+            background: rgba(16, 163, 127, 0.2);
+            border-color: rgba(16, 163, 127, 0.5);
+        }
+        
+        /* Responsive Mobile Styles - Compact Design */
+        @media (max-width: 768px) {
+            .hero-container {
+                padding: 70px 15px 30px !important;
+                min-height: auto !important;
             }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 20px #10a37f, 0 0 40px #10a37f, 0 0 60px #10a37f;
+            
+            .product-logo-container {
+                margin-bottom: 16px !important;
             }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 10px #10a37f, 0 0 20px #10a37f;
+            
+            .product-logo-container img {
+                max-width: 80px !important;
+                height: auto !important;
+            }
+            
+            .hero-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.3 !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.875rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.4 !important;
+            }
+            
+            .price-badge {
+                font-size: 1rem !important;
+                padding: 8px 16px !important;
+                margin: 12px 0 !important;
+            }
+            
+            .payment-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+                margin: 20px auto !important;
+                max-width: 100% !important;
+            }
+            
+            .payment-card {
+                padding: 12px 8px !important;
+            }
+            
+            .payment-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 6px !important;
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .payment-label {
+                font-size: 0.75rem !important;
+            }
+            
+            .cta-button {
+                font-size: 0.9rem !important;
+                padding: 12px 24px !important;
+                width: 100%;
+                max-width: 100% !important;
+                margin-top: 16px !important;
+            }
+            
+            .section {
+                padding: 12px 15px !important;
+            }
+            
+            .section-title {
+                font-size: 1.1rem !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 8px !important;
+            }
+            
+            .feature-card {
+                padding: 12px 10px !important;
+            }
+            
+            .feature-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .feature-title {
+                font-size: 1rem !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .feature-text {
+                font-size: 0.75rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .glass-card {
+                padding: 12px 10px !important;
+                margin-bottom: 12px !important;
+            }
+            
+            .nav-container {
+                padding: 8px 12px !important;
+            }
+            
+            .back-btn {
+                padding: 6px 12px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            .lang-btn {
+                padding: 4px 8px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            /* Reduce spacing in hero content */
+            .hero-content > * {
+                margin-bottom: 8px !important;
+            }
+            
+            /* Show 2 columns on mobile for better content visibility */
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            
+            /* Compact feature cards to show more content */
+            .feature-card {
+                padding: 10px 8px !important;
+                min-height: auto !important;
+            }
+            
+            .feature-icon {
+                font-size: 1.5rem !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .feature-title {
+                font-size: 0.85rem !important;
+                margin-bottom: 4px !important;
+                line-height: 1.3 !important;
+            }
+            
+            .feature-text {
+                font-size: 0.7rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .feature-card ul li {
+                font-size: 0.65rem !important;
+                margin-bottom: 3px !important;
+                line-height: 1.3 !important;
+            }
+            
+            /* Compact sections */
+            .section {
+                padding: 16px 12px !important;
+            }
+            
+            .section-title {
+                font-size: 1.15rem !important;
+                margin-bottom: 12px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem !important;
+            }
+            
+            .price-badge {
+                font-size: 1.1rem !important;
+                padding: 10px 20px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem !important;
+            }
+            
+            .payment-card {
+                padding: 16px 12px;
+            }
+        }
+        
+        /* Payment Modals Mobile Responsive */
+        @media (max-width: 768px) {
+            .modal div[style*="max-width"] {
+                max-width: 95% !important;
+                width: 95% !important;
+                padding: 20px 15px !important;
+                margin: 10px !important;
+            }
+            
+            .modal h2 {
+                font-size: 1.25rem !important;
+            }
+            
+            .modal code {
+                font-size: 0.85rem !important;
+                word-break: break-all;
+            }
+            
+            .modal button {
+                font-size: 0.9rem !important;
+                padding: 10px 20px !important;
+            }
+            
+            #qr-code {
+                max-width: 120px !important;
             }
         }
     </style>
@@ -59,147 +548,134 @@
 <body>
     <div id="particles-js"></div>
 
-    
-    <!-- Back to Home Button -->
-    <div class="absolute top-4 left-4 z-[100]">
-        <a href="index.html" class="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-full hover:bg-[#10a37f] hover:border-[#10a37f] transition-all">
-            <span data-i18n="nav.home">← الرئيسية</span>
-        </a>
-    </div>
-
-    <!-- Language Switcher -->
-    <div class="absolute top-4 right-4 z-[100] flex gap-2">
-        <button class="lang-btn active" data-lang="ar" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">العربية</button>
-        <button class="lang-btn" data-lang="en" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">EN</button>
-        <button class="lang-btn" data-lang="fr" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">FR</button>
-    </div>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <a href="index.html" class="back-btn" data-i18n="nav.home">← الرئيسية</a>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="ar">العربية</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative z-10">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1024px-ChatGPT_logo.svg.png" 
-             alt="ChatGPT" 
-             class="w-40 h-40 md:w-56 md:h-56 object-contain mb-8 animate-pulse">
-        
-        <h1 class="text-3xl sm:text-4xl md:text-6xl font-black mb-4 leading-tight text-[#10a37f] text-glow px-2" data-i18n="hero.title">
-            ChatGPT Business (GPT-5.1)
-        </h1>
-        
-        <p class="text-xl md:text-2xl text-gray-300 mb-4 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.subtitle">
-            مساحة عمل خاصة بأمان تام ورسائل غير محدودة
-        </p>
-        
-        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.price">
-            فقط بـ 6 دولارات
-        </p>
+    <section class="hero-container" style="position: relative;">
+        <div class="hero-content" style="position: relative; z-index: 10;">
+            <div class="product-logo-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1024px-ChatGPT_logo.svg.png" 
+                     alt="ChatGPT" 
+                     class="w-48 h-48 md:w-64 md:h-64 object-contain mx-auto"
+                     style="filter: drop-shadow(0 0 40px rgba(16, 163, 127, 0.6));">
+            </div>
+            
+            <h1 class="hero-title" data-i18n="hero.title">
+                ChatGPT Business (GPT-5.1)
+            </h1>
+            
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+                مساحة عمل خاصة بأمان تام ورسائل غير محدودة
+            </p>
+            
+            <div class="price-badge" data-i18n="hero.price">
+                فقط بـ 6 دولارات
+            </div>
 
-        <!-- Payment Methods Section -->
-        <div class="w-full max-w-4xl mx-auto mb-12 px-4">
-            <h2 class="text-xl sm:text-2xl font-bold text-[#10a37f] mb-6" data-i18n="payment.title">طرق الدفع المتاحة</h2>
-
-            <div class="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-12">
-                <!-- RedotPay Button -->
-                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:shadow-[0_0_25px_rgba(220,38,38,0.8)] group-hover:scale-110 transition-all duration-300">
-                        <span class="text-white font-bold text-sm sm:text-lg">Redot</span>
+            <!-- Payment Methods -->
+            <div class="payment-grid">
+                <div class="payment-card" onclick="openRedotPayModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                        <span style="color: white; font-weight: 700;">Redot</span>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">RedotPay</span>
-                </a>
+                    <div class="payment-label">RedotPay</div>
+                </div>
 
-                <!-- USDT Button -->
-                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#10a37f] flex items-center justify-center shadow-[0_0_15px_rgba(16,163,127,0.5)] group-hover:shadow-[0_0_25px_rgba(16,163,127,0.8)] group-hover:scale-110 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <div class="payment-card" onclick="openCryptoModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #10a37f, #0d8c6a);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
                             <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
                             <path d="M12 12v8"></path>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">USDT</span>
-                </a>
+                    <div class="payment-label">USDT</div>
+                </div>
 
-                <!-- BaridiMob Button -->
-                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.5)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                <div class="payment-card" onclick="openBaridiMobModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #ffffff, #e5e5e5);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
                             <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                             <line x1="2" y1="10" x2="22" y2="10"></line>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">BaridiMob</span>
-                </a>
+                    <div class="payment-label">BaridiMob</div>
+                </div>
             </div>
-        </div>
 
-        <a href="https://wa.me/213782125821" 
-           class="bg-[#10a37f] text-white font-bold text-base sm:text-xl py-3 px-6 sm:px-8 rounded-full hover:bg-[#0d8c6a] transition-all transform hover:scale-105 chatgpt-glow shadow-lg cta-pulse" data-i18n="cta.button">
-            اطلب الآن عبر WhatsApp
-        </a>
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في ChatGPT Business" 
+               class="cta-button" data-i18n="cta.button">
+                اطلب الآن عبر WhatsApp
+            </a>
+        </div>
     </section>
 
 
     <!-- Description Section -->
-    <section class="py-12 px-4 max-w-6xl mx-auto relative z-10">
-        <div class="bg-gradient-to-r from-[#10a37f]/10 to-transparent border-r-4 border-[#10a37f] p-6 rounded-lg mb-10">
-            <h2 class="text-2xl md:text-3xl font-bold text-[#10a37f] mb-4" data-i18n="desc.title">
-                ارتقِ بإنتاجيتك إلى مستوى الشركات الكبرى
-            </h2>
-            <p class="text-gray-300 leading-relaxed text-base mb-4" data-i18n="desc.subtitle">
-                لا تدفع شيئاً حتى تستلم حسابك وتجربه بنفسك.
-            </p>
-            <p class="text-gray-300 leading-relaxed text-base">
-                <span data-i18n="desc.text">هل ما زلت تعتمد على النسخة المجانية المحدودة أو اشتراك Plus الذي يشاركك فيه الملايين؟ حان الوقت لتمتلك مساحة عمل احترافية (Workspace) خاصة بك، مدعومة بأقوى نموذج ذكاء اصطناعي في العالم</span> <span class="text-[#10a37f] font-bold">GPT-5.1</span><span data-i18n="desc.text2">، مع ضمان الخصوصية الكاملة لبياناتك.</span>
-            </p>
+    <section class="section mobile-section">
+        <div class="max-w-6xl mx-auto">
+            <div class="glass-card p-8 md:p-12">
+                <h2 class="section-title" data-i18n="desc.title">
+                    ارتقِ بإنتاجيتك إلى مستوى الشركات الكبرى
+                </h2>
+                <p class="hero-subtitle text-center mb-6" data-i18n="desc.subtitle">
+                    لا تدفع شيئاً حتى تستلم حسابك وتجربه بنفسك.
+                </p>
+                <p class="feature-text text-center max-w-3xl mx-auto">
+                    <span data-i18n="desc.text">هل ما زلت تعتمد على النسخة المجانية المحدودة أو اشتراك Plus الذي يشاركك فيه الملايين؟ حان الوقت لتمتلك مساحة عمل احترافية (Workspace) خاصة بك، مدعومة بأقوى نموذج ذكاء اصطناعي في العالم</span> <span class="text-[#10a37f] font-bold">GPT-5.1</span><span data-i18n="desc.text2">، مع ضمان الخصوصية الكاملة لبياناتك.</span>
+                </p>
+            </div>
         </div>
+    </section>
 
         <!-- Comparison Section -->
-        <div class="mb-12">
-            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#10a37f] mb-8 text-glow" data-i18n="comp.title">
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="comp.title">
                 📊 لماذا يجب أن تنتقل إلى ChatGPT Business الآن؟
             </h2>
-            <p class="text-gray-300 text-center mb-8 max-w-3xl mx-auto" data-i18n="comp.subtitle">
+            <p class="hero-subtitle text-center mb-8 max-w-3xl mx-auto" data-i18n="comp.subtitle">
                 من خلال تحليلنا للخطط المتوفرة، إليك الفروقات الجوهرية التي تجعل اشتراك Business هو الخيار الوحيد للمحترفين:
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- Free Plan -->
-                <div class="bg-[#111]/80 rounded-2xl border border-gray-700 p-6">
-                    <div class="text-center mb-4">
-                        <span class="text-3xl">🆓</span>
-                        <h3 class="text-xl font-bold text-gray-400 mt-2" data-i18n="comp.free.title">الخطة المجانية</h3>
-                        <p class="text-sm text-gray-500" data-i18n="comp.free.subtitle">"مجرد تجربة"</p>
-                    </div>
-                    <ul class="space-y-2 text-sm text-gray-400">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🆓</div>
+                    <h3 class="feature-title" data-i18n="comp.free.title">الخطة المجانية</h3>
+                    <p class="feature-text mb-4" data-i18n="comp.free.subtitle">"مجرد تجربة"</p>
+                    <ul class="space-y-2 feature-text">
                         <li data-i18n="comp.free.item1">❌ ذاكرة ضعيفة وسياق محدود</li>
                         <li data-i18n="comp.free.item2">❌ للإجابات السريعة فقط</li>
                         <li data-i18n="comp.free.item3">❌ لا يصلح للأعمال الجادة</li>
                     </ul>
                 </div>
 
-                <!-- Plus Plan -->
-                <div class="bg-[#111]/80 rounded-2xl border border-yellow-600/50 p-6">
-                    <div class="text-center mb-4">
-                        <span class="text-3xl">⭐</span>
-                        <h3 class="text-xl font-bold text-yellow-500 mt-2" data-i18n="comp.plus.title">خطة Plus</h3>
-                        <p class="text-sm text-gray-400" data-i18n="comp.plus.price">20$/شهرياً</p>
-                    </div>
-                    <ul class="space-y-2 text-sm text-gray-300">
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3 class="feature-title" data-i18n="comp.plus.title">خطة Plus</h3>
+                    <p class="feature-text mb-4" data-i18n="comp.plus.price">20$/شهرياً</p>
+                    <ul class="space-y-2 feature-text">
                         <li data-i18n="comp.plus.item1">✅ Sora و Codex</li>
                         <li data-i18n="comp.plus.item2">⚠️ محدودة بعدد رسائل معين</li>
                         <li data-i18n="comp.plus.item3">⚠️ بياناتك قد تُستخدم للتدريب</li>
                     </ul>
                 </div>
 
-                <!-- Business Plan -->
-                <div class="bg-gradient-to-br from-[#10a37f]/20 to-[#10a37f]/5 rounded-2xl border-2 border-[#10a37f] p-6 relative">
-                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#10a37f] text-black px-4 py-1 rounded-full text-xs font-bold" data-i18n="comp.business.badge">
+                <div class="feature-card" style="border: 2px solid #10a37f; position: relative;">
+                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #10a37f; color: black; padding: 4px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;" data-i18n="comp.business.badge">
                         الأفضل 🚀
                     </div>
-                    <div class="text-center mb-4">
-                        <span class="text-3xl">💼</span>
-                        <h3 class="text-xl font-bold text-[#10a37f] mt-2" data-i18n="comp.business.title">خطة Business</h3>
-                        <p class="text-sm text-gray-300" data-i18n="comp.business.price">6$/شهرياً</p>
-                    </div>
-                    <ul class="space-y-2 text-sm text-gray-200">
+                    <div class="feature-icon">💼</div>
+                    <h3 class="feature-title" data-i18n="comp.business.title">خطة Business</h3>
+                    <p class="feature-text mb-4" data-i18n="comp.business.price">6$/شهرياً</p>
+                    <ul class="space-y-2 feature-text">
                         <li data-i18n="comp.business.item1">✅ رسائل غير محدودة مع GPT-5.1</li>
                         <li data-i18n="comp.business.item2">✅ خصوصية تامة - لا تدريب على بياناتك</li>
                         <li data-i18n="comp.business.item3">✅ تحليلات احترافية</li>
@@ -207,219 +683,182 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Detailed Features List -->
-        <div class="bg-gradient-to-br from-[#10a37f]/10 to-transparent rounded-2xl border border-[#10a37f]/30 p-8 mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#10a37f] mb-8 text-glow" data-i18n="features.title">
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="features.title">
                 ✨ كل ما تحصل عليه مع خطة Business
             </h2>
-            <p class="text-center text-gray-300 mb-10 text-lg">
+            <p class="hero-subtitle text-center mb-10">
                 <span data-i18n="features.price.official">السعر الرسمي</span> <span class="line-through text-gray-500" data-i18n="features.price.official.value">$25/شهر</span> - <span data-i18n="features.price.our">سعرنا</span> <span class="text-[#10a37f] font-bold text-2xl" data-i18n="features.price.only">6$ فقط!</span>
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Feature 1 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">📊</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature1.title">تحليلات احترافية</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature1.desc">قم بإجراء تحليلات متقدمة للبيانات وإنشاء رسوم بيانية وعروض تقديمية</p>
-                    </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title" data-i18n="feature1.title">تحليلات احترافية</h3>
+                    <p class="feature-text" data-i18n="feature1.desc">قم بإجراء تحليلات متقدمة للبيانات وإنشاء رسوم بيانية وعروض تقديمية</p>
                 </div>
 
-                <!-- Feature 2 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">∞</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature2.title">رسائل غير محدودة مع GPT-5</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature2.desc">استخدم GPT-5 بدون حدود - لا توقف، لا قيود يومية</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">∞</div>
+                    <h3 class="feature-title" data-i18n="feature2.title">رسائل غير محدودة مع GPT-5</h3>
+                    <p class="feature-text" data-i18n="feature2.desc">استخدم GPT-5 بدون حدود - لا توقف، لا قيود يومية</p>
                 </div>
 
-                <!-- Feature 3 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🎨</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature3.title">إنشاء صور وفيديوهات وعروض تقديمية</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature3.desc">DALL-E 3 لإنشاء الصور، Sora للفيديوهات، وأدوات إنشاء العروض</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title" data-i18n="feature3.title">إنشاء صور وفيديوهات وعروض تقديمية</h3>
+                    <p class="feature-text" data-i18n="feature3.desc">DALL-E 3 لإنشاء الصور، Sora للفيديوهات، وأدوات إنشاء العروض</p>
                 </div>
 
-                <!-- Feature 4 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🔐</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature4.title">أمان بمستوى المؤسسات (SSO, MFA)</h3>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3 class="feature-title" data-i18n="feature4.title">أمان بمستوى المؤسسات (SSO, MFA)</h3>
                         <p class="text-gray-400 text-sm" data-i18n="feature4.desc">حماية متقدمة مع تسجيل دخول موحد ومصادقة ثنائية</p>
                     </div>
                 </div>
 
-                <!-- Feature 5 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🛡️</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature5.title">حماية بياناتك - لا تُستخدم للتدريب</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature5.desc">بياناتك وأكوادك وملفاتك محمية تماماً ولن تُستخدم لتدريب النماذج</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title" data-i18n="feature5.title">حماية بياناتك - لا تُستخدم للتدريب</h3>
+                    <p class="feature-text" data-i18n="feature5.desc">بياناتك وأكوادك وملفاتك محمية تماماً ولن تُستخدم لتدريب النماذج</p>
                 </div>
 
-                <!-- Feature 6 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">📁</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature6.title">مشاركة المشاريع والـ GPTs المخصصة</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature6.desc">شارك مشاريعك ونماذج GPT المخصصة مع فريقك</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📁</div>
+                    <h3 class="feature-title" data-i18n="feature6.title">مشاركة المشاريع والـ GPTs المخصصة</h3>
+                    <p class="feature-text" data-i18n="feature6.desc">شارك مشاريعك ونماذج GPT المخصصة مع فريقك</p>
                 </div>
 
-                <!-- Feature 7 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🔗</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature7.title">تكامل مع SharePoint وأدوات أخرى</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature7.desc">اربط ChatGPT مع أدوات عملك المفضلة</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3 class="feature-title" data-i18n="feature7.title">تكامل مع SharePoint وأدوات أخرى</h3>
+                    <p class="feature-text" data-i18n="feature7.desc">اربط ChatGPT مع أدوات عملك المفضلة</p>
                 </div>
 
-                <!-- Feature 8 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">💳</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature8.title">إدارة الفواتير والمستخدمين</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature8.desc">لوحة تحكم شاملة لإدارة الحسابات والفواتير</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3 class="feature-title" data-i18n="feature8.title">إدارة الفواتير والمستخدمين</h3>
+                    <p class="feature-text" data-i18n="feature8.desc">لوحة تحكم شاملة لإدارة الحسابات والفواتير</p>
                 </div>
 
-                <!-- Feature 9 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🎙️</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature9.title">ملاحظات الاجتماعات مع النسخ</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature9.desc">تحويل الاجتماعات إلى نصوص وملاحظات منظمة تلقائياً</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎙️</div>
+                    <h3 class="feature-title" data-i18n="feature9.title">ملاحظات الاجتماعات مع النسخ</h3>
+                    <p class="feature-text" data-i18n="feature9.desc">تحويل الاجتماعات إلى نصوص وملاحظات منظمة تلقائياً</p>
                 </div>
 
-                <!-- Feature 10 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🤖</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature10.title">نشر وكلاء للبرمجة والبحث</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature10.desc">وكلاء ذكاء اصطناعي متخصصون يعملون على مهامك البرمجية والبحثية</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title" data-i18n="feature10.title">نشر وكلاء للبرمجة والبحث</h3>
+                    <p class="feature-text" data-i18n="feature10.desc">وكلاء ذكاء اصطناعي متخصصون يعملون على مهامك البرمجية والبحثية</p>
                 </div>
 
-                <!-- Feature 11 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">💻</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature11.title">كتابة الأكواد مع Codex</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature11.desc">مساعد برمجة متقدم لكتابة وتحسين الأكواد</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h3 class="feature-title" data-i18n="feature11.title">كتابة الأكواد مع Codex</h3>
+                    <p class="feature-text" data-i18n="feature11.desc">مساعد برمجة متقدم لكتابة وتحسين الأكواد</p>
                 </div>
 
-                <!-- Feature 12 -->
-                <div class="flex items-start gap-4 bg-[#111]/50 p-4 rounded-xl hover:bg-[#111]/80 transition-all">
-                    <div class="text-3xl flex-shrink-0">🌐</div>
-                    <div>
-                        <h3 class="text-[#10a37f] font-bold mb-1" data-i18n="feature12.title">تصفح الإنترنت والبحث الفوري</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature12.desc">الحصول على معلومات محدثة من الويب في الوقت الفعلي</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="feature-title" data-i18n="feature12.title">تصفح الإنترنت والبحث الفوري</h3>
+                    <p class="feature-text" data-i18n="feature12.desc">الحصول على معلومات محدثة من الويب في الوقت الفعلي</p>
                 </div>
             </div>
 
-            <div class="mt-8 text-center">
+            <div class="glass-card p-8 text-center mt-8 max-w-2xl mx-auto">
                 <p class="text-[#10a37f] font-bold text-xl mb-2" data-i18n="features.final">🎯 كل هذا بسعر 6 دولارات فقط!</p>
-                <p class="text-gray-400 text-sm" data-i18n="features.save">وفّر $19 شهرياً مقارنة بالسعر الرسمي</p>
+                <p class="feature-text" data-i18n="features.save">وفّر $19 شهرياً مقارنة بالسعر الرسمي</p>
             </div>
-        </div>
+        </section>
 
         <!-- Trust & Privacy Section -->
-        <div class="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-2xl p-8 mb-12">
-            <h3 class="text-2xl font-bold text-yellow-400 mb-6 text-center" data-i18n="trust.title">
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="trust.title">
                 🛡️ ضمان الثقة والخصوصية (عرضنا الحصري)
-            </h3>
-            <p class="text-gray-300 mb-6 text-center" data-i18n="trust.subtitle">
+            </h2>
+            <p class="hero-subtitle text-center mb-8" data-i18n="trust.subtitle">
                 نحن ندرك أن السوق مليء بالحسابات المشتركة والوهمية، لذلك نقدم لك عرضاً يكسر كل قواعد الخوف:
             </p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-black/40 p-5 rounded-lg">
-                    <h4 class="text-[#10a37f] font-bold mb-3 text-lg" data-i18n="trust.private.title">✅ حساب خاص وليس مشترك</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="trust.private.desc">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h4 class="feature-title" data-i18n="trust.private.title">حساب خاص وليس مشترك</h4>
+                    <p class="feature-text" data-i18n="trust.private.desc">
                         أنت لا تشتري "إيميلاً وباسورد" يدخل عليه 10 أشخاص. أنت تشتري دعوة رسمية لمساحة عمل خاصة بك وحدك (Private Workspace).
                     </p>
                 </div>
                 
-                <div class="bg-black/40 p-5 rounded-lg">
-                    <h4 class="text-[#10a37f] font-bold mb-3 text-lg" data-i18n="trust.payment.title">💰 الدفع بعد التفعيل</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="trust.payment.desc">
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h4 class="feature-title" data-i18n="trust.payment.title">الدفع بعد التفعيل</h4>
+                    <p class="feature-text" data-i18n="trust.payment.desc">
                         ثقتنا في خدمتنا تجعلنا لا نطلب منك فلساً واحداً مقدماً. أرسل إيميلك، استقبل الدعوة، فعّل حسابك وتأكد من عمل GPT-5.1، ثم ادفع.
                     </p>
                 </div>
                 
-                <div class="bg-black/40 p-5 rounded-lg md:col-span-2">
-                    <h4 class="text-[#10a37f] font-bold mb-3 text-lg" data-i18n="trust.monthly.title">🔄 نظام الاشتراك الشهري</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="trust.monthly.desc">
+                <div class="feature-card" style="grid-column: 1 / -1;">
+                    <div class="feature-icon">🔄</div>
+                    <h4 class="feature-title" data-i18n="trust.monthly.title">نظام الاشتراك الشهري</h4>
+                    <p class="feature-text" data-i18n="trust.monthly.desc">
                         الخدمة تعمل بنظام "الحساب الشهري" (30 يوماً كاملة). بعد انتهاء الشهر، يُغلق الحساب تلقائياً ولا يتم التجديد عليه لضمان أقصى درجات الأمان والبدء بداية نظيفة كل شهر.
                     </p>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- How to Get Section -->
-        <div class="bg-[#111]/80 rounded-2xl border border-[#10a37f]/30 p-8">
-            <h3 class="text-2xl font-bold text-[#10a37f] mb-6 text-center" data-i18n="howto.title">
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="howto.title">
                 📝 كيف تحصل على اشتراكك؟ (3 خطوات بسيطة)
-            </h3>
+            </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-[#10a37f] rounded-full flex items-center justify-center text-2xl font-bold text-black mx-auto mb-4">
-                        1
-                    </div>
-                    <h4 class="text-[#10a37f] font-bold mb-2" data-i18n="howto.step1.title">الطلب</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="howto.step1.desc">
+            <div class="feature-grid">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">1️⃣</div>
+                    <h4 class="feature-title" data-i18n="howto.step1.title">الطلب</h4>
+                    <p class="feature-text" data-i18n="howto.step1.desc">
                         تواصل معنا وأرسل بريدك الإلكتروني الشخصي الذي تريد التفعيل عليه.
                     </p>
                 </div>
                 
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-[#10a37f] rounded-full flex items-center justify-center text-2xl font-bold text-black mx-auto mb-4">
-                        2
-                    </div>
-                    <h4 class="text-[#10a37f] font-bold mb-2" data-i18n="howto.step2.title">التفعيل</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="howto.step2.desc">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">2️⃣</div>
+                    <h4 class="feature-title" data-i18n="howto.step2.title">التفعيل</h4>
+                    <p class="feature-text" data-i18n="howto.step2.desc">
                         ستصلك رسالة من OpenAI بعنوان "Join Workspace"، اضغط على قبول الدعوة.
                     </p>
                 </div>
                 
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-[#10a37f] rounded-full flex items-center justify-center text-2xl font-bold text-black mx-auto mb-4">
-                        3
-                    </div>
-                    <h4 class="text-[#10a37f] font-bold mb-2" data-i18n="howto.step3.title">الاستمتاع والدفع</h4>
-                    <p class="text-gray-300 text-sm" data-i18n="howto.step3.desc">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">3️⃣</div>
+                    <h4 class="feature-title" data-i18n="howto.step3.title">الاستمتاع والدفع</h4>
+                    <p class="feature-text" data-i18n="howto.step3.desc">
                         بمجرد دخولك للوحة التحكم والتأكد من المميزات، يمكنك إتمام عملية الدفع.
                     </p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
     <!-- Final CTA Section -->
-    <section class="py-12 px-4 max-w-4xl mx-auto text-center relative z-10">
-        <div class="bg-gradient-to-r from-[#10a37f]/20 to-transparent border-2 border-[#10a37f] rounded-2xl p-8">
-            <h2 class="text-3xl md:text-4xl font-bold text-[#10a37f] mb-4" data-i18n="final.title">
-                ⚠️ لا تضيع وقتك مع القيود
-            </h2>
-            <p class="text-xl text-gray-300 mb-6" data-i18n="final.subtitle">
-                امتلك قوة GPT-5.1 اللامحدودة اليوم!
-            </p>
-            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في ChatGPT Business" 
-               class="bg-[#10a37f] text-white font-bold text-xl py-4 px-12 rounded-full hover:bg-[#0d8c6a] transition-all transform hover:scale-105 chatgpt-glow shadow-lg inline-block cta-pulse" data-i18n="final.button">
-                🚀 اشترك الآن
-            </a>
+    <section class="section mobile-section">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-card p-12 text-center">
+                <h2 class="section-title mb-6" data-i18n="final.title">
+                    ⚠️ لا تضيع وقتك مع القيود
+                </h2>
+                <p class="hero-subtitle mb-8" data-i18n="final.subtitle">
+                    امتلك قوة GPT-5.1 اللامحدودة اليوم!
+                </p>
+                <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في ChatGPT Business" 
+                   class="cta-button" data-i18n="final.button">
+                    🚀 اشترك الآن
+                </a>
+            </div>
         </div>
     </section>
 

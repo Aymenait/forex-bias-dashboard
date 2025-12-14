@@ -3,11 +3,1356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamma.AI - قريباً | Market Algeriaa</title>
+    <title>Gamma.AI - منصة الذكاء الاصطناعي للعروض التقديمية | Market Algeriaa</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/8D1hNuQ.png">
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.2);
+        }
+        
+        /* Hero Section */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 80px;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .product-logo-container {
+            margin-bottom: 32px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .price-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: #6366f1;
+            margin: 32px 0;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+        }
+        
+        /* Payment Methods Cards */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 48px auto;
+        }
+        
+        .payment-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .payment-card:hover::before {
+            left: 100%;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .payment-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .payment-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 18px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5);
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 48px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-bottom: 12px;
+        }
+        
+        .feature-text {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .lang-btn.active,
+        .lang-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        
+        /* Responsive Mobile Styles - Compact Design */
+        @media (max-width: 768px) {
+            .hero-container {
+                padding: 70px 15px 30px !important;
+                min-height: auto !important;
+            }
+            
+            .product-logo-container {
+                margin-bottom: 16px !important;
+            }
+            
+            .product-logo-container img {
+                max-width: 80px !important;
+                height: auto !important;
+            }
+            
+            .hero-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.3 !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.875rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.4 !important;
+            }
+            
+            .price-badge {
+                font-size: 1rem !important;
+                padding: 8px 16px !important;
+                margin: 12px 0 !important;
+            }
+            
+            .payment-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+                margin: 20px auto !important;
+                max-width: 100% !important;
+            }
+            
+            .payment-card {
+                padding: 12px 8px !important;
+            }
+            
+            .payment-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 6px !important;
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .payment-label {
+                font-size: 0.75rem !important;
+            }
+            
+            .cta-button {
+                font-size: 0.9rem !important;
+                padding: 12px 24px !important;
+                width: 100%;
+                max-width: 100% !important;
+                margin-top: 16px !important;
+            }
+            
+            .section {
+                padding: 12px 15px !important;
+            }
+            
+            .section-title {
+                font-size: 1.1rem !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 8px !important;
+            }
+            
+            .feature-card {
+                padding: 12px 10px !important;
+            }
+            
+            .feature-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .feature-title {
+                font-size: 1rem !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .feature-text {
+                font-size: 0.75rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .glass-card {
+                padding: 12px 10px !important;
+                margin-bottom: 12px !important;
+            }
+            
+            .nav-container {
+                padding: 8px 12px !important;
+            }
+            
+            .back-btn {
+                padding: 6px 12px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            .lang-btn {
+                padding: 4px 8px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            /* Reduce spacing in hero content */
+            .hero-content > * {
+                margin-bottom: 8px !important;
+            }
+            
+            /* Show 2 columns on mobile for better content visibility */
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            
+            /* Compact feature cards to show more content */
+            .feature-card {
+                padding: 10px 8px !important;
+                min-height: auto !important;
+            }
+            
+            .feature-icon {
+                font-size: 1.5rem !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .feature-title {
+                font-size: 0.85rem !important;
+                margin-bottom: 4px !important;
+                line-height: 1.3 !important;
+            }
+            
+            .feature-text {
+                font-size: 0.7rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .feature-card ul li {
+                font-size: 0.65rem !important;
+                margin-bottom: 3px !important;
+                line-height: 1.3 !important;
+            }
+            
+            /* Compact sections */
+            .section {
+                padding: 16px 12px !important;
+            }
+            
+            .section-title {
+                font-size: 1.15rem !important;
+                margin-bottom: 12px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem !important;
+            }
+            
+            .price-badge {
+                font-size: 1.1rem !important;
+                padding: 10px 20px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem !important;
+            }
+            
+            .payment-card {
+                padding: 16px 12px;
+            }
+        }
+        
+        /* Payment Modals Mobile Responsive */
+        @media (max-width: 768px) {
+            .modal div[style*="max-width"] {
+                max-width: 95% !important;
+                width: 95% !important;
+                padding: 20px 15px !important;
+                margin: 10px !important;
+            }
+            
+            .modal h2 {
+                font-size: 1.25rem !important;
+            }
+            
+            .modal code {
+                font-size: 0.85rem !important;
+                word-break: break-all;
+            }
+            
+            .modal button {
+                font-size: 0.9rem !important;
+                padding: 10px 20px !important;
+            }
+            
+            #qr-code {
+                max-width: 120px !important;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- المحتوى سيتم إضافته عند الإطلاق -->
+    <div id="particles-js"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <a href="index.html" class="back-btn" data-i18n="nav.home">← الرئيسية</a>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="ar">العربية</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-container" style="position: relative;">
+        <div class="hero-content" style="position: relative; z-index: 10;">
+            <h1 class="hero-title" data-i18n="hero.title">
+                Gamma.AI - منصة الذكاء الاصطناعي
+            </h1>
+            
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+                أنشئ عروض تقديمية، مستندات، ومواقع إلكترونية احترافية بمساعدة الذكاء الاصطناعي
+            </p>
+            
+            <p class="hero-subtitle" data-i18n="hero.duration">
+                اشتراك شهري - يعمل على جميع أجهزتك
+            </p>
+
+            <div class="price-badge" data-i18n="hero.price">
+                من 1200 د.ج / $6 للشهر
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-grid">
+                <div class="payment-card" onclick="openCryptoModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
+                            <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
+                            <path d="M12 12v8"></path>
+                        </svg>
+                    </div>
+                    <div class="payment-label">USDT</div>
+                </div>
+
+                <div class="payment-card" onclick="openRedotPayModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                        <span style="color: white; font-weight: 700;">Redot</span>
+                    </div>
+                    <div class="payment-label">RedotPay</div>
+                </div>
+
+                <div class="payment-card" onclick="openBaridiMobModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #ffffff, #e5e5e5);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div class="payment-label">BaridiMob</div>
+                </div>
+            </div>
+
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Gamma.AI" 
+               class="cta-button" data-i18n="cta.button">
+                اطلب الآن عبر WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- What is Gamma Section -->
+    <section class="py-16 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-gradient-to-br from-[#6366f1]/10 to-transparent rounded-2xl border border-[#6366f1]/30 p-8 md:p-12">
+                <h2 class="text-2xl md:text-4xl font-bold text-center text-[#6366f1] mb-8 text-glow" data-i18n="desc.title">
+                    🚀 ما هو Gamma.AI؟
+                </h2>
+                <p class="text-gray-300 leading-relaxed text-lg mb-6" data-i18n="desc.text1">
+                    <strong style="color: #6366f1;">Gamma</strong> هو منصة مدعومة بالذكاء الاصطناعي تتيح لك إنشاء عروض تقديمية احترافية، مستندات تفاعلية، ومواقع إلكترونية بسهولة وسرعة فائقة. بدون الحاجة إلى مهارات تصميم متقدمة أو برمجة معقدة!
+                </p>
+                <p class="text-gray-300 leading-relaxed text-lg mb-6" data-i18n="desc.text2">
+                    ببساطة، <strong style="color: #6366f1;">Gamma</strong> يحول أفكارك إلى محتوى بصري مذهل في دقائق. فقط اكتب فكرتك أو لصق مخطط تفصيلي، والذكاء الاصطناعي سيقوم بإنشاء محتوى احترافي كامل مع تصميمات جذابة تلقائياً.
+                </p>
+                <p class="text-gray-300 leading-relaxed text-lg" data-i18n="desc.text3">
+                    مثالي للطلاب، المعلمين، رجال الأعمال، المسوقين، والمحترفين الذين يريدون إنشاء محتوى احترافي بسرعة دون تعقيدات.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What You'll Get Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="whatget.title">
+            ✦ ماذا ستحصل عليه ✦
+        </h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title" data-i18n="whatget.account.title">حساب Gamma Premium</h3>
+                <p class="feature-text mb-4" data-i18n="whatget.account.desc">حساب Premium كامل مع جميع المميزات المتقدمة</p>
+                <ul class="space-y-2 feature-text">
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#6366f1] mt-1">✓</span>
+                        <span data-i18n="whatget.account.item1">وصول كامل لجميع القوالب والمميزات</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#6366f1] mt-1">✓</span>
+                        <span data-i18n="whatget.account.item2">إزالة العلامة التجارية لـ Gamma</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#6366f1] mt-1">✓</span>
+                        <span data-i18n="whatget.account.item3">نماذج صور متقدمة بالذكاء الاصطناعي</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#6366f1] mt-1">✓</span>
+                        <span data-i18n="whatget.account.item4">تحليلات مفصلة للمشاريع</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3 class="feature-title" data-i18n="whatget.features.title">المميزات الاحترافية</h3>
+                <ul class="space-y-2 feature-text">
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#6366f1] mt-1">✓</span>
+                        <span data-i18n="whatget.features.item1">إنشاء عروض تقديمية احترافية في دقائق</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#6366f1] mt-1">✓</span>
+                        <span data-i18n="whatget.features.item2">تصميم مستندات تفاعلية وجذابة</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#6366f1] mt-1">✓</span>
+                        <span data-i18n="whatget.features.item3">إنشاء مواقع إلكترونية وصفحات هبوط</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#6366f1] mt-1">✓</span>
+                        <span data-i18n="whatget.features.item4">تصدير إلى PowerPoint و Google Slides</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-[#6366f1] mt-1">✓</span>
+                        <span data-i18n="whatget.features.item5">مشاركة مباشرة على وسائل التواصل الاجتماعي</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="features.title">
+            🌟 المميزات الرئيسية
+        </h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title" data-i18n="features.presentations.title">عروض تقديمية ذكية</h3>
+                <p class="feature-text" data-i18n="features.presentations.desc">أنشئ شرائح متناسقة بعلامة تجارية في دقائق. الذكاء الاصطناعي يختار التصميمات والصور تلقائياً.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📄</div>
+                <h3 class="feature-title" data-i18n="features.documents.title">مستندات تفاعلية</h3>
+                <p class="feature-text" data-i18n="features.documents.desc">إعداد مستندات وعروض مذهلة بسرعة فائقة في أي موضوع. تصميم احترافي تلقائياً.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3 class="feature-title" data-i18n="features.websites.title">مواقع إلكترونية</h3>
+                <p class="feature-text" data-i18n="features.websites.desc">إنشاء مواقع أعمال، صفحات هبوط، ومحافظ شخصية بسرعة ودون الحاجة إلى برمجة.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title" data-i18n="features.social.title">وسائل التواصل</h3>
+                <p class="feature-text" data-i18n="features.social.desc">تصميم رسومات ونصوص جذابة للمشاركة المباشرة على المنصات الاجتماعية.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3 class="feature-title" data-i18n="features.ai.title">ذكاء اصطناعي متقدم</h3>
+                <p class="feature-text" data-i18n="features.ai.desc">تخطيطات ذكية، محتوى غني، وترجمات بنقرة واحدة. كل شيء تلقائي!</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💾</div>
+                <h3 class="feature-title" data-i18n="features.export.title">تصدير متعدد</h3>
+                <p class="feature-text" data-i18n="features.export.desc">تصدير كملف PPT، PDF، PNG، أو Google Slides. أو نشر مباشر كموقع ويب.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="howitworks.title">
+            ⚡ كيف يعمل Gamma؟
+        </h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">1️⃣</div>
+                <h3 class="feature-title" data-i18n="howitworks.step1.title">ابدأ بفكرة</h3>
+                <p class="feature-text" data-i18n="howitworks.step1.desc">اكتب فكرتك، أو لصق مخطط تفصيلي، أو استورد محتوى موجود. Gamma يفهم ما تريده!</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">2️⃣</div>
+                <h3 class="feature-title" data-i18n="howitworks.step2.title">الذكاء الاصطناعي يعمل</h3>
+                <p class="feature-text" data-i18n="howitworks.step2.desc">Gamma يستخدم الذكاء الاصطناعي لإضافة تخطيطات ذكية، محتوى غني، صور مناسبة، وترجمات تلقائية.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">3️⃣</div>
+                <h3 class="feature-title" data-i18n="howitworks.step3.title">حرر وشارك</h3>
+                <p class="feature-text" data-i18n="howitworks.step3.desc">قم بتعديل التصميم حسب رغبتك، ثم صدّر كملف PPT أو PDF، أو انشره كموقع ويب مباشرة.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Important Notes Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="notes.title">
+            ⚠️ ملاحظات مهمة
+        </h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">👤</div>
+                <p class="feature-text" data-i18n="notes.item1"><strong style="color: #6366f1;">نوع الحساب:</strong> يمكنك اختيار حساب مشترك (أرخص) أو حساب شخصي (خاص بك فقط)</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <p class="feature-text" data-i18n="notes.item2"><strong style="color: #6366f1;">الاستخدام:</strong> الحساب يعمل على جميع الأجهزة - الكمبيوتر، الهاتف، والتابلت</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <p class="feature-text" data-i18n="notes.item3"><strong style="color: #6366f1;">التحديثات:</strong> جميع المميزات الجديدة متاحة تلقائياً في حسابك</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="faq.title">
+            ❓ الأسئلة الشائعة
+        </h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4 class="feature-title mb-3" data-i18n="faq.q1.question">س: ما الفرق بين الحساب المشترك والحساب الشخصي؟</h4>
+                <p class="feature-text" data-i18n="faq.q1.answer">ج: الحساب المشترك أرخص (1200 دج) لكن قد يكون مشترك مع مستخدمين آخرين. الحساب الشخصي (2000 دج) خاص بك فقط وأكثر أماناً.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4 class="feature-title mb-3" data-i18n="faq.q2.question">س: هل يمكنني استخدام Gamma على الهاتف؟</h4>
+                <p class="feature-text" data-i18n="faq.q2.answer">ج: نعم! Gamma يعمل على جميع الأجهزة - الكمبيوتر، الهاتف المحمول، التابلت، والمتصفحات.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4 class="feature-title mb-3" data-i18n="faq.q3.question">س: هل يمكنني تصدير العروض إلى PowerPoint؟</h4>
+                <p class="feature-text" data-i18n="faq.q3.answer">ج: نعم! يمكنك تصدير العروض كملف PPT، PDF، PNG، أو Google Slides بسهولة.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4 class="feature-title mb-3" data-i18n="faq.q4.question">س: هل أحتاج إلى مهارات برمجة لاستخدام Gamma؟</h4>
+                <p class="feature-text" data-i18n="faq.q4.answer">ج: لا على الإطلاق! Gamma مصمم ليكون سهلاً للجميع. فقط اكتب فكرتك والذكاء الاصطناعي يقوم بالباقي.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="why.title">
+            🌟 لماذا تختار Market Algeriaa؟
+        </h2>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h4 class="feature-title" data-i18n="why.instant.title">تسليم فوري</h4>
+                <p class="feature-text" data-i18n="why.instant.desc">احصل على تفاصيل حسابك مباشرة بعد الشراء</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h4 class="feature-title" data-i18n="why.secure.title">آمن وموثوق</h4>
+                <p class="feature-text" data-i18n="why.secure.desc">حساب Gamma Premium مؤكد وموثوق، 100% آمن وفعال</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h4 class="feature-title" data-i18n="why.warranty.title">ضمان كامل</h4>
+                <p class="feature-text" data-i18n="why.warranty.desc">ضمان لمدة الشهر الكامل</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h4 class="feature-title" data-i18n="why.support.title">دعم سريع</h4>
+                <p class="feature-text" data-i18n="why.support.desc">مساعدة سريعة ومفيدة، بدون تعقيدات</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="section mobile-section">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-card p-12 text-center">
+                <h2 class="section-title mb-6" data-i18n="final.title">
+                    🚀 ابدأ الآن مع Gamma.AI
+                </h2>
+                <p class="hero-subtitle mb-8" data-i18n="final.subtitle">
+                    أنشئ محتوى احترافي بمساعدة الذكاء الاصطناعي اليوم!
+                </p>
+                <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Gamma.AI" 
+                   class="cta-button" data-i18n="final.cta">
+                    🛒 اطلب الآن
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Modals -->
+    <!-- BaridiMob Modal -->
+    <div id="baridimob-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 450px; width: 90%; background: #0a0a0a; border: 2px solid #6366f1; border-radius: 20px; padding: 25px; position: relative;">
+            <button onclick="closeBaridiMobModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #6366f1; font-size: 28px; cursor: pointer;">&times;</button>
+            
+            <h2 id="baridimob-title" style="text-align: center; color: #6366f1; font-size: 1.5rem; margin-bottom: 15px;">الدفع عبر BaridiMob</h2>
+            
+            <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid #6366f1; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p style="color: #fff; margin-bottom: 8px; font-size: 0.9rem;"><strong id="baridimob-product">المنتج:</strong> Gamma.AI</p>
+                <p style="color: #fff; font-size: 0.9rem;"><strong id="baridimob-price">السعر:</strong> <span id="baridimob-price-value">1200 د.ج</span></p>
+            </div>
+
+            <div style="background: #111; border: 1px solid #6366f1; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p id="baridimob-rip-label" style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.9rem;">RIP BaridiMob:</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 12px; border-radius: 8px; gap: 8px;">
+                    <code id="baridimob-rip" style="color: #6366f1; font-size: 0.95rem; word-break: break-all; flex: 1;">00799999002787548473</code>
+                    <button id="baridimob-copy" onclick="copyBaridiMobRIP()" style="background: #6366f1; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.85rem; line-height: 1.6;">
+                <h3 id="baridimob-instructions-title" style="color: #6366f1; margin-bottom: 12px; font-size: 1rem;">تعليمات الدفع:</h3>
+                <ol id="baridimob-instructions" style="padding-right: 18px;">
+                    <li>افتح تطبيق BaridiMob</li>
+                    <li>اختر "تحويل الأموال" أو "Virement"</li>
+                    <li>اختر "RIP" كطريقة التحويل</li>
+                    <li>أدخل الـ RIP: <strong>00799999002787548473</strong></li>
+                    <li>أدخل المبلغ المطلوب</li>
+                    <li>أكمل عملية الدفع</li>
+                    <li>احتفظ بإثبات الدفع</li>
+                    <li>اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+                <p id="baridimob-warning" style="color: #6366f1; margin-top: 15px;">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!</p>
+            </div>
+
+            <button id="baridimob-button" onclick="confirmBaridiMobPayment()" style="width: 100%; background: #6366f1; color: #fff; border: none; padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <!-- USDT/Crypto Modal -->
+    <div id="crypto-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 450px; width: 90%; background: #0a0a0a; border: 2px solid #6366f1; border-radius: 20px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeCryptoModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #6366f1; font-size: 28px; cursor: pointer;">&times;</button>
+            
+            <h2 id="crypto-title" style="text-align: center; color: #6366f1; font-size: 1.5rem; margin-bottom: 15px;">الدفع بالعملات الرقمية</h2>
+            
+            <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid #6366f1; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p style="color: #fff; margin-bottom: 8px; font-size: 0.9rem;"><strong id="crypto-product">المنتج:</strong> Gamma.AI</p>
+                <p style="color: #fff; font-size: 0.9rem;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">$6</span></p>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <h3 id="crypto-select-network" style="color: #6366f1; margin-bottom: 10px; font-size: 0.95rem;">اختر الشبكة:</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="selectNetwork('TRC20', 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9')" style="flex: 1; background: #6366f1; color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">
+                        TRC20<br><span id="crypto-fees1" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~1 USDT)</span>
+                    </button>
+                    <button onclick="selectNetwork('BEP20', '0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0')" style="flex: 1; background: #333; color: #fff; border: 1px solid #6366f1; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">
+                        BEP20 (BSC)<br><span id="crypto-fees2" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~0.5 USDT)</span>
+                    </button>
+                </div>
+            </div>
+
+            <div style="background: #111; border: 1px solid #6366f1; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p id="crypto-wallet-label" style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.9rem;">عنوان المحفظة (<span id="selected-network">TRC20</span>):</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 12px; border-radius: 8px; margin-bottom: 12px; gap: 8px;">
+                    <code id="wallet-address" style="color: #6366f1; font-size: 0.85rem; word-break: break-all; flex: 1;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
+                    <button id="crypto-copy" onclick="copyWalletAddress()" style="background: #6366f1; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">نسخ</button>
+                </div>
+                <div style="text-align: center;">
+                    <img id="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9" alt="QR Code" style="max-width: 150px; border-radius: 10px;">
+                    <p id="crypto-qr-text" style="color: #888; font-size: 0.85rem; margin-top: 10px;">امسح الكود بتطبيق المحفظة</p>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.85rem; line-height: 1.6;">
+                <h3 id="crypto-instructions-title" style="color: #6366f1; margin-bottom: 12px; font-size: 1rem;">تعليمات الدفع:</h3>
+                <ol id="crypto-instructions" style="padding-right: 18px;">
+                    <li>افتح تطبيق محفظتك الرقمية (Binance, Trust Wallet, إلخ)</li>
+                    <li>اختر إرسال USDT</li>
+                    <li>اختر الشبكة المحددة (TRC20 أو BEP20)</li>
+                    <li>انسخ عنوان المحفظة أعلاه أو امسح QR Code</li>
+                    <li>أدخل المبلغ: <strong>$6</strong></li>
+                    <li>أكمل عملية الإرسال</li>
+                    <li>احتفظ برقم المعاملة (TXID)</li>
+                    <li>اضغط "تم الدفع" وأرسل رقم المعاملة</li>
+                </ol>
+            </div>
+
+            <button id="crypto-button" onclick="confirmCryptoPayment()" style="width: 100%; background: #6366f1; color: #fff; border: none; padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <!-- RedotPay Modal -->
+    <div id="redotpay-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 450px; width: 90%; background: #0a0a0a; border: 2px solid #6366f1; border-radius: 20px; padding: 25px; position: relative;">
+            <button onclick="closeRedotPayModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #6366f1; font-size: 28px; cursor: pointer;">&times;</button>
+            
+            <h2 id="redotpay-title" style="text-align: center; color: #6366f1; font-size: 1.5rem; margin-bottom: 15px;">الدفع عبر RedotPay</h2>
+            
+            <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid #6366f1; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p style="color: #fff; margin-bottom: 8px; font-size: 0.9rem;"><strong id="redotpay-product">المنتج:</strong> Gamma.AI</p>
+                <p style="color: #fff; font-size: 0.9rem;"><strong id="redotpay-price">السعر:</strong> <span id="redotpay-price-value">$6</span></p>
+            </div>
+
+            <div style="background: #111; border: 1px solid #6366f1; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p id="redotpay-id-label" style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.9rem;">RedotPay ID:</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 12px; border-radius: 8px; gap: 8px;">
+                    <code id="redotpay-id" style="color: #6366f1; font-size: 1.1rem; word-break: break-all; flex: 1;">1117632168</code>
+                    <button id="redotpay-copy" onclick="copyRedotPayID()" style="background: #6366f1; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.85rem; line-height: 1.6;">
+                <h3 id="redotpay-instructions-title" style="color: #6366f1; margin-bottom: 12px; font-size: 1rem;">تعليمات الدفع:</h3>
+                <ol id="redotpay-instructions" style="padding-right: 18px;">
+                    <li>افتح تطبيق RedotPay</li>
+                    <li>اختر "إرسال" أو "Send"</li>
+                    <li>أدخل RedotPay ID: <strong>1117632168</strong></li>
+                    <li>أدخل المبلغ: <strong>$6</strong></li>
+                    <li>أكمل عملية الدفع</li>
+                    <li>احتفظ بإثبات الدفع</li>
+                    <li>اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+            </div>
+
+            <button id="redotpay-button" onclick="confirmRedotPayPayment()" style="width: 100%; background: #6366f1; color: #fff; border: none; padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Particles.js Configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#6366f1' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#6366f1', opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+            },
+            retina_detect: true
+        });
+
+        // Language Switcher
+        const translations = {
+            ar: {
+                'nav.home': '← الرئيسية',
+                'hero.title': 'Gamma.AI - منصة الذكاء الاصطناعي',
+                'hero.subtitle': 'أنشئ عروض تقديمية، مستندات، ومواقع إلكترونية احترافية بمساعدة الذكاء الاصطناعي',
+                'hero.duration': 'اشتراك شهري - يعمل على جميع أجهزتك',
+                'hero.price': 'من 1200 د.ج / $6 للشهر',
+                'payment.title': 'طرق الدفع المتاحة',
+                'payment.crypto': '💰 USDT / عملات رقمية',
+                'payment.redotpay': '💳 RedotPay',
+                'payment.baridimob': '📱 BaridiMob',
+                'desc.title': '🚀 ما هو Gamma.AI؟',
+                'desc.text1': 'Gamma هو منصة مدعومة بالذكاء الاصطناعي تتيح لك إنشاء عروض تقديمية احترافية، مستندات تفاعلية، ومواقع إلكترونية بسهولة وسرعة فائقة. بدون الحاجة إلى مهارات تصميم متقدمة أو برمجة معقدة!',
+                'desc.text2': 'ببساطة، Gamma يحول أفكارك إلى محتوى بصري مذهل في دقائق. فقط اكتب فكرتك أو لصق مخطط تفصيلي، والذكاء الاصطناعي سيقوم بإنشاء محتوى احترافي كامل مع تصميمات جذابة تلقائياً.',
+                'desc.text3': 'مثالي للطلاب، المعلمين، رجال الأعمال، المسوقين، والمحترفين الذين يريدون إنشاء محتوى احترافي بسرعة دون تعقيدات.',
+                'whatget.title': '✦ ماذا ستحصل عليه ✦',
+                'whatget.account.title': 'حساب Gamma Premium',
+                'whatget.account.desc': 'حساب Premium كامل مع جميع المميزات المتقدمة',
+                'whatget.account.item1': '✓ وصول كامل لجميع القوالب والمميزات',
+                'whatget.account.item2': '✓ إزالة العلامة التجارية لـ Gamma',
+                'whatget.account.item3': '✓ نماذج صور متقدمة بالذكاء الاصطناعي',
+                'whatget.account.item4': '✓ تحليلات مفصلة للمشاريع',
+                'whatget.features.title': 'المميزات الاحترافية',
+                'whatget.features.item1': '✓ إنشاء عروض تقديمية احترافية في دقائق',
+                'whatget.features.item2': '✓ تصميم مستندات تفاعلية وجذابة',
+                'whatget.features.item3': '✓ إنشاء مواقع إلكترونية وصفحات هبوط',
+                'whatget.features.item4': '✓ تصدير إلى PowerPoint و Google Slides',
+                'whatget.features.item5': '✓ مشاركة مباشرة على وسائل التواصل الاجتماعي',
+                'features.title': '🌟 المميزات الرئيسية',
+                'features.presentations.title': 'عروض تقديمية ذكية',
+                'features.presentations.desc': 'أنشئ شرائح متناسقة بعلامة تجارية في دقائق. الذكاء الاصطناعي يختار التصميمات والصور تلقائياً.',
+                'features.documents.title': 'مستندات تفاعلية',
+                'features.documents.desc': 'إعداد مستندات وعروض مذهلة بسرعة فائقة في أي موضوع. تصميم احترافي تلقائياً.',
+                'features.websites.title': 'مواقع إلكترونية',
+                'features.websites.desc': 'إنشاء مواقع أعمال، صفحات هبوط، ومحافظ شخصية بسرعة ودون الحاجة إلى برمجة.',
+                'features.social.title': 'وسائل التواصل',
+                'features.social.desc': 'تصميم رسومات ونصوص جذابة للمشاركة المباشرة على المنصات الاجتماعية.',
+                'features.ai.title': 'ذكاء اصطناعي متقدم',
+                'features.ai.desc': 'تخطيطات ذكية، محتوى غني، وترجمات بنقرة واحدة. كل شيء تلقائي!',
+                'features.export.title': 'تصدير متعدد',
+                'features.export.desc': 'تصدير كملف PPT، PDF، PNG، أو Google Slides. أو نشر مباشر كموقع ويب.',
+                'howitworks.title': '⚡ كيف يعمل Gamma؟',
+                'howitworks.step1.title': '1️⃣ ابدأ بفكرة',
+                'howitworks.step1.desc': 'اكتب فكرتك، أو لصق مخطط تفصيلي، أو استورد محتوى موجود. Gamma يفهم ما تريده!',
+                'howitworks.step2.title': '2️⃣ الذكاء الاصطناعي يعمل',
+                'howitworks.step2.desc': 'Gamma يستخدم الذكاء الاصطناعي لإضافة تخطيطات ذكية، محتوى غني، صور مناسبة، وترجمات تلقائية.',
+                'howitworks.step3.title': '3️⃣ حرر وشارك',
+                'howitworks.step3.desc': 'قم بتعديل التصميم حسب رغبتك، ثم صدّر كملف PPT أو PDF، أو انشره كموقع ويب مباشرة.',
+                'notes.title': '⚠️ ملاحظات مهمة',
+                'notes.item1': 'نوع الحساب: يمكنك اختيار حساب مشترك (أرخص) أو حساب شخصي (خاص بك فقط)',
+                'notes.item2': 'الاستخدام: الحساب يعمل على جميع الأجهزة - الكمبيوتر، الهاتف، والتابلت',
+                'notes.item3': 'التحديثات: جميع المميزات الجديدة متاحة تلقائياً في حسابك',
+                'faq.title': '❓ الأسئلة الشائعة',
+                'faq.q1.question': 'س: ما الفرق بين الحساب المشترك والحساب الشخصي؟',
+                'faq.q1.answer': 'ج: الحساب المشترك أرخص (1200 دج) لكن قد يكون مشترك مع مستخدمين آخرين. الحساب الشخصي (2000 دج) خاص بك فقط وأكثر أماناً.',
+                'faq.q2.question': 'س: هل يمكنني استخدام Gamma على الهاتف؟',
+                'faq.q2.answer': 'ج: نعم! Gamma يعمل على جميع الأجهزة - الكمبيوتر، الهاتف المحمول، التابلت، والمتصفحات.',
+                'faq.q3.question': 'س: هل يمكنني تصدير العروض إلى PowerPoint؟',
+                'faq.q3.answer': 'ج: نعم! يمكنك تصدير العروض كملف PPT، PDF، PNG، أو Google Slides بسهولة.',
+                'faq.q4.question': 'س: هل أحتاج إلى مهارات برمجة لاستخدام Gamma؟',
+                'faq.q4.answer': 'ج: لا على الإطلاق! Gamma مصمم ليكون سهلاً للجميع. فقط اكتب فكرتك والذكاء الاصطناعي يقوم بالباقي.',
+                'why.title': '🌟 لماذا تختار Market Algeriaa؟',
+                'why.instant.title': '⚡ تسليم فوري',
+                'why.instant.desc': 'احصل على تفاصيل حسابك مباشرة بعد الشراء',
+                'why.secure.title': '🔒 آمن وموثوق',
+                'why.secure.desc': 'حساب Gamma Premium مؤكد وموثوق، 100% آمن وفعال',
+                'why.warranty.title': '🛡️ ضمان كامل',
+                'why.warranty.desc': 'ضمان لمدة الشهر الكامل',
+                'why.support.title': '💬 دعم سريع',
+                'why.support.desc': 'مساعدة سريعة ومفيدة، بدون تعقيدات',
+                'final.title': '🚀 ابدأ الآن مع Gamma.AI',
+                'final.subtitle': 'أنشئ محتوى احترافي بمساعدة الذكاء الاصطناعي اليوم!',
+                'final.cta': '🛒 اطلب الآن'
+            },
+            en: {
+                'nav.home': '← Home',
+                'hero.title': 'Gamma.AI - AI-Powered Platform',
+                'hero.subtitle': 'Create professional presentations, documents, and websites with AI assistance',
+                'hero.duration': 'Monthly subscription - Works on all your devices',
+                'hero.price': 'From $6 / 1200 DZD per month',
+                'payment.title': 'Available Payment Methods',
+                'payment.crypto': '💰 USDT / Cryptocurrency',
+                'payment.redotpay': '💳 RedotPay',
+                'payment.baridimob': '📱 BaridiMob',
+                'desc.title': '🚀 What is Gamma.AI?',
+                'desc.text1': 'Gamma is an AI-powered platform that allows you to create professional presentations, interactive documents, and websites easily and quickly. No advanced design skills or complex programming required!',
+                'desc.text2': 'Simply put, Gamma transforms your ideas into stunning visual content in minutes. Just write your idea or paste an outline, and AI will create complete professional content with attractive designs automatically.',
+                'desc.text3': 'Perfect for students, teachers, business owners, marketers, and professionals who want to create professional content quickly without complications.',
+                'whatget.title': '✦ What You\'ll Get ✦',
+                'whatget.account.title': 'Gamma Premium Account',
+                'whatget.account.desc': 'Full Premium account with all advanced features',
+                'whatget.account.item1': '✓ Full access to all templates and features',
+                'whatget.account.item2': '✓ Remove Gamma branding',
+                'whatget.account.item3': '✓ Advanced AI image templates',
+                'whatget.account.item4': '✓ Detailed project analytics',
+                'whatget.features.title': 'Professional Features',
+                'whatget.features.item1': '✓ Create professional presentations in minutes',
+                'whatget.features.item2': '✓ Design interactive and attractive documents',
+                'whatget.features.item3': '✓ Create websites and landing pages',
+                'whatget.features.item4': '✓ Export to PowerPoint and Google Slides',
+                'whatget.features.item5': '✓ Direct sharing on social media',
+                'features.title': '🌟 Main Features',
+                'features.presentations.title': 'Smart Presentations',
+                'features.presentations.desc': 'Create brand-consistent slides in minutes. AI automatically selects designs and images.',
+                'features.documents.title': 'Interactive Documents',
+                'features.documents.desc': 'Prepare stunning documents and presentations quickly on any topic. Automatic professional design.',
+                'features.websites.title': 'Websites',
+                'features.websites.desc': 'Create business websites, landing pages, and personal portfolios quickly without programming.',
+                'features.social.title': 'Social Media',
+                'features.social.desc': 'Design attractive graphics and text for direct sharing on social platforms.',
+                'features.ai.title': 'Advanced AI',
+                'features.ai.desc': 'Smart layouts, rich content, and translations with one click. Everything is automatic!',
+                'features.export.title': 'Multiple Export',
+                'features.export.desc': 'Export as PPT, PDF, PNG, or Google Slides files. Or publish directly as a website.',
+                'howitworks.title': '⚡ How Gamma Works?',
+                'howitworks.step1.title': '1️⃣ Start with an Idea',
+                'howitworks.step1.desc': 'Write your idea, paste an outline, or import existing content. Gamma understands what you want!',
+                'howitworks.step2.title': '2️⃣ AI Does the Work',
+                'howitworks.step2.desc': 'Gamma uses AI to add smart layouts, rich content, suitable images, and automatic translations.',
+                'howitworks.step3.title': '3️⃣ Edit and Share',
+                'howitworks.step3.desc': 'Modify the design as you wish, then export as PPT or PDF, or publish directly as a website.',
+                'notes.title': '⚠️ Important Notes',
+                'notes.item1': 'Account Type: You can choose a shared account (cheaper) or personal account (yours only)',
+                'notes.item2': 'Usage: The account works on all devices - computer, phone, and tablet',
+                'notes.item3': 'Updates: All new features are automatically available in your account',
+                'faq.title': '❓ Frequently Asked Questions',
+                'faq.q1.question': 'Q: What\'s the difference between shared and personal account?',
+                'faq.q1.answer': 'A: Shared account is cheaper (1200 DZD) but may be shared with other users. Personal account (2000 DZD) is yours only and more secure.',
+                'faq.q2.question': 'Q: Can I use Gamma on my phone?',
+                'faq.q2.answer': 'A: Yes! Gamma works on all devices - computer, mobile phone, tablet, and browsers.',
+                'faq.q3.question': 'Q: Can I export presentations to PowerPoint?',
+                'faq.q3.answer': 'A: Yes! You can export presentations as PPT, PDF, PNG, or Google Slides files easily.',
+                'faq.q4.question': 'Q: Do I need programming skills to use Gamma?',
+                'faq.q4.answer': 'A: Not at all! Gamma is designed to be easy for everyone. Just write your idea and AI does the rest.',
+                'why.title': '🌟 Why Choose Market Algeriaa?',
+                'why.instant.title': '⚡ Instant Delivery',
+                'why.instant.desc': 'Get your account details immediately after purchase',
+                'why.secure.title': '🔒 Secure & Trusted',
+                'why.secure.desc': 'Verified Gamma Premium account, 100% safe and functional',
+                'why.warranty.title': '🛡️ Full Warranty',
+                'why.warranty.desc': 'Warranty for the full month',
+                'why.support.title': '💬 Fast Support',
+                'why.support.desc': 'Fast and helpful assistance, no hassle',
+                'final.title': '🚀 Start Now with Gamma.AI',
+                'final.subtitle': 'Create professional content with AI assistance today!',
+                'final.cta': '🛒 Order Now'
+            },
+            fr: {
+                'nav.home': '← Accueil',
+                'hero.title': 'Gamma.AI - Plateforme IA',
+                'hero.subtitle': 'Créez des présentations, documents et sites web professionnels avec l\'IA',
+                'hero.duration': 'Abonnement mensuel - Fonctionne sur tous vos appareils',
+                'hero.price': 'À partir de $6 / 1200 DZD par mois',
+                'payment.title': 'Méthodes de Paiement Disponibles',
+                'payment.crypto': '💰 USDT / Cryptomonnaie',
+                'payment.redotpay': '💳 RedotPay',
+                'payment.baridimob': '📱 BaridiMob',
+                'desc.title': '🚀 Qu\'est-ce que Gamma.AI?',
+                'desc.text1': 'Gamma est une plateforme alimentée par l\'IA qui vous permet de créer des présentations professionnelles, des documents interactifs et des sites web facilement et rapidement. Aucune compétence en design avancé ou programmation complexe requise!',
+                'desc.text2': 'En bref, Gamma transforme vos idées en contenu visuel époustouflant en quelques minutes. Écrivez simplement votre idée ou collez un plan, et l\'IA créera un contenu professionnel complet avec des designs attrayants automatiquement.',
+                'desc.text3': 'Parfait pour les étudiants, enseignants, propriétaires d\'entreprises, marketeurs et professionnels qui veulent créer du contenu professionnel rapidement sans complications.',
+                'whatget.title': '✦ Ce Que Vous Obtenez ✦',
+                'whatget.account.title': 'Compte Gamma Premium',
+                'whatget.account.desc': 'Compte Premium complet avec toutes les fonctionnalités avancées',
+                'whatget.account.item1': '✓ Accès complet à tous les modèles et fonctionnalités',
+                'whatget.account.item2': '✓ Supprimer la marque Gamma',
+                'whatget.account.item3': '✓ Modèles d\'images IA avancés',
+                'whatget.account.item4': '✓ Analytiques détaillées des projets',
+                'whatget.features.title': 'Fonctionnalités Professionnelles',
+                'whatget.features.item1': '✓ Créer des présentations professionnelles en quelques minutes',
+                'whatget.features.item2': '✓ Concevoir des documents interactifs et attrayants',
+                'whatget.features.item3': '✓ Créer des sites web et pages d\'atterrissage',
+                'whatget.features.item4': '✓ Exporter vers PowerPoint et Google Slides',
+                'whatget.features.item5': '✓ Partage direct sur les réseaux sociaux',
+                'features.title': '🌟 Fonctionnalités Principales',
+                'features.presentations.title': 'Présentations Intelligentes',
+                'features.presentations.desc': 'Créez des diapositives cohérentes avec la marque en quelques minutes. L\'IA sélectionne automatiquement les designs et images.',
+                'features.documents.title': 'Documents Interactifs',
+                'features.documents.desc': 'Préparez des documents et présentations époustouflants rapidement sur n\'importe quel sujet. Design professionnel automatique.',
+                'features.websites.title': 'Sites Web',
+                'features.websites.desc': 'Créez des sites web d\'entreprise, pages d\'atterrissage et portfolios personnels rapidement sans programmation.',
+                'features.social.title': 'Réseaux Sociaux',
+                'features.social.desc': 'Concevez des graphiques et textes attrayants pour le partage direct sur les plateformes sociales.',
+                'features.ai.title': 'IA Avancée',
+                'features.ai.desc': 'Mises en page intelligentes, contenu riche et traductions en un clic. Tout est automatique!',
+                'features.export.title': 'Export Multiple',
+                'features.export.desc': 'Exporter en fichiers PPT, PDF, PNG ou Google Slides. Ou publier directement comme site web.',
+                'howitworks.title': '⚡ Comment Gamma Fonctionne?',
+                'howitworks.step1.title': '1️⃣ Commencez par une Idée',
+                'howitworks.step1.desc': 'Écrivez votre idée, collez un plan ou importez du contenu existant. Gamma comprend ce que vous voulez!',
+                'howitworks.step2.title': '2️⃣ L\'IA Fait le Travail',
+                'howitworks.step2.desc': 'Gamma utilise l\'IA pour ajouter des mises en page intelligentes, du contenu riche, des images appropriées et des traductions automatiques.',
+                'howitworks.step3.title': '3️⃣ Modifiez et Partagez',
+                'howitworks.step3.desc': 'Modifiez le design comme vous le souhaitez, puis exportez en PPT ou PDF, ou publiez directement comme site web.',
+                'notes.title': '⚠️ Notes Importantes',
+                'notes.item1': 'Type de Compte: Vous pouvez choisir un compte partagé (moins cher) ou un compte personnel (le vôtre uniquement)',
+                'notes.item2': 'Utilisation: Le compte fonctionne sur tous les appareils - ordinateur, téléphone et tablette',
+                'notes.item3': 'Mises à Jour: Toutes les nouvelles fonctionnalités sont automatiquement disponibles dans votre compte',
+                'faq.title': '❓ Questions Fréquemment Posées',
+                'faq.q1.question': 'Q: Quelle est la différence entre compte partagé et personnel?',
+                'faq.q1.answer': 'R: Le compte partagé est moins cher (1200 DZD) mais peut être partagé avec d\'autres utilisateurs. Le compte personnel (2000 DZD) est le vôtre uniquement et plus sécurisé.',
+                'faq.q2.question': 'Q: Puis-je utiliser Gamma sur mon téléphone?',
+                'faq.q2.answer': 'R: Oui! Gamma fonctionne sur tous les appareils - ordinateur, téléphone portable, tablette et navigateurs.',
+                'faq.q3.question': 'Q: Puis-je exporter les présentations vers PowerPoint?',
+                'faq.q3.answer': 'R: Oui! Vous pouvez exporter les présentations en fichiers PPT, PDF, PNG ou Google Slides facilement.',
+                'faq.q4.question': 'Q: Ai-je besoin de compétences en programmation pour utiliser Gamma?',
+                'faq.q4.answer': 'R: Pas du tout! Gamma est conçu pour être facile pour tout le monde. Écrivez simplement votre idée et l\'IA fait le reste.',
+                'why.title': '🌟 Pourquoi Choisir Market Algeriaa?',
+                'why.instant.title': '⚡ Livraison Instantanée',
+                'why.instant.desc': 'Obtenez les détails de votre compte immédiatement après l\'achat',
+                'why.secure.title': '🔒 Sécurisé et Fiable',
+                'why.secure.desc': 'Compte Gamma Premium vérifié, 100% sûr et fonctionnel',
+                'why.warranty.title': '🛡️ Garantie Complète',
+                'why.warranty.desc': 'Garantie pour le mois complet',
+                'why.support.title': '💬 Support Rapide',
+                'why.support.desc': 'Assistance rapide et utile, sans tracas',
+                'final.title': '🚀 Commencez Maintenant avec Gamma.AI',
+                'final.subtitle': 'Créez du contenu professionnel avec l\'assistance IA aujourd\'hui!',
+                'final.cta': '🛒 Commander Maintenant'
+            }
+        };
+
+        let currentLang = 'ar';
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentLang = btn.dataset.lang;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateTranslations();
+            });
+        });
+
+        function updateTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.value = translations[currentLang][key];
+                    } else {
+                        el.innerHTML = translations[currentLang][key];
+                    }
+                }
+            });
+        }
+
+        // Payment Modal Functions
+        function openBaridiMobModal() {
+            document.getElementById('baridimob-modal').style.display = 'flex';
+        }
+
+        function closeBaridiMobModal() {
+            document.getElementById('baridimob-modal').style.display = 'none';
+        }
+
+        function copyBaridiMobRIP() {
+            const rip = document.getElementById('baridimob-rip').textContent;
+            navigator.clipboard.writeText(rip).then(() => {
+                alert('تم نسخ RIP بنجاح!');
+            });
+        }
+
+        function confirmBaridiMobPayment() {
+            const product = 'Gamma.AI';
+            const price = document.getElementById('baridimob-price-value').textContent;
+            window.location.href = `https://wa.me/213555123456?text=أريد شراء ${product} - ${price} عبر BaridiMob`;
+        }
+
+        function openCryptoModal() {
+            document.getElementById('crypto-modal').style.display = 'flex';
+        }
+
+        function closeCryptoModal() {
+            document.getElementById('crypto-modal').style.display = 'none';
+        }
+
+        function selectNetwork(network, address) {
+            document.getElementById('selected-network').textContent = network;
+            document.getElementById('wallet-address').textContent = address;
+            document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${address}`;
+        }
+
+        function copyWalletAddress() {
+            const address = document.getElementById('wallet-address').textContent;
+            navigator.clipboard.writeText(address).then(() => {
+                alert('تم نسخ عنوان المحفظة بنجاح!');
+            });
+        }
+
+        function confirmCryptoPayment() {
+            const product = 'Gamma.AI';
+            const price = document.getElementById('crypto-price-value').textContent;
+            window.location.href = `https://wa.me/213555123456?text=أريد شراء ${product} - ${price} عبر USDT`;
+        }
+
+        function openRedotPayModal() {
+            document.getElementById('redotpay-modal').style.display = 'flex';
+        }
+
+        function closeRedotPayModal() {
+            document.getElementById('redotpay-modal').style.display = 'none';
+        }
+
+        function copyRedotPayID() {
+            const id = document.getElementById('redotpay-id').textContent;
+            navigator.clipboard.writeText(id).then(() => {
+                alert('تم نسخ RedotPay ID بنجاح!');
+            });
+        }
+
+        function confirmRedotPayPayment() {
+            const product = 'Gamma.AI';
+            const price = document.getElementById('redotpay-price-value').textContent;
+            window.location.href = `https://wa.me/213555123456?text=أريد شراء ${product} - ${price} عبر RedotPay`;
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = ['baridimob-modal', 'crypto-modal', 'redotpay-modal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        updateTranslations();
+    </script>
 </body>
 </html>

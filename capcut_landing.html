@@ -3,11 +3,1404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapCut Pro - قريباً | Market Algeriaa</title>
+    <title>CapCut Pro - حساب شخصي لأفضل تحرير فيديو | Market Algeriaa</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/8D1hNuQ.png">
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(255, 107, 107, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 107, 107, 0.05) 0px, transparent 50%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 107, 107, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 107, 107, 0.2);
+        }
+        
+        /* Hero Section */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 80px;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .product-logo-container {
+            margin-bottom: 32px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .video-showcase {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            height: 180px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(255, 107, 107, 0.4),
+                        0 0 0 1px rgba(255, 107, 107, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .video-showcase video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .video-overlay-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 107, 107, 0.1) 0%,
+                transparent 30%,
+                transparent 70%,
+                rgba(255, 107, 107, 0.1) 100%
+            );
+            pointer-events: none;
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .price-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 142, 83, 0.2));
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: #ff6b6b;
+            margin: 32px 0;
+            box-shadow: 0 8px 24px rgba(255, 107, 107, 0.2);
+        }
+        
+        /* Payment Methods Cards */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 48px auto;
+        }
+        
+        .payment-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .payment-card:hover::before {
+            left: 100%;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 107, 107, 0.5);
+            box-shadow: 0 12px 40px rgba(255, 107, 107, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .payment-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .payment-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 18px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(255, 107, 107, 0.5);
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 48px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 107, 107, 0.3);
+            box-shadow: 0 12px 40px rgba(255, 107, 107, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 12px;
+        }
+        
+        .feature-text {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.5);
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .lang-btn.active,
+        .lang-btn:hover {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.5);
+        }
+        
+        /* Responsive Mobile Styles - Compact Design */
+        @media (max-width: 768px) {
+            .hero-container {
+                padding: 70px 15px 30px !important;
+                min-height: auto !important;
+            }
+            
+            .product-logo-container {
+                margin-bottom: 16px !important;
+            }
+            
+            .product-logo-container {
+                margin-bottom: 20px !important;
+            }
+            
+            .video-showcase {
+                max-width: 280px !important;
+                height: 160px !important;
+                border-radius: 12px !important;
+            }
+            
+            .hero-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.3 !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.875rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.4 !important;
+            }
+            
+            .price-badge {
+                font-size: 1rem !important;
+                padding: 8px 16px !important;
+                margin: 12px 0 !important;
+            }
+            
+            .payment-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+                margin: 20px auto !important;
+                max-width: 100% !important;
+            }
+            
+            .payment-card {
+                padding: 12px 8px !important;
+            }
+            
+            .payment-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 6px !important;
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .payment-label {
+                font-size: 0.75rem !important;
+            }
+            
+            .cta-button {
+                font-size: 0.9rem !important;
+                padding: 12px 24px !important;
+                width: 100%;
+                max-width: 100% !important;
+                margin-top: 16px !important;
+            }
+            
+            .section {
+                padding: 24px 15px !important;
+            }
+            
+            .section-title {
+                font-size: 1.35rem !important;
+                margin-bottom: 16px !important;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 10px !important;
+            }
+            
+            .feature-card {
+                padding: 16px 12px !important;
+            }
+            
+            .feature-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .feature-title {
+                font-size: 1rem !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .feature-text {
+                font-size: 0.8rem !important;
+                line-height: 1.5 !important;
+            }
+            
+            .glass-card {
+                padding: 16px 12px !important;
+                margin-bottom: 16px !important;
+            }
+            
+            .nav-container {
+                padding: 8px 12px !important;
+            }
+            
+            .back-btn {
+                padding: 6px 12px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            .lang-btn {
+                padding: 4px 8px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            /* Hide video background on mobile for performance */
+            .video-background {
+                display: none !important;
+            }
+            
+            /* Reduce spacing in hero content */
+            .hero-content > * {
+                margin-bottom: 8px !important;
+            }
+            
+            /* Hide less important sections on mobile to reduce scrolling */
+            .mobile-hide {
+                display: none !important;
+            }
+            
+            /* Compact mobile-visible sections */
+            .mobile-section {
+                padding: 12px 15px !important;
+            }
+            
+            .mobile-section .section-title {
+                font-size: 1.1rem !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .mobile-section .feature-grid {
+                grid-template-columns: 1fr !important;
+                gap: 8px !important;
+            }
+            
+            .mobile-section .feature-card {
+                padding: 12px 10px !important;
+            }
+            
+            .mobile-section .feature-card ul li {
+                font-size: 0.75rem !important;
+                margin-bottom: 3px !important;
+                line-height: 1.4 !important;
+            }
+            
+            .mobile-section .feature-text {
+                font-size: 0.75rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .mobile-section .glass-card {
+                padding: 12px 10px !important;
+            }
+            
+            /* Show only first feature card in What You'll Get on mobile */
+            .mobile-section .feature-card:nth-of-type(2) {
+                display: none !important;
+            }
+            
+            /* Compact Description section */
+            .mobile-section p {
+                font-size: 0.75rem !important;
+                margin-bottom: 6px !important;
+                line-height: 1.4 !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem !important;
+            }
+            
+            .price-badge {
+                font-size: 1.1rem !important;
+                padding: 10px 20px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem !important;
+            }
+            
+            .payment-card {
+                padding: 16px 12px;
+            }
+        }
+        
+        /* Payment Modals Mobile Responsive */
+        @media (max-width: 768px) {
+            .modal div[style*="max-width"] {
+                max-width: 95% !important;
+                width: 95% !important;
+                padding: 20px 15px !important;
+                margin: 10px !important;
+            }
+            
+            .modal h2 {
+                font-size: 1.25rem !important;
+            }
+            
+            .modal code {
+                font-size: 0.85rem !important;
+                word-break: break-all;
+            }
+            
+            .modal button {
+                font-size: 0.9rem !important;
+                padding: 10px 20px !important;
+            }
+            
+            #qr-code {
+                max-width: 120px !important;
+            }
+        }
+        
+        /* Video Background */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.15;
+        }
+        
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+        }
+    </style>
 </head>
 <body>
-    <!-- المحتوى سيتم إضافته عند الإطلاق -->
+    <div id="particles-js"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <a href="index.html" class="back-btn" data-i18n="nav.home">← الرئيسية</a>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="ar">العربية</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-container" style="position: relative;">
+        <!-- Video Background -->
+        <div class="video-background">
+            <video autoplay loop muted playsinline>
+                <source src="https://i.imgur.com/ZpMzFGa.mp4" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+        
+        <div class="hero-content" style="position: relative; z-index: 10;">
+            <div class="product-logo-container">
+                <div class="video-showcase">
+                    <video autoplay loop muted playsinline>
+                        <source src="https://i.imgur.com/ZpMzFGa.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-overlay-gradient"></div>
+                </div>
+            </div>
+            
+            <h1 class="hero-title" data-i18n="hero.title">
+                CapCut Pro - حساب شخصي
+            </h1>
+            
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+                أنشئ فيديوهات احترافية بجودة عالية مع جميع ميزات PRO
+            </p>
+            
+            <p class="hero-subtitle" data-i18n="hero.duration">
+                اشتراك لمدة 30 يوماً - يعمل على جميع أجهزتك
+            </p>
+            
+            <div class="price-badge" data-i18n="hero.price">
+                فقط 1200 د.ج / $6
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-grid">
+                <div class="payment-card" onclick="openRedotPayModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                        <span style="color: white; font-weight: 700;">Redot</span>
+                    </div>
+                    <div class="payment-label">RedotPay</div>
+                </div>
+
+                <div class="payment-card" onclick="openCryptoModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #ff6b6b, #ff8e53);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
+                            <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
+                            <path d="M12 12v8"></path>
+                        </svg>
+                    </div>
+                    <div class="payment-label">USDT</div>
+                </div>
+
+                <div class="payment-card" onclick="openBaridiMobModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #ffffff, #e5e5e5);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div class="payment-label">BaridiMob</div>
+                </div>
+            </div>
+
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في CapCut Pro" 
+               class="cta-button" data-i18n="cta.button">
+                اطلب الآن عبر WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- Description Section -->
+    <section class="section mobile-section">
+        <div class="max-w-6xl mx-auto">
+            <div class="glass-card p-8 md:p-12">
+                <h2 class="section-title" data-i18n="desc.title">
+                    🎬 أنشئ فيديوهات احترافية بجودة استوديو مع CapCut Pro
+                </h2>
+                <p class="hero-subtitle text-center mb-6" data-i18n="desc.subtitle">
+                    حساب CapCut Pro Premium <strong style="color: #ff6b6b;">شخصي وفردي</strong> صالح لمدة 30 يوماً كاملاً - جاهز للاستخدام الفوري على جميع أجهزتك
+                </p>
+                <p class="feature-text text-center max-w-3xl mx-auto" data-i18n="desc.text">
+                    <strong style="color: #ff6b6b;">حساب شخصي بالكامل - ليس مشترك!</strong> مثالي للمحررين وصانعي المحتوى الذين يريدون حساباً آمناً ومستقراً خاص بهم فقط بجودة عالية جاهز للاستخدام الفوري. استمتع بجميع ميزات PRO بدون أي حدود أو قيود.
+                </p>
+            </div>
+        </div>
+    </section>
+
+        <!-- What You'll Get Section -->
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="whatget.title">
+                ✦ ماذا ستحصل عليه ✦
+            </h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title" data-i18n="whatget.account.title">حساب CapCut Premium</h3>
+                    <ul class="space-y-3 feature-text">
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.account.item1">حساب Premium نشط لمدة 30 يوماً</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.account.item2">وصول كامل لجميع ميزات PRO بدون حدود</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.account.item3">نظام تسجيل دخول آمن (يصلح لـ2-3 أجهزة)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.account.item4">تحرير وتصدير فيديوهات عالية الجودة بدون علامة مائية</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.account.item5">يعمل على Android, iOS, Windows, macOS, والويب</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">✨</div>
+                    <h3 class="feature-title" data-i18n="whatget.features.title">المميزات الاحترافية</h3>
+                    <ul class="space-y-3 feature-text">
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.features.item1">وصول غير محدود - استمتع بجميع أدوات PRO بدون قيود</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.features.item2">تحرير فيديو بجودة عالية - تصدير حتى 4K مع عرض سلس</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.features.item3">مئات المؤثرات والفلاتر المميزة - قوالب حصرية وانتقالات وتراكبات</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.features.item4">بدون علامة مائية - احتفظ بفيديوهاتك نظيفة واحترافية</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#ff6b6b] mt-1">✓</span>
+                            <span data-i18n="whatget.features.item5">مزامنة السحابة - استمر في مشاريعك بسلاسة عبر أجهزة متعددة</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activation Guide Section -->
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="guide.title">
+                📱 دليل التفعيل السريع
+            </h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title" data-i18n="guide.mobile.title">للهواتف (Android / iOS)</h3>
+                    <ol class="space-y-3 feature-text list-decimal list-inside">
+                        <li data-i18n="guide.mobile.step1">قم بتسجيل الدخول باستخدام البريد الإلكتروني وكلمة المرور المقدمة</li>
+                        <li data-i18n="guide.mobile.step2">استمتع بالوصول الكامل لجميع ميزات CapCut PRO فوراً</li>
+                    </ol>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h3 class="feature-title" data-i18n="guide.desktop.title">للكمبيوتر / النسخة الويب</h3>
+                    <ol class="space-y-3 feature-text list-decimal list-inside">
+                        <li data-i18n="guide.desktop.step1">سجل الدخول أولاً على تطبيق CapCut في هاتفك باستخدام نفس الحساب</li>
+                        <li data-i18n="guide.desktop.step2">ثم افتح CapCut على الكمبيوتر وامسح رمز QR للاتصال بحسابك</li>
+                        <li data-i18n="guide.desktop.step3">إذا لم يظهر خيار تسجيل الدخول بالبريد الإلكتروني: امسح بيانات التطبيق أو أعد تثبيته - هذا عادة يحل المشكلة</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Important Notes Section -->
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="notes.title">
+                ⚠️ ملاحظات مهمة
+            </h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <p class="feature-text" data-i18n="notes.item1"><strong style="color: #ff6b6b;">شارة Pro:</strong> تظهر فقط في تطبيق الهاتف المحمول، لكن جميع ميزات PRO تبقى نشطة على الكمبيوتر/الويب</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <p class="feature-text" data-i18n="notes.item2"><strong style="color: #ff6b6b;">عدد الأجهزة:</strong> آمن للاستخدام على ما يصل إلى 3 أجهزة. تجنب تسجيل الدخول والخروج المتكرر لمنع حدود الأمان</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✏️</div>
+                    <p class="feature-text" data-i18n="notes.item3"><strong style="color: #ff6b6b;">تغيير الحساب:</strong> يمكنك طلب الوصول إلى البريد الإلكتروني إذا أردت تغيير البريد الإلكتروني أو كلمة المرور</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="faq.title">
+                ❓ الأسئلة الشائعة
+            </h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4 class="feature-title mb-3" data-i18n="faq.q1.question">س: هل هذه خطة لمدة 30 يوماً؟</h4>
+                    <p class="feature-text" data-i18n="faq.q1.answer">ج: نعم، هذه خطة لمدة 30 يوماً كاملة.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4 class="feature-title mb-3" data-i18n="faq.q2.question">س: هل يمكنني استخدامه على جميع الأجهزة؟</h4>
+                    <p class="feature-text" data-i18n="faq.q2.answer">ج: نعم، يمكنك استخدامه على الهواتف المحمولة، وأجهزة الكمبيوتر، وMacBooks، وiPhones، بأمان على ما يصل إلى 3 أجهزة.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4 class="feature-title mb-3" data-i18n="faq.q3.question">س: ماذا لو لم تظهر شارة Pro على الكمبيوتر؟</h4>
+                    <p class="feature-text" data-i18n="faq.q3.answer">ج: هذا طبيعي - جميع أدوات PRO تعمل بشكل مثالي حتى لو لم تظهر الشارة.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4 class="feature-title mb-3" data-i18n="faq.q4.question">س: هل الحساب شخصي أم مشترك؟</h4>
+                    <p class="feature-text" data-i18n="faq.q4.answer">ج: الحساب <strong style="color: #ff6b6b;">شخصي وفردي بالكامل</strong> - ليس مشترك! أنت فقط من يستخدمه.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us Section -->
+        <section class="section mobile-section">
+            <h2 class="section-title" data-i18n="why.title">
+                🌟 لماذا تختار Market Algeriaa؟
+            </h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4 class="feature-title" data-i18n="why.instant.title">تسليم فوري</h4>
+                    <p class="feature-text" data-i18n="why.instant.desc">احصل على تفاصيل حسابك مباشرة بعد الشراء</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h4 class="feature-title" data-i18n="why.secure.title">آمن وموثوق</h4>
+                    <p class="feature-text" data-i18n="why.secure.desc">حساب CapCut PRO مؤكد وموثوق، 100% آمن وفعال</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👤</div>
+                    <h4 class="feature-title" data-i18n="why.personal.title">حساب شخصي</h4>
+                    <p class="feature-text" data-i18n="why.personal.desc">حساب فردي وشخصي بالكامل - ليس مشترك! أنت فقط من يستخدمه</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h4 class="feature-title" data-i18n="why.warranty.title">ضمان كامل</h4>
+                    <p class="feature-text" data-i18n="why.warranty.desc">صالح لمدة 30 يوماً كاملة</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h4 class="feature-title" data-i18n="why.support.title">دعم سريع</h4>
+                    <p class="feature-text" data-i18n="why.support.desc">مساعدة سريعة ومفيدة، بدون تعقيدات</p>
+                </div>
+            </div>
+        </section>
+
+    <!-- Final CTA Section -->
+    <section class="section">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-card p-12 text-center">
+                <h2 class="section-title mb-6" data-i18n="final.title">
+                    ⚠️ لا تضيع وقتك مع النسخ المجانية المحدودة
+                </h2>
+                <p class="hero-subtitle mb-8" data-i18n="final.subtitle">
+                    ابدأ بإنشاء فيديوهات احترافية اليوم!
+                </p>
+                <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في CapCut Pro" 
+                   class="cta-button" data-i18n="final.button">
+                    🚀 اطلب الآن
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-600 text-sm border-t border-gray-900 relative z-10">
+        <span data-i18n="footer.text">&copy; 2024 CapCut Pro - Market Algeriaa. جميع الحقوق محفوظة.</span>
+    </footer>
+
+    <!-- Payment Modals -->
+    <!-- BaridiMob Modal -->
+    <div id="baridimob-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 450px; width: 90%; background: #0a0a0a; border: 2px solid #ff6b6b; border-radius: 20px; padding: 25px; position: relative;">
+            <button onclick="closeBaridiMobModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #ff6b6b; font-size: 28px; cursor: pointer;">&times;</button>
+            
+            <h2 id="baridimob-title" style="text-align: center; color: #ff6b6b; font-size: 1.5rem; margin-bottom: 15px;">الدفع عبر BaridiMob</h2>
+            
+            <div style="background: rgba(255, 107, 107, 0.1); border: 1px solid #ff6b6b; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p style="color: #fff; margin-bottom: 8px; font-size: 0.9rem;"><strong id="baridimob-product">المنتج:</strong> CapCut Pro</p>
+                <p style="color: #fff; font-size: 0.9rem;"><strong id="baridimob-price">السعر:</strong> <span id="baridimob-price-value">1200 د.ج</span></p>
+            </div>
+
+            <div style="background: #111; border: 1px solid #ff6b6b; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p id="baridimob-rip-label" style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.9rem;">RIP BaridiMob:</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 12px; border-radius: 8px; gap: 8px;">
+                    <code id="baridimob-rip" style="color: #ff6b6b; font-size: 0.95rem; word-break: break-all; flex: 1;">00799999002787548473</code>
+                    <button id="baridimob-copy" onclick="copyBaridiMobRIP()" style="background: #ff6b6b; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.85rem; line-height: 1.6;">
+                <h3 id="baridimob-instructions-title" style="color: #ff6b6b; margin-bottom: 12px; font-size: 1rem;">تعليمات الدفع:</h3>
+                <ol id="baridimob-instructions" style="padding-right: 18px;">
+                    <li>افتح تطبيق BaridiMob</li>
+                    <li>اختر "تحويل الأموال" أو "Virement"</li>
+                    <li>اختر "RIP" كطريقة التحويل</li>
+                    <li>أدخل الـ RIP: <strong>00799999002787548473</strong></li>
+                    <li>أدخل المبلغ المطلوب</li>
+                    <li>أكمل عملية الدفع</li>
+                    <li>احتفظ بإثبات الدفع</li>
+                    <li>اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+                <p id="baridimob-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!</p>
+            </div>
+
+            <button id="baridimob-button" onclick="confirmBaridiMobPayment()" style="width: 100%; background: #ff6b6b; color: #fff; border: none; padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <!-- USDT/Crypto Modal -->
+    <div id="crypto-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 450px; width: 90%; background: #0a0a0a; border: 2px solid #ff6b6b; border-radius: 20px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeCryptoModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #ff6b6b; font-size: 28px; cursor: pointer;">&times;</button>
+            
+            <h2 id="crypto-title" style="text-align: center; color: #ff6b6b; font-size: 1.5rem; margin-bottom: 15px;">الدفع بالعملات الرقمية</h2>
+            
+            <div style="background: rgba(255, 107, 107, 0.1); border: 1px solid #ff6b6b; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> CapCut Pro</p>
+                <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">$6</span></p>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <h3 id="crypto-select-network" style="color: #ff6b6b; margin-bottom: 10px; font-size: 0.95rem;">اختر الشبكة:</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="selectNetwork('TRC20', 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9')" style="flex: 1; background: #ff6b6b; color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">
+                        TRC20<br><span id="crypto-fees1" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~1 USDT)</span>
+                    </button>
+                    <button onclick="selectNetwork('BEP20', '0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0')" style="flex: 1; background: #333; color: #fff; border: 1px solid #ff6b6b; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">
+                        BEP20 (BSC)<br><span id="crypto-fees2" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~0.5 USDT)</span>
+                    </button>
+                </div>
+            </div>
+
+            <div style="background: #111; border: 1px solid #ff6b6b; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p id="crypto-wallet-label" style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.9rem;">عنوان المحفظة (<span id="selected-network">TRC20</span>):</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 12px; border-radius: 8px; margin-bottom: 12px; gap: 8px;">
+                    <code id="wallet-address" style="color: #ff6b6b; font-size: 0.85rem; word-break: break-all; flex: 1;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
+                    <button id="crypto-copy" onclick="copyWalletAddress()" style="background: #ff6b6b; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">نسخ</button>
+                </div>
+                <div style="text-align: center;">
+                    <img id="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9" alt="QR Code" style="max-width: 150px; border-radius: 10px;">
+                    <p id="crypto-qr-text" style="color: #888; font-size: 0.85rem; margin-top: 10px;">امسح الكود بتطبيق المحفظة</p>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.85rem; line-height: 1.6;">
+                <h3 id="crypto-instructions-title" style="color: #ff6b6b; margin-bottom: 12px; font-size: 1rem;">تعليمات الدفع:</h3>
+                <ol id="crypto-instructions" style="padding-right: 18px;">
+                    <li>اختر الشبكة المناسبة (TRC20 أو BEP20)</li>
+                    <li>انسخ عنوان المحفظة أو امسح QR Code</li>
+                    <li>افتح تطبيق Binance أو أي محفظة USDT</li>
+                    <li>تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)</li>
+                    <li>أرسل المبلغ المطلوب (6 دولارات)</li>
+                    <li>احتفظ بـ Transaction ID</li>
+                    <li>اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+                <p id="crypto-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!</p>
+            </div>
+
+            <button id="crypto-button" onclick="confirmCryptoPayment()" style="width: 100%; background: #ff6b6b; color: #fff; border: none; padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <!-- RedotPay Modal -->
+    <div id="redotpay-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="max-width: 450px; width: 90%; background: #0a0a0a; border: 2px solid #ff6b6b; border-radius: 20px; padding: 25px; position: relative;">
+            <button onclick="closeRedotPayModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #ff6b6b; font-size: 28px; cursor: pointer;">&times;</button>
+            
+            <h2 id="redotpay-title" style="text-align: center; color: #ff6b6b; font-size: 1.5rem; margin-bottom: 15px;">الدفع عبر RedotPay</h2>
+            
+            <div style="background: rgba(255, 107, 107, 0.1); border: 1px solid #ff6b6b; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p style="color: #fff; margin-bottom: 8px; font-size: 0.9rem;"><strong id="redotpay-product">المنتج:</strong> CapCut Pro</p>
+                <p style="color: #fff; font-size: 0.9rem;"><strong id="redotpay-price">السعر:</strong> <span id="redotpay-price-value">$6</span></p>
+            </div>
+
+            <div style="background: #111; border: 1px solid #ff6b6b; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                <p id="redotpay-id-label" style="color: #888; margin-bottom: 8px; text-align: center; font-size: 0.9rem;">RedotPay ID:</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 12px; border-radius: 8px; gap: 8px;">
+                    <code id="redotpay-id" style="color: #ff6b6b; font-size: 1.1rem; word-break: break-all; flex: 1;">1117632168</code>
+                    <button id="redotpay-copy" onclick="copyRedotPayID()" style="background: #ff6b6b; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                </div>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.85rem; line-height: 1.6;">
+                <h3 id="redotpay-instructions-title" style="color: #ff6b6b; margin-bottom: 12px; font-size: 1rem;">تعليمات الدفع:</h3>
+                <ol id="redotpay-instructions" style="padding-right: 18px;">
+                    <li>افتح تطبيق RedotPay</li>
+                    <li>اختر "Send" أو "إرسال"</li>
+                    <li>أدخل RedotPay ID: <strong>1117632168</strong></li>
+                    <li>أدخل المبلغ بالدولار (6 USD)</li>
+                    <li>أكمل عملية الإرسال</li>
+                    <li>احتفظ بإثبات التحويل</li>
+                    <li>اضغط "تم الدفع" للتواصل معنا</li>
+                </ol>
+                <p id="redotpay-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!</p>
+            </div>
+
+            <button id="redotpay-button" onclick="confirmRedotPayPayment()" style="width: 100%; background: #ff6b6b; color: #fff; border: none; padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;">
+                تم الدفع - تواصل معنا
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Particles.js configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ff6b6b' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#ff6b6b',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Payment Modal Functions
+        function openBaridiMobModal() {
+            document.getElementById('baridimob-modal').style.display = 'flex';
+        }
+        function closeBaridiMobModal() {
+            document.getElementById('baridimob-modal').style.display = 'none';
+        }
+        function copyBaridiMobRIP() {
+            const rip = document.getElementById('baridimob-rip').textContent;
+            navigator.clipboard.writeText(rip);
+            alert('تم نسخ RIP بنجاح!');
+        }
+        function confirmBaridiMobPayment() {
+            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر BaridiMob لـ CapCut Pro', '_blank');
+        }
+
+        function openCryptoModal() {
+            document.getElementById('crypto-modal').style.display = 'flex';
+        }
+        function closeCryptoModal() {
+            document.getElementById('crypto-modal').style.display = 'none';
+        }
+        function selectNetwork(network, address) {
+            document.getElementById('selected-network').textContent = network;
+            document.getElementById('network-warning').textContent = network;
+            document.getElementById('wallet-address').textContent = address;
+            document.getElementById('qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + address;
+            
+            // Update button styles
+            const buttons = document.querySelectorAll('#crypto-modal button[onclick*="selectNetwork"]');
+            buttons.forEach(btn => {
+                if (btn.textContent.includes(network)) {
+                    btn.style.background = '#ff6b6b';
+                    btn.style.color = '#fff';
+                } else {
+                    btn.style.background = '#333';
+                    btn.style.color = '#fff';
+                    btn.style.border = '1px solid #ff6b6b';
+                }
+            });
+        }
+        function copyWalletAddress() {
+            const address = document.getElementById('wallet-address').textContent;
+            navigator.clipboard.writeText(address);
+            alert('تم نسخ عنوان المحفظة بنجاح!');
+        }
+        function confirmCryptoPayment() {
+            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر USDT لـ CapCut Pro', '_blank');
+        }
+
+        function openRedotPayModal() {
+            document.getElementById('redotpay-modal').style.display = 'flex';
+        }
+        function closeRedotPayModal() {
+            document.getElementById('redotpay-modal').style.display = 'none';
+        }
+        function copyRedotPayID() {
+            const id = document.getElementById('redotpay-id').textContent;
+            navigator.clipboard.writeText(id);
+            alert('تم نسخ RedotPay ID بنجاح!');
+        }
+        function confirmRedotPayPayment() {
+            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر RedotPay لـ CapCut Pro', '_blank');
+        }
+
+        // Translation System
+        const translations = {
+            ar: {
+                'nav.home': '← الرئيسية',
+                'hero.title': 'CapCut Pro - حساب شخصي',
+                'hero.subtitle': 'أنشئ فيديوهات احترافية بجودة عالية مع جميع ميزات PRO',
+                'hero.duration': 'اشتراك لمدة 30 يوماً - يعمل على جميع أجهزتك',
+                'hero.price': 'فقط 1200 د.ج / $6',
+                'payment.title': 'طرق الدفع المتاحة',
+                'cta.button': 'اطلب الآن عبر WhatsApp',
+                'desc.title': '🎬 أنشئ فيديوهات احترافية بجودة استوديو مع CapCut Pro',
+                'desc.subtitle': 'حساب CapCut Pro Premium <strong style="color: #ff6b6b;">شخصي وفردي</strong> صالح لمدة 30 يوماً كاملاً - جاهز للاستخدام الفوري على جميع أجهزتك',
+                'desc.text': '<strong style="color: #ff6b6b;">حساب شخصي بالكامل - ليس مشترك!</strong> مثالي للمحررين وصانعي المحتوى الذين يريدون حساباً آمناً ومستقراً خاص بهم فقط بجودة عالية جاهز للاستخدام الفوري. استمتع بجميع ميزات PRO بدون أي حدود أو قيود.',
+                'whatget.title': '✦ ماذا ستحصل عليه ✦',
+                'whatget.account.title': 'حساب CapCut Premium',
+                'whatget.account.item1': 'حساب Premium نشط لمدة 30 يوماً',
+                'whatget.account.item2': 'وصول كامل لجميع ميزات PRO بدون حدود',
+                'whatget.account.item3': 'نظام تسجيل دخول آمن (يصلح لـ2-3 أجهزة)',
+                'whatget.account.item4': 'تحرير وتصدير فيديوهات عالية الجودة بدون علامة مائية',
+                'whatget.account.item5': 'يعمل على Android, iOS, Windows, macOS, والويب',
+                'whatget.features.title': 'المميزات الاحترافية',
+                'whatget.features.item1': 'وصول غير محدود - استمتع بجميع أدوات PRO بدون قيود',
+                'whatget.features.item2': 'تحرير فيديو بجودة عالية - تصدير حتى 4K مع عرض سلس',
+                'whatget.features.item3': 'مئات المؤثرات والفلاتر المميزة - قوالب حصرية وانتقالات وتراكبات',
+                'whatget.features.item4': 'بدون علامة مائية - احتفظ بفيديوهاتك نظيفة واحترافية',
+                'whatget.features.item5': 'مزامنة السحابة - استمر في مشاريعك بسلاسة عبر أجهزة متعددة',
+                'guide.title': '📱 دليل التفعيل السريع',
+                'guide.mobile.title': 'للهواتف (Android / iOS)',
+                'guide.mobile.step1': 'قم بتسجيل الدخول باستخدام البريد الإلكتروني وكلمة المرور المقدمة',
+                'guide.mobile.step2': 'استمتع بالوصول الكامل لجميع ميزات CapCut PRO فوراً',
+                'guide.desktop.title': 'للكمبيوتر / النسخة الويب',
+                'guide.desktop.step1': 'سجل الدخول أولاً على تطبيق CapCut في هاتفك باستخدام نفس الحساب',
+                'guide.desktop.step2': 'ثم افتح CapCut على الكمبيوتر وامسح رمز QR للاتصال بحسابك',
+                'guide.desktop.step3': 'إذا لم يظهر خيار تسجيل الدخول بالبريد الإلكتروني: امسح بيانات التطبيق أو أعد تثبيته - هذا عادة يحل المشكلة',
+                'notes.title': '⚠️ ملاحظات مهمة',
+                'notes.item1': '<strong>شارة Pro:</strong> تظهر فقط في تطبيق الهاتف المحمول، لكن جميع ميزات PRO تبقى نشطة على الكمبيوتر/الويب',
+                'notes.item2': '<strong>عدد الأجهزة:</strong> آمن للاستخدام على ما يصل إلى 3 أجهزة. تجنب تسجيل الدخول والخروج المتكرر لمنع حدود الأمان',
+                'notes.item3': '<strong>تغيير الحساب:</strong> يمكنك طلب الوصول إلى البريد الإلكتروني إذا أردت تغيير البريد الإلكتروني أو كلمة المرور',
+                'faq.title': '❓ الأسئلة الشائعة',
+                'faq.q1.question': 'س: هل هذه خطة لمدة 30 يوماً؟',
+                'faq.q1.answer': 'ج: نعم، هذه خطة لمدة 30 يوماً كاملة.',
+                'faq.q2.question': 'س: هل يمكنني استخدامه على جميع الأجهزة؟',
+                'faq.q2.answer': 'ج: نعم، يمكنك استخدامه على الهواتف المحمولة، وأجهزة الكمبيوتر، وMacBooks، وiPhones، بأمان على ما يصل إلى 3 أجهزة.',
+                'faq.q3.question': 'س: ماذا لو لم تظهر شارة Pro على الكمبيوتر؟',
+                'faq.q3.answer': 'ج: هذا طبيعي - جميع أدوات PRO تعمل بشكل مثالي حتى لو لم تظهر الشارة.',
+                'why.title': '🌟 لماذا تختار Market Algeriaa؟',
+                'why.instant.title': '⚡ تسليم فوري',
+                'why.instant.desc': 'احصل على تفاصيل حسابك مباشرة بعد الشراء',
+                'why.secure.title': '🔒 آمن وموثوق',
+                'why.secure.desc': 'حساب CapCut PRO مؤكد وموثوق، 100% آمن وفعال',
+                'why.warranty.title': '🛡️ ضمان كامل',
+                'why.warranty.desc': 'صالح لمدة 30 يوماً كاملة',
+                'why.support.title': '💬 دعم سريع',
+                'why.support.desc': 'مساعدة سريعة ومفيدة، بدون تعقيدات',
+                'why.personal.title': '👤 حساب شخصي',
+                'why.personal.desc': 'حساب فردي وشخصي بالكامل - ليس مشترك! أنت فقط من يستخدمه',
+                'final.title': '⚠️ لا تضيع وقتك مع النسخ المجانية المحدودة',
+                'final.subtitle': 'ابدأ بإنشاء فيديوهات احترافية اليوم!',
+                'final.button': '🚀 اطلب الآن',
+                'footer.text': '© 2024 CapCut Pro - Market Algeriaa. جميع الحقوق محفوظة.'
+            },
+            en: {
+                'nav.home': '← Home',
+                'hero.title': 'CapCut Pro - Personal Account',
+                'hero.subtitle': 'Create stunning, professional-quality videos with all PRO features',
+                'hero.duration': '30-day subscription - Works on all your devices',
+                'hero.price': 'Only $6 / 1200 DZD',
+                'payment.title': 'Available Payment Methods',
+                'cta.button': 'Order Now via WhatsApp',
+                'desc.title': '🎬 Create Professional Studio-Quality Videos with CapCut Pro',
+                'desc.subtitle': 'CapCut Pro Premium <strong style="color: #ff6b6b;">Personal & Individual Account</strong> valid for 30 full days - Ready for instant use across all your devices',
+                'desc.text': '<strong style="color: #ff6b6b;">Fully Personal Account - Not Shared!</strong> Perfect for editors and content creators who want a secure, stable, and high-quality account that is exclusively theirs, ready for instant use. Enjoy all PRO features without any limits or restrictions.',
+                'whatget.title': '✦ What You\'ll Get ✦',
+                'whatget.account.title': 'CapCut Premium Account',
+                'whatget.account.item1': 'Premium account active for 30 days',
+                'whatget.account.item2': 'Full access to all PRO features - No limits',
+                'whatget.account.item3': 'Anti-limit login system (Safe for 2-3 devices)',
+                'whatget.account.item4': 'Edit & export high-quality videos (No watermark)',
+                'whatget.account.item5': 'Works on Android, iOS, Windows, macOS, and Web',
+                'whatget.features.title': 'Premium Features',
+                'whatget.features.item1': 'Unlimited access - Enjoy all PRO tools without restrictions',
+                'whatget.features.item2': 'High-quality video editing - Export up to 4K with smooth rendering',
+                'whatget.features.item3': 'Hundreds of premium effects & filters - Exclusive templates, transitions, and overlays',
+                'whatget.features.item4': 'No watermark - Keep your videos clean and professional',
+                'whatget.features.item5': 'Cloud sync - Seamlessly continue your projects across multiple devices',
+                'guide.title': '📱 Quick Activation Guide',
+                'guide.mobile.title': 'For Mobile (Android / iOS)',
+                'guide.mobile.step1': 'Log in using the provided email and password',
+                'guide.mobile.step2': 'Enjoy full access to all CapCut PRO features instantly',
+                'guide.desktop.title': 'For Desktop / Web Version',
+                'guide.desktop.step1': 'Log in first on your mobile CapCut app using the same account',
+                'guide.desktop.step2': 'Then open CapCut on your desktop and scan the QR code to connect your account',
+                'guide.desktop.step3': 'If the email login option doesn\'t appear: Clear app data or reinstall CapCut - this usually resolves the issue',
+                'notes.title': '⚠️ Important Notes',
+                'notes.item1': '<strong>Pro Badge:</strong> Appears only on the mobile app, but all PRO features remain active on desktop/web',
+                'notes.item2': '<strong>Device Limit:</strong> Safe for use on up to 3 devices. Avoid frequent logins and logouts to prevent security limits',
+                'notes.item3': '<strong>Account Changes:</strong> You may request email access if you wish to change the email or password',
+                'faq.title': '❓ Frequently Asked Questions',
+                'faq.q1.question': 'Q: Is this a 30-day plan?',
+                'faq.q1.answer': 'A: Yes, it\'s a 30-day plan.',
+                'faq.q2.question': 'Q: Can I use it on all devices?',
+                'faq.q2.answer': 'A: Yes, you can use it on mobile phones, PCs, MacBooks, and iPhones, safely up to 3 devices.',
+                'faq.q3.question': 'Q: What if the Pro badge doesn\'t show on desktop?',
+                'faq.q3.answer': 'A: That\'s normal - all PRO tools still work perfectly even if the badge isn\'t displayed.',
+                'faq.q4.question': 'Q: Is the account personal or shared?',
+                'faq.q4.answer': 'A: The account is <strong style="color: #ff6b6b;">fully personal and individual</strong> - not shared! You are the only one using it.',
+                'why.title': '🌟 Why Choose Market Algeriaa?',
+                'why.instant.title': '⚡ Instant Delivery',
+                'why.instant.desc': 'Receive your account details immediately after purchase',
+                'why.secure.title': '🔒 Official & Secure',
+                'why.secure.desc': 'Verified CapCut PRO account, 100% safe and functional',
+                'why.warranty.title': '🛡️ Full Warranty',
+                'why.warranty.desc': 'Valid for the entire 30-day duration',
+                'why.support.title': '💬 Friendly Support',
+                'why.support.desc': 'Fast and helpful assistance, no hassle or drama',
+                'why.personal.title': '👤 Personal Account',
+                'why.personal.desc': 'Fully individual and personal account - not shared! You are the only one using it',
+                'final.title': '⚠️ Don\'t Waste Time with Limited Free Versions',
+                'final.subtitle': 'Start creating professional videos today!',
+                'final.button': '🚀 Order Now',
+                'footer.text': '© 2024 CapCut Pro - Market Algeriaa. All rights reserved.'
+            },
+            fr: {
+                'nav.home': '← Accueil',
+                'hero.title': 'CapCut Pro - Compte Professionnel',
+                'hero.subtitle': 'Créez des vidéos professionnelles de haute qualité avec toutes les fonctionnalités PRO',
+                'hero.duration': 'Abonnement de 30 jours - Fonctionne sur tous vos appareils',
+                'hero.price': 'Seulement 6$ / 1200 DZD',
+                'payment.title': 'Méthodes de paiement disponibles',
+                'cta.button': 'Commander maintenant via WhatsApp',
+                'desc.title': '🎬 Créez des Vidéos Professionnelles de Qualité Studio avec CapCut Pro',
+                'desc.subtitle': 'Compte CapCut Pro Premium <strong style="color: #ff6b6b;">Personnel et Individuel</strong> valable pour 30 jours complets - Prêt à être utilisé instantanément sur tous vos appareils',
+                'desc.text': '<strong style="color: #ff6b6b;">Compte Entièrement Personnel - Non Partagé!</strong> Parfait pour les éditeurs et créateurs de contenu qui veulent un compte sécurisé, stable et de haute qualité qui leur appartient exclusivement, prêt à l\'emploi. Profitez de toutes les fonctionnalités PRO sans limites ni restrictions.',
+                'whatget.title': '✦ Ce Que Vous Obtenez ✦',
+                'whatget.account.title': 'Compte CapCut Premium',
+                'whatget.account.item1': 'Compte Premium actif pendant 30 jours',
+                'whatget.account.item2': 'Accès complet à toutes les fonctionnalités PRO - Sans limites',
+                'whatget.account.item3': 'Système de connexion anti-limite (Sûr pour 2-3 appareils)',
+                'whatget.account.item4': 'Éditer et exporter des vidéos haute qualité (Sans filigrane)',
+                'whatget.account.item5': 'Fonctionne sur Android, iOS, Windows, macOS et Web',
+                'whatget.features.title': 'Fonctionnalités Premium',
+                'whatget.features.item1': 'Accès illimité - Profitez de tous les outils PRO sans restrictions',
+                'whatget.features.item2': 'Édition vidéo haute qualité - Export jusqu\'à 4K avec rendu fluide',
+                'whatget.features.item3': 'Des centaines d\'effets et filtres premium - Modèles exclusifs, transitions et superpositions',
+                'whatget.features.item4': 'Sans filigrane - Gardez vos vidéos propres et professionnelles',
+                'whatget.features.item5': 'Synchronisation cloud - Continuez vos projets en douceur sur plusieurs appareils',
+                'guide.title': '📱 Guide d\'Activation Rapide',
+                'guide.mobile.title': 'Pour Mobile (Android / iOS)',
+                'guide.mobile.step1': 'Connectez-vous en utilisant l\'email et le mot de passe fournis',
+                'guide.mobile.step2': 'Profitez d\'un accès complet à toutes les fonctionnalités CapCut PRO instantanément',
+                'guide.desktop.title': 'Pour Desktop / Version Web',
+                'guide.desktop.step1': 'Connectez-vous d\'abord sur l\'application CapCut mobile en utilisant le même compte',
+                'guide.desktop.step2': 'Ensuite, ouvrez CapCut sur votre ordinateur et scannez le code QR pour connecter votre compte',
+                'guide.desktop.step3': 'Si l\'option de connexion par email n\'apparaît pas: Effacez les données de l\'application ou réinstallez CapCut - cela résout généralement le problème',
+                'notes.title': '⚠️ Notes Importantes',
+                'notes.item1': '<strong>Badge Pro:</strong> N\'apparaît que sur l\'application mobile, mais toutes les fonctionnalités PRO restent actives sur desktop/web',
+                'notes.item2': '<strong>Limite d\'Appareils:</strong> Sûr pour utilisation sur jusqu\'à 3 appareils. Évitez les connexions/déconnexions fréquentes pour prévenir les limites de sécurité',
+                'notes.item3': '<strong>Changements de Compte:</strong> Vous pouvez demander l\'accès à l\'email si vous souhaitez changer l\'email ou le mot de passe',
+                'faq.title': '❓ Questions Fréquemment Posées',
+                'faq.q1.question': 'Q: Est-ce un plan de 30 jours?',
+                'faq.q1.answer': 'R: Oui, c\'est un plan de 30 jours.',
+                'faq.q2.question': 'Q: Puis-je l\'utiliser sur tous les appareils?',
+                'faq.q2.answer': 'R: Oui, vous pouvez l\'utiliser sur téléphones mobiles, PC, MacBooks et iPhones, en toute sécurité sur jusqu\'à 3 appareils.',
+                'faq.q3.question': 'Q: Et si le badge Pro n\'apparaît pas sur le bureau?',
+                'faq.q3.answer': 'R: C\'est normal - tous les outils PRO fonctionnent parfaitement même si le badge n\'est pas affiché.',
+                'faq.q4.question': 'Q: Le compte est-il personnel ou partagé?',
+                'faq.q4.answer': 'R: Le compte est <strong style="color: #ff6b6b;">entièrement personnel et individuel</strong> - non partagé! Vous êtes le seul à l\'utiliser.',
+                'why.title': '🌟 Pourquoi Choisir Market Algeriaa?',
+                'why.instant.title': '⚡ Livraison Instantanée',
+                'why.instant.desc': 'Recevez les détails de votre compte immédiatement après l\'achat',
+                'why.secure.title': '🔒 Officiel et Sécurisé',
+                'why.secure.desc': 'Compte CapCut PRO vérifié, 100% sûr et fonctionnel',
+                'why.warranty.title': '🛡️ Garantie Complète',
+                'why.warranty.desc': 'Valable pour toute la durée de 30 jours',
+                'why.support.title': '💬 Support Amical',
+                'why.support.desc': 'Assistance rapide et utile, sans tracas ni drame',
+                'why.personal.title': '👤 Compte Personnel',
+                'why.personal.desc': 'Compte entièrement individuel et personnel - non partagé! Vous êtes le seul à l\'utiliser',
+                'final.title': '⚠️ Ne Perdez Pas de Temps avec les Versions Gratuites Limitées',
+                'final.subtitle': 'Commencez à créer des vidéos professionnelles aujourd\'hui!',
+                'final.button': '🚀 Commander Maintenant',
+                'footer.text': '© 2024 CapCut Pro - Market Algeriaa. Tous droits réservés.'
+            }
+        };
+
+        // Language switcher
+        let currentLang = localStorage.getItem('preferredLanguage') || 'ar';
+        
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('preferredLanguage', lang);
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    // Check if element has HTML content
+                    if (translations[lang][key].includes('<strong>')) {
+                        element.innerHTML = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                    btn.style.background = '#ff6b6b';
+                    btn.style.color = 'white';
+                } else {
+                    btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                    btn.style.color = 'white';
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    switchLanguage(lang);
+                });
+            });
+            
+            // Initialize with saved language
+            switchLanguage(currentLang);
+        });
+    </script>
 </body>
 </html>

@@ -8,20 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Cairo', sans-serif;
-            background: linear-gradient(-45deg, #000814, #001d3d, #003566, #001233);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(31, 182, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(13, 138, 188, 0.05) 0px, transparent 50%);
             color: white;
             min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.6;
         }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        
         #particles-js {
             position: fixed;
             width: 100%;
@@ -30,28 +34,513 @@
             left: 0;
             z-index: 0;
             pointer-events: none;
+            opacity: 0.3;
         }
-        .perplexity-glow {
-            box-shadow: 0 0 10px #1FB6FF, 0 0 20px #1FB6FF;
+        
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
-        .text-glow {
-            text-shadow: 0 0 5px #1FB6FF;
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(31, 182, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(31, 182, 255, 0.2);
         }
-        .cta-pulse {
-            animation: cta-pulse-animation 2s infinite;
+        
+        /* Hero Section */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 80px;
         }
-        @keyframes cta-pulse-animation {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 10px #1FB6FF, 0 0 20px #1FB6FF;
+        
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .product-logo-container {
+            margin-bottom: 32px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #1FB6FF, #0D8ABC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .price-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(31, 182, 255, 0.2), rgba(13, 138, 188, 0.2));
+            border: 2px solid rgba(31, 182, 255, 0.3);
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: #1FB6FF;
+            margin: 32px 0;
+            box-shadow: 0 8px 24px rgba(31, 182, 255, 0.2);
+        }
+        
+        /* Payment Methods Cards */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 48px auto;
+        }
+        
+        .payment-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(31, 182, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .payment-card:hover::before {
+            left: 100%;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(31, 182, 255, 0.5);
+            box-shadow: 0 12px 40px rgba(31, 182, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .payment-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .payment-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #1FB6FF, #0D8ABC);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 18px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(31, 182, 255, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(31, 182, 255, 0.5);
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 48px;
+            background: linear-gradient(135deg, #1FB6FF, #0D8ABC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(31, 182, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(31, 182, 255, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1FB6FF;
+            margin-bottom: 12px;
+        }
+        
+        .feature-text {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(31, 182, 255, 0.2);
+            border-color: rgba(31, 182, 255, 0.5);
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .lang-btn.active,
+        .lang-btn:hover {
+            background: rgba(31, 182, 255, 0.2);
+            border-color: rgba(31, 182, 255, 0.5);
+        }
+        
+        /* Responsive Mobile Styles - Compact Design */
+        @media (max-width: 768px) {
+            .hero-container {
+                padding: 70px 15px 30px !important;
+                min-height: auto !important;
             }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 20px #1FB6FF, 0 0 40px #1FB6FF, 0 0 60px #1FB6FF;
+            
+            .product-logo-container {
+                margin-bottom: 16px !important;
             }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 10px #1FB6FF, 0 0 20px #1FB6FF;
+            
+            .product-logo-container img {
+                max-width: 80px !important;
+                height: auto !important;
+            }
+            
+            .hero-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.3 !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.875rem !important;
+                margin-bottom: 8px !important;
+                line-height: 1.4 !important;
+            }
+            
+            .price-badge {
+                font-size: 1rem !important;
+                padding: 8px 16px !important;
+                margin: 12px 0 !important;
+            }
+            
+            .payment-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+                margin: 20px auto !important;
+                max-width: 100% !important;
+            }
+            
+            .payment-card {
+                padding: 12px 8px !important;
+            }
+            
+            .payment-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 6px !important;
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .payment-label {
+                font-size: 0.75rem !important;
+            }
+            
+            .cta-button {
+                font-size: 0.9rem !important;
+                padding: 12px 24px !important;
+                width: 100%;
+                max-width: 100% !important;
+                margin-top: 16px !important;
+            }
+            
+            .section {
+                padding: 12px 15px !important;
+            }
+            
+            .section-title {
+                font-size: 1.1rem !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 8px !important;
+            }
+            
+            .feature-card {
+                padding: 12px 10px !important;
+            }
+            
+            .feature-icon {
+                font-size: 1.8rem !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .feature-title {
+                font-size: 1rem !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .feature-text {
+                font-size: 0.75rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .glass-card {
+                padding: 12px 10px !important;
+                margin-bottom: 12px !important;
+            }
+            
+            .nav-container {
+                padding: 8px 12px !important;
+            }
+            
+            .back-btn {
+                padding: 6px 12px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            .lang-btn {
+                padding: 4px 8px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            /* Reduce spacing in hero content */
+            .hero-content > * {
+                margin-bottom: 8px !important;
+            }
+            
+            /* Show 2 columns on mobile for better content visibility */
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            
+            /* Compact feature cards to show more content */
+            .feature-card {
+                padding: 10px 8px !important;
+                min-height: auto !important;
+            }
+            
+            .feature-icon {
+                font-size: 1.5rem !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .feature-title {
+                font-size: 0.85rem !important;
+                margin-bottom: 4px !important;
+                line-height: 1.3 !important;
+            }
+            
+            .feature-text {
+                font-size: 0.7rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .feature-card ul li {
+                font-size: 0.65rem !important;
+                margin-bottom: 3px !important;
+                line-height: 1.3 !important;
+            }
+            
+            /* Compact sections */
+            .section {
+                padding: 16px 12px !important;
+            }
+            
+            .section-title {
+                font-size: 1.15rem !important;
+                margin-bottom: 12px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem !important;
+            }
+            
+            .price-badge {
+                font-size: 1.1rem !important;
+                padding: 10px 20px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem !important;
+            }
+            
+            .payment-card {
+                padding: 16px 12px;
+            }
+        }
+        
+        /* Payment Modals Mobile Responsive */
+        @media (max-width: 768px) {
+            .modal div[style*="max-width"] {
+                max-width: 95% !important;
+                width: 95% !important;
+                padding: 20px 15px !important;
+                margin: 10px !important;
+            }
+            
+            .modal h2 {
+                font-size: 1.25rem !important;
+            }
+            
+            .modal code {
+                font-size: 0.85rem !important;
+                word-break: break-all;
+            }
+            
+            .modal button {
+                font-size: 0.9rem !important;
+                padding: 10px 20px !important;
+            }
+            
+            #qr-code {
+                max-width: 120px !important;
             }
         }
     </style>
@@ -59,96 +548,91 @@
 <body>
     <div id="particles-js"></div>
 
-    <!-- Back to Home Button -->
-    <div class="absolute top-4 left-4 z-[100]">
-        <a href="index.html" class="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-full hover:bg-[#1FB6FF] hover:border-[#1FB6FF] transition-all">
-            <span data-i18n="nav.home">← الرئيسية</span>
-        </a>
-    </div>
-
-    <!-- Language Switcher -->
-    <div class="absolute top-4 right-4 z-[100] flex gap-2">
-        <button class="lang-btn active" data-lang="ar" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">العربية</button>
-        <button class="lang-btn" data-lang="en" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">EN</button>
-        <button class="lang-btn" data-lang="fr" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.3s;">FR</button>
-    </div>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <a href="index.html" class="back-btn" data-i18n="nav.home">← الرئيسية</a>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="ar">العربية</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative z-10">
-        <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/perplexity-ai-icon.png" 
-             alt="Perplexity AI Pro" 
-             class="w-40 h-40 md:w-56 md:h-56 object-contain mb-8 animate-pulse"
-             style="filter: drop-shadow(0 0 20px #1FB6FF);">
-        
-        <h1 class="text-3xl sm:text-4xl md:text-6xl font-black mb-4 leading-tight text-[#1FB6FF] text-glow px-2" data-i18n="hero.title">
-            Perplexity AI Pro
-        </h1>
-        
-        <p class="text-xl md:text-2xl text-gray-300 mb-4 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.subtitle">
-            محرك بحث ذكي مدعوم بالذكاء الاصطناعي
-        </p>
-        
-        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.price">
-            1200 د.ج للسنة الكاملة
-        </p>
+    <section class="hero-container" style="position: relative;">
+        <div class="hero-content" style="position: relative; z-index: 10;">
+            <div class="product-logo-container">
+                <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/perplexity-ai-icon.png" 
+                     alt="Perplexity AI Pro" 
+                     class="w-48 h-48 md:w-64 md:h-64 object-contain mx-auto"
+                     style="filter: drop-shadow(0 0 40px rgba(31, 182, 255, 0.6));">
+            </div>
+            
+            <h1 class="hero-title" data-i18n="hero.title">
+                Perplexity AI Pro
+            </h1>
+            
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+                محرك بحث ذكي مدعوم بالذكاء الاصطناعي
+            </p>
+            
+            <div class="price-badge" data-i18n="hero.price">
+                1200 د.ج للسنة الكاملة
+            </div>
 
-        <!-- Payment Methods Section -->
-        <div class="w-full max-w-4xl mx-auto mb-12 px-4">
-            <h2 class="text-xl sm:text-2xl font-bold text-[#1FB6FF] mb-6" data-i18n="payment.title">طرق الدفع المتاحة</h2>
-
-            <div class="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-12">
-                <!-- RedotPay Button -->
-                <a href="javascript:void(0)" class="redotpay-btn flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer" data-product="Perplexity AI Pro" data-price="1200" data-price-usd="6">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:shadow-[0_0_25px_rgba(220,38,38,0.8)] group-hover:scale-110 transition-all duration-300">
-                        <span class="text-white font-bold text-sm sm:text-lg">Redot</span>
+            <!-- Payment Methods -->
+            <div class="payment-grid">
+                <div class="payment-card" onclick="openRedotPayModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                        <span style="color: white; font-weight: 700;">Redot</span>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">RedotPay</span>
-                </a>
+                    <div class="payment-label">RedotPay</div>
+                </div>
 
-                <!-- USDT Button -->
-                <a href="javascript:void(0)" class="crypto-pay-btn flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer" data-product="Perplexity AI Pro" data-price="1200" data-price-usd="6">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#1FB6FF] flex items-center justify-center shadow-[0_0_15px_rgba(31,182,255,0.5)] group-hover:shadow-[0_0_25px_rgba(31,182,255,0.8)] group-hover:scale-110 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <div class="payment-card" onclick="openCryptoModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #1FB6FF, #0D8ABC);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
                             <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
                             <path d="M12 12v8"></path>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">USDT</span>
-                </a>
+                    <div class="payment-label">USDT</div>
+                </div>
 
-                <!-- BaridiMob Button -->
-                <a href="javascript:void(0)" class="baridimob-btn flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer" data-product="Perplexity AI Pro" data-price="1200" data-price-usd="6">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.5)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                <div class="payment-card" onclick="openBaridiMobModal()">
+                    <div class="payment-icon" style="background: linear-gradient(135deg, #ffffff, #e5e5e5);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
                             <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                             <line x1="2" y1="10" x2="22" y2="10"></line>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">BaridiMob</span>
-                </a>
+                    <div class="payment-label">BaridiMob</div>
+                </div>
             </div>
-        </div>
 
-        <a href="https://wa.me/213782125821" 
-           class="bg-[#1FB6FF] text-white font-bold text-base sm:text-xl py-3 px-6 sm:px-8 rounded-full hover:bg-[#0D8ABC] transition-all transform hover:scale-105 perplexity-glow shadow-lg cta-pulse" data-i18n="cta.button">
-            اطلب الآن عبر WhatsApp
-        </a>
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Perplexity AI Pro" 
+               class="cta-button" data-i18n="cta.button">
+                اطلب الآن عبر WhatsApp
+            </a>
+        </div>
     </section>
 
     <!-- Description Section -->
-    <section class="py-12 px-4 max-w-6xl mx-auto relative z-10">
-        <!-- Main Title -->
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-5xl font-black text-[#1FB6FF] mb-4 text-glow">
-                🚀 Perplexity Pro (سنة كاملة) – المستقبل بين يديك الآن!
-            </h2>
-            <div class="flex flex-wrap justify-center gap-4 text-lg md:text-xl text-gray-300">
-                <span class="bg-[#1FB6FF]/20 px-4 py-2 rounded-full">✅ تفعيل فوري</span>
-                <span class="bg-[#1FB6FF]/20 px-4 py-2 rounded-full">🌐 بدون VPN</span>
-                <span class="bg-[#1FB6FF]/20 px-4 py-2 rounded-full">💳 بدون بطاقة بنكية</span>
+    <section class="section mobile-section">
+        <div class="max-w-6xl mx-auto">
+            <div class="glass-card p-8 md:p-12 text-center">
+                <h2 class="section-title mb-6">
+                    🚀 Perplexity Pro (سنة كاملة) – المستقبل بين يديك الآن!
+                </h2>
+                <div class="flex flex-wrap justify-center gap-4 mb-6">
+                    <span class="bg-[#1FB6FF]/20 px-4 py-2 rounded-full text-lg">✅ تفعيل فوري</span>
+                    <span class="bg-[#1FB6FF]/20 px-4 py-2 rounded-full text-lg">🌐 بدون VPN</span>
+                    <span class="bg-[#1FB6FF]/20 px-4 py-2 rounded-full text-lg">💳 بدون بطاقة بنكية</span>
+                </div>
             </div>
         </div>
+    </section>
 
         <!-- Why This Subscription -->
         <div class="bg-gradient-to-r from-[#1FB6FF]/10 to-transparent border-r-4 border-[#1FB6FF] p-6 rounded-lg mb-10">
@@ -183,153 +667,148 @@
         </div>
 
         <!-- Premium Features Section -->
-        <div class="bg-gradient-to-br from-[#1FB6FF]/10 to-transparent rounded-2xl border border-[#1FB6FF]/30 p-8 mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#1FB6FF] mb-4 text-glow">
+        <section class="section mobile-section">
+            <h2 class="section-title">
                 🔥 القوة التي ستمتلكها (Premium Perks)
             </h2>
-            <p class="text-center text-gray-300 mb-10 text-base">
+            <p class="hero-subtitle text-center mb-10">
                 بمجرد التفعيل، ستفتح باباً على أحدث تقنيات الذكاء الاصطناعي في العالم:
             </p>
 
-            <!-- Feature 1: Perplexity Labs -->
-            <div class="bg-[#111]/70 p-6 rounded-xl mb-6 border border-[#1FB6FF]/20">
-                <h3 class="text-2xl font-bold text-[#1FB6FF] mb-4">🆕 حصرياً: Perplexity Labs</h3>
-                <p class="text-gray-300 mb-4">حوّل أفكارك إلى واقع! يمكنك إنشاء:</p>
-                <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                    <li class="flex items-center gap-2 text-gray-300"><span class="text-[#1FB6FF]">📊</span> تقارير كاملة</li>
-                    <li class="flex items-center gap-2 text-gray-300"><span class="text-[#1FB6FF]">📈</span> جداول بيانات (Spreadsheets)</li>
-                    <li class="flex items-center gap-2 text-gray-300"><span class="text-[#1FB6FF]">🎛️</span> لوحات تحكم (Dashboards)</li>
-                    <li class="flex items-center gap-2 text-gray-300"><span class="text-[#1FB6FF]">🌐</span> تطبيقات ويب مصغرة (Mini Web Apps)</li>
-                </ul>
-                <p class="text-gray-400 text-sm italic">
-                    <strong>كيف؟</strong> سير عمل ذكي (AI Workflows) يستمر لعدة دقائق ليسلمك نتائج جاهزة ومتقنة.
-                </p>
-            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🆕</div>
+                    <h3 class="feature-title">حصرياً: Perplexity Labs</h3>
+                    <p class="feature-text mb-4">حوّل أفكارك إلى واقع! يمكنك إنشاء:</p>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 feature-text">
+                        <li class="flex items-center gap-2"><span class="text-[#1FB6FF]">📊</span> تقارير كاملة</li>
+                        <li class="flex items-center gap-2"><span class="text-[#1FB6FF]">📈</span> جداول بيانات (Spreadsheets)</li>
+                        <li class="flex items-center gap-2"><span class="text-[#1FB6FF]">🎛️</span> لوحات تحكم (Dashboards)</li>
+                        <li class="flex items-center gap-2"><span class="text-[#1FB6FF]">🌐</span> تطبيقات ويب مصغرة (Mini Web Apps)</li>
+                    </ul>
+                    <p class="feature-text text-sm italic">
+                        <strong>كيف؟</strong> سير عمل ذكي (AI Workflows) يستمر لعدة دقائق ليسلمك نتائج جاهزة ومتقنة.
+                    </p>
+                </div>
 
-            <!-- Feature 2: AI Models -->
-            <div class="bg-[#111]/70 p-6 rounded-xl mb-6 border border-[#1FB6FF]/20">
-                <h3 class="text-2xl font-bold text-[#1FB6FF] mb-4">🧠 الوصول لأقوى الموديلات (Advanced AI Models)</h3>
-                <p class="text-gray-300 mb-4">لا تقيد نفسك بموديل واحد. بدّل بحرية بين عمالقة الذكاء الاصطناعي:</p>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
-                        <div class="text-2xl mb-1">🚀</div>
-                        <p class="text-white font-bold text-sm">GPT-5</p>
-                        <p class="text-gray-400 text-xs">The Next Gen</p>
-                    </div>
-                    <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
-                        <div class="text-2xl mb-1">💎</div>
-                        <p class="text-white font-bold text-sm">Gemini 2.5 Pro</p>
-                    </div>
-                    <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
-                        <div class="text-2xl mb-1">📝</div>
-                        <p class="text-white font-bold text-sm">Claude 4.0</p>
-                        <p class="text-gray-400 text-xs">Sonnet</p>
-                    </div>
-                    <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
-                        <div class="text-2xl mb-1">🤖</div>
-                        <p class="text-white font-bold text-sm">Grok 4</p>
-                        <p class="text-gray-400 text-xs">& More!</p>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="feature-title">الوصول لأقوى الموديلات</h3>
+                    <p class="feature-text mb-4">لا تقيد نفسك بموديل واحد. بدّل بحرية بين عمالقة الذكاء الاصطناعي:</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
+                            <div class="text-2xl mb-1">🚀</div>
+                            <p class="text-white font-bold text-sm">GPT-5</p>
+                            <p class="text-gray-400 text-xs">The Next Gen</p>
+                        </div>
+                        <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
+                            <div class="text-2xl mb-1">💎</div>
+                            <p class="text-white font-bold text-sm">Gemini 2.5 Pro</p>
+                        </div>
+                        <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
+                            <div class="text-2xl mb-1">📝</div>
+                            <p class="text-white font-bold text-sm">Claude 4.0</p>
+                            <p class="text-gray-400 text-xs">Sonnet</p>
+                        </div>
+                        <div class="bg-[#1FB6FF]/10 p-3 rounded-lg text-center">
+                            <div class="text-2xl mb-1">🤖</div>
+                            <p class="text-white font-bold text-sm">Grok 4</p>
+                            <p class="text-gray-400 text-xs">& More!</p>
+                        </div>
                     </div>
                 </div>
-                <p class="text-gray-400 text-sm mt-4 italic">*(بما في ذلك الإصدارات الأحدث فور توفرها)*</p>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📂</div>
+                    <h3 class="feature-title">تحليل الملفات الاحترافي</h3>
+                    <p class="feature-text">
+                        ارفع ملفات <strong style="color: #1FB6FF;">PDF</strong>، <strong style="color: #1FB6FF;">صور</strong>، أو ملفات <strong style="color: #1FB6FF;">CSV</strong> معقدة، ودع الذكاء الاصطناعي يحللها ويستخرج منها البيانات بدقة.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">➕</div>
+                    <h3 class="feature-title">ميزات إضافية للمحترفين</h3>
+                    <ul class="space-y-3 feature-text">
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#1FB6FF] mt-1">✓</span>
+                            <div>
+                                <strong>300+ بحث احترافي يومياً</strong>
+                                <p class="text-sm text-gray-400">بحث عميق ومتشعب</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#1FB6FF] mt-1">✓</span>
+                            <div>
+                                <strong>API Credits</strong>
+                                <p class="text-sm text-gray-400">رصيد شهري بقيمة 5$ للمطورين</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#1FB6FF] mt-1">✓</span>
+                            <strong>بحث أساسي غير محدود</strong>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-[#1FB6FF] mt-1">✓</span>
+                            <strong>دعم فني ذو أولوية</strong>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
-            <!-- Feature 3: File Analysis -->
-            <div class="bg-[#111]/70 p-6 rounded-xl mb-6 border border-[#1FB6FF]/20">
-                <h3 class="text-2xl font-bold text-[#1FB6FF] mb-4">📂 تحليل الملفات الاحترافي</h3>
-                <p class="text-gray-300">
-                    ارفع ملفات <strong>PDF</strong>، <strong>صور</strong>، أو ملفات <strong>CSV</strong> معقدة، ودع الذكاء الاصطناعي يحللها ويستخرج منها البيانات بدقة.
-                </p>
-            </div>
-
-            <!-- Feature 4: Additional Features -->
-            <div class="bg-[#111]/70 p-6 rounded-xl border border-[#1FB6FF]/20">
-                <h3 class="text-2xl font-bold text-[#1FB6FF] mb-4">➕ ميزات إضافية للمحترفين:</h3>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3">
-                        <span class="text-[#1FB6FF] text-xl">✅</span>
-                        <div>
-                            <strong class="text-white">300+ بحث احترافي يومياً (Pro Searches)</strong>
-                            <p class="text-gray-400 text-sm">بحث عميق ومتشعب</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <span class="text-[#1FB6FF] text-xl">✅</span>
-                        <div>
-                            <strong class="text-white">API Credits</strong>
-                            <p class="text-gray-400 text-sm">رصيد شهري بقيمة 5$ للمطورين</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <span class="text-[#1FB6FF] text-xl">✅</span>
-                        <strong class="text-white">بحث أساسي غير محدود</strong>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <span class="text-[#1FB6FF] text-xl">✅</span>
-                        <strong class="text-white">دعم فني ذو أولوية</strong>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="mt-8 text-center">
-                <p class="text-center text-gray-300 mb-2 text-lg">
+            <div class="glass-card p-8 text-center mt-8">
+                <p class="feature-text mb-2 text-lg">
                     <span class="line-through text-gray-500">السعر الرسمي: $20/شهر ($240/سنة)</span>
                 </p>
                 <p class="text-[#1FB6FF] font-bold text-3xl mb-2">💰 سعرنا: 1200 د.ج للسنة الكاملة!</p>
-                <p class="text-gray-400 text-sm">وفّر أكثر من 20,000 دج سنوياً مقارنة بالسعر الرسمي</p>
+                <p class="feature-text">وفّر أكثر من 20,000 دج سنوياً مقارنة بالسعر الرسمي</p>
             </div>
-        </div>
+        </section>
 
         <!-- How to Get Section -->
-        <div class="bg-[#111]/80 rounded-2xl border border-[#1FB6FF]/30 p-8">
-            <h3 class="text-2xl md:text-3xl font-bold text-[#1FB6FF] mb-4 text-center">
+        <section class="section mobile-section">
+            <h2 class="section-title">
                 ⚙️ كيف يتم التفعيل؟ (How It Works)
-            </h3>
-            <p class="text-center text-gray-300 mb-8">سهولة مطلقة في 3 خطوات:</p>
+            </h2>
+            <p class="hero-subtitle text-center mb-8">سهولة مطلقة في 3 خطوات:</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center bg-[#1FB6FF]/5 p-6 rounded-xl border border-[#1FB6FF]/20">
-                    <div class="w-20 h-20 bg-[#1FB6FF] rounded-full flex items-center justify-center text-3xl font-bold text-black mx-auto mb-4 shadow-lg">
-                        1️⃣
-                    </div>
-                    <h4 class="text-[#1FB6FF] font-bold mb-3 text-lg">اطلب الخدمة</h4>
-                    <p class="text-gray-300 text-sm">
+            <div class="feature-grid">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">1️⃣</div>
+                    <h4 class="feature-title">اطلب الخدمة</h4>
+                    <p class="feature-text">
                         اطلب الخدمة وسيصلك رابط التفعيل الذاتي فوراً
                     </p>
                 </div>
                 
-                <div class="text-center bg-[#1FB6FF]/5 p-6 rounded-xl border border-[#1FB6FF]/20">
-                    <div class="w-20 h-20 bg-[#1FB6FF] rounded-full flex items-center justify-center text-3xl font-bold text-black mx-auto mb-4 shadow-lg">
-                        2️⃣
-                    </div>
-                    <h4 class="text-[#1FB6FF] font-bold mb-3 text-lg">اضغط على الرابط</h4>
-                    <p class="text-gray-300 text-sm">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">2️⃣</div>
+                    <h4 class="feature-title">اضغط على الرابط</h4>
+                    <p class="feature-text">
                         اضغط على الرابط وقم بتطبيقه على حسابك في Perplexity
                     </p>
                 </div>
                 
-                <div class="text-center bg-[#1FB6FF]/5 p-6 rounded-xl border border-[#1FB6FF]/20">
-                    <div class="w-20 h-20 bg-[#1FB6FF] rounded-full flex items-center justify-center text-3xl font-bold text-black mx-auto mb-4 shadow-lg">
-                        3️⃣
-                    </div>
-                    <h4 class="text-[#1FB6FF] font-bold mb-3 text-lg">مبروك! 🎉</h4>
-                    <p class="text-gray-300 text-sm">
-                        استمتع بـ <strong>12 شهراً</strong> من الوصول الكامل (Pro Access) بدون انقطاع
+                <div class="feature-card text-center">
+                    <div class="feature-icon">3️⃣</div>
+                    <h4 class="feature-title">مبروك! 🎉</h4>
+                    <p class="feature-text">
+                        استمتع بـ <strong style="color: #1FB6FF;">12 شهراً</strong> من الوصول الكامل (Pro Access) بدون انقطاع
                     </p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
     <!-- Final CTA Section -->
-    <section class="py-12 px-4 max-w-4xl mx-auto text-center relative z-10">
-        <div class="bg-gradient-to-r from-[#1FB6FF]/20 to-transparent border-2 border-[#1FB6FF] rounded-2xl p-8">
-            <h2 class="text-3xl md:text-4xl font-bold text-[#1FB6FF] mb-4" data-i18n="final.title">
-                🚀 ابدأ البحث الذكي اليوم
-            </h2>
-            <p class="text-xl text-gray-300 mb-6" data-i18n="final.subtitle">
-                احصل على Perplexity AI Pro بأفضل سعر في الجزائر!
-            </p>
+    <section class="section mobile-section">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-card p-12 text-center">
+                <h2 class="section-title mb-6" data-i18n="final.title">
+                    🚀 ابدأ البحث الذكي اليوم
+                </h2>
+                <p class="hero-subtitle mb-8" data-i18n="final.subtitle">
+                    احصل على Perplexity AI Pro بأفضل سعر في الجزائر!
+                </p>
             <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Perplexity AI Pro" 
                class="bg-[#1FB6FF] text-white font-bold text-xl py-4 px-12 rounded-full hover:bg-[#0D8ABC] transition-all transform hover:scale-105 perplexity-glow shadow-lg inline-block cta-pulse" data-i18n="final.button">
                 🎯 اشترك الآن

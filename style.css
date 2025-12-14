@@ -1082,18 +1082,18 @@ img {
         display: none;
     }
     
-    /* بطاقة المنتج - تصميم خفيف للأداء */
+    /* بطاقة المنتج - تصميم مدمج وجميل للموبايل */
     .product-card {
-        flex: 0 0 280px;
-        min-width: 280px;
-        max-width: 280px;
+        flex: 0 0 260px;
+        min-width: 260px;
+        max-width: 260px;
         scroll-snap-align: center;
         padding: 0;
-        border-radius: 20px;
+        border-radius: 16px;
         background: rgba(25, 28, 50, 0.98);
         border: 1px solid rgba(255, 215, 100, 0.12);
         /* ظل مبسط للأداء */
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         overflow: hidden;
         gap: 0;
         /* تحسينات الأداء - بدون transition أثناء التمرير */
@@ -1130,10 +1130,10 @@ img {
         transition: transform 0.1s ease;
     }
 
-    /* صورة المنتج - محسّنة للأداء */
+    /* صورة المنتج - مصغرة للموبايل */
     .product-image {
-        height: 150px;
-        min-height: 150px;
+        height: 130px;
+        min-height: 130px;
         border-radius: 0;
         border: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -1148,11 +1148,11 @@ img {
         display: none;
     }
 
-    /* محتوى البطاقة */
+    /* محتوى البطاقة - مصغر */
     .product-card h3 {
-        font-size: 1.15rem;
+        font-size: 1rem;
         margin: 0;
-        padding: 16px 16px 0;
+        padding: 12px 12px 0;
         line-height: 1.3;
         font-weight: 700;
         color: #fff;
@@ -1162,10 +1162,10 @@ img {
     }
 
     .product-card .description {
-        font-size: 0.85rem;
-        line-height: 1.5;
+        font-size: 0.78rem;
+        line-height: 1.4;
         color: rgba(255, 255, 255, 0.65);
-        padding: 8px 16px 0;
+        padding: 6px 12px 0;
         margin: 0;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -1174,19 +1174,19 @@ img {
         text-align: center;
     }
     
-    /* تقييم المنتج */
+    /* تقييم المنتج - مصغر */
     .product-card [id*="-rating-container"] {
-        padding: 0 16px;
-        margin: 8px 0 !important;
+        padding: 0 12px;
+        margin: 6px 0 !important;
     }
 
-    /* السعر - مبسط للأداء */
+    /* السعر - مصغر وأنيق */
     .price-tag {
-        padding: 10px 16px;
-        font-size: 1.1rem;
+        padding: 8px 12px;
+        font-size: 0.95rem;
         font-weight: 800;
-        border-radius: 10px;
-        margin: 12px 16px;
+        border-radius: 8px;
+        margin: 8px 12px;
         background: rgba(255, 213, 111, 0.15);
         border: 1px solid rgba(255, 213, 111, 0.35);
         text-align: center;
@@ -1194,16 +1194,16 @@ img {
         color: var(--accent);
     }
 
-    /* المميزات */
+    /* المميزات - مدمجة */
     .product-features {
         display: block;
-        padding: 0 16px;
-        margin: 12px 0;
+        padding: 0 12px;
+        margin: 8px 0;
     }
     
     .product-features li {
-        font-size: 0.8rem;
-        padding: 6px 0;
+        font-size: 0.72rem;
+        padding: 4px 0;
         color: rgba(255, 255, 255, 0.7);
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
@@ -1215,30 +1215,35 @@ img {
     .product-features li::before {
         content: "✓";
         color: #4ade80;
-        margin-left: 8px;
-        font-size: 0.9rem;
+        margin-left: 6px;
+        font-size: 0.8rem;
         font-weight: bold;
     }
     
-    /* طرق الدفع - مبسط للأداء */
+    /* طرق الدفع - مصغرة وأنيقة للموبايل */
     .payment-methods-row {
         display: flex !important;
-        flex-wrap: wrap;
-        gap: 6px;
-        padding: 10px 16px;
+        flex-wrap: nowrap;
+        gap: 4px;
+        padding: 8px 12px;
         justify-content: center;
-        background: rgba(0, 0, 0, 0.15);
-        border-top: 1px solid rgba(255, 255, 255, 0.04);
+        background: rgba(0, 0, 0, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 0 0 16px 16px;
     }
     
     .payment-btn-compact {
         display: flex !important;
-        padding: 8px 10px !important;
-        font-size: 0.75rem !important;
+        flex-direction: column;
+        align-items: center;
+        padding: 6px 8px !important;
+        font-size: 0.65rem !important;
         border-radius: 8px;
-        flex: 1 1 calc(33.33% - 4px);
-        min-width: 70px;
+        flex: 1;
+        min-width: 55px;
+        max-width: 75px;
         justify-content: center;
+        gap: 3px;
         /* تحسينات الأداء */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
@@ -1249,31 +1254,33 @@ img {
     }
     
     .payment-btn-compact svg {
-        width: 14px !important;
-        height: 14px !important;
+        width: 16px !important;
+        height: 16px !important;
     }
     
     .payment-btn-compact span {
-        font-size: 0.7rem !important;
+        font-size: 0.6rem !important;
+        font-weight: 600;
+        letter-spacing: -0.3px;
     }
 
-    /* زر اكتشف المزيد */
+    /* زر اكتشف المزيد - مصغر */
     .discover-btn {
         display: block !important;
-        margin: 0 16px 10px !important;
-        padding: 10px !important;
-        font-size: 0.9rem !important;
-        border-radius: 10px !important;
+        margin: 0 12px 8px !important;
+        padding: 8px !important;
+        font-size: 0.8rem !important;
+        border-radius: 8px !important;
     }
 
-    /* زر الطلب - محسّن للأداء */
+    /* زر الطلب - مصغر وأنيق */
     .order-btn {
-        margin: 0 16px 16px;
-        padding: 14px 24px;
-        font-size: 1rem;
+        margin: 0 12px 12px;
+        padding: 10px 20px;
+        font-size: 0.9rem;
         font-weight: 700;
-        border-radius: 12px;
-        width: calc(100% - 32px);
+        border-radius: 10px;
+        width: calc(100% - 24px);
         border: 2px solid rgba(138, 43, 226, 0.5);
         background: rgba(138, 43, 226, 0.2);
         cursor: pointer !important;
@@ -1297,38 +1304,47 @@ img {
         transform: scale(0.98);
     }
     
-    /* إخفاء أزرار نوع Adobe على الموبايل */
+    /* أزرار نوع Adobe - مصغرة */
     .adobe-account-type {
-        padding: 0 16px;
-        margin: 10px 0 !important;
+        padding: 0 12px;
+        margin: 8px 0 !important;
     }
     
     .adobe-account-type > div {
-        gap: 6px !important;
+        gap: 4px !important;
+    }
+    
+    .adobe-account-type > p {
+        font-size: 0.75rem !important;
+        margin-bottom: 6px !important;
     }
     
     .adobe-type-btn {
-        padding: 8px !important;
-        font-size: 0.75rem !important;
-        border-radius: 8px !important;
+        padding: 6px 4px !important;
+        font-size: 0.68rem !important;
+        border-radius: 6px !important;
     }
     
     .adobe-prices {
-        padding: 0 16px;
+        padding: 0 12px;
     }
     
     .price-options {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
         text-align: center;
+    }
+    
+    .price-options > span {
+        font-size: 0.75rem !important;
     }
     
     .price-options .price-tag {
         display: inline;
-        padding: 4px 10px;
-        font-size: 0.95rem;
-        margin: 0 4px;
+        padding: 3px 8px;
+        font-size: 0.85rem;
+        margin: 0 3px;
     }
     
     /* مؤشر التمرير */
@@ -3044,29 +3060,7 @@ img {
 }
 
 /* ═══════════ تحسين أزرار الدفع - Payment Buttons ═══════════ */
-@media (max-width: 768px) {
-    .payment-methods-row {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .payment-btn-compact {
-        min-height: 48px !important;
-        min-width: 100px !important;
-        padding: 12px 16px !important;
-        font-size: 0.95rem !important;
-        flex: 1 1 calc(50% - 4px);
-    }
-
-    .payment-btn-compact svg {
-        width: 20px !important;
-        height: 20px !important;
-    }
-
-    .payment-btn-compact span {
-        font-size: 0.9rem !important;
-    }
-}
+/* تم نقل الأنماط إلى قسم بطاقات المنتجات للموبايل */
 
 /* ═══════════ تحسين Touch Targets ═══════════ */
 @media (max-width: 768px) {
@@ -3152,92 +3146,96 @@ img {
     
     /* ═══════ بطاقات المنتجات - شاشات صغيرة ═══════ */
     .product-grid {
-        gap: 14px !important;
-        padding: 10px 15px 20px !important;
+        gap: 12px !important;
+        padding: 8px 12px 16px !important;
     }
     
     .product-card {
-        flex: 0 0 260px !important;
-        min-width: 260px !important;
-        max-width: 260px !important;
+        flex: 0 0 240px !important;
+        min-width: 240px !important;
+        max-width: 240px !important;
     }
     
     .product-image {
-        height: 140px !important;
-        min-height: 140px !important;
+        height: 115px !important;
+        min-height: 115px !important;
     }
     
     .product-card h3 {
-        font-size: 1.05rem !important;
-        padding: 14px 14px 0 !important;
+        font-size: 0.92rem !important;
+        padding: 10px 10px 0 !important;
     }
     
     .product-card .description {
-        font-size: 0.8rem !important;
-        padding: 6px 14px 0 !important;
+        font-size: 0.72rem !important;
+        padding: 4px 10px 0 !important;
         -webkit-line-clamp: 2 !important;
     }
     
     .price-tag {
-        padding: 8px 16px !important;
-        font-size: 1rem !important;
-        margin: 10px 14px !important;
+        padding: 6px 10px !important;
+        font-size: 0.88rem !important;
+        margin: 6px 10px !important;
     }
     
     .product-features {
-        padding: 0 14px !important;
-        margin: 10px 0 !important;
+        padding: 0 10px !important;
+        margin: 6px 0 !important;
     }
     
     .product-features li {
-        font-size: 0.75rem !important;
-        padding: 5px 0 !important;
+        font-size: 0.68rem !important;
+        padding: 3px 0 !important;
     }
     
+    /* أزرار الدفع - مصغرة جداً وأنيقة */
     .payment-methods-row {
-        padding: 8px 14px !important;
-        gap: 5px !important;
+        padding: 6px 8px !important;
+        gap: 3px !important;
     }
     
     .payment-btn-compact {
-        padding: 6px 10px !important;
-        font-size: 0.7rem !important;
+        padding: 5px 6px !important;
+        font-size: 0.58rem !important;
+        min-width: 48px !important;
+        max-width: 65px !important;
+        gap: 2px !important;
     }
     
     .payment-btn-compact svg {
-        width: 12px !important;
-        height: 12px !important;
+        width: 14px !important;
+        height: 14px !important;
     }
     
     .payment-btn-compact span {
-        font-size: 0.65rem !important;
+        font-size: 0.55rem !important;
     }
     
     .discover-btn {
-        margin: 0 14px 8px !important;
-        padding: 8px !important;
-        font-size: 0.85rem !important;
+        margin: 0 10px 6px !important;
+        padding: 7px !important;
+        font-size: 0.75rem !important;
     }
     
     .order-btn {
-        margin: 0 14px 14px !important;
-        padding: 12px 20px !important;
-        font-size: 0.95rem !important;
-        border-radius: 12px !important;
-        width: calc(100% - 28px) !important;
+        margin: 0 10px 10px !important;
+        padding: 9px 16px !important;
+        font-size: 0.85rem !important;
+        border-radius: 8px !important;
+        width: calc(100% - 20px) !important;
     }
     
     .adobe-account-type {
-        padding: 0 14px !important;
+        padding: 0 10px !important;
     }
     
     .adobe-type-btn {
-        padding: 6px !important;
-        font-size: 0.7rem !important;
+        padding: 5px 3px !important;
+        font-size: 0.62rem !important;
     }
     
     .adobe-prices {
-        padding: 0 14px !important;
+        padding: 0 10px !important;
     }
 
     /* ═══════ Trust Badges ═══════ */
@@ -3284,26 +3282,66 @@ img {
 /* ═══════════ شاشات صغيرة جداً (أقل من 360px) ═══════════ */
 @media (max-width: 360px) {
     .product-card {
-        flex: 0 0 240px !important;
-        min-width: 240px !important;
-        max-width: 240px !important;
+        flex: 0 0 220px !important;
+        min-width: 220px !important;
+        max-width: 220px !important;
     }
     
     .product-image {
-        height: 120px !important;
-        min-height: 120px !important;
+        height: 100px !important;
+        min-height: 100px !important;
     }
     
     .product-card h3 {
-        font-size: 0.95rem !important;
+        font-size: 0.85rem !important;
+        padding: 8px 8px 0 !important;
+    }
+    
+    .product-card .description {
+        font-size: 0.68rem !important;
+        padding: 3px 8px 0 !important;
     }
     
     .price-tag {
-        font-size: 0.9rem !important;
+        font-size: 0.82rem !important;
+        padding: 5px 8px !important;
+        margin: 5px 8px !important;
+    }
+    
+    .product-features li {
+        font-size: 0.62rem !important;
+    }
+    
+    /* أزرار الدفع - مصغرة للشاشات الصغيرة جداً */
+    .payment-methods-row {
+        padding: 5px 6px !important;
+    }
+    
+    .payment-btn-compact {
+        padding: 4px 5px !important;
+        min-width: 42px !important;
+        max-width: 58px !important;
+    }
+    
+    .payment-btn-compact svg {
+        width: 12px !important;
+        height: 12px !important;
+    }
+    
+    .payment-btn-compact span {
+        font-size: 0.5rem !important;
+    }
+    
+    .discover-btn {
+        margin: 0 8px 5px !important;
+        padding: 6px !important;
+        font-size: 0.7rem !important;
     }
     
     .order-btn {
-        padding: 10px 16px !important;
-        font-size: 0.85rem !important;
+        padding: 8px 14px !important;
+        font-size: 0.8rem !important;
+        margin: 0 8px 8px !important;
+        width: calc(100% - 16px) !important;
     }
 }
