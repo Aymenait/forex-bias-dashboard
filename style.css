@@ -650,58 +650,47 @@ img {
 
 .order-btn {
     margin-top: auto;
-    background: rgba(15, 15, 35, 0.6);
-    color: var(--text-primary);
-    border: 2px solid rgba(138, 43, 226, 0.8);
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    color: #1b1d32;
+    border: none;
     padding: 14px;
     border-radius: 50px;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
     position: relative;
-    box-shadow:
-        0 0 20px rgba(138, 43, 226, 0.6),
-        0 0 40px rgba(138, 43, 226, 0.4),
-        inset 0 0 20px rgba(138, 43, 226, 0.1);
+    box-shadow: 0 4px 15px rgba(255, 181, 71, 0.3);
     transition: all 0.3s ease;
-}
-
-.order-btn::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: 50px;
-    padding: 2px;
-    background: linear-gradient(90deg,
-            rgba(138, 43, 226, 0.8),
-            rgba(147, 112, 219, 0.9),
-            rgba(138, 43, 226, 0.8));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    opacity: 0.8;
-    animation: neonPulse 2s ease-in-out infinite;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .order-btn:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow:
-        0 0 30px rgba(138, 43, 226, 0.8),
-        0 0 60px rgba(138, 43, 226, 0.6),
-        0 0 90px rgba(138, 43, 226, 0.4),
-        inset 0 0 30px rgba(138, 43, 226, 0.2);
+    box-shadow: 0 8px 25px rgba(255, 181, 71, 0.5);
+    background: linear-gradient(135deg, #ffd56f, #ffb347);
 }
 
-@keyframes neonPulse {
+.discover-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--accent);
+    text-align: center;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: 1px solid rgba(255, 213, 111, 0.3);
+    backdrop-filter: blur(5px);
+}
 
-    0%,
-    100% {
-        opacity: 0.8;
-    }
-
-    50% {
-        opacity: 1;
-    }
+.discover-btn:hover {
+    background: rgba(255, 213, 111, 0.1);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 181, 71, 0.15);
 }
 
 .process-grid {
@@ -1049,7 +1038,7 @@ img {
     
     /* قسم المنتجات */
     #products {
-        padding: 30px 0 50px;
+        padding: 30px 0 60px;
     }
     
     #products .section-header {
@@ -1057,15 +1046,15 @@ img {
     }
     
     #products .section-header h2 {
-        font-size: 1.6rem;
+        font-size: 1.7rem;
     }
     
     /* شبكة المنتجات - تمرير أفقي محسّن للأداء */
     .product-grid {
         display: flex !important;
         flex-wrap: nowrap !important;
-        gap: 16px;
-        padding: 10px 20px 20px;
+        gap: 20px;
+        padding: 10px 20px 30px;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
@@ -1084,12 +1073,12 @@ img {
     
     /* بطاقة المنتج - تصميم مدمج وجميل للموبايل */
     .product-card {
-        flex: 0 0 260px;
-        min-width: 260px;
-        max-width: 260px;
+        flex: 0 0 280px;
+        min-width: 280px;
+        max-width: 280px;
         scroll-snap-align: center;
         padding: 0;
-        border-radius: 16px;
+        border-radius: 20px;
         background: rgba(25, 28, 50, 0.98);
         border: 1px solid rgba(255, 215, 100, 0.12);
         /* ظل مبسط للأداء */
@@ -1268,27 +1257,31 @@ img {
     .discover-btn {
         display: block !important;
         margin: 0 12px 8px !important;
-        padding: 8px !important;
-        font-size: 0.8rem !important;
-        border-radius: 8px !important;
+        padding: 10px !important;
+        font-size: 0.85rem !important;
+        border-radius: 10px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
     }
 
     /* زر الطلب - مصغر وأنيق */
     .order-btn {
         margin: 0 12px 12px;
-        padding: 10px 20px;
-        font-size: 0.9rem;
-        font-weight: 700;
-        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        font-weight: 800;
+        border-radius: 12px;
         width: calc(100% - 24px);
-        border: 2px solid rgba(138, 43, 226, 0.5);
-        background: rgba(138, 43, 226, 0.2);
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        color: #1b1d32;
+        border: none;
         cursor: pointer !important;
         pointer-events: auto !important;
         z-index: 100;
         touch-action: manipulation;
-        -webkit-tap-highlight-color: rgba(138, 43, 226, 0.3);
+        -webkit-tap-highlight-color: transparent;
         user-select: none;
+        box-shadow: 0 4px 12px rgba(255, 181, 71, 0.3);
         /* تحسينات الأداء */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
@@ -1300,8 +1293,8 @@ img {
     }
     
     .order-btn:active {
-        background: rgba(138, 43, 226, 0.4);
         transform: scale(0.98);
+        background: linear-gradient(135deg, #e6c265, #e6a241);
     }
     
     /* أزرار نوع Adobe - مصغرة */
