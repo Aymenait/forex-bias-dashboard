@@ -544,6 +544,22 @@
                 max-width: 120px !important;
             }
         }
+        
+        /* Animation للون الذهبي في زر DISCOVER MORE */
+        @keyframes goldenShift {
+            0%, 100% {
+                background: linear-gradient(135deg, #ffd56f 0%, #ffb347 100%) !important;
+            }
+            25% {
+                background: linear-gradient(135deg, #ffb347 0%, #ff9500 100%) !important;
+            }
+            50% {
+                background: linear-gradient(135deg, #ff9500 0%, #ffb347 100%) !important;
+            }
+            75% {
+                background: linear-gradient(135deg, #ffb347 0%, #ffd56f 100%) !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -612,6 +628,13 @@
             <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Gamma.AI" 
                class="cta-button" data-i18n="cta.button">
                 اطلب الآن عبر WhatsApp
+            </a>
+            
+            <a href="index.html" 
+               class="discover-btn" 
+               style="display: block; width: 100%; max-width: 400px; margin: 20px auto 0; padding: 14px 24px; background: linear-gradient(135deg, #ffd56f 0%, #ffb347 100%); color: #1b1d32; text-align: center; border-radius: 12px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 4px 20px rgba(255, 181, 71, 0.3), 0 8px 30px rgba(255, 181, 71, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.1); text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s ease; animation: goldenShift 4s ease-in-out infinite;"
+               data-i18n="nav.backToProducts">
+                ← العودة للمنتجات
             </a>
         </div>
     </section>
