@@ -558,9 +558,9 @@ img {
 }
 
 .product-card {
-    background: rgba(19, 22, 41, 0.78);
+    background: #000000;
     border-radius: var(--radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 20px;
     box-shadow: var(--shadow);
     display: flex;
@@ -570,8 +570,8 @@ img {
     z-index: 1 !important;
     transition: all var(--transition-base);
     transform: translateY(0);
+    overflow: hidden;
 }
-
 
 .product-card:hover {
     transform: translateY(-8px) scale(1.02);
@@ -1239,11 +1239,11 @@ img {
     }
     
     /* تقليل الـ animations للأداء */
-    .product-card *,
     .product-grid * {
         animation: none !important;
         transition: none !important;
     }
+    
     
     /* السماح بـ transition فقط للعناصر المهمة */
     .order-btn,
@@ -1304,8 +1304,8 @@ img {
         scroll-snap-align: center;
         padding: 0;
         border-radius: 16px;
-        background: rgba(25, 28, 50, 0.98);
-        border: 1px solid rgba(255, 215, 100, 0.12);
+        background: #000000;
+        border: 2px solid rgba(255, 255, 255, 0.1);
         /* ظل مبسط للأداء */
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         overflow: hidden;
