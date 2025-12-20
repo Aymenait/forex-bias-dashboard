@@ -107,6 +107,12 @@
                 <button onclick="showTab('accounting')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="accounting">
                     💰 المحاسبة
                 </button>
+                <button onclick="showTab('debtors')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="debtors">
+                    💳 المديونين
+                </button>
+                <button onclick="showTab('giveaway')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="giveaway">
+                    🎁 المسابقات
+                </button>
                 <button onclick="showTab('suppliers')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="suppliers">
                     📦 الموردين
                 </button>
@@ -973,6 +979,171 @@
                 </div>
             </div>
             
+            <!-- ═══════════ Giveaway Tab ═══════════ -->
+            <div id="tab-giveaway" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-6">🎁 إدارة المسابقات (Giveaway)</h2>
+                
+                <!-- Giveaway Status Card -->
+                <div id="giveaway-status-card" class="rounded-xl p-6 mb-6" style="background: linear-gradient(135deg, rgba(16, 163, 127, 0.15), rgba(255, 213, 111, 0.15)); border: 2px solid var(--accent);">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold flex items-center gap-2">
+                            <span class="text-2xl">🎉</span>
+                            حالة المسابقة الحالية
+                        </h3>
+                        <span id="giveaway-active-badge" class="px-4 py-2 rounded-full text-sm font-bold" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">
+                            ❌ غير مفعلة
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div class="rounded-lg p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <div class="text-2xl font-bold" id="giveaway-prize-display" style="color: var(--accent);">-</div>
+                            <div class="text-gray-400 text-sm">الجائزة</div>
+                        </div>
+                        <div class="rounded-lg p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <div class="text-2xl font-bold" id="giveaway-participants-display" style="color: var(--accent);">0</div>
+                            <div class="text-gray-400 text-sm">المشاركين المؤهلين</div>
+                        </div>
+                        <div class="rounded-lg p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <div class="text-2xl font-bold" id="giveaway-time-remaining" style="color: var(--accent);">-</div>
+                            <div class="text-gray-400 text-sm">الوقت المتبقي</div>
+                        </div>
+                        <div class="rounded-lg p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <div class="text-2xl font-bold" id="giveaway-end-date-display" style="color: var(--accent);">-</div>
+                            <div class="text-gray-400 text-sm">تاريخ السحب</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="pickGiveawayWinner()" id="btn-pick-winner" class="px-6 py-3 rounded-lg font-bold transition-all hover:scale-105" style="background: linear-gradient(135deg, #10a37f, #0d8c6a); color: white;" disabled>
+                            🎲 اختر الفائز عشوائياً
+                        </button>
+                        <button onclick="toggleGiveaway()" id="btn-toggle-giveaway" class="px-6 py-3 rounded-lg font-bold transition-all" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+                            ⏸️ إيقاف المسابقة
+                        </button>
+                        <a href="reviews.html" target="_blank" class="px-6 py-3 rounded-lg font-bold transition-all" style="background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3);">
+                            👁️ عرض صفحة التقييمات
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Create/Edit Giveaway Form -->
+                <div class="rounded-xl p-6 mb-6" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <span class="text-2xl">✨</span>
+                        إنشاء / تعديل مسابقة
+                    </h3>
+                    
+                    <form id="giveaway-form" class="space-y-4">
+                        <!-- Prize Selection -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">🎁 الجائزة (المنتج)</label>
+                                <input type="text" id="giveaway-prize" placeholder="مثال: ChatGPT Business, iPhone 15, Netflix Premium..."
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                                <p class="text-gray-500 text-sm mt-1">اكتب اسم الجائزة كما تريد أن يظهر للمشاركين</p>
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">⏱️ مدة الجائزة</label>
+                                <input type="text" id="giveaway-duration" placeholder="مثال: شهر، 3 أشهر، سنة، مدى الحياة..."
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                                <p class="text-gray-500 text-sm mt-1">اكتب مدة الاشتراك أو الجائزة</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Dates -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">📅 تاريخ بداية قبول التعليقات</label>
+                                <input type="datetime-local" id="giveaway-start-date" 
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                                <p class="text-gray-500 text-sm mt-1">التعليقات قبل هذا التاريخ لن تدخل القرعة</p>
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">🏁 تاريخ السحب (نهاية العداد التنازلي)</label>
+                                <input type="datetime-local" id="giveaway-end-date" 
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                                <p class="text-gray-500 text-sm mt-1">موعد اختيار الفائز</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Duration Buttons -->
+                        <div>
+                            <label class="block text-gray-300 mb-2">⚡ اختيار سريع لمدة المسابقة</label>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" onclick="setGiveawayDuration(1)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                    يوم واحد
+                                </button>
+                                <button type="button" onclick="setGiveawayDuration(3)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                    3 أيام
+                                </button>
+                                <button type="button" onclick="setGiveawayDuration(7)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                    أسبوع
+                                </button>
+                                <button type="button" onclick="setGiveawayDuration(14)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                    أسبوعين
+                                </button>
+                                <button type="button" onclick="setGiveawayDuration(30)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                    شهر
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Giveaway Active Toggle -->
+                        <div class="flex items-center gap-4 p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="giveaway-active" class="sr-only peer">
+                                <div class="w-14 h-7 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500"></div>
+                            </label>
+                            <div>
+                                <span class="font-bold">تفعيل المسابقة</span>
+                                <p class="text-gray-400 text-sm">عند التفعيل، ستظهر المسابقة في صفحة التقييمات</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="flex gap-3">
+                            <button type="submit" class="px-8 py-3 rounded-lg font-bold transition-all hover:scale-105" style="background: var(--accent); color: #1b1d32;">
+                                💾 حفظ إعدادات المسابقة
+                            </button>
+                            <button type="button" onclick="resetGiveawayForm()" class="px-6 py-3 rounded-lg font-bold transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                🔄 إعادة تعيين
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Eligible Participants List -->
+                <div class="rounded-xl p-6 mb-6" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold flex items-center gap-2">
+                            <span class="text-2xl">👥</span>
+                            المشاركين المؤهلين للقرعة
+                        </h3>
+                        <button onclick="loadGiveawayParticipants()" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                            🔄 تحديث القائمة
+                        </button>
+                    </div>
+                    
+                    <div id="giveaway-participants-list" class="space-y-2 max-h-96 overflow-y-auto">
+                        <p class="text-gray-400 text-center py-4">جاري التحميل...</p>
+                    </div>
+                </div>
+                
+                <!-- Previous Winners -->
+                <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🏆</span>
+                        الفائزين السابقين
+                    </h3>
+                    
+                    <div id="previous-winners-list" class="space-y-3">
+                        <p class="text-gray-400 text-center py-4">لا يوجد فائزين سابقين</p>
+                    </div>
+                </div>
+            </div>
+            
             <!-- ═══════════ Settings Tab ═══════════ -->
             <div id="tab-settings" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-6">⚙️ الإعدادات</h2>
@@ -1032,6 +1203,84 @@
                             <p>📅 آخر تحديث: <span id="last-update"></span></p>
                         </div>
                     </div>
+                </div>
+            </div>
+            
+            <!-- ═══════════ Debtors Tab ═══════════ -->
+            <div id="tab-debtors" class="tab-content hidden">
+                <!-- Header with Title and Add Button -->
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+                    <h2 class="text-2xl font-bold">💳 إدارة المديونين</h2>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <!-- Search Input -->
+                        <input type="text" id="search-debtors" placeholder="🔍 بحث بالاسم أو الهاتف..."
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none w-48"
+                            oninput="filterDebtorsBySearch(this.value)">
+                        <!-- Status Filter -->
+                        <select id="filter-debtor-status" 
+                            class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none"
+                            onchange="filterDebtorsByStatus(this.value)">
+                            <option value="all">جميع الحالات</option>
+                            <option value="pending">مستحق</option>
+                            <option value="partial">مدفوع جزئياً</option>
+                            <option value="paid">مدفوع بالكامل</option>
+                        </select>
+                        <!-- Add Debtor Button -->
+                        <button onclick="openDebtorModal()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            ➕ إضافة مدين
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <!-- Total Debt Card -->
+                    <div class="stat-card rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05)); border: 1px solid rgba(239, 68, 68, 0.3);">
+                        <div class="text-3xl mb-2">💰</div>
+                        <div class="text-2xl font-bold text-red-400" id="stat-total-debt">0 د.ج</div>
+                        <div class="text-gray-400 text-sm mt-1">إجمالي الديون المستحقة</div>
+                    </div>
+                    <!-- Debtors Count Card -->
+                    <div class="stat-card rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3);">
+                        <div class="text-3xl mb-2">👥</div>
+                        <div class="text-2xl font-bold text-blue-400" id="stat-debtors-count">0</div>
+                        <div class="text-gray-400 text-sm mt-1">عدد المديونين</div>
+                    </div>
+                    <!-- Overdue Count Card -->
+                    <div class="stat-card rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.05)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <div class="text-3xl mb-2">⚠️</div>
+                        <div class="text-2xl font-bold text-orange-400" id="stat-overdue-count">0</div>
+                        <div class="text-gray-400 text-sm mt-1">ديون متأخرة (أكثر من 7 أيام)</div>
+                    </div>
+                </div>
+                
+                <!-- Debtors Table -->
+                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="overflow-x-auto">
+                        <table class="w-full" id="debtors-table">
+                            <thead style="background: rgba(255, 255, 255, 0.05);">
+                                <tr>
+                                    <th class="text-right px-4 py-4">الاسم</th>
+                                    <th class="text-right px-4 py-4">الهاتف</th>
+                                    <th class="text-right px-4 py-4">المنتج</th>
+                                    <th class="text-right px-4 py-4">المبلغ</th>
+                                    <th class="text-center px-4 py-4">الحالة</th>
+                                    <th class="text-right px-4 py-4">التاريخ</th>
+                                    <th class="text-center px-4 py-4">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="debtors-table-body">
+                                <tr>
+                                    <td colspan="7" class="text-center py-8 text-gray-400">لا يوجد مديونين</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Debtors Count Info -->
+                <div class="mt-4 text-gray-400 text-center">
+                    <span id="debtors-display-count">0</span> مدين
                 </div>
             </div>
             
@@ -1649,6 +1898,99 @@
                 <div class="flex gap-3 pt-3 border-t border-gray-700">
                     <button type="button" onclick="closeSupplierModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
                     <button type="submit" class="flex-1 px-4 py-2 bg-amber-600 hover:bg-amber-700 rounded-lg text-sm font-bold">💾 حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Debtor Modal (إضافة/تعديل مدين) -->
+    <div id="debtor-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-5 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-purple-400" id="debtor-modal-title">💳 إضافة مدين جديد</h3>
+                <button onclick="closeDebtorModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <form id="debtor-form" onsubmit="saveDebtor(event)" class="space-y-4">
+                <input type="hidden" id="debtor-id" value="">
+                
+                <!-- Name Field (Required) -->
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">اسم المدين <span class="text-red-400">*</span></label>
+                    <input type="text" id="debtor-name" required placeholder="أدخل اسم المدين" 
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                </div>
+                
+                <!-- Phone Field -->
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">رقم الهاتف</label>
+                    <input type="tel" id="debtor-phone" placeholder="رقم الهاتف للتواصل" 
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                </div>
+                
+                <!-- Product Dropdown -->
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">المنتج</label>
+                    <select id="debtor-product" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                        <option value="">-- اختر المنتج --</option>
+                    </select>
+                </div>
+                
+                <!-- Amount and Currency -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">المبلغ المستحق <span class="text-red-400">*</span></label>
+                        <input type="number" id="debtor-amount" required step="0.01" min="0.01" placeholder="0.00" 
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-1 text-sm">العملة</label>
+                        <select id="debtor-currency" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                            <option value="DZD">🇩🇿 DZD</option>
+                            <option value="USD">🇺🇸 USD</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Notes Field -->
+                <div>
+                    <label class="block text-gray-300 mb-1 text-sm">ملاحظات</label>
+                    <textarea id="debtor-notes" rows="2" placeholder="أي ملاحظات إضافية..." 
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none resize-none"></textarea>
+                </div>
+                
+                <!-- Payment Recording Section (Edit Mode Only) -->
+                <div id="debtor-payment-section" class="hidden border-t border-gray-700 pt-4 mt-4">
+                    <h4 class="text-md font-bold text-green-400 mb-3">💵 تسجيل دفعة</h4>
+                    
+                    <!-- Remaining Amount Display -->
+                    <div class="rounded-lg p-3 mb-3" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300 text-sm">المبلغ المتبقي:</span>
+                            <span class="text-red-400 font-bold" id="debtor-remaining-amount">0</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-1">
+                            <span class="text-gray-400 text-xs">المدفوع سابقاً:</span>
+                            <span class="text-green-400 text-sm" id="debtor-paid-amount">0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Amount Input -->
+                    <div class="flex gap-3">
+                        <div class="flex-1">
+                            <input type="number" id="debtor-payment-amount" step="0.01" min="0.01" placeholder="مبلغ الدفعة" 
+                                class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-green-500 focus:outline-none">
+                        </div>
+                        <button type="button" onclick="recordDebtorPayment()" 
+                            class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm font-bold transition-colors">
+                            💵 تسجيل دفعة
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Form Buttons -->
+                <div class="flex gap-3 pt-3 border-t border-gray-700">
+                    <button type="button" onclick="closeDebtorModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm transition-colors">إلغاء</button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-bold transition-colors">💾 حفظ</button>
                 </div>
             </form>
         </div>

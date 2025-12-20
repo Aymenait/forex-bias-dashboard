@@ -21,6 +21,7 @@ let allCustomers = [];         // جميع العملاء
 let allPurchases = [];         // جميع عمليات الشراء
 let allExpenses = [];          // جميع المصاريف
 let allSuppliers = [];         // جميع الموردين ومصادر السلع
+let allDebtors = [];           // جميع المديونين
 let reviewToDelete = null;     // التقييم المراد حذفه
 const DEFAULT_PASSWORD = 'admin123';  // كلمة المرور الافتراضية
 
@@ -1486,14 +1487,9 @@ function searchReviews() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * فتح نافذة تأكيد الحذف
+ * فتح نافذة تأكيد الحذف - تم نقلها لأسفل مع دعم أنواع متعددة
  */
-function openDeleteModal(reviewId) {
-    reviewToDelete = reviewId;
-    const modal = document.getElementById('delete-modal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
+// function openDeleteModal moved to line ~3428 with multi-type support
 
 /**
  * إغلاق نافذة تأكيد الحذف
@@ -1506,35 +1502,9 @@ function closeDeleteModal() {
 }
 
 /**
- * تأكيد حذف التقييم
+ * تأكيد حذف التقييم - تم نقلها لأسفل مع دعم أنواع متعددة
  */
-async function confirmDelete() {
-    if (!reviewToDelete) return;
-    
-    try {
-        const { deleteDoc, doc } = window.firebaseModules;
-        
-        // حذف من Firebase
-        await deleteDoc(doc(window.db, 'reviews', reviewToDelete));
-        
-        // تحديث القائمة المحلية
-        allReviews = allReviews.filter(review => review.id !== reviewToDelete);
-        
-        // تحديث العرض
-        updateStats();
-        displayRecentReviews();
-        displayReviewsTable();
-        
-        // إغلاق النافذة
-        closeDeleteModal();
-        
-        showToast('تم حذف التقييم بنجاح 🗑️');
-        
-    } catch (error) {
-        console.error('خطأ في حذف التقييم:', error);
-        showToast('خطأ في حذف التقييم', 'error');
-    }
-}
+// async function confirmDelete moved to line ~3444 with multi-type support
 
 // ═══════════════════════════════════════════════════════════════════════════
 // تغيير كلمة المرور - Change Password
@@ -4359,11 +4329,48 @@ function initExpenseFormEvents() {
     if (expenseForm) expenseForm.addEventListener('submit', saveExpense);
 }
 
+/**
+ * تهيئة أحداث نماذج المديونين
+ * Initialize debtor form events
+ * Requirements: 1.2, 2.3, 2.4, 3.2
+ */
+function initDebtorFormEvents() {
+    // 11.1 - Form submit handlers
+    const debtorForm = document.getElementById('debtor-form');
+    if (debtorForm) {
+        debtorForm.addEventListener('submit', saveDebtor);
+    }
+    
+    // Payment button handler
+    const paymentButton = document.querySelector('#debtor-payment-section button[type="button"]');
+    if (paymentButton) {
+        paymentButton.addEventListener('click', recordDebtorPayment);
+    }
+    
+    // 11.2 - Filter event handlers
+    const searchDebtorsInput = document.getElementById('search-debtors');
+    if (searchDebtorsInput) {
+        searchDebtorsInput.addEventListener('input', function(e) {
+            filterDebtorsBySearch(e.target.value);
+        });
+    }
+    
+    const statusFilterSelect = document.getElementById('filter-debtor-status');
+    if (statusFilterSelect) {
+        statusFilterSelect.addEventListener('change', function(e) {
+            filterDebtorsByStatus(e.target.value);
+        });
+    }
+    
+    console.log('✅ تم تهيئة أحداث نماذج المديونين');
+}
+
 // تهيئة عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
     initSaleFormEvents();
     initPurchaseFormEvents();
     initExpenseFormEvents();
+    initDebtorFormEvents();
 });
 
 // وظائف المحاسبة المتاحة عالمياً
@@ -4929,3 +4936,1396 @@ window.saveSupplier = saveSupplier;
 window.editSupplier = editSupplier;
 window.deleteSupplier = deleteSupplier;
 
+
+// ═══════════════════════════════════════════════════════════════════════════
+// وظائف إدارة المديونين - Debtors Management
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * تحميل المديونين من Firebase
+ * Requirements: 2.1
+ */
+async function loadDebtors() {
+    try {
+        if (!window.db || !window.firebaseModules) {
+            console.warn('⚠️ Firebase غير متاح');
+            return;
+        }
+
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+        const q = query(collection(window.db, 'debtors'), orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        
+        allDebtors = [];
+        querySnapshot.forEach(doc => {
+            allDebtors.push({ id: doc.id, ...doc.data() });
+        });
+
+        console.log(`💳 تم تحميل ${allDebtors.length} مدين`);
+        
+        displayDebtorsTable();
+        updateDebtorStats();
+        
+    } catch (error) {
+        console.error('خطأ في تحميل المديونين:', error);
+        showToast('خطأ في تحميل المديونين', 'error');
+    }
+}
+
+/**
+ * التحقق من صحة نموذج المدين
+ * Requirements: 1.3
+ * @returns {Object} - { isValid: boolean, errors: string[] }
+ */
+function validateDebtorForm() {
+    const errors = [];
+    
+    const name = document.getElementById('debtor-name')?.value?.trim();
+    const amount = parseFloat(document.getElementById('debtor-amount')?.value);
+    
+    // التحقق من الاسم (مطلوب)
+    if (!name || name.length === 0) {
+        errors.push('اسم المدين مطلوب');
+    }
+    
+    // التحقق من المبلغ (مطلوب وأكبر من صفر)
+    if (isNaN(amount) || amount <= 0) {
+        errors.push('المبلغ يجب أن يكون أكبر من صفر');
+    }
+    
+    return {
+        isValid: errors.length === 0,
+        errors: errors
+    };
+}
+
+// تحميل المديونين عند فتح تبويب المديونين
+const originalShowTabForDebtors = window.showTab;
+window.showTab = function(tabName) {
+    originalShowTabForDebtors(tabName);
+    
+    // تحميل المديونين عند فتح تبويب المديونين
+    if (tabName === 'debtors' && allDebtors.length === 0) {
+        loadDebtors();
+    }
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// وظائف CRUD للمديونين - Debtors CRUD Operations
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * حفظ مدين جديد
+ * Requirements: 1.2, 1.4
+ * @param {Event} event - حدث النموذج
+ */
+async function saveDebtor(event) {
+    event.preventDefault();
+    
+    // التحقق من صحة النموذج
+    const validation = validateDebtorForm();
+    if (!validation.isValid) {
+        showToast(validation.errors.join('\n'), 'error');
+        return;
+    }
+    
+    // التحقق من Firebase
+    if (!window.db || !window.firebaseModules) {
+        showToast('خطأ في الاتصال بقاعدة البيانات', 'error');
+        return;
+    }
+    
+    const debtorId = document.getElementById('debtor-id')?.value;
+    
+    // إذا كان هناك ID، فهذا تعديل وليس إضافة
+    if (debtorId) {
+        const updateData = {
+            name: document.getElementById('debtor-name').value.trim(),
+            phone: document.getElementById('debtor-phone')?.value?.trim() || '',
+            productId: document.getElementById('debtor-product')?.value || '',
+            productName: document.getElementById('debtor-product')?.options[document.getElementById('debtor-product')?.selectedIndex]?.text || '',
+            amountOwed: parseFloat(document.getElementById('debtor-amount').value),
+            currency: document.getElementById('debtor-currency')?.value || 'DZD',
+            notes: document.getElementById('debtor-notes')?.value?.trim() || ''
+        };
+        await updateDebtor(debtorId, updateData);
+        return;
+    }
+    
+    try {
+        const { addDoc, collection, serverTimestamp } = window.firebaseModules;
+        
+        // جمع بيانات المدين
+        const productSelect = document.getElementById('debtor-product');
+        const debtorData = {
+            name: document.getElementById('debtor-name').value.trim(),
+            phone: document.getElementById('debtor-phone')?.value?.trim() || '',
+            productId: productSelect?.value || '',
+            productName: productSelect?.options[productSelect?.selectedIndex]?.text || '',
+            amountOwed: parseFloat(document.getElementById('debtor-amount').value),
+            amountPaid: 0,
+            currency: document.getElementById('debtor-currency')?.value || 'DZD',
+            status: 'pending',
+            notes: document.getElementById('debtor-notes')?.value?.trim() || '',
+            createdAt: serverTimestamp(),
+            updatedAt: null,
+            paidAt: null
+        };
+        
+        // حفظ في Firebase
+        await addDoc(collection(window.db, 'debtors'), debtorData);
+        
+        // إغلاق النافذة وتحديث العرض
+        closeDebtorModal();
+        showToast('✅ تم إضافة المدين بنجاح');
+        logActivity('debtor', 'created', debtorData.name);
+        
+        // إعادة تحميل البيانات
+        await loadDebtors();
+        
+    } catch (error) {
+        console.error('خطأ في حفظ المدين:', error);
+        showToast('خطأ في حفظ المدين', 'error');
+    }
+}
+
+/**
+ * تحديث بيانات مدين
+ * Requirements: 3.4
+ * @param {string} id - معرف المدين
+ * @param {Object} data - البيانات المحدثة
+ */
+async function updateDebtor(id, data) {
+    if (!id) {
+        showToast('معرف المدين غير صالح', 'error');
+        return;
+    }
+    
+    if (!window.db || !window.firebaseModules) {
+        showToast('خطأ في الاتصال بقاعدة البيانات', 'error');
+        return;
+    }
+    
+    try {
+        const { doc, updateDoc, serverTimestamp } = window.firebaseModules;
+        
+        // إضافة timestamp التحديث
+        const updateData = {
+            ...data,
+            updatedAt: serverTimestamp()
+        };
+        
+        // تحديث في Firebase
+        await updateDoc(doc(window.db, 'debtors', id), updateData);
+        
+        // إغلاق النافذة وتحديث العرض
+        closeDebtorModal();
+        showToast('✅ تم تحديث بيانات المدين');
+        logActivity('debtor', 'updated', data.name || id);
+        
+        // إعادة تحميل البيانات
+        await loadDebtors();
+        
+    } catch (error) {
+        console.error('خطأ في تحديث المدين:', error);
+        showToast('خطأ في تحديث المدين', 'error');
+    }
+}
+
+/**
+ * حذف مدين
+ * Requirements: 4.1, 4.2, 4.3
+ * @param {string} id - معرف المدين
+ */
+async function deleteDebtor(id) {
+    if (!id) {
+        showToast('معرف المدين غير صالح', 'error');
+        return;
+    }
+    
+    // عرض نافذة التأكيد (Requirements: 4.1)
+    const confirmed = confirm('هل أنت متأكد من حذف هذا المدين؟\nلا يمكن التراجع عن هذا الإجراء.');
+    
+    // إلغاء الحذف إذا لم يؤكد المستخدم (Requirements: 4.3)
+    if (!confirmed) {
+        return;
+    }
+    
+    if (!window.db || !window.firebaseModules) {
+        showToast('خطأ في الاتصال بقاعدة البيانات', 'error');
+        return;
+    }
+    
+    try {
+        const { doc, deleteDoc } = window.firebaseModules;
+        
+        // الحصول على اسم المدين للسجل
+        const debtor = allDebtors.find(d => d.id === id);
+        const debtorName = debtor?.name || id;
+        
+        // حذف من Firebase (Requirements: 4.2)
+        await deleteDoc(doc(window.db, 'debtors', id));
+        
+        showToast('✅ تم حذف المدين');
+        logActivity('debtor', 'deleted', debtorName);
+        
+        // إعادة تحميل البيانات
+        await loadDebtors();
+        
+    } catch (error) {
+        console.error('خطأ في حذف المدين:', error);
+        showToast('خطأ في حذف المدين', 'error');
+    }
+}
+
+/**
+ * تسجيل دفعة للمدين
+ * Requirements: 3.2, 3.3
+ * @param {string} id - معرف المدين
+ * @param {number} amount - مبلغ الدفعة
+ */
+async function recordPayment(id, amount) {
+    if (!id) {
+        showToast('معرف المدين غير صالح', 'error');
+        return;
+    }
+    
+    // التحقق من المبلغ
+    const paymentAmount = parseFloat(amount);
+    if (isNaN(paymentAmount) || paymentAmount <= 0) {
+        showToast('المبلغ يجب أن يكون أكبر من صفر', 'error');
+        return;
+    }
+    
+    if (!window.db || !window.firebaseModules) {
+        showToast('خطأ في الاتصال بقاعدة البيانات', 'error');
+        return;
+    }
+    
+    // البحث عن المدين
+    const debtor = allDebtors.find(d => d.id === id);
+    if (!debtor) {
+        showToast('المدين غير موجود', 'error');
+        return;
+    }
+    
+    // حساب المبلغ المتبقي
+    const currentPaid = parseFloat(debtor.amountPaid) || 0;
+    const amountOwed = parseFloat(debtor.amountOwed) || 0;
+    const remainingAmount = amountOwed - currentPaid;
+    
+    // التحقق من أن الدفعة لا تتجاوز المتبقي
+    if (paymentAmount > remainingAmount) {
+        showToast('المبلغ المدفوع أكبر من المتبقي', 'error');
+        return;
+    }
+    
+    try {
+        const { doc, updateDoc, serverTimestamp } = window.firebaseModules;
+        
+        // حساب المبلغ المدفوع الجديد
+        const newAmountPaid = currentPaid + paymentAmount;
+        
+        // تحديد الحالة الجديدة
+        // استخدام epsilon للتعامل مع مشاكل دقة الأرقام العشرية
+        const epsilon = 0.0001;
+        let newStatus;
+        let paidAt = null;
+        
+        if (newAmountPaid >= amountOwed - epsilon) {
+            // دفع كامل (Requirements: 3.3)
+            newStatus = 'paid';
+            paidAt = serverTimestamp();
+        } else {
+            // دفع جزئي (Requirements: 3.2)
+            newStatus = 'partial';
+        }
+        
+        // تحديث البيانات في Firebase
+        const updateData = {
+            amountPaid: newAmountPaid,
+            status: newStatus,
+            updatedAt: serverTimestamp()
+        };
+        
+        // إضافة تاريخ الدفع الكامل إذا تم الدفع بالكامل
+        if (paidAt) {
+            updateData.paidAt = paidAt;
+        }
+        
+        await updateDoc(doc(window.db, 'debtors', id), updateData);
+        
+        // رسالة النجاح
+        const statusMessage = newStatus === 'paid' ? 'تم الدفع بالكامل ✅' : 'تم تسجيل الدفعة الجزئية';
+        showToast(`💰 ${statusMessage}`);
+        logActivity('debtor', 'payment', `${debtor.name}: ${paymentAmount} ${debtor.currency}`);
+        
+        // إغلاق النافذة وإعادة تحميل البيانات
+        closeDebtorModal();
+        await loadDebtors();
+        
+    } catch (error) {
+        console.error('خطأ في تسجيل الدفعة:', error);
+        showToast('خطأ في تسجيل الدفعة', 'error');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// وظائف عرض المديونين - Display Functions
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * حساب مؤشر عمر الدين
+ * Requirements: 5.1, 5.2
+ * @param {Date|Object} createdAt - تاريخ إنشاء الدين
+ * @param {string} status - حالة الدين
+ * @returns {string} - 'critical' | 'warning' | 'normal'
+ */
+function getDebtAgeIndicator(createdAt, status) {
+    // إذا كان الدين مدفوعاً، لا حاجة لمؤشر
+    if (status === 'paid') {
+        return 'normal';
+    }
+    
+    // تحويل التاريخ إلى كائن Date
+    let debtDate;
+    if (createdAt?.toDate) {
+        debtDate = createdAt.toDate();
+    } else if (createdAt instanceof Date) {
+        debtDate = createdAt;
+    } else if (createdAt) {
+        debtDate = new Date(createdAt);
+    } else {
+        return 'normal';
+    }
+    
+    // حساب عدد الأيام منذ إنشاء الدين
+    const now = new Date();
+    const diffTime = now.getTime() - debtDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    // تحديد المؤشر بناءً على العمر
+    if (diffDays > 30) {
+        return 'critical';
+    } else if (diffDays > 7) {
+        return 'warning';
+    }
+    return 'normal';
+}
+
+/**
+ * فلترة المديونين بالبحث (الاسم أو الهاتف)
+ * Requirements: 2.3
+ * @param {string} term - مصطلح البحث
+ */
+function filterDebtorsBySearch(term) {
+    // تحديث عرض الجدول (سيقرأ قيمة البحث من الحقل)
+    displayDebtorsTable();
+}
+
+/**
+ * فلترة المديونين بالحالة
+ * Requirements: 2.4
+ * @param {string} status - الحالة المطلوبة (all, pending, partial, paid)
+ */
+function filterDebtorsByStatus(status) {
+    // تحديث عرض الجدول (سيقرأ قيمة الفلتر من القائمة)
+    displayDebtorsTable();
+}
+
+/**
+ * ترتيب المديونين: غير المدفوعين أولاً (الأقدم أولاً)، ثم المدفوعين
+ * Requirements: 5.3
+ * @param {Array} debtors - مصفوفة المديونين
+ * @returns {Array} - المصفوفة مرتبة
+ */
+function sortDebtors(debtors) {
+    return [...debtors].sort((a, b) => {
+        // المدفوعين في النهاية
+        if (a.status === 'paid' && b.status !== 'paid') return 1;
+        if (a.status !== 'paid' && b.status === 'paid') return -1;
+        
+        // ترتيب غير المدفوعين بالتاريخ (الأقدم أولاً)
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+        return dateA - dateB;
+    });
+}
+
+/**
+ * عرض جدول المديونين
+ * Requirements: 2.1, 5.1, 5.2
+ */
+function displayDebtorsTable() {
+    const tableBody = document.getElementById('debtors-table-body');
+    if (!tableBody) {
+        console.error('عنصر جدول المديونين غير موجود');
+        return;
+    }
+    
+    // الحصول على قيم الفلترة (استخدام IDs الصحيحة من HTML)
+    const searchTerm = document.getElementById('search-debtors')?.value?.toLowerCase() || '';
+    const statusFilter = document.getElementById('filter-debtor-status')?.value || 'all';
+    
+    // فلترة المديونين
+    let filteredDebtors = allDebtors.filter(debtor => {
+        // فلترة بالبحث (الاسم أو الهاتف) - case-insensitive
+        const matchesSearch = !searchTerm || 
+            (debtor.name?.toLowerCase().includes(searchTerm)) ||
+            (debtor.phone?.toLowerCase().includes(searchTerm));
+        
+        // فلترة بالحالة
+        const matchesStatus = statusFilter === 'all' || debtor.status === statusFilter;
+        
+        return matchesSearch && matchesStatus;
+    });
+    
+    // ترتيب المديونين باستخدام الدالة المخصصة
+    filteredDebtors = sortDebtors(filteredDebtors);
+    
+    // إذا لم يكن هناك مديونين
+    if (filteredDebtors.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center py-8 text-gray-400">
+                    ${searchTerm || statusFilter !== 'all' ? 'لا توجد نتائج مطابقة' : 'لا يوجد مديونين'}
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    // بناء صفوف الجدول
+    tableBody.innerHTML = filteredDebtors.map(debtor => {
+        const ageIndicator = getDebtAgeIndicator(debtor.createdAt, debtor.status);
+        const remainingAmount = (debtor.amountOwed || 0) - (debtor.amountPaid || 0);
+        
+        // تحديد لون الصف بناءً على المؤشر
+        let rowClass = '';
+        let indicatorBadge = '';
+        if (ageIndicator === 'critical') {
+            rowClass = 'bg-red-500/10 border-r-4 border-red-500';
+            indicatorBadge = '<span class="inline-block px-2 py-1 text-xs rounded bg-red-500/20 text-red-400 mr-2">⚠️ متأخر جداً</span>';
+        } else if (ageIndicator === 'warning') {
+            rowClass = 'bg-orange-500/10 border-r-4 border-orange-500';
+            indicatorBadge = '<span class="inline-block px-2 py-1 text-xs rounded bg-orange-500/20 text-orange-400 mr-2">⏰ متأخر</span>';
+        }
+        
+        // تحديد لون الحالة
+        let statusBadge = '';
+        switch (debtor.status) {
+            case 'pending':
+                statusBadge = '<span class="px-2 py-1 text-xs rounded bg-red-500/20 text-red-400">مستحق</span>';
+                break;
+            case 'partial':
+                statusBadge = '<span class="px-2 py-1 text-xs rounded bg-yellow-500/20 text-yellow-400">جزئي</span>';
+                break;
+            case 'paid':
+                statusBadge = '<span class="px-2 py-1 text-xs rounded bg-green-500/20 text-green-400">مدفوع</span>';
+                break;
+            default:
+                statusBadge = '<span class="px-2 py-1 text-xs rounded bg-gray-500/20 text-gray-400">غير محدد</span>';
+        }
+        
+        // تنسيق التاريخ
+        let dateStr = '-';
+        if (debtor.createdAt) {
+            const date = debtor.createdAt?.toDate ? debtor.createdAt.toDate() : new Date(debtor.createdAt);
+            dateStr = date.toLocaleDateString('ar-DZ');
+        }
+        
+        // تنسيق المبلغ
+        const currencySymbol = debtor.currency === 'USD' ? '$' : 'د.ج';
+        const amountDisplay = debtor.status === 'paid' 
+            ? `<span class="text-green-400">${debtor.amountOwed?.toLocaleString()} ${currencySymbol}</span>`
+            : `<span class="text-red-400">${remainingAmount.toLocaleString()} ${currencySymbol}</span>`;
+        
+        return `
+            <tr class="${rowClass} hover:bg-white/5 transition-colors">
+                <td class="px-4 py-3">
+                    ${indicatorBadge}
+                    <span class="font-medium text-white">${debtor.name || '-'}</span>
+                </td>
+                <td class="px-4 py-3 text-gray-300">${debtor.phone || '-'}</td>
+                <td class="px-4 py-3 text-gray-300">${debtor.productName || '-'}</td>
+                <td class="px-4 py-3">${amountDisplay}</td>
+                <td class="px-4 py-3">${statusBadge}</td>
+                <td class="px-4 py-3 text-gray-400 text-sm">${dateStr}</td>
+                <td class="px-4 py-3">
+                    <div class="flex gap-2">
+                        ${debtor.status !== 'paid' ? `
+                            <button onclick="openDebtorModal('${debtor.id}')" 
+                                class="px-2 py-1 text-xs rounded bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition-colors"
+                                title="تعديل">
+                                ✏️
+                            </button>
+                            <button onclick="quickPayment('${debtor.id}')" 
+                                class="px-2 py-1 text-xs rounded bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-colors"
+                                title="تسجيل دفعة">
+                                💰
+                            </button>
+                        ` : ''}
+                        <button onclick="deleteDebtor('${debtor.id}')" 
+                            class="px-2 py-1 text-xs rounded bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
+                            title="حذف">
+                            🗑️
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+/**
+ * تسجيل دفعة سريعة (فتح نافذة الدفع)
+ * @param {string} debtorId - معرف المدين
+ */
+function quickPayment(debtorId) {
+    const debtor = allDebtors.find(d => d.id === debtorId);
+    if (!debtor) {
+        showToast('المدين غير موجود', 'error');
+        return;
+    }
+    
+    const remainingAmount = (debtor.amountOwed || 0) - (debtor.amountPaid || 0);
+    const currencySymbol = debtor.currency === 'USD' ? '$' : 'د.ج';
+    
+    // طلب المبلغ من المستخدم
+    const paymentStr = prompt(`أدخل مبلغ الدفعة لـ ${debtor.name}\nالمتبقي: ${remainingAmount.toLocaleString()} ${currencySymbol}`);
+    
+    if (paymentStr === null) return; // المستخدم ألغى
+    
+    const paymentAmount = parseFloat(paymentStr);
+    if (isNaN(paymentAmount) || paymentAmount <= 0) {
+        showToast('يرجى إدخال مبلغ صحيح', 'error');
+        return;
+    }
+    
+    // تسجيل الدفعة
+    recordPayment(debtorId, paymentAmount);
+}
+
+/**
+ * تحديث إحصائيات المديونين
+ * Requirements: 2.2
+ */
+function updateDebtorStats() {
+    // حساب إجمالي الديون المستحقة (المتبقية)
+    let totalDebtDZD = 0;
+    let totalDebtUSD = 0;
+    let debtorsCount = 0;
+    let overdueCount = 0;
+    
+    allDebtors.forEach(debtor => {
+        // تجاهل المديونين المدفوعين بالكامل
+        if (debtor.status === 'paid') return;
+        
+        // حساب المبلغ المتبقي
+        const remainingAmount = (debtor.amountOwed || 0) - (debtor.amountPaid || 0);
+        
+        // إضافة للإجمالي حسب العملة
+        if (debtor.currency === 'USD') {
+            totalDebtUSD += remainingAmount;
+        } else {
+            totalDebtDZD += remainingAmount;
+        }
+        
+        // عد المديونين غير المدفوعين
+        debtorsCount++;
+        
+        // عد الديون المتأخرة (أكثر من 7 أيام)
+        const ageIndicator = getDebtAgeIndicator(debtor.createdAt, debtor.status);
+        if (ageIndicator === 'warning' || ageIndicator === 'critical') {
+            overdueCount++;
+        }
+    });
+    
+    // تحويل USD إلى DZD للعرض الموحد (باستخدام سعر السكوار)
+    const totalDebtInDZD = totalDebtDZD + (totalDebtUSD * USD_TO_DZD_RATE);
+    
+    // تحديث عناصر الإحصائيات في الصفحة
+    const totalDebtElement = document.getElementById('stat-total-debt');
+    const debtorsCountElement = document.getElementById('stat-debtors-count');
+    const overdueCountElement = document.getElementById('stat-overdue-count');
+    
+    if (totalDebtElement) {
+        // عرض المبلغ بالدينار مع إضافة الدولار إذا وجد
+        let displayText = `${Math.round(totalDebtInDZD).toLocaleString()} د.ج`;
+        if (totalDebtUSD > 0) {
+            displayText += ` (${totalDebtUSD.toLocaleString()} $)`;
+        }
+        totalDebtElement.textContent = displayText;
+    }
+    
+    if (debtorsCountElement) {
+        debtorsCountElement.textContent = debtorsCount.toString();
+    }
+    
+    if (overdueCountElement) {
+        overdueCountElement.textContent = overdueCount.toString();
+    }
+}
+
+/**
+ * فتح نافذة إضافة/تعديل مدين
+ * Open debtor modal for add/edit
+ * Requirements: 1.1, 3.1
+ * @param {string} [debtorId] - معرف المدين للتعديل (اختياري)
+ */
+async function openDebtorModal(debtorId) {
+    const modal = document.getElementById('debtor-modal');
+    const modalTitle = document.getElementById('debtor-modal-title');
+    const form = document.getElementById('debtor-form');
+    const productSelect = document.getElementById('debtor-product');
+    const paymentSection = document.getElementById('debtor-payment-section');
+    const debtorIdInput = document.getElementById('debtor-id');
+    
+    if (!modal) {
+        console.error('عنصر نافذة المدين غير موجود');
+        return;
+    }
+    
+    // تحميل المنتجات إذا كانت فارغة
+    if (allProducts.length === 0) {
+        await loadProducts();
+    }
+    
+    // ملء قائمة المنتجات
+    if (productSelect) {
+        productSelect.innerHTML = '<option value="">-- اختر المنتج --</option>';
+        allProducts.forEach(product => {
+            const option = document.createElement('option');
+            option.value = product.id;
+            option.textContent = `${product.name} (${product.price_dzd} د.ج / $${product.price_usd})`;
+            option.dataset.productName = product.name;
+            productSelect.appendChild(option);
+        });
+    }
+    
+    // إعادة تعيين النموذج
+    if (form) form.reset();
+    if (debtorIdInput) debtorIdInput.value = '';
+    
+    // إخفاء قسم الدفع افتراضياً
+    if (paymentSection) paymentSection.classList.add('hidden');
+    
+    // تحديد وضع الإضافة أو التعديل
+    if (debtorId) {
+        // وضع التعديل - تحميل بيانات المدين
+        const debtor = allDebtors.find(d => d.id === debtorId);
+        
+        if (!debtor) {
+            showToast('المدين غير موجود', 'error');
+            return;
+        }
+        
+        // تحديث عنوان النافذة
+        if (modalTitle) modalTitle.textContent = '✏️ تعديل بيانات المدين';
+        
+        // ملء الحقول ببيانات المدين
+        if (debtorIdInput) debtorIdInput.value = debtor.id;
+        
+        const nameInput = document.getElementById('debtor-name');
+        const phoneInput = document.getElementById('debtor-phone');
+        const amountInput = document.getElementById('debtor-amount');
+        const currencySelect = document.getElementById('debtor-currency');
+        const notesInput = document.getElementById('debtor-notes');
+        
+        if (nameInput) nameInput.value = debtor.name || '';
+        if (phoneInput) phoneInput.value = debtor.phone || '';
+        if (amountInput) amountInput.value = debtor.amountOwed || 0;
+        if (currencySelect) currencySelect.value = debtor.currency || 'DZD';
+        if (notesInput) notesInput.value = debtor.notes || '';
+        
+        // تحديد المنتج إذا كان موجوداً
+        if (productSelect && debtor.productId) {
+            productSelect.value = debtor.productId;
+        }
+        
+        // إظهار قسم الدفع إذا كان الدين غير مدفوع بالكامل
+        if (paymentSection && debtor.status !== 'paid') {
+            paymentSection.classList.remove('hidden');
+            
+            // حساب المبلغ المتبقي
+            const amountPaid = debtor.amountPaid || 0;
+            const amountOwed = debtor.amountOwed || 0;
+            const remaining = amountOwed - amountPaid;
+            const currency = debtor.currency || 'DZD';
+            
+            const remainingDisplay = document.getElementById('debtor-remaining-amount');
+            const paidDisplay = document.getElementById('debtor-paid-amount');
+            
+            if (remainingDisplay) {
+                remainingDisplay.textContent = `${remaining.toLocaleString()} ${currency}`;
+            }
+            if (paidDisplay) {
+                paidDisplay.textContent = `${amountPaid.toLocaleString()} ${currency}`;
+            }
+        }
+    } else {
+        // وضع الإضافة
+        if (modalTitle) modalTitle.textContent = '💳 إضافة مدين جديد';
+    }
+    
+    // إظهار النافذة
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    // التركيز على حقل الاسم
+    const nameInput = document.getElementById('debtor-name');
+    if (nameInput) {
+        setTimeout(() => nameInput.focus(), 100);
+    }
+}
+
+/**
+ * إغلاق نافذة المدين
+ * Close debtor modal
+ * Requirements: 1.1
+ */
+function closeDebtorModal() {
+    const modal = document.getElementById('debtor-modal');
+    const form = document.getElementById('debtor-form');
+    const paymentSection = document.getElementById('debtor-payment-section');
+    const paymentAmountInput = document.getElementById('debtor-payment-amount');
+    
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+    
+    // إعادة تعيين النموذج
+    if (form) form.reset();
+    
+    // إخفاء قسم الدفع
+    if (paymentSection) paymentSection.classList.add('hidden');
+    
+    // مسح حقل الدفعة
+    if (paymentAmountInput) paymentAmountInput.value = '';
+    
+    // إعادة تعيين معرف المدين
+    const debtorIdInput = document.getElementById('debtor-id');
+    if (debtorIdInput) debtorIdInput.value = '';
+}
+
+/**
+ * تسجيل دفعة من نافذة التعديل
+ * Record payment from edit modal
+ * Requirements: 3.2, 3.3
+ */
+async function recordDebtorPayment() {
+    const debtorId = document.getElementById('debtor-id')?.value;
+    const paymentAmountInput = document.getElementById('debtor-payment-amount');
+    const paymentAmount = parseFloat(paymentAmountInput?.value) || 0;
+    
+    if (!debtorId) {
+        showToast('معرف المدين غير صالح', 'error');
+        return;
+    }
+    
+    if (paymentAmount <= 0) {
+        showToast('يرجى إدخال مبلغ صحيح', 'error');
+        return;
+    }
+    
+    // استخدام وظيفة recordPayment الموجودة
+    await recordPayment(debtorId, paymentAmount);
+    
+    // مسح حقل الدفعة
+    if (paymentAmountInput) paymentAmountInput.value = '';
+    
+    // تحديث عرض المبالغ في النافذة
+    const debtor = allDebtors.find(d => d.id === debtorId);
+    if (debtor) {
+        const amountPaid = debtor.amountPaid || 0;
+        const amountOwed = debtor.amountOwed || 0;
+        const remaining = amountOwed - amountPaid;
+        const currency = debtor.currency || 'DZD';
+        
+        const remainingDisplay = document.getElementById('debtor-remaining-amount');
+        const paidDisplay = document.getElementById('debtor-paid-amount');
+        
+        if (remainingDisplay) {
+            remainingDisplay.textContent = `${remaining.toLocaleString()} ${currency}`;
+        }
+        if (paidDisplay) {
+            paidDisplay.textContent = `${amountPaid.toLocaleString()} ${currency}`;
+        }
+        
+        // إغلاق النافذة إذا تم الدفع بالكامل
+        if (debtor.status === 'paid') {
+            closeDebtorModal();
+        }
+    }
+}
+
+// جعل وظائف المديونين متاحة عالمياً
+// 11.3 - Export functions to window object
+window.loadDebtors = loadDebtors;
+window.validateDebtorForm = validateDebtorForm;
+window.saveDebtor = saveDebtor;
+window.updateDebtor = updateDebtor;
+window.deleteDebtor = deleteDebtor;
+window.recordPayment = recordPayment;
+window.getDebtAgeIndicator = getDebtAgeIndicator;
+window.displayDebtorsTable = displayDebtorsTable;
+window.quickPayment = quickPayment;
+window.updateDebtorStats = updateDebtorStats;
+window.filterDebtorsBySearch = filterDebtorsBySearch;
+window.filterDebtorsByStatus = filterDebtorsByStatus;
+window.sortDebtors = sortDebtors;
+window.openDebtorModal = openDebtorModal;
+window.closeDebtorModal = closeDebtorModal;
+window.recordDebtorPayment = recordDebtorPayment;
+window.initDebtorFormEvents = initDebtorFormEvents;
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🎁 إدارة المسابقات (Giveaway) - Giveaway Management
+// ═══════════════════════════════════════════════════════════════════════════
+
+let giveawaySettings = null;
+let giveawayParticipants = [];
+let giveawayWinners = [];
+
+// تعريف الوظائف مسبقاً لتجنب أخطاء undefined
+window.loadGiveawaySettings = loadGiveawaySettings;
+window.saveGiveawaySettings = saveGiveawaySettings;
+window.loadGiveawayParticipants = loadGiveawayParticipants;
+window.loadGiveawayWinners = loadGiveawayWinners;
+window.pickGiveawayWinner = pickGiveawayWinner;
+window.toggleGiveaway = toggleGiveaway;
+window.setGiveawayDuration = setGiveawayDuration;
+window.resetGiveawayForm = resetGiveawayForm;
+
+/**
+ * تحميل إعدادات المسابقة من Firebase
+ */
+async function loadGiveawaySettings() {
+    try {
+        if (!window.db || !window.firebaseModules) {
+            console.warn('⚠️ Firebase غير متاح');
+            return;
+        }
+
+        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const docRef = doc(window.db, 'settings', 'giveaway');
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            giveawaySettings = docSnap.data();
+            console.log('✅ تم تحميل إعدادات المسابقة:', giveawaySettings);
+        } else {
+            // إعدادات افتراضية
+            giveawaySettings = {
+                active: false,
+                prize: 'ChatGPT Business',
+                duration: '1 شهر',
+                startDate: new Date().toISOString(),
+                endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+            };
+        }
+        
+        updateGiveawayUI();
+        loadGiveawayParticipants();
+        loadGiveawayWinners();
+        
+    } catch (error) {
+        console.error('خطأ في تحميل إعدادات المسابقة:', error);
+    }
+}
+
+/**
+ * حفظ إعدادات المسابقة في Firebase
+ */
+async function saveGiveawaySettings(settings) {
+    try {
+        if (!window.db) {
+            showToast('Firebase غير متاح', 'error');
+            return false;
+        }
+
+        const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        await setDoc(doc(window.db, 'settings', 'giveaway'), settings);
+        
+        giveawaySettings = settings;
+        showToast('✅ تم حفظ إعدادات المسابقة بنجاح!', 'success');
+        updateGiveawayUI();
+        
+        return true;
+    } catch (error) {
+        console.error('خطأ في حفظ إعدادات المسابقة:', error);
+        showToast('خطأ في حفظ الإعدادات', 'error');
+        return false;
+    }
+}
+
+/**
+ * تحديث واجهة المسابقة
+ */
+function updateGiveawayUI() {
+    if (!giveawaySettings) return;
+    
+    // تحديث حالة التفعيل
+    const activeBadge = document.getElementById('giveaway-active-badge');
+    const toggleBtn = document.getElementById('btn-toggle-giveaway');
+    const pickWinnerBtn = document.getElementById('btn-pick-winner');
+    const activeCheckbox = document.getElementById('giveaway-active');
+    
+    if (giveawaySettings.active) {
+        if (activeBadge) {
+            activeBadge.textContent = '✅ مفعلة';
+            activeBadge.style.background = 'rgba(34, 197, 94, 0.2)';
+            activeBadge.style.color = '#22c55e';
+        }
+        if (toggleBtn) {
+            toggleBtn.innerHTML = '⏸️ إيقاف المسابقة';
+            toggleBtn.style.background = 'rgba(239, 68, 68, 0.2)';
+            toggleBtn.style.color = '#ef4444';
+        }
+        if (pickWinnerBtn) pickWinnerBtn.disabled = false;
+        if (activeCheckbox) activeCheckbox.checked = true;
+    } else {
+        if (activeBadge) {
+            activeBadge.textContent = '❌ غير مفعلة';
+            activeBadge.style.background = 'rgba(239, 68, 68, 0.2)';
+            activeBadge.style.color = '#ef4444';
+        }
+        if (toggleBtn) {
+            toggleBtn.innerHTML = '▶️ تفعيل المسابقة';
+            toggleBtn.style.background = 'rgba(34, 197, 94, 0.2)';
+            toggleBtn.style.color = '#22c55e';
+        }
+        if (pickWinnerBtn) pickWinnerBtn.disabled = true;
+        if (activeCheckbox) activeCheckbox.checked = false;
+    }
+    
+    // تحديث معلومات الجائزة
+    const prizeDisplay = document.getElementById('giveaway-prize-display');
+    if (prizeDisplay) {
+        prizeDisplay.textContent = giveawaySettings.prize + ' (' + giveawaySettings.duration + ')';
+    }
+    
+    // تحديث تاريخ السحب
+    const endDateDisplay = document.getElementById('giveaway-end-date-display');
+    if (endDateDisplay && giveawaySettings.endDate) {
+        const endDate = new Date(giveawaySettings.endDate);
+        endDateDisplay.textContent = endDate.toLocaleDateString('ar-DZ', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+    
+    // تحديث الوقت المتبقي
+    updateGiveawayTimeRemaining();
+    
+    // تحديث النموذج
+    const prizeSelect = document.getElementById('giveaway-prize');
+    const durationSelect = document.getElementById('giveaway-duration');
+    const startDateInput = document.getElementById('giveaway-start-date');
+    const endDateInput = document.getElementById('giveaway-end-date');
+    
+    if (prizeSelect) prizeSelect.value = giveawaySettings.prize || 'ChatGPT Business';
+    if (durationSelect) durationSelect.value = giveawaySettings.duration || '1 شهر';
+    
+    if (startDateInput && giveawaySettings.startDate) {
+        startDateInput.value = new Date(giveawaySettings.startDate).toISOString().slice(0, 16);
+    }
+    if (endDateInput && giveawaySettings.endDate) {
+        endDateInput.value = new Date(giveawaySettings.endDate).toISOString().slice(0, 16);
+    }
+}
+
+/**
+ * تحديث الوقت المتبقي
+ */
+function updateGiveawayTimeRemaining() {
+    const timeDisplay = document.getElementById('giveaway-time-remaining');
+    if (!timeDisplay || !giveawaySettings || !giveawaySettings.endDate) return;
+    
+    const now = new Date();
+    const endDate = new Date(giveawaySettings.endDate);
+    const diff = endDate - now;
+    
+    if (diff <= 0) {
+        timeDisplay.textContent = 'انتهى!';
+        timeDisplay.style.color = '#ef4444';
+        return;
+    }
+    
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    
+    if (days > 0) {
+        timeDisplay.textContent = `${days} يوم ${hours} ساعة`;
+    } else {
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        timeDisplay.textContent = `${hours} ساعة ${minutes} دقيقة`;
+    }
+}
+
+// تحديث الوقت المتبقي كل دقيقة
+setInterval(updateGiveawayTimeRemaining, 60000);
+
+/**
+ * تحميل المشاركين المؤهلين
+ */
+async function loadGiveawayParticipants() {
+    if (!giveawaySettings) return;
+    
+    const listContainer = document.getElementById('giveaway-participants-list');
+    const countDisplay = document.getElementById('giveaway-participants-display');
+    
+    if (listContainer) {
+        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">جاري التحميل...</p>';
+    }
+    
+    try {
+        if (!window.db || !window.firebaseModules) return;
+        
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+        const startDate = new Date(giveawaySettings.startDate);
+        
+        giveawayParticipants = [];
+        
+        // تحميل من جميع مجموعات التقييمات
+        const collections = [
+            'reviews', 'chatgpt-reviews', 'adobe-reviews', 'gamma-reviews',
+            'canva-reviews', 'capcut-reviews', 'netflix-reviews',
+            'perplexity-reviews', 'tradingview-reviews', 'cursor-reviews'
+        ];
+        
+        for (const collName of collections) {
+            try {
+                const q = query(collection(window.db, collName), orderBy('timestamp', 'desc'));
+                const snapshot = await getDocs(q);
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const reviewDate = data.timestamp?.toDate?.() || new Date(data.timestamp);
+                    
+                    if (reviewDate >= startDate && data.name) {
+                        giveawayParticipants.push({
+                            id: doc.id,
+                            collection: collName,
+                            name: data.name,
+                            comment: data.comment || '',
+                            product: data.product || collName.replace('-reviews', ''),
+                            date: reviewDate,
+                            rating: data.rating || 5
+                        });
+                    }
+                });
+            } catch (err) {
+                // تجاهل الأخطاء للمجموعات غير الموجودة
+            }
+        }
+        
+        // ترتيب حسب التاريخ
+        giveawayParticipants.sort((a, b) => b.date - a.date);
+        
+        // تحديث العدد
+        if (countDisplay) {
+            countDisplay.textContent = giveawayParticipants.length;
+        }
+        
+        // عرض القائمة
+        if (listContainer) {
+            if (giveawayParticipants.length === 0) {
+                listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">لا يوجد مشاركين مؤهلين بعد</p>';
+            } else {
+                listContainer.innerHTML = giveawayParticipants.map((p, index) => `
+                    <div class="flex items-center justify-between p-3 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                        <div class="flex items-center gap-3">
+                            <span class="text-lg font-bold" style="color: var(--accent);">#${index + 1}</span>
+                            <div>
+                                <div class="font-bold">${escapeHtml(p.name)}</div>
+                                <div class="text-gray-400 text-sm">${p.product} • ${'⭐'.repeat(p.rating)}</div>
+                            </div>
+                        </div>
+                        <div class="text-gray-400 text-sm">
+                            ${p.date.toLocaleDateString('ar-DZ')}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+    } catch (error) {
+        console.error('خطأ في تحميل المشاركين:', error);
+        if (listContainer) {
+            listContainer.innerHTML = '<p class="text-red-400 text-center py-4">خطأ في التحميل</p>';
+        }
+    }
+}
+
+/**
+ * تحميل الفائزين السابقين
+ */
+async function loadGiveawayWinners() {
+    const listContainer = document.getElementById('previous-winners-list');
+    
+    try {
+        if (!window.db) return;
+        
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+        const q = query(collection(window.db, 'giveaway-winners'), orderBy('date', 'desc'));
+        const snapshot = await getDocs(q);
+        
+        giveawayWinners = [];
+        snapshot.forEach(doc => {
+            giveawayWinners.push({ id: doc.id, ...doc.data() });
+        });
+        
+        if (listContainer) {
+            if (giveawayWinners.length === 0) {
+                listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">لا يوجد فائزين سابقين</p>';
+            } else {
+                listContainer.innerHTML = giveawayWinners.map(w => `
+                    <div class="flex items-center justify-between p-4 rounded-lg" style="background: linear-gradient(135deg, rgba(255, 213, 111, 0.1), rgba(16, 163, 127, 0.1)); border: 1px solid rgba(255, 213, 111, 0.3);">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🏆</span>
+                            <div>
+                                <div class="font-bold text-lg" style="color: var(--accent);">${escapeHtml(w.name)}</div>
+                                <div class="text-gray-400">${w.prize} (${w.duration || '1 شهر'})</div>
+                            </div>
+                        </div>
+                        <div class="text-gray-400 text-sm">
+                            ${new Date(w.date).toLocaleDateString('ar-DZ')}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+    } catch (error) {
+        console.error('خطأ في تحميل الفائزين:', error);
+    }
+}
+
+/**
+ * اختيار الفائز عشوائياً
+ */
+async function pickGiveawayWinner() {
+    if (!giveawaySettings || !giveawaySettings.active) {
+        showToast('المسابقة غير مفعلة!', 'error');
+        return;
+    }
+    
+    if (giveawayParticipants.length === 0) {
+        showToast('لا يوجد مشاركين مؤهلين!', 'error');
+        return;
+    }
+    
+    // تأكيد
+    if (!confirm(`هل أنت متأكد من اختيار الفائز؟\n\nعدد المشاركين: ${giveawayParticipants.length}\nالجائزة: ${giveawaySettings.prize}`)) {
+        return;
+    }
+    
+    // اختيار عشوائي
+    const randomIndex = Math.floor(Math.random() * giveawayParticipants.length);
+    const winner = giveawayParticipants[randomIndex];
+    
+    // حفظ الفائز
+    try {
+        const { collection, addDoc } = window.firebaseModules;
+        await addDoc(collection(window.db, 'giveaway-winners'), {
+            name: winner.name,
+            comment: winner.comment,
+            product: winner.product,
+            prize: giveawaySettings.prize,
+            duration: giveawaySettings.duration,
+            date: new Date().toISOString(),
+            originalReviewId: winner.id,
+            originalCollection: winner.collection
+        });
+        
+        // إيقاف المسابقة
+        giveawaySettings.active = false;
+        await saveGiveawaySettings(giveawaySettings);
+        
+        // عرض الفائز
+        showWinnerModal(winner);
+        
+        // تحديث القوائم
+        loadGiveawayWinners();
+        
+    } catch (error) {
+        console.error('خطأ في حفظ الفائز:', error);
+        showToast('خطأ في حفظ الفائز', 'error');
+    }
+}
+
+/**
+ * عرض نافذة الفائز
+ */
+function showWinnerModal(winner) {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 flex items-center justify-center z-50';
+    modal.style.background = 'rgba(0, 0, 0, 0.9)';
+    modal.innerHTML = `
+        <div class="rounded-2xl p-8 text-center max-w-md mx-4" style="background: linear-gradient(135deg, var(--card-bg), rgba(16, 163, 127, 0.2)); border: 2px solid var(--accent); animation: winnerPop 0.5s ease-out;">
+            <div class="text-6xl mb-4" style="animation: bounce 1s infinite;">🎉🏆🎉</div>
+            <h2 class="text-2xl font-bold mb-2">مبروك!</h2>
+            <div class="text-3xl font-bold mb-4" style="color: var(--accent);">${escapeHtml(winner.name)}</div>
+            <p class="text-gray-300 mb-4">ربح ${giveawaySettings.prize} لمدة ${giveawaySettings.duration}!</p>
+            <p class="text-gray-400 text-sm mb-6">"${escapeHtml(winner.comment.substring(0, 100))}${winner.comment.length > 100 ? '...' : ''}"</p>
+            <button onclick="this.parentElement.parentElement.remove()" class="px-8 py-3 rounded-lg font-bold" style="background: var(--accent); color: #1b1d32;">
+                إغلاق
+            </button>
+        </div>
+    `;
+    
+    // إضافة أنيميشن
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes winnerPop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(modal);
+    
+    // Confetti
+    createConfetti();
+}
+
+/**
+ * إنشاء تأثير الـ Confetti
+ */
+function createConfetti() {
+    const colors = ['#ffd56f', '#10a37f', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4'];
+    
+    for (let i = 0; i < 100; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.style.cssText = `
+                position: fixed;
+                width: ${Math.random() * 10 + 5}px;
+                height: ${Math.random() * 10 + 5}px;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                left: ${Math.random() * 100}vw;
+                top: -20px;
+                z-index: 10000;
+                animation: confettiFall ${Math.random() * 2 + 2}s linear forwards;
+            `;
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 4000);
+        }, i * 30);
+    }
+    
+    // إضافة أنيميشن السقوط
+    if (!document.getElementById('confetti-style')) {
+        const style = document.createElement('style');
+        style.id = 'confetti-style';
+        style.textContent = `
+            @keyframes confettiFall {
+                0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+/**
+ * تبديل حالة المسابقة
+ */
+async function toggleGiveaway() {
+    if (!giveawaySettings) return;
+    
+    giveawaySettings.active = !giveawaySettings.active;
+    await saveGiveawaySettings(giveawaySettings);
+    
+    if (giveawaySettings.active) {
+        showToast('✅ تم تفعيل المسابقة!', 'success');
+    } else {
+        showToast('⏸️ تم إيقاف المسابقة', 'info');
+    }
+}
+
+/**
+ * تعيين مدة المسابقة بسرعة
+ */
+function setGiveawayDuration(days) {
+    const now = new Date();
+    const startDate = document.getElementById('giveaway-start-date');
+    const endDate = document.getElementById('giveaway-end-date');
+    
+    if (startDate) {
+        startDate.value = now.toISOString().slice(0, 16);
+    }
+    
+    if (endDate) {
+        const end = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+        endDate.value = end.toISOString().slice(0, 16);
+    }
+    
+    showToast(`✅ تم تعيين المدة: ${days} يوم`, 'success');
+}
+
+/**
+ * إعادة تعيين نموذج المسابقة
+ */
+function resetGiveawayForm() {
+    document.getElementById('giveaway-form')?.reset();
+    showToast('🔄 تم إعادة تعيين النموذج', 'info');
+}
+
+/**
+ * تهيئة أحداث نموذج المسابقة
+ */
+function initGiveawayEvents() {
+    // نموذج المسابقة
+    const form = document.getElementById('giveaway-form');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const prize = document.getElementById('giveaway-prize').value;
+            const duration = document.getElementById('giveaway-duration').value;
+            const startDate = document.getElementById('giveaway-start-date').value;
+            const endDate = document.getElementById('giveaway-end-date').value;
+            const active = document.getElementById('giveaway-active').checked;
+            
+            if (!prize) {
+                showToast('الرجاء كتابة اسم الجائزة', 'error');
+                return;
+            }
+            
+            if (!startDate || !endDate) {
+                showToast('الرجاء تحديد تاريخ البداية والنهاية', 'error');
+                return;
+            }
+            
+            const settings = {
+                prize: prize,
+                duration: duration || 'شهر',
+                startDate: new Date(startDate).toISOString(),
+                endDate: new Date(endDate).toISOString(),
+                active: active
+            };
+            
+            await saveGiveawaySettings(settings);
+        });
+    }
+}
+
+// تحميل المسابقة عند فتح التبويب
+const originalShowTabForGiveaway = window.showTab;
+window.showTab = function(tabName) {
+    if (typeof originalShowTabForGiveaway === 'function') {
+        originalShowTabForGiveaway(tabName);
+    }
+    
+    if (tabName === 'giveaway') {
+        loadGiveawaySettings();
+    }
+};
+
+// تهيئة عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    initGiveawayEvents();
+});

@@ -325,6 +325,182 @@
             display: inline-block;
         }
         
+        /* 🎁 Giveaway Styles */
+        .giveaway-container {
+            background: linear-gradient(135deg, rgba(16, 163, 127, 0.15), rgba(255, 213, 111, 0.15));
+            border: 2px solid var(--accent);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: giveawayGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes giveawayGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 213, 111, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 213, 111, 0.6); }
+        }
+        
+        .giveaway-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #10a37f, #ffd56f);
+            color: #000;
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            font-weight: 800;
+            font-size: 0.85rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .giveaway-title {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .giveaway-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .giveaway-countdown {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+        
+        .countdown-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md) var(--spacing-lg);
+            min-width: 80px;
+        }
+        
+        .countdown-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+        }
+        
+        .countdown-label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        
+        .giveaway-info {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            text-align: right;
+        }
+        
+        .giveaway-info p {
+            margin: var(--spacing-sm) 0;
+            color: var(--text-secondary);
+        }
+        
+        .giveaway-btn {
+            background: linear-gradient(135deg, #10a37f, #0d8c6a);
+            color: white;
+            font-size: 1.2rem;
+            padding: 16px 40px;
+            border-radius: var(--radius-full);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-weight: 700;
+        }
+        
+        .giveaway-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 163, 127, 0.4);
+        }
+        
+        /* Winner Modal */
+        .winner-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        
+        .winner-content {
+            background: linear-gradient(135deg, var(--card-bg), rgba(16, 163, 127, 0.2));
+            border: 2px solid var(--accent);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            text-align: center;
+            max-width: 500px;
+            animation: winnerPop 0.5s ease-out;
+        }
+        
+        @keyframes winnerPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .winner-emoji {
+            font-size: 5rem;
+            margin-bottom: var(--spacing-md);
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .winner-name {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .winner-prize {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            animation: confettiFall 3s linear forwards;
+        }
+        
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
         @media (max-width: 768px) {
             .reviews-page-header {
                 padding: 60px 0 40px;
@@ -473,6 +649,38 @@
                 تقييمات حقيقية من عملاء راضين عن خدماتنا
             </p>
             
+            <!-- 🎁 GIVEAWAY SECTION - يتم إظهاره فقط عند التفعيل من لوحة التحكم -->
+            <div id="giveaway-section" class="giveaway-container" style="display: none;">
+                <div class="giveaway-badge">🎁 GIVEAWAY</div>
+                <h2 class="giveaway-title">🎉 اربح حساب ChatGPT Business مجاناً!</h2>
+                <p class="giveaway-subtitle">علّق الآن للدخول في السحب - الفائز يحصل على اشتراك شهر كامل!</p>
+                
+                <div class="giveaway-countdown">
+                    <div class="countdown-item">
+                        <span id="countdown-days" class="countdown-number">0</span>
+                        <span class="countdown-label">يوم</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="countdown-hours" class="countdown-number">0</span>
+                        <span class="countdown-label">ساعة</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="countdown-minutes" class="countdown-number">0</span>
+                        <span class="countdown-label">دقيقة</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="countdown-seconds" class="countdown-number">0</span>
+                        <span class="countdown-label">ثانية</span>
+                    </div>
+                </div>
+                
+                <div class="giveaway-info">
+                    <p>📌 <strong>الشروط:</strong> علّق في الموقع للدخول في القرعة</p>
+                    <p>📅 <strong>المشاركون:</strong> التعليقات من <span id="giveaway-start-date">اليوم</span> فقط</p>
+                    <p id="eligible-count">👥 <strong>عدد المشاركين:</strong> <span id="participants-count">0</span> مشارك</p>
+                </div>
+            </div>
+
             <!-- Stats -->
             <div class="reviews-stats">
                 <div class="stat-item">
@@ -617,6 +825,270 @@
 
     <!-- Define functions first -->
     <script>
+        // 🎁 GIVEAWAY - يتم تحميل الإعدادات من Firebase
+        let GIVEAWAY_START_DATE = new Date();
+        let GIVEAWAY_END_DATE = new Date();
+        let GIVEAWAY_ACTIVE = false;
+        let GIVEAWAY_PRIZE = '';
+        let GIVEAWAY_DURATION = '';
+        
+        // Store eligible reviews for giveaway
+        let eligibleGiveawayReviews = [];
+        
+        // تحميل إعدادات المسابقة من Firebase
+        async function loadGiveawayFromFirebase() {
+            console.log('🎁 جاري تحميل إعدادات المسابقة...');
+            try {
+                // انتظار Firebase
+                if (!window.db) {
+                    console.log('⏳ انتظار Firebase...');
+                    await new Promise(resolve => {
+                        window.addEventListener('firebaseReady', resolve, { once: true });
+                        setTimeout(resolve, 5000); // زيادة الوقت
+                    });
+                }
+                
+                if (!window.db) {
+                    console.warn('❌ Firebase غير متاح');
+                    hideGiveawaySection();
+                    return;
+                }
+                
+                console.log('✅ Firebase متاح، جاري قراءة الإعدادات...');
+                
+                const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const docRef = doc(window.db, 'settings', 'giveaway');
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const settings = docSnap.data();
+                    console.log('📋 إعدادات المسابقة:', settings);
+                    
+                    GIVEAWAY_ACTIVE = settings.active || false;
+                    GIVEAWAY_PRIZE = settings.prize || '';
+                    GIVEAWAY_DURATION = settings.duration || '';
+                    GIVEAWAY_START_DATE = new Date(settings.startDate);
+                    GIVEAWAY_END_DATE = new Date(settings.endDate);
+                    
+                    console.log('🔄 حالة التفعيل:', GIVEAWAY_ACTIVE);
+                    console.log('🎁 الجائزة:', GIVEAWAY_PRIZE);
+                    console.log('📅 تاريخ البداية:', GIVEAWAY_START_DATE);
+                    console.log('🏁 تاريخ النهاية:', GIVEAWAY_END_DATE);
+                    
+                    if (GIVEAWAY_ACTIVE) {
+                        console.log('✅ المسابقة مفعلة - إظهار القسم');
+                        showGiveawaySection();
+                        updateGiveawayDisplay();
+                        updateCountdown();
+                    } else {
+                        console.log('⏸️ المسابقة غير مفعلة - إخفاء القسم');
+                        hideGiveawaySection();
+                    }
+                } else {
+                    console.log('📭 لا توجد إعدادات مسابقة محفوظة');
+                    hideGiveawaySection();
+                }
+            } catch (error) {
+                console.error('❌ خطأ في تحميل إعدادات المسابقة:', error);
+                hideGiveawaySection();
+            }
+        }
+        
+        // إظهار قسم المسابقة
+        function showGiveawaySection() {
+            const section = document.getElementById('giveaway-section');
+            if (section) {
+                section.style.display = 'block';
+                console.log('👁️ تم إظهار قسم المسابقة');
+            } else {
+                console.error('❌ لم يتم العثور على قسم المسابقة!');
+            }
+        }
+        
+        // إخفاء قسم المسابقة
+        function hideGiveawaySection() {
+            const section = document.getElementById('giveaway-section');
+            if (section) section.style.display = 'none';
+        }
+        
+        // تحديث عرض المسابقة
+        function updateGiveawayDisplay() {
+            // تحديث عنوان الجائزة
+            const titleEl = document.querySelector('.giveaway-title');
+            if (titleEl && GIVEAWAY_PRIZE) {
+                titleEl.textContent = `🎉 اربح ${GIVEAWAY_PRIZE} مجاناً!`;
+            }
+            
+            // تحديث المدة
+            const subtitleEl = document.querySelector('.giveaway-subtitle');
+            if (subtitleEl && GIVEAWAY_DURATION) {
+                subtitleEl.textContent = `علّق الآن للدخول في السحب - الفائز يحصل على اشتراك ${GIVEAWAY_DURATION}!`;
+            }
+            
+            // تحديث تاريخ البداية
+            const startDateEl = document.getElementById('giveaway-start-date');
+            if (startDateEl) {
+                startDateEl.textContent = GIVEAWAY_START_DATE.toLocaleDateString('ar-DZ', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+        }
+        
+        // Countdown Timer
+        function updateCountdown() {
+            if (!GIVEAWAY_ACTIVE) return;
+            
+            const now = new Date();
+            const diff = GIVEAWAY_END_DATE - now;
+            
+            if (diff <= 0) {
+                document.getElementById('countdown-days').textContent = '0';
+                document.getElementById('countdown-hours').textContent = '0';
+                document.getElementById('countdown-minutes').textContent = '0';
+                document.getElementById('countdown-seconds').textContent = '0';
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown-days').textContent = days;
+            document.getElementById('countdown-hours').textContent = hours;
+            document.getElementById('countdown-minutes').textContent = minutes;
+            document.getElementById('countdown-seconds').textContent = seconds;
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        
+        // تحميل الإعدادات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGiveawayFromFirebase();
+        });
+        
+        // Update eligible participants count
+        function updateEligibleParticipants(reviews) {
+            if (!GIVEAWAY_ACTIVE) return;
+            
+            eligibleGiveawayReviews = reviews.filter(review => {
+                const reviewDate = review.timestamp instanceof Date ? review.timestamp : new Date(review.timestamp);
+                return reviewDate >= GIVEAWAY_START_DATE;
+            });
+            
+            const countEl = document.getElementById('participants-count');
+            if (countEl) {
+                countEl.textContent = eligibleGiveawayReviews.length;
+            }
+        }
+        
+        // Pick random winner
+        window.pickRandomWinner = function() {
+            if (eligibleGiveawayReviews.length === 0) {
+                alert('لا يوجد مشاركين مؤهلين للقرعة! التعليقات يجب أن تكون من تاريخ ' + GIVEAWAY_START_DATE.toLocaleDateString('ar-DZ') + ' فصاعداً');
+                return;
+            }
+            
+            // Create spinning animation
+            const giveawaySection = document.getElementById('giveaway-section');
+            giveawaySection.innerHTML = `
+                <div class="giveaway-spinning">
+                    <div class="spinner-wheel">🎰</div>
+                    <p style="color: var(--accent); font-size: 1.5rem; margin-top: 20px;">جاري اختيار الفائز...</p>
+                </div>
+            `;
+            
+            // Add spinning style
+            const style = document.createElement('style');
+            style.textContent = `
+                .spinner-wheel {
+                    font-size: 8rem;
+                    animation: spin 0.5s linear infinite;
+                }
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Simulate suspense
+            setTimeout(() => {
+                // Pick random winner
+                const randomIndex = Math.floor(Math.random() * eligibleGiveawayReviews.length);
+                const winner = eligibleGiveawayReviews[randomIndex];
+                
+                // Show winner
+                showWinner(winner);
+            }, 3000);
+        };
+        
+        // Show winner with celebration
+        function showWinner(winner) {
+            // Create confetti
+            createConfetti();
+            
+            // Create winner modal
+            const modal = document.createElement('div');
+            modal.className = 'winner-modal';
+            modal.innerHTML = `
+                <div class="winner-content">
+                    <div class="winner-emoji">🎉🏆🎉</div>
+                    <h2 style="color: var(--text-primary); margin-bottom: 10px;">مبروك!</h2>
+                    <div class="winner-name">${escapeHtml(winner.name)}</div>
+                    <p class="winner-prize">🎁 ربح حساب ChatGPT Business لمدة شهر!</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        تعليقه: "${escapeHtml(winner.comment.substring(0, 100))}${winner.comment.length > 100 ? '...' : ''}"
+                    </p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="btn primary" style="margin-top: 20px;">
+                        إغلاق
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Update giveaway section
+            const giveawaySection = document.getElementById('giveaway-section');
+            giveawaySection.innerHTML = `
+                <div class="giveaway-badge">🏆 انتهت المسابقة</div>
+                <h2 class="giveaway-title">🎉 مبروك للفائز!</h2>
+                <div style="background: var(--card-bg); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-top: var(--spacing-md);">
+                    <p style="font-size: 2rem; color: var(--accent); font-weight: 800;">${escapeHtml(winner.name)}</p>
+                    <p style="color: var(--text-secondary);">ربح حساب ChatGPT Business لمدة شهر! 🎁</p>
+                </div>
+            `;
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#ffd56f', '#10a37f', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = Math.random() * 10 + 5 + 'px';
+                    confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+        
+        // Escape HTML helper
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
         // Override closeAddReviewModal to ensure it works correctly
         window.closeAddReviewModal = function() {
             const modal = document.getElementById('add-review-modal');

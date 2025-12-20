@@ -115,6 +115,23 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // Check 24-hour limit
+            const lastReviewTime = localStorage.getItem('lastReviewTime');
+            if (lastReviewTime) {
+                const timeDiff = Date.now() - parseInt(lastReviewTime);
+                const hoursRemaining = Math.ceil((24 * 60 * 60 * 1000 - timeDiff) / (60 * 60 * 1000));
+                
+                if (timeDiff < 24 * 60 * 60 * 1000) {
+                    const msg = currentLang === 'ar' 
+                        ? `يمكنك إضافة تعليق واحد فقط كل 24 ساعة. يرجى الانتظار ${hoursRemaining} ساعة.`
+                        : currentLang === 'fr' 
+                        ? `Vous ne pouvez ajouter qu'un avis toutes les 24 heures. Veuillez attendre ${hoursRemaining} heure(s).`
+                        : `You can only add one review every 24 hours. Please wait ${hoursRemaining} hour(s).`;
+                    alert(msg);
+                    return;
+                }
+            }
+            
             const name = document.getElementById('review-name').value;
             const product = document.getElementById('review-product').value;
             const source = document.getElementById('review-source').value;
@@ -161,6 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                     
                     await addDoc(collection(window.db, collectionName), reviewData);
+                    
+                    // Save timestamp to localStorage for 24-hour limit
+                    localStorage.setItem('lastReviewTime', Date.now().toString());
                     
                     const successMsg = currentLang === 'ar' ? 'شكراً! تم إرسال تقييمك بنجاح. سيتم مراجعته قريباً.' : 
                                        currentLang === 'fr' ? 'Merci! Votre avis a été soumis avec succès. Il sera examiné bientôt.' :
@@ -325,6 +345,11 @@ function updateStats() {
     } else {
         totalCount.textContent = '0';
         avgRating.textContent = '5.0';
+    }
+    
+    // Update giveaway eligible participants
+    if (typeof updateEligibleParticipants === 'function') {
+        updateEligibleParticipants(allReviews);
     }
 }
 
