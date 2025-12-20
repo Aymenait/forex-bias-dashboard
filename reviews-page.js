@@ -273,21 +273,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Load reviews from Firebase
 async function loadReviews() {
+    console.log('🔄 بدء تحميل التعليقات...');
     const loading = document.getElementById('loading');
     const container = document.getElementById('reviews-container');
     const noReviews = document.getElementById('no-reviews');
     
-    loading.classList.remove('hidden');
+    if (loading) loading.classList.remove('hidden');
     
     try {
         if (!window.db || !window.firebaseModules) {
+            console.log('⏳ انتظار Firebase...');
             await new Promise(resolve => {
                 const timeout = setTimeout(() => {
-                    console.log('Firebase timeout');
+                    console.log('⚠️ Firebase timeout');
                     resolve();
-                }, 3000);
+                }, 5000);
                 
                 window.addEventListener('firebaseReady', () => {
+                    console.log('✅ Firebase جاهز');
                     clearTimeout(timeout);
                     resolve();
                 }, { once: true });
@@ -297,6 +300,7 @@ async function loadReviews() {
         allReviews = [];
         
         if (window.db && window.firebaseModules) {
+            console.log('📚 تحميل من Firebase...');
             const { collection, getDocs, query: firebaseQuery, orderBy: firebaseOrderBy, limit: firebaseLimit } = window.firebaseModules;
             
             const collections = [
@@ -327,6 +331,26 @@ async function loadReviews() {
                     querySnapshot.forEach((doc) => {
                         const data = doc.data();
                         if (data.rating && data.name) {
+                            // معالجة التاريخ بشكل صحيح
+                            let reviewTimestamp = null;
+                            if (data.timestamp) {
+                                if (data.timestamp.toDate) {
+                                    reviewTimestamp = data.timestamp.toDate();
+                                } else if (data.timestamp.seconds) {
+                                    reviewTimestamp = new Date(data.timestamp.seconds * 1000);
+                                } else if (typeof data.timestamp === 'string') {
+                                    reviewTimestamp = new Date(data.timestamp);
+                                }
+                            } else if (data.date) {
+                                reviewTimestamp = new Date(data.date);
+                            } else if (data.createdAt) {
+                                if (data.createdAt.toDate) {
+                                    reviewTimestamp = data.createdAt.toDate();
+                                } else {
+                                    reviewTimestamp = new Date(data.createdAt);
+                                }
+                            }
+                            
                             reviews.push({
                                 id: doc.id,
                                 name: data.name,
@@ -334,7 +358,7 @@ async function loadReviews() {
                                 rating: data.rating,
                                 comment: data.comment || '',
                                 platform: data.platform || data.source || 'Unknown',
-                                timestamp: data.timestamp?.toDate?.() || new Date(),
+                                timestamp: reviewTimestamp,
                                 image: data.image || null
                             });
                         }
@@ -348,6 +372,26 @@ async function loadReviews() {
                         querySnapshot.forEach((doc) => {
                             const data = doc.data();
                             if (data.rating && data.name) {
+                                // معالجة التاريخ بشكل صحيح
+                                let reviewTimestamp = null;
+                                if (data.timestamp) {
+                                    if (data.timestamp.toDate) {
+                                        reviewTimestamp = data.timestamp.toDate();
+                                    } else if (data.timestamp.seconds) {
+                                        reviewTimestamp = new Date(data.timestamp.seconds * 1000);
+                                    } else if (typeof data.timestamp === 'string') {
+                                        reviewTimestamp = new Date(data.timestamp);
+                                    }
+                                } else if (data.date) {
+                                    reviewTimestamp = new Date(data.date);
+                                } else if (data.createdAt) {
+                                    if (data.createdAt.toDate) {
+                                        reviewTimestamp = data.createdAt.toDate();
+                                    } else {
+                                        reviewTimestamp = new Date(data.createdAt);
+                                    }
+                                }
+                                
                                 reviews.push({
                                     id: doc.id,
                                     name: data.name,
@@ -355,7 +399,7 @@ async function loadReviews() {
                                     rating: data.rating,
                                     comment: data.comment || '',
                                     platform: data.platform || data.source || 'Unknown',
-                                    timestamp: data.timestamp?.toDate?.() || new Date(),
+                                    timestamp: reviewTimestamp,
                                     image: data.image || null
                                 });
                             }
@@ -412,6 +456,13 @@ function updateStats() {
     if (typeof updateEligibleParticipants === 'function') {
         updateEligibleParticipants(allReviews);
     }
+    
+    // إعادة المحاولة بعد ثانية في حال لم تكن إعدادات المسابقة محملة بعد
+    setTimeout(() => {
+        if (typeof updateEligibleParticipants === 'function' && typeof GIVEAWAY_ACTIVE !== 'undefined' && GIVEAWAY_ACTIVE) {
+            updateEligibleParticipants(allReviews);
+        }
+    }, 2000);
 }
 
 // Display reviews
@@ -580,19 +631,26 @@ function formatReviewDates() {
     const locale = lang === 'ar' ? 'ar-DZ' : lang === 'fr' ? 'fr-FR' : 'en-US';
     
     allReviews.forEach(review => {
-        if (review.timestamp) {
-            const date = review.timestamp instanceof Date ? review.timestamp : new Date(review.timestamp);
-            review.date = date.toLocaleDateString(locale, { 
+        if (review.timestamp && review.timestamp instanceof Date && !isNaN(review.timestamp)) {
+            review.date = review.timestamp.toLocaleDateString(locale, { 
                 year: 'numeric', 
                 month: 'long', 
                 day: 'numeric' 
             });
+        } else if (review.timestamp) {
+            // محاولة تحويل التاريخ
+            const date = new Date(review.timestamp);
+            if (!isNaN(date)) {
+                review.date = date.toLocaleDateString(locale, { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            } else {
+                review.date = ''; // لا يوجد تاريخ صالح
+            }
         } else {
-            review.date = new Date().toLocaleDateString(locale, { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
+            review.date = ''; // لا يوجد تاريخ
         }
     });
 }

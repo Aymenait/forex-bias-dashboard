@@ -951,6 +951,12 @@
                         showGiveawaySection();
                         updateGiveawayDisplay();
                         updateCountdown();
+                        
+                        // تحديث عدد المشاركين إذا كانت التعليقات محملة
+                        if (typeof allReviews !== 'undefined' && allReviews.length > 0) {
+                            console.log('📊 تحديث المشاركين من التعليقات المحملة');
+                            updateEligibleParticipants(allReviews);
+                        }
                     } else {
                         console.log('⏸️ المسابقة غير مفعلة - إخفاء القسم');
                         hideGiveawaySection();
@@ -1045,10 +1051,40 @@
         function updateEligibleParticipants(reviews) {
             if (!GIVEAWAY_ACTIVE) return;
             
+            console.log('🔄 تحديث عدد المشاركين المؤهلين...');
+            console.log('📅 تاريخ بداية المسابقة:', GIVEAWAY_START_DATE);
+            console.log('📊 عدد التعليقات الكلي:', reviews.length);
+            
             eligibleGiveawayReviews = reviews.filter(review => {
-                const reviewDate = review.timestamp instanceof Date ? review.timestamp : new Date(review.timestamp);
-                return reviewDate >= GIVEAWAY_START_DATE;
+                // تجاهل التعليقات بدون تاريخ
+                if (!review.timestamp) {
+                    console.log('⚠️ تعليق بدون تاريخ:', review.name);
+                    return false;
+                }
+                
+                let reviewDate;
+                if (review.timestamp instanceof Date) {
+                    reviewDate = review.timestamp;
+                } else if (review.timestamp.seconds) {
+                    reviewDate = new Date(review.timestamp.seconds * 1000);
+                } else {
+                    reviewDate = new Date(review.timestamp);
+                }
+                
+                // التحقق من صحة التاريخ
+                if (isNaN(reviewDate.getTime())) {
+                    console.log('⚠️ تاريخ غير صالح:', review.name);
+                    return false;
+                }
+                
+                const isEligible = reviewDate >= GIVEAWAY_START_DATE;
+                if (isEligible) {
+                    console.log('✅ مؤهل:', review.name, reviewDate);
+                }
+                return isEligible;
             });
+            
+            console.log('👥 عدد المشاركين المؤهلين:', eligibleGiveawayReviews.length);
             
             const countEl = document.getElementById('participants-count');
             if (countEl) {
