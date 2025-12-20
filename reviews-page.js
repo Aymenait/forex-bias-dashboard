@@ -5,6 +5,7 @@ let allReviews = [];
 let displayedReviews = 0;
 const reviewsPerPage = 12;
 let currentFilter = 'all';
+let selectedImageBase64 = null; // لتخزين الصورة المحددة
 
 // Open Add Review Modal
 window.openAddReviewModal = function() {
@@ -39,7 +40,60 @@ window.closeAddReviewModal = function() {
             star.classList.remove('text-yellow-400');
             star.classList.add('text-gray-300');
         });
+        
+        // Reset image
+        removeSelectedImage();
     }
+}
+
+// إزالة الصورة المحددة
+window.removeSelectedImage = function() {
+    selectedImageBase64 = null;
+    const imageInput = document.getElementById('review-image');
+    const previewContainer = document.getElementById('image-preview-container');
+    const placeholder = document.getElementById('image-upload-placeholder');
+    const preview = document.getElementById('image-preview');
+    
+    if (imageInput) imageInput.value = '';
+    if (preview) preview.src = '';
+    if (previewContainer) previewContainer.style.display = 'none';
+    if (placeholder) placeholder.style.display = 'block';
+}
+
+// معالجة اختيار الصورة
+function handleImageSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // التحقق من نوع الملف
+    if (!file.type.startsWith('image/')) {
+        alert(currentLang === 'ar' ? 'الرجاء اختيار صورة فقط' : 
+              currentLang === 'fr' ? 'Veuillez sélectionner une image uniquement' : 
+              'Please select an image only');
+        return;
+    }
+    
+    // التحقق من حجم الملف (2MB max)
+    if (file.size > 2 * 1024 * 1024) {
+        alert(currentLang === 'ar' ? 'حجم الصورة يجب أن يكون أقل من 2MB' : 
+              currentLang === 'fr' ? 'La taille de l\'image doit être inférieure à 2 Mo' : 
+              'Image size must be less than 2MB');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        selectedImageBase64 = e.target.result;
+        
+        const previewContainer = document.getElementById('image-preview-container');
+        const placeholder = document.getElementById('image-upload-placeholder');
+        const preview = document.getElementById('image-preview');
+        
+        if (preview) preview.src = selectedImageBase64;
+        if (previewContainer) previewContainer.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
 }
 
 // Close modal when clicking on backdrop
@@ -52,6 +106,12 @@ window.closeAddReviewModalOnBackdrop = function(event) {
 // Initialize star rating
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Reviews page loaded');
+    
+    // إضافة مستمع لحقل الصورة
+    const imageInput = document.getElementById('review-image');
+    if (imageInput) {
+        imageInput.addEventListener('change', handleImageSelect);
+    }
     
     // Add event listener to Add Review button
     const addReviewBtn = document.getElementById('add-review-btn');
@@ -171,10 +231,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         comment: comment,
                         source: source,
                         timestamp: serverTimestamp(),
-                        approved: false
+                        approved: false,
+                        image: selectedImageBase64 || null
                     };
                     
                     await addDoc(collection(window.db, collectionName), reviewData);
+                    
+                    // Reset image after submit
+                    selectedImageBase64 = null;
                     
                     // Save timestamp to localStorage for 24-hour limit
                     localStorage.setItem('lastReviewTime', Date.now().toString());

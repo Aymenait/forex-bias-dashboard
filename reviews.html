@@ -435,6 +435,59 @@
             box-shadow: 0 10px 30px rgba(16, 163, 127, 0.4);
         }
         
+        /* Image Upload Styles */
+        .image-upload-container {
+            margin-top: 8px;
+        }
+        
+        .image-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            background: rgba(255, 255, 255, 0.02);
+            position: relative;
+        }
+        
+        .image-upload-area:hover {
+            border-color: var(--accent);
+            background: rgba(255, 213, 111, 0.05);
+        }
+        
+        #image-upload-placeholder {
+            color: var(--text-secondary);
+        }
+        
+        #image-preview-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .remove-image-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .remove-image-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+        
         /* Winner Modal */
         .winner-modal {
             position: fixed;
@@ -814,6 +867,24 @@
                 <div>
                     <label data-i18n="addReview.comment">التعليق:</label>
                     <textarea id="review-comment" required rows="4" placeholder="شارك تجربتك معنا..."></textarea>
+                </div>
+
+                <div>
+                    <label data-i18n="addReview.image">📷 صورة (اختياري):</label>
+                    <div class="image-upload-container">
+                        <input type="file" id="review-image" accept="image/*" style="display: none;">
+                        <div id="image-upload-area" class="image-upload-area" onclick="document.getElementById('review-image').click()">
+                            <div id="image-preview-container" style="display: none;">
+                                <img id="image-preview" src="" alt="Preview" style="max-width: 100%; max-height: 150px; border-radius: 8px;">
+                                <button type="button" onclick="event.stopPropagation(); removeSelectedImage();" class="remove-image-btn">✕</button>
+                            </div>
+                            <div id="image-upload-placeholder">
+                                <span style="font-size: 2rem;">📷</span>
+                                <p data-i18n="addReview.uploadImage">اضغط لرفع صورة</p>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary);">PNG, JPG (max 2MB)</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn primary" data-i18n="addReview.submit">
