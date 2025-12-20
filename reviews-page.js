@@ -150,10 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             try {
                 if (window.db && window.firebaseModules) {
-                    const { collection, addDoc } = window.firebaseModules;
-                    
-                    // Import serverTimestamp
-                    const { serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                    const { collection, addDoc, serverTimestamp } = window.firebaseModules;
                     
                     let collectionName = 'reviews';
                     if (product.includes('ChatGPT')) collectionName = 'chatgpt-reviews';
