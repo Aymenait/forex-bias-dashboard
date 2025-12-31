@@ -245,6 +245,10 @@
                             <option value="unavailable">غير متوفر</option>
                             <option value="coming_soon">قريباً</option>
                         </select>
+                        <!-- Migration Button -->
+                        <button onclick="runDataMigration()" id="migration-btn" class="px-4 py-2 rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white font-bold">
+                            🔄 ترحيل البيانات
+                        </button>
                         <button onclick="openProductModal()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             ➕ إضافة منتج جديد
                         </button>
@@ -303,6 +307,44 @@
                 
                 <!-- Drag & Drop Hint -->
                 <p class="text-gray-500 text-sm mt-3 text-center">💡 اسحب وأفلت الصفوف لتغيير ترتيب المنتجات</p>
+                
+                <!-- ═══════════ Archived Products Section ═══════════ -->
+                <div class="mt-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold flex items-center gap-2">
+                            📁 المنتجات المؤرشفة
+                            <span id="archived-products-count" class="text-sm font-normal text-gray-400">(0)</span>
+                        </h3>
+                        <button onclick="toggleArchivedSection()" id="toggle-archived-btn" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm">
+                            👁️ عرض المؤرشفة
+                        </button>
+                    </div>
+                    
+                    <!-- Archived Products Table (Hidden by default) -->
+                    <div id="archived-products-section" class="hidden">
+                        <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                            <div class="overflow-x-auto">
+                                <table class="w-full" id="archived-products-table">
+                                    <thead style="background: rgba(255, 255, 255, 0.05);">
+                                        <tr>
+                                            <th class="text-right px-4 py-4">الصورة</th>
+                                            <th class="text-right px-4 py-4">المنتج</th>
+                                            <th class="text-right px-4 py-4">السعر</th>
+                                            <th class="text-right px-4 py-4">تاريخ الأرشفة</th>
+                                            <th class="text-center px-4 py-4">إجراءات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="archived-products-table-body">
+                                        <tr>
+                                            <td colspan="5" class="text-center py-8 text-gray-400">لا توجد منتجات مؤرشفة</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm mt-3 text-center">💡 يمكنك استعادة المنتجات المؤرشفة أو حذفها نهائياً</p>
+                    </div>
+                </div>
             </div>
             
             <!-- ═══════════ Orders Tab ═══════════ -->
@@ -1304,171 +1346,385 @@
         </div>
     </div>
     
-    <!-- Product Modal -->
+    <!-- Product Modal - Enhanced Version -->
     <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
         <div class="rounded-2xl p-6 max-w-4xl w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
-            <h3 class="text-2xl font-bold mb-6" id="product-modal-title">إضافة منتج جديد</h3>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold" id="product-modal-title">✏️ تعديل المنتج</h3>
+                <button type="button" onclick="closeProductModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
             <form id="product-form" class="space-y-4">
-                <!-- Row 1: ID, Name, Category -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-gray-300 mb-2">معرف المنتج (ID) <span class="text-red-400">*</span></label>
-                        <input type="text" id="product-id" required placeholder="مثال: trw"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 mb-2">اسم المنتج <span class="text-red-400">*</span></label>
-                        <input type="text" id="product-name" required placeholder="اسم المنتج"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 mb-2">الفئة</label>
-                        <select id="product-category"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                            <option value="subscriptions">اشتراكات</option>
-                            <option value="accounts">حسابات</option>
-                            <option value="tools">أدوات</option>
-                            <option value="courses">كورسات</option>
-                            <option value="other">أخرى</option>
-                        </select>
-                    </div>
-                </div>
                 
-                <!-- Row 2: Selling Prices -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-gray-300 mb-2">سعر البيع (DZD) <span class="text-red-400">*</span></label>
-                        <input type="number" id="product-price-dzd" required min="0" step="0.01" placeholder="0"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                <!-- Section 1: Basic Information - المعلومات الأساسية -->
+                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📝 المعلومات الأساسية</h4>
+                    
+                    <!-- Product ID (hidden for edit mode) -->
+                    <input type="hidden" id="product-id">
+                    
+                    <!-- Product Names - Multilingual -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-300 mb-2">اسم المنتج (عربي) <span class="text-red-400">*</span></label>
+                            <input type="text" id="product-name-ar" required placeholder="اسم المنتج بالعربية"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">اسم المنتج (إنجليزي)</label>
+                            <input type="text" id="product-name-en" placeholder="Product name in English"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">اسم المنتج (فرنسي)</label>
+                            <input type="text" id="product-name-fr" placeholder="Nom du produit en français"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-gray-300 mb-2">السعر القديم (DZD)</label>
-                        <input type="number" id="product-old-price-dzd" min="0" step="0.01" placeholder="اختياري"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 mb-2">سعر البيع (USD) <span class="text-red-400">*</span></label>
-                        <input type="number" id="product-price-usd" required min="0" step="0.01" placeholder="0"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 mb-2">السعر القديم (USD)</label>
-                        <input type="number" id="product-old-price-usd" min="0" step="0.01" placeholder="اختياري"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    </div>
-                </div>
-                
-                <!-- Row 2.5: Cost Prices & Supplier -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-lg" style="background: rgba(139, 92, 246, 0.1); border: 1px dashed rgba(139, 92, 246, 0.3);">
-                    <div>
-                        <label class="block text-gray-300 mb-2">💰 سعر الشراء (DZD)</label>
-                        <input type="number" id="product-cost-dzd" min="0" step="0.01" placeholder="تكلفة الشراء"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 mb-2">💵 سعر الشراء (USD)</label>
-                        <input type="number" id="product-cost-usd" min="0" step="0.01" placeholder="تكلفة الشراء"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 mb-2">🏪 اسم المورد</label>
-                        <input type="text" id="product-supplier" placeholder="من أين اشتريت؟"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    </div>
-                </div>
-                
-                <!-- Row 3: Stock & Image -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-gray-300 mb-2">المخزون (عدد الحسابات)</label>
-                        <input type="number" id="product-stock" min="0" placeholder="غير محدود إذا فارغ"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-gray-300 mb-2">رابط الصورة</label>
-                        <div class="flex gap-2">
-                            <input type="url" id="product-image" placeholder="https://i.imgur.com/..."
-                                class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                            <div id="product-image-preview" class="w-12 h-12 bg-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
-                                <span class="text-gray-400 text-xs">معاينة</span>
-                            </div>
+                    
+                    <!-- Legacy fields for backward compatibility -->
+                    <input type="hidden" id="product-name">
+                    
+                    <!-- Category -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-300 mb-2">الفئة</label>
+                            <select id="product-category"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                                <option value="subscriptions">اشتراكات</option>
+                                <option value="accounts">حسابات</option>
+                                <option value="tools">أدوات</option>
+                                <option value="courses">كورسات</option>
+                                <option value="other">أخرى</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">ترتيب العرض</label>
+                            <input type="number" id="product-display-order" min="0" placeholder="0"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
                     </div>
                 </div>
                 
-                <!-- Row 4: Features -->
-                <div>
-                    <label class="block text-gray-300 mb-2">المميزات (سطر لكل ميزة)</label>
-                    <textarea id="product-features" rows="3" placeholder="✅ ميزة 1&#10;✅ ميزة 2&#10;✅ ميزة 3"
-                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
-                </div>
-                
-                <!-- Row 5: WhatsApp Message -->
-                <div>
-                    <label class="block text-gray-300 mb-2">رسالة WhatsApp المخصصة</label>
-                    <input type="text" id="product-whatsapp-msg" placeholder="مرحباً، أريد شراء {product_name}"
-                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
-                    <p class="text-gray-500 text-xs mt-1">استخدم {product_name} لإدراج اسم المنتج تلقائياً</p>
-                </div>
-                
-                <!-- Row 6: Descriptions -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-gray-300 mb-2">الوصف (عربي)</label>
-                        <textarea id="product-desc-ar" rows="3" placeholder="وصف المنتج بالعربية"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 mb-2">الوصف (إنجليزي)</label>
-                        <textarea id="product-desc-en" rows="3" placeholder="Product description in English"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 mb-2">الوصف (فرنسي)</label>
-                        <textarea id="product-desc-fr" rows="3" placeholder="Description du produit en français"
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                <!-- Section 2: Prices - الأسعار -->
+                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">💰 الأسعار</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-gray-300 mb-2">السعر (د.ج) <span class="text-red-400">*</span></label>
+                            <input type="number" id="product-price-dzd" required min="0" step="0.01" placeholder="0"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">السعر القديم (د.ج)</label>
+                            <input type="number" id="product-old-price-dzd" min="0" step="0.01" placeholder="اختياري"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">السعر ($) <span class="text-red-400">*</span></label>
+                            <input type="number" id="product-price-usd" required min="0" step="0.01" placeholder="0"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">السعر القديم ($)</label>
+                            <input type="number" id="product-old-price-usd" min="0" step="0.01" placeholder="اختياري"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Row 7: Status Checkboxes -->
-                <div class="flex flex-wrap items-center gap-6 p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" id="product-available" checked class="w-5 h-5 accent-green-500">
-                        <label for="product-available" class="text-gray-300">✅ متوفر للبيع</label>
+                <!-- Section 2.5: Cost Prices & Supplier -->
+                <div class="p-4 rounded-lg" style="background: rgba(139, 92, 246, 0.1); border: 1px dashed rgba(139, 92, 246, 0.3);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📊 معلومات التكلفة (للمحاسبة)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-gray-300 mb-2">💰 سعر الشراء (د.ج)</label>
+                            <input type="number" id="product-cost-dzd" min="0" step="0.01" placeholder="تكلفة الشراء"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">💵 سعر الشراء ($)</label>
+                            <input type="number" id="product-cost-usd" min="0" step="0.01" placeholder="تكلفة الشراء"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">🏪 اسم المورد</label>
+                            <input type="text" id="product-supplier" placeholder="من أين اشتريت؟"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" id="product-active" checked class="w-5 h-5 accent-purple-500">
-                        <label for="product-active" class="text-gray-300">👁️ المنتج نشط (مرئي)</label>
+                </div>
+                
+                <!-- Section 3: Availability Status - حالة التوفر -->
+                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📊 حالة التوفر</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 transition-all availability-option" data-status="available">
+                            <input type="radio" name="product-availability" value="available" checked class="w-5 h-5 accent-green-500">
+                            <span class="text-green-400 font-bold">✅ متوفر</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 transition-all availability-option" data-status="unavailable">
+                            <input type="radio" name="product-availability" value="unavailable" class="w-5 h-5 accent-red-500">
+                            <span class="text-red-400 font-bold">❌ غير متوفر</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 transition-all availability-option" data-status="coming_soon">
+                            <input type="radio" name="product-availability" value="coming_soon" class="w-5 h-5 accent-yellow-500">
+                            <span class="text-yellow-400 font-bold">🔜 قريباً</span>
+                        </label>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" id="product-featured" class="w-5 h-5 accent-yellow-500">
-                        <label for="product-featured" class="text-gray-300">⭐ منتج مميز</label>
+                </div>
+                
+                <!-- Section 4: Media - الوسائط -->
+                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">🖼️ الوسائط (صورة أو فيديو من Imgur)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-300 mb-2">رابط الوسائط</label>
+                            <input type="url" id="product-media-url" placeholder="https://i.imgur.com/..."
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                                onchange="previewProductMedia()">
+                            <p class="text-gray-500 text-xs mt-1">يدعم: .png, .jpg, .gif (صور) و .mp4 (فيديو)</p>
+                            <!-- Legacy field for backward compatibility -->
+                            <input type="hidden" id="product-image">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">معاينة</label>
+                            <div id="product-media-preview" class="w-full h-32 bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden border border-gray-600">
+                                <span class="text-gray-400">معاينة الوسائط</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-gray-300 mb-2">المخزون (عدد الحسابات)</label>
+                        <input type="number" id="product-stock" min="0" placeholder="غير محدود إذا فارغ"
+                            class="w-full md:w-1/3 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                </div>
+                
+                <!-- Section 5: Payment Methods - طرق الدفع -->
+                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">💳 طرق الدفع</h4>
+                    <div class="flex flex-wrap gap-6">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="payment-usdt" checked class="w-5 h-5 accent-green-500">
+                            <span class="text-gray-300">💵 USDT</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="payment-redotpay" checked class="w-5 h-5 accent-blue-500">
+                            <span class="text-gray-300">💳 RedotPay</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="payment-baridimob" checked class="w-5 h-5 accent-yellow-500">
+                            <span class="text-gray-300">📱 BaridiMob</span>
+                        </label>
+                    </div>
+                    <p id="payment-warning" class="text-red-400 text-sm mt-2 hidden">⚠️ تحذير: يجب تفعيل طريقة دفع واحدة على الأقل</p>
+                </div>
+                
+                <!-- Section 6: Features - المميزات -->
+                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">⭐ المميزات (حد أقصى 5)</h4>
+                    <div id="features-container" class="space-y-2 mb-4">
+                        <!-- Features will be added dynamically -->
+                    </div>
+                    <button type="button" onclick="addFeatureRow()" id="add-feature-btn" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm">
+                        ➕ إضافة ميزة
+                    </button>
+                    <p id="features-limit-warning" class="text-yellow-400 text-sm mt-2 hidden">⚠️ الحد الأقصى للمميزات هو 5</p>
+                    <!-- Legacy field for backward compatibility -->
+                    <textarea id="product-features" class="hidden"></textarea>
+                </div>
+                
+                <!-- Section 7: Descriptions - الوصف -->
+                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📝 الوصف</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-gray-300 mb-2">الوصف (عربي) <span class="text-red-400">*</span></label>
+                            <textarea id="product-desc-ar" rows="3" placeholder="وصف المنتج بالعربية"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">الوصف (إنجليزي)</label>
+                            <textarea id="product-desc-en" rows="3" placeholder="Product description in English"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">الوصف (فرنسي)</label>
+                            <textarea id="product-desc-fr" rows="3" placeholder="Description du produit en français"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section 8: Sub-Offers - العروض الفرعية (اختياري) -->
+                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📦 العروض الفرعية (اختياري)</h4>
+                    <div id="sub-offers-container" class="space-y-3 mb-4">
+                        <p class="text-gray-500 text-sm" id="no-sub-offers-msg">لا توجد عروض فرعية حالياً</p>
+                    </div>
+                    <button type="button" onclick="openSubOfferModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm">
+                        ➕ إضافة عرض فرعي
+                    </button>
+                </div>
+                
+                <!-- Section 9: Additional Settings - إعدادات إضافية -->
+                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">⚙️ إعدادات إضافية</h4>
+                    <div class="flex flex-wrap items-center gap-6">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="product-active" checked class="w-5 h-5 accent-purple-500">
+                            <span class="text-gray-300">👁️ المنتج نشط (مرئي)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="product-featured" class="w-5 h-5 accent-yellow-500">
+                            <span class="text-gray-300">⭐ منتج مميز</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="product-archived" class="w-5 h-5 accent-gray-500">
+                            <span class="text-gray-300">📁 مؤرشف</span>
+                        </label>
+                    </div>
+                    <!-- WhatsApp Message -->
+                    <div class="mt-4">
+                        <label class="block text-gray-300 mb-2">رسالة WhatsApp المخصصة</label>
+                        <input type="text" id="product-whatsapp-msg" placeholder="مرحباً، أريد شراء {product_name}"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                        <p class="text-gray-500 text-xs mt-1">استخدم {product_name} لإدراج اسم المنتج تلقائياً</p>
                     </div>
                 </div>
                 
                 <!-- Buttons -->
-                <div class="flex gap-4 justify-end pt-4 border-t border-gray-700">
-                    <button type="button" onclick="closeProductModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
-                        إلغاء
+                <div class="flex gap-4 justify-between pt-4 border-t border-gray-700">
+                    <button type="button" onclick="previewProductChanges()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                        👁️ معاينة
                     </button>
-                    <button type="submit" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
-                        💾 حفظ المنتج
-                    </button>
+                    <div class="flex gap-4">
+                        <button type="button" onclick="closeProductModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                            إلغاء
+                        </button>
+                        <button type="submit" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            💾 حفظ المنتج
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
     
-    <!-- Product Preview Modal -->
+    <!-- Product Preview Modal - Enhanced with Language Switching -->
     <div id="product-preview-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-6 max-w-lg w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+        <div class="rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+            <!-- Header with Language Switcher -->
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-bold">👁️ معاينة المنتج</h3>
-                <button onclick="closePreviewModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                <div class="flex items-center gap-3">
+                    <!-- Language Switcher -->
+                    <div class="flex gap-1 bg-gray-800 rounded-lg p-1" id="preview-lang-switcher">
+                        <button type="button" onclick="setPreviewLanguage('ar')" 
+                            class="preview-lang-btn px-3 py-1 rounded text-sm transition-colors active" data-lang="ar">
+                            العربية
+                        </button>
+                        <button type="button" onclick="setPreviewLanguage('en')" 
+                            class="preview-lang-btn px-3 py-1 rounded text-sm transition-colors" data-lang="en">
+                            English
+                        </button>
+                        <button type="button" onclick="setPreviewLanguage('fr')" 
+                            class="preview-lang-btn px-3 py-1 rounded text-sm transition-colors" data-lang="fr">
+                            Français
+                        </button>
+                    </div>
+                    <button onclick="closePreviewModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
             </div>
+            
+            <!-- Preview Content - Simulates Main Page Product Card -->
             <div id="product-preview-content" class="space-y-4">
                 <!-- Preview content will be populated by JavaScript -->
             </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex gap-4 justify-end pt-4 mt-4 border-t border-gray-700" id="preview-action-buttons">
+                <button type="button" onclick="cancelPreviewChanges()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                    ❌ إلغاء
+                </button>
+                <button type="button" onclick="confirmAndPublish()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                    ✅ تأكيد ونشر
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sub-Offer Modal - نافذة إضافة عرض فرعي -->
+    <div id="sub-offer-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-6 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold" id="sub-offer-modal-title">➕ إضافة عرض فرعي</h3>
+                <button type="button" onclick="closeSubOfferModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <form id="sub-offer-form" class="space-y-4">
+                <input type="hidden" id="sub-offer-id">
+                <input type="hidden" id="sub-offer-index">
+                
+                <!-- Sub-Offer Names - Multilingual -->
+                <div>
+                    <label class="block text-gray-300 mb-2">اسم العرض (عربي) <span class="text-red-400">*</span></label>
+                    <input type="text" id="sub-offer-name-ar" required placeholder="مثال: حساب مشترك"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-2">اسم العرض (إنجليزي)</label>
+                    <input type="text" id="sub-offer-name-en" placeholder="e.g. Shared Account"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-2">اسم العرض (فرنسي)</label>
+                    <input type="text" id="sub-offer-name-fr" placeholder="ex. Compte Partagé"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                
+                <!-- Sub-Offer Prices -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-300 mb-2">السعر (د.ج) <span class="text-red-400">*</span></label>
+                        <input type="number" id="sub-offer-price-dzd" required min="0" step="0.01" placeholder="0"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">السعر ($) <span class="text-red-400">*</span></label>
+                        <input type="number" id="sub-offer-price-usd" required min="0" step="0.01" placeholder="0"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                </div>
+                
+                <!-- Sub-Offer Availability -->
+                <div>
+                    <label class="block text-gray-300 mb-2">حالة التوفر</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="sub-offer-availability" value="available" checked class="w-4 h-4 accent-green-500">
+                            <span class="text-green-400 text-sm">✅ متوفر</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="sub-offer-availability" value="unavailable" class="w-4 h-4 accent-red-500">
+                            <span class="text-red-400 text-sm">❌ غير متوفر</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="sub-offer-availability" value="coming_soon" class="w-4 h-4 accent-yellow-500">
+                            <span class="text-yellow-400 text-sm">🔜 قريباً</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Buttons -->
+                <div class="flex gap-4 justify-end pt-4 border-t border-gray-700">
+                    <button type="button" onclick="closeSubOfferModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                        إلغاء
+                    </button>
+                    <button type="submit" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        💾 حفظ
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
     
@@ -2058,7 +2314,72 @@
     
     <!-- Currency Config for Products -->
     <script src="currency-config.js"></script>
-
+    
+    <!-- Admin Product Management UI -->
+    <script src="admin-product-model.js"></script>
+    <script src="admin-validation.js"></script>
+    <script src="admin-product-controller.js" type="module"></script>
+    <script src="admin-product-ui.js"></script>
+    
+    <!-- Data Migration Script -->
+    <script src="data-migration.js"></script>
+    
+    <!-- Migration Function -->
+    <script>
+        // دالة تشغيل ترحيل البيانات
+        async function runDataMigration() {
+            const btn = document.getElementById('migration-btn');
+            
+            if (!window.db || !window.firebaseModules) {
+                alert('❌ Firebase غير متاح. يرجى الانتظار حتى يتم تحميل Firebase.');
+                return;
+            }
+            
+            // التحقق من وجود منتجات مسبقاً
+            if (window.DataMigration) {
+                try {
+                    btn.disabled = true;
+                    btn.innerHTML = '⏳ جاري الترحيل...';
+                    
+                    const existingIds = await window.DataMigration.checkExistingProducts(window.db, window.firebaseModules);
+                    
+                    if (existingIds.length > 0) {
+                        const confirmOverwrite = confirm(`⚠️ يوجد ${existingIds.length} منتج في Firebase.\n\nهل تريد إعادة ترحيل البيانات؟ (سيتم تحديث المنتجات الموجودة)`);
+                        if (!confirmOverwrite) {
+                            btn.disabled = false;
+                            btn.innerHTML = '🔄 ترحيل البيانات';
+                            return;
+                        }
+                    }
+                    
+                    // تشغيل الترحيل
+                    const results = await window.DataMigration.migrateAllProducts(window.db, window.firebaseModules);
+                    
+                    btn.disabled = false;
+                    btn.innerHTML = '🔄 ترحيل البيانات';
+                    
+                    if (results.failed === 0) {
+                        alert(`✅ تم ترحيل ${results.success} منتج بنجاح!`);
+                        // إعادة تحميل جدول المنتجات
+                        if (typeof loadProductsTable === 'function') {
+                            loadProductsTable();
+                        }
+                    } else {
+                        alert(`⚠️ تم ترحيل ${results.success} منتج.\n❌ فشل ترحيل ${results.failed} منتج.\n\nالأخطاء:\n${results.errors.map(e => e.productId + ': ' + e.error).join('\n')}`);
+                    }
+                    
+                } catch (error) {
+                    btn.disabled = false;
+                    btn.innerHTML = '🔄 ترحيل البيانات';
+                    alert('❌ خطأ في الترحيل: ' + error.message);
+                    console.error('Migration error:', error);
+                }
+            } else {
+                alert('❌ سكريبت الترحيل غير متاح.');
+            }
+        }
+    </script>
+    
     <script src="admin.js"></script>
 </body>
 </html>

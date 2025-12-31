@@ -2809,6 +2809,16 @@ function changeLanguage(lang) {
 
     // Update price displays with correct currency symbol
     updatePriceDisplays(lang);
+    
+    // Update product translations from Firebase (Requirements: 4.5)
+    if (window.ProductTranslationsUI) {
+        window.ProductTranslationsUI.onLanguageChange(lang);
+    }
+    
+    // Update availability texts for the new language
+    if (window.AvailabilityUI) {
+        window.AvailabilityUI.updateAvailabilityTextsForLanguage(lang);
+    }
 
     // Save preference
     localStorage.setItem('preferredLanguage', lang);

@@ -2409,6 +2409,7 @@ async function saveProductOrder() {
 
 /**
  * فتح نافذة إضافة/تعديل منتج
+ * تستخدم الواجهة المحسنة من admin-product-ui.js
  */
 function openProductModal(productId = null) {
     editingProductId = productId;
@@ -2416,42 +2417,106 @@ function openProductModal(productId = null) {
     const form = document.getElementById('product-form');
     const title = document.getElementById('product-modal-title');
     
+    // Use enhanced UI if available
+    if (typeof window.openProductModalV2 === 'function') {
+        window.openProductModalV2(productId);
+        return;
+    }
+    
+    // Fallback to legacy behavior
     if (productId) {
         title.textContent = '✏️ تعديل المنتج';
         const product = allProducts.find(p => p.id === productId);
         if (product) {
             document.getElementById('product-id').value = product.id;
             document.getElementById('product-id').disabled = true;
-            document.getElementById('product-name').value = product.name || '';
+            
+            // Handle multilingual names
+            const nameAr = document.getElementById('product-name-ar');
+            const nameEn = document.getElementById('product-name-en');
+            const nameFr = document.getElementById('product-name-fr');
+            const nameLegacy = document.getElementById('product-name');
+            
+            if (nameAr && typeof product.name === 'object') {
+                nameAr.value = product.name.ar || '';
+                if (nameEn) nameEn.value = product.name.en || '';
+                if (nameFr) nameFr.value = product.name.fr || '';
+            } else if (nameLegacy) {
+                nameLegacy.value = product.name || '';
+            }
+            
             document.getElementById('product-category').value = product.category || 'other';
-            document.getElementById('product-price-dzd').value = product.price_dzd || 0;
-            document.getElementById('product-price-usd').value = product.price_usd || 0;
-            document.getElementById('product-old-price-dzd').value = product.old_price_dzd || '';
-            document.getElementById('product-old-price-usd').value = product.old_price_usd || '';
-            document.getElementById('product-cost-dzd').value = product.cost_dzd || '';
-            document.getElementById('product-cost-usd').value = product.cost_usd || '';
-            document.getElementById('product-supplier').value = product.supplier || '';
-            document.getElementById('product-stock').value = product.stock !== undefined ? product.stock : '';
-            document.getElementById('product-image').value = product.image || '';
-            document.getElementById('product-features').value = product.features || '';
-            document.getElementById('product-whatsapp-msg').value = product.whatsappMsg || '';
-            document.getElementById('product-desc-ar').value = product.description?.ar || '';
-            document.getElementById('product-desc-en').value = product.description?.en || '';
-            document.getElementById('product-desc-fr').value = product.description?.fr || '';
-            document.getElementById('product-available').checked = product.available !== false;
-            document.getElementById('product-active').checked = product.active !== false;
-            document.getElementById('product-featured').checked = product.featured || false;
+            document.getElementById('product-price-dzd').value = product.price_dzd || product.priceDZD || 0;
+            document.getElementById('product-price-usd').value = product.price_usd || product.priceUSD || 0;
+            
+            const oldPriceDzd = document.getElementById('product-old-price-dzd');
+            const oldPriceUsd = document.getElementById('product-old-price-usd');
+            if (oldPriceDzd) oldPriceDzd.value = product.old_price_dzd || '';
+            if (oldPriceUsd) oldPriceUsd.value = product.old_price_usd || '';
+            
+            const costDzd = document.getElementById('product-cost-dzd');
+            const costUsd = document.getElementById('product-cost-usd');
+            const supplier = document.getElementById('product-supplier');
+            if (costDzd) costDzd.value = product.cost_dzd || '';
+            if (costUsd) costUsd.value = product.cost_usd || '';
+            if (supplier) supplier.value = product.supplier || '';
+            
+            const stock = document.getElementById('product-stock');
+            if (stock) stock.value = product.stock !== undefined ? product.stock : '';
+            
+            // Handle media URL
+            const mediaUrl = document.getElementById('product-media-url');
+            const imageLegacy = document.getElementById('product-image');
+            if (mediaUrl) mediaUrl.value = product.mediaUrl || product.image || '';
+            if (imageLegacy) imageLegacy.value = product.mediaUrl || product.image || '';
+            
+            const features = document.getElementById('product-features');
+            if (features) features.value = product.features || '';
+            
+            const whatsappMsg = document.getElementById('product-whatsapp-msg');
+            if (whatsappMsg) whatsappMsg.value = product.whatsappMsg || product.whatsapp_msg || '';
+            
+            const descAr = document.getElementById('product-desc-ar');
+            const descEn = document.getElementById('product-desc-en');
+            const descFr = document.getElementById('product-desc-fr');
+            if (descAr) descAr.value = product.description?.ar || '';
+            if (descEn) descEn.value = product.description?.en || '';
+            if (descFr) descFr.value = product.description?.fr || '';
+            
+            // Handle availability status
+            const availability = product.availability || product.status || 
+                (product.available === false ? 'unavailable' : 'available');
+            const availabilityRadio = document.querySelector(`input[name="product-availability"][value="${availability}"]`);
+            if (availabilityRadio) availabilityRadio.checked = true;
+            
+            const productActive = document.getElementById('product-active');
+            const productFeatured = document.getElementById('product-featured');
+            if (productActive) productActive.checked = product.active !== false;
+            if (productFeatured) productFeatured.checked = product.featured || false;
             
             // تحديث معاينة الصورة
-            updateImagePreview();
+            if (typeof previewProductMedia === 'function') {
+                previewProductMedia();
+            } else {
+                updateImagePreview();
+            }
         }
     } else {
         title.textContent = '➕ إضافة منتج جديد';
         form.reset();
-        document.getElementById('product-id').disabled = false;
-        document.getElementById('product-available').checked = true;
-        document.getElementById('product-active').checked = true;
-        document.getElementById('product-image-preview').innerHTML = '<span class="text-gray-400 text-xs">معاينة</span>';
+        const productId = document.getElementById('product-id');
+        if (productId) productId.disabled = false;
+        
+        const productActive = document.getElementById('product-active');
+        if (productActive) productActive.checked = true;
+        
+        const availableRadio = document.querySelector('input[name="product-availability"][value="available"]');
+        if (availableRadio) availableRadio.checked = true;
+        
+        const imagePreview = document.getElementById('product-image-preview');
+        const mediaPreview = document.getElementById('product-media-preview');
+        if (imagePreview) imagePreview.innerHTML = '<span class="text-gray-400 text-xs">معاينة</span>';
+        if (mediaPreview) mediaPreview.innerHTML = '<span class="text-gray-400">معاينة الوسائط</span>';
     }
     
     modal.classList.remove('hidden');
@@ -2462,12 +2527,23 @@ function openProductModal(productId = null) {
  * إغلاق نافذة المنتج
  */
 function closeProductModal() {
+    // Use enhanced UI if available
+    if (typeof window.closeProductModalV2 === 'function') {
+        window.closeProductModalV2();
+        return;
+    }
+    
     const modal = document.getElementById('product-modal');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
     editingProductId = null;
-    document.getElementById('product-form').reset();
-    document.getElementById('product-image-preview').innerHTML = '<span class="text-gray-400 text-xs">معاينة</span>';
+    const form = document.getElementById('product-form');
+    if (form) form.reset();
+    
+    const imagePreview = document.getElementById('product-image-preview');
+    const mediaPreview = document.getElementById('product-media-preview');
+    if (imagePreview) imagePreview.innerHTML = '<span class="text-gray-400 text-xs">معاينة</span>';
+    if (mediaPreview) mediaPreview.innerHTML = '<span class="text-gray-400">معاينة الوسائط</span>';
 }
 
 /**
@@ -2483,46 +2559,124 @@ function editProduct(productId) {
 async function saveProduct(event) {
     event.preventDefault();
     
-    const stockValue = document.getElementById('product-stock').value;
-    const oldPriceDzd = document.getElementById('product-old-price-dzd').value;
-    const oldPriceUsd = document.getElementById('product-old-price-usd').value;
-    const costDzd = document.getElementById('product-cost-dzd').value;
-    const costUsd = document.getElementById('product-cost-usd').value;
-    const supplier = document.getElementById('product-supplier').value;
-    
-    const productData = {
-        id: document.getElementById('product-id').value,
-        name: document.getElementById('product-name').value,
-        category: document.getElementById('product-category').value,
-        price_dzd: parseFloat(document.getElementById('product-price-dzd').value),
-        price_usd: parseFloat(document.getElementById('product-price-usd').value),
-        old_price_dzd: oldPriceDzd ? parseFloat(oldPriceDzd) : null,
-        old_price_usd: oldPriceUsd ? parseFloat(oldPriceUsd) : null,
-        cost_dzd: costDzd ? parseFloat(costDzd) : null,
-        cost_usd: costUsd ? parseFloat(costUsd) : null,
-        supplier: supplier || null,
-        stock: stockValue !== '' ? parseInt(stockValue) : null,
-        image: document.getElementById('product-image').value,
-        features: document.getElementById('product-features').value,
-        whatsappMsg: document.getElementById('product-whatsapp-msg').value,
-        description: {
-            ar: document.getElementById('product-desc-ar').value,
-            en: document.getElementById('product-desc-en').value,
-            fr: document.getElementById('product-desc-fr').value
-        },
-        available: document.getElementById('product-available').checked,
-        active: document.getElementById('product-active').checked,
-        featured: document.getElementById('product-featured').checked,
-        updatedAt: new Date()
-    };
+    // Use enhanced form data collection if available
+    let productData;
+    if (typeof window.collectProductFormData === 'function') {
+        productData = window.collectProductFormData();
+        
+        // Validate using enhanced validation
+        if (typeof window.validateProductFormData === 'function') {
+            const validation = window.validateProductFormData(productData);
+            if (!validation.valid) {
+                showToast(validation.errors.join('\n'), 'error');
+                return;
+            }
+        }
+        
+        // Convert to legacy format for backward compatibility
+        productData = {
+            id: productData.id || document.getElementById('product-id')?.value,
+            name: productData.name?.ar || productData.name,
+            name_translations: productData.name,
+            category: productData.category,
+            price_dzd: productData.priceDZD,
+            price_usd: productData.priceUSD,
+            priceDZD: productData.priceDZD,
+            priceUSD: productData.priceUSD,
+            old_price_dzd: productData.old_price_dzd,
+            old_price_usd: productData.old_price_usd,
+            cost_dzd: productData.cost_dzd,
+            cost_usd: productData.cost_usd,
+            supplier: productData.supplier,
+            stock: productData.stock,
+            image: productData.mediaUrl,
+            mediaUrl: productData.mediaUrl,
+            mediaType: productData.mediaType,
+            features: productData.features,
+            paymentMethods: productData.paymentMethods,
+            subOffers: productData.subOffers,
+            whatsappMsg: productData.whatsapp_msg,
+            whatsapp_msg: productData.whatsapp_msg,
+            description: productData.description,
+            availability: productData.availability,
+            available: productData.availability === 'available',
+            status: productData.availability,
+            active: productData.active,
+            featured: productData.featured,
+            isArchived: productData.isArchived,
+            displayOrder: productData.displayOrder,
+            updatedAt: new Date()
+        };
+    } else {
+        // Legacy form data collection
+        const stockValue = document.getElementById('product-stock')?.value;
+        const oldPriceDzd = document.getElementById('product-old-price-dzd')?.value;
+        const oldPriceUsd = document.getElementById('product-old-price-usd')?.value;
+        const costDzd = document.getElementById('product-cost-dzd')?.value;
+        const costUsd = document.getElementById('product-cost-usd')?.value;
+        const supplier = document.getElementById('product-supplier')?.value;
+        
+        // Get name from multilingual fields or legacy field
+        const nameAr = document.getElementById('product-name-ar')?.value;
+        const nameEn = document.getElementById('product-name-en')?.value;
+        const nameFr = document.getElementById('product-name-fr')?.value;
+        const nameLegacy = document.getElementById('product-name')?.value;
+        
+        const name = nameAr || nameLegacy || '';
+        
+        // Get availability from radio buttons or checkbox
+        const availabilityRadio = document.querySelector('input[name="product-availability"]:checked');
+        const availableCheckbox = document.getElementById('product-available');
+        const availability = availabilityRadio?.value || (availableCheckbox?.checked ? 'available' : 'unavailable');
+        
+        // Get media URL from new or legacy field
+        const mediaUrl = document.getElementById('product-media-url')?.value || document.getElementById('product-image')?.value || '';
+        
+        productData = {
+            id: document.getElementById('product-id')?.value,
+            name: name,
+            name_translations: { ar: nameAr || name, en: nameEn || '', fr: nameFr || '' },
+            category: document.getElementById('product-category')?.value,
+            price_dzd: parseFloat(document.getElementById('product-price-dzd')?.value) || 0,
+            price_usd: parseFloat(document.getElementById('product-price-usd')?.value) || 0,
+            priceDZD: parseFloat(document.getElementById('product-price-dzd')?.value) || 0,
+            priceUSD: parseFloat(document.getElementById('product-price-usd')?.value) || 0,
+            old_price_dzd: oldPriceDzd ? parseFloat(oldPriceDzd) : null,
+            old_price_usd: oldPriceUsd ? parseFloat(oldPriceUsd) : null,
+            cost_dzd: costDzd ? parseFloat(costDzd) : null,
+            cost_usd: costUsd ? parseFloat(costUsd) : null,
+            supplier: supplier || null,
+            stock: stockValue !== '' ? parseInt(stockValue) : null,
+            image: mediaUrl,
+            mediaUrl: mediaUrl,
+            mediaType: typeof detectMediaType === 'function' ? detectMediaType(mediaUrl) : 'image',
+            features: document.getElementById('product-features')?.value,
+            whatsappMsg: document.getElementById('product-whatsapp-msg')?.value,
+            whatsapp_msg: document.getElementById('product-whatsapp-msg')?.value,
+            description: {
+                ar: document.getElementById('product-desc-ar')?.value || '',
+                en: document.getElementById('product-desc-en')?.value || '',
+                fr: document.getElementById('product-desc-fr')?.value || ''
+            },
+            availability: availability,
+            available: availability === 'available',
+            status: availability,
+            active: document.getElementById('product-active')?.checked !== false,
+            featured: document.getElementById('product-featured')?.checked || false,
+            isArchived: document.getElementById('product-archived')?.checked || false,
+            updatedAt: new Date()
+        };
+    }
     
     // الحفاظ على الترتيب الحالي
     const existingProduct = allProducts.find(p => p.id === productData.id);
     if (existingProduct) {
         productData.order = existingProduct.order;
+        productData.displayOrder = existingProduct.displayOrder || existingProduct.order;
         productData.createdAt = existingProduct.createdAt;
     } else {
         productData.order = allProducts.length;
+        productData.displayOrder = allProducts.length;
         productData.createdAt = new Date();
     }
     

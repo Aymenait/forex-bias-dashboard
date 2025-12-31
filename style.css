@@ -2521,6 +2521,98 @@ img {
     box-shadow: none;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* Availability Status Badges - Requirements: 2.3, 2.4, 2.5                    */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Base Availability Badge */
+.availability-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    z-index: 10;
+    animation: pulse 2s infinite;
+    text-align: center;
+}
+
+/* Unavailable Badge - غير متوفر */
+.unavailable-badge {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 68, 68, 0.5);
+}
+
+/* Coming Soon Badge - قريباً */
+.coming-soon-badge {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.5);
+}
+
+/* Unavailable Product Card */
+.unavailable-card {
+    position: relative;
+    opacity: 0.85;
+}
+
+.unavailable-card .product-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
+
+/* Coming Soon Product Card */
+.coming-soon-card {
+    position: relative;
+    opacity: 0.9;
+}
+
+.coming-soon-card .product-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 152, 0, 0.1);
+    pointer-events: none;
+}
+
+/* Disabled Order Button Styles */
+.unavailable-card .order-btn:disabled,
+.coming-soon-card .order-btn:disabled {
+    background: rgba(100, 100, 100, 0.3) !important;
+    border-color: rgba(150, 150, 150, 0.5) !important;
+    box-shadow: none !important;
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+}
+
+.unavailable-card .order-btn:disabled:hover,
+.coming-soon-card .order-btn:disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Disabled Payment Buttons */
+.unavailable-card .payment-btn-compact:disabled,
+.coming-soon-card .payment-btn-compact:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
 /* RedotPay Button */
 .payment-btn-compact.redotpay-btn {
     background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
@@ -3583,5 +3675,144 @@ img {
         font-size: 0.8rem !important;
         margin: 0 8px 8px !important;
         width: calc(100% - 16px) !important;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   العروض الفرعية - Sub-Offers Styles
+   Requirements: 3.4, 3.5
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.sub-offers-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 15px;
+    margin: 8px 0;
+    justify-content: center;
+}
+
+.sub-offer-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+    position: relative;
+}
+
+.sub-offer-btn:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 213, 111, 0.5);
+    transform: translateY(-2px);
+}
+
+.sub-offer-btn.selected {
+    background: rgba(255, 213, 111, 0.15);
+    border-color: var(--accent);
+    box-shadow: 0 4px 15px rgba(255, 213, 111, 0.3);
+}
+
+.sub-offer-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(100, 100, 100, 0.2);
+}
+
+.sub-offer-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.sub-offer-price {
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.sub-offer-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Mobile Styles for Sub-Offers */
+@media (max-width: 768px) {
+    .sub-offers-container {
+        padding: 8px 10px;
+        gap: 6px;
+    }
+    
+    .sub-offer-btn {
+        padding: 8px 12px;
+        min-width: 80px;
+        border-radius: 10px;
+    }
+    
+    .sub-offer-name {
+        font-size: 0.75rem;
+    }
+    
+    .sub-offer-price {
+        font-size: 0.68rem;
+    }
+    
+    .sub-offer-badge {
+        font-size: 0.55rem;
+        padding: 2px 6px;
+        top: -6px;
+        right: -6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sub-offers-container {
+        padding: 6px 8px;
+        gap: 5px;
+    }
+    
+    .sub-offer-btn {
+        padding: 6px 10px;
+        min-width: 70px;
+        border-radius: 8px;
+    }
+    
+    .sub-offer-name {
+        font-size: 0.68rem;
+    }
+    
+    .sub-offer-price {
+        font-size: 0.62rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .sub-offer-btn {
+        padding: 5px 8px;
+        min-width: 60px;
+    }
+    
+    .sub-offer-name {
+        font-size: 0.62rem;
+    }
+    
+    .sub-offer-price {
+        font-size: 0.58rem;
     }
 }
