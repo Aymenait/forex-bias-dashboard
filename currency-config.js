@@ -116,12 +116,12 @@ const PRODUCTS = {
   'adobe': {
     id: 'adobe',
     name: 'Adobe Creative Cloud',
-    price_dzd: 2500,
-    price_usd: 6,
+    price_dzd: 1200,
+    price_usd: 5,
     description: {
-      ar: 'حساب Adobe Creative Cloud مشترك',
-      en: 'Adobe Creative Cloud shared account',
-      fr: 'Compte Adobe Creative Cloud partagé'
+      ar: 'اشتراك Adobe Creative Cloud يشمل أكثر من 20 تطبيقًا احترافيًا',
+      en: 'Adobe Creative Cloud subscription includes 20+ professional applications',
+      fr: 'L\'abonnement Adobe Creative Cloud comprend plus de 20 applications professionnelles'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],
@@ -179,9 +179,9 @@ const PRODUCTS = {
     price_dzd: 1200,
     price_usd: 6,
     description: {
-      ar: 'حساب CapCut Pro لتحرير الفيديو',
-      en: 'CapCut Pro account for video editing',
-      fr: 'Compte CapCut Pro pour montage vidéo'
+      ar: 'محرر فيديو احترافي مع مميزات الذكاء الاصطناعي - 30 يوم',
+      en: 'Professional video editor with AI features - 30 days',
+      fr: 'Éditeur vidéo professionnel avec fonctionnalités IA - 30 jours'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],
@@ -221,12 +221,42 @@ const PRODUCTS = {
   'cursor': {
     id: 'cursor',
     name: 'Cursor AI - 7 Days',
-    price_dzd: 700,
+    price_dzd: 600,
     price_usd: 3,
     description: {
       ar: 'محرر أكواد ذكي بالذكاء الاصطناعي لمدة 7 أيام',
       en: 'AI-powered smart code editor for 7 days',
       fr: 'Éditeur de code IA intelligent pour 7 jours'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'primevideo': {
+    id: 'primevideo',
+    name: 'Prime Video',
+    price_dzd: 1200,
+    price_usd: 5,
+    description: {
+      ar: 'اشتراك Amazon Prime Video لمدة 3 أشهر',
+      en: 'Amazon Prime Video subscription for 3 months',
+      fr: 'Abonnement Amazon Prime Video pour 3 mois'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'crunchyroll': {
+    id: 'crunchyroll',
+    name: 'Crunchyroll',
+    price_dzd: 1200,
+    price_usd: 5,
+    description: {
+      ar: 'اشتراك Crunchyroll Premium لمدة شهر واحد',
+      en: 'Crunchyroll Premium subscription for 1 month',
+      fr: 'Abonnement Crunchyroll Premium pour 1 mois'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],

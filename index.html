@@ -51,7 +51,7 @@
     <!-- 8. Preload critical images for faster loading -->
     <link rel="preload" href="https://i.imgur.com/8D1hNuQ.png" as="image">
     <link rel="preload" href="https://i.imgur.com/hEiJhso.gif" as="image">
-    <link rel="preload" href="https://i.imgur.com/my0lNcf.gif" as="image">
+    <link rel="preload" href="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" as="image">
     <link rel="preload" href="https://i.imgur.com/FDZBdd9.gif" as="image">
 
     <link rel="stylesheet" href="style.css?v=final2">
@@ -75,6 +75,56 @@
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
+
+    <!-- Button Shine Effect CSS -->
+    <style>
+        /* Shine effect for interactive buttons */
+        .adobe-duration-btn, .capcut-duration-btn, .gamma-type-btn, .cursor-type-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .adobe-duration-btn::before, .capcut-duration-btn::before, .gamma-type-btn::before, .cursor-type-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .adobe-duration-btn:hover::before, .capcut-duration-btn:hover::before, 
+        .gamma-type-btn:hover::before, .cursor-type-btn:hover::before {
+            left: 100%;
+        }
+
+        .adobe-duration-btn.active::before, .capcut-duration-btn.active::before, 
+        .gamma-type-btn.active::before, .cursor-type-btn.active::before {
+            left: 100%;
+            animation: shine 0.6s ease;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Enhanced active state with glow */
+        .adobe-duration-btn.active, .capcut-duration-btn.active, 
+        .gamma-type-btn.active, .cursor-type-btn.active {
+            box-shadow: 0 0 20px rgba(255, 213, 111, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* Click animation */
+        .adobe-duration-btn:active, .capcut-duration-btn:active, 
+        .gamma-type-btn:active, .cursor-type-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(255, 213, 111, 0.3);
+        }
+    </style>
 </head>
 
 <body>
@@ -159,11 +209,11 @@
                                     </div>
                                 </div>
                                 <div class="slide">
-                                    <img src="https://i.imgur.com/my0lNcf.gif" alt="Adobe Creative Cloud"
+                                    <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe Creative Cloud"
                                         loading="lazy">
                                     <div class="slide-info">
                                         <h4>Adobe Creative Cloud</h4>
-                                        <p><span data-i18n="slider.from">من</span> 3200 <span
+                                        <p><span data-i18n="slider.from">من</span> 1200 <span
                                                 data-i18n="currency">د.ج</span></p>
                                     </div>
                                 </div>
@@ -271,55 +321,44 @@
                             onclick="orderProduct('The Real World Account')">اطلب الآن</button>
                     </div>
                     <div class="product-card fade-in" id="adobe-card">
-                        <div class="product-image" style="background-image: url('https://i.imgur.com/my0lNcf.gif');"
+                        <div class="product-image" style="background-image: url('https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="Adobe Creative Cloud"></div>
                         <h3>Adobe Creative Cloud</h3>
                         <p class="description" data-i18n="product.adobe.desc">اشتراك Adobe Creative Cloud يشمل أكثر من
                             20 تطبيقًا احترافيًا.</p>
 
-                        <!-- Account Type Selection -->
-                        <div class="adobe-account-type" style="margin: 16px 0;">
+                        <!-- Duration Selection -->
+                        <div class="adobe-duration-type" style="margin: 16px 0;">
                             <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;"
-                                data-i18n="product.adobe.selectType">اختر نوع الحساب:</p>
+                                data-i18n="product.adobe.selectDuration">اختر المدة:</p>
                             <div style="display: flex; gap: 10px;">
-                                <button class="adobe-type-btn active" data-type="shared"
-                                    onclick="selectAdobeType('shared')"
+                                <button class="adobe-duration-btn active" data-duration="1month"
+                                    onclick="selectAdobeDuration('1month')"
                                     style="flex: 1; padding: 10px; border: 2px solid var(--accent); background: rgba(255, 213, 111, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                                    <span data-i18n="product.adobe.shared">حساب مشترك</span>
+                                    <span data-i18n="product.adobe.oneMonth">شهر واحد</span>
                                 </button>
-                                <button class="adobe-type-btn" data-type="personal"
-                                    onclick="selectAdobeType('personal')"
+                                <button class="adobe-duration-btn" data-duration="3months"
+                                    onclick="selectAdobeDuration('3months')"
                                     style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                                    <span data-i18n="product.adobe.personal">حساب شخصي (Keys)</span>
+                                    <span data-i18n="product.adobe.threeMonths">3 أشهر</span>
                                 </button>
                             </div>
                         </div>
 
                         <!-- Prices (will change based on selection) -->
-                        <div class="adobe-prices" id="adobe-prices-shared">
-                            <div class="price-options">
-                                <span><span data-i18n="product.adobe.oneMonth">شهر واحد</span>: <strong
-                                        class="price-tag" data-price-dzd="1500" data-price-usd="6">1500
-                                        د.ج</strong></span>
-                                <span><span data-i18n="product.adobe.twoMonths">شهرين</span>: <strong class="price-tag"
-                                        data-price-dzd="2200" data-price-usd="9">2200 د.ج</strong></span>
-                                <span><span data-i18n="product.adobe.threeMonths">3 أشهر</span>: <strong
-                                        class="price-tag" data-price-dzd="3000" data-price-usd="12">3000
-                                        د.ج</strong></span>
-                            </div>
+                        <div class="adobe-prices" id="adobe-prices-1month">
+                            <div class="price-tag" data-price-dzd="1200" data-price-usd="5">1200 د.ج</div> 
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.adobe.oneMonth">شهر واحد</span></span>
                         </div>
 
-                        <div class="adobe-prices" id="adobe-prices-personal" style="display: none;">
-                            <div class="price-options">
-                                <span><span data-i18n="product.adobe.oneMonth">شهر واحد</span>: <strong
-                                        class="price-tag" data-price-dzd="3000" data-price-usd="12">3000
-                                        د.ج</strong></span>
-                            </div>
+                        <div class="adobe-prices" id="adobe-prices-3months" style="display: none;">
+                            <div class="price-tag" data-price-dzd="2900" data-price-usd="12">2900 د.ج</div> 
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.adobe.threeMonths">3 أشهر</span></span>
                         </div>
 
                         <div class="payment-methods-row">
                             <button class="payment-btn-compact crypto-pay-btn" data-product="Adobe Creative Cloud"
-                                data-price="1500" data-price-usd="6">
+                                data-price="1200" data-price-usd="5" id="adobe-usdt-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
@@ -327,7 +366,7 @@
                                 <span>USDT</span>
                             </button>
                             <button class="payment-btn-compact redotpay-btn" data-product="Adobe Creative Cloud"
-                                data-price="1500" data-price-usd="6">
+                                data-price="1200" data-price-usd="5" id="adobe-redotpay-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
@@ -335,7 +374,7 @@
                                 <span>RedotPay</span>
                             </button>
                             <button class="payment-btn-compact baridimob-btn" data-product="Adobe Creative Cloud"
-                                data-price="1500" data-price-usd="6">
+                                data-price="1200" data-price-usd="5" id="adobe-baridimob-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
@@ -350,7 +389,7 @@
                             <li data-i18n="product.adobe.feature3">دعم فني كامل</li>
                         </ul>
 
-                        <button class="order-btn" data-product="Adobe Creative Cloud - Shared"
+                        <button class="order-btn" data-product="Adobe Creative Cloud - 1 Month" id="adobe-order-btn"
                             data-i18n="product.orderNow" onclick="orderAdobe()">اطلب الآن</button>
                     </div>
                     <div class="product-card fade-in">
@@ -429,36 +468,9 @@
                         <p class="description" data-i18n="product.gamma.desc">منصة ذكاء اصطناعي متقدمة لإنشاء العروض
                             التقديمية والمستندات والمواقع بشكل احترافي.</p>
 
-                        <!-- Account Type Selection -->
-                        <div class="gamma-account-type" style="margin: 16px 0;">
-                            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;"
-                                data-i18n="product.gamma.selectType">اختر نوع الحساب:</p>
-                            <div style="display: flex; gap: 10px;">
-                                <button class="gamma-type-btn active" data-type="shared"
-                                    onclick="selectGammaType('shared')"
-                                    style="flex: 1; padding: 10px; border: 2px solid var(--accent); background: rgba(255, 213, 111, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                                    <span data-i18n="product.gamma.shared">حساب مشترك</span>
-                                </button>
-                                <button class="gamma-type-btn" data-type="personal"
-                                    onclick="selectGammaType('personal')"
-                                    style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                                    <span data-i18n="product.gamma.personal">حساب شخصي</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Prices (will change based on selection) -->
-                        <div class="gamma-prices" id="gamma-prices-shared">
-                            <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div> <span
-                                style="color: #9ca3af; font-size: 0.9rem;">/ <span
-                                    data-i18n="perMonth">للشهر</span></span>
-                        </div>
-
-                        <div class="gamma-prices" id="gamma-prices-personal" style="display: none;">
-                            <div class="price-tag" data-price-dzd="2000" data-price-usd="8">2000 د.ج</div> <span
-                                style="color: #9ca3af; font-size: 0.9rem;">/ <span
-                                    data-i18n="perMonth">للشهر</span></span>
-                        </div>
+                        <!-- Price Display -->
+                        <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div> 
+                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="perMonth">للشهر</span></span>
 
                         <div class="payment-methods-row">
                             <button class="payment-btn-compact crypto-pay-btn" data-product="Gamma.AI" data-price="1200"
@@ -494,8 +506,8 @@
                         </ul>
                         <a href="gamma_landing.html" class="discover-btn" data-i18n="product.discoverMore">اكتشف
                             المزيد</a>
-                        <button class="order-btn" data-product="Gamma.AI - Shared" data-i18n="product.orderNow"
-                            onclick="orderGamma()">اطلب الآن</button>
+                        <button class="order-btn" data-product="Gamma.AI" data-i18n="product.orderNow"
+                            onclick="orderProduct('Gamma.AI')">اطلب الآن</button>
                     </div>
 
                     <!-- Netflix Premium -->
@@ -548,6 +560,100 @@
                         <button class="order-btn" data-product="Netflix Premium" data-i18n="product.orderNow"
                             onclick="orderProduct('Netflix Premium')">اطلب
                             الآن</button>
+                    </div>
+
+                    <!-- Prime Video -->
+                    <div class="product-card fade-in">
+                        <div class="product-image"
+                            style="background-image: url('https://i.pinimg.com/736x/71/8b/41/718b41945aab84bd2276c762266931d0.jpg'); background-size: cover; background-position: center;"
+                            role="img" aria-label="Prime Video">
+                        </div>
+                        <h3>Prime Video</h3>
+                        <p class="description" data-i18n="product.primevideo.desc">اشتراك Amazon Prime Video مع مكتبة ضخمة من الأفلام والمسلسلات الحصرية.</p>
+                        <div class="price-tag" data-price-dzd="1200" data-price-usd="5">1200 د.ج</div>
+                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.primevideo.duration">3 أشهر</span></span>
+
+                        <div class="payment-methods-row">
+                            <button class="payment-btn-compact crypto-pay-btn" data-product="Prime Video"
+                                data-price="1200" data-price-usd="5">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
+                                </svg>
+                                <span>USDT</span>
+                            </button>
+                            <button class="payment-btn-compact redotpay-btn" data-product="Prime Video"
+                                data-price="1200" data-price-usd="5">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                </svg>
+                                <span>RedotPay</span>
+                            </button>
+                            <button class="payment-btn-compact baridimob-btn" data-product="Prime Video"
+                                data-price="1200" data-price-usd="5">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
+                                </svg>
+                                <span>BaridiMob</span>
+                            </button>
+                        </div>
+
+                        <ul class="product-features">
+                            <li data-i18n="product.primevideo.feature1">مكتبة ضخمة من الأفلام والمسلسلات</li>
+                            <li data-i18n="product.primevideo.feature2">محتوى حصري من Amazon Studios</li>
+                            <li data-i18n="product.primevideo.feature3">جودة عالية حتى 4K Ultra HD</li>
+                        </ul>
+                        <button class="order-btn" data-product="Prime Video" data-i18n="product.orderNow"
+                            onclick="orderProduct('Prime Video')">اطلب الآن</button>
+                    </div>
+
+                    <!-- Crunchyroll -->
+                    <div class="product-card fade-in">
+                        <div class="product-image"
+                            style="background-image: url('https://i.pinimg.com/1200x/38/e3/08/38e308732b87069ed50893423f09ca4b.jpg'); background-size: cover; background-position: center;"
+                            role="img" aria-label="Crunchyroll">
+                        </div>
+                        <h3>Crunchyroll</h3>
+                        <p class="description" data-i18n="product.crunchyroll.desc">اشتراك Crunchyroll Premium مع أكبر مكتبة أنمي في العالم بدون إعلانات.</p>
+                        <div class="price-tag" data-price-dzd="1200" data-price-usd="5">1200 د.ج</div>
+                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.crunchyroll.duration">شهر واحد</span></span>
+
+                        <div class="payment-methods-row">
+                            <button class="payment-btn-compact crypto-pay-btn" data-product="Crunchyroll"
+                                data-price="1200" data-price-usd="5">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
+                                </svg>
+                                <span>USDT</span>
+                            </button>
+                            <button class="payment-btn-compact redotpay-btn" data-product="Crunchyroll"
+                                data-price="1200" data-price-usd="5">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                </svg>
+                                <span>RedotPay</span>
+                            </button>
+                            <button class="payment-btn-compact baridimob-btn" data-product="Crunchyroll"
+                                data-price="1200" data-price-usd="5">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
+                                </svg>
+                                <span>BaridiMob</span>
+                            </button>
+                        </div>
+
+                        <ul class="product-features">
+                            <li data-i18n="product.crunchyroll.feature1">أكبر مكتبة أنمي في العالم</li>
+                            <li data-i18n="product.crunchyroll.feature2">مشاهدة بدون إعلانات</li>
+                            <li data-i18n="product.crunchyroll.feature3">حلقات جديدة بعد ساعة من البث في اليابان</li>
+                        </ul>
+                        <button class="order-btn" data-product="Crunchyroll" data-i18n="product.orderNow"
+                            onclick="orderProduct('Crunchyroll')">اطلب الآن</button>
                     </div>
 
                     <!-- TradingView Premium -->
@@ -748,13 +854,49 @@
 
                         <p class="description" data-i18n="product.capcut.desc">محرر فيديو احترافي مع مميزات الذكاء
                             الاصطناعي وأدوات التحرير المتقدمة.</p>
-                        <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div> <span
-                            style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.capcut.duration">30
-                                يوم</span></span>
+
+                        <!-- Duration Selection -->
+                        <div class="capcut-duration-type" style="margin: 16px 0;">
+                            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;"
+                                data-i18n="product.capcut.selectDuration">اختر المدة:</p>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button class="capcut-duration-btn active" data-duration="1month"
+                                    onclick="selectCapcutDuration('1month')"
+                                    style="flex: 1; min-width: 90px; padding: 8px; border: 2px solid var(--accent); background: rgba(255, 213, 111, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.85rem;">
+                                    <span data-i18n="product.capcut.oneMonth">30 يوم</span>
+                                </button>
+                                <button class="capcut-duration-btn" data-duration="3months"
+                                    onclick="selectCapcutDuration('3months')"
+                                    style="flex: 1; min-width: 90px; padding: 8px; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.85rem;">
+                                    <span data-i18n="product.capcut.threeMonths">3 أشهر</span>
+                                </button>
+                                <button class="capcut-duration-btn" data-duration="6months"
+                                    onclick="selectCapcutDuration('6months')"
+                                    style="flex: 1; min-width: 90px; padding: 8px; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.85rem;">
+                                    <span data-i18n="product.capcut.sixMonths">6 أشهر</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Prices (will change based on selection) -->
+                        <div class="capcut-prices" id="capcut-prices-1month">
+                            <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div> 
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.capcut.oneMonth">30 يوم</span></span>
+                        </div>
+
+                        <div class="capcut-prices" id="capcut-prices-3months" style="display: none;">
+                            <div class="price-tag" data-price-dzd="2900" data-price-usd="12">2900 د.ج</div> 
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.capcut.threeMonths">3 أشهر</span></span>
+                        </div>
+
+                        <div class="capcut-prices" id="capcut-prices-6months" style="display: none;">
+                            <div class="price-tag" data-price-dzd="5000" data-price-usd="20">5000 د.ج</div> 
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.capcut.sixMonths">6 أشهر</span></span>
+                        </div>
 
                         <div class="payment-methods-row">
                             <button class="payment-btn-compact crypto-pay-btn" data-product="CapCut Pro"
-                                data-price="1200" data-price-usd="6">
+                                data-price="1200" data-price-usd="6" id="capcut-usdt-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
@@ -762,7 +904,7 @@
                                 <span>USDT</span>
                             </button>
                             <button class="payment-btn-compact redotpay-btn" data-product="CapCut Pro" data-price="1200"
-                                data-price-usd="6">
+                                data-price-usd="6" id="capcut-redotpay-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
@@ -770,7 +912,7 @@
                                 <span>RedotPay</span>
                             </button>
                             <button class="payment-btn-compact baridimob-btn" data-product="CapCut Pro"
-                                data-price="1200" data-price-usd="6">
+                                data-price="1200" data-price-usd="6" id="capcut-baridimob-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
@@ -786,17 +928,12 @@
                         </ul>
                         <a href="capcut_landing.html" class="discover-btn" data-i18n="product.discoverMore">اكتشف
                             المزيد</a>
-                        <button class="order-btn" data-product="CapCut Pro" data-i18n="product.orderNow"
-                            onclick="orderProduct('CapCut Pro')">اطلب
-                            الآن</button>
+                        <button class="order-btn" data-product="CapCut Pro - 30 Days" id="capcut-order-btn"
+                            data-i18n="product.orderNow" onclick="orderCapcut()">اطلب الآن</button>
                     </div>
 
-                    <!-- Cursor AI - Coming Soon -->
-                    <div class="product-card fade-in" style="position: relative; opacity: 0.9;">
-                        <div class="coming-soon-badge"
-                            style="position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, #ff6b6b, #ff8e53); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; z-index: 10; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5); animation: pulse 2s infinite;">
-                            <span data-i18n="product.comingSoon">قريباً</span>
-                        </div>
+                    <!-- Cursor AI -->
+                    <div class="product-card fade-in">
                         <div class="product-image"
                             style="background: linear-gradient(135deg, #0F0F0F 0%, #1a1a2e 100%); background-image: url('https://cursor.com/favicon.svg'); background-size: 60%; background-position: center; background-repeat: no-repeat;"
                             role="img" aria-label="Cursor">
@@ -810,29 +947,29 @@
                             <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;"
                                 data-i18n="product.cursor.selectType">اختر المدة:</p>
                             <div style="display: flex; gap: 10px;">
-                                <button class="cursor-type-btn" data-type="7days" onclick="selectCursorType('7days')"
-                                    style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                <button class="cursor-type-btn active" data-type="7days" onclick="selectCursorType('7days')"
+                                    style="flex: 1; padding: 10px; border: 2px solid var(--accent); background: rgba(255, 213, 111, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
                                     <span data-i18n="product.cursor.7days">7 DAYS TRIAL</span>
                                 </button>
-                                <button class="cursor-type-btn active" data-type="30days"
+                                <button class="cursor-type-btn" data-type="30days"
                                     onclick="selectCursorType('30days')"
-                                    style="flex: 1; padding: 10px; border: 2px solid var(--accent); background: rgba(255, 213, 111, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                                    <span data-i18n="product.cursor.30days">30 D PRO SHARED</span>
+                                    style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.3); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: all 0.3s; opacity: 0.5;" disabled>
+                                    <span data-i18n="product.cursor.30days">30 D - غير متوفر</span>
                                 </button>
                             </div>
                         </div>
 
                         <!-- Prices (will change based on selection) -->
-                        <div class="cursor-prices" id="cursor-prices-7days" style="display: none;">
-                            <div
-                                style="opacity: 0.6; color: var(--text-secondary); font-size: 0.95rem; font-weight: 600;">
-                                <span data-i18n="product.cursor.notAvailable">غير متوفر بعد</span>
-                            </div>
+                        <div class="cursor-prices" id="cursor-prices-7days">
+                            <div class="price-tag" data-price-dzd="600" data-price-usd="3">600 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.cursor.7daysDuration">7 أيام</span></span>
                         </div>
 
-                        <div class="cursor-prices" id="cursor-prices-30days">
-                            <div class="price-tag" style="opacity: 0.6;" data-price-dzd="2500" data-price-usd="10">2500
-                                د.ج</div>
+                        <div class="cursor-prices" id="cursor-prices-30days" style="display: none;">
+                            <div
+                                style="opacity: 0.6; color: var(--text-secondary); font-size: 0.95rem; font-weight: 600;">
+                                <span data-i18n="product.cursor.notAvailable">غير متوفر</span>
+                            </div>
                         </div>
 
                         <ul class="product-features" style="opacity: 0.7;">
@@ -840,9 +977,9 @@
                             <li data-i18n="product.cursor.feature2">دعم متعدد اللغات البرمجية</li>
                             <li data-i18n="product.cursor.feature3">تصحيح وتحسين الكود بالذكاء الاصطناعي</li>
                         </ul>
-                        <button class="order-btn" disabled
-                            style="opacity: 0.5; cursor: not-allowed; background: rgba(100, 100, 100, 0.3); border-color: rgba(150, 150, 150, 0.5); box-shadow: none;">
-                            <span data-i18n="product.comingSoon">قريباً</span>
+                        <button class="order-btn" data-product="Cursor AI - 7 Days" data-i18n="product.orderNow"
+                            onclick="orderProduct('Cursor AI - 7 Days')">
+                            <span data-i18n="product.orderNow">اطلب الآن</span>
                         </button>
                     </div>
                 </div>
@@ -927,7 +1064,8 @@
                             <option value="Netflix Premium">Netflix Premium</option>
                             <option value="Perplexity AI Pro">Perplexity AI Pro</option>
                             <option value="TradingView Premium">TradingView Premium</option>
-                            <option value="Cursor AI">Cursor AI</option>
+                            <option value="Prime Video">Prime Video</option>
+                            <option value="Crunchyroll">Crunchyroll</option>
                         </select>
                     </div>
 
@@ -1709,6 +1847,8 @@
                     'Cursor AI': 'cursor',
                     'Cursor AI - 7 Days': 'cursor',
                     'Cursor AI - 30 Days': 'cursor',
+                    'Prime Video': 'primevideo',
+                    'Crunchyroll': 'crunchyroll',
                     'Gamma.AI': 'gamma',
                     'Gamma.AI - Shared': 'gamma',
                     'Gamma.AI - Personal': 'gamma',
@@ -2071,6 +2211,152 @@
                 }
             });
         })();
+
+        // CapCut Duration Selection Functions
+        function selectCapcutDuration(duration) {
+            // Update button states
+            document.querySelectorAll('.capcut-duration-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.border = '2px solid var(--border-color)';
+                btn.style.background = 'transparent';
+                btn.style.color = 'var(--text-secondary)';
+                btn.style.boxShadow = 'none';
+                btn.style.transform = 'none';
+            });
+
+            // Activate selected button with shine effect
+            const selectedBtn = document.querySelector(`.capcut-duration-btn[data-duration="${duration}"]`);
+            selectedBtn.classList.add('active');
+            selectedBtn.style.border = '2px solid var(--accent)';
+            selectedBtn.style.background = 'rgba(255, 213, 111, 0.15)';
+            selectedBtn.style.color = 'var(--text-primary)';
+            
+            // Trigger shine animation
+            setTimeout(() => {
+                selectedBtn.style.boxShadow = '0 0 20px rgba(255, 213, 111, 0.5)';
+                selectedBtn.style.transform = 'translateY(-1px)';
+            }, 100);
+
+            // Update price display
+            document.querySelectorAll('.capcut-prices').forEach(price => {
+                price.style.display = 'none';
+            });
+            document.getElementById(`capcut-prices-${duration}`).style.display = 'block';
+
+            // Update payment buttons
+            const prices = {
+                '1month': { dzd: 1200, usd: 6 },
+                '3months': { dzd: 2900, usd: 12 }
+            };
+
+            const price = prices[duration];
+            document.getElementById('capcut-usdt-btn').setAttribute('data-price', price.dzd);
+            document.getElementById('capcut-usdt-btn').setAttribute('data-price-usd', price.usd);
+            document.getElementById('capcut-redotpay-btn').setAttribute('data-price', price.dzd);
+            document.getElementById('capcut-redotpay-btn').setAttribute('data-price-usd', price.usd);
+            document.getElementById('capcut-baridimob-btn').setAttribute('data-price', price.dzd);
+            document.getElementById('capcut-baridimob-btn').setAttribute('data-price-usd', price.usd);
+
+            // Update order button
+            const productNames = {
+                '1month': 'CapCut Pro - 30 Days',
+                '3months': 'CapCut Pro - 3 Months'
+            };
+            document.getElementById('capcut-order-btn').setAttribute('data-product', productNames[duration]);
+        }
+
+        // CapCut Order Function
+        function orderCapcut() {
+            const activeBtn = document.querySelector('.capcut-duration-btn.active');
+            const duration = activeBtn.getAttribute('data-duration');
+            const productNames = {
+                '1month': 'CapCut Pro - 30 يوم',
+                '3months': 'CapCut Pro - 3 أشهر'
+            };
+            const prices = {
+                '1month': '1200 د.ج',
+                '3months': '2900 د.ج'
+            };
+            
+            const productName = productNames[duration];
+            const price = prices[duration];
+            const message = `مرحباً! أريد طلب ${productName} بسعر ${price}`;
+            const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Adobe Duration Selection Functions
+        function selectAdobeDuration(duration) {
+            // Update button states
+            document.querySelectorAll('.adobe-duration-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.border = '2px solid var(--border-color)';
+                btn.style.background = 'transparent';
+                btn.style.color = 'var(--text-secondary)';
+                btn.style.boxShadow = 'none';
+                btn.style.transform = 'none';
+            });
+
+            // Activate selected button with shine effect
+            const selectedBtn = document.querySelector(`[data-duration="${duration}"]`);
+            selectedBtn.classList.add('active');
+            selectedBtn.style.border = '2px solid var(--accent)';
+            selectedBtn.style.background = 'rgba(255, 213, 111, 0.15)';
+            selectedBtn.style.color = 'var(--text-primary)';
+            
+            // Trigger shine animation
+            setTimeout(() => {
+                selectedBtn.style.boxShadow = '0 0 20px rgba(255, 213, 111, 0.5)';
+                selectedBtn.style.transform = 'translateY(-1px)';
+            }, 100);
+
+            // Update price display
+            document.querySelectorAll('.adobe-prices').forEach(price => {
+                price.style.display = 'none';
+            });
+            document.getElementById(`adobe-prices-${duration}`).style.display = 'block';
+
+            // Update payment buttons
+            const prices = {
+                '1month': { dzd: 1200, usd: 5 },
+                '3months': { dzd: 2900, usd: 12 }
+            };
+
+            const price = prices[duration];
+            document.getElementById('adobe-usdt-btn').setAttribute('data-price', price.dzd);
+            document.getElementById('adobe-usdt-btn').setAttribute('data-price-usd', price.usd);
+            document.getElementById('adobe-redotpay-btn').setAttribute('data-price', price.dzd);
+            document.getElementById('adobe-redotpay-btn').setAttribute('data-price-usd', price.usd);
+            document.getElementById('adobe-baridimob-btn').setAttribute('data-price', price.dzd);
+            document.getElementById('adobe-baridimob-btn').setAttribute('data-price-usd', price.usd);
+
+            // Update order button
+            const productNames = {
+                '1month': 'Adobe Creative Cloud - 1 Month',
+                '3months': 'Adobe Creative Cloud - 3 Months'
+            };
+            document.getElementById('adobe-order-btn').setAttribute('data-product', productNames[duration]);
+        }
+
+        // Adobe Order Function
+        function orderAdobe() {
+            const activeBtn = document.querySelector('.adobe-duration-btn.active');
+            const duration = activeBtn.getAttribute('data-duration');
+            const productNames = {
+                '1month': 'Adobe Creative Cloud - شهر واحد',
+                '3months': 'Adobe Creative Cloud - 3 أشهر'
+            };
+            const prices = {
+                '1month': '1200 د.ج',
+                '3months': '2900 د.ج'
+            };
+            
+            const productName = productNames[duration];
+            const price = prices[duration];
+            const message = `مرحباً! أريد طلب ${productName} بسعر ${price}`;
+            const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
     </script>
 </body>
 
