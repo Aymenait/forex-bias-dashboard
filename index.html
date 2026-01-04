@@ -71,6 +71,14 @@
         !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '2046893892791206');
         fbq('track', 'PageView');
+
+        // Track Interested User (Stays > 30s)
+        setTimeout(function () {
+            fbq('trackCustom', 'InterestedLead', {
+                content_name: 'HomePage',
+                time_on_page: '10s'
+            });
+        }, 10000);
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
@@ -79,12 +87,18 @@
     <!-- Button Shine Effect CSS -->
     <style>
         /* Shine effect for interactive buttons */
-        .adobe-duration-btn, .capcut-duration-btn, .gamma-type-btn, .cursor-type-btn {
+        .adobe-duration-btn,
+        .capcut-duration-btn,
+        .gamma-type-btn,
+        .cursor-type-btn {
             position: relative;
             overflow: hidden;
         }
 
-        .adobe-duration-btn::before, .capcut-duration-btn::before, .gamma-type-btn::before, .cursor-type-btn::before {
+        .adobe-duration-btn::before,
+        .capcut-duration-btn::before,
+        .gamma-type-btn::before,
+        .cursor-type-btn::before {
             content: '';
             position: absolute;
             top: 0;
@@ -95,32 +109,45 @@
             transition: left 0.5s ease;
         }
 
-        .adobe-duration-btn:hover::before, .capcut-duration-btn:hover::before, 
-        .gamma-type-btn:hover::before, .cursor-type-btn:hover::before {
+        .adobe-duration-btn:hover::before,
+        .capcut-duration-btn:hover::before,
+        .gamma-type-btn:hover::before,
+        .cursor-type-btn:hover::before {
             left: 100%;
         }
 
-        .adobe-duration-btn.active::before, .capcut-duration-btn.active::before, 
-        .gamma-type-btn.active::before, .cursor-type-btn.active::before {
+        .adobe-duration-btn.active::before,
+        .capcut-duration-btn.active::before,
+        .gamma-type-btn.active::before,
+        .cursor-type-btn.active::before {
             left: 100%;
             animation: shine 0.6s ease;
         }
 
         @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
         }
 
         /* Enhanced active state with glow */
-        .adobe-duration-btn.active, .capcut-duration-btn.active, 
-        .gamma-type-btn.active, .cursor-type-btn.active {
+        .adobe-duration-btn.active,
+        .capcut-duration-btn.active,
+        .gamma-type-btn.active,
+        .cursor-type-btn.active {
             box-shadow: 0 0 20px rgba(255, 213, 111, 0.5);
             transform: translateY(-1px);
         }
 
         /* Click animation */
-        .adobe-duration-btn:active, .capcut-duration-btn:active, 
-        .gamma-type-btn:active, .cursor-type-btn:active {
+        .adobe-duration-btn:active,
+        .capcut-duration-btn:active,
+        .gamma-type-btn:active,
+        .cursor-type-btn:active {
             transform: translateY(1px);
             box-shadow: 0 2px 10px rgba(255, 213, 111, 0.3);
         }
@@ -181,8 +208,12 @@
                     <p data-i18n="hero.description">حسابات تعليمية، أدوات إبداعية، وحلول ذكاء اصطناعي مصممة لدعم أعمالك
                         ومشاريعك بأفضل الأسعار وخدمة عملاء احترافية.</p>
                     <div class="hero-buttons">
-                        <a href="#products" class="btn primary" data-i18n="hero.explore">استكشف المنتجات</a>
-                        <a href="#contact" class="btn secondary" data-i18n="hero.learn">تعرف على خدماتنا</a>
+                        <a href="#products" class="btn primary" data-i18n="hero.explore"
+                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Hero - Explore Products', content_category: 'Navigation' }); }">استكشف
+                            المنتجات</a>
+                        <a href="#contact" class="btn secondary" data-i18n="hero.learn"
+                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Hero - Learn Services', content_category: 'Navigation' }); }">تعرف
+                            على خدماتنا</a>
                     </div>
                     <div class="trust-badges">
                         <div class="badge">
@@ -209,8 +240,8 @@
                                     </div>
                                 </div>
                                 <div class="slide">
-                                    <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe Creative Cloud"
-                                        loading="lazy">
+                                    <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg"
+                                        alt="Adobe Creative Cloud" loading="lazy">
                                     <div class="slide-info">
                                         <h4>Adobe Creative Cloud</h4>
                                         <p><span data-i18n="slider.from">من</span> 1200 <span
@@ -321,7 +352,8 @@
                             onclick="orderProduct('The Real World Account')">اطلب الآن</button>
                     </div>
                     <div class="product-card fade-in" id="adobe-card">
-                        <div class="product-image" style="background-image: url('https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg'); background-size: cover; background-position: center;"
+                        <div class="product-image"
+                            style="background-image: url('https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="Adobe Creative Cloud"></div>
                         <h3>Adobe Creative Cloud</h3>
                         <p class="description" data-i18n="product.adobe.desc">اشتراك Adobe Creative Cloud يشمل أكثر من
@@ -347,13 +379,15 @@
 
                         <!-- Prices (will change based on selection) -->
                         <div class="adobe-prices" id="adobe-prices-1month">
-                            <div class="price-tag" data-price-dzd="1200" data-price-usd="5">1200 د.ج</div> 
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.adobe.oneMonth">شهر واحد</span></span>
+                            <div class="price-tag" data-price-dzd="1200" data-price-usd="5">1200 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.adobe.oneMonth">شهر واحد</span></span>
                         </div>
 
                         <div class="adobe-prices" id="adobe-prices-3months" style="display: none;">
-                            <div class="price-tag" data-price-dzd="2900" data-price-usd="12">2900 د.ج</div> 
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.adobe.threeMonths">3 أشهر</span></span>
+                            <div class="price-tag" data-price-dzd="2900" data-price-usd="12">2900 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.adobe.threeMonths">3 أشهر</span></span>
                         </div>
 
                         <div class="payment-methods-row">
@@ -469,8 +503,9 @@
                             التقديمية والمستندات والمواقع بشكل احترافي.</p>
 
                         <!-- Price Display -->
-                        <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div> 
-                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="perMonth">للشهر</span></span>
+                        <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div>
+                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                data-i18n="perMonth">للشهر</span></span>
 
                         <div class="payment-methods-row">
                             <button class="payment-btn-compact crypto-pay-btn" data-product="Gamma.AI" data-price="1200"
@@ -504,10 +539,12 @@
                             <li data-i18n="product.gamma.feature2">تصميم مستندات ومواقع تفاعلية</li>
                             <li data-i18n="product.gamma.feature3">قوالب جاهزة وتخصيص كامل</li>
                         </ul>
-                        <a href="gamma_landing.html" class="discover-btn" data-i18n="product.discoverMore">اكتشف
+                        <a href="gamma_landing.html" class="discover-btn" data-i18n="product.discoverMore"
+                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Gamma.AI', content_category: 'ProductClick' }); }">اكتشف
                             المزيد</a>
                         <button class="order-btn" data-product="Gamma.AI" data-i18n="product.orderNow"
-                            onclick="orderProduct('Gamma.AI')">اطلب الآن</button>
+                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'AddToCart', { content_name: 'Gamma.AI' }); } orderProduct('Gamma.AI')">اطلب
+                            الآن</button>
                     </div>
 
                     <!-- Netflix Premium -->
@@ -555,10 +592,11 @@
                             <li data-i18n="product.netflix.feature2">جودة 4K Ultra HD</li>
                             <li data-i18n="product.netflix.feature3">يعمل في جميع أنحاء العالم مع VPN</li>
                         </ul>
-                        <a href="netflix_landing.html" class="discover-btn" data-i18n="product.discoverMore">اكتشف
+                        <a href="netflix_landing.html" class="discover-btn" data-i18n="product.discoverMore"
+                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Netflix Premium', content_category: 'ProductClick' }); }">اكتشف
                             المزيد</a>
                         <button class="order-btn" data-product="Netflix Premium" data-i18n="product.orderNow"
-                            onclick="orderProduct('Netflix Premium')">اطلب
+                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'AddToCart', { content_name: 'Netflix Premium' }); } orderProduct('Netflix Premium')">اطلب
                             الآن</button>
                     </div>
 
@@ -569,9 +607,11 @@
                             role="img" aria-label="Prime Video">
                         </div>
                         <h3>Prime Video</h3>
-                        <p class="description" data-i18n="product.primevideo.desc">اشتراك Amazon Prime Video مع مكتبة ضخمة من الأفلام والمسلسلات الحصرية.</p>
+                        <p class="description" data-i18n="product.primevideo.desc">اشتراك Amazon Prime Video مع مكتبة
+                            ضخمة من الأفلام والمسلسلات الحصرية.</p>
                         <div class="price-tag" data-price-dzd="1200" data-price-usd="5">1200 د.ج</div>
-                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.primevideo.duration">3 أشهر</span></span>
+                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                data-i18n="product.primevideo.duration">3 أشهر</span></span>
 
                         <div class="payment-methods-row">
                             <button class="payment-btn-compact crypto-pay-btn" data-product="Prime Video"
@@ -616,9 +656,11 @@
                             role="img" aria-label="Crunchyroll">
                         </div>
                         <h3>Crunchyroll</h3>
-                        <p class="description" data-i18n="product.crunchyroll.desc">اشتراك Crunchyroll Premium مع أكبر مكتبة أنمي في العالم بدون إعلانات.</p>
+                        <p class="description" data-i18n="product.crunchyroll.desc">اشتراك Crunchyroll Premium مع أكبر
+                            مكتبة أنمي في العالم بدون إعلانات.</p>
                         <div class="price-tag" data-price-dzd="1200" data-price-usd="5">1200 د.ج</div>
-                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.crunchyroll.duration">شهر واحد</span></span>
+                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                data-i18n="product.crunchyroll.duration">شهر واحد</span></span>
 
                         <div class="payment-methods-row">
                             <button class="payment-btn-compact crypto-pay-btn" data-product="Crunchyroll"
@@ -880,18 +922,21 @@
 
                         <!-- Prices (will change based on selection) -->
                         <div class="capcut-prices" id="capcut-prices-1month">
-                            <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div> 
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.capcut.oneMonth">30 يوم</span></span>
+                            <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.capcut.oneMonth">30 يوم</span></span>
                         </div>
 
                         <div class="capcut-prices" id="capcut-prices-3months" style="display: none;">
-                            <div class="price-tag" data-price-dzd="2900" data-price-usd="12">2900 د.ج</div> 
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.capcut.threeMonths">3 أشهر</span></span>
+                            <div class="price-tag" data-price-dzd="2900" data-price-usd="12">2900 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.capcut.threeMonths">3 أشهر</span></span>
                         </div>
 
                         <div class="capcut-prices" id="capcut-prices-6months" style="display: none;">
-                            <div class="price-tag" data-price-dzd="5000" data-price-usd="20">5000 د.ج</div> 
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.capcut.sixMonths">6 أشهر</span></span>
+                            <div class="price-tag" data-price-dzd="5000" data-price-usd="20">5000 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.capcut.sixMonths">6 أشهر</span></span>
                         </div>
 
                         <div class="payment-methods-row">
@@ -947,13 +992,14 @@
                             <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;"
                                 data-i18n="product.cursor.selectType">اختر المدة:</p>
                             <div style="display: flex; gap: 10px;">
-                                <button class="cursor-type-btn active" data-type="7days" onclick="selectCursorType('7days')"
+                                <button class="cursor-type-btn active" data-type="7days"
+                                    onclick="selectCursorType('7days')"
                                     style="flex: 1; padding: 10px; border: 2px solid var(--accent); background: rgba(255, 213, 111, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
                                     <span data-i18n="product.cursor.7days">7 DAYS TRIAL</span>
                                 </button>
-                                <button class="cursor-type-btn" data-type="30days"
-                                    onclick="selectCursorType('30days')"
-                                    style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.3); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: all 0.3s; opacity: 0.5;" disabled>
+                                <button class="cursor-type-btn" data-type="30days" onclick="selectCursorType('30days')"
+                                    style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.3); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: all 0.3s; opacity: 0.5;"
+                                    disabled>
                                     <span data-i18n="product.cursor.30days">30 D - غير متوفر</span>
                                 </button>
                             </div>
@@ -962,7 +1008,8 @@
                         <!-- Prices (will change based on selection) -->
                         <div class="cursor-prices" id="cursor-prices-7days">
                             <div class="price-tag" data-price-dzd="600" data-price-usd="3">600 د.ج</div>
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.cursor.7daysDuration">7 أيام</span></span>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.cursor.7daysDuration">7 أيام</span></span>
                         </div>
 
                         <div class="cursor-prices" id="cursor-prices-30days" style="display: none;">
@@ -1434,6 +1481,7 @@
     <!-- Floating Social Buttons -->
     <div class="floating-social">
         <a href="https://wa.me/213782125821" target="_blank" class="social-float whatsapp-float"
+            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_category: 'WhatsApp', content_name: 'Floating Button'}); }"
             aria-label="تواصل عبر واتساب">
             <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor">
                 <path
@@ -1441,14 +1489,16 @@
             </svg>
         </a>
         <a href="https://t.me/+213656165400" target="_blank" class="social-float telegram-float"
+            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_category: 'Telegram', content_name: 'Floating Button'}); }"
             aria-label="تواصل عبر تيليجرام">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
                 <path
                     d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.326.016.094.036.308.02.475z" />
             </svg>
         </a>
-        <a href="https://www.instagram.com/market_algeriaa" target="_blank" class="social-float instagram-float"
-            aria-label="تابعنا على إنستغرام">
+        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" target="_blank"
+            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_category: 'Instagram', content_name: 'Floating Button'}); }"
+            class="social-float instagram-float" aria-label="تابعنا على انستقرام">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
                 <path
                     d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
@@ -2230,12 +2280,22 @@
             selectedBtn.style.border = '2px solid var(--accent)';
             selectedBtn.style.background = 'rgba(255, 213, 111, 0.15)';
             selectedBtn.style.color = 'var(--text-primary)';
-            
+
             // Trigger shine animation
             setTimeout(() => {
                 selectedBtn.style.boxShadow = '0 0 20px rgba(255, 213, 111, 0.5)';
                 selectedBtn.style.transform = 'translateY(-1px)';
             }, 100);
+
+            // Track CustomizeProduct (User is selecting options)
+            if (typeof fbq !== 'undefined') {
+                const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+                fbq('track', 'CustomizeProduct', {
+                    content_name: 'CapCut Pro',
+                    variant: duration,
+                    currency: currency
+                });
+            }
 
             // Update price display
             document.querySelectorAll('.capcut-prices').forEach(price => {
@@ -2268,19 +2328,42 @@
         // CapCut Order Function
         function orderCapcut() {
             const activeBtn = document.querySelector('.capcut-duration-btn.active');
+            if (!activeBtn) return;
             const duration = activeBtn.getAttribute('data-duration');
+
+            // Detect current currency
+            const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+
             const productNames = {
-                '1month': 'CapCut Pro - 30 يوم',
-                '3months': 'CapCut Pro - 3 أشهر'
+                '1month': 'CapCut Pro - 30 Days',
+                '3months': 'CapCut Pro - 3 Months',
+                '6months': 'CapCut Pro - 6 Months'
             };
             const prices = {
-                '1month': '1200 د.ج',
-                '3months': '2900 د.ج'
+                '1month': { dzd: 1200, usd: 6 },
+                '3months': { dzd: 2900, usd: 12 },
+                '6months': { dzd: 5000, usd: 25 }
             };
-            
+
             const productName = productNames[duration];
-            const price = prices[duration];
-            const message = `مرحباً! أريد طلب ${productName} بسعر ${price}`;
+            const priceObj = prices[duration];
+            const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+            // Track Facebook Events
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead', {
+                    content_name: productName,
+                    value: parseFloat(price),
+                    currency: currency
+                });
+                fbq('track', 'InitiateCheckout', {
+                    content_name: productName,
+                    value: parseFloat(price),
+                    currency: currency
+                });
+            }
+
+            const message = `مرحباً! أريد طلب ${productName} بسعر ${price} ${currency === 'USD' ? '$' : 'د.ج'}`;
             const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }
@@ -2303,12 +2386,22 @@
             selectedBtn.style.border = '2px solid var(--accent)';
             selectedBtn.style.background = 'rgba(255, 213, 111, 0.15)';
             selectedBtn.style.color = 'var(--text-primary)';
-            
+
             // Trigger shine animation
             setTimeout(() => {
                 selectedBtn.style.boxShadow = '0 0 20px rgba(255, 213, 111, 0.5)';
                 selectedBtn.style.transform = 'translateY(-1px)';
             }, 100);
+
+            // Track CustomizeProduct
+            if (typeof fbq !== 'undefined') {
+                const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+                fbq('track', 'CustomizeProduct', {
+                    content_name: 'Adobe Creative Cloud',
+                    variant: duration,
+                    currency: currency
+                });
+            }
 
             // Update price display
             document.querySelectorAll('.adobe-prices').forEach(price => {
@@ -2341,19 +2434,39 @@
         // Adobe Order Function
         function orderAdobe() {
             const activeBtn = document.querySelector('.adobe-duration-btn.active');
-            const duration = activeBtn.getAttribute('data-duration');
+            const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
+
+            // Detect current currency
+            const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+
             const productNames = {
-                '1month': 'Adobe Creative Cloud - شهر واحد',
-                '3months': 'Adobe Creative Cloud - 3 أشهر'
+                '1month': 'Adobe Creative Cloud - 1 Month',
+                '3months': 'Adobe Creative Cloud - 3 Months'
             };
             const prices = {
-                '1month': '1200 د.ج',
-                '3months': '2900 د.ج'
+                '1month': { dzd: 1200, usd: 5 },
+                '3months': { dzd: 2900, usd: 12 }
             };
-            
+
             const productName = productNames[duration];
-            const price = prices[duration];
-            const message = `مرحباً! أريد طلب ${productName} بسعر ${price}`;
+            const priceObj = prices[duration];
+            const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+            // Track Facebook Events
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead', {
+                    content_name: productName,
+                    value: parseFloat(price),
+                    currency: currency
+                });
+                fbq('track', 'InitiateCheckout', {
+                    content_name: productName,
+                    value: parseFloat(price),
+                    currency: currency
+                });
+            }
+
+            const message = `مرحباً! أريد طلب ${productName} بسعر ${price} ${currency === 'USD' ? '$' : 'د.ج'}`;
             const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }

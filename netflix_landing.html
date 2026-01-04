@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix Premium - حساب مشترك بأفضل سعر</title>
-    
+
     <!-- Meta Pixel Code -->
     <script>
         !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '2046893892791206');
         fbq('track', 'PageView');
+
+        // Points 1 & 2: Detailed ViewContent and InterestedLead
+        const isUSD = location.search.includes('USD');
+        fbq('track', 'ViewContent', {
+            content_name: 'Netflix Premium',
+            content_category: 'Streaming',
+            value: isUSD ? 6 : 1500,
+            currency: isUSD ? 'USD' : 'DZD'
+        });
+
+        setTimeout(function () {
+            fbq('trackCustom', 'InterestedLead', {
+                content_name: 'Netflix Premium',
+                time_on_page: '10s'
+            });
+        }, 10000);
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -24,11 +41,11 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Cairo', sans-serif;
             background: #0a0a0a;
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(229, 9, 20, 0.1) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(178, 7, 16, 0.05) 0px, transparent 50%);
             color: white;
@@ -36,7 +53,7 @@
             overflow-x: hidden;
             line-height: 1.6;
         }
-        
+
         #particles-js {
             position: fixed;
             width: 100%;
@@ -47,7 +64,7 @@
             pointer-events: none;
             opacity: 0.3;
         }
-        
+
         /* Glassmorphism Effect */
         .glass-card {
             background: rgba(255, 255, 255, 0.03);
@@ -58,14 +75,14 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
-        
+
         .glass-card:hover {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(229, 9, 20, 0.3);
             transform: translateY(-4px);
             box-shadow: 0 12px 40px rgba(229, 9, 20, 0.2);
         }
-        
+
         /* Hero Section */
         .hero-container {
             position: relative;
@@ -75,23 +92,30 @@
             justify-content: center;
             padding: 120px 20px 80px;
         }
-        
+
         .hero-content {
             max-width: 1200px;
             width: 100%;
             text-align: center;
         }
-        
+
         .product-logo-container {
             margin-bottom: 32px;
             animation: float 3s ease-in-out infinite;
         }
-        
+
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
-        
+
         .hero-title {
             font-size: clamp(2.5rem, 5vw, 4.5rem);
             font-weight: 900;
@@ -102,7 +126,7 @@
             margin-bottom: 24px;
             line-height: 1.2;
         }
-        
+
         .hero-subtitle {
             font-size: clamp(1.1rem, 2vw, 1.5rem);
             color: rgba(255, 255, 255, 0.8);
@@ -111,7 +135,7 @@
             margin-left: auto;
             margin-right: auto;
         }
-        
+
         .price-badge {
             display: inline-block;
             background: linear-gradient(135deg, rgba(229, 9, 20, 0.2), rgba(178, 7, 16, 0.2));
@@ -124,7 +148,7 @@
             margin: 32px 0;
             box-shadow: 0 8px 24px rgba(229, 9, 20, 0.2);
         }
-        
+
         /* Payment Methods Cards */
         .payment-grid {
             display: grid;
@@ -133,7 +157,7 @@
             max-width: 900px;
             margin: 48px auto;
         }
-        
+
         .payment-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -146,7 +170,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .payment-card::before {
             content: '';
             position: absolute;
@@ -157,18 +181,18 @@
             background: linear-gradient(90deg, transparent, rgba(229, 9, 20, 0.1), transparent);
             transition: left 0.5s;
         }
-        
+
         .payment-card:hover::before {
             left: 100%;
         }
-        
+
         .payment-card:hover {
             transform: translateY(-8px);
             border-color: rgba(229, 9, 20, 0.5);
             box-shadow: 0 12px 40px rgba(229, 9, 20, 0.3);
             background: rgba(255, 255, 255, 0.08);
         }
-        
+
         .payment-icon {
             width: 80px;
             height: 80px;
@@ -181,13 +205,13 @@
             font-weight: 700;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
-        
+
         .payment-label {
             font-size: 1.1rem;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.9);
         }
-        
+
         /* CTA Button */
         .cta-button {
             display: inline-block;
@@ -204,7 +228,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .cta-button::before {
             content: '';
             position: absolute;
@@ -217,24 +241,24 @@
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
-        
+
         .cta-button:hover::before {
             width: 300px;
             height: 300px;
         }
-        
+
         .cta-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 32px rgba(229, 9, 20, 0.5);
         }
-        
+
         /* Section Styling */
         .section {
             padding: 80px 20px;
             position: relative;
             z-index: 10;
         }
-        
+
         .section-title {
             font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 800;
@@ -245,7 +269,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -253,7 +277,7 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .feature-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
@@ -262,30 +286,30 @@
             padding: 32px;
             transition: all 0.3s ease;
         }
-        
+
         .feature-card:hover {
             transform: translateY(-4px);
             border-color: rgba(229, 9, 20, 0.3);
             box-shadow: 0 12px 40px rgba(229, 9, 20, 0.15);
         }
-        
+
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 16px;
         }
-        
+
         .feature-title {
             font-size: 1.5rem;
             font-weight: 700;
             color: #e50914;
             margin-bottom: 12px;
         }
-        
+
         .feature-text {
             color: rgba(255, 255, 255, 0.7);
             line-height: 1.8;
         }
-        
+
         /* Navigation */
         .nav-container {
             position: fixed;
@@ -298,7 +322,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .back-btn {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -310,17 +334,17 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-        
+
         .back-btn:hover {
             background: rgba(229, 9, 20, 0.2);
             border-color: rgba(229, 9, 20, 0.5);
         }
-        
+
         .lang-switcher {
             display: flex;
             gap: 8px;
         }
-        
+
         .lang-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -331,69 +355,69 @@
             transition: all 0.3s ease;
             font-weight: 600;
         }
-        
+
         .lang-btn.active,
         .lang-btn:hover {
             background: rgba(229, 9, 20, 0.2);
             border-color: rgba(229, 9, 20, 0.5);
         }
-        
+
         /* Responsive Mobile Styles - Compact Design */
         @media (max-width: 768px) {
             .hero-container {
                 padding: 70px 15px 30px !important;
                 min-height: auto !important;
             }
-            
+
             .product-logo-container {
                 margin-bottom: 16px !important;
             }
-            
+
             .product-logo-container img {
                 max-width: 80px !important;
                 height: auto !important;
             }
-            
+
             .hero-title {
                 font-size: 1.5rem !important;
                 margin-bottom: 8px !important;
                 line-height: 1.3 !important;
             }
-            
+
             .hero-subtitle {
                 font-size: 0.875rem !important;
                 margin-bottom: 8px !important;
                 line-height: 1.4 !important;
             }
-            
+
             .price-badge {
                 font-size: 1rem !important;
                 padding: 8px 16px !important;
                 margin: 12px 0 !important;
             }
-            
+
             .payment-grid {
                 grid-template-columns: repeat(3, 1fr) !important;
                 gap: 8px !important;
                 margin: 20px auto !important;
                 max-width: 100% !important;
             }
-            
+
             .payment-card {
                 padding: 12px 8px !important;
             }
-            
+
             .payment-icon {
                 font-size: 1.8rem !important;
                 margin-bottom: 6px !important;
                 width: 40px !important;
                 height: 40px !important;
             }
-            
+
             .payment-label {
                 font-size: 0.75rem !important;
             }
-            
+
             .cta-button {
                 font-size: 0.9rem !important;
                 padding: 12px 24px !important;
@@ -401,132 +425,132 @@
                 max-width: 100% !important;
                 margin-top: 16px !important;
             }
-            
+
             .section {
                 padding: 12px 15px !important;
             }
-            
+
             .section-title {
                 font-size: 1.1rem !important;
                 margin-bottom: 10px !important;
             }
-            
+
             .feature-grid {
                 grid-template-columns: 1fr;
                 gap: 8px !important;
             }
-            
+
             .feature-card {
                 padding: 12px 10px !important;
             }
-            
+
             .feature-icon {
                 font-size: 1.8rem !important;
                 margin-bottom: 8px !important;
             }
-            
+
             .feature-title {
                 font-size: 1rem !important;
                 margin-bottom: 6px !important;
             }
-            
+
             .feature-text {
                 font-size: 0.75rem !important;
                 line-height: 1.4 !important;
             }
-            
+
             .glass-card {
                 padding: 12px 10px !important;
                 margin-bottom: 12px !important;
             }
-            
+
             .nav-container {
                 padding: 8px 12px !important;
             }
-            
+
             .back-btn {
                 padding: 6px 12px !important;
                 font-size: 0.75rem !important;
             }
-            
+
             .lang-btn {
                 padding: 4px 8px !important;
                 font-size: 0.75rem !important;
             }
-            
+
             /* Reduce spacing in hero content */
-            .hero-content > * {
+            .hero-content>* {
                 margin-bottom: 8px !important;
             }
-            
+
             /* Show 2 columns on mobile for better content visibility */
             .feature-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 8px !important;
             }
-            
+
             /* Compact feature cards to show more content */
             .feature-card {
                 padding: 10px 8px !important;
                 min-height: auto !important;
             }
-            
+
             .feature-icon {
                 font-size: 1.5rem !important;
                 margin-bottom: 6px !important;
             }
-            
+
             .feature-title {
                 font-size: 0.85rem !important;
                 margin-bottom: 4px !important;
                 line-height: 1.3 !important;
             }
-            
+
             .feature-text {
                 font-size: 0.7rem !important;
                 line-height: 1.4 !important;
             }
-            
+
             .feature-card ul li {
                 font-size: 0.65rem !important;
                 margin-bottom: 3px !important;
                 line-height: 1.3 !important;
             }
-            
+
             /* Compact sections */
             .section {
                 padding: 16px 12px !important;
             }
-            
+
             .section-title {
                 font-size: 1.15rem !important;
                 margin-bottom: 12px !important;
             }
         }
-        
+
         @media (max-width: 480px) {
             .hero-title {
                 font-size: 1.75rem !important;
             }
-            
+
             .hero-subtitle {
                 font-size: 0.9rem !important;
             }
-            
+
             .price-badge {
                 font-size: 1.1rem !important;
                 padding: 10px 20px;
             }
-            
+
             .section-title {
                 font-size: 1.5rem !important;
             }
-            
+
             .payment-card {
                 padding: 16px 12px;
             }
         }
-        
+
         /* Payment Modals Mobile Responsive */
         @media (max-width: 768px) {
             .modal div[style*="max-width"] {
@@ -535,27 +559,28 @@
                 padding: 20px 15px !important;
                 margin: 10px !important;
             }
-            
+
             .modal h2 {
                 font-size: 1.25rem !important;
             }
-            
+
             .modal code {
                 font-size: 0.85rem !important;
                 word-break: break-all;
             }
-            
+
             .modal button {
                 font-size: 0.9rem !important;
                 padding: 10px 20px !important;
             }
-            
+
             #qr-code {
                 max-width: 120px !important;
             }
         }
     </style>
 </head>
+
 <body>
     <div id="particles-js"></div>
 
@@ -573,20 +598,19 @@
     <section class="hero-container" style="position: relative;">
         <div class="hero-content" style="position: relative; z-index: 10;">
             <div class="product-logo-container">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" 
-                     alt="Netflix" 
-                     class="w-48 h-auto md:w-64 object-contain mx-auto"
-                     style="filter: drop-shadow(0 0 40px rgba(229, 9, 20, 0.6));">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"
+                    class="w-48 h-auto md:w-64 object-contain mx-auto"
+                    style="filter: drop-shadow(0 0 40px rgba(229, 9, 20, 0.6));">
             </div>
-            
+
             <h1 class="hero-title" data-i18n="hero.title">
                 Netflix Premium - حساب مشترك
             </h1>
-            
+
             <p class="hero-subtitle" data-i18n="hero.subtitle">
                 استمتع بمشاهدة غير محدودة لأفضل الأفلام والمسلسلات
             </p>
-            
+
             <div class="price-badge" data-i18n="hero.price">
                 فقط بـ 1500 دج / 4 أشهر
             </div>
@@ -602,7 +626,8 @@
 
                 <div class="payment-card" onclick="openCryptoModal()">
                     <div class="payment-icon" style="background: linear-gradient(135deg, #e50914, #b20710);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                            stroke="white" stroke-width="2">
                             <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
                             <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
                             <path d="M12 12v8"></path>
@@ -613,7 +638,8 @@
 
                 <div class="payment-card" onclick="openBaridiMobModal()">
                     <div class="payment-icon" style="background: linear-gradient(135deg, #ffffff, #e5e5e5);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                            stroke="#0066cc" stroke-width="2">
                             <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                             <line x1="2" y1="10" x2="22" y2="10"></line>
                         </svg>
@@ -622,8 +648,9 @@
                 </div>
             </div>
 
-            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Netflix Premium" 
-               class="cta-button" data-i18n="cta.button">
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Netflix Premium"
+                onclick="if(typeof fbq !== 'undefined') { const isUSD = location.search.includes('USD'); const val = isUSD ? 6 : 1500; const cur = isUSD ? 'USD' : 'DZD'; fbq('track', 'Lead', {content_name: 'Netflix Premium', value: val, currency: cur}); fbq('track', 'InitiateCheckout', {content_name: 'Netflix Premium', value: val, currency: cur}); }"
+                class="cta-button" data-i18n="cta.button">
                 اطلب الآن عبر WhatsApp
             </a>
         </div>
@@ -641,70 +668,72 @@
                     حساب مشترك آمن وموثوق مع بروفايل خاص لك
                 </p>
                 <p class="feature-text text-center max-w-3xl mx-auto" data-i18n="desc.text">
-                    احصل على وصول كامل إلى مكتبة Netflix الضخمة من الأفلام والمسلسلات والبرامج الوثائقية. شاهد على أي جهاز، في أي وقت، مع جودة عالية تصل إلى 4K Ultra HD.
+                    احصل على وصول كامل إلى مكتبة Netflix الضخمة من الأفلام والمسلسلات والبرامج الوثائقية. شاهد على أي
+                    جهاز، في أي وقت، مع جودة عالية تصل إلى 4K Ultra HD.
                 </p>
             </div>
         </div>
     </section>
 
-        <!-- Features Section -->
-        <section class="section mobile-section">
-            <h2 class="section-title" data-i18n="features.title">
-                ✨ ما تحصل عليه مع Netflix Premium
-            </h2>
-            <p class="hero-subtitle text-center mb-10">
-                <span data-i18n="features.duration">مدة الاشتراك:</span> <span class="text-[#e50914] font-bold text-2xl" data-i18n="features.duration.value">4 أشهر كاملة</span>
-            </p>
+    <!-- Features Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="features.title">
+            ✨ ما تحصل عليه مع Netflix Premium
+        </h2>
+        <p class="hero-subtitle text-center mb-10">
+            <span data-i18n="features.duration">مدة الاشتراك:</span> <span class="text-[#e50914] font-bold text-2xl"
+                data-i18n="features.duration.value">4 أشهر كاملة</span>
+        </p>
 
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎬</div>
-                    <h3 class="feature-title" data-i18n="feature1.title">مكتبة ضخمة من المحتوى</h3>
-                    <p class="feature-text" data-i18n="feature1.desc">آلاف الأفلام والمسلسلات والبرامج الوثائقية</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📺</div>
-                    <h3 class="feature-title" data-i18n="feature2.title">جودة عالية حتى 4K</h3>
-                    <p class="feature-text" data-i18n="feature2.desc">استمتع بمشاهدة بجودة Ultra HD على الأجهزة المدعومة</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3 class="feature-title" data-i18n="feature3.title">شاهد على أي جهاز</h3>
-                    <p class="feature-text" data-i18n="feature3.desc">هاتف، تابلت، كمبيوتر، تلفاز ذكي - كلها مدعومة</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">👤</div>
-                    <h3 class="feature-title" data-i18n="feature4.title">بروفايل خاص بك</h3>
-                    <p class="feature-text" data-i18n="feature4.desc">أنشئ بروفايلك الخاص مع PIN للحماية</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🌍</div>
-                    <h3 class="feature-title" data-i18n="feature5.title">يعمل في جميع أنحاء العالم</h3>
-                    <p class="feature-text" data-i18n="feature5.desc">مع VPN إذا لزم الأمر - دعم كامل</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3 class="feature-title" data-i18n="feature6.title">توصيل سريع وتلقائي</h3>
-                    <p class="feature-text" data-i18n="feature6.desc">احصل على حسابك فوراً بعد الطلب</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <h3 class="feature-title" data-i18n="feature7.title">ضمان 4 أشهر كاملة</h3>
-                    <p class="feature-text" data-i18n="feature7.desc">نضمن لك الوصول الكامل طوال المدة</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3 class="feature-title" data-i18n="feature8.title">دعم 24/7</h3>
-                    <p class="feature-text" data-i18n="feature8.desc">فريقنا جاهز لمساعدتك في أي وقت</p>
-                </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎬</div>
+                <h3 class="feature-title" data-i18n="feature1.title">مكتبة ضخمة من المحتوى</h3>
+                <p class="feature-text" data-i18n="feature1.desc">آلاف الأفلام والمسلسلات والبرامج الوثائقية</p>
             </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📺</div>
+                <h3 class="feature-title" data-i18n="feature2.title">جودة عالية حتى 4K</h3>
+                <p class="feature-text" data-i18n="feature2.desc">استمتع بمشاهدة بجودة Ultra HD على الأجهزة المدعومة</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title" data-i18n="feature3.title">شاهد على أي جهاز</h3>
+                <p class="feature-text" data-i18n="feature3.desc">هاتف، تابلت، كمبيوتر، تلفاز ذكي - كلها مدعومة</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">👤</div>
+                <h3 class="feature-title" data-i18n="feature4.title">بروفايل خاص بك</h3>
+                <p class="feature-text" data-i18n="feature4.desc">أنشئ بروفايلك الخاص مع PIN للحماية</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3 class="feature-title" data-i18n="feature5.title">يعمل في جميع أنحاء العالم</h3>
+                <p class="feature-text" data-i18n="feature5.desc">مع VPN إذا لزم الأمر - دعم كامل</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title" data-i18n="feature6.title">توصيل سريع وتلقائي</h3>
+                <p class="feature-text" data-i18n="feature6.desc">احصل على حسابك فوراً بعد الطلب</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3 class="feature-title" data-i18n="feature7.title">ضمان 4 أشهر كاملة</h3>
+                <p class="feature-text" data-i18n="feature7.desc">نضمن لك الوصول الكامل طوال المدة</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3 class="feature-title" data-i18n="feature8.title">دعم 24/7</h3>
+                <p class="feature-text" data-i18n="feature8.desc">فريقنا جاهز لمساعدتك في أي وقت</p>
+            </div>
+        </div>
         </div>
 
 
@@ -713,7 +742,7 @@
             <h2 class="section-title" data-i18n="info.title">
                 ⚠️ معلومات مهمة قبل الشراء
             </h2>
-            
+
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-icon">📌</div>
@@ -722,7 +751,7 @@
                         الحسابات مشتركة وليست شخصية. يمكنك إنشاء بروفايل خاص بك مع PIN للحماية.
                     </p>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">🌐</div>
                     <h4 class="feature-title" data-i18n="info.vpn.title">استخدام VPN عند الحاجة</h4>
@@ -730,7 +759,7 @@
                         إذا واجهت مشاكل في تسجيل الدخول، استخدم VPN. الحساب يعمل في جميع أنحاء العالم.
                     </p>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
                     <h4 class="feature-title" data-i18n="info.delivery.title">التوصيل السريع</h4>
@@ -738,7 +767,7 @@
                         التوصيل سريع وتلقائي. إذا تأخر طلبك وكنا غير متصلين، فهذا يعني أن التوصيل متوقف مؤقتاً.
                     </p>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">💬</div>
                     <h4 class="feature-title" data-i18n="info.support.title">الدعم الفني</h4>
@@ -754,7 +783,7 @@
             <h2 class="section-title" data-i18n="rules.title">
                 📋 قواعد استخدام الحساب
             </h2>
-            
+
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🔒</div>
@@ -771,11 +800,14 @@
                         إذا واجهت مشكلة "كلمة مرور خاطئة"، ابقَ هادئاً واتبع هذه الخطوات:
                     </p>
                     <ul class="feature-text space-y-2 mr-4 text-sm">
-                        <li data-i18n="rules.troubleshoot.step1">✓ جرب استخدام VPN مختلف إذا كنت تستخدم واحداً بالفعل</li>
-                        <li data-i18n="rules.troubleshoot.step2">✓ بدّل المتصفح، حيث أن Netflix يحفظ البيانات مؤقتاً</li>
+                        <li data-i18n="rules.troubleshoot.step1">✓ جرب استخدام VPN مختلف إذا كنت تستخدم واحداً بالفعل
+                        </li>
+                        <li data-i18n="rules.troubleshoot.step2">✓ بدّل المتصفح، حيث أن Netflix يحفظ البيانات مؤقتاً
+                        </li>
                         <li data-i18n="rules.troubleshoot.step3">✓ جرب جهازاً آخر: هاتف، كمبيوتر، أو لابتوب</li>
                         <li data-i18n="rules.troubleshoot.step4">✓ انتظر قليلاً قبل تسجيل الدخول مرة أخرى</li>
-                        <li data-i18n="rules.troubleshoot.step5">⚠️ تجنب تسجيل الدخول والخروج بشكل متكرر - قد يؤدي ذلك لقفل الحساب مؤقتاً</li>
+                        <li data-i18n="rules.troubleshoot.step5">⚠️ تجنب تسجيل الدخول والخروج بشكل متكرر - قد يؤدي ذلك
+                            لقفل الحساب مؤقتاً</li>
                     </ul>
                 </div>
             </div>
@@ -786,14 +818,14 @@
             <h2 class="section-title" data-i18n="pricing.title">
                 💰 الأسعار
             </h2>
-            
+
             <div class="feature-grid" style="max-width: 600px;">
                 <div class="feature-card text-center">
                     <div class="feature-icon">🇩🇿</div>
                     <h4 class="feature-title text-2xl" data-i18n="pricing.dzd">1500 دج</h4>
                     <p class="feature-text" data-i18n="pricing.duration">لمدة 4 أشهر كاملة</p>
                 </div>
-                
+
                 <div class="feature-card text-center">
                     <div class="feature-icon">💵</div>
                     <h4 class="feature-title text-2xl" data-i18n="pricing.usdt">6 USDT</h4>
@@ -812,7 +844,7 @@
             <h2 class="section-title" data-i18n="howto.title">
                 📝 كيف تحصل على حسابك؟ (3 خطوات بسيطة)
             </h2>
-            
+
             <div class="feature-grid">
                 <div class="feature-card text-center">
                     <div class="feature-icon">1️⃣</div>
@@ -821,7 +853,7 @@
                         تواصل معنا عبر WhatsApp واختر طريقة الدفع المناسبة لك
                     </p>
                 </div>
-                
+
                 <div class="feature-card text-center">
                     <div class="feature-icon">2️⃣</div>
                     <h4 class="feature-title" data-i18n="howto.step2.title">ادفع بأمان</h4>
@@ -829,7 +861,7 @@
                         اختر من بين RedotPay، USDT، أو BaridiMob وأكمل الدفع
                     </p>
                 </div>
-                
+
                 <div class="feature-card text-center">
                     <div class="feature-icon">3️⃣</div>
                     <h4 class="feature-title" data-i18n="howto.step3.title">ابدأ المشاهدة</h4>
@@ -840,694 +872,760 @@
             </div>
         </section>
 
-    <!-- Final CTA Section -->
-    <section class="section mobile-section">
-        <div class="max-w-4xl mx-auto">
-            <div class="glass-card p-12 text-center">
-                <h2 class="section-title mb-6" data-i18n="final.title">
-                    🎬 لا تفوت أفضل الأفلام والمسلسلات
+        <!-- Final CTA Section -->
+        <section class="section mobile-section">
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-card p-12 text-center">
+                    <h2 class="section-title mb-6" data-i18n="final.title">
+                        🎬 لا تفوت أفضل الأفلام والمسلسلات
+                    </h2>
+                    <p class="hero-subtitle mb-8" data-i18n="final.subtitle">
+                        احصل على Netflix Premium بأفضل سعر اليوم!
+                    </p>
+                    <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Netflix Premium"
+                        onclick="if(typeof fbq !== 'undefined') { const isUSD = location.search.includes('USD'); const val = isUSD ? 6 : 1500; const cur = isUSD ? 'USD' : 'DZD'; fbq('track', 'Lead', {content_name: 'Netflix Premium', value: val, currency: cur}); fbq('track', 'InitiateCheckout', {content_name: 'Netflix Premium', value: val, currency: cur}); }"
+                        class="cta-button" data-i18n="final.button">
+                        🚀 اشترك الآن
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-8 text-center text-gray-600 text-sm border-t border-gray-900 relative z-10">
+            <span data-i18n="footer.text">&copy; 2024 Netflix Premium. جميع الحقوق محفوظة.</span>
+        </footer>
+
+        <!-- Payment Modals -->
+        <!-- BaridiMob Modal -->
+        <div id="baridimob-modal" class="modal"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+            <div
+                style="max-width: 600px; background: #0a0a0a; border: 2px solid #e50914; border-radius: 20px; padding: 40px; position: relative;">
+                <button onclick="closeBaridiMobModal()"
+                    style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #e50914; font-size: 30px; cursor: pointer;">&times;</button>
+
+                <h2 id="baridimob-title"
+                    style="text-align: center; color: #e50914; font-size: 2rem; margin-bottom: 20px;">الدفع عبر
+                    BaridiMob</h2>
+
+                <div
+                    style="background: rgba(229, 9, 20, 0.1); border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <p style="color: #fff; margin-bottom: 10px;"><strong id="baridimob-product">المنتج:</strong> Netflix
+                        Premium (4 أشهر)</p>
+                    <p style="color: #fff;"><strong id="baridimob-price">السعر:</strong> <span
+                            id="baridimob-price-value">1500 دج</span></p>
+                </div>
+
+                <div
+                    style="background: #111; border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <p id="baridimob-rip-label" style="color: #888; margin-bottom: 10px; text-align: center;">RIP
+                        BaridiMob:</p>
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
+                        <code id="baridimob-rip" style="color: #e50914; font-size: 1.2rem;">00799999002787548473</code>
+                        <button id="baridimob-copy" onclick="copyBaridiMobRIP()"
+                            style="background: #e50914; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                    </div>
+                </div>
+
+                <div style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">
+                    <h3 id="baridimob-instructions-title" style="color: #e50914; margin-bottom: 15px;">تعليمات الدفع:
+                    </h3>
+                    <ol id="baridimob-instructions" style="padding-right: 20px;">
+                        <li>افتح تطبيق BaridiMob</li>
+                        <li>اختر "تحويل الأموال" أو "Virement"</li>
+                        <li>اختر "RIP" كطريقة التحويل</li>
+                        <li>أدخل الـ RIP: <strong>00799999002787548473</strong></li>
+                        <li>أدخل المبلغ: <strong>1500 دج</strong></li>
+                        <li>أكمل عملية الدفع</li>
+                        <li>احتفظ بإثبات الدفع</li>
+                        <li>اضغط "تم الدفع" للتواصل معنا</li>
+                    </ol>
+                    <p id="baridimob-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال الـ RIP بشكل
+                        صحيح!</p>
+                </div>
+
+                <button id="baridimob-button" onclick="confirmBaridiMobPayment()"
+                    style="width: 100%; background: #e50914; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+                    تم الدفع - تواصل معنا
+                </button>
+            </div>
+        </div>
+
+
+        <!-- USDT/Crypto Modal -->
+        <div id="crypto-modal" class="modal"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+            <div
+                style="max-width: 600px; background: #0a0a0a; border: 2px solid #e50914; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
+                <button onclick="closeCryptoModal()"
+                    style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #e50914; font-size: 30px; cursor: pointer;">&times;</button>
+
+                <h2 id="crypto-title" style="text-align: center; color: #e50914; font-size: 2rem; margin-bottom: 20px;">
+                    الدفع بالعملات الرقمية</h2>
+
+                <div
+                    style="background: rgba(229, 9, 20, 0.1); border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> Netflix
+                        Premium (4 أشهر)</p>
+                    <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">6
+                            USDT</span></p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h3 id="crypto-select-network" style="color: #e50914; margin-bottom: 15px;">اختر الشبكة:</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="selectNetwork('TRC20', 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9')"
+                            style="flex: 1; background: #e50914; color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                            TRC20<br><span id="crypto-fees1" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة
+                                (~1 USDT)</span>
+                        </button>
+                        <button onclick="selectNetwork('BEP20', '0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0')"
+                            style="flex: 1; background: #333; color: #fff; border: 1px solid #e50914; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                            BEP20 (BSC)<br><span id="crypto-fees2" style="font-size: 0.8rem; font-weight: normal;">رسوم
+                                منخفضة (~0.5 USDT)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    style="background: #111; border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <p id="crypto-wallet-label" style="color: #888; margin-bottom: 10px; text-align: center;">عنوان
+                        المحفظة (<span id="selected-network">TRC20</span>):</p>
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <code id="wallet-address"
+                            style="color: #e50914; font-size: 0.9rem; word-break: break-all;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
+                        <button id="crypto-copy" onclick="copyWalletAddress()"
+                            style="background: #e50914; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">نسخ</button>
+                    </div>
+                    <div style="text-align: center;">
+                        <img id="qr-code"
+                            src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9"
+                            alt="QR Code" style="max-width: 200px; border-radius: 10px;">
+                        <p id="crypto-qr-text" style="color: #888; font-size: 0.85rem; margin-top: 10px;">امسح الكود
+                            بتطبيق المحفظة</p>
+                    </div>
+                </div>
+
+                <div style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">
+                    <h3 id="crypto-instructions-title" style="color: #e50914; margin-bottom: 15px;">تعليمات الدفع:</h3>
+                    <ol id="crypto-instructions" style="padding-right: 20px;">
+                        <li>اختر الشبكة المناسبة (TRC20 أو BEP20)</li>
+                        <li>انسخ عنوان المحفظة أو امسح QR Code</li>
+                        <li>افتح تطبيق Binance أو أي محفظة USDT</li>
+                        <li>تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)</li>
+                        <li>أرسل المبلغ: <strong>6 USDT</strong></li>
+                        <li>احتفظ بـ Transaction ID</li>
+                        <li>اضغط "تم الدفع" للتواصل معنا</li>
+                    </ol>
+                    <p id="crypto-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من اختيار الشبكة الصحيحة
+                        وإلا ستفقد أموالك!</p>
+                </div>
+
+                <button id="crypto-button" onclick="confirmCryptoPayment()"
+                    style="width: 100%; background: #e50914; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+                    تم الدفع - تواصل معنا
+                </button>
+            </div>
+        </div>
+
+
+        <!-- RedotPay Modal -->
+        <div id="redotpay-modal" class="modal"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+            <div
+                style="max-width: 600px; background: #0a0a0a; border: 2px solid #e50914; border-radius: 20px; padding: 40px; position: relative;">
+                <button onclick="closeRedotPayModal()"
+                    style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #e50914; font-size: 30px; cursor: pointer;">&times;</button>
+
+                <h2 id="redotpay-title"
+                    style="text-align: center; color: #e50914; font-size: 2rem; margin-bottom: 20px;">الدفع عبر RedotPay
                 </h2>
-                <p class="hero-subtitle mb-8" data-i18n="final.subtitle">
-                    احصل على Netflix Premium بأفضل سعر اليوم!
-                </p>
-                <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Netflix Premium" 
-                   class="cta-button" data-i18n="final.button">
-                    🚀 اشترك الآن
-                </a>
+
+                <div
+                    style="background: rgba(229, 9, 20, 0.1); border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <p style="color: #fff; margin-bottom: 10px;"><strong id="redotpay-product">المنتج:</strong> Netflix
+                        Premium (4 أشهر)</p>
+                    <p style="color: #fff;"><strong id="redotpay-price">السعر:</strong> <span
+                            id="redotpay-price-value">6 USD</span></p>
+                </div>
+
+                <div
+                    style="background: #111; border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <p id="redotpay-id-label" style="color: #888; margin-bottom: 10px; text-align: center;">RedotPay ID:
+                    </p>
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
+                        <code id="redotpay-id" style="color: #e50914; font-size: 1.3rem;">1117632168</code>
+                        <button id="redotpay-copy" onclick="copyRedotPayID()"
+                            style="background: #e50914; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                    </div>
+                </div>
+
+                <div style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">
+                    <h3 id="redotpay-instructions-title" style="color: #e50914; margin-bottom: 15px;">تعليمات الدفع:
+                    </h3>
+                    <ol id="redotpay-instructions" style="padding-right: 20px;">
+                        <li>افتح تطبيق RedotPay</li>
+                        <li>اختر "Send" أو "إرسال"</li>
+                        <li>أدخل RedotPay ID: <strong>1117632168</strong></li>
+                        <li>أدخل المبلغ: <strong>6 USD</strong></li>
+                        <li>أكمل عملية الإرسال</li>
+                        <li>احتفظ بإثبات التحويل</li>
+                        <li>اضغط "تم الدفع" للتواصل معنا</li>
+                    </ol>
+                    <p id="redotpay-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال RedotPay ID بشكل
+                        صحيح!</p>
+                </div>
+
+                <button id="redotpay-button" onclick="confirmRedotPayPayment()"
+                    style="width: 100%; background: #e50914; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+                    تم الدفع - تواصل معنا
+                </button>
             </div>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="py-8 text-center text-gray-600 text-sm border-t border-gray-900 relative z-10">
-        <span data-i18n="footer.text">&copy; 2024 Netflix Premium. جميع الحقوق محفوظة.</span>
-    </footer>
+        <!-- Floating Social Buttons -->
+        <div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
+            <!-- WhatsApp Button -->
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن Netflix Premium"
+                onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_name: 'Netflix Premium', content_category: 'WhatsApp'}); }"
+                class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
+                style="box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); animation: pulse-whatsapp 2s infinite;">
+                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
+                    <path
+                        d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z" />
+                </svg>
+            </a>
 
-    <!-- Payment Modals -->
-    <!-- BaridiMob Modal -->
-    <div id="baridimob-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #e50914; border-radius: 20px; padding: 40px; position: relative;">
-            <button onclick="closeBaridiMobModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #e50914; font-size: 30px; cursor: pointer;">&times;</button>
-            
-            <h2 id="baridimob-title" style="text-align: center; color: #e50914; font-size: 2rem; margin-bottom: 20px;">الدفع عبر BaridiMob</h2>
-            
-            <div style="background: rgba(229, 9, 20, 0.1); border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;"><strong id="baridimob-product">المنتج:</strong> Netflix Premium (4 أشهر)</p>
-                <p style="color: #fff;"><strong id="baridimob-price">السعر:</strong> <span id="baridimob-price-value">1500 دج</span></p>
-            </div>
-
-            <div style="background: #111; border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p id="baridimob-rip-label" style="color: #888; margin-bottom: 10px; text-align: center;">RIP BaridiMob:</p>
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
-                    <code id="baridimob-rip" style="color: #e50914; font-size: 1.2rem;">00799999002787548473</code>
-                    <button id="baridimob-copy" onclick="copyBaridiMobRIP()" style="background: #e50914; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
-                </div>
-            </div>
-
-            <div style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">
-                <h3 id="baridimob-instructions-title" style="color: #e50914; margin-bottom: 15px;">تعليمات الدفع:</h3>
-                <ol id="baridimob-instructions" style="padding-right: 20px;">
-                    <li>افتح تطبيق BaridiMob</li>
-                    <li>اختر "تحويل الأموال" أو "Virement"</li>
-                    <li>اختر "RIP" كطريقة التحويل</li>
-                    <li>أدخل الـ RIP: <strong>00799999002787548473</strong></li>
-                    <li>أدخل المبلغ: <strong>1500 دج</strong></li>
-                    <li>أكمل عملية الدفع</li>
-                    <li>احتفظ بإثبات الدفع</li>
-                    <li>اضغط "تم الدفع" للتواصل معنا</li>
-                </ol>
-                <p id="baridimob-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!</p>
-            </div>
-
-            <button id="baridimob-button" onclick="confirmBaridiMobPayment()" style="width: 100%; background: #e50914; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
-                تم الدفع - تواصل معنا
-            </button>
+            <!-- Instagram Button -->
+            <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" target="_blank"
+                onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_name: 'Netflix Premium', content_category: 'Instagram'}); }"
+                class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
+                style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); animation: pulse-instagram 2s infinite;">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
+                    <path
+                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+            </a>
         </div>
-    </div>
 
+        <style>
+            @keyframes pulse-whatsapp {
+                0% {
+                    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+                }
 
-    <!-- USDT/Crypto Modal -->
-    <div id="crypto-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #e50914; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
-            <button onclick="closeCryptoModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #e50914; font-size: 30px; cursor: pointer;">&times;</button>
-            
-            <h2 id="crypto-title" style="text-align: center; color: #e50914; font-size: 2rem; margin-bottom: 20px;">الدفع بالعملات الرقمية</h2>
-            
-            <div style="background: rgba(229, 9, 20, 0.1); border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> Netflix Premium (4 أشهر)</p>
-                <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">6 USDT</span></p>
-            </div>
+                50% {
+                    box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1);
+                }
 
-            <div style="margin-bottom: 20px;">
-                <h3 id="crypto-select-network" style="color: #e50914; margin-bottom: 15px;">اختر الشبكة:</h3>
-                <div style="display: flex; gap: 10px;">
-                    <button onclick="selectNetwork('TRC20', 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9')" style="flex: 1; background: #e50914; color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
-                        TRC20<br><span id="crypto-fees1" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~1 USDT)</span>
-                    </button>
-                    <button onclick="selectNetwork('BEP20', '0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0')" style="flex: 1; background: #333; color: #fff; border: 1px solid #e50914; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
-                        BEP20 (BSC)<br><span id="crypto-fees2" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~0.5 USDT)</span>
-                    </button>
-                </div>
-            </div>
-
-            <div style="background: #111; border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p id="crypto-wallet-label" style="color: #888; margin-bottom: 10px; text-align: center;">عنوان المحفظة (<span id="selected-network">TRC20</span>):</p>
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <code id="wallet-address" style="color: #e50914; font-size: 0.9rem; word-break: break-all;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
-                    <button id="crypto-copy" onclick="copyWalletAddress()" style="background: #e50914; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">نسخ</button>
-                </div>
-                <div style="text-align: center;">
-                    <img id="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9" alt="QR Code" style="max-width: 200px; border-radius: 10px;">
-                    <p id="crypto-qr-text" style="color: #888; font-size: 0.85rem; margin-top: 10px;">امسح الكود بتطبيق المحفظة</p>
-                </div>
-            </div>
-
-            <div style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">
-                <h3 id="crypto-instructions-title" style="color: #e50914; margin-bottom: 15px;">تعليمات الدفع:</h3>
-                <ol id="crypto-instructions" style="padding-right: 20px;">
-                    <li>اختر الشبكة المناسبة (TRC20 أو BEP20)</li>
-                    <li>انسخ عنوان المحفظة أو امسح QR Code</li>
-                    <li>افتح تطبيق Binance أو أي محفظة USDT</li>
-                    <li>تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)</li>
-                    <li>أرسل المبلغ: <strong>6 USDT</strong></li>
-                    <li>احتفظ بـ Transaction ID</li>
-                    <li>اضغط "تم الدفع" للتواصل معنا</li>
-                </ol>
-                <p id="crypto-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!</p>
-            </div>
-
-            <button id="crypto-button" onclick="confirmCryptoPayment()" style="width: 100%; background: #e50914; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
-                تم الدفع - تواصل معنا
-            </button>
-        </div>
-    </div>
-
-
-    <!-- RedotPay Modal -->
-    <div id="redotpay-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #e50914; border-radius: 20px; padding: 40px; position: relative;">
-            <button onclick="closeRedotPayModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #e50914; font-size: 30px; cursor: pointer;">&times;</button>
-            
-            <h2 id="redotpay-title" style="text-align: center; color: #e50914; font-size: 2rem; margin-bottom: 20px;">الدفع عبر RedotPay</h2>
-            
-            <div style="background: rgba(229, 9, 20, 0.1); border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;"><strong id="redotpay-product">المنتج:</strong> Netflix Premium (4 أشهر)</p>
-                <p style="color: #fff;"><strong id="redotpay-price">السعر:</strong> <span id="redotpay-price-value">6 USD</span></p>
-            </div>
-
-            <div style="background: #111; border: 1px solid #e50914; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p id="redotpay-id-label" style="color: #888; margin-bottom: 10px; text-align: center;">RedotPay ID:</p>
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
-                    <code id="redotpay-id" style="color: #e50914; font-size: 1.3rem;">1117632168</code>
-                    <button id="redotpay-copy" onclick="copyRedotPayID()" style="background: #e50914; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
-                </div>
-            </div>
-
-            <div style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">
-                <h3 id="redotpay-instructions-title" style="color: #e50914; margin-bottom: 15px;">تعليمات الدفع:</h3>
-                <ol id="redotpay-instructions" style="padding-right: 20px;">
-                    <li>افتح تطبيق RedotPay</li>
-                    <li>اختر "Send" أو "إرسال"</li>
-                    <li>أدخل RedotPay ID: <strong>1117632168</strong></li>
-                    <li>أدخل المبلغ: <strong>6 USD</strong></li>
-                    <li>أكمل عملية الإرسال</li>
-                    <li>احتفظ بإثبات التحويل</li>
-                    <li>اضغط "تم الدفع" للتواصل معنا</li>
-                </ol>
-                <p id="redotpay-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!</p>
-            </div>
-
-            <button id="redotpay-button" onclick="confirmRedotPayPayment()" style="width: 100%; background: #e50914; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
-                تم الدفع - تواصل معنا
-            </button>
-        </div>
-    </div>
-
-    <!-- Floating Social Buttons -->
-    <div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
-        <!-- WhatsApp Button -->
-        <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن Netflix Premium" 
-           class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
-           style="box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); animation: pulse-whatsapp 2s infinite;">
-            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
-                <path d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z"/>
-            </svg>
-        </a>
-
-        <!-- Instagram Button -->
-        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" 
-           target="_blank"
-           class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
-           style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); animation: pulse-instagram 2s infinite;">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-            </svg>
-        </a>
-    </div>
-
-    <style>
-        @keyframes pulse-whatsapp {
-            0% {
-                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+                100% {
+                    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+                }
             }
-            50% {
-                box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1);
+
+            @keyframes pulse-instagram {
+                0% {
+                    box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
+                }
+
+                50% {
+                    box-shadow: 0 4px 30px rgba(225, 48, 108, 0.7), 0 0 0 10px rgba(225, 48, 108, 0.1);
+                }
+
+                100% {
+                    box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
+                }
             }
-            100% {
-                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-            }
-        }
-        @keyframes pulse-instagram {
-            0% {
-                box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
-            }
-            50% {
-                box-shadow: 0 4px 30px rgba(225, 48, 108, 0.7), 0 0 0 10px rgba(225, 48, 108, 0.1);
-            }
-            100% {
-                box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
-            }
-        }
-    </style>
+        </style>
 
 
-    <script>
-        // Particles.js configuration
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: '#e50914' },
-                shape: { type: 'circle' },
-                opacity: { value: 0.5, random: false },
-                size: { value: 3, random: true },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: '#e50914',
-                    opacity: 0.4,
-                    width: 1
+        <script>
+            // Particles.js configuration
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: '#e50914' },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.5, random: false },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: '#e50914',
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: 'none',
+                        random: false,
+                        straight: false,
+                        out_mode: 'out',
+                        bounce: false
+                    }
                 },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: 'none',
-                    random: false,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false
-                }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: {
-                    onhover: { enable: true, mode: 'repulse' },
-                    onclick: { enable: true, mode: 'push' },
-                    resize: true
-                }
-            },
-            retina_detect: true
-        });
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: { enable: true, mode: 'repulse' },
+                        onclick: { enable: true, mode: 'push' },
+                        resize: true
+                    }
+                },
+                retina_detect: true
+            });
 
-        // Payment Modal Functions
-        function openBaridiMobModal() {
-            document.getElementById('baridimob-modal').style.display = 'flex';
-        }
-        function closeBaridiMobModal() {
-            document.getElementById('baridimob-modal').style.display = 'none';
-        }
-        function copyBaridiMobRIP() {
-            const rip = document.getElementById('baridimob-rip').textContent;
-            navigator.clipboard.writeText(rip);
-            alert('تم نسخ RIP بنجاح!');
-        }
-        function confirmBaridiMobPayment() {
-            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر BaridiMob لـ Netflix Premium', '_blank');
-        }
-
-        function openCryptoModal() {
-            document.getElementById('crypto-modal').style.display = 'flex';
-        }
-        function closeCryptoModal() {
-            document.getElementById('crypto-modal').style.display = 'none';
-        }
-        function selectNetwork(network, address) {
-            document.getElementById('selected-network').textContent = network;
-            document.getElementById('network-warning').textContent = network;
-            document.getElementById('wallet-address').textContent = address;
-            document.getElementById('qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + address;
-        }
-        function copyWalletAddress() {
-            const address = document.getElementById('wallet-address').textContent;
-            navigator.clipboard.writeText(address);
-            alert('تم نسخ عنوان المحفظة بنجاح!');
-        }
-        function confirmCryptoPayment() {
-            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر USDT لـ Netflix Premium', '_blank');
-        }
-
-        function openRedotPayModal() {
-            document.getElementById('redotpay-modal').style.display = 'flex';
-        }
-        function closeRedotPayModal() {
-            document.getElementById('redotpay-modal').style.display = 'none';
-        }
-        function copyRedotPayID() {
-            const id = document.getElementById('redotpay-id').textContent;
-            navigator.clipboard.writeText(id);
-            alert('تم نسخ RedotPay ID بنجاح!');
-        }
-        function confirmRedotPayPayment() {
-            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر RedotPay لـ Netflix Premium', '_blank');
-        }
-
-        // Add click events to payment buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const paymentButtons = document.querySelectorAll('.flex.flex-col.items-center.gap-2');
-            if (paymentButtons.length >= 3) {
-                paymentButtons[0].addEventListener('click', openRedotPayModal);
-                paymentButtons[1].addEventListener('click', openCryptoModal);
-                paymentButtons[2].addEventListener('click', openBaridiMobModal);
+            // Payment Modal Functions
+            function openBaridiMobModal() {
+                document.getElementById('baridimob-modal').style.display = 'flex';
+                if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Netflix Premium', value: 1500, currency: 'DZD', content_category: 'BaridiMob' }); }
             }
-        });
-
-        // Language Switcher
-        const translations = {
-            ar: {
-                'nav.home': '← الرئيسية',
-                'hero.title': 'Netflix Premium - حساب مشترك',
-                'hero.subtitle': 'استمتع بمشاهدة غير محدودة لأفضل الأفلام والمسلسلات',
-                'hero.price': 'فقط بـ 1500 دج / 4 أشهر',
-                'payment.title': 'طرق الدفع المتاحة',
-                'cta.button': 'اطلب الآن عبر WhatsApp',
-                'desc.title': 'استمتع بأفضل تجربة مشاهدة مع Netflix Premium',
-                'desc.subtitle': 'حساب مشترك آمن وموثوق مع بروفايل خاص لك',
-                'desc.text': 'احصل على وصول كامل إلى مكتبة Netflix الضخمة من الأفلام والمسلسلات والبرامج الوثائقية. شاهد على أي جهاز، في أي وقت، مع جودة عالية تصل إلى 4K Ultra HD.',
-                'features.title': '✨ ما تحصل عليه مع Netflix Premium',
-                'features.duration': 'مدة الاشتراك:',
-                'features.duration.value': '4 أشهر كاملة',
-                'feature1.title': 'مكتبة ضخمة من المحتوى',
-                'feature1.desc': 'آلاف الأفلام والمسلسلات والبرامج الوثائقية',
-                'feature2.title': 'جودة عالية حتى 4K',
-                'feature2.desc': 'استمتع بمشاهدة بجودة Ultra HD على الأجهزة المدعومة',
-                'feature3.title': 'شاهد على أي جهاز',
-                'feature3.desc': 'هاتف، تابلت، كمبيوتر، تلفاز ذكي - كلها مدعومة',
-                'feature4.title': 'بروفايل خاص بك',
-                'feature4.desc': 'أنشئ بروفايلك الخاص مع PIN للحماية',
-                'feature5.title': 'يعمل في جميع أنحاء العالم',
-                'feature5.desc': 'مع VPN إذا لزم الأمر - دعم كامل',
-                'feature6.title': 'توصيل سريع وتلقائي',
-                'feature6.desc': 'احصل على حسابك فوراً بعد الطلب',
-                'feature7.title': 'ضمان 4 أشهر كاملة',
-                'feature7.desc': 'نضمن لك الوصول الكامل طوال المدة',
-                'feature8.title': 'دعم 24/7',
-                'feature8.desc': 'فريقنا جاهز لمساعدتك في أي وقت',
-                'info.title': '⚠️ معلومات مهمة قبل الشراء',
-                'info.shared.title': '📌 حساب مشترك - ليس شخصي',
-                'info.shared.desc': 'الحسابات مشتركة وليست شخصية. يمكنك إنشاء بروفايل خاص بك مع PIN للحماية.',
-                'info.vpn.title': '🌐 استخدام VPN عند الحاجة',
-                'info.vpn.desc': 'إذا واجهت مشاكل في تسجيل الدخول، استخدم VPN. الحساب يعمل في جميع أنحاء العالم.',
-                'info.delivery.title': '⚡ التوصيل السريع',
-                'info.delivery.desc': 'التوصيل سريع وتلقائي. إذا تأخر طلبك وكنا غير متصلين، فهذا يعني أن التوصيل متوقف مؤقتاً.',
-                'info.support.title': '💬 الدعم الفني',
-                'info.support.desc': 'في حالة أي مشكلة، تواصل معنا في الشات أولاً - سنرد في أقرب وقت ممكن.',
-                'rules.title': '📋 قواعد استخدام الحساب',
-                'rules.password.title': 'لا يمكن تغيير كلمة المرور',
-                'rules.password.desc': 'يمكنك فقط إنشاء بروفايل خاص بك وإضافة رمز PIN للحماية. لا تحاول تغيير كلمة المرور الرئيسية.',
-                'rules.troubleshoot.title': 'حل مشكلة كلمة المرور الخاطئة',
-                'rules.troubleshoot.intro': 'إذا واجهت مشكلة "كلمة مرور خاطئة"، ابقَ هادئاً واتبع هذه الخطوات:',
-                'rules.troubleshoot.step1': '✓ جرب استخدام VPN مختلف إذا كنت تستخدم واحداً بالفعل',
-                'rules.troubleshoot.step2': '✓ بدّل المتصفح، حيث أن Netflix يحفظ البيانات مؤقتاً',
-                'rules.troubleshoot.step3': '✓ جرب جهازاً آخر: هاتف، كمبيوتر، أو لابتوب',
-                'rules.troubleshoot.step4': '✓ انتظر قليلاً قبل تسجيل الدخول مرة أخرى',
-                'rules.troubleshoot.step5': '⚠️ تجنب تسجيل الدخول والخروج بشكل متكرر - قد يؤدي ذلك لقفل الحساب مؤقتاً',
-                'pricing.title': '💰 الأسعار',
-                'pricing.dzd': '1500 دج',
-                'pricing.usdt': '6 USDT',
-                'pricing.duration': 'لمدة 4 أشهر كاملة',
-                'pricing.best': '🎯 أفضل سعر في السوق!',
-                'pricing.guarantee': 'مع ضمان الوصول الكامل لمدة 4 أشهر',
-                'howto.title': '📝 كيف تحصل على حسابك؟ (3 خطوات بسيطة)',
-                'howto.step1.title': 'اطلب الآن',
-                'howto.step1.desc': 'تواصل معنا عبر WhatsApp واختر طريقة الدفع المناسبة لك',
-                'howto.step2.title': 'ادفع بأمان',
-                'howto.step2.desc': 'اختر من بين RedotPay، USDT، أو BaridiMob وأكمل الدفع',
-                'howto.step3.title': 'ابدأ المشاهدة',
-                'howto.step3.desc': 'استلم بيانات الحساب فوراً وابدأ الاستمتاع بـ Netflix',
-                'final.title': '🎬 لا تفوت أفضل الأفلام والمسلسلات',
-                'final.subtitle': 'احصل على Netflix Premium بأفضل سعر اليوم!',
-                'final.button': '🚀 اشترك الآن',
-                'modal.baridimob.title': 'الدفع عبر BaridiMob',
-                'modal.product': 'المنتج:',
-                'modal.price': 'السعر:',
-                'modal.baridimob.rip': 'RIP BaridiMob:',
-                'modal.copy': 'نسخ',
-                'modal.instructions': 'تعليمات الدفع:',
-                'modal.baridimob.step1': 'افتح تطبيق BaridiMob',
-                'modal.baridimob.step2': 'اختر "تحويل الأموال" أو "Virement"',
-                'modal.baridimob.step3': 'اختر "RIP" كطريقة التحويل',
-                'modal.baridimob.step4': 'أدخل الـ RIP: 00799999002787548473',
-                'modal.baridimob.step5': 'أدخل المبلغ: 1500 دج',
-                'modal.baridimob.step6': 'أكمل عملية الدفع',
-                'modal.baridimob.step7': 'احتفظ بإثبات الدفع',
-                'modal.baridimob.step8': 'اضغط "تم الدفع" للتواصل معنا',
-                'modal.baridimob.warning': '⚠️ تأكد من إدخال الـ RIP بشكل صحيح!',
-                'modal.baridimob.button': 'تم الدفع - تواصل معنا',
-                'modal.crypto.title': 'الدفع بالعملات الرقمية',
-                'modal.crypto.network': 'اختر الشبكة:',
-                'modal.crypto.fees1': 'رسوم منخفضة (~1 USDT)',
-                'modal.crypto.fees2': 'رسوم منخفضة (~0.5 USDT)',
-                'modal.crypto.wallet': 'عنوان المحفظة',
-                'modal.crypto.qr': 'امسح الكود بتطبيق المحفظة',
-                'modal.crypto.step1': 'اختر الشبكة المناسبة (TRC20 أو BEP20)',
-                'modal.crypto.step2': 'انسخ عنوان المحفظة أو امسح QR Code',
-                'modal.crypto.step3': 'افتح تطبيق Binance أو أي محفظة USDT',
-                'modal.crypto.step4': 'تأكد من اختيار نفس الشبكة (TRC20)',
-                'modal.crypto.step5': 'أرسل المبلغ: 6 USDT',
-                'modal.crypto.step6': 'احتفظ بـ Transaction ID',
-                'modal.crypto.step7': 'اضغط "تم الدفع" للتواصل معنا',
-                'modal.crypto.warning': '⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!',
-                'modal.crypto.button': 'تم الدفع - تواصل معنا',
-                'modal.redotpay.title': 'الدفع عبر RedotPay',
-                'modal.redotpay.id': 'RedotPay ID:',
-                'modal.redotpay.step1': 'افتح تطبيق RedotPay',
-                'modal.redotpay.step2': 'اختر "Send" أو "إرسال"',
-                'modal.redotpay.step3': 'أدخل RedotPay ID: 1117632168',
-                'modal.redotpay.step4': 'أدخل المبلغ: 6 USD',
-                'modal.redotpay.step5': 'أكمل عملية الإرسال',
-                'modal.redotpay.step6': 'احتفظ بإثبات التحويل',
-                'modal.redotpay.step7': 'اضغط "تم الدفع" للتواصل معنا',
-                'modal.redotpay.warning': '⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!',
-                'modal.redotpay.button': 'تم الدفع - تواصل معنا',
-                'footer.text': '© 2024 Netflix Premium. جميع الحقوق محفوظة.'
-            },
-            en: {
-                'nav.home': '← Home',
-                'hero.title': 'Netflix Premium - Shared Account',
-                'hero.subtitle': 'Enjoy unlimited streaming of the best movies and series',
-                'hero.price': 'Only 1500 DZD / 4 Months',
-                'payment.title': 'Available Payment Methods',
-                'cta.button': 'Order Now via WhatsApp',
-                'desc.title': 'Enjoy the Best Viewing Experience with Netflix Premium',
-                'desc.subtitle': 'Secure and verified shared account with your private profile',
-                'desc.text': 'Get full access to Netflix\'s huge library of movies, series, and documentaries. Watch on any device, anytime, with high quality up to 4K Ultra HD.',
-                'features.title': '✨ What You Get with Netflix Premium',
-                'features.duration': 'Subscription Duration:',
-                'features.duration.value': '4 Full Months',
-                'feature1.title': 'Huge Content Library',
-                'feature1.desc': 'Thousands of movies, series, and documentaries',
-                'feature2.title': 'High Quality up to 4K',
-                'feature2.desc': 'Enjoy Ultra HD viewing on supported devices',
-                'feature3.title': 'Watch on Any Device',
-                'feature3.desc': 'Phone, tablet, computer, smart TV - all supported',
-                'feature4.title': 'Your Private Profile',
-                'feature4.desc': 'Create your own profile with PIN protection',
-                'feature5.title': 'Works Worldwide',
-                'feature5.desc': 'With VPN if needed - full support',
-                'feature6.title': 'Fast and Automatic Delivery',
-                'feature6.desc': 'Get your account instantly after ordering',
-                'feature7.title': '4 Months Guarantee',
-                'feature7.desc': 'We guarantee full access throughout the period',
-                'feature8.title': '24/7 Support',
-                'feature8.desc': 'Our team is ready to help you anytime',
-                'info.title': '⚠️ Important Information Before Purchase',
-                'info.shared.title': '📌 Shared Account - Not Personal',
-                'info.shared.desc': 'Accounts are shared, not personal. You can create your own profile with PIN protection.',
-                'info.vpn.title': '🌐 Use VPN When Needed',
-                'info.vpn.desc': 'If you encounter login issues, use a VPN. The account works worldwide.',
-                'info.delivery.title': '⚡ Fast Delivery',
-                'info.delivery.desc': 'Delivery is fast and automatic. If your order is delayed and we\'re offline, it means delivery is temporarily paused.',
-                'info.support.title': '💬 Technical Support',
-                'info.support.desc': 'In case of any problem, contact us in chat first - we\'ll respond as soon as possible.',
-                'rules.title': '📋 Account Usage Rules',
-                'rules.password.title': 'Cannot Change Password',
-                'rules.password.desc': 'You can only create your own profile and add a PIN code for protection. Do not try to change the main password.',
-                'rules.troubleshoot.title': 'Solving Incorrect Password Issue',
-                'rules.troubleshoot.intro': 'If you encounter an "incorrect password" issue, stay calm and follow these steps:',
-                'rules.troubleshoot.step1': '✓ Try using a different VPN if you\'re already using one',
-                'rules.troubleshoot.step2': '✓ Switch browsers, as Netflix caches data',
-                'rules.troubleshoot.step3': '✓ Try another device: phone, computer, or laptop',
-                'rules.troubleshoot.step4': '✓ Wait a little before logging in again',
-                'rules.troubleshoot.step5': '⚠️ Avoid repeatedly logging in and out - this may temporarily lock the account',
-                'pricing.title': '💰 Pricing',
-                'pricing.dzd': '1500 DZD',
-                'pricing.usdt': '6 USDT',
-                'pricing.duration': 'For 4 Full Months',
-                'pricing.best': '🎯 Best Price in the Market!',
-                'pricing.guarantee': 'With full access guarantee for 4 months',
-                'howto.title': '📝 How to Get Your Account? (3 Simple Steps)',
-                'howto.step1.title': 'Order Now',
-                'howto.step1.desc': 'Contact us via WhatsApp and choose your preferred payment method',
-                'howto.step2.title': 'Pay Securely',
-                'howto.step2.desc': 'Choose from RedotPay, USDT, or BaridiMob and complete payment',
-                'howto.step3.title': 'Start Watching',
-                'howto.step3.desc': 'Receive account details instantly and start enjoying Netflix',
-                'final.title': '🎬 Don\'t Miss the Best Movies and Series',
-                'final.subtitle': 'Get Netflix Premium at the Best Price Today!',
-                'final.button': '🚀 Subscribe Now',
-                'modal.baridimob.title': 'Payment via BaridiMob',
-                'modal.product': 'Product:',
-                'modal.price': 'Price:',
-                'modal.baridimob.rip': 'BaridiMob RIP:',
-                'modal.copy': 'Copy',
-                'modal.instructions': 'Payment Instructions:',
-                'modal.baridimob.step1': 'Open BaridiMob app',
-                'modal.baridimob.step2': 'Choose "Money Transfer" or "Virement"',
-                'modal.baridimob.step3': 'Select "RIP" as transfer method',
-                'modal.baridimob.step4': 'Enter RIP: 00799999002787548473',
-                'modal.baridimob.step5': 'Enter amount: 1500 DZD',
-                'modal.baridimob.step6': 'Complete the payment',
-                'modal.baridimob.step7': 'Keep payment proof',
-                'modal.baridimob.step8': 'Click "Payment Done" to contact us',
-                'modal.baridimob.warning': '⚠️ Make sure to enter the RIP correctly!',
-                'modal.baridimob.button': 'Payment Done - Contact Us',
-                'modal.crypto.title': 'Payment with Cryptocurrency',
-                'modal.crypto.network': 'Choose Network:',
-                'modal.crypto.fees1': 'Low fees (~1 USDT)',
-                'modal.crypto.fees2': 'Low fees (~0.5 USDT)',
-                'modal.crypto.wallet': 'Wallet Address',
-                'modal.crypto.qr': 'Scan code with wallet app',
-                'modal.crypto.step1': 'Choose the appropriate network (TRC20 or BEP20)',
-                'modal.crypto.step2': 'Copy wallet address or scan QR Code',
-                'modal.crypto.step3': 'Open Binance app or any USDT wallet',
-                'modal.crypto.step4': 'Make sure to select the same network (TRC20)',
-                'modal.crypto.step5': 'Send amount: 6 USDT',
-                'modal.crypto.step6': 'Keep Transaction ID',
-                'modal.crypto.step7': 'Click "Payment Done" to contact us',
-                'modal.crypto.warning': '⚠️ Make sure to choose the correct network or you will lose your money!',
-                'modal.crypto.button': 'Payment Done - Contact Us',
-                'modal.redotpay.title': 'Payment via RedotPay',
-                'modal.redotpay.id': 'RedotPay ID:',
-                'modal.redotpay.step1': 'Open RedotPay app',
-                'modal.redotpay.step2': 'Choose "Send"',
-                'modal.redotpay.step3': 'Enter RedotPay ID: 1117632168',
-                'modal.redotpay.step4': 'Enter amount: 6 USD',
-                'modal.redotpay.step5': 'Complete the transfer',
-                'modal.redotpay.step6': 'Keep transfer proof',
-                'modal.redotpay.step7': 'Click "Payment Done" to contact us',
-                'modal.redotpay.warning': '⚠️ Make sure to enter RedotPay ID correctly!',
-                'modal.redotpay.button': 'Payment Done - Contact Us',
-                'footer.text': '© 2024 Netflix Premium. All rights reserved.'
-            },
-            fr: {
-                'nav.home': '← Accueil',
-                'hero.title': 'Netflix Premium - Compte Partagé',
-                'hero.subtitle': 'Profitez d\'un streaming illimité des meilleurs films et séries',
-                'hero.price': 'Seulement 1500 DZD / 4 Mois',
-                'payment.title': 'Méthodes de Paiement Disponibles',
-                'cta.button': 'Commander Maintenant via WhatsApp',
-                'desc.title': 'Profitez de la Meilleure Expérience de Visionnage avec Netflix Premium',
-                'desc.subtitle': 'Compte partagé sécurisé et vérifié avec votre profil privé',
-                'desc.text': 'Accédez à l\'immense bibliothèque Netflix de films, séries et documentaires. Regardez sur n\'importe quel appareil, à tout moment, avec une qualité élevée jusqu\'à 4K Ultra HD.',
-                'features.title': '✨ Ce Que Vous Obtenez avec Netflix Premium',
-                'features.duration': 'Durée d\'Abonnement:',
-                'features.duration.value': '4 Mois Complets',
-                'feature1.title': 'Énorme Bibliothèque de Contenu',
-                'feature1.desc': 'Des milliers de films, séries et documentaires',
-                'feature2.title': 'Haute Qualité jusqu\'à 4K',
-                'feature2.desc': 'Profitez du visionnage Ultra HD sur les appareils compatibles',
-                'feature3.title': 'Regardez sur N\'importe Quel Appareil',
-                'feature3.desc': 'Téléphone, tablette, ordinateur, TV intelligente - tous pris en charge',
-                'feature4.title': 'Votre Profil Privé',
-                'feature4.desc': 'Créez votre propre profil avec protection PIN',
-                'feature5.title': 'Fonctionne Partout dans le Monde',
-                'feature5.desc': 'Avec VPN si nécessaire - support complet',
-                'feature6.title': 'Livraison Rapide et Automatique',
-                'feature6.desc': 'Obtenez votre compte instantanément après la commande',
-                'feature7.title': 'Garantie de 4 Mois',
-                'feature7.desc': 'Nous garantissons un accès complet pendant toute la période',
-                'feature8.title': 'Support 24/7',
-                'feature8.desc': 'Notre équipe est prête à vous aider à tout moment',
-                'info.title': '⚠️ Informations Importantes Avant l\'Achat',
-                'info.shared.title': '📌 Compte Partagé - Pas Personnel',
-                'info.shared.desc': 'Les comptes sont partagés, pas personnels. Vous pouvez créer votre propre profil avec protection PIN.',
-                'info.vpn.title': '🌐 Utiliser un VPN si Nécessaire',
-                'info.vpn.desc': 'Si vous rencontrez des problèmes de connexion, utilisez un VPN. Le compte fonctionne partout dans le monde.',
-                'info.delivery.title': '⚡ Livraison Rapide',
-                'info.delivery.desc': 'La livraison est rapide et automatique. Si votre commande est retardée et que nous sommes hors ligne, cela signifie que la livraison est temporairement suspendue.',
-                'info.support.title': '💬 Support Technique',
-                'info.support.desc': 'En cas de problème, contactez-nous d\'abord par chat - nous répondrons dès que possible.',
-                'rules.title': '📋 Règles d\'Utilisation du Compte',
-                'rules.password.title': 'Impossible de Changer le Mot de Passe',
-                'rules.password.desc': 'Vous pouvez uniquement créer votre propre profil et ajouter un code PIN pour la protection. N\'essayez pas de changer le mot de passe principal.',
-                'rules.troubleshoot.title': 'Résoudre le Problème de Mot de Passe Incorrect',
-                'rules.troubleshoot.intro': 'Si vous rencontrez un problème de "mot de passe incorrect", restez calme et suivez ces étapes:',
-                'rules.troubleshoot.step1': '✓ Essayez d\'utiliser un VPN différent si vous en utilisez déjà un',
-                'rules.troubleshoot.step2': '✓ Changez de navigateur, car Netflix met en cache les données',
-                'rules.troubleshoot.step3': '✓ Essayez un autre appareil: téléphone, ordinateur ou laptop',
-                'rules.troubleshoot.step4': '✓ Attendez un peu avant de vous reconnecter',
-                'rules.troubleshoot.step5': '⚠️ Évitez de vous connecter et déconnecter de manière répétée - cela peut verrouiller temporairement le compte',
-                'pricing.title': '💰 Tarifs',
-                'pricing.dzd': '1500 DZD',
-                'pricing.usdt': '6 USDT',
-                'pricing.duration': 'Pour 4 Mois Complets',
-                'pricing.best': '🎯 Meilleur Prix du Marché!',
-                'pricing.guarantee': 'Avec garantie d\'accès complet pendant 4 mois',
-                'howto.title': '📝 Comment Obtenir Votre Compte? (3 Étapes Simples)',
-                'howto.step1.title': 'Commander Maintenant',
-                'howto.step1.desc': 'Contactez-nous via WhatsApp et choisissez votre méthode de paiement préférée',
-                'howto.step2.title': 'Payer en Toute Sécurité',
-                'howto.step2.desc': 'Choisissez parmi RedotPay, USDT ou BaridiMob et complétez le paiement',
-                'howto.step3.title': 'Commencer à Regarder',
-                'howto.step3.desc': 'Recevez les détails du compte instantanément et commencez à profiter de Netflix',
-                'final.title': '🎬 Ne Manquez Pas les Meilleurs Films et Séries',
-                'final.subtitle': 'Obtenez Netflix Premium au Meilleur Prix Aujourd\'hui!',
-                'final.button': '🚀 S\'Abonner Maintenant',
-                'modal.baridimob.title': 'Paiement via BaridiMob',
-                'modal.product': 'Produit:',
-                'modal.price': 'Prix:',
-                'modal.baridimob.rip': 'RIP BaridiMob:',
-                'modal.copy': 'Copier',
-                'modal.instructions': 'Instructions de Paiement:',
-                'modal.baridimob.step1': 'Ouvrez l\'application BaridiMob',
-                'modal.baridimob.step2': 'Choisissez "Transfert d\'argent" ou "Virement"',
-                'modal.baridimob.step3': 'Sélectionnez "RIP" comme méthode de transfert',
-                'modal.baridimob.step4': 'Entrez le RIP: 00799999002787548473',
-                'modal.baridimob.step5': 'Entrez le montant: 1500 DZD',
-                'modal.baridimob.step6': 'Complétez le paiement',
-                'modal.baridimob.step7': 'Conservez la preuve de paiement',
-                'modal.baridimob.step8': 'Cliquez sur "Paiement Effectué" pour nous contacter',
-                'modal.baridimob.warning': '⚠️ Assurez-vous d\'entrer le RIP correctement!',
-                'modal.baridimob.button': 'Paiement Effectué - Contactez-nous',
-                'modal.crypto.title': 'Paiement par Cryptomonnaie',
-                'modal.crypto.network': 'Choisir le Réseau:',
-                'modal.crypto.fees1': 'Frais bas (~1 USDT)',
-                'modal.crypto.fees2': 'Frais bas (~0.5 USDT)',
-                'modal.crypto.wallet': 'Adresse du Portefeuille',
-                'modal.crypto.qr': 'Scannez le code avec l\'application portefeuille',
-                'modal.crypto.step1': 'Choisissez le réseau approprié (TRC20 ou BEP20)',
-                'modal.crypto.step2': 'Copiez l\'adresse du portefeuille ou scannez le QR Code',
-                'modal.crypto.step3': 'Ouvrez l\'application Binance ou tout portefeuille USDT',
-                'modal.crypto.step4': 'Assurez-vous de sélectionner le même réseau (TRC20)',
-                'modal.crypto.step5': 'Envoyez le montant: 6 USDT',
-                'modal.crypto.step6': 'Conservez l\'ID de transaction',
-                'modal.crypto.step7': 'Cliquez sur "Paiement Effectué" pour nous contacter',
-                'modal.crypto.warning': '⚠️ Assurez-vous de choisir le bon réseau sinon vous perdrez votre argent!',
-                'modal.crypto.button': 'Paiement Effectué - Contactez-nous',
-                'modal.redotpay.title': 'Paiement via RedotPay',
-                'modal.redotpay.id': 'ID RedotPay:',
-                'modal.redotpay.step1': 'Ouvrez l\'application RedotPay',
-                'modal.redotpay.step2': 'Choisissez "Envoyer"',
-                'modal.redotpay.step3': 'Entrez l\'ID RedotPay: 1117632168',
-                'modal.redotpay.step4': 'Entrez le montant: 6 USD',
-                'modal.redotpay.step5': 'Complétez le transfert',
-                'modal.redotpay.step6': 'Conservez la preuve de transfert',
-                'modal.redotpay.step7': 'Cliquez sur "Paiement Effectué" pour nous contacter',
-                'modal.redotpay.warning': '⚠️ Assurez-vous d\'entrer l\'ID RedotPay correctement!',
-                'modal.redotpay.button': 'Paiement Effectué - Contactez-nous',
-                'footer.text': '© 2024 Netflix Premium. Tous droits réservés.'
+            function closeBaridiMobModal() {
+                document.getElementById('baridimob-modal').style.display = 'none';
             }
-        };
+            function copyBaridiMobRIP() {
+                const rip = document.getElementById('baridimob-rip').textContent;
+                navigator.clipboard.writeText(rip);
+                alert('تم نسخ RIP بنجاح!');
+            }
+            function confirmBaridiMobPayment() {
+                window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر BaridiMob لـ Netflix Premium', '_blank');
+                if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'Netflix Premium', value: 1500, currency: 'DZD', content_category: 'BaridiMob' }); }
+            }
 
-        function changeLanguage(lang) {
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) {
-                    element.textContent = translations[lang][key];
+            function openCryptoModal() {
+                document.getElementById('crypto-modal').style.display = 'flex';
+                if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Netflix Premium', value: 1500, currency: 'DZD', content_category: 'Crypto' }); }
+            }
+            function closeCryptoModal() {
+                document.getElementById('crypto-modal').style.display = 'none';
+            }
+            function selectNetwork(network, address) {
+                document.getElementById('selected-network').textContent = network;
+                document.getElementById('network-warning').textContent = network;
+                document.getElementById('wallet-address').textContent = address;
+                document.getElementById('qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + address;
+            }
+            function copyWalletAddress() {
+                const address = document.getElementById('wallet-address').textContent;
+                navigator.clipboard.writeText(address);
+                alert('تم نسخ عنوان المحفظة بنجاح!');
+            }
+            function confirmCryptoPayment() {
+                window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر USDT لـ Netflix Premium', '_blank');
+                if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'Netflix Premium', value: 1500, currency: 'DZD', content_category: 'Crypto' }); }
+            }
+
+            function openRedotPayModal() {
+                document.getElementById('redotpay-modal').style.display = 'flex';
+                if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Netflix Premium', value: 1500, currency: 'DZD', content_category: 'RedotPay' }); }
+            }
+            function closeRedotPayModal() {
+                document.getElementById('redotpay-modal').style.display = 'none';
+            }
+            function copyRedotPayID() {
+                const id = document.getElementById('redotpay-id').textContent;
+                navigator.clipboard.writeText(id);
+                alert('تم نسخ RedotPay ID بنجاح!');
+            }
+            function confirmRedotPayPayment() {
+                window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر RedotPay لـ Netflix Premium', '_blank');
+                if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'Netflix Premium', value: 1500, currency: 'DZD', content_category: 'RedotPay' }); }
+            }
+
+            // Add click events to payment buttons
+            document.addEventListener('DOMContentLoaded', function () {
+                const paymentButtons = document.querySelectorAll('.flex.flex-col.items-center.gap-2');
+                if (paymentButtons.length >= 3) {
+                    paymentButtons[0].addEventListener('click', openRedotPayModal);
+                    paymentButtons[1].addEventListener('click', openCryptoModal);
+                    paymentButtons[2].addEventListener('click', openBaridiMobModal);
                 }
             });
 
-            // Update active button
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-lang') === lang) {
-                    btn.classList.add('active');
-                    btn.style.background = 'rgba(229, 9, 20, 0.3)';
-                    btn.style.borderColor = '#e50914';
-                } else {
-                    btn.style.background = 'rgba(255, 255, 255, 0.1)';
-                    btn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            // Language Switcher
+            const translations = {
+                ar: {
+                    'nav.home': '← الرئيسية',
+                    'hero.title': 'Netflix Premium - حساب مشترك',
+                    'hero.subtitle': 'استمتع بمشاهدة غير محدودة لأفضل الأفلام والمسلسلات',
+                    'hero.price': 'فقط بـ 1500 دج / 4 أشهر',
+                    'payment.title': 'طرق الدفع المتاحة',
+                    'cta.button': 'اطلب الآن عبر WhatsApp',
+                    'desc.title': 'استمتع بأفضل تجربة مشاهدة مع Netflix Premium',
+                    'desc.subtitle': 'حساب مشترك آمن وموثوق مع بروفايل خاص لك',
+                    'desc.text': 'احصل على وصول كامل إلى مكتبة Netflix الضخمة من الأفلام والمسلسلات والبرامج الوثائقية. شاهد على أي جهاز، في أي وقت، مع جودة عالية تصل إلى 4K Ultra HD.',
+                    'features.title': '✨ ما تحصل عليه مع Netflix Premium',
+                    'features.duration': 'مدة الاشتراك:',
+                    'features.duration.value': '4 أشهر كاملة',
+                    'feature1.title': 'مكتبة ضخمة من المحتوى',
+                    'feature1.desc': 'آلاف الأفلام والمسلسلات والبرامج الوثائقية',
+                    'feature2.title': 'جودة عالية حتى 4K',
+                    'feature2.desc': 'استمتع بمشاهدة بجودة Ultra HD على الأجهزة المدعومة',
+                    'feature3.title': 'شاهد على أي جهاز',
+                    'feature3.desc': 'هاتف، تابلت، كمبيوتر، تلفاز ذكي - كلها مدعومة',
+                    'feature4.title': 'بروفايل خاص بك',
+                    'feature4.desc': 'أنشئ بروفايلك الخاص مع PIN للحماية',
+                    'feature5.title': 'يعمل في جميع أنحاء العالم',
+                    'feature5.desc': 'مع VPN إذا لزم الأمر - دعم كامل',
+                    'feature6.title': 'توصيل سريع وتلقائي',
+                    'feature6.desc': 'احصل على حسابك فوراً بعد الطلب',
+                    'feature7.title': 'ضمان 4 أشهر كاملة',
+                    'feature7.desc': 'نضمن لك الوصول الكامل طوال المدة',
+                    'feature8.title': 'دعم 24/7',
+                    'feature8.desc': 'فريقنا جاهز لمساعدتك في أي وقت',
+                    'info.title': '⚠️ معلومات مهمة قبل الشراء',
+                    'info.shared.title': '📌 حساب مشترك - ليس شخصي',
+                    'info.shared.desc': 'الحسابات مشتركة وليست شخصية. يمكنك إنشاء بروفايل خاص بك مع PIN للحماية.',
+                    'info.vpn.title': '🌐 استخدام VPN عند الحاجة',
+                    'info.vpn.desc': 'إذا واجهت مشاكل في تسجيل الدخول، استخدم VPN. الحساب يعمل في جميع أنحاء العالم.',
+                    'info.delivery.title': '⚡ التوصيل السريع',
+                    'info.delivery.desc': 'التوصيل سريع وتلقائي. إذا تأخر طلبك وكنا غير متصلين، فهذا يعني أن التوصيل متوقف مؤقتاً.',
+                    'info.support.title': '💬 الدعم الفني',
+                    'info.support.desc': 'في حالة أي مشكلة، تواصل معنا في الشات أولاً - سنرد في أقرب وقت ممكن.',
+                    'rules.title': '📋 قواعد استخدام الحساب',
+                    'rules.password.title': 'لا يمكن تغيير كلمة المرور',
+                    'rules.password.desc': 'يمكنك فقط إنشاء بروفايل خاص بك وإضافة رمز PIN للحماية. لا تحاول تغيير كلمة المرور الرئيسية.',
+                    'rules.troubleshoot.title': 'حل مشكلة كلمة المرور الخاطئة',
+                    'rules.troubleshoot.intro': 'إذا واجهت مشكلة "كلمة مرور خاطئة"، ابقَ هادئاً واتبع هذه الخطوات:',
+                    'rules.troubleshoot.step1': '✓ جرب استخدام VPN مختلف إذا كنت تستخدم واحداً بالفعل',
+                    'rules.troubleshoot.step2': '✓ بدّل المتصفح، حيث أن Netflix يحفظ البيانات مؤقتاً',
+                    'rules.troubleshoot.step3': '✓ جرب جهازاً آخر: هاتف، كمبيوتر، أو لابتوب',
+                    'rules.troubleshoot.step4': '✓ انتظر قليلاً قبل تسجيل الدخول مرة أخرى',
+                    'rules.troubleshoot.step5': '⚠️ تجنب تسجيل الدخول والخروج بشكل متكرر - قد يؤدي ذلك لقفل الحساب مؤقتاً',
+                    'pricing.title': '💰 الأسعار',
+                    'pricing.dzd': '1500 دج',
+                    'pricing.usdt': '6 USDT',
+                    'pricing.duration': 'لمدة 4 أشهر كاملة',
+                    'pricing.best': '🎯 أفضل سعر في السوق!',
+                    'pricing.guarantee': 'مع ضمان الوصول الكامل لمدة 4 أشهر',
+                    'howto.title': '📝 كيف تحصل على حسابك؟ (3 خطوات بسيطة)',
+                    'howto.step1.title': 'اطلب الآن',
+                    'howto.step1.desc': 'تواصل معنا عبر WhatsApp واختر طريقة الدفع المناسبة لك',
+                    'howto.step2.title': 'ادفع بأمان',
+                    'howto.step2.desc': 'اختر من بين RedotPay، USDT، أو BaridiMob وأكمل الدفع',
+                    'howto.step3.title': 'ابدأ المشاهدة',
+                    'howto.step3.desc': 'استلم بيانات الحساب فوراً وابدأ الاستمتاع بـ Netflix',
+                    'final.title': '🎬 لا تفوت أفضل الأفلام والمسلسلات',
+                    'final.subtitle': 'احصل على Netflix Premium بأفضل سعر اليوم!',
+                    'final.button': '🚀 اشترك الآن',
+                    'modal.baridimob.title': 'الدفع عبر BaridiMob',
+                    'modal.product': 'المنتج:',
+                    'modal.price': 'السعر:',
+                    'modal.baridimob.rip': 'RIP BaridiMob:',
+                    'modal.copy': 'نسخ',
+                    'modal.instructions': 'تعليمات الدفع:',
+                    'modal.baridimob.step1': 'افتح تطبيق BaridiMob',
+                    'modal.baridimob.step2': 'اختر "تحويل الأموال" أو "Virement"',
+                    'modal.baridimob.step3': 'اختر "RIP" كطريقة التحويل',
+                    'modal.baridimob.step4': 'أدخل الـ RIP: 00799999002787548473',
+                    'modal.baridimob.step5': 'أدخل المبلغ: 1500 دج',
+                    'modal.baridimob.step6': 'أكمل عملية الدفع',
+                    'modal.baridimob.step7': 'احتفظ بإثبات الدفع',
+                    'modal.baridimob.step8': 'اضغط "تم الدفع" للتواصل معنا',
+                    'modal.baridimob.warning': '⚠️ تأكد من إدخال الـ RIP بشكل صحيح!',
+                    'modal.baridimob.button': 'تم الدفع - تواصل معنا',
+                    'modal.crypto.title': 'الدفع بالعملات الرقمية',
+                    'modal.crypto.network': 'اختر الشبكة:',
+                    'modal.crypto.fees1': 'رسوم منخفضة (~1 USDT)',
+                    'modal.crypto.fees2': 'رسوم منخفضة (~0.5 USDT)',
+                    'modal.crypto.wallet': 'عنوان المحفظة',
+                    'modal.crypto.qr': 'امسح الكود بتطبيق المحفظة',
+                    'modal.crypto.step1': 'اختر الشبكة المناسبة (TRC20 أو BEP20)',
+                    'modal.crypto.step2': 'انسخ عنوان المحفظة أو امسح QR Code',
+                    'modal.crypto.step3': 'افتح تطبيق Binance أو أي محفظة USDT',
+                    'modal.crypto.step4': 'تأكد من اختيار نفس الشبكة (TRC20)',
+                    'modal.crypto.step5': 'أرسل المبلغ: 6 USDT',
+                    'modal.crypto.step6': 'احتفظ بـ Transaction ID',
+                    'modal.crypto.step7': 'اضغط "تم الدفع" للتواصل معنا',
+                    'modal.crypto.warning': '⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!',
+                    'modal.crypto.button': 'تم الدفع - تواصل معنا',
+                    'modal.redotpay.title': 'الدفع عبر RedotPay',
+                    'modal.redotpay.id': 'RedotPay ID:',
+                    'modal.redotpay.step1': 'افتح تطبيق RedotPay',
+                    'modal.redotpay.step2': 'اختر "Send" أو "إرسال"',
+                    'modal.redotpay.step3': 'أدخل RedotPay ID: 1117632168',
+                    'modal.redotpay.step4': 'أدخل المبلغ: 6 USD',
+                    'modal.redotpay.step5': 'أكمل عملية الإرسال',
+                    'modal.redotpay.step6': 'احتفظ بإثبات التحويل',
+                    'modal.redotpay.step7': 'اضغط "تم الدفع" للتواصل معنا',
+                    'modal.redotpay.warning': '⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!',
+                    'modal.redotpay.button': 'تم الدفع - تواصل معنا',
+                    'footer.text': '© 2024 Netflix Premium. جميع الحقوق محفوظة.'
+                },
+                en: {
+                    'nav.home': '← Home',
+                    'hero.title': 'Netflix Premium - Shared Account',
+                    'hero.subtitle': 'Enjoy unlimited streaming of the best movies and series',
+                    'hero.price': 'Only 1500 DZD / 4 Months',
+                    'payment.title': 'Available Payment Methods',
+                    'cta.button': 'Order Now via WhatsApp',
+                    'desc.title': 'Enjoy the Best Viewing Experience with Netflix Premium',
+                    'desc.subtitle': 'Secure and verified shared account with your private profile',
+                    'desc.text': 'Get full access to Netflix\'s huge library of movies, series, and documentaries. Watch on any device, anytime, with high quality up to 4K Ultra HD.',
+                    'features.title': '✨ What You Get with Netflix Premium',
+                    'features.duration': 'Subscription Duration:',
+                    'features.duration.value': '4 Full Months',
+                    'feature1.title': 'Huge Content Library',
+                    'feature1.desc': 'Thousands of movies, series, and documentaries',
+                    'feature2.title': 'High Quality up to 4K',
+                    'feature2.desc': 'Enjoy Ultra HD viewing on supported devices',
+                    'feature3.title': 'Watch on Any Device',
+                    'feature3.desc': 'Phone, tablet, computer, smart TV - all supported',
+                    'feature4.title': 'Your Private Profile',
+                    'feature4.desc': 'Create your own profile with PIN protection',
+                    'feature5.title': 'Works Worldwide',
+                    'feature5.desc': 'With VPN if needed - full support',
+                    'feature6.title': 'Fast and Automatic Delivery',
+                    'feature6.desc': 'Get your account instantly after ordering',
+                    'feature7.title': '4 Months Guarantee',
+                    'feature7.desc': 'We guarantee full access throughout the period',
+                    'feature8.title': '24/7 Support',
+                    'feature8.desc': 'Our team is ready to help you anytime',
+                    'info.title': '⚠️ Important Information Before Purchase',
+                    'info.shared.title': '📌 Shared Account - Not Personal',
+                    'info.shared.desc': 'Accounts are shared, not personal. You can create your own profile with PIN protection.',
+                    'info.vpn.title': '🌐 Use VPN When Needed',
+                    'info.vpn.desc': 'If you encounter login issues, use a VPN. The account works worldwide.',
+                    'info.delivery.title': '⚡ Fast Delivery',
+                    'info.delivery.desc': 'Delivery is fast and automatic. If your order is delayed and we\'re offline, it means delivery is temporarily paused.',
+                    'info.support.title': '💬 Technical Support',
+                    'info.support.desc': 'In case of any problem, contact us in chat first - we\'ll respond as soon as possible.',
+                    'rules.title': '📋 Account Usage Rules',
+                    'rules.password.title': 'Cannot Change Password',
+                    'rules.password.desc': 'You can only create your own profile and add a PIN code for protection. Do not try to change the main password.',
+                    'rules.troubleshoot.title': 'Solving Incorrect Password Issue',
+                    'rules.troubleshoot.intro': 'If you encounter an "incorrect password" issue, stay calm and follow these steps:',
+                    'rules.troubleshoot.step1': '✓ Try using a different VPN if you\'re already using one',
+                    'rules.troubleshoot.step2': '✓ Switch browsers, as Netflix caches data',
+                    'rules.troubleshoot.step3': '✓ Try another device: phone, computer, or laptop',
+                    'rules.troubleshoot.step4': '✓ Wait a little before logging in again',
+                    'rules.troubleshoot.step5': '⚠️ Avoid repeatedly logging in and out - this may temporarily lock the account',
+                    'pricing.title': '💰 Pricing',
+                    'pricing.dzd': '1500 DZD',
+                    'pricing.usdt': '6 USDT',
+                    'pricing.duration': 'For 4 Full Months',
+                    'pricing.best': '🎯 Best Price in the Market!',
+                    'pricing.guarantee': 'With full access guarantee for 4 months',
+                    'howto.title': '📝 How to Get Your Account? (3 Simple Steps)',
+                    'howto.step1.title': 'Order Now',
+                    'howto.step1.desc': 'Contact us via WhatsApp and choose your preferred payment method',
+                    'howto.step2.title': 'Pay Securely',
+                    'howto.step2.desc': 'Choose from RedotPay, USDT, or BaridiMob and complete payment',
+                    'howto.step3.title': 'Start Watching',
+                    'howto.step3.desc': 'Receive account details instantly and start enjoying Netflix',
+                    'final.title': '🎬 Don\'t Miss the Best Movies and Series',
+                    'final.subtitle': 'Get Netflix Premium at the Best Price Today!',
+                    'final.button': '🚀 Subscribe Now',
+                    'modal.baridimob.title': 'Payment via BaridiMob',
+                    'modal.product': 'Product:',
+                    'modal.price': 'Price:',
+                    'modal.baridimob.rip': 'BaridiMob RIP:',
+                    'modal.copy': 'Copy',
+                    'modal.instructions': 'Payment Instructions:',
+                    'modal.baridimob.step1': 'Open BaridiMob app',
+                    'modal.baridimob.step2': 'Choose "Money Transfer" or "Virement"',
+                    'modal.baridimob.step3': 'Select "RIP" as transfer method',
+                    'modal.baridimob.step4': 'Enter RIP: 00799999002787548473',
+                    'modal.baridimob.step5': 'Enter amount: 1500 DZD',
+                    'modal.baridimob.step6': 'Complete the payment',
+                    'modal.baridimob.step7': 'Keep payment proof',
+                    'modal.baridimob.step8': 'Click "Payment Done" to contact us',
+                    'modal.baridimob.warning': '⚠️ Make sure to enter the RIP correctly!',
+                    'modal.baridimob.button': 'Payment Done - Contact Us',
+                    'modal.crypto.title': 'Payment with Cryptocurrency',
+                    'modal.crypto.network': 'Choose Network:',
+                    'modal.crypto.fees1': 'Low fees (~1 USDT)',
+                    'modal.crypto.fees2': 'Low fees (~0.5 USDT)',
+                    'modal.crypto.wallet': 'Wallet Address',
+                    'modal.crypto.qr': 'Scan code with wallet app',
+                    'modal.crypto.step1': 'Choose the appropriate network (TRC20 or BEP20)',
+                    'modal.crypto.step2': 'Copy wallet address or scan QR Code',
+                    'modal.crypto.step3': 'Open Binance app or any USDT wallet',
+                    'modal.crypto.step4': 'Make sure to select the same network (TRC20)',
+                    'modal.crypto.step5': 'Send amount: 6 USDT',
+                    'modal.crypto.step6': 'Keep Transaction ID',
+                    'modal.crypto.step7': 'Click "Payment Done" to contact us',
+                    'modal.crypto.warning': '⚠️ Make sure to choose the correct network or you will lose your money!',
+                    'modal.crypto.button': 'Payment Done - Contact Us',
+                    'modal.redotpay.title': 'Payment via RedotPay',
+                    'modal.redotpay.id': 'RedotPay ID:',
+                    'modal.redotpay.step1': 'Open RedotPay app',
+                    'modal.redotpay.step2': 'Choose "Send"',
+                    'modal.redotpay.step3': 'Enter RedotPay ID: 1117632168',
+                    'modal.redotpay.step4': 'Enter amount: 6 USD',
+                    'modal.redotpay.step5': 'Complete the transfer',
+                    'modal.redotpay.step6': 'Keep transfer proof',
+                    'modal.redotpay.step7': 'Click "Payment Done" to contact us',
+                    'modal.redotpay.warning': '⚠️ Make sure to enter RedotPay ID correctly!',
+                    'modal.redotpay.button': 'Payment Done - Contact Us',
+                    'footer.text': '© 2024 Netflix Premium. All rights reserved.'
+                },
+                fr: {
+                    'nav.home': '← Accueil',
+                    'hero.title': 'Netflix Premium - Compte Partagé',
+                    'hero.subtitle': 'Profitez d\'un streaming illimité des meilleurs films et séries',
+                    'hero.price': 'Seulement 1500 DZD / 4 Mois',
+                    'payment.title': 'Méthodes de Paiement Disponibles',
+                    'cta.button': 'Commander Maintenant via WhatsApp',
+                    'desc.title': 'Profitez de la Meilleure Expérience de Visionnage avec Netflix Premium',
+                    'desc.subtitle': 'Compte partagé sécurisé et vérifié avec votre profil privé',
+                    'desc.text': 'Accédez à l\'immense bibliothèque Netflix de films, séries et documentaires. Regardez sur n\'importe quel appareil, à tout moment, avec une qualité élevée jusqu\'à 4K Ultra HD.',
+                    'features.title': '✨ Ce Que Vous Obtenez avec Netflix Premium',
+                    'features.duration': 'Durée d\'Abonnement:',
+                    'features.duration.value': '4 Mois Complets',
+                    'feature1.title': 'Énorme Bibliothèque de Contenu',
+                    'feature1.desc': 'Des milliers de films, séries et documentaires',
+                    'feature2.title': 'Haute Qualité jusqu\'à 4K',
+                    'feature2.desc': 'Profitez du visionnage Ultra HD sur les appareils compatibles',
+                    'feature3.title': 'Regardez sur N\'importe Quel Appareil',
+                    'feature3.desc': 'Téléphone, tablette, ordinateur, TV intelligente - tous pris en charge',
+                    'feature4.title': 'Votre Profil Privé',
+                    'feature4.desc': 'Créez votre propre profil avec protection PIN',
+                    'feature5.title': 'Fonctionne Partout dans le Monde',
+                    'feature5.desc': 'Avec VPN si nécessaire - support complet',
+                    'feature6.title': 'Livraison Rapide et Automatique',
+                    'feature6.desc': 'Obtenez votre compte instantanément après la commande',
+                    'feature7.title': 'Garantie de 4 Mois',
+                    'feature7.desc': 'Nous garantissons un accès complet pendant toute la période',
+                    'feature8.title': 'Support 24/7',
+                    'feature8.desc': 'Notre équipe est prête à vous aider à tout moment',
+                    'info.title': '⚠️ Informations Importantes Avant l\'Achat',
+                    'info.shared.title': '📌 Compte Partagé - Pas Personnel',
+                    'info.shared.desc': 'Les comptes sont partagés, pas personnels. Vous pouvez créer votre propre profil avec protection PIN.',
+                    'info.vpn.title': '🌐 Utiliser un VPN si Nécessaire',
+                    'info.vpn.desc': 'Si vous rencontrez des problèmes de connexion, utilisez un VPN. Le compte fonctionne partout dans le monde.',
+                    'info.delivery.title': '⚡ Livraison Rapide',
+                    'info.delivery.desc': 'La livraison est rapide et automatique. Si votre commande est retardée et que nous sommes hors ligne, cela signifie que la livraison est temporairement suspendue.',
+                    'info.support.title': '💬 Support Technique',
+                    'info.support.desc': 'En cas de problème, contactez-nous d\'abord par chat - nous répondrons dès que possible.',
+                    'rules.title': '📋 Règles d\'Utilisation du Compte',
+                    'rules.password.title': 'Impossible de Changer le Mot de Passe',
+                    'rules.password.desc': 'Vous pouvez uniquement créer votre propre profil et ajouter un code PIN pour la protection. N\'essayez pas de changer le mot de passe principal.',
+                    'rules.troubleshoot.title': 'Résoudre le Problème de Mot de Passe Incorrect',
+                    'rules.troubleshoot.intro': 'Si vous rencontrez un problème de "mot de passe incorrect", restez calme et suivez ces étapes:',
+                    'rules.troubleshoot.step1': '✓ Essayez d\'utiliser un VPN différent si vous en utilisez déjà un',
+                    'rules.troubleshoot.step2': '✓ Changez de navigateur, car Netflix met en cache les données',
+                    'rules.troubleshoot.step3': '✓ Essayez un autre appareil: téléphone, ordinateur ou laptop',
+                    'rules.troubleshoot.step4': '✓ Attendez un peu avant de vous reconnecter',
+                    'rules.troubleshoot.step5': '⚠️ Évitez de vous connecter et déconnecter de manière répétée - cela peut verrouiller temporairement le compte',
+                    'pricing.title': '💰 Tarifs',
+                    'pricing.dzd': '1500 DZD',
+                    'pricing.usdt': '6 USDT',
+                    'pricing.duration': 'Pour 4 Mois Complets',
+                    'pricing.best': '🎯 Meilleur Prix du Marché!',
+                    'pricing.guarantee': 'Avec garantie d\'accès complet pendant 4 mois',
+                    'howto.title': '📝 Comment Obtenir Votre Compte? (3 Étapes Simples)',
+                    'howto.step1.title': 'Commander Maintenant',
+                    'howto.step1.desc': 'Contactez-nous via WhatsApp et choisissez votre méthode de paiement préférée',
+                    'howto.step2.title': 'Payer en Toute Sécurité',
+                    'howto.step2.desc': 'Choisissez parmi RedotPay, USDT ou BaridiMob et complétez le paiement',
+                    'howto.step3.title': 'Commencer à Regarder',
+                    'howto.step3.desc': 'Recevez les détails du compte instantanément et commencez à profiter de Netflix',
+                    'final.title': '🎬 Ne Manquez Pas les Meilleurs Films et Séries',
+                    'final.subtitle': 'Obtenez Netflix Premium au Meilleur Prix Aujourd\'hui!',
+                    'final.button': '🚀 S\'Abonner Maintenant',
+                    'modal.baridimob.title': 'Paiement via BaridiMob',
+                    'modal.product': 'Produit:',
+                    'modal.price': 'Prix:',
+                    'modal.baridimob.rip': 'RIP BaridiMob:',
+                    'modal.copy': 'Copier',
+                    'modal.instructions': 'Instructions de Paiement:',
+                    'modal.baridimob.step1': 'Ouvrez l\'application BaridiMob',
+                    'modal.baridimob.step2': 'Choisissez "Transfert d\'argent" ou "Virement"',
+                    'modal.baridimob.step3': 'Sélectionnez "RIP" comme méthode de transfert',
+                    'modal.baridimob.step4': 'Entrez le RIP: 00799999002787548473',
+                    'modal.baridimob.step5': 'Entrez le montant: 1500 DZD',
+                    'modal.baridimob.step6': 'Complétez le paiement',
+                    'modal.baridimob.step7': 'Conservez la preuve de paiement',
+                    'modal.baridimob.step8': 'Cliquez sur "Paiement Effectué" pour nous contacter',
+                    'modal.baridimob.warning': '⚠️ Assurez-vous d\'entrer le RIP correctement!',
+                    'modal.baridimob.button': 'Paiement Effectué - Contactez-nous',
+                    'modal.crypto.title': 'Paiement par Cryptomonnaie',
+                    'modal.crypto.network': 'Choisir le Réseau:',
+                    'modal.crypto.fees1': 'Frais bas (~1 USDT)',
+                    'modal.crypto.fees2': 'Frais bas (~0.5 USDT)',
+                    'modal.crypto.wallet': 'Adresse du Portefeuille',
+                    'modal.crypto.qr': 'Scannez le code avec l\'application portefeuille',
+                    'modal.crypto.step1': 'Choisissez le réseau approprié (TRC20 ou BEP20)',
+                    'modal.crypto.step2': 'Copiez l\'adresse du portefeuille ou scannez le QR Code',
+                    'modal.crypto.step3': 'Ouvrez l\'application Binance ou tout portefeuille USDT',
+                    'modal.crypto.step4': 'Assurez-vous de sélectionner le même réseau (TRC20)',
+                    'modal.crypto.step5': 'Envoyez le montant: 6 USDT',
+                    'modal.crypto.step6': 'Conservez l\'ID de transaction',
+                    'modal.crypto.step7': 'Cliquez sur "Paiement Effectué" pour nous contacter',
+                    'modal.crypto.warning': '⚠️ Assurez-vous de choisir le bon réseau sinon vous perdrez votre argent!',
+                    'modal.crypto.button': 'Paiement Effectué - Contactez-nous',
+                    'modal.redotpay.title': 'Paiement via RedotPay',
+                    'modal.redotpay.id': 'ID RedotPay:',
+                    'modal.redotpay.step1': 'Ouvrez l\'application RedotPay',
+                    'modal.redotpay.step2': 'Choisissez "Envoyer"',
+                    'modal.redotpay.step3': 'Entrez l\'ID RedotPay: 1117632168',
+                    'modal.redotpay.step4': 'Entrez le montant: 6 USD',
+                    'modal.redotpay.step5': 'Complétez le transfert',
+                    'modal.redotpay.step6': 'Conservez la preuve de transfert',
+                    'modal.redotpay.step7': 'Cliquez sur "Paiement Effectué" pour nous contacter',
+                    'modal.redotpay.warning': '⚠️ Assurez-vous d\'entrer l\'ID RedotPay correctement!',
+                    'modal.redotpay.button': 'Paiement Effectué - Contactez-nous',
+                    'footer.text': '© 2024 Netflix Premium. Tous droits réservés.'
                 }
-            });
+            };
 
-            // Update HTML lang and dir attributes
-            document.documentElement.lang = lang;
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            function changeLanguage(lang) {
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
 
-            // Update payment modals text
-            updateModalTranslations(lang);
+                // Update active button
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-lang') === lang) {
+                        btn.classList.add('active');
+                        btn.style.background = 'rgba(229, 9, 20, 0.3)';
+                        btn.style.borderColor = '#e50914';
+                    } else {
+                        btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                        btn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    }
+                });
 
-            // Save language preference to localStorage (same key as index.html)
-            localStorage.setItem('preferredLanguage', lang);
-        }
+                // Update HTML lang and dir attributes
+                document.documentElement.lang = lang;
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-        // Function to update payment modal translations
-        function updateModalTranslations(lang) {
-            const t = translations[lang];
-            if (!t) return;
+                // Update payment modals text
+                updateModalTranslations(lang);
 
-            // BaridiMob Modal
-            document.getElementById('baridimob-title').textContent = t['modal.baridimob.title'];
-            document.getElementById('baridimob-product').textContent = t['modal.product'];
-            document.getElementById('baridimob-price').textContent = t['modal.price'];
-            document.getElementById('baridimob-rip-label').textContent = t['modal.baridimob.rip'];
-            document.getElementById('baridimob-copy').textContent = t['modal.copy'];
-            document.getElementById('baridimob-instructions-title').textContent = t['modal.instructions'];
-            document.getElementById('baridimob-warning').textContent = t['modal.baridimob.warning'];
-            document.getElementById('baridimob-button').textContent = t['modal.baridimob.button'];
-            
-            const baridimobSteps = document.querySelector('#baridimob-instructions');
-            if (baridimobSteps) {
-                baridimobSteps.innerHTML = `
+                // Save language preference to localStorage (same key as index.html)
+                localStorage.setItem('preferredLanguage', lang);
+            }
+
+            // Function to update payment modal translations
+            function updateModalTranslations(lang) {
+                const t = translations[lang];
+                if (!t) return;
+
+                // BaridiMob Modal
+                document.getElementById('baridimob-title').textContent = t['modal.baridimob.title'];
+                document.getElementById('baridimob-product').textContent = t['modal.product'];
+                document.getElementById('baridimob-price').textContent = t['modal.price'];
+                document.getElementById('baridimob-rip-label').textContent = t['modal.baridimob.rip'];
+                document.getElementById('baridimob-copy').textContent = t['modal.copy'];
+                document.getElementById('baridimob-instructions-title').textContent = t['modal.instructions'];
+                document.getElementById('baridimob-warning').textContent = t['modal.baridimob.warning'];
+                document.getElementById('baridimob-button').textContent = t['modal.baridimob.button'];
+
+                const baridimobSteps = document.querySelector('#baridimob-instructions');
+                if (baridimobSteps) {
+                    baridimobSteps.innerHTML = `
                     <li>${t['modal.baridimob.step1']}</li>
                     <li>${t['modal.baridimob.step2']}</li>
                     <li>${t['modal.baridimob.step3']}</li>
@@ -1537,25 +1635,25 @@
                     <li>${t['modal.baridimob.step7']}</li>
                     <li>${t['modal.baridimob.step8']}</li>
                 `;
-            }
+                }
 
-            // Crypto Modal
-            document.getElementById('crypto-title').textContent = t['modal.crypto.title'];
-            document.getElementById('crypto-product').textContent = t['modal.product'];
-            document.getElementById('crypto-price').textContent = t['modal.price'];
-            document.getElementById('crypto-select-network').textContent = t['modal.crypto.network'];
-            document.getElementById('crypto-fees1').textContent = t['modal.crypto.fees1'];
-            document.getElementById('crypto-fees2').textContent = t['modal.crypto.fees2'];
-            document.getElementById('crypto-wallet-label').innerHTML = t['modal.crypto.wallet'] + ' (<span id="selected-network">TRC20</span>):';
-            document.getElementById('crypto-copy').textContent = t['modal.copy'];
-            document.getElementById('crypto-qr-text').textContent = t['modal.crypto.qr'];
-            document.getElementById('crypto-instructions-title').textContent = t['modal.instructions'];
-            document.getElementById('crypto-warning').textContent = t['modal.crypto.warning'];
-            document.getElementById('crypto-button').textContent = t['modal.crypto.button'];
-            
-            const cryptoSteps = document.querySelector('#crypto-instructions');
-            if (cryptoSteps) {
-                cryptoSteps.innerHTML = `
+                // Crypto Modal
+                document.getElementById('crypto-title').textContent = t['modal.crypto.title'];
+                document.getElementById('crypto-product').textContent = t['modal.product'];
+                document.getElementById('crypto-price').textContent = t['modal.price'];
+                document.getElementById('crypto-select-network').textContent = t['modal.crypto.network'];
+                document.getElementById('crypto-fees1').textContent = t['modal.crypto.fees1'];
+                document.getElementById('crypto-fees2').textContent = t['modal.crypto.fees2'];
+                document.getElementById('crypto-wallet-label').innerHTML = t['modal.crypto.wallet'] + ' (<span id="selected-network">TRC20</span>):';
+                document.getElementById('crypto-copy').textContent = t['modal.copy'];
+                document.getElementById('crypto-qr-text').textContent = t['modal.crypto.qr'];
+                document.getElementById('crypto-instructions-title').textContent = t['modal.instructions'];
+                document.getElementById('crypto-warning').textContent = t['modal.crypto.warning'];
+                document.getElementById('crypto-button').textContent = t['modal.crypto.button'];
+
+                const cryptoSteps = document.querySelector('#crypto-instructions');
+                if (cryptoSteps) {
+                    cryptoSteps.innerHTML = `
                     <li>${t['modal.crypto.step1']}</li>
                     <li>${t['modal.crypto.step2']}</li>
                     <li>${t['modal.crypto.step3']}</li>
@@ -1564,21 +1662,21 @@
                     <li>${t['modal.crypto.step6']}</li>
                     <li>${t['modal.crypto.step7']}</li>
                 `;
-            }
+                }
 
-            // RedotPay Modal
-            document.getElementById('redotpay-title').textContent = t['modal.redotpay.title'];
-            document.getElementById('redotpay-product').textContent = t['modal.product'];
-            document.getElementById('redotpay-price').textContent = t['modal.price'];
-            document.getElementById('redotpay-id-label').textContent = t['modal.redotpay.id'];
-            document.getElementById('redotpay-copy').textContent = t['modal.copy'];
-            document.getElementById('redotpay-instructions-title').textContent = t['modal.instructions'];
-            document.getElementById('redotpay-warning').textContent = t['modal.redotpay.warning'];
-            document.getElementById('redotpay-button').textContent = t['modal.redotpay.button'];
-            
-            const redotpaySteps = document.querySelector('#redotpay-instructions');
-            if (redotpaySteps) {
-                redotpaySteps.innerHTML = `
+                // RedotPay Modal
+                document.getElementById('redotpay-title').textContent = t['modal.redotpay.title'];
+                document.getElementById('redotpay-product').textContent = t['modal.product'];
+                document.getElementById('redotpay-price').textContent = t['modal.price'];
+                document.getElementById('redotpay-id-label').textContent = t['modal.redotpay.id'];
+                document.getElementById('redotpay-copy').textContent = t['modal.copy'];
+                document.getElementById('redotpay-instructions-title').textContent = t['modal.instructions'];
+                document.getElementById('redotpay-warning').textContent = t['modal.redotpay.warning'];
+                document.getElementById('redotpay-button').textContent = t['modal.redotpay.button'];
+
+                const redotpaySteps = document.querySelector('#redotpay-instructions');
+                if (redotpaySteps) {
+                    redotpaySteps.innerHTML = `
                     <li>${t['modal.redotpay.step1']}</li>
                     <li>${t['modal.redotpay.step2']}</li>
                     <li>${t['modal.redotpay.step3']}</li>
@@ -1587,22 +1685,23 @@
                     <li>${t['modal.redotpay.step6']}</li>
                     <li>${t['modal.redotpay.step7']}</li>
                 `;
+                }
             }
-        }
 
-        // Load saved language on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
-            changeLanguage(savedLang);
-        });
-
-        // Language button click handlers
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const lang = btn.getAttribute('data-lang');
-                changeLanguage(lang);
+            // Load saved language on page load
+            document.addEventListener('DOMContentLoaded', function () {
+                const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
+                changeLanguage(savedLang);
             });
-        });
-    </script>
+
+            // Language button click handlers
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const lang = btn.getAttribute('data-lang');
+                    changeLanguage(lang);
+                });
+            });
+        </script>
 </body>
+
 </html>

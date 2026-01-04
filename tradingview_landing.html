@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TradingView Premium - حساب شخصي لمدة 30 يوم</title>
-    
+
     <!-- Meta Pixel Code -->
     <script>
         !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '2046893892791206');
         fbq('track', 'PageView');
+
+        // Detailed ViewContent and InterestedLead
+        const isUSD = location.search.includes('USD');
+        fbq('track', 'ViewContent', {
+            content_name: 'TradingView Premium',
+            content_category: 'Finance',
+            value: isUSD ? 6 : 1400,
+            currency: isUSD ? 'USD' : 'DZD'
+        });
+
+        setTimeout(function () {
+            fbq('trackCustom', 'InterestedLead', {
+                content_name: 'TradingView Premium',
+                time_on_page: '10s'
+            });
+        }, 10000);
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -24,11 +41,11 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Cairo', sans-serif;
             background: #0a0a0a;
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(41, 98, 255, 0.1) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(41, 98, 255, 0.05) 0px, transparent 50%);
             color: white;
@@ -36,7 +53,7 @@
             overflow-x: hidden;
             line-height: 1.6;
         }
-        
+
         #particles-js {
             position: fixed;
             width: 100%;
@@ -47,7 +64,7 @@
             pointer-events: none;
             opacity: 0.3;
         }
-        
+
         /* Glassmorphism Effect */
         .glass-card {
             background: rgba(255, 255, 255, 0.03);
@@ -58,14 +75,14 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
-        
+
         .glass-card:hover {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(41, 98, 255, 0.3);
             transform: translateY(-4px);
             box-shadow: 0 12px 40px rgba(41, 98, 255, 0.2);
         }
-        
+
         /* Hero Section */
         .hero-container {
             position: relative;
@@ -75,23 +92,30 @@
             justify-content: center;
             padding: 120px 20px 80px;
         }
-        
+
         .hero-content {
             max-width: 1200px;
             width: 100%;
             text-align: center;
         }
-        
+
         .product-logo-container {
             margin-bottom: 32px;
             animation: float 3s ease-in-out infinite;
         }
-        
+
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
-        
+
         .hero-title {
             font-size: clamp(2.5rem, 5vw, 4.5rem);
             font-weight: 900;
@@ -102,7 +126,7 @@
             margin-bottom: 24px;
             line-height: 1.2;
         }
-        
+
         .hero-subtitle {
             font-size: clamp(1.1rem, 2vw, 1.5rem);
             color: rgba(255, 255, 255, 0.8);
@@ -111,7 +135,7 @@
             margin-left: auto;
             margin-right: auto;
         }
-        
+
         .price-badge {
             display: inline-block;
             background: linear-gradient(135deg, rgba(41, 98, 255, 0.2), rgba(30, 64, 175, 0.2));
@@ -124,7 +148,7 @@
             margin: 32px 0;
             box-shadow: 0 8px 24px rgba(41, 98, 255, 0.2);
         }
-        
+
         /* Payment Methods Cards */
         .payment-grid {
             display: grid;
@@ -133,7 +157,7 @@
             max-width: 900px;
             margin: 48px auto;
         }
-        
+
         .payment-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -146,7 +170,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .payment-card::before {
             content: '';
             position: absolute;
@@ -157,18 +181,18 @@
             background: linear-gradient(90deg, transparent, rgba(41, 98, 255, 0.1), transparent);
             transition: left 0.5s;
         }
-        
+
         .payment-card:hover::before {
             left: 100%;
         }
-        
+
         .payment-card:hover {
             transform: translateY(-8px);
             border-color: rgba(41, 98, 255, 0.5);
             box-shadow: 0 12px 40px rgba(41, 98, 255, 0.3);
             background: rgba(255, 255, 255, 0.08);
         }
-        
+
         .payment-icon {
             width: 80px;
             height: 80px;
@@ -181,13 +205,13 @@
             font-weight: 700;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
-        
+
         .payment-label {
             font-size: 1.1rem;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.9);
         }
-        
+
         /* CTA Button */
         .cta-button {
             display: inline-block;
@@ -204,7 +228,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .cta-button::before {
             content: '';
             position: absolute;
@@ -217,24 +241,24 @@
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
-        
+
         .cta-button:hover::before {
             width: 300px;
             height: 300px;
         }
-        
+
         .cta-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 32px rgba(41, 98, 255, 0.5);
         }
-        
+
         /* Section Styling */
         .section {
             padding: 80px 20px;
             position: relative;
             z-index: 10;
         }
-        
+
         .section-title {
             font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 800;
@@ -245,7 +269,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -253,7 +277,7 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .feature-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
@@ -262,30 +286,30 @@
             padding: 32px;
             transition: all 0.3s ease;
         }
-        
+
         .feature-card:hover {
             transform: translateY(-4px);
             border-color: rgba(41, 98, 255, 0.3);
             box-shadow: 0 12px 40px rgba(41, 98, 255, 0.15);
         }
-        
+
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 16px;
         }
-        
+
         .feature-title {
             font-size: 1.5rem;
             font-weight: 700;
             color: #2962FF;
             margin-bottom: 12px;
         }
-        
+
         .feature-text {
             color: rgba(255, 255, 255, 0.7);
             line-height: 1.8;
         }
-        
+
         /* Navigation */
         .nav-container {
             position: fixed;
@@ -298,7 +322,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .back-btn {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -310,17 +334,17 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-        
+
         .back-btn:hover {
             background: rgba(41, 98, 255, 0.2);
             border-color: rgba(41, 98, 255, 0.5);
         }
-        
+
         .lang-switcher {
             display: flex;
             gap: 8px;
         }
-        
+
         .lang-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -331,69 +355,69 @@
             transition: all 0.3s ease;
             font-weight: 600;
         }
-        
+
         .lang-btn.active,
         .lang-btn:hover {
             background: rgba(41, 98, 255, 0.2);
             border-color: rgba(41, 98, 255, 0.5);
         }
-        
+
         /* Responsive Mobile Styles - Compact Design */
         @media (max-width: 768px) {
             .hero-container {
                 padding: 70px 15px 30px !important;
                 min-height: auto !important;
             }
-            
+
             .product-logo-container {
                 margin-bottom: 16px !important;
             }
-            
+
             .product-logo-container img {
                 max-width: 80px !important;
                 height: auto !important;
             }
-            
+
             .hero-title {
                 font-size: 1.5rem !important;
                 margin-bottom: 8px !important;
                 line-height: 1.3 !important;
             }
-            
+
             .hero-subtitle {
                 font-size: 0.875rem !important;
                 margin-bottom: 8px !important;
                 line-height: 1.4 !important;
             }
-            
+
             .price-badge {
                 font-size: 1rem !important;
                 padding: 8px 16px !important;
                 margin: 12px 0 !important;
             }
-            
+
             .payment-grid {
                 grid-template-columns: repeat(3, 1fr) !important;
                 gap: 8px !important;
                 margin: 20px auto !important;
                 max-width: 100% !important;
             }
-            
+
             .payment-card {
                 padding: 12px 8px !important;
             }
-            
+
             .payment-icon {
                 font-size: 1.8rem !important;
                 margin-bottom: 6px !important;
                 width: 40px !important;
                 height: 40px !important;
             }
-            
+
             .payment-label {
                 font-size: 0.75rem !important;
             }
-            
+
             .cta-button {
                 font-size: 0.9rem !important;
                 padding: 12px 24px !important;
@@ -401,132 +425,132 @@
                 max-width: 100% !important;
                 margin-top: 16px !important;
             }
-            
+
             .section {
                 padding: 12px 15px !important;
             }
-            
+
             .section-title {
                 font-size: 1.1rem !important;
                 margin-bottom: 10px !important;
             }
-            
+
             .feature-grid {
                 grid-template-columns: 1fr;
                 gap: 8px !important;
             }
-            
+
             .feature-card {
                 padding: 12px 10px !important;
             }
-            
+
             .feature-icon {
                 font-size: 1.8rem !important;
                 margin-bottom: 8px !important;
             }
-            
+
             .feature-title {
                 font-size: 1rem !important;
                 margin-bottom: 6px !important;
             }
-            
+
             .feature-text {
                 font-size: 0.75rem !important;
                 line-height: 1.4 !important;
             }
-            
+
             .glass-card {
                 padding: 12px 10px !important;
                 margin-bottom: 12px !important;
             }
-            
+
             .nav-container {
                 padding: 8px 12px !important;
             }
-            
+
             .back-btn {
                 padding: 6px 12px !important;
                 font-size: 0.75rem !important;
             }
-            
+
             .lang-btn {
                 padding: 4px 8px !important;
                 font-size: 0.75rem !important;
             }
-            
+
             /* Reduce spacing in hero content */
-            .hero-content > * {
+            .hero-content>* {
                 margin-bottom: 8px !important;
             }
-            
+
             /* Show 2 columns on mobile for better content visibility */
             .feature-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 8px !important;
             }
-            
+
             /* Compact feature cards to show more content */
             .feature-card {
                 padding: 10px 8px !important;
                 min-height: auto !important;
             }
-            
+
             .feature-icon {
                 font-size: 1.5rem !important;
                 margin-bottom: 6px !important;
             }
-            
+
             .feature-title {
                 font-size: 0.85rem !important;
                 margin-bottom: 4px !important;
                 line-height: 1.3 !important;
             }
-            
+
             .feature-text {
                 font-size: 0.7rem !important;
                 line-height: 1.4 !important;
             }
-            
+
             .feature-card ul li {
                 font-size: 0.65rem !important;
                 margin-bottom: 3px !important;
                 line-height: 1.3 !important;
             }
-            
+
             /* Compact sections */
             .section {
                 padding: 16px 12px !important;
             }
-            
+
             .section-title {
                 font-size: 1.15rem !important;
                 margin-bottom: 12px !important;
             }
         }
-        
+
         @media (max-width: 480px) {
             .hero-title {
                 font-size: 1.75rem !important;
             }
-            
+
             .hero-subtitle {
                 font-size: 0.9rem !important;
             }
-            
+
             .price-badge {
                 font-size: 1.1rem !important;
                 padding: 10px 20px;
             }
-            
+
             .section-title {
                 font-size: 1.5rem !important;
             }
-            
+
             .payment-card {
                 padding: 16px 12px;
             }
         }
-        
+
         /* Payment Modals Mobile Responsive */
         @media (max-width: 768px) {
             .modal div[style*="max-width"] {
@@ -535,27 +559,28 @@
                 padding: 20px 15px !important;
                 margin: 10px !important;
             }
-            
+
             .modal h2 {
                 font-size: 1.25rem !important;
             }
-            
+
             .modal code {
                 font-size: 0.85rem !important;
                 word-break: break-all;
             }
-            
+
             .modal button {
                 font-size: 0.9rem !important;
                 padding: 10px 20px !important;
             }
-            
+
             #qr-code {
                 max-width: 120px !important;
             }
         }
     </style>
 </head>
+
 <body>
     <div id="particles-js"></div>
 
@@ -573,19 +598,21 @@
     <section class="hero-container" style="position: relative;">
         <div class="hero-content" style="position: relative; z-index: 10;">
             <div class="product-logo-container">
-                <div class="w-48 h-48 md:w-64 md:h-64 mx-auto flex items-center justify-center glass-card" style="background: linear-gradient(135deg, rgba(19, 23, 34, 0.8), rgba(30, 34, 45, 0.8));">
-                    <img src="https://www.tradingview.com/static/images/logo-preview.png" alt="TradingView" class="w-40 md:w-52 object-contain">
+                <div class="w-48 h-48 md:w-64 md:h-64 mx-auto flex items-center justify-center glass-card"
+                    style="background: linear-gradient(135deg, rgba(19, 23, 34, 0.8), rgba(30, 34, 45, 0.8));">
+                    <img src="https://www.tradingview.com/static/images/logo-preview.png" alt="TradingView"
+                        class="w-40 md:w-52 object-contain">
                 </div>
             </div>
-            
+
             <h1 class="hero-title" data-i18n="hero.title">
                 TradingView Premium - حساب شخصي
             </h1>
-            
+
             <p class="hero-subtitle" data-i18n="hero.subtitle">
                 منصة تحليل فني احترافية للمتداولين المحترفين
             </p>
-            
+
             <div class="price-badge" data-i18n="hero.price">
                 فقط بـ 1500 دج / 30 يوم
             </div>
@@ -601,7 +628,8 @@
 
                 <div class="payment-card" onclick="openCryptoModal()">
                     <div class="payment-icon" style="background: linear-gradient(135deg, #2962FF, #1e40af);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                            stroke="white" stroke-width="2">
                             <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
                             <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
                             <path d="M12 12v8"></path>
@@ -612,7 +640,8 @@
 
                 <div class="payment-card" onclick="openBaridiMobModal()">
                     <div class="payment-icon" style="background: linear-gradient(135deg, #ffffff, #e5e5e5);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                            stroke="#0066cc" stroke-width="2">
                             <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                             <line x1="2" y1="10" x2="22" y2="10"></line>
                         </svg>
@@ -621,8 +650,9 @@
                 </div>
             </div>
 
-            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في TradingView Premium" 
-               class="cta-button" data-i18n="cta.button">
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في TradingView Premium"
+                onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Lead', {content_name: 'TradingView Premium', value: 1500, currency: 'DZD'}); fbq('track', 'InitiateCheckout', {content_name: 'TradingView Premium', value: 1500, currency: 'DZD'}); }"
+                class="cta-button" data-i18n="cta.button">
                 اطلب الآن عبر WhatsApp
             </a>
         </div>
@@ -647,182 +677,191 @@
                     حساب شخصي وليس مشترك - يمكنك تغيير كلمة المرور
                 </p>
                 <p class="feature-text text-center max-w-3xl mx-auto" data-i18n="desc.text">
-                    احصل على وصول كامل إلى جميع أدوات TradingView Premium للتحليل الفني المتقدم مع بيانات السوق في الوقت الفعلي.
+                    احصل على وصول كامل إلى جميع أدوات TradingView Premium للتحليل الفني المتقدم مع بيانات السوق في الوقت
+                    الفعلي.
                 </p>
             </div>
         </div>
     </section>
 
-        <!-- Key Features Section -->
-        <section class="section mobile-section">
-            <h2 class="section-title" data-i18n="features.title">
-                ✨ المميزات الرئيسية
-            </h2>
-            <p class="hero-subtitle text-center mb-10">
-                <span data-i18n="features.duration">مدة الاشتراك:</span> <span class="text-[#2962FF] font-bold text-2xl" data-i18n="features.duration.value">30 يوم</span>
-            </p>
+    <!-- Key Features Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="features.title">
+            ✨ المميزات الرئيسية
+        </h2>
+        <p class="hero-subtitle text-center mb-10">
+            <span data-i18n="features.duration">مدة الاشتراك:</span> <span class="text-[#2962FF] font-bold text-2xl"
+                data-i18n="features.duration.value">30 يوم</span>
+        </p>
 
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3 class="feature-title" data-i18n="feature1.title">8 شارتات في نافذة واحدة</h3>
-                    <p class="feature-text" data-i18n="feature1.desc">Charts: Up to 8 charts in a single window</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h3 class="feature-title" data-i18n="feature2.title">25 مؤشر لكل شارت</h3>
-                    <p class="feature-text" data-i18n="feature2.desc">Indicators: Up to 25 indicators per chart</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔔</div>
-                    <h3 class="feature-title" data-i18n="feature3.title">400 تنبيه</h3>
-                    <p class="feature-text" data-i18n="feature3.desc">Alerts: Up to 400 alerts, including server-side alerts</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📜</div>
-                    <h3 class="feature-title" data-i18n="feature4.title">بيانات تاريخية موسعة</h3>
-                    <p class="feature-text" data-i18n="feature4.desc">Extended historical data for backtesting strategies</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🚫</div>
-                    <h3 class="feature-title" data-i18n="feature5.title">بدون إعلانات</h3>
-                    <p class="feature-text" data-i18n="feature5.desc">Ad-free experience with faster loading speed</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3 class="feature-title" data-i18n="feature6.title">تخصيص غير محدود</h3>
-                    <p class="feature-text" data-i18n="feature6.desc">Unlimited layout customization & saving chart templates</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3 class="feature-title" data-i18n="feature7.title">يمكن تغيير كلمة المرور</h3>
-                    <p class="feature-text" data-i18n="feature7.desc">Password can be changed - Personal use (not shared)</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3 class="feature-title" data-i18n="feature8.title">دعم 24/7</h3>
-                    <p class="feature-text" data-i18n="feature8.desc">Warranty & Support: 24/7</p>
-                </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title" data-i18n="feature1.title">8 شارتات في نافذة واحدة</h3>
+                <p class="feature-text" data-i18n="feature1.desc">Charts: Up to 8 charts in a single window</p>
             </div>
-        </section>
 
-        <!-- Ideal For Section -->
-        <section class="section mobile-section">
-            <h2 class="section-title" data-i18n="ideal.title">
-                🎯 مثالي لـ
-            </h2>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">👨‍💼</div>
-                    <h4 class="feature-title" data-i18n="ideal.pro.title">المتداولين المحترفين</h4>
-                    <p class="feature-text" data-i18n="ideal.pro.desc">
-                        Ideal for professional traders who need multiple charts simultaneously
-                    </p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h4 class="feature-title" data-i18n="ideal.multi.title">التداول متعدد الأطر الزمنية</h4>
-                    <p class="feature-text" data-i18n="ideal.multi.desc">
-                        Optimised for multi-timeframe trading strategies
-                    </p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🔔</div>
-                    <h4 class="feature-title" data-i18n="ideal.alerts.title">تنبيهات متقدمة</h4>
-                    <p class="feature-text" data-i18n="ideal.alerts.desc">
-                        Reduce the risk of missing signals with advanced alert systems
-                    </p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h4 class="feature-title" data-i18n="ideal.smooth.title">تجربة سلسة</h4>
-                    <p class="feature-text" data-i18n="ideal.smooth.desc">
-                        Smooth, uninterrupted experience without ads
-                    </p>
-                </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3 class="feature-title" data-i18n="feature2.title">25 مؤشر لكل شارت</h3>
+                <p class="feature-text" data-i18n="feature2.desc">Indicators: Up to 25 indicators per chart</p>
             </div>
-        </section>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h3 class="feature-title" data-i18n="feature3.title">400 تنبيه</h3>
+                <p class="feature-text" data-i18n="feature3.desc">Alerts: Up to 400 alerts, including server-side alerts
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📜</div>
+                <h3 class="feature-title" data-i18n="feature4.title">بيانات تاريخية موسعة</h3>
+                <p class="feature-text" data-i18n="feature4.desc">Extended historical data for backtesting strategies
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🚫</div>
+                <h3 class="feature-title" data-i18n="feature5.title">بدون إعلانات</h3>
+                <p class="feature-text" data-i18n="feature5.desc">Ad-free experience with faster loading speed</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3 class="feature-title" data-i18n="feature6.title">تخصيص غير محدود</h3>
+                <p class="feature-text" data-i18n="feature6.desc">Unlimited layout customization & saving chart
+                    templates</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3 class="feature-title" data-i18n="feature7.title">يمكن تغيير كلمة المرور</h3>
+                <p class="feature-text" data-i18n="feature7.desc">Password can be changed - Personal use (not shared)
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3 class="feature-title" data-i18n="feature8.title">دعم 24/7</h3>
+                <p class="feature-text" data-i18n="feature8.desc">Warranty & Support: 24/7</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ideal For Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="ideal.title">
+            🎯 مثالي لـ
+        </h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">👨‍💼</div>
+                <h4 class="feature-title" data-i18n="ideal.pro.title">المتداولين المحترفين</h4>
+                <p class="feature-text" data-i18n="ideal.pro.desc">
+                    Ideal for professional traders who need multiple charts simultaneously
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h4 class="feature-title" data-i18n="ideal.multi.title">التداول متعدد الأطر الزمنية</h4>
+                <p class="feature-text" data-i18n="ideal.multi.desc">
+                    Optimised for multi-timeframe trading strategies
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h4 class="feature-title" data-i18n="ideal.alerts.title">تنبيهات متقدمة</h4>
+                <p class="feature-text" data-i18n="ideal.alerts.desc">
+                    Reduce the risk of missing signals with advanced alert systems
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h4 class="feature-title" data-i18n="ideal.smooth.title">تجربة سلسة</h4>
+                <p class="feature-text" data-i18n="ideal.smooth.desc">
+                    Smooth, uninterrupted experience without ads
+                </p>
+            </div>
+        </div>
+    </section>
 
 
-        <!-- Pricing Section -->
-        <section class="section mobile-section">
-            <h2 class="section-title" data-i18n="pricing.title">
-                💰 الأسعار
-            </h2>
-            
-            <div class="payment-grid">
-                <div class="payment-card">
-                    <div class="payment-icon" style="font-size: 3rem;">🇩🇿</div>
-                    <div class="payment-label">
-                        <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.dzd">1500 دج</h4>
-                        <p class="feature-text" data-i18n="pricing.duration">لمدة 30 يوم</p>
-                    </div>
-                </div>
-                
-                <div class="payment-card">
-                    <div class="payment-icon" style="font-size: 3rem;">💵</div>
-                    <div class="payment-label">
-                        <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.usdt">6 USD</h4>
-                        <p class="feature-text" data-i18n="pricing.duration">لمدة 30 يوم</p>
-                    </div>
+    <!-- Pricing Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="pricing.title">
+            💰 الأسعار
+        </h2>
+
+        <div class="payment-grid">
+            <div class="payment-card">
+                <div class="payment-icon" style="font-size: 3rem;">🇩🇿</div>
+                <div class="payment-label">
+                    <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.dzd">1500 دج</h4>
+                    <p class="feature-text" data-i18n="pricing.duration">لمدة 30 يوم</p>
                 </div>
             </div>
 
-            <div class="mt-8 text-center">
-                <p class="text-[#2962FF] font-bold text-xl mb-2" data-i18n="pricing.best">🎯 أفضل سعر في السوق!</p>
-                <p class="feature-text" data-i18n="pricing.guarantee">مع ضمان الوصول الكامل لمدة 30 يوم</p>
+            <div class="payment-card">
+                <div class="payment-icon" style="font-size: 3rem;">💵</div>
+                <div class="payment-label">
+                    <h4 class="text-[#2962FF] font-bold text-2xl mb-2" data-i18n="pricing.usdt">6 USD</h4>
+                    <p class="feature-text" data-i18n="pricing.duration">لمدة 30 يوم</p>
+                </div>
             </div>
-        </section>
+        </div>
 
-        <!-- How to Get Section -->
-        <section class="section mobile-section">
-            <h2 class="section-title" data-i18n="howto.title">
-                📝 كيف تحصل على حسابك؟ (3 خطوات بسيطة)
-            </h2>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon" style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2962FF, #1E53E5); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
-                        1
-                    </div>
-                    <h4 class="feature-title" data-i18n="howto.step1.title">اطلب الآن</h4>
-                    <p class="feature-text" data-i18n="howto.step1.desc">
-                        تواصل معنا عبر WhatsApp واختر طريقة الدفع المناسبة لك
-                    </p>
+        <div class="mt-8 text-center">
+            <p class="text-[#2962FF] font-bold text-xl mb-2" data-i18n="pricing.best">🎯 أفضل سعر في السوق!</p>
+            <p class="feature-text" data-i18n="pricing.guarantee">مع ضمان الوصول الكامل لمدة 30 يوم</p>
+        </div>
+    </section>
+
+    <!-- How to Get Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="howto.title">
+            📝 كيف تحصل على حسابك؟ (3 خطوات بسيطة)
+        </h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon"
+                    style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2962FF, #1E53E5); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
+                    1
                 </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon" style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2962FF, #1E53E5); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
-                        2
-                    </div>
-                    <h4 class="feature-title" data-i18n="howto.step2.title">ادفع بأمان</h4>
-                    <p class="feature-text" data-i18n="howto.step2.desc">
-                        اختر من بين RedotPay، USDT، أو BaridiMob وأكمل الدفع
-                    </p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon" style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2962FF, #1E53E5); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
-                        3
-                    </div>
-                    <h4 class="feature-title" data-i18n="howto.step3.title">ابدأ التداول</h4>
-                    <p class="feature-text" data-i18n="howto.step3.desc">
-                        استلم بيانات الحساب فوراً وابدأ التحليل الفني
-                    </p>
-                </div>
+                <h4 class="feature-title" data-i18n="howto.step1.title">اطلب الآن</h4>
+                <p class="feature-text" data-i18n="howto.step1.desc">
+                    تواصل معنا عبر WhatsApp واختر طريقة الدفع المناسبة لك
+                </p>
             </div>
-        </section>
+
+            <div class="feature-card">
+                <div class="feature-icon"
+                    style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2962FF, #1E53E5); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
+                    2
+                </div>
+                <h4 class="feature-title" data-i18n="howto.step2.title">ادفع بأمان</h4>
+                <p class="feature-text" data-i18n="howto.step2.desc">
+                    اختر من بين RedotPay، USDT، أو BaridiMob وأكمل الدفع
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"
+                    style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2962FF, #1E53E5); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
+                    3
+                </div>
+                <h4 class="feature-title" data-i18n="howto.step3.title">ابدأ التداول</h4>
+                <p class="feature-text" data-i18n="howto.step3.desc">
+                    استلم بيانات الحساب فوراً وابدأ التحليل الفني
+                </p>
+            </div>
+        </div>
+    </section>
 
 
     <!-- Final CTA Section -->
@@ -835,8 +874,9 @@
                 <p class="hero-subtitle mb-8" data-i18n="final.subtitle">
                     احصل على TradingView Premium بأفضل سعر!
                 </p>
-                <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في TradingView Premium" 
-                   class="cta-button" data-i18n="final.button">
+                <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في TradingView Premium"
+                    onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Lead', {content_name: 'TradingView Premium', value: 2500, currency: 'DZD'}); fbq('track', 'InitiateCheckout', {content_name: 'TradingView Premium', value: 2500, currency: 'DZD'}); }"
+                    class="cta-button" data-i18n="final.button">
                     🚀 اشترك الآن
                 </a>
             </div>
@@ -850,22 +890,33 @@
 
     <!-- Payment Modals -->
     <!-- BaridiMob Modal -->
-    <div id="baridimob-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #2962FF; border-radius: 20px; padding: 40px; position: relative;">
-            <button onclick="closeBaridiMobModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #2962FF; font-size: 30px; cursor: pointer;">&times;</button>
-            
-            <h2 id="baridimob-title" style="text-align: center; color: #2962FF; font-size: 2rem; margin-bottom: 20px;">الدفع عبر BaridiMob</h2>
-            
-            <div style="background: rgba(41, 98, 255, 0.1); border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;"><strong id="baridimob-product">المنتج:</strong> TradingView Premium (30 يوم)</p>
-                <p style="color: #fff;"><strong id="baridimob-price">السعر:</strong> <span id="baridimob-price-value">1500 دج</span></p>
+    <div id="baridimob-modal" class="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div
+            style="max-width: 600px; background: #0a0a0a; border: 2px solid #2962FF; border-radius: 20px; padding: 40px; position: relative;">
+            <button onclick="closeBaridiMobModal()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #2962FF; font-size: 30px; cursor: pointer;">&times;</button>
+
+            <h2 id="baridimob-title" style="text-align: center; color: #2962FF; font-size: 2rem; margin-bottom: 20px;">
+                الدفع عبر BaridiMob</h2>
+
+            <div
+                style="background: rgba(41, 98, 255, 0.1); border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="baridimob-product">المنتج:</strong> TradingView
+                    Premium (30 يوم)</p>
+                <p style="color: #fff;"><strong id="baridimob-price">السعر:</strong> <span
+                        id="baridimob-price-value">1500 دج</span></p>
             </div>
 
-            <div style="background: #111; border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p id="baridimob-rip-label" style="color: #888; margin-bottom: 10px; text-align: center;">RIP BaridiMob:</p>
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
+            <div
+                style="background: #111; border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p id="baridimob-rip-label" style="color: #888; margin-bottom: 10px; text-align: center;">RIP BaridiMob:
+                </p>
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
                     <code id="baridimob-rip" style="color: #2962FF; font-size: 1.2rem;">00799999002787548473</code>
-                    <button id="baridimob-copy" onclick="copyBaridiMobRIP()" style="background: #2962FF; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                    <button id="baridimob-copy" onclick="copyBaridiMobRIP()"
+                        style="background: #2962FF; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
                 </div>
             </div>
 
@@ -881,10 +932,12 @@
                     <li>احتفظ بإثبات الدفع</li>
                     <li>اضغط "تم الدفع" للتواصل معنا</li>
                 </ol>
-                <p id="baridimob-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!</p>
+                <p id="baridimob-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!
+                </p>
             </div>
 
-            <button id="baridimob-button" onclick="confirmBaridiMobPayment()" style="width: 100%; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+            <button id="baridimob-button" onclick="confirmBaridiMobPayment()"
+                style="width: 100%; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
                 تم الدفع - تواصل معنا
             </button>
         </div>
@@ -892,38 +945,57 @@
 
 
     <!-- USDT/Crypto Modal -->
-    <div id="crypto-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #2962FF; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
-            <button onclick="closeCryptoModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #2962FF; font-size: 30px; cursor: pointer;">&times;</button>
-            
-            <h2 id="crypto-title" style="text-align: center; color: #2962FF; font-size: 2rem; margin-bottom: 20px;">الدفع بالعملات الرقمية</h2>
-            
-            <div style="background: rgba(41, 98, 255, 0.1); border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> TradingView Premium (30 يوم)</p>
-                <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">6 USDT</span></p>
+    <div id="crypto-modal" class="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div
+            style="max-width: 600px; background: #0a0a0a; border: 2px solid #2962FF; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeCryptoModal()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #2962FF; font-size: 30px; cursor: pointer;">&times;</button>
+
+            <h2 id="crypto-title" style="text-align: center; color: #2962FF; font-size: 2rem; margin-bottom: 20px;">
+                الدفع بالعملات الرقمية</h2>
+
+            <div
+                style="background: rgba(41, 98, 255, 0.1); border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> TradingView
+                    Premium (30 يوم)</p>
+                <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">6
+                        USDT</span></p>
             </div>
 
             <div style="margin-bottom: 20px;">
                 <h3 id="crypto-select-network" style="color: #2962FF; margin-bottom: 15px;">اختر الشبكة:</h3>
                 <div style="display: flex; gap: 10px;">
-                    <button onclick="selectNetwork('TRC20', 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9')" style="flex: 1; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
-                        TRC20<br><span id="crypto-fees1" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~1 USDT)</span>
+                    <button onclick="selectNetwork('TRC20', 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9')"
+                        style="flex: 1; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                        TRC20<br><span id="crypto-fees1" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~1
+                            USDT)</span>
                     </button>
-                    <button onclick="selectNetwork('BEP20', '0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0')" style="flex: 1; background: #333; color: #fff; border: 1px solid #2962FF; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
-                        BEP20 (BSC)<br><span id="crypto-fees2" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~0.5 USDT)</span>
+                    <button onclick="selectNetwork('BEP20', '0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0')"
+                        style="flex: 1; background: #333; color: #fff; border: 1px solid #2962FF; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                        BEP20 (BSC)<br><span id="crypto-fees2" style="font-size: 0.8rem; font-weight: normal;">رسوم
+                            منخفضة (~0.5 USDT)</span>
                     </button>
                 </div>
             </div>
 
-            <div style="background: #111; border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p id="crypto-wallet-label" style="color: #888; margin-bottom: 10px; text-align: center;">عنوان المحفظة (<span id="selected-network">TRC20</span>):</p>
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <code id="wallet-address" style="color: #2962FF; font-size: 0.9rem; word-break: break-all;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
-                    <button id="crypto-copy" onclick="copyWalletAddress()" style="background: #2962FF; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">نسخ</button>
+            <div
+                style="background: #111; border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p id="crypto-wallet-label" style="color: #888; margin-bottom: 10px; text-align: center;">عنوان المحفظة
+                    (<span id="selected-network">TRC20</span>):</p>
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <code id="wallet-address"
+                        style="color: #2962FF; font-size: 0.9rem; word-break: break-all;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
+                    <button id="crypto-copy" onclick="copyWalletAddress()"
+                        style="background: #2962FF; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">نسخ</button>
                 </div>
                 <div style="text-align: center;">
-                    <img id="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9" alt="QR Code" style="max-width: 200px; border-radius: 10px;">
-                    <p id="crypto-qr-text" style="color: #888; font-size: 0.85rem; margin-top: 10px;">امسح الكود بتطبيق المحفظة</p>
+                    <img id="qr-code"
+                        src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9"
+                        alt="QR Code" style="max-width: 200px; border-radius: 10px;">
+                    <p id="crypto-qr-text" style="color: #888; font-size: 0.85rem; margin-top: 10px;">امسح الكود بتطبيق
+                        المحفظة</p>
                 </div>
             </div>
 
@@ -938,10 +1010,12 @@
                     <li>احتفظ بـ Transaction ID</li>
                     <li>اضغط "تم الدفع" للتواصل معنا</li>
                 </ol>
-                <p id="crypto-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!</p>
+                <p id="crypto-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا
+                    ستفقد أموالك!</p>
             </div>
 
-            <button id="crypto-button" onclick="confirmCryptoPayment()" style="width: 100%; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+            <button id="crypto-button" onclick="confirmCryptoPayment()"
+                style="width: 100%; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
                 تم الدفع - تواصل معنا
             </button>
         </div>
@@ -949,22 +1023,32 @@
 
 
     <!-- RedotPay Modal -->
-    <div id="redotpay-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #2962FF; border-radius: 20px; padding: 40px; position: relative;">
-            <button onclick="closeRedotPayModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #2962FF; font-size: 30px; cursor: pointer;">&times;</button>
-            
-            <h2 id="redotpay-title" style="text-align: center; color: #2962FF; font-size: 2rem; margin-bottom: 20px;">الدفع عبر RedotPay</h2>
-            
-            <div style="background: rgba(41, 98, 255, 0.1); border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;"><strong id="redotpay-product">المنتج:</strong> TradingView Premium (30 يوم)</p>
-                <p style="color: #fff;"><strong id="redotpay-price">السعر:</strong> <span id="redotpay-price-value">6 USD</span></p>
+    <div id="redotpay-modal" class="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div
+            style="max-width: 600px; background: #0a0a0a; border: 2px solid #2962FF; border-radius: 20px; padding: 40px; position: relative;">
+            <button onclick="closeRedotPayModal()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #2962FF; font-size: 30px; cursor: pointer;">&times;</button>
+
+            <h2 id="redotpay-title" style="text-align: center; color: #2962FF; font-size: 2rem; margin-bottom: 20px;">
+                الدفع عبر RedotPay</h2>
+
+            <div
+                style="background: rgba(41, 98, 255, 0.1); border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="redotpay-product">المنتج:</strong> TradingView
+                    Premium (30 يوم)</p>
+                <p style="color: #fff;"><strong id="redotpay-price">السعر:</strong> <span id="redotpay-price-value">6
+                        USD</span></p>
             </div>
 
-            <div style="background: #111; border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+            <div
+                style="background: #111; border: 1px solid #2962FF; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
                 <p id="redotpay-id-label" style="color: #888; margin-bottom: 10px; text-align: center;">RedotPay ID:</p>
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
                     <code id="redotpay-id" style="color: #2962FF; font-size: 1.3rem;">1117632168</code>
-                    <button id="redotpay-copy" onclick="copyRedotPayID()" style="background: #2962FF; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                    <button id="redotpay-copy" onclick="copyRedotPayID()"
+                        style="background: #2962FF; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
                 </div>
             </div>
 
@@ -979,10 +1063,12 @@
                     <li>احتفظ بإثبات التحويل</li>
                     <li>اضغط "تم الدفع" للتواصل معنا</li>
                 </ol>
-                <p id="redotpay-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!</p>
+                <p id="redotpay-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال RedotPay ID بشكل
+                    صحيح!</p>
             </div>
 
-            <button id="redotpay-button" onclick="confirmRedotPayPayment()" style="width: 100%; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+            <button id="redotpay-button" onclick="confirmRedotPayPayment()"
+                style="width: 100%; background: #2962FF; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
                 تم الدفع - تواصل معنا
             </button>
         </div>
@@ -991,35 +1077,55 @@
     <!-- Floating Social Buttons -->
     <div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
         <!-- WhatsApp Button -->
-        <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن TradingView Premium" 
-           class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
-           style="box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); animation: pulse-whatsapp 2s infinite;">
+        <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن TradingView Premium"
+            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_name: 'TradingView Premium', content_category: 'WhatsApp'}); }"
+            class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
+            style="box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); animation: pulse-whatsapp 2s infinite;">
             <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
-                <path d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z"/>
+                <path
+                    d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z" />
             </svg>
         </a>
 
         <!-- Instagram Button -->
-        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" 
-           target="_blank"
-           class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
-           style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); animation: pulse-instagram 2s infinite;">
+        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" target="_blank"
+            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_name: 'TradingView Premium', content_category: 'Instagram'}); }"
+            class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
+            style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); animation: pulse-instagram 2s infinite;">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
             </svg>
         </a>
     </div>
 
     <style>
         @keyframes pulse-whatsapp {
-            0% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
-            50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1); }
-            100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+            0% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1);
+            }
+
+            100% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            }
         }
+
         @keyframes pulse-instagram {
-            0% { box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); }
-            50% { box-shadow: 0 4px 30px rgba(225, 48, 108, 0.7), 0 0 0 10px rgba(225, 48, 108, 0.1); }
-            100% { box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); }
+            0% {
+                box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 4px 30px rgba(225, 48, 108, 0.7), 0 0 0 10px rgba(225, 48, 108, 0.1);
+            }
+
+            100% {
+                box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
+            }
         }
     </style>
 
@@ -1064,6 +1170,7 @@
         // Payment Modal Functions
         function openBaridiMobModal() {
             document.getElementById('baridimob-modal').style.display = 'flex';
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'TradingView Premium', value: 2500, currency: 'DZD', content_category: 'BaridiMob' }); }
         }
         function closeBaridiMobModal() {
             document.getElementById('baridimob-modal').style.display = 'none';
@@ -1075,10 +1182,12 @@
         }
         function confirmBaridiMobPayment() {
             window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر BaridiMob لـ TradingView Premium', '_blank');
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'TradingView Premium', value: 2500, currency: 'DZD', content_category: 'BaridiMob' }); }
         }
 
         function openCryptoModal() {
             document.getElementById('crypto-modal').style.display = 'flex';
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'TradingView Premium', value: 2500, currency: 'DZD', content_category: 'Crypto' }); }
         }
         function closeCryptoModal() {
             document.getElementById('crypto-modal').style.display = 'none';
@@ -1096,10 +1205,12 @@
         }
         function confirmCryptoPayment() {
             window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر USDT لـ TradingView Premium', '_blank');
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'TradingView Premium', value: 2500, currency: 'DZD', content_category: 'Crypto' }); }
         }
 
         function openRedotPayModal() {
             document.getElementById('redotpay-modal').style.display = 'flex';
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'TradingView Premium', value: 2500, currency: 'DZD', content_category: 'RedotPay' }); }
         }
         function closeRedotPayModal() {
             document.getElementById('redotpay-modal').style.display = 'none';
@@ -1111,10 +1222,11 @@
         }
         function confirmRedotPayPayment() {
             window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر RedotPay لـ TradingView Premium', '_blank');
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'TradingView Premium', value: 2500, currency: 'DZD', content_category: 'RedotPay' }); }
         }
 
         // Add click events to payment buttons
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const paymentButtons = document.querySelectorAll('.flex.flex-col.items-center.gap-2');
             if (paymentButtons.length >= 3) {
                 paymentButtons[0].addEventListener('click', openRedotPayModal);
@@ -1331,7 +1443,7 @@
         }
 
         // Load saved language on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
             changeLanguage(savedLang);
         });
@@ -1345,4 +1457,5 @@
         });
     </script>
 </body>
+
 </html>

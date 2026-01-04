@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatGPT Premium - حساب مميز بأفضل سعر</title>
-    
+
     <!-- Meta Pixel Code -->
     <script>
         !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '2046893892791206');
         fbq('track', 'PageView');
+
+        // Detailed ViewContent and InterestedLead
+        const isUSD = location.search.includes('USD');
+        fbq('track', 'ViewContent', {
+            content_name: 'ChatGPT Business',
+            content_category: 'AI Tools',
+            value: isUSD ? 6 : 1200,
+            currency: isUSD ? 'USD' : 'DZD'
+        });
+
+        setTimeout(function () {
+            fbq('trackCustom', 'InterestedLead', {
+                content_name: 'ChatGPT Business',
+                time_on_page: '10s'
+            });
+        }, 10000);
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -24,11 +41,11 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Cairo', sans-serif;
             background: #0a0a0a;
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(16, 163, 127, 0.1) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(13, 140, 106, 0.05) 0px, transparent 50%);
             color: white;
@@ -36,7 +53,7 @@
             overflow-x: hidden;
             line-height: 1.6;
         }
-        
+
         #particles-js {
             position: fixed;
             width: 100%;
@@ -47,7 +64,7 @@
             pointer-events: none;
             opacity: 0.3;
         }
-        
+
         /* Glassmorphism Effect */
         .glass-card {
             background: rgba(255, 255, 255, 0.03);
@@ -58,14 +75,14 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
-        
+
         .glass-card:hover {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(16, 163, 127, 0.3);
             transform: translateY(-4px);
             box-shadow: 0 12px 40px rgba(16, 163, 127, 0.2);
         }
-        
+
         /* Hero Section */
         .hero-container {
             position: relative;
@@ -75,23 +92,30 @@
             justify-content: center;
             padding: 120px 20px 80px;
         }
-        
+
         .hero-content {
             max-width: 1200px;
             width: 100%;
             text-align: center;
         }
-        
+
         .product-logo-container {
             margin-bottom: 32px;
             animation: float 3s ease-in-out infinite;
         }
-        
+
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
-        
+
         .hero-title {
             font-size: clamp(2.5rem, 5vw, 4.5rem);
             font-weight: 900;
@@ -102,7 +126,7 @@
             margin-bottom: 24px;
             line-height: 1.2;
         }
-        
+
         .hero-subtitle {
             font-size: clamp(1.1rem, 2vw, 1.5rem);
             color: rgba(255, 255, 255, 0.8);
@@ -111,7 +135,7 @@
             margin-left: auto;
             margin-right: auto;
         }
-        
+
         .price-badge {
             display: inline-block;
             background: linear-gradient(135deg, rgba(16, 163, 127, 0.2), rgba(13, 140, 106, 0.2));
@@ -124,7 +148,7 @@
             margin: 32px 0;
             box-shadow: 0 8px 24px rgba(16, 163, 127, 0.2);
         }
-        
+
         /* Payment Methods Cards */
         .payment-grid {
             display: grid;
@@ -133,7 +157,7 @@
             max-width: 900px;
             margin: 48px auto;
         }
-        
+
         .payment-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -146,7 +170,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .payment-card::before {
             content: '';
             position: absolute;
@@ -157,18 +181,18 @@
             background: linear-gradient(90deg, transparent, rgba(16, 163, 127, 0.1), transparent);
             transition: left 0.5s;
         }
-        
+
         .payment-card:hover::before {
             left: 100%;
         }
-        
+
         .payment-card:hover {
             transform: translateY(-8px);
             border-color: rgba(16, 163, 127, 0.5);
             box-shadow: 0 12px 40px rgba(16, 163, 127, 0.3);
             background: rgba(255, 255, 255, 0.08);
         }
-        
+
         .payment-icon {
             width: 80px;
             height: 80px;
@@ -181,13 +205,13 @@
             font-weight: 700;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
-        
+
         .payment-label {
             font-size: 1.1rem;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.9);
         }
-        
+
         /* CTA Button */
         .cta-button {
             display: inline-block;
@@ -204,7 +228,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .cta-button::before {
             content: '';
             position: absolute;
@@ -217,24 +241,24 @@
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
-        
+
         .cta-button:hover::before {
             width: 300px;
             height: 300px;
         }
-        
+
         .cta-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 32px rgba(16, 163, 127, 0.5);
         }
-        
+
         /* Section Styling */
         .section {
             padding: 80px 20px;
             position: relative;
             z-index: 10;
         }
-        
+
         .section-title {
             font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 800;
@@ -245,7 +269,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -253,7 +277,7 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .feature-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
@@ -262,30 +286,30 @@
             padding: 32px;
             transition: all 0.3s ease;
         }
-        
+
         .feature-card:hover {
             transform: translateY(-4px);
             border-color: rgba(16, 163, 127, 0.3);
             box-shadow: 0 12px 40px rgba(16, 163, 127, 0.15);
         }
-        
+
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 16px;
         }
-        
+
         .feature-title {
             font-size: 1.5rem;
             font-weight: 700;
             color: #10a37f;
             margin-bottom: 12px;
         }
-        
+
         .feature-text {
             color: rgba(255, 255, 255, 0.7);
             line-height: 1.8;
         }
-        
+
         /* Navigation */
         .nav-container {
             position: fixed;
@@ -298,7 +322,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .back-btn {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -310,17 +334,17 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-        
+
         .back-btn:hover {
             background: rgba(16, 163, 127, 0.2);
             border-color: rgba(16, 163, 127, 0.5);
         }
-        
+
         .lang-switcher {
             display: flex;
             gap: 8px;
         }
-        
+
         .lang-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -331,69 +355,69 @@
             transition: all 0.3s ease;
             font-weight: 600;
         }
-        
+
         .lang-btn.active,
         .lang-btn:hover {
             background: rgba(16, 163, 127, 0.2);
             border-color: rgba(16, 163, 127, 0.5);
         }
-        
+
         /* Responsive Mobile Styles - Compact Design */
         @media (max-width: 768px) {
             .hero-container {
                 padding: 70px 15px 30px !important;
                 min-height: auto !important;
             }
-            
+
             .product-logo-container {
                 margin-bottom: 16px !important;
             }
-            
+
             .product-logo-container img {
                 max-width: 80px !important;
                 height: auto !important;
             }
-            
+
             .hero-title {
                 font-size: 1.5rem !important;
                 margin-bottom: 8px !important;
                 line-height: 1.3 !important;
             }
-            
+
             .hero-subtitle {
                 font-size: 0.875rem !important;
                 margin-bottom: 8px !important;
                 line-height: 1.4 !important;
             }
-            
+
             .price-badge {
                 font-size: 1rem !important;
                 padding: 8px 16px !important;
                 margin: 12px 0 !important;
             }
-            
+
             .payment-grid {
                 grid-template-columns: repeat(3, 1fr) !important;
                 gap: 8px !important;
                 margin: 20px auto !important;
                 max-width: 100% !important;
             }
-            
+
             .payment-card {
                 padding: 12px 8px !important;
             }
-            
+
             .payment-icon {
                 font-size: 1.8rem !important;
                 margin-bottom: 6px !important;
                 width: 40px !important;
                 height: 40px !important;
             }
-            
+
             .payment-label {
                 font-size: 0.75rem !important;
             }
-            
+
             .cta-button {
                 font-size: 0.9rem !important;
                 padding: 12px 24px !important;
@@ -401,132 +425,132 @@
                 max-width: 100% !important;
                 margin-top: 16px !important;
             }
-            
+
             .section {
                 padding: 12px 15px !important;
             }
-            
+
             .section-title {
                 font-size: 1.1rem !important;
                 margin-bottom: 10px !important;
             }
-            
+
             .feature-grid {
                 grid-template-columns: 1fr;
                 gap: 8px !important;
             }
-            
+
             .feature-card {
                 padding: 12px 10px !important;
             }
-            
+
             .feature-icon {
                 font-size: 1.8rem !important;
                 margin-bottom: 8px !important;
             }
-            
+
             .feature-title {
                 font-size: 1rem !important;
                 margin-bottom: 6px !important;
             }
-            
+
             .feature-text {
                 font-size: 0.75rem !important;
                 line-height: 1.4 !important;
             }
-            
+
             .glass-card {
                 padding: 12px 10px !important;
                 margin-bottom: 12px !important;
             }
-            
+
             .nav-container {
                 padding: 8px 12px !important;
             }
-            
+
             .back-btn {
                 padding: 6px 12px !important;
                 font-size: 0.75rem !important;
             }
-            
+
             .lang-btn {
                 padding: 4px 8px !important;
                 font-size: 0.75rem !important;
             }
-            
+
             /* Reduce spacing in hero content */
-            .hero-content > * {
+            .hero-content>* {
                 margin-bottom: 8px !important;
             }
-            
+
             /* Show 2 columns on mobile for better content visibility */
             .feature-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 8px !important;
             }
-            
+
             /* Compact feature cards to show more content */
             .feature-card {
                 padding: 10px 8px !important;
                 min-height: auto !important;
             }
-            
+
             .feature-icon {
                 font-size: 1.5rem !important;
                 margin-bottom: 6px !important;
             }
-            
+
             .feature-title {
                 font-size: 0.85rem !important;
                 margin-bottom: 4px !important;
                 line-height: 1.3 !important;
             }
-            
+
             .feature-text {
                 font-size: 0.7rem !important;
                 line-height: 1.4 !important;
             }
-            
+
             .feature-card ul li {
                 font-size: 0.65rem !important;
                 margin-bottom: 3px !important;
                 line-height: 1.3 !important;
             }
-            
+
             /* Compact sections */
             .section {
                 padding: 16px 12px !important;
             }
-            
+
             .section-title {
                 font-size: 1.15rem !important;
                 margin-bottom: 12px !important;
             }
         }
-        
+
         @media (max-width: 480px) {
             .hero-title {
                 font-size: 1.75rem !important;
             }
-            
+
             .hero-subtitle {
                 font-size: 0.9rem !important;
             }
-            
+
             .price-badge {
                 font-size: 1.1rem !important;
                 padding: 10px 20px;
             }
-            
+
             .section-title {
                 font-size: 1.5rem !important;
             }
-            
+
             .payment-card {
                 padding: 16px 12px;
             }
         }
-        
+
         /* Payment Modals Mobile Responsive */
         @media (max-width: 768px) {
             .modal div[style*="max-width"] {
@@ -535,27 +559,28 @@
                 padding: 20px 15px !important;
                 margin: 10px !important;
             }
-            
+
             .modal h2 {
                 font-size: 1.25rem !important;
             }
-            
+
             .modal code {
                 font-size: 0.85rem !important;
                 word-break: break-all;
             }
-            
+
             .modal button {
                 font-size: 0.9rem !important;
                 padding: 10px 20px !important;
             }
-            
+
             #qr-code {
                 max-width: 120px !important;
             }
         }
     </style>
 </head>
+
 <body>
     <div id="particles-js"></div>
 
@@ -573,20 +598,19 @@
     <section class="hero-container" style="position: relative;">
         <div class="hero-content" style="position: relative; z-index: 10;">
             <div class="product-logo-container">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1024px-ChatGPT_logo.svg.png" 
-                     alt="ChatGPT" 
-                     class="w-48 h-48 md:w-64 md:h-64 object-contain mx-auto"
-                     style="filter: drop-shadow(0 0 40px rgba(16, 163, 127, 0.6));">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1024px-ChatGPT_logo.svg.png"
+                    alt="ChatGPT" class="w-48 h-48 md:w-64 md:h-64 object-contain mx-auto"
+                    style="filter: drop-shadow(0 0 40px rgba(16, 163, 127, 0.6));">
             </div>
-            
+
             <h1 class="hero-title" data-i18n="hero.title">
                 ChatGPT Business (GPT-5.1)
             </h1>
-            
+
             <p class="hero-subtitle" data-i18n="hero.subtitle">
                 مساحة عمل خاصة بأمان تام ورسائل غير محدودة
             </p>
-            
+
             <div class="price-badge" data-i18n="hero.price">
                 فقط بـ 6 دولارات
             </div>
@@ -602,7 +626,8 @@
 
                 <div class="payment-card" onclick="openCryptoModal()">
                     <div class="payment-icon" style="background: linear-gradient(135deg, #10a37f, #0d8c6a);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                            stroke="white" stroke-width="2">
                             <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
                             <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
                             <path d="M12 12v8"></path>
@@ -613,7 +638,8 @@
 
                 <div class="payment-card" onclick="openBaridiMobModal()">
                     <div class="payment-icon" style="background: linear-gradient(135deg, #ffffff, #e5e5e5);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                            stroke="#0066cc" stroke-width="2">
                             <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                             <line x1="2" y1="10" x2="22" y2="10"></line>
                         </svg>
@@ -622,8 +648,9 @@
                 </div>
             </div>
 
-            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في ChatGPT Business" 
-               class="cta-button" data-i18n="cta.button">
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في ChatGPT Business"
+                onclick="if(typeof fbq !== 'undefined') { const isUSD = location.search.includes('USD'); const val = isUSD ? 6 : 1200; const cur = isUSD ? 'USD' : 'DZD'; fbq('track', 'Lead', {content_name: 'ChatGPT Business', value: val, currency: cur}); fbq('track', 'InitiateCheckout', {content_name: 'ChatGPT Business', value: val, currency: cur}); }"
+                class="cta-button" data-i18n="cta.button">
                 اطلب الآن عبر WhatsApp
             </a>
         </div>
@@ -641,219 +668,235 @@
                     لا تدفع شيئاً حتى تستلم حسابك وتجربه بنفسك.
                 </p>
                 <p class="feature-text text-center max-w-3xl mx-auto">
-                    <span data-i18n="desc.text">هل ما زلت تعتمد على النسخة المجانية المحدودة أو اشتراك Plus الذي يشاركك فيه الملايين؟ حان الوقت لتمتلك مساحة عمل احترافية (Workspace) خاصة بك، مدعومة بأقوى نموذج ذكاء اصطناعي في العالم</span> <span class="text-[#10a37f] font-bold">GPT-5.1</span><span data-i18n="desc.text2">، مع ضمان الخصوصية الكاملة لبياناتك.</span>
+                    <span data-i18n="desc.text">هل ما زلت تعتمد على النسخة المجانية المحدودة أو اشتراك Plus الذي يشاركك
+                        فيه الملايين؟ حان الوقت لتمتلك مساحة عمل احترافية (Workspace) خاصة بك، مدعومة بأقوى نموذج ذكاء
+                        اصطناعي في العالم</span> <span class="text-[#10a37f] font-bold">GPT-5.1</span><span
+                        data-i18n="desc.text2">، مع ضمان الخصوصية الكاملة لبياناتك.</span>
                 </p>
             </div>
         </div>
     </section>
 
-        <!-- Comparison Section -->
-        <section class="section mobile-section">
-            <h2 class="section-title" data-i18n="comp.title">
-                📊 لماذا يجب أن تنتقل إلى ChatGPT Business الآن؟
-            </h2>
-            <p class="hero-subtitle text-center mb-8 max-w-3xl mx-auto" data-i18n="comp.subtitle">
-                من خلال تحليلنا للخطط المتوفرة، إليك الفروقات الجوهرية التي تجعل اشتراك Business هو الخيار الوحيد للمحترفين:
+    <!-- Comparison Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="comp.title">
+            📊 لماذا يجب أن تنتقل إلى ChatGPT Business الآن؟
+        </h2>
+        <p class="hero-subtitle text-center mb-8 max-w-3xl mx-auto" data-i18n="comp.subtitle">
+            من خلال تحليلنا للخطط المتوفرة، إليك الفروقات الجوهرية التي تجعل اشتراك Business هو الخيار الوحيد للمحترفين:
+        </p>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🆓</div>
+                <h3 class="feature-title" data-i18n="comp.free.title">الخطة المجانية</h3>
+                <p class="feature-text mb-4" data-i18n="comp.free.subtitle">"مجرد تجربة"</p>
+                <ul class="space-y-2 feature-text">
+                    <li data-i18n="comp.free.item1">❌ ذاكرة ضعيفة وسياق محدود</li>
+                    <li data-i18n="comp.free.item2">❌ للإجابات السريعة فقط</li>
+                    <li data-i18n="comp.free.item3">❌ لا يصلح للأعمال الجادة</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3 class="feature-title" data-i18n="comp.plus.title">خطة Plus</h3>
+                <p class="feature-text mb-4" data-i18n="comp.plus.price">20$/شهرياً</p>
+                <ul class="space-y-2 feature-text">
+                    <li data-i18n="comp.plus.item1">✅ Sora و Codex</li>
+                    <li data-i18n="comp.plus.item2">⚠️ محدودة بعدد رسائل معين</li>
+                    <li data-i18n="comp.plus.item3">⚠️ بياناتك قد تُستخدم للتدريب</li>
+                </ul>
+            </div>
+
+            <div class="feature-card" style="border: 2px solid #10a37f; position: relative;">
+                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #10a37f; color: black; padding: 4px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;"
+                    data-i18n="comp.business.badge">
+                    الأفضل 🚀
+                </div>
+                <div class="feature-icon">💼</div>
+                <h3 class="feature-title" data-i18n="comp.business.title">خطة Business</h3>
+                <p class="feature-text mb-4" data-i18n="comp.business.price">6$/شهرياً</p>
+                <ul class="space-y-2 feature-text">
+                    <li data-i18n="comp.business.item1">✅ رسائل غير محدودة مع GPT-5.1</li>
+                    <li data-i18n="comp.business.item2">✅ خصوصية تامة - لا تدريب على بياناتك</li>
+                    <li data-i18n="comp.business.item3">✅ تحليلات احترافية</li>
+                    <li data-i18n="comp.business.item4">✅ وكلاء ومساعدين متطورين</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Features List -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="features.title">
+            ✨ كل ما تحصل عليه مع خطة Business
+        </h2>
+        <p class="hero-subtitle text-center mb-10">
+            <span data-i18n="features.price.official">السعر الرسمي</span> <span class="line-through text-gray-500"
+                data-i18n="features.price.official.value">$25/شهر</span> - <span
+                data-i18n="features.price.our">سعرنا</span> <span class="text-[#10a37f] font-bold text-2xl"
+                data-i18n="features.price.only">6$ فقط!</span>
+        </p>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title" data-i18n="feature1.title">تحليلات احترافية</h3>
+                <p class="feature-text" data-i18n="feature1.desc">قم بإجراء تحليلات متقدمة للبيانات وإنشاء رسوم بيانية
+                    وعروض تقديمية</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">∞</div>
+                <h3 class="feature-title" data-i18n="feature2.title">رسائل غير محدودة مع GPT-5</h3>
+                <p class="feature-text" data-i18n="feature2.desc">استخدم GPT-5 بدون حدود - لا توقف، لا قيود يومية</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3 class="feature-title" data-i18n="feature3.title">إنشاء صور وفيديوهات وعروض تقديمية</h3>
+                <p class="feature-text" data-i18n="feature3.desc">DALL-E 3 لإنشاء الصور، Sora للفيديوهات، وأدوات إنشاء
+                    العروض</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3 class="feature-title" data-i18n="feature4.title">أمان بمستوى المؤسسات (SSO, MFA)</h3>
+                <p class="text-gray-400 text-sm" data-i18n="feature4.desc">حماية متقدمة مع تسجيل دخول موحد ومصادقة
+                    ثنائية</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <h3 class="feature-title" data-i18n="feature5.title">حماية بياناتك - لا تُستخدم للتدريب</h3>
+            <p class="feature-text" data-i18n="feature5.desc">بياناتك وأكوادك وملفاتك محمية تماماً ولن تُستخدم لتدريب
+                النماذج</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📁</div>
+            <h3 class="feature-title" data-i18n="feature6.title">مشاركة المشاريع والـ GPTs المخصصة</h3>
+            <p class="feature-text" data-i18n="feature6.desc">شارك مشاريعك ونماذج GPT المخصصة مع فريقك</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🔗</div>
+            <h3 class="feature-title" data-i18n="feature7.title">تكامل مع SharePoint وأدوات أخرى</h3>
+            <p class="feature-text" data-i18n="feature7.desc">اربط ChatGPT مع أدوات عملك المفضلة</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">💳</div>
+            <h3 class="feature-title" data-i18n="feature8.title">إدارة الفواتير والمستخدمين</h3>
+            <p class="feature-text" data-i18n="feature8.desc">لوحة تحكم شاملة لإدارة الحسابات والفواتير</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🎙️</div>
+            <h3 class="feature-title" data-i18n="feature9.title">ملاحظات الاجتماعات مع النسخ</h3>
+            <p class="feature-text" data-i18n="feature9.desc">تحويل الاجتماعات إلى نصوص وملاحظات منظمة تلقائياً</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3 class="feature-title" data-i18n="feature10.title">نشر وكلاء للبرمجة والبحث</h3>
+            <p class="feature-text" data-i18n="feature10.desc">وكلاء ذكاء اصطناعي متخصصون يعملون على مهامك البرمجية
+                والبحثية</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">💻</div>
+            <h3 class="feature-title" data-i18n="feature11.title">كتابة الأكواد مع Codex</h3>
+            <p class="feature-text" data-i18n="feature11.desc">مساعد برمجة متقدم لكتابة وتحسين الأكواد</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h3 class="feature-title" data-i18n="feature12.title">تصفح الإنترنت والبحث الفوري</h3>
+            <p class="feature-text" data-i18n="feature12.desc">الحصول على معلومات محدثة من الويب في الوقت الفعلي</p>
+        </div>
+        </div>
+
+        <div class="glass-card p-8 text-center mt-8 max-w-2xl mx-auto">
+            <p class="text-[#10a37f] font-bold text-xl mb-2" data-i18n="features.final">🎯 كل هذا بسعر 6 دولارات فقط!
             </p>
+            <p class="feature-text" data-i18n="features.save">وفّر $19 شهرياً مقارنة بالسعر الرسمي</p>
+        </div>
+    </section>
 
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🆓</div>
-                    <h3 class="feature-title" data-i18n="comp.free.title">الخطة المجانية</h3>
-                    <p class="feature-text mb-4" data-i18n="comp.free.subtitle">"مجرد تجربة"</p>
-                    <ul class="space-y-2 feature-text">
-                        <li data-i18n="comp.free.item1">❌ ذاكرة ضعيفة وسياق محدود</li>
-                        <li data-i18n="comp.free.item2">❌ للإجابات السريعة فقط</li>
-                        <li data-i18n="comp.free.item3">❌ لا يصلح للأعمال الجادة</li>
-                    </ul>
-                </div>
+    <!-- Trust & Privacy Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="trust.title">
+            🛡️ ضمان الثقة والخصوصية (عرضنا الحصري)
+        </h2>
+        <p class="hero-subtitle text-center mb-8" data-i18n="trust.subtitle">
+            نحن ندرك أن السوق مليء بالحسابات المشتركة والوهمية، لذلك نقدم لك عرضاً يكسر كل قواعد الخوف:
+        </p>
 
-                <div class="feature-card">
-                    <div class="feature-icon">⭐</div>
-                    <h3 class="feature-title" data-i18n="comp.plus.title">خطة Plus</h3>
-                    <p class="feature-text mb-4" data-i18n="comp.plus.price">20$/شهرياً</p>
-                    <ul class="space-y-2 feature-text">
-                        <li data-i18n="comp.plus.item1">✅ Sora و Codex</li>
-                        <li data-i18n="comp.plus.item2">⚠️ محدودة بعدد رسائل معين</li>
-                        <li data-i18n="comp.plus.item3">⚠️ بياناتك قد تُستخدم للتدريب</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card" style="border: 2px solid #10a37f; position: relative;">
-                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #10a37f; color: black; padding: 4px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;" data-i18n="comp.business.badge">
-                        الأفضل 🚀
-                    </div>
-                    <div class="feature-icon">💼</div>
-                    <h3 class="feature-title" data-i18n="comp.business.title">خطة Business</h3>
-                    <p class="feature-text mb-4" data-i18n="comp.business.price">6$/شهرياً</p>
-                    <ul class="space-y-2 feature-text">
-                        <li data-i18n="comp.business.item1">✅ رسائل غير محدودة مع GPT-5.1</li>
-                        <li data-i18n="comp.business.item2">✅ خصوصية تامة - لا تدريب على بياناتك</li>
-                        <li data-i18n="comp.business.item3">✅ تحليلات احترافية</li>
-                        <li data-i18n="comp.business.item4">✅ وكلاء ومساعدين متطورين</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Detailed Features List -->
-        <section class="section mobile-section">
-            <h2 class="section-title" data-i18n="features.title">
-                ✨ كل ما تحصل عليه مع خطة Business
-            </h2>
-            <p class="hero-subtitle text-center mb-10">
-                <span data-i18n="features.price.official">السعر الرسمي</span> <span class="line-through text-gray-500" data-i18n="features.price.official.value">$25/شهر</span> - <span data-i18n="features.price.our">سعرنا</span> <span class="text-[#10a37f] font-bold text-2xl" data-i18n="features.price.only">6$ فقط!</span>
-            </p>
-
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3 class="feature-title" data-i18n="feature1.title">تحليلات احترافية</h3>
-                    <p class="feature-text" data-i18n="feature1.desc">قم بإجراء تحليلات متقدمة للبيانات وإنشاء رسوم بيانية وعروض تقديمية</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">∞</div>
-                    <h3 class="feature-title" data-i18n="feature2.title">رسائل غير محدودة مع GPT-5</h3>
-                    <p class="feature-text" data-i18n="feature2.desc">استخدم GPT-5 بدون حدود - لا توقف، لا قيود يومية</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3 class="feature-title" data-i18n="feature3.title">إنشاء صور وفيديوهات وعروض تقديمية</h3>
-                    <p class="feature-text" data-i18n="feature3.desc">DALL-E 3 لإنشاء الصور، Sora للفيديوهات، وأدوات إنشاء العروض</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔐</div>
-                    <h3 class="feature-title" data-i18n="feature4.title">أمان بمستوى المؤسسات (SSO, MFA)</h3>
-                        <p class="text-gray-400 text-sm" data-i18n="feature4.desc">حماية متقدمة مع تسجيل دخول موحد ومصادقة ثنائية</p>
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <h3 class="feature-title" data-i18n="feature5.title">حماية بياناتك - لا تُستخدم للتدريب</h3>
-                    <p class="feature-text" data-i18n="feature5.desc">بياناتك وأكوادك وملفاتك محمية تماماً ولن تُستخدم لتدريب النماذج</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📁</div>
-                    <h3 class="feature-title" data-i18n="feature6.title">مشاركة المشاريع والـ GPTs المخصصة</h3>
-                    <p class="feature-text" data-i18n="feature6.desc">شارك مشاريعك ونماذج GPT المخصصة مع فريقك</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔗</div>
-                    <h3 class="feature-title" data-i18n="feature7.title">تكامل مع SharePoint وأدوات أخرى</h3>
-                    <p class="feature-text" data-i18n="feature7.desc">اربط ChatGPT مع أدوات عملك المفضلة</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💳</div>
-                    <h3 class="feature-title" data-i18n="feature8.title">إدارة الفواتير والمستخدمين</h3>
-                    <p class="feature-text" data-i18n="feature8.desc">لوحة تحكم شاملة لإدارة الحسابات والفواتير</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🎙️</div>
-                    <h3 class="feature-title" data-i18n="feature9.title">ملاحظات الاجتماعات مع النسخ</h3>
-                    <p class="feature-text" data-i18n="feature9.desc">تحويل الاجتماعات إلى نصوص وملاحظات منظمة تلقائياً</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🤖</div>
-                    <h3 class="feature-title" data-i18n="feature10.title">نشر وكلاء للبرمجة والبحث</h3>
-                    <p class="feature-text" data-i18n="feature10.desc">وكلاء ذكاء اصطناعي متخصصون يعملون على مهامك البرمجية والبحثية</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💻</div>
-                    <h3 class="feature-title" data-i18n="feature11.title">كتابة الأكواد مع Codex</h3>
-                    <p class="feature-text" data-i18n="feature11.desc">مساعد برمجة متقدم لكتابة وتحسين الأكواد</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <h3 class="feature-title" data-i18n="feature12.title">تصفح الإنترنت والبحث الفوري</h3>
-                    <p class="feature-text" data-i18n="feature12.desc">الحصول على معلومات محدثة من الويب في الوقت الفعلي</p>
-                </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h4 class="feature-title" data-i18n="trust.private.title">حساب خاص وليس مشترك</h4>
+                <p class="feature-text" data-i18n="trust.private.desc">
+                    أنت لا تشتري "إيميلاً وباسورد" يدخل عليه 10 أشخاص. أنت تشتري دعوة رسمية لمساحة عمل خاصة بك وحدك
+                    (Private Workspace).
+                </p>
             </div>
 
-            <div class="glass-card p-8 text-center mt-8 max-w-2xl mx-auto">
-                <p class="text-[#10a37f] font-bold text-xl mb-2" data-i18n="features.final">🎯 كل هذا بسعر 6 دولارات فقط!</p>
-                <p class="feature-text" data-i18n="features.save">وفّر $19 شهرياً مقارنة بالسعر الرسمي</p>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h4 class="feature-title" data-i18n="trust.payment.title">الدفع بعد التفعيل</h4>
+                <p class="feature-text" data-i18n="trust.payment.desc">
+                    ثقتنا في خدمتنا تجعلنا لا نطلب منك فلساً واحداً مقدماً. أرسل إيميلك، استقبل الدعوة، فعّل حسابك وتأكد
+                    من عمل GPT-5.1، ثم ادفع.
+                </p>
             </div>
-        </section>
 
-        <!-- Trust & Privacy Section -->
-        <section class="section mobile-section">
-            <h2 class="section-title" data-i18n="trust.title">
-                🛡️ ضمان الثقة والخصوصية (عرضنا الحصري)
-            </h2>
-            <p class="hero-subtitle text-center mb-8" data-i18n="trust.subtitle">
-                نحن ندرك أن السوق مليء بالحسابات المشتركة والوهمية، لذلك نقدم لك عرضاً يكسر كل قواعد الخوف:
-            </p>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">✅</div>
-                    <h4 class="feature-title" data-i18n="trust.private.title">حساب خاص وليس مشترك</h4>
-                    <p class="feature-text" data-i18n="trust.private.desc">
-                        أنت لا تشتري "إيميلاً وباسورد" يدخل عليه 10 أشخاص. أنت تشتري دعوة رسمية لمساحة عمل خاصة بك وحدك (Private Workspace).
-                    </p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h4 class="feature-title" data-i18n="trust.payment.title">الدفع بعد التفعيل</h4>
-                    <p class="feature-text" data-i18n="trust.payment.desc">
-                        ثقتنا في خدمتنا تجعلنا لا نطلب منك فلساً واحداً مقدماً. أرسل إيميلك، استقبل الدعوة، فعّل حسابك وتأكد من عمل GPT-5.1، ثم ادفع.
-                    </p>
-                </div>
-                
-                <div class="feature-card" style="grid-column: 1 / -1;">
-                    <div class="feature-icon">🔄</div>
-                    <h4 class="feature-title" data-i18n="trust.monthly.title">نظام الاشتراك الشهري</h4>
-                    <p class="feature-text" data-i18n="trust.monthly.desc">
-                        الخدمة تعمل بنظام "الحساب الشهري" (30 يوماً كاملة). بعد انتهاء الشهر، يُغلق الحساب تلقائياً ولا يتم التجديد عليه لضمان أقصى درجات الأمان والبدء بداية نظيفة كل شهر.
-                    </p>
-                </div>
+            <div class="feature-card" style="grid-column: 1 / -1;">
+                <div class="feature-icon">🔄</div>
+                <h4 class="feature-title" data-i18n="trust.monthly.title">نظام الاشتراك الشهري</h4>
+                <p class="feature-text" data-i18n="trust.monthly.desc">
+                    الخدمة تعمل بنظام "الحساب الشهري" (30 يوماً كاملة). بعد انتهاء الشهر، يُغلق الحساب تلقائياً ولا يتم
+                    التجديد عليه لضمان أقصى درجات الأمان والبدء بداية نظيفة كل شهر.
+                </p>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- How to Get Section -->
-        <section class="section mobile-section">
-            <h2 class="section-title" data-i18n="howto.title">
-                📝 كيف تحصل على اشتراكك؟ (3 خطوات بسيطة)
-            </h2>
-            
-            <div class="feature-grid">
-                <div class="feature-card text-center">
-                    <div class="feature-icon">1️⃣</div>
-                    <h4 class="feature-title" data-i18n="howto.step1.title">الطلب</h4>
-                    <p class="feature-text" data-i18n="howto.step1.desc">
-                        تواصل معنا وأرسل بريدك الإلكتروني الشخصي الذي تريد التفعيل عليه.
-                    </p>
-                </div>
-                
-                <div class="feature-card text-center">
-                    <div class="feature-icon">2️⃣</div>
-                    <h4 class="feature-title" data-i18n="howto.step2.title">التفعيل</h4>
-                    <p class="feature-text" data-i18n="howto.step2.desc">
-                        ستصلك رسالة من OpenAI بعنوان "Join Workspace"، اضغط على قبول الدعوة.
-                    </p>
-                </div>
-                
-                <div class="feature-card text-center">
-                    <div class="feature-icon">3️⃣</div>
-                    <h4 class="feature-title" data-i18n="howto.step3.title">الاستمتاع والدفع</h4>
-                    <p class="feature-text" data-i18n="howto.step3.desc">
-                        بمجرد دخولك للوحة التحكم والتأكد من المميزات، يمكنك إتمام عملية الدفع.
-                    </p>
-                </div>
+    <!-- How to Get Section -->
+    <section class="section mobile-section">
+        <h2 class="section-title" data-i18n="howto.title">
+            📝 كيف تحصل على اشتراكك؟ (3 خطوات بسيطة)
+        </h2>
+
+        <div class="feature-grid">
+            <div class="feature-card text-center">
+                <div class="feature-icon">1️⃣</div>
+                <h4 class="feature-title" data-i18n="howto.step1.title">الطلب</h4>
+                <p class="feature-text" data-i18n="howto.step1.desc">
+                    تواصل معنا وأرسل بريدك الإلكتروني الشخصي الذي تريد التفعيل عليه.
+                </p>
             </div>
-        </section>
+
+            <div class="feature-card text-center">
+                <div class="feature-icon">2️⃣</div>
+                <h4 class="feature-title" data-i18n="howto.step2.title">التفعيل</h4>
+                <p class="feature-text" data-i18n="howto.step2.desc">
+                    ستصلك رسالة من OpenAI بعنوان "Join Workspace"، اضغط على قبول الدعوة.
+                </p>
+            </div>
+
+            <div class="feature-card text-center">
+                <div class="feature-icon">3️⃣</div>
+                <h4 class="feature-title" data-i18n="howto.step3.title">الاستمتاع والدفع</h4>
+                <p class="feature-text" data-i18n="howto.step3.desc">
+                    بمجرد دخولك للوحة التحكم والتأكد من المميزات، يمكنك إتمام عملية الدفع.
+                </p>
+            </div>
+        </div>
+    </section>
 
     <!-- Final CTA Section -->
     <section class="section mobile-section">
@@ -865,8 +908,9 @@
                 <p class="hero-subtitle mb-8" data-i18n="final.subtitle">
                     امتلك قوة GPT-5.1 اللامحدودة اليوم!
                 </p>
-                <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في ChatGPT Business" 
-                   class="cta-button" data-i18n="final.button">
+                <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في ChatGPT Business"
+                    onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Lead', {content_name: 'ChatGPT Business', value: 1200, currency: 'DZD'}); fbq('track', 'InitiateCheckout', {content_name: 'ChatGPT Business', value: 1200, currency: 'DZD'}); }"
+                    class="cta-button" data-i18n="final.button">
                     🚀 اشترك الآن
                 </a>
             </div>
@@ -880,22 +924,33 @@
 
     <!-- Payment Modals -->
     <!-- BaridiMob Modal -->
-    <div id="baridimob-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #10a37f; border-radius: 20px; padding: 40px; position: relative;">
-            <button onclick="closeBaridiMobModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #10a37f; font-size: 30px; cursor: pointer;">&times;</button>
-            
-            <h2 id="baridimob-title" style="text-align: center; color: #10a37f; font-size: 2rem; margin-bottom: 20px;">الدفع عبر BaridiMob</h2>
-            
-            <div style="background: rgba(16, 163, 127, 0.1); border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;"><strong id="baridimob-product">المنتج:</strong> ChatGPT Business (GPT-5.1)</p>
-                <p style="color: #fff;"><strong id="baridimob-price">السعر:</strong> <span id="baridimob-price-value">6 دولارات</span></p>
+    <div id="baridimob-modal" class="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div
+            style="max-width: 600px; background: #0a0a0a; border: 2px solid #10a37f; border-radius: 20px; padding: 40px; position: relative;">
+            <button onclick="closeBaridiMobModal()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #10a37f; font-size: 30px; cursor: pointer;">&times;</button>
+
+            <h2 id="baridimob-title" style="text-align: center; color: #10a37f; font-size: 2rem; margin-bottom: 20px;">
+                الدفع عبر BaridiMob</h2>
+
+            <div
+                style="background: rgba(16, 163, 127, 0.1); border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="baridimob-product">المنتج:</strong> ChatGPT
+                    Business (GPT-5.1)</p>
+                <p style="color: #fff;"><strong id="baridimob-price">السعر:</strong> <span id="baridimob-price-value">6
+                        دولارات</span></p>
             </div>
 
-            <div style="background: #111; border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p id="baridimob-rip-label" style="color: #888; margin-bottom: 10px; text-align: center;">RIP BaridiMob:</p>
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
+            <div
+                style="background: #111; border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p id="baridimob-rip-label" style="color: #888; margin-bottom: 10px; text-align: center;">RIP BaridiMob:
+                </p>
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
                     <code id="baridimob-rip" style="color: #10a37f; font-size: 1.2rem;">00799999002787548473</code>
-                    <button id="baridimob-copy" onclick="copyBaridiMobRIP()" style="background: #10a37f; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                    <button id="baridimob-copy" onclick="copyBaridiMobRIP()"
+                        style="background: #10a37f; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
                 </div>
             </div>
 
@@ -911,48 +966,69 @@
                     <li>احتفظ بإثبات الدفع</li>
                     <li>اضغط "تم الدفع" للتواصل معنا</li>
                 </ol>
-                <p id="baridimob-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!</p>
+                <p id="baridimob-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال الـ RIP بشكل صحيح!
+                </p>
             </div>
 
-            <button id="baridimob-button" onclick="confirmBaridiMobPayment()" style="width: 100%; background: #10a37f; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+            <button id="baridimob-button" onclick="confirmBaridiMobPayment()"
+                style="width: 100%; background: #10a37f; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
                 تم الدفع - تواصل معنا
             </button>
         </div>
     </div>
 
     <!-- USDT/Crypto Modal -->
-    <div id="crypto-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #10a37f; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
-            <button onclick="closeCryptoModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #10a37f; font-size: 30px; cursor: pointer;">&times;</button>
-            
-            <h2 id="crypto-title" style="text-align: center; color: #10a37f; font-size: 2rem; margin-bottom: 20px;">الدفع بالعملات الرقمية</h2>
-            
-            <div style="background: rgba(16, 163, 127, 0.1); border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> ChatGPT Business (GPT-5.1)</p>
-                <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">6 دولارات</span></p>
+    <div id="crypto-modal" class="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div
+            style="max-width: 600px; background: #0a0a0a; border: 2px solid #10a37f; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeCryptoModal()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #10a37f; font-size: 30px; cursor: pointer;">&times;</button>
+
+            <h2 id="crypto-title" style="text-align: center; color: #10a37f; font-size: 2rem; margin-bottom: 20px;">
+                الدفع بالعملات الرقمية</h2>
+
+            <div
+                style="background: rgba(16, 163, 127, 0.1); border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> ChatGPT
+                    Business (GPT-5.1)</p>
+                <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">6
+                        دولارات</span></p>
             </div>
 
             <div style="margin-bottom: 20px;">
                 <h3 id="crypto-select-network" style="color: #10a37f; margin-bottom: 15px;">اختر الشبكة:</h3>
                 <div style="display: flex; gap: 10px;">
-                    <button onclick="selectNetwork('TRC20', 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9')" style="flex: 1; background: #10a37f; color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
-                        TRC20<br><span id="crypto-fees1" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~1 USDT)</span>
+                    <button onclick="selectNetwork('TRC20', 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9')"
+                        style="flex: 1; background: #10a37f; color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                        TRC20<br><span id="crypto-fees1" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~1
+                            USDT)</span>
                     </button>
-                    <button onclick="selectNetwork('BEP20', '0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0')" style="flex: 1; background: #333; color: #fff; border: 1px solid #10a37f; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
-                        BEP20 (BSC)<br><span id="crypto-fees2" style="font-size: 0.8rem; font-weight: normal;">رسوم منخفضة (~0.5 USDT)</span>
+                    <button onclick="selectNetwork('BEP20', '0xa07c3892bd946f61ec736f52dd8ecacb8c2edec0')"
+                        style="flex: 1; background: #333; color: #fff; border: 1px solid #10a37f; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                        BEP20 (BSC)<br><span id="crypto-fees2" style="font-size: 0.8rem; font-weight: normal;">رسوم
+                            منخفضة (~0.5 USDT)</span>
                     </button>
                 </div>
             </div>
 
-            <div style="background: #111; border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p id="crypto-wallet-label" style="color: #888; margin-bottom: 10px; text-align: center;">عنوان المحفظة (<span id="selected-network">TRC20</span>):</p>
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <code id="wallet-address" style="color: #10a37f; font-size: 0.9rem; word-break: break-all;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
-                    <button id="crypto-copy" onclick="copyWalletAddress()" style="background: #10a37f; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">نسخ</button>
+            <div
+                style="background: #111; border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p id="crypto-wallet-label" style="color: #888; margin-bottom: 10px; text-align: center;">عنوان المحفظة
+                    (<span id="selected-network">TRC20</span>):</p>
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <code id="wallet-address"
+                        style="color: #10a37f; font-size: 0.9rem; word-break: break-all;">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
+                    <button id="crypto-copy" onclick="copyWalletAddress()"
+                        style="background: #10a37f; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">نسخ</button>
                 </div>
                 <div style="text-align: center;">
-                    <img id="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9" alt="QR Code" style="max-width: 200px; border-radius: 10px;">
-                    <p id="crypto-qr-text" style="color: #888; font-size: 0.85rem; margin-top: 10px;">امسح الكود بتطبيق المحفظة</p>
+                    <img id="qr-code"
+                        src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9"
+                        alt="QR Code" style="max-width: 200px; border-radius: 10px;">
+                    <p id="crypto-qr-text" style="color: #888; font-size: 0.85rem; margin-top: 10px;">امسح الكود بتطبيق
+                        المحفظة</p>
                 </div>
             </div>
 
@@ -967,32 +1043,44 @@
                     <li>احتفظ بـ Transaction ID</li>
                     <li>اضغط "تم الدفع" للتواصل معنا</li>
                 </ol>
-                <p id="crypto-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!</p>
+                <p id="crypto-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا
+                    ستفقد أموالك!</p>
             </div>
 
-            <button id="crypto-button" onclick="confirmCryptoPayment()" style="width: 100%; background: #10a37f; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+            <button id="crypto-button" onclick="confirmCryptoPayment()"
+                style="width: 100%; background: #10a37f; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
                 تم الدفع - تواصل معنا
             </button>
         </div>
     </div>
 
     <!-- RedotPay Modal -->
-    <div id="redotpay-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 600px; background: #0a0a0a; border: 2px solid #10a37f; border-radius: 20px; padding: 40px; position: relative;">
-            <button onclick="closeRedotPayModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #10a37f; font-size: 30px; cursor: pointer;">&times;</button>
-            
-            <h2 id="redotpay-title" style="text-align: center; color: #10a37f; font-size: 2rem; margin-bottom: 20px;">الدفع عبر RedotPay</h2>
-            
-            <div style="background: rgba(16, 163, 127, 0.1); border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;"><strong id="redotpay-product">المنتج:</strong> ChatGPT Business (GPT-5.1)</p>
-                <p style="color: #fff;"><strong id="redotpay-price">السعر:</strong> <span id="redotpay-price-value">6 دولارات</span></p>
+    <div id="redotpay-modal" class="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div
+            style="max-width: 600px; background: #0a0a0a; border: 2px solid #10a37f; border-radius: 20px; padding: 40px; position: relative;">
+            <button onclick="closeRedotPayModal()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #10a37f; font-size: 30px; cursor: pointer;">&times;</button>
+
+            <h2 id="redotpay-title" style="text-align: center; color: #10a37f; font-size: 2rem; margin-bottom: 20px;">
+                الدفع عبر RedotPay</h2>
+
+            <div
+                style="background: rgba(16, 163, 127, 0.1); border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <p style="color: #fff; margin-bottom: 10px;"><strong id="redotpay-product">المنتج:</strong> ChatGPT
+                    Business (GPT-5.1)</p>
+                <p style="color: #fff;"><strong id="redotpay-price">السعر:</strong> <span id="redotpay-price-value">6
+                        دولارات</span></p>
             </div>
 
-            <div style="background: #111; border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+            <div
+                style="background: #111; border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
                 <p id="redotpay-id-label" style="color: #888; margin-bottom: 10px; text-align: center;">RedotPay ID:</p>
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px;">
                     <code id="redotpay-id" style="color: #10a37f; font-size: 1.3rem;">1117632168</code>
-                    <button id="redotpay-copy" onclick="copyRedotPayID()" style="background: #10a37f; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
+                    <button id="redotpay-copy" onclick="copyRedotPayID()"
+                        style="background: #10a37f; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ</button>
                 </div>
             </div>
 
@@ -1007,10 +1095,12 @@
                     <li>احتفظ بإثبات التحويل</li>
                     <li>اضغط "تم الدفع" للتواصل معنا</li>
                 </ol>
-                <p id="redotpay-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!</p>
+                <p id="redotpay-warning" style="color: #ff6b6b; margin-top: 15px;">⚠️ تأكد من إدخال RedotPay ID بشكل
+                    صحيح!</p>
             </div>
 
-            <button id="redotpay-button" onclick="confirmRedotPayPayment()" style="width: 100%; background: #10a37f; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
+            <button id="redotpay-button" onclick="confirmRedotPayPayment()"
+                style="width: 100%; background: #10a37f; color: #fff; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px;">
                 تم الدفع - تواصل معنا
             </button>
         </div>
@@ -1019,21 +1109,24 @@
     <!-- Floating Social Buttons -->
     <div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
         <!-- WhatsApp Button -->
-        <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن ChatGPT Business" 
-           class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
-           style="box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); animation: pulse-whatsapp 2s infinite;">
+        <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن ChatGPT Business"
+            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_name: 'ChatGPT Business', content_category: 'WhatsApp'}); }"
+            class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
+            style="box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); animation: pulse-whatsapp 2s infinite;">
             <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
-                <path d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z"/>
+                <path
+                    d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z" />
             </svg>
         </a>
 
         <!-- Instagram Button -->
-        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" 
-           target="_blank"
-           class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
-           style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); animation: pulse-instagram 2s infinite;">
+        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" target="_blank"
+            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_name: 'ChatGPT Business', content_category: 'Instagram'}); }"
+            class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all"
+            style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4); animation: pulse-instagram 2s infinite;">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="white">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
             </svg>
         </a>
     </div>
@@ -1043,20 +1136,25 @@
             0% {
                 box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
             }
+
             50% {
                 box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1);
             }
+
             100% {
                 box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
             }
         }
+
         @keyframes pulse-instagram {
             0% {
                 box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
             }
+
             50% {
                 box-shadow: 0 4px 30px rgba(225, 48, 108, 0.7), 0 0 0 10px rgba(225, 48, 108, 0.1);
             }
+
             100% {
                 box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
             }
@@ -1103,6 +1201,7 @@
         // Payment Modal Functions
         function openBaridiMobModal() {
             document.getElementById('baridimob-modal').style.display = 'flex';
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'ChatGPT Business', value: 1200, currency: 'DZD', content_category: 'BaridiMob' }); }
         }
         function closeBaridiMobModal() {
             document.getElementById('baridimob-modal').style.display = 'none';
@@ -1114,10 +1213,12 @@
         }
         function confirmBaridiMobPayment() {
             window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر BaridiMob لـ ChatGPT Business', '_blank');
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'ChatGPT Business', value: 1200, currency: 'DZD', content_category: 'BaridiMob' }); }
         }
 
         function openCryptoModal() {
             document.getElementById('crypto-modal').style.display = 'flex';
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'ChatGPT Business', value: 1200, currency: 'DZD', content_category: 'Crypto' }); }
         }
         function closeCryptoModal() {
             document.getElementById('crypto-modal').style.display = 'none';
@@ -1135,10 +1236,12 @@
         }
         function confirmCryptoPayment() {
             window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر USDT لـ ChatGPT Business', '_blank');
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'ChatGPT Business', value: 1200, currency: 'DZD', content_category: 'Crypto' }); }
         }
 
         function openRedotPayModal() {
             document.getElementById('redotpay-modal').style.display = 'flex';
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'ChatGPT Business', value: 1200, currency: 'DZD', content_category: 'RedotPay' }); }
         }
         function closeRedotPayModal() {
             document.getElementById('redotpay-modal').style.display = 'none';
@@ -1150,10 +1253,11 @@
         }
         function confirmRedotPayPayment() {
             window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر RedotPay لـ ChatGPT Business', '_blank');
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'ChatGPT Business', value: 1200, currency: 'DZD', content_category: 'RedotPay' }); }
         }
 
         // Add click events to payment buttons
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const paymentButtons = document.querySelectorAll('.flex.flex-col.items-center.gap-2');
             if (paymentButtons.length >= 3) {
                 paymentButtons[0].addEventListener('click', openRedotPayModal);
@@ -1165,16 +1269,19 @@
 
     <!-- Image Modal for Reviews -->
     <div id="image-modal" class="modal" style="display: none;">
-        <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 0; background: transparent; border: none;">
-            <span class="close-btn" onclick="closeImageModal()" style="position: absolute; top: 20px; right: 20px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; background: rgba(0,0,0,0.7); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</span>
-            <img id="modal-image" src="" alt="Review Image" style="max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 10px; box-shadow: 0 0 50px rgba(16, 163, 127, 0.5);">
+        <div class="modal-content"
+            style="max-width: 90vw; max-height: 90vh; padding: 0; background: transparent; border: none;">
+            <span class="close-btn" onclick="closeImageModal()"
+                style="position: absolute; top: 20px; right: 20px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; background: rgba(0,0,0,0.7); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</span>
+            <img id="modal-image" src="" alt="Review Image"
+                style="max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 10px; box-shadow: 0 0 50px rgba(16, 163, 127, 0.5);">
         </div>
     </div>
 
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function(){
+        (function () {
             emailjs.init({
                 publicKey: "lNwV3VedQul6wNWTq",
             });
@@ -1205,597 +1312,599 @@
         // Make Firebase available globally
         window.db = db;
         window.firebaseModules = { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy };
-        
+
         // Trigger reviews loading after Firebase is ready
         window.dispatchEvent(new Event('firebaseReady'));
     </script>
 
 </body>
+
 </html>
 
 
-    <script>
-        // Translation System
-        const translations = {
-            ar: {
-                'nav.home': '← الرئيسية',
-                'hero.title': 'ChatGPT Business (GPT-5.1)',
-                'hero.subtitle': 'مساحة عمل خاصة بأمان تام ورسائل غير محدودة',
-                'hero.price': 'فقط بـ 6 دولارات',
-                'payment.title': 'طرق الدفع المتاحة',
-                'cta.button': 'اطلب الآن عبر WhatsApp',
-                'desc.title': 'ارتقِ بإنتاجيتك إلى مستوى الشركات الكبرى',
-                'desc.subtitle': 'لا تدفع شيئاً حتى تستلم حسابك وتجربه بنفسك.',
-                'desc.text': 'هل ما زلت تعتمد على النسخة المجانية المحدودة أو اشتراك Plus الذي يشاركك فيه الملايين؟ حان الوقت لتمتلك مساحة عمل احترافية (Workspace) خاصة بك، مدعومة بأقوى نموذج ذكاء اصطناعي في العالم',
-                'desc.text2': '، مع ضمان الخصوصية الكاملة لبياناتك.',
-                'comp.title': '📊 لماذا يجب أن تنتقل إلى ChatGPT Business الآن؟',
-                'comp.subtitle': 'من خلال تحليلنا للخطط المتوفرة، إليك الفروقات الجوهرية التي تجعل اشتراك Business هو الخيار الوحيد للمحترفين:',
-                'comp.free.title': 'الخطة المجانية',
-                'comp.free.subtitle': '"مجرد تجربة"',
-                'comp.free.item1': '❌ ذاكرة ضعيفة وسياق محدود',
-                'comp.free.item2': '❌ للإجابات السريعة فقط',
-                'comp.free.item3': '❌ لا يصلح للأعمال الجادة',
-                'comp.plus.title': 'خطة Plus',
-                'comp.plus.price': '20$/شهرياً',
-                'comp.plus.item1': '✅ Sora و Codex',
-                'comp.plus.item2': '⚠️ محدودة بعدد رسائل معين',
-                'comp.plus.item3': '⚠️ بياناتك قد تُستخدم للتدريب',
-                'comp.business.title': 'خطة Business',
-                'comp.business.price': '6$/شهرياً',
-                'comp.business.badge': 'الأفضل 🚀',
-                'comp.business.item1': '✅ رسائل غير محدودة مع GPT-5.1',
-                'comp.business.item2': '✅ خصوصية تامة - لا تدريب على بياناتك',
-                'comp.business.item3': '✅ تحليلات احترافية',
-                'comp.business.item4': '✅ وكلاء ومساعدين متطورين',
-                'features.title': '✨ كل ما تحصل عليه مع خطة Business',
-                'features.price.official': 'السعر الرسمي',
-                'features.price.official.value': '$25/شهر',
-                'features.price.our': 'سعرنا',
-                'features.price.only': '6$ فقط!',
-                'feature1.title': 'تحليلات احترافية',
-                'feature1.desc': 'قم بإجراء تحليلات متقدمة للبيانات وإنشاء رسوم بيانية وعروض تقديمية',
-                'feature2.title': 'رسائل غير محدودة مع GPT-5',
-                'feature2.desc': 'استخدم GPT-5 بدون حدود - لا توقف، لا قيود يومية',
-                'feature3.title': 'إنشاء صور وفيديوهات وعروض تقديمية',
-                'feature3.desc': 'DALL-E 3 لإنشاء الصور، Sora للفيديوهات، وأدوات إنشاء العروض',
-                'feature4.title': 'أمان بمستوى المؤسسات (SSO, MFA)',
-                'feature4.desc': 'حماية متقدمة مع تسجيل دخول موحد ومصادقة ثنائية',
-                'feature5.title': 'حماية بياناتك - لا تُستخدم للتدريب',
-                'feature5.desc': 'بياناتك وأكوادك وملفاتك محمية تماماً ولن تُستخدم لتدريب النماذج',
-                'feature6.title': 'مشاركة المشاريع والـ GPTs المخصصة',
-                'feature6.desc': 'شارك مشاريعك ونماذج GPT المخصصة مع فريقك',
-                'feature7.title': 'تكامل مع SharePoint وأدوات أخرى',
-                'feature7.desc': 'اربط ChatGPT مع أدوات عملك المفضلة',
-                'feature8.title': 'إدارة الفواتير والمستخدمين',
-                'feature8.desc': 'لوحة تحكم شاملة لإدارة الحسابات والفواتير',
-                'feature9.title': 'ملاحظات الاجتماعات مع النسخ',
-                'feature9.desc': 'تحويل الاجتماعات إلى نصوص وملاحظات منظمة تلقائياً',
-                'feature10.title': 'نشر وكلاء للبرمجة والبحث',
-                'feature10.desc': 'وكلاء ذكاء اصطناعي متخصصون يعملون على مهامك البرمجية والبحثية',
-                'feature11.title': 'كتابة الأكواد مع Codex',
-                'feature11.desc': 'مساعد برمجة متقدم لكتابة وتحسين الأكواد',
-                'feature12.title': 'تصفح الإنترنت والبحث الفوري',
-                'feature12.desc': 'الحصول على معلومات محدثة من الويب في الوقت الفعلي',
-                'features.final': '🎯 كل هذا بسعر 6 دولارات فقط!',
-                'features.save': 'وفّر $19 شهرياً مقارنة بالسعر الرسمي',
-                'footer.text': '© 2024 ChatGPT Business. جميع الحقوق محفوظة.',
-                'trust.title': '🛡️ ضمان الثقة والخصوصية (عرضنا الحصري)',
-                'trust.subtitle': 'نحن ندرك أن السوق مليء بالحسابات المشتركة والوهمية، لذلك نقدم لك عرضاً يكسر كل قواعد الخوف:',
-                'trust.private.title': '✅ حساب خاص وليس مشترك',
-                'trust.private.desc': 'أنت لا تشتري "إيميلاً وباسورد" يدخل عليه 10 أشخاص. أنت تشتري دعوة رسمية لمساحة عمل خاصة بك وحدك (Private Workspace).',
-                'trust.payment.title': '💰 الدفع بعد التفعيل',
-                'trust.payment.desc': 'ثقتنا في خدمتنا تجعلنا لا نطلب منك فلساً واحداً مقدماً. أرسل إيميلك، استقبل الدعوة، فعّل حسابك وتأكد من عمل GPT-5.1، ثم ادفع.',
-                'trust.monthly.title': '🔄 نظام الاشتراك الشهري',
-                'trust.monthly.desc': 'الخدمة تعمل بنظام "الحساب الشهري" (30 يوماً كاملة). بعد انتهاء الشهر، يُغلق الحساب تلقائياً ولا يتم التجديد عليه لضمان أقصى درجات الأمان والبدء بداية نظيفة كل شهر.',
-                'howto.title': '📝 كيف تحصل على اشتراكك؟ (3 خطوات بسيطة)',
-                'howto.step1.title': 'الطلب',
-                'howto.step1.desc': 'تواصل معنا وأرسل بريدك الإلكتروني الشخصي الذي تريد التفعيل عليه.',
-                'howto.step2.title': 'التفعيل',
-                'howto.step2.desc': 'ستصلك رسالة من OpenAI بعنوان "Join Workspace"، اضغط على قبول الدعوة.',
-                'howto.step3.title': 'الاستمتاع والدفع',
-                'howto.step3.desc': 'بمجرد دخولك للوحة التحكم والتأكد من المميزات، يمكنك إتمام عملية الدفع.',
-                'final.title': '⚠️ لا تضيع وقتك مع القيود',
-                'final.subtitle': 'امتلك قوة GPT-5.1 اللامحدودة اليوم!',
-                'final.button': '🚀 اشترك الآن'
-            },
-            en: {
-                'nav.home': '← Home',
-                'hero.title': 'ChatGPT Business (GPT-5.1)',
-                'hero.subtitle': 'Private workspace with complete security and unlimited messages',
-                'hero.price': 'Only $6',
-                'payment.title': 'Available Payment Methods',
-                'cta.button': 'Order Now via WhatsApp',
-                'desc.title': 'Elevate Your Productivity to Enterprise Level',
-                'desc.subtitle': 'Don\'t pay anything until you receive and test your account.',
-                'desc.text': 'Are you still relying on the limited free version or the Plus subscription shared by millions? It\'s time to own a professional Workspace of your own, powered by the world\'s most powerful AI model',
-                'desc.text2': ', with complete privacy guarantee for your data.',
-                'comp.title': '📊 Why Should You Switch to ChatGPT Business Now?',
-                'comp.subtitle': 'Through our analysis of available plans, here are the fundamental differences that make Business subscription the only choice for professionals:',
-                'comp.free.title': 'Free Plan',
-                'comp.free.subtitle': '"Just a trial"',
-                'comp.free.item1': '❌ Weak memory and limited context',
-                'comp.free.item2': '❌ For quick answers only',
-                'comp.free.item3': '❌ Not suitable for serious work',
-                'comp.plus.title': 'Plus Plan',
-                'comp.plus.price': '$20/month',
-                'comp.plus.item1': '✅ Sora and Codex',
-                'comp.plus.item2': '⚠️ Limited by message count',
-                'comp.plus.item3': '⚠️ Your data may be used for training',
-                'comp.business.title': 'Business Plan',
-                'comp.business.price': '$6/month',
-                'comp.business.badge': 'Best 🚀',
-                'comp.business.item1': '✅ Unlimited messages with GPT-5.1',
-                'comp.business.item2': '✅ Complete privacy - no training on your data',
-                'comp.business.item3': '✅ Professional analytics',
-                'comp.business.item4': '✅ Advanced agents and assistants',
-                'features.title': '✨ Everything You Get with Business Plan',
-                'features.price.official': 'Official Price',
-                'features.price.official.value': '$25/month',
-                'features.price.our': 'Our Price',
-                'features.price.only': 'Only $6!',
-                'feature1.title': 'Professional Analytics',
-                'feature1.desc': 'Perform advanced data analysis and create charts and presentations',
-                'feature2.title': 'Unlimited Messages with GPT-5',
-                'feature2.desc': 'Use GPT-5 without limits - no stops, no daily restrictions',
-                'feature3.title': 'Create Images, Videos, and Presentations',
-                'feature3.desc': 'DALL-E 3 for images, Sora for videos, and presentation tools',
-                'feature4.title': 'Enterprise-Level Security (SSO, MFA)',
-                'feature4.desc': 'Advanced protection with single sign-on and two-factor authentication',
-                'feature5.title': 'Data Protection - Not Used for Training',
-                'feature5.desc': 'Your data, code, and files are fully protected and won\'t be used to train models',
-                'feature6.title': 'Share Projects and Custom GPTs',
-                'feature6.desc': 'Share your projects and custom GPT models with your team',
-                'feature7.title': 'Integration with SharePoint and Other Tools',
-                'feature7.desc': 'Connect ChatGPT with your favorite work tools',
-                'feature8.title': 'Billing and User Management',
-                'feature8.desc': 'Comprehensive dashboard for managing accounts and billing',
-                'feature9.title': 'Meeting Notes with Transcription',
-                'feature9.desc': 'Automatically convert meetings into organized text and notes',
-                'feature10.title': 'Deploy Agents for Coding and Research',
-                'feature10.desc': 'Specialized AI agents working on your coding and research tasks',
-                'feature11.title': 'Code Writing with Codex',
-                'feature11.desc': 'Advanced programming assistant for writing and improving code',
-                'feature12.title': 'Web Browsing and Real-time Search',
-                'feature12.desc': 'Get updated information from the web in real-time',
-                'features.final': '🎯 All this for only $6!',
-                'features.save': 'Save $19 monthly compared to official price',
-                'footer.text': '© 2024 ChatGPT Business. All rights reserved.',
-                'trust.title': '🛡️ Trust & Privacy Guarantee (Our Exclusive Offer)',
-                'trust.subtitle': 'We know the market is full of shared and fake accounts, so we offer you a deal that breaks all fear rules:',
-                'trust.private.title': '✅ Private Account, Not Shared',
-                'trust.private.desc': 'You\'re not buying an "email and password" that 10 people access. You\'re buying an official invitation to your own private workspace.',
-                'trust.payment.title': '💰 Pay After Activation',
-                'trust.payment.desc': 'Our confidence in our service means we don\'t ask for a penny upfront. Send your email, receive the invitation, activate your account and verify GPT-5.1 works, then pay.',
-                'trust.monthly.title': '🔄 Monthly Subscription System',
-                'trust.monthly.desc': 'The service works on a "monthly account" system (full 30 days). After the month ends, the account closes automatically with no renewal to ensure maximum security and a fresh start each month.',
-                'howto.title': '📝 How to Get Your Subscription? (3 Simple Steps)',
-                'howto.step1.title': 'Order',
-                'howto.step1.desc': 'Contact us and send your personal email address that you want to activate on.',
-                'howto.step2.title': 'Activation',
-                'howto.step2.desc': 'You\'ll receive a message from OpenAI titled "Join Workspace", click to accept the invitation.',
-                'howto.step3.title': 'Enjoy and Pay',
-                'howto.step3.desc': 'Once you enter the dashboard and verify the features, you can complete the payment process.',
-                'final.title': '⚠️ Don\'t Waste Time with Limitations',
-                'final.subtitle': 'Own the Unlimited Power of GPT-5.1 Today!',
-                'final.button': '🚀 Subscribe Now'
-            },
-            fr: {
-                'nav.home': '← Accueil',
-                'hero.title': 'ChatGPT Business (GPT-5.1)',
-                'hero.subtitle': 'Espace de travail privé avec sécurité totale et messages illimités',
-                'hero.price': 'Seulement 6$',
-                'payment.title': 'Méthodes de paiement disponibles',
-                'cta.button': 'Commander maintenant via WhatsApp',
-                'desc.title': 'Élevez votre productivité au niveau des grandes entreprises',
-                'desc.subtitle': 'Ne payez rien avant de recevoir et tester votre compte.',
-                'desc.text': 'Comptez-vous toujours sur la version gratuite limitée ou l\'abonnement Plus partagé par des millions? Il est temps de posséder un Workspace professionnel qui vous est propre, alimenté par le modèle d\'IA le plus puissant au monde',
-                'desc.text2': ', avec une garantie de confidentialité complète pour vos données.',
-                'comp.title': '📊 Pourquoi devriez-vous passer à ChatGPT Business maintenant?',
-                'comp.subtitle': 'Grâce à notre analyse des plans disponibles, voici les différences fondamentales qui font de l\'abonnement Business le seul choix pour les professionnels:',
-                'comp.free.title': 'Plan Gratuit',
-                'comp.free.subtitle': '"Juste un essai"',
-                'comp.free.item1': '❌ Mémoire faible et contexte limité',
-                'comp.free.item2': '❌ Pour réponses rapides seulement',
-                'comp.free.item3': '❌ Ne convient pas au travail sérieux',
-                'comp.plus.title': 'Plan Plus',
-                'comp.plus.price': '20$/mois',
-                'comp.plus.item1': '✅ Sora et Codex',
-                'comp.plus.item2': '⚠️ Limité par nombre de messages',
-                'comp.plus.item3': '⚠️ Vos données peuvent être utilisées pour l\'entraînement',
-                'comp.business.title': 'Plan Business',
-                'comp.business.price': '6$/mois',
-                'comp.business.badge': 'Meilleur 🚀',
-                'comp.business.item1': '✅ Messages illimités avec GPT-5.1',
-                'comp.business.item2': '✅ Confidentialité totale - pas d\'entraînement sur vos données',
-                'comp.business.item3': '✅ Analyses professionnelles',
-                'comp.business.item4': '✅ Agents et assistants avancés',
-                'features.title': '✨ Tout ce que vous obtenez avec le plan Business',
-                'features.price.official': 'Prix officiel',
-                'features.price.official.value': '25$/mois',
-                'features.price.our': 'Notre prix',
-                'features.price.only': 'Seulement 6$!',
-                'feature1.title': 'Analyses professionnelles',
-                'feature1.desc': 'Effectuez des analyses de données avancées et créez des graphiques et présentations',
-                'feature2.title': 'Messages illimités avec GPT-5',
-                'feature2.desc': 'Utilisez GPT-5 sans limites - pas d\'arrêts, pas de restrictions quotidiennes',
-                'feature3.title': 'Créer des images, vidéos et présentations',
-                'feature3.desc': 'DALL-E 3 pour les images, Sora pour les vidéos, et outils de présentation',
-                'feature4.title': 'Sécurité de niveau entreprise (SSO, MFA)',
-                'feature4.desc': 'Protection avancée avec authentification unique et à deux facteurs',
-                'feature5.title': 'Protection des données - Non utilisées pour l\'entraînement',
-                'feature5.desc': 'Vos données, code et fichiers sont entièrement protégés et ne seront pas utilisés pour entraîner les modèles',
-                'feature6.title': 'Partager des projets et GPTs personnalisés',
-                'feature6.desc': 'Partagez vos projets et modèles GPT personnalisés avec votre équipe',
-                'feature7.title': 'Intégration avec SharePoint et autres outils',
-                'feature7.desc': 'Connectez ChatGPT avec vos outils de travail préférés',
-                'feature8.title': 'Gestion de facturation et des utilisateurs',
-                'feature8.desc': 'Tableau de bord complet pour gérer les comptes et la facturation',
-                'feature9.title': 'Notes de réunion avec transcription',
-                'feature9.desc': 'Convertir automatiquement les réunions en textes et notes organisés',
-                'feature10.title': 'Déployer des agents pour le codage et la recherche',
-                'feature10.desc': 'Agents IA spécialisés travaillant sur vos tâches de codage et de recherche',
-                'feature11.title': 'Écriture de code avec Codex',
-                'feature11.desc': 'Assistant de programmation avancé pour écrire et améliorer le code',
-                'feature12.title': 'Navigation Web et recherche en temps réel',
-                'feature12.desc': 'Obtenez des informations mises à jour du web en temps réel',
-                'features.final': '🎯 Tout cela pour seulement 6$!',
-                'features.save': 'Économisez 19$ par mois par rapport au prix officiel',
-                'footer.text': '© 2024 ChatGPT Business. Tous droits réservés.',
-                'trust.title': '🛡️ Garantie de confiance et de confidentialité (Notre offre exclusive)',
-                'trust.subtitle': 'Nous savons que le marché est plein de comptes partagés et faux, nous vous offrons donc une offre qui brise toutes les règles de peur:',
-                'trust.private.title': '✅ Compte privé, non partagé',
-                'trust.private.desc': 'Vous n\'achetez pas un "email et mot de passe" auquel 10 personnes accèdent. Vous achetez une invitation officielle à votre propre espace de travail privé.',
-                'trust.payment.title': '💰 Payer après activation',
-                'trust.payment.desc': 'Notre confiance dans notre service signifie que nous ne demandons pas un centime d\'avance. Envoyez votre email, recevez l\'invitation, activez votre compte et vérifiez que GPT-5.1 fonctionne, puis payez.',
-                'trust.monthly.title': '🔄 Système d\'abonnement mensuel',
-                'trust.monthly.desc': 'Le service fonctionne sur un système de "compte mensuel" (30 jours complets). Après la fin du mois, le compte se ferme automatiquement sans renouvellement pour garantir une sécurité maximale et un nouveau départ chaque mois.',
-                'howto.title': '📝 Comment obtenir votre abonnement? (3 étapes simples)',
-                'howto.step1.title': 'Commande',
-                'howto.step1.desc': 'Contactez-nous et envoyez votre adresse email personnelle sur laquelle vous souhaitez activer.',
-                'howto.step2.title': 'Activation',
-                'howto.step2.desc': 'Vous recevrez un message d\'OpenAI intitulé "Join Workspace", cliquez pour accepter l\'invitation.',
-                'howto.step3.title': 'Profiter et payer',
-                'howto.step3.desc': 'Une fois que vous entrez dans le tableau de bord et vérifiez les fonctionnalités, vous pouvez compléter le processus de paiement.',
-                'final.title': '⚠️ Ne perdez pas de temps avec les limitations',
-                'final.subtitle': 'Possédez la puissance illimitée de GPT-5.1 aujourd\'hui!',
-                'final.button': '🚀 S\'abonner maintenant'
-            }
-        };
+<script>
+    // Translation System
+    const translations = {
+        ar: {
+            'nav.home': '← الرئيسية',
+            'hero.title': 'ChatGPT Business (GPT-5.1)',
+            'hero.subtitle': 'مساحة عمل خاصة بأمان تام ورسائل غير محدودة',
+            'hero.price': 'فقط بـ 6 دولارات',
+            'payment.title': 'طرق الدفع المتاحة',
+            'cta.button': 'اطلب الآن عبر WhatsApp',
+            'desc.title': 'ارتقِ بإنتاجيتك إلى مستوى الشركات الكبرى',
+            'desc.subtitle': 'لا تدفع شيئاً حتى تستلم حسابك وتجربه بنفسك.',
+            'desc.text': 'هل ما زلت تعتمد على النسخة المجانية المحدودة أو اشتراك Plus الذي يشاركك فيه الملايين؟ حان الوقت لتمتلك مساحة عمل احترافية (Workspace) خاصة بك، مدعومة بأقوى نموذج ذكاء اصطناعي في العالم',
+            'desc.text2': '، مع ضمان الخصوصية الكاملة لبياناتك.',
+            'comp.title': '📊 لماذا يجب أن تنتقل إلى ChatGPT Business الآن؟',
+            'comp.subtitle': 'من خلال تحليلنا للخطط المتوفرة، إليك الفروقات الجوهرية التي تجعل اشتراك Business هو الخيار الوحيد للمحترفين:',
+            'comp.free.title': 'الخطة المجانية',
+            'comp.free.subtitle': '"مجرد تجربة"',
+            'comp.free.item1': '❌ ذاكرة ضعيفة وسياق محدود',
+            'comp.free.item2': '❌ للإجابات السريعة فقط',
+            'comp.free.item3': '❌ لا يصلح للأعمال الجادة',
+            'comp.plus.title': 'خطة Plus',
+            'comp.plus.price': '20$/شهرياً',
+            'comp.plus.item1': '✅ Sora و Codex',
+            'comp.plus.item2': '⚠️ محدودة بعدد رسائل معين',
+            'comp.plus.item3': '⚠️ بياناتك قد تُستخدم للتدريب',
+            'comp.business.title': 'خطة Business',
+            'comp.business.price': '6$/شهرياً',
+            'comp.business.badge': 'الأفضل 🚀',
+            'comp.business.item1': '✅ رسائل غير محدودة مع GPT-5.1',
+            'comp.business.item2': '✅ خصوصية تامة - لا تدريب على بياناتك',
+            'comp.business.item3': '✅ تحليلات احترافية',
+            'comp.business.item4': '✅ وكلاء ومساعدين متطورين',
+            'features.title': '✨ كل ما تحصل عليه مع خطة Business',
+            'features.price.official': 'السعر الرسمي',
+            'features.price.official.value': '$25/شهر',
+            'features.price.our': 'سعرنا',
+            'features.price.only': '6$ فقط!',
+            'feature1.title': 'تحليلات احترافية',
+            'feature1.desc': 'قم بإجراء تحليلات متقدمة للبيانات وإنشاء رسوم بيانية وعروض تقديمية',
+            'feature2.title': 'رسائل غير محدودة مع GPT-5',
+            'feature2.desc': 'استخدم GPT-5 بدون حدود - لا توقف، لا قيود يومية',
+            'feature3.title': 'إنشاء صور وفيديوهات وعروض تقديمية',
+            'feature3.desc': 'DALL-E 3 لإنشاء الصور، Sora للفيديوهات، وأدوات إنشاء العروض',
+            'feature4.title': 'أمان بمستوى المؤسسات (SSO, MFA)',
+            'feature4.desc': 'حماية متقدمة مع تسجيل دخول موحد ومصادقة ثنائية',
+            'feature5.title': 'حماية بياناتك - لا تُستخدم للتدريب',
+            'feature5.desc': 'بياناتك وأكوادك وملفاتك محمية تماماً ولن تُستخدم لتدريب النماذج',
+            'feature6.title': 'مشاركة المشاريع والـ GPTs المخصصة',
+            'feature6.desc': 'شارك مشاريعك ونماذج GPT المخصصة مع فريقك',
+            'feature7.title': 'تكامل مع SharePoint وأدوات أخرى',
+            'feature7.desc': 'اربط ChatGPT مع أدوات عملك المفضلة',
+            'feature8.title': 'إدارة الفواتير والمستخدمين',
+            'feature8.desc': 'لوحة تحكم شاملة لإدارة الحسابات والفواتير',
+            'feature9.title': 'ملاحظات الاجتماعات مع النسخ',
+            'feature9.desc': 'تحويل الاجتماعات إلى نصوص وملاحظات منظمة تلقائياً',
+            'feature10.title': 'نشر وكلاء للبرمجة والبحث',
+            'feature10.desc': 'وكلاء ذكاء اصطناعي متخصصون يعملون على مهامك البرمجية والبحثية',
+            'feature11.title': 'كتابة الأكواد مع Codex',
+            'feature11.desc': 'مساعد برمجة متقدم لكتابة وتحسين الأكواد',
+            'feature12.title': 'تصفح الإنترنت والبحث الفوري',
+            'feature12.desc': 'الحصول على معلومات محدثة من الويب في الوقت الفعلي',
+            'features.final': '🎯 كل هذا بسعر 6 دولارات فقط!',
+            'features.save': 'وفّر $19 شهرياً مقارنة بالسعر الرسمي',
+            'footer.text': '© 2024 ChatGPT Business. جميع الحقوق محفوظة.',
+            'trust.title': '🛡️ ضمان الثقة والخصوصية (عرضنا الحصري)',
+            'trust.subtitle': 'نحن ندرك أن السوق مليء بالحسابات المشتركة والوهمية، لذلك نقدم لك عرضاً يكسر كل قواعد الخوف:',
+            'trust.private.title': '✅ حساب خاص وليس مشترك',
+            'trust.private.desc': 'أنت لا تشتري "إيميلاً وباسورد" يدخل عليه 10 أشخاص. أنت تشتري دعوة رسمية لمساحة عمل خاصة بك وحدك (Private Workspace).',
+            'trust.payment.title': '💰 الدفع بعد التفعيل',
+            'trust.payment.desc': 'ثقتنا في خدمتنا تجعلنا لا نطلب منك فلساً واحداً مقدماً. أرسل إيميلك، استقبل الدعوة، فعّل حسابك وتأكد من عمل GPT-5.1، ثم ادفع.',
+            'trust.monthly.title': '🔄 نظام الاشتراك الشهري',
+            'trust.monthly.desc': 'الخدمة تعمل بنظام "الحساب الشهري" (30 يوماً كاملة). بعد انتهاء الشهر، يُغلق الحساب تلقائياً ولا يتم التجديد عليه لضمان أقصى درجات الأمان والبدء بداية نظيفة كل شهر.',
+            'howto.title': '📝 كيف تحصل على اشتراكك؟ (3 خطوات بسيطة)',
+            'howto.step1.title': 'الطلب',
+            'howto.step1.desc': 'تواصل معنا وأرسل بريدك الإلكتروني الشخصي الذي تريد التفعيل عليه.',
+            'howto.step2.title': 'التفعيل',
+            'howto.step2.desc': 'ستصلك رسالة من OpenAI بعنوان "Join Workspace"، اضغط على قبول الدعوة.',
+            'howto.step3.title': 'الاستمتاع والدفع',
+            'howto.step3.desc': 'بمجرد دخولك للوحة التحكم والتأكد من المميزات، يمكنك إتمام عملية الدفع.',
+            'final.title': '⚠️ لا تضيع وقتك مع القيود',
+            'final.subtitle': 'امتلك قوة GPT-5.1 اللامحدودة اليوم!',
+            'final.button': '🚀 اشترك الآن'
+        },
+        en: {
+            'nav.home': '← Home',
+            'hero.title': 'ChatGPT Business (GPT-5.1)',
+            'hero.subtitle': 'Private workspace with complete security and unlimited messages',
+            'hero.price': 'Only $6',
+            'payment.title': 'Available Payment Methods',
+            'cta.button': 'Order Now via WhatsApp',
+            'desc.title': 'Elevate Your Productivity to Enterprise Level',
+            'desc.subtitle': 'Don\'t pay anything until you receive and test your account.',
+            'desc.text': 'Are you still relying on the limited free version or the Plus subscription shared by millions? It\'s time to own a professional Workspace of your own, powered by the world\'s most powerful AI model',
+            'desc.text2': ', with complete privacy guarantee for your data.',
+            'comp.title': '📊 Why Should You Switch to ChatGPT Business Now?',
+            'comp.subtitle': 'Through our analysis of available plans, here are the fundamental differences that make Business subscription the only choice for professionals:',
+            'comp.free.title': 'Free Plan',
+            'comp.free.subtitle': '"Just a trial"',
+            'comp.free.item1': '❌ Weak memory and limited context',
+            'comp.free.item2': '❌ For quick answers only',
+            'comp.free.item3': '❌ Not suitable for serious work',
+            'comp.plus.title': 'Plus Plan',
+            'comp.plus.price': '$20/month',
+            'comp.plus.item1': '✅ Sora and Codex',
+            'comp.plus.item2': '⚠️ Limited by message count',
+            'comp.plus.item3': '⚠️ Your data may be used for training',
+            'comp.business.title': 'Business Plan',
+            'comp.business.price': '$6/month',
+            'comp.business.badge': 'Best 🚀',
+            'comp.business.item1': '✅ Unlimited messages with GPT-5.1',
+            'comp.business.item2': '✅ Complete privacy - no training on your data',
+            'comp.business.item3': '✅ Professional analytics',
+            'comp.business.item4': '✅ Advanced agents and assistants',
+            'features.title': '✨ Everything You Get with Business Plan',
+            'features.price.official': 'Official Price',
+            'features.price.official.value': '$25/month',
+            'features.price.our': 'Our Price',
+            'features.price.only': 'Only $6!',
+            'feature1.title': 'Professional Analytics',
+            'feature1.desc': 'Perform advanced data analysis and create charts and presentations',
+            'feature2.title': 'Unlimited Messages with GPT-5',
+            'feature2.desc': 'Use GPT-5 without limits - no stops, no daily restrictions',
+            'feature3.title': 'Create Images, Videos, and Presentations',
+            'feature3.desc': 'DALL-E 3 for images, Sora for videos, and presentation tools',
+            'feature4.title': 'Enterprise-Level Security (SSO, MFA)',
+            'feature4.desc': 'Advanced protection with single sign-on and two-factor authentication',
+            'feature5.title': 'Data Protection - Not Used for Training',
+            'feature5.desc': 'Your data, code, and files are fully protected and won\'t be used to train models',
+            'feature6.title': 'Share Projects and Custom GPTs',
+            'feature6.desc': 'Share your projects and custom GPT models with your team',
+            'feature7.title': 'Integration with SharePoint and Other Tools',
+            'feature7.desc': 'Connect ChatGPT with your favorite work tools',
+            'feature8.title': 'Billing and User Management',
+            'feature8.desc': 'Comprehensive dashboard for managing accounts and billing',
+            'feature9.title': 'Meeting Notes with Transcription',
+            'feature9.desc': 'Automatically convert meetings into organized text and notes',
+            'feature10.title': 'Deploy Agents for Coding and Research',
+            'feature10.desc': 'Specialized AI agents working on your coding and research tasks',
+            'feature11.title': 'Code Writing with Codex',
+            'feature11.desc': 'Advanced programming assistant for writing and improving code',
+            'feature12.title': 'Web Browsing and Real-time Search',
+            'feature12.desc': 'Get updated information from the web in real-time',
+            'features.final': '🎯 All this for only $6!',
+            'features.save': 'Save $19 monthly compared to official price',
+            'footer.text': '© 2024 ChatGPT Business. All rights reserved.',
+            'trust.title': '🛡️ Trust & Privacy Guarantee (Our Exclusive Offer)',
+            'trust.subtitle': 'We know the market is full of shared and fake accounts, so we offer you a deal that breaks all fear rules:',
+            'trust.private.title': '✅ Private Account, Not Shared',
+            'trust.private.desc': 'You\'re not buying an "email and password" that 10 people access. You\'re buying an official invitation to your own private workspace.',
+            'trust.payment.title': '💰 Pay After Activation',
+            'trust.payment.desc': 'Our confidence in our service means we don\'t ask for a penny upfront. Send your email, receive the invitation, activate your account and verify GPT-5.1 works, then pay.',
+            'trust.monthly.title': '🔄 Monthly Subscription System',
+            'trust.monthly.desc': 'The service works on a "monthly account" system (full 30 days). After the month ends, the account closes automatically with no renewal to ensure maximum security and a fresh start each month.',
+            'howto.title': '📝 How to Get Your Subscription? (3 Simple Steps)',
+            'howto.step1.title': 'Order',
+            'howto.step1.desc': 'Contact us and send your personal email address that you want to activate on.',
+            'howto.step2.title': 'Activation',
+            'howto.step2.desc': 'You\'ll receive a message from OpenAI titled "Join Workspace", click to accept the invitation.',
+            'howto.step3.title': 'Enjoy and Pay',
+            'howto.step3.desc': 'Once you enter the dashboard and verify the features, you can complete the payment process.',
+            'final.title': '⚠️ Don\'t Waste Time with Limitations',
+            'final.subtitle': 'Own the Unlimited Power of GPT-5.1 Today!',
+            'final.button': '🚀 Subscribe Now'
+        },
+        fr: {
+            'nav.home': '← Accueil',
+            'hero.title': 'ChatGPT Business (GPT-5.1)',
+            'hero.subtitle': 'Espace de travail privé avec sécurité totale et messages illimités',
+            'hero.price': 'Seulement 6$',
+            'payment.title': 'Méthodes de paiement disponibles',
+            'cta.button': 'Commander maintenant via WhatsApp',
+            'desc.title': 'Élevez votre productivité au niveau des grandes entreprises',
+            'desc.subtitle': 'Ne payez rien avant de recevoir et tester votre compte.',
+            'desc.text': 'Comptez-vous toujours sur la version gratuite limitée ou l\'abonnement Plus partagé par des millions? Il est temps de posséder un Workspace professionnel qui vous est propre, alimenté par le modèle d\'IA le plus puissant au monde',
+            'desc.text2': ', avec une garantie de confidentialité complète pour vos données.',
+            'comp.title': '📊 Pourquoi devriez-vous passer à ChatGPT Business maintenant?',
+            'comp.subtitle': 'Grâce à notre analyse des plans disponibles, voici les différences fondamentales qui font de l\'abonnement Business le seul choix pour les professionnels:',
+            'comp.free.title': 'Plan Gratuit',
+            'comp.free.subtitle': '"Juste un essai"',
+            'comp.free.item1': '❌ Mémoire faible et contexte limité',
+            'comp.free.item2': '❌ Pour réponses rapides seulement',
+            'comp.free.item3': '❌ Ne convient pas au travail sérieux',
+            'comp.plus.title': 'Plan Plus',
+            'comp.plus.price': '20$/mois',
+            'comp.plus.item1': '✅ Sora et Codex',
+            'comp.plus.item2': '⚠️ Limité par nombre de messages',
+            'comp.plus.item3': '⚠️ Vos données peuvent être utilisées pour l\'entraînement',
+            'comp.business.title': 'Plan Business',
+            'comp.business.price': '6$/mois',
+            'comp.business.badge': 'Meilleur 🚀',
+            'comp.business.item1': '✅ Messages illimités avec GPT-5.1',
+            'comp.business.item2': '✅ Confidentialité totale - pas d\'entraînement sur vos données',
+            'comp.business.item3': '✅ Analyses professionnelles',
+            'comp.business.item4': '✅ Agents et assistants avancés',
+            'features.title': '✨ Tout ce que vous obtenez avec le plan Business',
+            'features.price.official': 'Prix officiel',
+            'features.price.official.value': '25$/mois',
+            'features.price.our': 'Notre prix',
+            'features.price.only': 'Seulement 6$!',
+            'feature1.title': 'Analyses professionnelles',
+            'feature1.desc': 'Effectuez des analyses de données avancées et créez des graphiques et présentations',
+            'feature2.title': 'Messages illimités avec GPT-5',
+            'feature2.desc': 'Utilisez GPT-5 sans limites - pas d\'arrêts, pas de restrictions quotidiennes',
+            'feature3.title': 'Créer des images, vidéos et présentations',
+            'feature3.desc': 'DALL-E 3 pour les images, Sora pour les vidéos, et outils de présentation',
+            'feature4.title': 'Sécurité de niveau entreprise (SSO, MFA)',
+            'feature4.desc': 'Protection avancée avec authentification unique et à deux facteurs',
+            'feature5.title': 'Protection des données - Non utilisées pour l\'entraînement',
+            'feature5.desc': 'Vos données, code et fichiers sont entièrement protégés et ne seront pas utilisés pour entraîner les modèles',
+            'feature6.title': 'Partager des projets et GPTs personnalisés',
+            'feature6.desc': 'Partagez vos projets et modèles GPT personnalisés avec votre équipe',
+            'feature7.title': 'Intégration avec SharePoint et autres outils',
+            'feature7.desc': 'Connectez ChatGPT avec vos outils de travail préférés',
+            'feature8.title': 'Gestion de facturation et des utilisateurs',
+            'feature8.desc': 'Tableau de bord complet pour gérer les comptes et la facturation',
+            'feature9.title': 'Notes de réunion avec transcription',
+            'feature9.desc': 'Convertir automatiquement les réunions en textes et notes organisés',
+            'feature10.title': 'Déployer des agents pour le codage et la recherche',
+            'feature10.desc': 'Agents IA spécialisés travaillant sur vos tâches de codage et de recherche',
+            'feature11.title': 'Écriture de code avec Codex',
+            'feature11.desc': 'Assistant de programmation avancé pour écrire et améliorer le code',
+            'feature12.title': 'Navigation Web et recherche en temps réel',
+            'feature12.desc': 'Obtenez des informations mises à jour du web en temps réel',
+            'features.final': '🎯 Tout cela pour seulement 6$!',
+            'features.save': 'Économisez 19$ par mois par rapport au prix officiel',
+            'footer.text': '© 2024 ChatGPT Business. Tous droits réservés.',
+            'trust.title': '🛡️ Garantie de confiance et de confidentialité (Notre offre exclusive)',
+            'trust.subtitle': 'Nous savons que le marché est plein de comptes partagés et faux, nous vous offrons donc une offre qui brise toutes les règles de peur:',
+            'trust.private.title': '✅ Compte privé, non partagé',
+            'trust.private.desc': 'Vous n\'achetez pas un "email et mot de passe" auquel 10 personnes accèdent. Vous achetez une invitation officielle à votre propre espace de travail privé.',
+            'trust.payment.title': '💰 Payer après activation',
+            'trust.payment.desc': 'Notre confiance dans notre service signifie que nous ne demandons pas un centime d\'avance. Envoyez votre email, recevez l\'invitation, activez votre compte et vérifiez que GPT-5.1 fonctionne, puis payez.',
+            'trust.monthly.title': '🔄 Système d\'abonnement mensuel',
+            'trust.monthly.desc': 'Le service fonctionne sur un système de "compte mensuel" (30 jours complets). Après la fin du mois, le compte se ferme automatiquement sans renouvellement pour garantir une sécurité maximale et un nouveau départ chaque mois.',
+            'howto.title': '📝 Comment obtenir votre abonnement? (3 étapes simples)',
+            'howto.step1.title': 'Commande',
+            'howto.step1.desc': 'Contactez-nous et envoyez votre adresse email personnelle sur laquelle vous souhaitez activer.',
+            'howto.step2.title': 'Activation',
+            'howto.step2.desc': 'Vous recevrez un message d\'OpenAI intitulé "Join Workspace", cliquez pour accepter l\'invitation.',
+            'howto.step3.title': 'Profiter et payer',
+            'howto.step3.desc': 'Une fois que vous entrez dans le tableau de bord et vérifiez les fonctionnalités, vous pouvez compléter le processus de paiement.',
+            'final.title': '⚠️ Ne perdez pas de temps avec les limitations',
+            'final.subtitle': 'Possédez la puissance illimitée de GPT-5.1 aujourd\'hui!',
+            'final.button': '🚀 S\'abonner maintenant'
+        }
+    };
 
-        // Modal translations
-        const modalTranslations = {
-            ar: {
-                baridimob: {
-                    title: 'الدفع عبر BaridiMob',
-                    product: 'المنتج:',
-                    price: 'السعر:',
-                    priceValue: '6 دولارات',
-                    ripLabel: 'RIP BaridiMob:',
-                    copy: 'نسخ',
-                    instructionsTitle: 'تعليمات الدفع:',
-                    instructions: [
-                        'افتح تطبيق BaridiMob',
-                        'اختر "تحويل الأموال" أو "Virement"',
-                        'اختر "RIP" كطريقة التحويل',
-                        'أدخل الـ RIP: <strong>00799999002787548473</strong>',
-                        'أدخل المبلغ المطلوب',
-                        'أكمل عملية الدفع',
-                        'احتفظ بإثبات الدفع',
-                        'اضغط "تم الدفع" للتواصل معنا'
-                    ],
-                    warning: '⚠️ تأكد من إدخال الـ RIP بشكل صحيح!',
-                    button: 'تم الدفع - تواصل معنا'
-                },
-                crypto: {
-                    title: 'الدفع بالعملات الرقمية',
-                    product: 'المنتج:',
-                    price: 'السعر:',
-                    priceValue: '6 دولارات',
-                    selectNetwork: 'اختر الشبكة:',
-                    lowFees: 'رسوم منخفضة',
-                    walletAddress: 'عنوان المحفظة',
-                    copy: 'نسخ',
-                    scanQR: 'امسح الكود بتطبيق المحفظة',
-                    instructionsTitle: 'تعليمات الدفع:',
-                    instructions: [
-                        'اختر الشبكة المناسبة (TRC20 أو BEP20)',
-                        'انسخ عنوان المحفظة أو امسح QR Code',
-                        'افتح تطبيق Binance أو أي محفظة USDT',
-                        'تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)',
-                        'أرسل المبلغ المطلوب (6 دولارات)',
-                        'احتفظ بـ Transaction ID',
-                        'اضغط "تم الدفع" للتواصل معنا'
-                    ],
-                    warning: '⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!',
-                    button: 'تم الدفع - تواصل معنا'
-                },
-                redotpay: {
-                    title: 'الدفع عبر RedotPay',
-                    product: 'المنتج:',
-                    price: 'السعر:',
-                    priceValue: '6 دولارات',
-                    idLabel: 'RedotPay ID:',
-                    copy: 'نسخ',
-                    instructionsTitle: 'تعليمات الدفع:',
-                    instructions: [
-                        'افتح تطبيق RedotPay',
-                        'اختر "Send" أو "إرسال"',
-                        'أدخل RedotPay ID: <strong>1117632168</strong>',
-                        'أدخل المبلغ بالدولار (6 USD)',
-                        'أكمل عملية الإرسال',
-                        'احتفظ بإثبات التحويل',
-                        'اضغط "تم الدفع" للتواصل معنا'
-                    ],
-                    warning: '⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!',
-                    button: 'تم الدفع - تواصل معنا'
-                }
+    // Modal translations
+    const modalTranslations = {
+        ar: {
+            baridimob: {
+                title: 'الدفع عبر BaridiMob',
+                product: 'المنتج:',
+                price: 'السعر:',
+                priceValue: '6 دولارات',
+                ripLabel: 'RIP BaridiMob:',
+                copy: 'نسخ',
+                instructionsTitle: 'تعليمات الدفع:',
+                instructions: [
+                    'افتح تطبيق BaridiMob',
+                    'اختر "تحويل الأموال" أو "Virement"',
+                    'اختر "RIP" كطريقة التحويل',
+                    'أدخل الـ RIP: <strong>00799999002787548473</strong>',
+                    'أدخل المبلغ المطلوب',
+                    'أكمل عملية الدفع',
+                    'احتفظ بإثبات الدفع',
+                    'اضغط "تم الدفع" للتواصل معنا'
+                ],
+                warning: '⚠️ تأكد من إدخال الـ RIP بشكل صحيح!',
+                button: 'تم الدفع - تواصل معنا'
             },
-            en: {
-                baridimob: {
-                    title: 'Payment via BaridiMob',
-                    product: 'Product:',
-                    price: 'Price:',
-                    priceValue: '$6',
-                    ripLabel: 'BaridiMob RIP:',
-                    copy: 'Copy',
-                    instructionsTitle: 'Payment Instructions:',
-                    instructions: [
-                        'Open BaridiMob app',
-                        'Select "Money Transfer" or "Virement"',
-                        'Choose "RIP" as transfer method',
-                        'Enter RIP: <strong>00799999002787548473</strong>',
-                        'Enter the required amount',
-                        'Complete the payment',
-                        'Keep payment proof',
-                        'Click "Payment Done" to contact us'
-                    ],
-                    warning: '⚠️ Make sure to enter the RIP correctly!',
-                    button: 'Payment Done - Contact Us'
-                },
-                crypto: {
-                    title: 'Cryptocurrency Payment',
-                    product: 'Product:',
-                    price: 'Price:',
-                    priceValue: '$6',
-                    selectNetwork: 'Select Network:',
-                    lowFees: 'Low fees',
-                    walletAddress: 'Wallet Address',
-                    copy: 'Copy',
-                    scanQR: 'Scan code with wallet app',
-                    instructionsTitle: 'Payment Instructions:',
-                    instructions: [
-                        'Choose the appropriate network (TRC20 or BEP20)',
-                        'Copy wallet address or scan QR Code',
-                        'Open Binance or any USDT wallet',
-                        'Make sure to select the same network (<strong id="network-warning">TRC20</strong>)',
-                        'Send the required amount ($6)',
-                        'Keep Transaction ID',
-                        'Click "Payment Done" to contact us'
-                    ],
-                    warning: '⚠️ Make sure to select the correct network or you will lose your funds!',
-                    button: 'Payment Done - Contact Us'
-                },
-                redotpay: {
-                    title: 'Payment via RedotPay',
-                    product: 'Product:',
-                    price: 'Price:',
-                    priceValue: '$6',
-                    idLabel: 'RedotPay ID:',
-                    copy: 'Copy',
-                    instructionsTitle: 'Payment Instructions:',
-                    instructions: [
-                        'Open RedotPay app',
-                        'Select "Send"',
-                        'Enter RedotPay ID: <strong>1117632168</strong>',
-                        'Enter amount in dollars (6 USD)',
-                        'Complete the transfer',
-                        'Keep transfer proof',
-                        'Click "Payment Done" to contact us'
-                    ],
-                    warning: '⚠️ Make sure to enter RedotPay ID correctly!',
-                    button: 'Payment Done - Contact Us'
-                }
+            crypto: {
+                title: 'الدفع بالعملات الرقمية',
+                product: 'المنتج:',
+                price: 'السعر:',
+                priceValue: '6 دولارات',
+                selectNetwork: 'اختر الشبكة:',
+                lowFees: 'رسوم منخفضة',
+                walletAddress: 'عنوان المحفظة',
+                copy: 'نسخ',
+                scanQR: 'امسح الكود بتطبيق المحفظة',
+                instructionsTitle: 'تعليمات الدفع:',
+                instructions: [
+                    'اختر الشبكة المناسبة (TRC20 أو BEP20)',
+                    'انسخ عنوان المحفظة أو امسح QR Code',
+                    'افتح تطبيق Binance أو أي محفظة USDT',
+                    'تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)',
+                    'أرسل المبلغ المطلوب (6 دولارات)',
+                    'احتفظ بـ Transaction ID',
+                    'اضغط "تم الدفع" للتواصل معنا'
+                ],
+                warning: '⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!',
+                button: 'تم الدفع - تواصل معنا'
             },
-            fr: {
-                baridimob: {
-                    title: 'Paiement via BaridiMob',
-                    product: 'Produit:',
-                    price: 'Prix:',
-                    priceValue: '6$',
-                    ripLabel: 'RIP BaridiMob:',
-                    copy: 'Copier',
-                    instructionsTitle: 'Instructions de paiement:',
-                    instructions: [
-                        'Ouvrez l\'application BaridiMob',
-                        'Sélectionnez "Transfert d\'argent" ou "Virement"',
-                        'Choisissez "RIP" comme méthode de transfert',
-                        'Entrez le RIP: <strong>00799999002787548473</strong>',
-                        'Entrez le montant requis',
-                        'Complétez le paiement',
-                        'Conservez la preuve de paiement',
-                        'Cliquez sur "Paiement effectué" pour nous contacter'
-                    ],
-                    warning: '⚠️ Assurez-vous d\'entrer le RIP correctement!',
-                    button: 'Paiement effectué - Contactez-nous'
-                },
-                crypto: {
-                    title: 'Paiement en cryptomonnaie',
-                    product: 'Produit:',
-                    price: 'Prix:',
-                    priceValue: '6$',
-                    selectNetwork: 'Sélectionner le réseau:',
-                    lowFees: 'Frais bas',
-                    walletAddress: 'Adresse du portefeuille',
-                    copy: 'Copier',
-                    scanQR: 'Scannez le code avec l\'application portefeuille',
-                    instructionsTitle: 'Instructions de paiement:',
-                    instructions: [
-                        'Choisissez le réseau approprié (TRC20 ou BEP20)',
-                        'Copiez l\'adresse du portefeuille ou scannez le QR Code',
-                        'Ouvrez Binance ou tout portefeuille USDT',
-                        'Assurez-vous de sélectionner le même réseau (<strong id="network-warning">TRC20</strong>)',
-                        'Envoyez le montant requis (6$)',
-                        'Conservez l\'ID de transaction',
-                        'Cliquez sur "Paiement effectué" pour nous contacter'
-                    ],
-                    warning: '⚠️ Assurez-vous de sélectionner le bon réseau sinon vous perdrez vos fonds!',
-                    button: 'Paiement effectué - Contactez-nous'
-                },
-                redotpay: {
-                    title: 'Paiement via RedotPay',
-                    product: 'Produit:',
-                    price: 'Prix:',
-                    priceValue: '6$',
-                    idLabel: 'RedotPay ID:',
-                    copy: 'Copier',
-                    instructionsTitle: 'Instructions de paiement:',
-                    instructions: [
-                        'Ouvrez l\'application RedotPay',
-                        'Sélectionnez "Envoyer"',
-                        'Entrez RedotPay ID: <strong>1117632168</strong>',
-                        'Entrez le montant en dollars (6 USD)',
-                        'Complétez le transfert',
-                        'Conservez la preuve de transfert',
-                        'Cliquez sur "Paiement effectué" pour nous contacter'
-                    ],
-                    warning: '⚠️ Assurez-vous d\'entrer correctement l\'ID RedotPay!',
-                    button: 'Paiement effectué - Contactez-nous'
-                }
+            redotpay: {
+                title: 'الدفع عبر RedotPay',
+                product: 'المنتج:',
+                price: 'السعر:',
+                priceValue: '6 دولارات',
+                idLabel: 'RedotPay ID:',
+                copy: 'نسخ',
+                instructionsTitle: 'تعليمات الدفع:',
+                instructions: [
+                    'افتح تطبيق RedotPay',
+                    'اختر "Send" أو "إرسال"',
+                    'أدخل RedotPay ID: <strong>1117632168</strong>',
+                    'أدخل المبلغ بالدولار (6 USD)',
+                    'أكمل عملية الإرسال',
+                    'احتفظ بإثبات التحويل',
+                    'اضغط "تم الدفع" للتواصل معنا'
+                ],
+                warning: '⚠️ تأكد من إدخال RedotPay ID بشكل صحيح!',
+                button: 'تم الدفع - تواصل معنا'
             }
-        };
+        },
+        en: {
+            baridimob: {
+                title: 'Payment via BaridiMob',
+                product: 'Product:',
+                price: 'Price:',
+                priceValue: '$6',
+                ripLabel: 'BaridiMob RIP:',
+                copy: 'Copy',
+                instructionsTitle: 'Payment Instructions:',
+                instructions: [
+                    'Open BaridiMob app',
+                    'Select "Money Transfer" or "Virement"',
+                    'Choose "RIP" as transfer method',
+                    'Enter RIP: <strong>00799999002787548473</strong>',
+                    'Enter the required amount',
+                    'Complete the payment',
+                    'Keep payment proof',
+                    'Click "Payment Done" to contact us'
+                ],
+                warning: '⚠️ Make sure to enter the RIP correctly!',
+                button: 'Payment Done - Contact Us'
+            },
+            crypto: {
+                title: 'Cryptocurrency Payment',
+                product: 'Product:',
+                price: 'Price:',
+                priceValue: '$6',
+                selectNetwork: 'Select Network:',
+                lowFees: 'Low fees',
+                walletAddress: 'Wallet Address',
+                copy: 'Copy',
+                scanQR: 'Scan code with wallet app',
+                instructionsTitle: 'Payment Instructions:',
+                instructions: [
+                    'Choose the appropriate network (TRC20 or BEP20)',
+                    'Copy wallet address or scan QR Code',
+                    'Open Binance or any USDT wallet',
+                    'Make sure to select the same network (<strong id="network-warning">TRC20</strong>)',
+                    'Send the required amount ($6)',
+                    'Keep Transaction ID',
+                    'Click "Payment Done" to contact us'
+                ],
+                warning: '⚠️ Make sure to select the correct network or you will lose your funds!',
+                button: 'Payment Done - Contact Us'
+            },
+            redotpay: {
+                title: 'Payment via RedotPay',
+                product: 'Product:',
+                price: 'Price:',
+                priceValue: '$6',
+                idLabel: 'RedotPay ID:',
+                copy: 'Copy',
+                instructionsTitle: 'Payment Instructions:',
+                instructions: [
+                    'Open RedotPay app',
+                    'Select "Send"',
+                    'Enter RedotPay ID: <strong>1117632168</strong>',
+                    'Enter amount in dollars (6 USD)',
+                    'Complete the transfer',
+                    'Keep transfer proof',
+                    'Click "Payment Done" to contact us'
+                ],
+                warning: '⚠️ Make sure to enter RedotPay ID correctly!',
+                button: 'Payment Done - Contact Us'
+            }
+        },
+        fr: {
+            baridimob: {
+                title: 'Paiement via BaridiMob',
+                product: 'Produit:',
+                price: 'Prix:',
+                priceValue: '6$',
+                ripLabel: 'RIP BaridiMob:',
+                copy: 'Copier',
+                instructionsTitle: 'Instructions de paiement:',
+                instructions: [
+                    'Ouvrez l\'application BaridiMob',
+                    'Sélectionnez "Transfert d\'argent" ou "Virement"',
+                    'Choisissez "RIP" comme méthode de transfert',
+                    'Entrez le RIP: <strong>00799999002787548473</strong>',
+                    'Entrez le montant requis',
+                    'Complétez le paiement',
+                    'Conservez la preuve de paiement',
+                    'Cliquez sur "Paiement effectué" pour nous contacter'
+                ],
+                warning: '⚠️ Assurez-vous d\'entrer le RIP correctement!',
+                button: 'Paiement effectué - Contactez-nous'
+            },
+            crypto: {
+                title: 'Paiement en cryptomonnaie',
+                product: 'Produit:',
+                price: 'Prix:',
+                priceValue: '6$',
+                selectNetwork: 'Sélectionner le réseau:',
+                lowFees: 'Frais bas',
+                walletAddress: 'Adresse du portefeuille',
+                copy: 'Copier',
+                scanQR: 'Scannez le code avec l\'application portefeuille',
+                instructionsTitle: 'Instructions de paiement:',
+                instructions: [
+                    'Choisissez le réseau approprié (TRC20 ou BEP20)',
+                    'Copiez l\'adresse du portefeuille ou scannez le QR Code',
+                    'Ouvrez Binance ou tout portefeuille USDT',
+                    'Assurez-vous de sélectionner le même réseau (<strong id="network-warning">TRC20</strong>)',
+                    'Envoyez le montant requis (6$)',
+                    'Conservez l\'ID de transaction',
+                    'Cliquez sur "Paiement effectué" pour nous contacter'
+                ],
+                warning: '⚠️ Assurez-vous de sélectionner le bon réseau sinon vous perdrez vos fonds!',
+                button: 'Paiement effectué - Contactez-nous'
+            },
+            redotpay: {
+                title: 'Paiement via RedotPay',
+                product: 'Produit:',
+                price: 'Prix:',
+                priceValue: '6$',
+                idLabel: 'RedotPay ID:',
+                copy: 'Copier',
+                instructionsTitle: 'Instructions de paiement:',
+                instructions: [
+                    'Ouvrez l\'application RedotPay',
+                    'Sélectionnez "Envoyer"',
+                    'Entrez RedotPay ID: <strong>1117632168</strong>',
+                    'Entrez le montant en dollars (6 USD)',
+                    'Complétez le transfert',
+                    'Conservez la preuve de transfert',
+                    'Cliquez sur "Paiement effectué" pour nous contacter'
+                ],
+                warning: '⚠️ Assurez-vous d\'entrer correctement l\'ID RedotPay!',
+                button: 'Paiement effectué - Contactez-nous'
+            }
+        }
+    };
 
-        // Language switcher
-        let currentLang = localStorage.getItem('preferredLanguage') || 'ar';
-        
-        function switchLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('preferredLanguage', lang);
-            document.documentElement.lang = lang;
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            
-            // Update modals
-            updateModals(lang);
-            
-            // Update all elements with data-i18n attribute
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) {
-                    // Check if element has HTML content
-                    if (element.querySelector('span')) {
-                        element.innerHTML = translations[lang][key];
-                    } else {
-                        element.textContent = translations[lang][key];
-                    }
-                }
-            });
-            
-            // Update active button
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-lang') === lang) {
-                    btn.classList.add('active');
-                    btn.style.background = '#10a37f';
-                    btn.style.color = 'white';
+    // Language switcher
+    let currentLang = localStorage.getItem('preferredLanguage') || 'ar';
+
+    function switchLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('preferredLanguage', lang);
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+        // Update modals
+        updateModals(lang);
+
+        // Update all elements with data-i18n attribute
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                // Check if element has HTML content
+                if (element.querySelector('span')) {
+                    element.innerHTML = translations[lang][key];
                 } else {
-                    btn.style.background = 'rgba(255, 255, 255, 0.1)';
-                    btn.style.color = 'white';
+                    element.textContent = translations[lang][key];
                 }
-            });
-        }
-
-        // Update modals content
-        function updateModals(lang) {
-            const t = modalTranslations[lang];
-            console.log('Updating modals to language:', lang);
-            console.log('Modal translations:', t);
-            
-            // Update BaridiMob Modal
-            const el = (id) => document.getElementById(id);
-            
-            if (el('baridimob-title')) el('baridimob-title').textContent = t.baridimob.title;
-            if (el('baridimob-product')) el('baridimob-product').textContent = t.baridimob.product;
-            if (el('baridimob-price')) el('baridimob-price').textContent = t.baridimob.price;
-            if (el('baridimob-price-value')) el('baridimob-price-value').textContent = t.baridimob.priceValue;
-            if (el('baridimob-rip-label')) el('baridimob-rip-label').textContent = t.baridimob.ripLabel;
-            if (el('baridimob-copy')) el('baridimob-copy').textContent = t.baridimob.copy;
-            if (el('baridimob-instructions-title')) el('baridimob-instructions-title').textContent = t.baridimob.instructionsTitle;
-            if (el('baridimob-warning')) el('baridimob-warning').textContent = t.baridimob.warning;
-            if (el('baridimob-button')) el('baridimob-button').textContent = t.baridimob.button;
-            
-            const baridimobList = el('baridimob-instructions');
-            if (baridimobList) {
-                const items = baridimobList.querySelectorAll('li');
-                t.baridimob.instructions.forEach((text, i) => {
-                    if (items[i]) items[i].innerHTML = text;
-                });
             }
-            
-            // Update Crypto Modal
-            if (el('crypto-title')) el('crypto-title').textContent = t.crypto.title;
-            if (el('crypto-product')) el('crypto-product').textContent = t.crypto.product;
-            if (el('crypto-price')) el('crypto-price').textContent = t.crypto.price;
-            if (el('crypto-price-value')) el('crypto-price-value').textContent = t.crypto.priceValue;
-            if (el('crypto-select-network')) el('crypto-select-network').textContent = t.crypto.selectNetwork;
-            if (el('crypto-fees1')) el('crypto-fees1').textContent = `${t.crypto.lowFees} (~1 USDT)`;
-            if (el('crypto-fees2')) el('crypto-fees2').textContent = `${t.crypto.lowFees} (~0.5 USDT)`;
-            if (el('crypto-wallet-label')) {
-                const network = el('selected-network').textContent;
-                el('crypto-wallet-label').innerHTML = `${t.crypto.walletAddress} (<span id="selected-network">${network}</span>):`;
-            }
-            if (el('crypto-copy')) el('crypto-copy').textContent = t.crypto.copy;
-            if (el('crypto-qr-text')) el('crypto-qr-text').textContent = t.crypto.scanQR;
-            if (el('crypto-instructions-title')) el('crypto-instructions-title').textContent = t.crypto.instructionsTitle;
-            if (el('crypto-warning')) el('crypto-warning').textContent = t.crypto.warning;
-            if (el('crypto-button')) el('crypto-button').textContent = t.crypto.button;
-            
-            const cryptoList = el('crypto-instructions');
-            if (cryptoList) {
-                const items = cryptoList.querySelectorAll('li');
-                t.crypto.instructions.forEach((text, i) => {
-                    if (items[i]) items[i].innerHTML = text;
-                });
-            }
-            
-            // Update RedotPay Modal
-            if (el('redotpay-title')) el('redotpay-title').textContent = t.redotpay.title;
-            if (el('redotpay-product')) el('redotpay-product').textContent = t.redotpay.product;
-            if (el('redotpay-price')) el('redotpay-price').textContent = t.redotpay.price;
-            if (el('redotpay-price-value')) el('redotpay-price-value').textContent = t.redotpay.priceValue;
-            if (el('redotpay-id-label')) el('redotpay-id-label').textContent = t.redotpay.idLabel;
-            if (el('redotpay-copy')) el('redotpay-copy').textContent = t.redotpay.copy;
-            if (el('redotpay-instructions-title')) el('redotpay-instructions-title').textContent = t.redotpay.instructionsTitle;
-            if (el('redotpay-warning')) el('redotpay-warning').textContent = t.redotpay.warning;
-            if (el('redotpay-button')) el('redotpay-button').textContent = t.redotpay.button;
-            
-            const redotpayList = el('redotpay-instructions');
-            if (redotpayList) {
-                const items = redotpayList.querySelectorAll('li');
-                t.redotpay.instructions.forEach((text, i) => {
-                    if (items[i]) items[i].innerHTML = text;
-                });
-            }
-        }
-
-        // Add event listeners to language buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Translation system loaded');
-            console.log('Available translations:', Object.keys(translations));
-            console.log('Modal translations loaded:', Object.keys(modalTranslations));
-            
-            // Initialize modals with current language
-            updateModals(currentLang);
-            
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const lang = this.getAttribute('data-lang');
-                    console.log('Switching to language:', lang);
-                    switchLanguage(lang);
-                });
-            });
-            
-            // Initialize with saved language on page load
-            switchLanguage(currentLang);
         });
-    </script>
+
+        // Update active button
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-lang') === lang) {
+                btn.classList.add('active');
+                btn.style.background = '#10a37f';
+                btn.style.color = 'white';
+            } else {
+                btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                btn.style.color = 'white';
+            }
+        });
+    }
+
+    // Update modals content
+    function updateModals(lang) {
+        const t = modalTranslations[lang];
+        console.log('Updating modals to language:', lang);
+        console.log('Modal translations:', t);
+
+        // Update BaridiMob Modal
+        const el = (id) => document.getElementById(id);
+
+        if (el('baridimob-title')) el('baridimob-title').textContent = t.baridimob.title;
+        if (el('baridimob-product')) el('baridimob-product').textContent = t.baridimob.product;
+        if (el('baridimob-price')) el('baridimob-price').textContent = t.baridimob.price;
+        if (el('baridimob-price-value')) el('baridimob-price-value').textContent = t.baridimob.priceValue;
+        if (el('baridimob-rip-label')) el('baridimob-rip-label').textContent = t.baridimob.ripLabel;
+        if (el('baridimob-copy')) el('baridimob-copy').textContent = t.baridimob.copy;
+        if (el('baridimob-instructions-title')) el('baridimob-instructions-title').textContent = t.baridimob.instructionsTitle;
+        if (el('baridimob-warning')) el('baridimob-warning').textContent = t.baridimob.warning;
+        if (el('baridimob-button')) el('baridimob-button').textContent = t.baridimob.button;
+
+        const baridimobList = el('baridimob-instructions');
+        if (baridimobList) {
+            const items = baridimobList.querySelectorAll('li');
+            t.baridimob.instructions.forEach((text, i) => {
+                if (items[i]) items[i].innerHTML = text;
+            });
+        }
+
+        // Update Crypto Modal
+        if (el('crypto-title')) el('crypto-title').textContent = t.crypto.title;
+        if (el('crypto-product')) el('crypto-product').textContent = t.crypto.product;
+        if (el('crypto-price')) el('crypto-price').textContent = t.crypto.price;
+        if (el('crypto-price-value')) el('crypto-price-value').textContent = t.crypto.priceValue;
+        if (el('crypto-select-network')) el('crypto-select-network').textContent = t.crypto.selectNetwork;
+        if (el('crypto-fees1')) el('crypto-fees1').textContent = `${t.crypto.lowFees} (~1 USDT)`;
+        if (el('crypto-fees2')) el('crypto-fees2').textContent = `${t.crypto.lowFees} (~0.5 USDT)`;
+        if (el('crypto-wallet-label')) {
+            const network = el('selected-network').textContent;
+            el('crypto-wallet-label').innerHTML = `${t.crypto.walletAddress} (<span id="selected-network">${network}</span>):`;
+        }
+        if (el('crypto-copy')) el('crypto-copy').textContent = t.crypto.copy;
+        if (el('crypto-qr-text')) el('crypto-qr-text').textContent = t.crypto.scanQR;
+        if (el('crypto-instructions-title')) el('crypto-instructions-title').textContent = t.crypto.instructionsTitle;
+        if (el('crypto-warning')) el('crypto-warning').textContent = t.crypto.warning;
+        if (el('crypto-button')) el('crypto-button').textContent = t.crypto.button;
+
+        const cryptoList = el('crypto-instructions');
+        if (cryptoList) {
+            const items = cryptoList.querySelectorAll('li');
+            t.crypto.instructions.forEach((text, i) => {
+                if (items[i]) items[i].innerHTML = text;
+            });
+        }
+
+        // Update RedotPay Modal
+        if (el('redotpay-title')) el('redotpay-title').textContent = t.redotpay.title;
+        if (el('redotpay-product')) el('redotpay-product').textContent = t.redotpay.product;
+        if (el('redotpay-price')) el('redotpay-price').textContent = t.redotpay.price;
+        if (el('redotpay-price-value')) el('redotpay-price-value').textContent = t.redotpay.priceValue;
+        if (el('redotpay-id-label')) el('redotpay-id-label').textContent = t.redotpay.idLabel;
+        if (el('redotpay-copy')) el('redotpay-copy').textContent = t.redotpay.copy;
+        if (el('redotpay-instructions-title')) el('redotpay-instructions-title').textContent = t.redotpay.instructionsTitle;
+        if (el('redotpay-warning')) el('redotpay-warning').textContent = t.redotpay.warning;
+        if (el('redotpay-button')) el('redotpay-button').textContent = t.redotpay.button;
+
+        const redotpayList = el('redotpay-instructions');
+        if (redotpayList) {
+            const items = redotpayList.querySelectorAll('li');
+            t.redotpay.instructions.forEach((text, i) => {
+                if (items[i]) items[i].innerHTML = text;
+            });
+        }
+    }
+
+    // Add event listeners to language buttons
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('Translation system loaded');
+        console.log('Available translations:', Object.keys(translations));
+        console.log('Modal translations loaded:', Object.keys(modalTranslations));
+
+        // Initialize modals with current language
+        updateModals(currentLang);
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const lang = this.getAttribute('data-lang');
+                console.log('Switching to language:', lang);
+                switchLanguage(lang);
+            });
+        });
+
+        // Initialize with saved language on page load
+        switchLanguage(currentLang);
+    });
+</script>
 </body>
+
 </html>

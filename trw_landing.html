@@ -5,17 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Real World - Escape the Matrix</title>
-    
+
     <!-- Meta Pixel Code -->
     <script>
         !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '2046893892791206');
         fbq('track', 'PageView');
+
+        // Detailed ViewContent and InterestedLead
+        const isUSD = location.search.includes('USD');
+        fbq('track', 'ViewContent', {
+            content_name: 'The Real World',
+            content_category: 'Courses',
+            value: isUSD ? 18 : 3750,
+            currency: isUSD ? 'USD' : 'DZD'
+        });
+
+        setTimeout(function () {
+            fbq('trackCustom', 'InterestedLead', {
+                content_name: 'The Real World',
+                time_on_page: '10s'
+            });
+        }, 10000);
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -183,9 +199,11 @@
             0% {
                 box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
             }
+
             50% {
                 box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1);
             }
+
             100% {
                 box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
             }
@@ -195,9 +213,11 @@
             0% {
                 box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
             }
+
             50% {
                 box-shadow: 0 4px 30px rgba(225, 48, 108, 0.7), 0 0 0 10px rgba(225, 48, 108, 0.1);
             }
+
             100% {
                 box-shadow: 0 4px 20px rgba(225, 48, 108, 0.4);
             }
@@ -238,10 +258,12 @@
                 transform: scale(1);
                 box-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
             }
+
             50% {
                 transform: scale(1.05);
                 box-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14, 0 0 60px #39ff14;
             }
+
             100% {
                 transform: scale(1);
                 box-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
@@ -264,6 +286,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -283,6 +306,7 @@
 
         /* Mobile Responsive - Phone */
         @media (max-width: 768px) {
+
             /* Social Buttons */
             .floating-social-buttons {
                 bottom: 20px;
@@ -494,7 +518,8 @@
         class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden z-10">
         <img src="https://i.imgur.com/QzlT4Ch.gif" alt="The Real World"
             class="w-40 h-40 md:w-56 md:h-56 object-cover rounded-full border-4 border-matrix-green shadow-[0_0_30px_#39ff14] mb-8 animate-pulse-fast">
-        <h1 class="text-2xl sm:text-4xl md:text-6xl font-black mb-4 leading-tight text-matrix-green text-glow hero-title-mobile px-2">
+        <h1
+            class="text-2xl sm:text-4xl md:text-6xl font-black mb-4 leading-tight text-matrix-green text-glow hero-title-mobile px-2">
             THE REAL WORLD ACCOUNT <br class="hidden sm:block"> VETERAN PLAN ALL COURSES
         </h1>
         <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.price">
@@ -503,17 +528,20 @@
 
         <!-- Payment Methods Section -->
         <div class="w-full max-w-4xl mx-auto mb-12 px-4">
-            <h2 class="text-xl sm:text-2xl font-bold text-matrix-green mb-6" data-i18n="payment.title">طرق الدفع المتاحة</h2>
+            <h2 class="text-xl sm:text-2xl font-bold text-matrix-green mb-6" data-i18n="payment.title">طرق الدفع المتاحة
+            </h2>
 
             <div class="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-12 payment-buttons-mobile">
                 <!-- RedotPay Button -->
-                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer redotpay-btn payment-method-btn hover-lift"
+                <a href="javascript:void(0)"
+                    class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer redotpay-btn payment-method-btn hover-lift"
                     data-product="The Real World Account - Veteran Plan" data-price="3750" data-price-usd="15">
                     <div
                         class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:shadow-[0_0_25px_rgba(220,38,38,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-white payment-btn-circle">
                         <span class="text-white font-bold text-sm sm:text-lg">Redot</span>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">RedotPay</span>
+                    <span
+                        class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">RedotPay</span>
                 </a>
 
                 <!-- USDT Button -->
@@ -522,8 +550,9 @@
                     data-product="The Real World Account - Veteran Plan" data-price="3750" data-price-usd="15">
                     <div
                         class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-matrix-green flex items-center justify-center shadow-[0_0_15px_rgba(57,255,20,0.5)] group-hover:shadow-[0_0_25px_rgba(57,255,20,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-white payment-btn-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="none"
-                            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="sm:w-10 sm:h-10"
+                            viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
                             <path d="M20.42 4.58a10 10 0 1 0-16.84 0"></path>
                             <path d="M16.5 9.5a4 4 0 1 0-9 0"></path>
                             <path d="M12 12v8"></path>
@@ -531,28 +560,33 @@
                             <path d="M8 16v4"></path>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">USDT</span>
+                    <span
+                        class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">USDT</span>
                 </a>
 
                 <!-- BaridiMob Button -->
-                <a href="javascript:void(0)" class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer baridimob-btn payment-method-btn hover-lift"
+                <a href="javascript:void(0)"
+                    class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer baridimob-btn payment-method-btn hover-lift"
                     data-product="The Real World Account - Veteran Plan" data-price="3750" data-price-usd="15">
                     <div
                         class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.5)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-matrix-green payment-btn-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="none"
-                            stroke="#0066cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="sm:w-10 sm:h-10"
+                            viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
                             <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                             <line x1="2" y1="10" x2="22" y2="10"></line>
                         </svg>
                     </div>
-                    <span class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">BaridiMob</span>
+                    <span
+                        class="text-gray-300 font-medium group-hover:text-white transition-colors text-sm sm:text-base">BaridiMob</span>
                 </a>
             </div>
         </div>
 
         <!-- Scarcity Counter -->
         <div class="w-full max-w-2xl mx-auto mb-8 px-4">
-            <div class="bg-gradient-to-r from-red-900/40 to-orange-900/40 border-2 border-red-500/50 rounded-2xl p-6 backdrop-blur-sm">
+            <div
+                class="bg-gradient-to-r from-red-900/40 to-orange-900/40 border-2 border-red-500/50 rounded-2xl p-6 backdrop-blur-sm">
                 <div class="flex items-center justify-center gap-3 mb-4">
                     <span class="text-3xl">⚠️</span>
                     <h3 class="text-xl sm:text-2xl font-bold text-red-400" data-i18n="scarcity.title">مقاعد محدودة!</h3>
@@ -573,16 +607,18 @@
                     </div>
                 </div>
                 <div class="w-full bg-gray-700 rounded-full h-3 mb-4 overflow-hidden">
-                    <div class="bg-gradient-to-r from-red-500 to-orange-500 h-3 rounded-full transition-all duration-500" 
-                         style="width: 20%" id="seats-progress"></div>
+                    <div class="bg-gradient-to-r from-red-500 to-orange-500 h-3 rounded-full transition-all duration-500"
+                        style="width: 20%" id="seats-progress"></div>
                 </div>
-                <p class="text-center text-yellow-400 text-xs sm:text-sm font-semibold animate-pulse" data-i18n="scarcity.warning">
+                <p class="text-center text-yellow-400 text-xs sm:text-sm font-semibold animate-pulse"
+                    data-i18n="scarcity.warning">
                     ⏰ احجز مقعدك الآن قبل نفاد الكمية!
                 </p>
             </div>
         </div>
 
         <a href="https://wa.me/213782125821"
+            onclick="if(typeof fbq !== 'undefined') { const isUSD = location.search.includes('USD'); const val = isUSD ? 18 : 3750; const cur = isUSD ? 'USD' : 'DZD'; fbq('track', 'Lead', {content_name: 'The Real World', value: val, currency: cur}); fbq('track', 'InitiateCheckout', {content_name: 'The Real World', value: val, currency: cur}); }"
             class="bg-matrix-green text-black font-bold text-base sm:text-xl py-3 px-6 sm:px-8 rounded-full hover:bg-green-400 transition-all transform hover:scale-105 matrix-glow shadow-lg cta-pulse cta-btn-mobile"
             data-i18n="hero.cta">
             انضم الآن
@@ -592,7 +628,8 @@
     <!-- Reviews Section -->
     <section class="py-8 sm:py-12 px-4 max-w-6xl mx-auto relative z-10">
         <div class="text-center mb-6">
-            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-matrix-green mb-3 text-glow" data-i18n="reviews.title">
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-matrix-green mb-3 text-glow"
+                data-i18n="reviews.title">
                 ⭐ تقييمات العملاء
             </h2>
             <div class="flex items-center justify-center gap-2">
@@ -603,25 +640,27 @@
                     <span class="text-yellow-400 text-xl">★</span>
                     <span class="text-yellow-400 text-xl">★</span>
                 </div>
-                <span class="text-gray-300 text-base">(<span id="total-reviews">0</span> <span data-i18n="reviews.reviews">تقييم</span>)</span>
+                <span class="text-gray-300 text-base">(<span id="total-reviews">0</span> <span
+                        data-i18n="reviews.reviews">تقييم</span>)</span>
             </div>
         </div>
 
         <!-- Add Review Form -->
         <div class="max-w-2xl mx-auto mb-8 bg-[#111]/80 rounded-xl border border-matrix-green/30 p-4">
-            <h3 class="text-lg font-bold text-matrix-green mb-3 text-center" data-i18n="reviews.addReview">أضف تقييمك</h3>
+            <h3 class="text-lg font-bold text-matrix-green mb-3 text-center" data-i18n="reviews.addReview">أضف تقييمك
+            </h3>
             <form id="review-form" class="space-y-3">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.yourName">اسمك:</label>
                         <input type="text" id="reviewer-name" required
                             class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-matrix-green focus:outline-none"
-                            data-i18n-placeholder="reviews.namePlaceholder"
-                            placeholder="أدخل اسمك">
+                            data-i18n-placeholder="reviews.namePlaceholder" placeholder="أدخل اسمك">
                     </div>
-                    
+
                     <div>
-                        <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.platform">من أين عرفت عنا؟</label>
+                        <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.platform">من أين عرفت
+                            عنا؟</label>
                         <select id="platform" required
                             class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-matrix-green focus:outline-none">
                             <option value="" data-i18n="reviews.selectPlatform">اختر المنصة</option>
@@ -635,42 +674,58 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div>
-                    <label class="block text-gray-300 mb-2 text-sm text-center font-semibold" data-i18n="reviews.rating">التقييم:</label>
-                    <p class="text-center text-gray-400 text-xs mb-3" data-i18n="reviews.clickStars">اضغط على النجوم لاختيار تقييمك</p>
+                    <label class="block text-gray-300 mb-2 text-sm text-center font-semibold"
+                        data-i18n="reviews.rating">التقييم:</label>
+                    <p class="text-center text-gray-400 text-xs mb-3" data-i18n="reviews.clickStars">اضغط على النجوم
+                        لاختيار تقييمك</p>
                     <div class="flex gap-2 justify-center" id="star-rating">
-                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="1" title="سيء">★</span>
-                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="2" title="مقبول">★</span>
-                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="3" title="جيد">★</span>
-                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="4" title="ممتاز">★</span>
-                        <span class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110" data-rating="5" title="رائع">★</span>
+                        <span
+                            class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110"
+                            data-rating="1" title="سيء">★</span>
+                        <span
+                            class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110"
+                            data-rating="2" title="مقبول">★</span>
+                        <span
+                            class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110"
+                            data-rating="3" title="جيد">★</span>
+                        <span
+                            class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110"
+                            data-rating="4" title="ممتاز">★</span>
+                        <span
+                            class="star cursor-pointer text-5xl text-gray-600 hover:text-yellow-400 transition-all hover:scale-110"
+                            data-rating="5" title="رائع">★</span>
                     </div>
-                    <p class="text-center text-matrix-green text-sm mt-2 font-semibold" id="rating-text" style="min-height: 20px;"></p>
+                    <p class="text-center text-matrix-green text-sm mt-2 font-semibold" id="rating-text"
+                        style="min-height: 20px;"></p>
                     <input type="hidden" id="rating-value" required>
                 </div>
 
                 <div>
-                    <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.comment">تعليقك (اختياري):</label>
+                    <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.comment">تعليقك
+                        (اختياري):</label>
                     <textarea id="review-comment" rows="2"
                         class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-matrix-green focus:outline-none resize-none"
-                        data-i18n-placeholder="reviews.commentPlaceholder"
-                        placeholder="شارك تجربتك معنا..."></textarea>
+                        data-i18n-placeholder="reviews.commentPlaceholder" placeholder="شارك تجربتك معنا..."></textarea>
                 </div>
 
                 <div>
-                    <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.image">أضف صورة (اختياري):</label>
+                    <label class="block text-gray-300 mb-1 text-xs" data-i18n="reviews.image">أضف صورة
+                        (اختياري):</label>
                     <div class="flex items-center gap-3">
-                        <label for="review-image" 
+                        <label for="review-image"
                             class="cursor-pointer bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-300 hover:border-matrix-green transition-all flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
                                 <polyline points="21 15 16 10 5 21"></polyline>
                             </svg>
                             <span data-i18n="reviews.chooseImage">اختر صورة</span>
                         </label>
-                        <input type="file" id="review-image" accept="image/jpeg,image/jpg,image/png,image/webp" class="hidden">
+                        <input type="file" id="review-image" accept="image/jpeg,image/jpg,image/png,image/webp"
+                            class="hidden">
                         <span id="image-name" class="text-gray-400 text-xs"></span>
                     </div>
                     <div id="image-preview" class="mt-2 hidden">
@@ -693,24 +748,25 @@
         <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <!-- Reviews will be added here dynamically -->
         </div>
-        
+
         <!-- Show More Button -->
-        <div class="text-center mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center" id="show-more-container" style="display: none;">
-            <button id="show-more-btn" 
+        <div class="text-center mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center"
+            id="show-more-container" style="display: none;">
+            <button id="show-more-btn"
                 class="bg-gray-800/50 text-matrix-green border border-matrix-green/50 font-semibold py-2 px-6 rounded-lg hover:bg-matrix-green hover:text-black transition-all text-sm"
                 data-i18n="reviews.showMore">
                 عرض المزيد
             </button>
         </div>
-        
+
         <!-- Admin Controls (Hidden by default) -->
         <div class="text-center mt-4" id="admin-controls" style="display: none;">
             <div class="flex gap-3 justify-center flex-wrap">
-                <button onclick="toggleAdminMode()" 
+                <button onclick="toggleAdminMode()"
                     class="bg-red-900/30 text-red-400 border border-red-500/50 font-semibold py-1.5 px-4 rounded-lg hover:bg-red-900/50 transition-all text-xs">
                     🗑️ <span data-i18n="reviews.clearAll">حذف جميع التقييمات</span>
                 </button>
-                <button onclick="startGiveaway()" 
+                <button onclick="startGiveaway()"
                     class="bg-matrix-green/30 text-matrix-green border border-matrix-green/50 font-semibold py-1.5 px-4 rounded-lg hover:bg-matrix-green/50 transition-all text-xs">
                     🎁 <span data-i18n="reviews.giveaway">سحب على 4 فائزين</span>
                 </button>
@@ -719,14 +775,17 @@
     </section>
 
     <!-- Giveaway Modal - MUST BE HERE -->
-    <div id="giveaway-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="max-width: 700px; background: #0a0a0a; border: 2px solid #39ff14; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
-            <button onclick="closeGiveawayModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #39ff14; font-size: 30px; cursor: pointer; line-height: 1;">&times;</button>
-            
+    <div id="giveaway-modal" class="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div
+            style="max-width: 700px; background: #0a0a0a; border: 2px solid #39ff14; border-radius: 20px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeGiveawayModal()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #39ff14; font-size: 30px; cursor: pointer; line-height: 1;">&times;</button>
+
             <h2 style="text-align: center; color: #39ff14; font-size: 2rem; margin-bottom: 20px;">
                 🎉 سحب Giveaway 🎉
             </h2>
-            
+
             <div style="text-align: center; margin-bottom: 30px;">
                 <p style="color: #fff; font-size: 1.2rem; margin-bottom: 20px;">
                     سيتم اختيار <span style="color: #39ff14; font-weight: bold;">4 فائزين</span> عشوائياً
@@ -746,9 +805,9 @@
                     🏆 الفائزون 🏆
                 </h3>
                 <div id="winners-container"></div>
-                
+
                 <div style="text-align: center; margin-top: 30px;">
-                    <button onclick="copyWinners()" 
+                    <button onclick="copyWinners()"
                         style="background: #39ff14; color: #000; padding: 12px 30px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem;">
                         📋 نسخ أسماء الفائزين
                     </button>
@@ -756,7 +815,7 @@
             </div>
 
             <div style="text-align: center; margin-top: 20px;" id="start-button-container">
-                <button onclick="runGiveaway()" 
+                <button onclick="runGiveaway()"
                     style="background: #39ff14; color: #000; padding: 15px 50px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.2rem; box-shadow: 0 5px 20px rgba(57, 255, 20, 0.3);">
                     🎲 ابدأ السحب
                 </button>
@@ -766,193 +825,270 @@
 
     <!-- Content Guide Section -->
     <section class="py-10 sm:py-20 px-3 sm:px-4 max-w-5xl mx-auto relative z-10">
-        
+
         <!-- Main Title -->
         <div class="text-center mb-12">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-matrix-green mb-4 text-glow" data-i18n="guide.title">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-matrix-green mb-4 text-glow"
+                data-i18n="guide.title">
                 📚 دليل شامل لمحتويات The Real World
             </h2>
             <p class="text-lg sm:text-xl text-gray-300" data-i18n="guide.subtitle">ماذا ستحصل عليه عند الاشتراك؟</p>
         </div>
 
         <!-- Introduction -->
-        <div class="bg-gradient-to-r from-matrix-green/10 to-transparent border-r-4 border-matrix-green p-6 rounded-lg mb-10">
-            <p class="text-gray-300 leading-relaxed text-sm sm:text-base" data-i18n="guide.intro">عندما تشتري حساب <span class="text-matrix-green font-bold">The Real World</span>، فأنت لا تشتري مجرد كورس واحد، بل تدخل إلى منصة تعليمية متكاملة تحتوي على <span class="text-matrix-green font-bold">19 أسلوباً حديثاً</span> لتوليد الثروة. المنصة مقسمة إلى "كليات" (Campuses)، كل كلية تركز على مهارة معينة تدر الأموال.</p>
+        <div
+            class="bg-gradient-to-r from-matrix-green/10 to-transparent border-r-4 border-matrix-green p-6 rounded-lg mb-10">
+            <p class="text-gray-300 leading-relaxed text-sm sm:text-base" data-i18n="guide.intro">عندما تشتري حساب <span
+                    class="text-matrix-green font-bold">The Real World</span>، فأنت لا تشتري مجرد كورس واحد، بل تدخل إلى
+                منصة تعليمية متكاملة تحتوي على <span class="text-matrix-green font-bold">19 أسلوباً حديثاً</span> لتوليد
+                الثروة. المنصة مقسمة إلى "كليات" (Campuses)، كل كلية تركز على مهارة معينة تدر الأموال.</p>
         </div>
 
         <!-- Campus Cards -->
         <div class="space-y-6">
 
             <!-- 1. E-Commerce Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">🛒</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus1.title">1. كلية التجارة الإلكترونية</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus1.title">1. كلية التجارة
+                            الإلكترونية</h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus1.subtitle">E-Commerce Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus1.desc">ستتعلم كيفية بيع المنتجات عبر الإنترنت دون أن تلمسها بيدك (الدروبشيبينغ). يعلمك الخبراء كيفية إيجاد "المنتجات الرابحة"، وبناء متجر احترافي، وتسويق هذه المنتجات باستخدام الإعلانات المدفوعة (TikTok Ads) أو الزيارات المجانية (Organic Viral Traffic).</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus1.desc">ستتعلم كيفية بيع
+                            المنتجات عبر الإنترنت دون أن تلمسها بيدك (الدروبشيبينغ). يعلمك الخبراء كيفية إيجاد "المنتجات
+                            الرابحة"، وبناء متجر احترافي، وتسويق هذه المنتجات باستخدام الإعلانات المدفوعة (TikTok Ads)
+                            أو الزيارات المجانية (Organic Viral Traffic).</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus1.forWho">للأشخاص الذين يملكون بعض رأس المال للمخاطرة أو لديهم قدرة عالية على صناعة فيديوهات فيرال.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus1.forWho">للأشخاص الذين يملكون بعض رأس المال
+                            للمخاطرة أو لديهم قدرة عالية على صناعة فيديوهات فيرال.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus1.tip">إذا كانت ميزانيتك محدودة (أقل من 500-1000$)، ركز على استراتيجية "TikTok Organic" لأنها لا تتطلب دفع أموال للإعلانات.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus1.tip">إذا كانت ميزانيتك محدودة (أقل من
+                                500-1000$)، ركز على استراتيجية "TikTok Organic" لأنها لا تتطلب دفع أموال
+                                للإعلانات.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 2. Copywriting Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">✍️</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus2.title">2. كلية الكتابة الإعلانية</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus2.title">2. كلية الكتابة
+                            الإعلانية</h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus2.subtitle">Copywriting Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus2.desc">فن بيع الكلام. ستتعلم كيف تكتب نصوصاً تبيع المنتجات، وكيف تكتب رسائل بريد إلكتروني تجعل الناس يشترون، وكيف تصيغ محتوى صفحات الهبوط. الأهم من ذلك، يعلمونك كيفية العثور على عملاء وشركات لتدفع لك مقابل كتابة هذه النصوص لهم.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus2.desc">فن بيع الكلام. ستتعلم
+                            كيف تكتب نصوصاً تبيع المنتجات، وكيف تكتب رسائل بريد إلكتروني تجعل الناس يشترون، وكيف تصيغ
+                            محتوى صفحات الهبوط. الأهم من ذلك، يعلمونك كيفية العثور على عملاء وشركات لتدفع لك مقابل كتابة
+                            هذه النصوص لهم.</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus2.forWho">للمبتدئين الذين يملكون 0 دولار كرأس مال، ولكن لغتهم الإنجليزية قوية جداً.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus2.forWho">للمبتدئين الذين يملكون 0 دولار كرأس
+                            مال، ولكن لغتهم الإنجليزية قوية جداً.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus2.tip">هذا هو أفضل مكان للبدء إذا كنت "مفلساً" ولكنك تجيد الإنجليزية. السر هنا ليس في "تعلم الكتابة" فقط، بل في تطبيق دروس "جلب العملاء".</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus2.tip">هذا هو أفضل مكان للبدء إذا كنت "مفلساً"
+                                ولكنك تجيد الإنجليزية. السر هنا ليس في "تعلم الكتابة" فقط، بل في تطبيق دروس "جلب
+                                العملاء".</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 3. AI & Content Creation Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">🤖</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus3.title">3. كلية الذكاء الاصطناعي وصناعة المحتوى</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus3.title">3. كلية الذكاء
+                            الاصطناعي وصناعة المحتوى</h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus3.subtitle">AI & Content Creation Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus3.desc">هذا هو الكورس الأكثر طلباً حالياً. ينقسم إلى قسمين: <strong class="text-white">صناعة المحتوى</strong> (تعلم تحرير الفيديو والتصميم وكيفية جعل الفيديوهات تنتشر فيروسياً)، و<strong class="text-white">أتمتة الذكاء الاصطناعي</strong> (كيفية استخدام أدوات AI لبناء أنظمة للشركات - تخصص جديد ومربح جداً).</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus3.desc">هذا هو الكورس الأكثر
+                            طلباً حالياً. ينقسم إلى قسمين: <strong class="text-white">صناعة المحتوى</strong> (تعلم تحرير
+                            الفيديو والتصميم وكيفية جعل الفيديوهات تنتشر فيروسياً)، و<strong class="text-white">أتمتة
+                                الذكاء الاصطناعي</strong> (كيفية استخدام أدوات AI لبناء أنظمة للشركات - تخصص جديد ومربح
+                            جداً).</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus3.forWho">للمبدعين، ولمن يريد استغلال طفرة الذكاء الاصطناعي الحالية. مناسب جداً لمن لا يملك رأس مال كبير.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus3.forWho">للمبدعين، ولمن يريد استغلال طفرة
+                            الذكاء الاصطناعي الحالية. مناسب جداً لمن لا يملك رأس مال كبير.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus3.tip">سوق "وكالات أتمتة الذكاء الاصطناعي" (AAA) ينفجر حالياً. إذا كنت ذكياً تقنياً، توجه مباشرة لهذا القسم!</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus3.tip">سوق "وكالات أتمتة الذكاء الاصطناعي" (AAA)
+                                ينفجر حالياً. إذا كنت ذكياً تقنياً، توجه مباشرة لهذا القسم!</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 4. Content Creation Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">🎬</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus4.title">4. كلية صناعة المحتوى</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus4.title">4. كلية صناعة المحتوى
+                        </h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus4.subtitle">Content Creation Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus4.desc">كيفية إنتاج وتحرير فيديوهات قصيرة (Shorts/Reels) تنتشر بسرعة البرق (Viral). ستتعلم المونتاج، التصميم، وكيفية خطف انتباه المشاهد في أول 3 ثوانٍ.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus4.desc">كيفية إنتاج وتحرير
+                            فيديوهات قصيرة (Shorts/Reels) تنتشر بسرعة البرق (Viral). ستتعلم المونتاج، التصميم، وكيفية
+                            خطف انتباه المشاهد في أول 3 ثوانٍ.</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus4.forWho">للمبدعين، ولمن يحبون العمل على برامج المونتاج. هذه المهارة مطلوبة جداً سواء لعملك الخاص أو للعمل مع مشاهير السوشيال ميديا.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus4.forWho">للمبدعين، ولمن يحبون العمل على برامج
+                            المونتاج. هذه المهارة مطلوبة جداً سواء لعملك الخاص أو للعمل مع مشاهير السوشيال ميديا.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus4.tip">الطلب على "محرري الفيديو" (Video Editors) هائل. يمكنك دمج هذه المهارة مع الذكاء الاصطناعي لإنتاج فيديوهات بجودة عالية في وقت قياسي.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus4.tip">الطلب على "محرري الفيديو" (Video Editors)
+                                هائل. يمكنك دمج هذه المهارة مع الذكاء الاصطناعي لإنتاج فيديوهات بجودة عالية في وقت
+                                قياسي.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 5. Crypto Trading Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">📉</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus5.title">5. كلية تداول الكريبتو</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus5.title">5. كلية تداول الكريبتو
+                        </h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus5.subtitle">Crypto Trading Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus5.desc">المضاربة اليومية السريعة. كيف تقرأ الرسوم البيانية (التحليل الفني)، وكيف تربح من صعود وهبوط العملات الرقمية بشكل يومي.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus5.desc">المضاربة اليومية
+                            السريعة. كيف تقرأ الرسوم البيانية (التحليل الفني)، وكيف تربح من صعود وهبوط العملات الرقمية
+                            بشكل يومي.</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus5.forWho">للأشخاص الذين يملكون أعصاباً حديدية ومالاً فائضاً للمخاطرة. هذا ليس عملاً، بل هو مهارة قنص الفرص.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus5.forWho">للأشخاص الذين يملكون أعصاباً حديدية
+                            ومالاً فائضاً للمخاطرة. هذا ليس عملاً، بل هو مهارة قنص الفرص.</p>
                     </div>
                     <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
-                        <p class="text-red-400 text-sm"><span class="font-bold" data-i18n="campus.warning">⚠️ تحذير:</span> <span data-i18n="campus5.warning">التداول اليومي عالي المخاطرة. لا تدخل هنا بمال تحتاجه لدفع إيجارك. ابدأ بمبالغ صغيرة جداً حتى تتقن الاستراتيجية.</span></p>
+                        <p class="text-red-400 text-sm"><span class="font-bold" data-i18n="campus.warning">⚠️
+                                تحذير:</span> <span data-i18n="campus5.warning">التداول اليومي عالي المخاطرة. لا تدخل
+                                هنا بمال تحتاجه لدفع إيجارك. ابدأ بمبالغ صغيرة جداً حتى تتقن الاستراتيجية.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 6. Crypto Investing Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">₿</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus6.title">6. كلية الاستثمار في الكريبتو</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus6.title">6. كلية الاستثمار في
+                            الكريبتو</h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus6.subtitle">Crypto Investing Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus6.desc">كيف تكتشف العملات والمشاريع القوية قبل أن يرتفع سعرها (الاستثمار طويل الأمد). ستتعلم الفرق بين المشاريع الحقيقية والمشاريع الوهمية (Scams).</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus6.desc">كيف تكتشف العملات
+                            والمشاريع القوية قبل أن يرتفع سعرها (الاستثمار طويل الأمد). ستتعلم الفرق بين المشاريع
+                            الحقيقية والمشاريع الوهمية (Scams).</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus6.forWho">لمن لديه رأس مال ويريد تجميده لفترة (6 أشهر - سنة) ليحصل على عوائد ضخمة لاحقاً.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus6.forWho">لمن لديه رأس مال ويريد تجميده لفترة
+                            (6 أشهر - سنة) ليحصل على عوائد ضخمة لاحقاً.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus6.tip">هذه الكلية تعلمك الصبر. الشراء الصحيح والاحتفاظ (HODL) هو السر هنا، بعيداً عن توتر المضاربة اليومية.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus6.tip">هذه الكلية تعلمك الصبر. الشراء الصحيح
+                                والاحتفاظ (HODL) هو السر هنا، بعيداً عن توتر المضاربة اليومية.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 7. DeFi Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">🌐</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus7.title">7. كلية التمويل اللامركزي</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus7.title">7. كلية التمويل
+                            اللامركزي</h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus7.subtitle">DeFi Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus7.desc">الجانب التقني المتقدم للكريبتو. كيف تستخدم منصات التبادل اللامركزي (DEXs) لتحقيق دخل سلبي من عملاتك، وما يعرف بـ "زراعة العائد" (Yield Farming).</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus7.desc">الجانب التقني المتقدم
+                            للكريبتو. كيف تستخدم منصات التبادل اللامركزي (DEXs) لتحقيق دخل سلبي من عملاتك، وما يعرف بـ
+                            "زراعة العائد" (Yield Farming).</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus7.forWho">للمستثمرين المتقدمين في الكريبتو. لا تدخل هنا إذا كنت لا تزال مبتدئاً في فهم البلوكتشين.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus7.forWho">للمستثمرين المتقدمين في الكريبتو. لا
+                            تدخل هنا إذا كنت لا تزال مبتدئاً في فهم البلوكتشين.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus7.tip">هذا هو المستوى التالي بعد "الاستثمار". يمكنك تحقيق عوائد سنوية (APY) أعلى بكثير من البنوك التقليدية إذا تعلمت الاستراتيجيات هنا.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus7.tip">هذا هو المستوى التالي بعد "الاستثمار".
+                                يمكنك تحقيق عوائد سنوية (APY) أعلى بكثير من البنوك التقليدية إذا تعلمت الاستراتيجيات
+                                هنا.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 8. Stocks Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">📈</span>
                     <div>
@@ -962,135 +1098,187 @@
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus8.desc">تداول الأسهم في الأسواق العالمية والخيارات (Options). يركزون على "التداول المتأرجح" (Swing Trading) الذي لا يتطلب الجلوس أمام الشاشة طوال اليوم.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus8.desc">تداول الأسهم في
+                            الأسواق العالمية والخيارات (Options). يركزون على "التداول المتأرجح" (Swing Trading) الذي لا
+                            يتطلب الجلوس أمام الشاشة طوال اليوم.</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus8.forWho">لمن يفضل الأسواق المنظمة والأكثر استقراراً مقارنة بالكريبتو، ولديه رأس مال مبدئي للاستثمار ($2000+).</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus8.forWho">لمن يفضل الأسواق المنظمة والأكثر
+                            استقراراً مقارنة بالكريبتو، ولديه رأس مال مبدئي للاستثمار ($2000+).</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus8.tip">إذا كان لديك وظيفة، فهذا أفضل خيار لك لأن استراتيجية Swing Trading تتيح لك التداول دون التأثير على وقت عملك.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus8.tip">إذا كان لديك وظيفة، فهذا أفضل خيار لك لأن
+                                استراتيجية Swing Trading تتيح لك التداول دون التأثير على وقت عملك.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 9. Freelancing Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">💼</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus9.title">9. كلية العمل الحر</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus9.title">9. كلية العمل الحر
+                        </h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus9.subtitle">Freelancing Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus9.desc">كيف تحول أي مهارة تمتلكها (تصميم، ترجمة، برمجة) إلى "بيزنس". يعلمك كيف ترفع أسعارك، وكيف تتفاوض، وكيف تجد عملاء خارج منصات العمل الحر الرخيصة.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus9.desc">كيف تحول أي مهارة
+                            تمتلكها (تصميم، ترجمة، برمجة) إلى "بيزنس". يعلمك كيف ترفع أسعارك، وكيف تتفاوض، وكيف تجد
+                            عملاء خارج منصات العمل الحر الرخيصة.</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus9.forWho">لأي شخص يريد الحصول على أول 1000$ له عبر الإنترنت بسرعة باستخدام مهاراته الحالية.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus9.forWho">لأي شخص يريد الحصول على أول 1000$ له
+                            عبر الإنترنت بسرعة باستخدام مهاراته الحالية.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus9.tip">استخدم هذه الكلية كـ "جسر". ابدأ هنا لتجمع رأس المال بسرعة، ثم استثمره لاحقاً في التجارة الإلكترونية أو الأسهم.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus9.tip">استخدم هذه الكلية كـ "جسر". ابدأ هنا لتجمع
+                                رأس المال بسرعة، ثم استثمره لاحقاً في التجارة الإلكترونية أو الأسهم.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 10. Client Acquisition Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">🤝</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus10.title">10. كلية اكتساب العملاء</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus10.title">10. كلية اكتساب
+                            العملاء</h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus10.subtitle">Client Acquisition Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus10.desc">فن البيع والمراسلة الباردة. كيف تجد عملاء (Leads)، كيف تراسلهم، وكيف تقنعهم بدفع المال لك مقابل خدماتك.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus10.desc">فن البيع والمراسلة
+                            الباردة. كيف تجد عملاء (Leads)، كيف تراسلهم، وكيف تقنعهم بدفع المال لك مقابل خدماتك.</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus10.forWho">هذه "مهارة مساندة" ضرورية لكل من يعمل في التسويق أو العمل الحر. بدون عملاء، لا يوجد مال.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus10.forWho">هذه "مهارة مساندة" ضرورية لكل من
+                            يعمل في التسويق أو العمل الحر. بدون عملاء، لا يوجد مال.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus10.tip">ادرس هذه الكلية بالتوازي مع أي مهارة أخرى. فمهما كنت بارعاً في التصميم أو البرمجة، لن تربح شيئاً إذا لم تكن تعرف كيف "تبيع" نفسك.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus10.tip">ادرس هذه الكلية بالتوازي مع أي مهارة أخرى.
+                                فمهما كنت بارعاً في التصميم أو البرمجة، لن تربح شيئاً إذا لم تكن تعرف كيف "تبيع"
+                                نفسك.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 11. Affiliate Marketing Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">📢</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus11.title">11. كلية التسويق بالعمولة</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus11.title">11. كلية التسويق
+                            بالعمولة</h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus11.subtitle">Affiliate Marketing Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus11.desc">كيفية تسويق منتجات الآخرين (بما في ذلك عضوية The Real World) مقابل عمولة. يركزون بقوة على استراتيجيات الفيديوهات القصيرة (TikTok/Reels).</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus11.desc">كيفية تسويق منتجات
+                            الآخرين (بما في ذلك عضوية The Real World) مقابل عمولة. يركزون بقوة على استراتيجيات
+                            الفيديوهات القصيرة (TikTok/Reels).</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus11.forWho">للمبدعين في صناعة المحتوى الفيروسي (Viral Content) والذين لا يملكون منتجاً خاصاً بهم لبيعه.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus11.forWho">للمبدعين في صناعة المحتوى الفيروسي
+                            (Viral Content) والذين لا يملكون منتجاً خاصاً بهم لبيعه.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus11.tip">المنافسة هنا شرسة. لكي تنجح، يجب أن تكون مبدعاً جداً وتنتج كميات كبيرة من المحتوى يومياً.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus11.tip">المنافسة هنا شرسة. لكي تنجح، يجب أن تكون
+                                مبدعاً جداً وتنتج كميات كبيرة من المحتوى يومياً.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 12. Business Mastery Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">👔</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus12.title">12. كلية إدارة الأعمال</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus12.title">12. كلية إدارة
+                            الأعمال</h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus12.subtitle">Business Mastery Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus12.desc">كيف تدير أموالك، الضرائب، التوظيف، وكيف توسع شركتك. هذه دروس متقدمة في الإدارة المالية والهيكلة القانونية.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus12.desc">كيف تدير أموالك،
+                            الضرائب، التوظيف، وكيف توسع شركتك. هذه دروس متقدمة في الإدارة المالية والهيكلة القانونية.
+                        </p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus12.forWho">للمستوى المتقدم فقط. لمن بدأ بالفعل في جني المال ويريد الانتقال من "مستقل" إلى "رجل أعمال".</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus12.forWho">للمستوى المتقدم فقط. لمن بدأ بالفعل
+                            في جني المال ويريد الانتقال من "مستقل" إلى "رجل أعمال".</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus12.tip">لا تضيع وقتك هنا إذا لم تكن قد كسبت أول دولار لك بعد. عد إليها لاحقاً عندما تحتاج لتوظيف فريق عمل.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus12.tip">لا تضيع وقتك هنا إذا لم تكن قد كسبت أول
+                                دولار لك بعد. عد إليها لاحقاً عندما تحتاج لتوظيف فريق عمل.</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- 13. Fitness Campus -->
-            <div class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
+            <div
+                class="bg-[#111]/80 rounded-2xl border border-matrix-green/30 hover:border-matrix-green transition-all overflow-hidden">
                 <div class="bg-matrix-green/10 p-4 flex items-center gap-4">
                     <span class="text-4xl">💪</span>
                     <div>
-                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus13.title">13. كلية اللياقة البدنية</h3>
+                        <h3 class="text-xl font-bold text-matrix-green" data-i18n="campus13.title">13. كلية اللياقة
+                            البدنية</h3>
                         <p class="text-gray-400 text-sm" data-i18n="campus13.subtitle">Fitness Campus</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus13.desc">نظام تدريب وتغذية مصمم خصيصاً لرواد الأعمال. الفكرة هي الحصول على أقصى طاقة جسدية وذهنية بأقل وقت ممكن في الجيم.</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.whatLearn">📖 ماذا ستتعلم؟
+                        </h4>
+                        <p class="text-gray-300 text-sm leading-relaxed" data-i18n="campus13.desc">نظام تدريب وتغذية
+                            مصمم خصيصاً لرواد الأعمال. الفكرة هي الحصول على أقصى طاقة جسدية وذهنية بأقل وقت ممكن في
+                            الجيم.</p>
                     </div>
                     <div>
-                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟</h4>
-                        <p class="text-gray-300 text-sm" data-i18n="campus13.forWho">لكل مشترك. "العقل السليم في الجسم السليم".</p>
+                        <h4 class="text-matrix-green font-semibold mb-2" data-i18n="campus.forWho">👤 لمن هذا المسار؟
+                        </h4>
+                        <p class="text-gray-300 text-sm" data-i18n="campus13.forWho">لكل مشترك. "العقل السليم في الجسم
+                            السليم".</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡 نصيحتي:</span> <span data-i18n="campus13.tip">لا تتجاهل هذا القسم. الانضباط في الجسد ينعكس مباشرة على انضباطك في المال والعمل.</span></p>
+                        <p class="text-yellow-400 text-sm"><span class="font-bold" data-i18n="campus.tip">💡
+                                نصيحتي:</span> <span data-i18n="campus13.tip">لا تتجاهل هذا القسم. الانضباط في الجسد
+                                ينعكس مباشرة على انضباطك في المال والعمل.</span></p>
                     </div>
                 </div>
             </div>
@@ -1098,41 +1286,55 @@
         </div>
 
         <!-- Golden Tips Section -->
-        <div class="mt-12 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-2xl p-6">
-            <h3 class="text-2xl font-bold text-yellow-400 mb-6 text-center" data-i18n="tips.title">⭐ نصائح ذهبية للمشترك الجديد</h3>
+        <div
+            class="mt-12 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-2xl p-6">
+            <h3 class="text-2xl font-bold text-yellow-400 mb-6 text-center" data-i18n="tips.title">⭐ نصائح ذهبية للمشترك
+                الجديد</h3>
             <div class="space-y-4">
                 <div class="bg-black/40 p-4 rounded-lg">
                     <p class="text-white font-bold mb-2" data-i18n="tips.tip1.title">🚫 لا تكن "سائحاً"</p>
-                    <p class="text-gray-300 text-sm" data-i18n="tips.tip1.desc">أكبر خطأ يقع فيه المشتركون هو التنقل بين الكليات (أسبوع تجارة إلكترونية، وأسبوع كريبتو..). هذا يضمن فشلك. اختر مجالاً واحداً فقط والتزم به لمدة 3 أشهر على الأقل.</p>
+                    <p class="text-gray-300 text-sm" data-i18n="tips.tip1.desc">أكبر خطأ يقع فيه المشتركون هو التنقل بين
+                        الكليات (أسبوع تجارة إلكترونية، وأسبوع كريبتو..). هذا يضمن فشلك. اختر مجالاً واحداً فقط والتزم
+                        به لمدة 3 أشهر على الأقل.</p>
                 </div>
                 <div class="bg-black/40 p-4 rounded-lg">
-                    <p class="text-white font-bold mb-2" data-i18n="tips.tip2.title">⚖️ حدد موقفك (المال مقابل الوقت)</p>
+                    <p class="text-white font-bold mb-2" data-i18n="tips.tip2.title">⚖️ حدد موقفك (المال مقابل الوقت)
+                    </p>
                     <div class="grid md:grid-cols-2 gap-3 mt-2">
                         <div class="bg-matrix-green/10 p-3 rounded">
-                            <p class="text-matrix-green font-semibold text-sm" data-i18n="tips.tip2.option1.title">لديك وقت ولا تملك مالاً؟</p>
-                            <p class="text-gray-300 text-xs" data-i18n="tips.tip2.option1.desc">اختر: الكتابة الإعلانية، العمل الحر، أو صناعة المحتوى</p>
+                            <p class="text-matrix-green font-semibold text-sm" data-i18n="tips.tip2.option1.title">لديك
+                                وقت ولا تملك مالاً؟</p>
+                            <p class="text-gray-300 text-xs" data-i18n="tips.tip2.option1.desc">اختر: الكتابة الإعلانية،
+                                العمل الحر، أو صناعة المحتوى</p>
                         </div>
                         <div class="bg-matrix-green/10 p-3 rounded">
-                            <p class="text-matrix-green font-semibold text-sm" data-i18n="tips.tip2.option2.title">لديك مال ولا تملك وقتاً؟</p>
-                            <p class="text-gray-300 text-xs" data-i18n="tips.tip2.option2.desc">اختر: التجارة الإلكترونية أو الاستثمار في الكريبتو/الأسهم</p>
+                            <p class="text-matrix-green font-semibold text-sm" data-i18n="tips.tip2.option2.title">لديك
+                                مال ولا تملك وقتاً؟</p>
+                            <p class="text-gray-300 text-xs" data-i18n="tips.tip2.option2.desc">اختر: التجارة
+                                الإلكترونية أو الاستثمار في الكريبتو/الأسهم</p>
                         </div>
                     </div>
                 </div>
                 <div class="bg-black/40 p-4 rounded-lg">
                     <p class="text-white font-bold mb-2" data-i18n="tips.tip3.title">💪 تجاوز الشهر الأول</p>
-                    <p class="text-gray-300 text-sm" data-i18n="tips.tip3.desc">الشهر الأول هو الأصعب، ستشعر بضغط المعلومات. لا تستسلم. النتائج الحقيقية تظهر غالباً في الشهر الثاني أو الثالث من العمل الجاد.</p>
+                    <p class="text-gray-300 text-sm" data-i18n="tips.tip3.desc">الشهر الأول هو الأصعب، ستشعر بضغط
+                        المعلومات. لا تستسلم. النتائج الحقيقية تظهر غالباً في الشهر الثاني أو الثالث من العمل الجاد.</p>
                 </div>
             </div>
             <div class="mt-6 text-center bg-matrix-green/20 p-4 rounded-lg">
-                <p class="text-matrix-green font-bold" data-i18n="tips.final">نحن نوفر لك "المفتاح" للدخول إلى هذا العالم، لكن "الجهد" يجب أن يأتي من طرفك. بالتوفيق في رحلتك نحو الثراء! 🚀</p>
+                <p class="text-matrix-green font-bold" data-i18n="tips.final">نحن نوفر لك "المفتاح" للدخول إلى هذا
+                    العالم، لكن "الجهد" يجب أن يأتي من طرفك. بالتوفيق في رحلتك نحو الثراء! 🚀</p>
             </div>
         </div>
 
         <!-- Final CTA Section -->
         <div class="mt-12 text-center">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-matrix-green text-glow" data-i18n="footer.title">لا تضيع الفرصة</h2>
-            <p class="text-lg sm:text-xl text-gray-400 mb-8" data-i18n="footer.subtitle">السعر سيرتفع قريباً. انضم للنخبة الآن.</p>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-matrix-green text-glow"
+                data-i18n="footer.title">لا تضيع الفرصة</h2>
+            <p class="text-lg sm:text-xl text-gray-400 mb-8" data-i18n="footer.subtitle">السعر سيرتفع قريباً. انضم
+                للنخبة الآن.</p>
             <a href="https://wa.me/213782125821"
+                onclick="if(typeof fbq !== 'undefined') { const isUSD = location.search.includes('USD'); const val = isUSD ? 18 : 3750; const cur = isUSD ? 'USD' : 'DZD'; fbq('track', 'Lead', {content_name: 'The Real World', value: val, currency: cur}); fbq('track', 'InitiateCheckout', {content_name: 'The Real World', value: val, currency: cur}); }"
                 class="bg-matrix-green text-black font-bold text-xl sm:text-2xl py-4 px-12 sm:px-16 rounded-full hover:bg-green-400 transition-all transform hover:scale-105 matrix-glow shadow-lg inline-block cta-pulse"
                 data-i18n="footer.cta">
                 🚀 ابدأ رحلتك الآن
@@ -1150,15 +1352,18 @@
             <span class="close-btn baridimob-close">&times;</span>
             <h2 data-i18n="modal.baridimob.title">الدفع عبر BaridiMob</h2>
             <div class="crypto-product-info">
-                <p><strong data-i18n="modal.product">المنتج:</strong> <span id="baridimob-product-name">The Real World Account - Veteran Plan</span></p>
-                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span id="baridimob-price-usd">15</span> USDT</p>
+                <p><strong data-i18n="modal.product">المنتج:</strong> <span id="baridimob-product-name">The Real World
+                        Account - Veteran Plan</span></p>
+                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
+                        id="baridimob-price-usd">15</span> USDT</p>
             </div>
 
             <div class="crypto-wallet-info">
                 <h3 data-i18n="modal.paymentInfo">معلومات الدفع</h3>
                 <div class="wallet-address-box">
                     <div style="text-align: center; width: 100%;">
-                        <p style="margin-bottom: 10px; color: var(--text-secondary);" data-i18n="modal.baridimob.rip">RIP BaridiMob:</p>
+                        <p style="margin-bottom: 10px; color: var(--text-secondary);" data-i18n="modal.baridimob.rip">
+                            RIP BaridiMob:</p>
                         <code id="baridimob-rip" style="font-size: 1.2rem;">00799999002787548473</code>
                     </div>
                     <button class="copy-btn" onclick="copyBaridiMobRIP()">
@@ -1203,8 +1408,10 @@
             <span class="close-btn crypto-close">&times;</span>
             <h2 data-i18n="modal.crypto.title">الدفع بالعملات الرقمية</h2>
             <div class="crypto-product-info">
-                <p><strong data-i18n="modal.product">المنتج:</strong> <span id="crypto-product-name">The Real World Account - Veteran Plan</span></p>
-                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span id="crypto-price-usd">15</span> USDT</p>
+                <p><strong data-i18n="modal.product">المنتج:</strong> <span id="crypto-product-name">The Real World
+                        Account - Veteran Plan</span></p>
+                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
+                        id="crypto-price-usd">15</span> USDT</p>
             </div>
 
             <div class="network-selector">
@@ -1224,7 +1431,8 @@
             </div>
 
             <div class="crypto-wallet-info">
-                <h3><span data-i18n="modal.crypto.walletAddress">عنوان المحفظة</span> (<span id="selected-network">TRC20</span>)</h3>
+                <h3><span data-i18n="modal.crypto.walletAddress">عنوان المحفظة</span> (<span
+                        id="selected-network">TRC20</span>)</h3>
                 <div class="wallet-address-box">
                     <code id="wallet-address">TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9</code>
                     <button class="copy-btn" onclick="copyWalletAddress()">
@@ -1248,12 +1456,14 @@
                     <li data-i18n="modal.crypto.step1">اختر الشبكة المناسبة (TRC20 أو BEP20)</li>
                     <li data-i18n="modal.crypto.step2">انسخ عنوان المحفظة أو امسح QR Code</li>
                     <li data-i18n="modal.crypto.step3">افتح تطبيق Binance أو أي محفظة USDT</li>
-                    <li data-i18n="modal.crypto.step4">تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)</li>
+                    <li data-i18n="modal.crypto.step4">تأكد من اختيار نفس الشبكة (<strong
+                            id="network-warning">TRC20</strong>)</li>
                     <li data-i18n="modal.crypto.step5">أرسل المبلغ المطلوب</li>
                     <li data-i18n="modal.crypto.step6">احتفظ بـ Transaction ID</li>
                     <li data-i18n="modal.crypto.step7">اضغط "تم الدفع" للتواصل معنا</li>
                 </ol>
-                <p class="warning-note" data-i18n="modal.crypto.warning">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد أموالك!</p>
+                <p class="warning-note" data-i18n="modal.crypto.warning">⚠️ تأكد من اختيار الشبكة الصحيحة وإلا ستفقد
+                    أموالك!</p>
             </div>
 
             <button class="confirm-payment-btn" onclick="confirmCryptoPayment()">
@@ -1272,15 +1482,18 @@
             <span class="close-btn redotpay-close">&times;</span>
             <h2 data-i18n="modal.redotpay.title">الدفع عبر RedotPay</h2>
             <div class="crypto-product-info">
-                <p><strong data-i18n="modal.product">المنتج:</strong> <span id="redotpay-product-name">The Real World Account - Veteran Plan</span></p>
-                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span id="redotpay-price-usd">15</span> USD</p>
+                <p><strong data-i18n="modal.product">المنتج:</strong> <span id="redotpay-product-name">The Real World
+                        Account - Veteran Plan</span></p>
+                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
+                        id="redotpay-price-usd">15</span> USD</p>
             </div>
 
             <div class="crypto-wallet-info">
                 <h3 data-i18n="modal.paymentInfo">معلومات الدفع</h3>
                 <div class="wallet-address-box">
                     <div style="text-align: center; width: 100%;">
-                        <p style="margin-bottom: 10px; color: var(--text-secondary);" data-i18n="modal.redotpay.idLabel">RedotPay ID:</p>
+                        <p style="margin-bottom: 10px; color: var(--text-secondary);"
+                            data-i18n="modal.redotpay.idLabel">RedotPay ID:</p>
                         <code id="redotpay-id" style="font-size: 1.3rem;">1117632168</code>
                     </div>
                     <button class="copy-btn" onclick="copyRedotPayID()">
@@ -1321,44 +1534,47 @@
     <!-- Floating Social Buttons -->
     <div class="floating-social-buttons">
         <!-- WhatsApp Button -->
-        <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن The Real World Account" 
-           class="social-float whatsapp-float" 
-           target="_blank"
-           aria-label="Contact us on WhatsApp">
+        <a href="https://wa.me/213782125821?text=مرحباً، أريد الاستفسار عن The Real World Account"
+            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_name: 'The Real World', content_category: 'WhatsApp'}); }"
+            class="social-float whatsapp-float" target="_blank" aria-label="Contact us on WhatsApp">
             <span class="social-tooltip" data-i18n="whatsapp.tooltip">تحدث معنا الآن!</span>
             <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z"/>
+                <path
+                    d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.305-0.153-1.806-0.891-2.086-0.993s-0.484-0.153-0.688 0.153c-0.203 0.305-0.788 0.993-0.966 1.197s-0.356 0.229-0.661 0.076c-0.305-0.153-1.289-0.475-2.454-1.513-0.908-0.809-1.521-1.809-1.699-2.114s-0.018-0.47 0.134-0.622c0.138-0.137 0.305-0.356 0.458-0.534s0.203-0.305 0.305-0.509c0.102-0.203 0.051-0.381-0.025-0.534s-0.688-1.659-0.943-2.274c-0.248-0.598-0.499-0.517-0.688-0.526-0.178-0.009-0.381-0.011-0.585-0.011s-0.534 0.076-0.814 0.381c-0.28 0.305-1.069 1.044-1.069 2.548s1.095 2.956 1.248 3.159c0.153 0.203 2.156 3.289 5.223 4.611 0.729 0.315 1.299 0.503 1.743 0.644 0.732 0.232 1.399 0.199 1.926 0.121 0.588-0.087 1.806-0.738 2.061-1.451s0.255-1.323 0.178-1.451c-0.076-0.127-0.28-0.203-0.585-0.356z" />
             </svg>
         </a>
 
         <!-- Instagram Button -->
-        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw" 
-           class="social-float instagram-float" 
-           target="_blank"
-           aria-label="Follow us on Instagram">
+        <a href="https://www.instagram.com/market_algeriaa?igsh=eTI4cGdzbDZtOXYw"
+            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Contact', {content_name: 'The Real World', content_category: 'Instagram'}); }"
+            class="social-float instagram-float" target="_blank" aria-label="Follow us on Instagram">
             <span class="social-tooltip" data-i18n="instagram.tooltip">تابعنا على Instagram!</span>
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
             </svg>
         </a>
     </div>
 
     <!-- Image Modal for Reviews -->
     <div id="image-modal" class="modal" style="display: none;">
-        <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 0; background: transparent; border: none;">
-            <span class="close-btn" onclick="closeImageModal()" style="position: absolute; top: 20px; right: 20px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; background: rgba(0,0,0,0.7); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</span>
-            <img id="modal-image" src="" alt="Review Image" style="max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 10px; box-shadow: 0 0 50px rgba(57, 255, 20, 0.5);">
+        <div class="modal-content"
+            style="max-width: 90vw; max-height: 90vh; padding: 0; background: transparent; border: none;">
+            <span class="close-btn" onclick="closeImageModal()"
+                style="position: absolute; top: 20px; right: 20px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; background: rgba(0,0,0,0.7); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</span>
+            <img id="modal-image" src="" alt="Review Image"
+                style="max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 10px; box-shadow: 0 0 50px rgba(57, 255, 20, 0.5);">
         </div>
     </div>
 
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function(){
-            emailjs.init({
-                publicKey: "lNwV3VedQul6wNWTq",
-            });
-        })();
+            (function () {
+                emailjs.init({
+                    publicKey: "lNwV3VedQul6wNWTq",
+                });
+            })();
     </script>
 
     <!-- Firebase SDK -->
@@ -1385,27 +1601,30 @@
         // Make Firebase available globally
         window.db = db;
         window.firebaseModules = { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy };
-        
+
         // Trigger reviews loading after Firebase is ready
         window.dispatchEvent(new Event('firebaseReady'));
     </script>
 
     <!-- Giveaway Modal -->
     <div id="giveaway-modal" class="modal" style="display: none;">
-        <div class="modal-content" style="max-width: 700px; background: #0a0a0a; border: 2px solid #39ff14; border-radius: 20px; padding: 40px;">
-            <span class="close-btn" onclick="closeGiveawayModal()" style="color: #39ff14; font-size: 30px;">&times;</span>
-            
+        <div class="modal-content"
+            style="max-width: 700px; background: #0a0a0a; border: 2px solid #39ff14; border-radius: 20px; padding: 40px;">
+            <span class="close-btn" onclick="closeGiveawayModal()"
+                style="color: #39ff14; font-size: 30px;">&times;</span>
+
             <h2 style="text-align: center; color: #39ff14; font-size: 2rem; margin-bottom: 20px;">
                 🎉 سحب Giveaway 🎉
             </h2>
-            
+
             <div id="giveaway-content">
                 <div style="text-align: center; margin-bottom: 30px;">
                     <p style="color: #fff; font-size: 1.2rem; margin-bottom: 20px;">
                         سيتم اختيار <span style="color: #39ff14; font-weight: bold;">4 فائزين</span> عشوائياً
                     </p>
                     <p style="color: #888; font-size: 0.9rem;">
-                        عدد التقييمات المؤهلة: <span id="eligible-count" style="color: #39ff14; font-weight: bold;">0</span>
+                        عدد التقييمات المؤهلة: <span id="eligible-count"
+                            style="color: #39ff14; font-weight: bold;">0</span>
                     </p>
                 </div>
 
@@ -1419,9 +1638,9 @@
                         🏆 الفائزون 🏆
                     </h3>
                     <div id="winners-container"></div>
-                    
+
                     <div style="text-align: center; margin-top: 30px;">
-                        <button onclick="copyWinners()" 
+                        <button onclick="copyWinners()"
                             style="background: #39ff14; color: #000; padding: 12px 30px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem;">
                             📋 نسخ أسماء الفائزين
                         </button>
@@ -1429,7 +1648,7 @@
                 </div>
 
                 <div style="text-align: center; margin-top: 20px;" id="start-button-container">
-                    <button onclick="runGiveaway()" 
+                    <button onclick="runGiveaway()"
                         style="background: #39ff14; color: #000; padding: 15px 50px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.2rem; box-shadow: 0 5px 20px rgba(57, 255, 20, 0.3);">
                         🎲 ابدأ السحب
                     </button>
@@ -1440,8 +1659,13 @@
 
     <style>
         @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .winner-card {
@@ -1458,6 +1682,7 @@
                 opacity: 0;
                 transform: scale(0.8);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);

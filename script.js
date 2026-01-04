@@ -5,15 +5,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize International Expansion System
     // This integrates Currency Manager, Payment Manager, and all UI components
     let expansionSystem = null;
-    
+
     try {
         // Initialize the complete international expansion system
         expansionSystem = await initInternationalExpansion();
         console.log('✅ International expansion system ready');
-        
+
         // Setup payment button event listeners
         setupPaymentButtonListeners(expansionSystem.paymentManager);
-        
+
     } catch (error) {
         console.error('❌ Failed to initialize international expansion:', error);
     }
@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const orderBtns = document.querySelectorAll('.order-btn');
 
     console.log('Order buttons found:', orderBtns.length);
-    
+
     // Add click event listeners to order buttons
     // This ensures the onclick handlers work properly on mobile
     orderBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             const onclickAttr = this.getAttribute('onclick');
             if (onclickAttr) {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
     });
-    
+
     const hideContactChoiceModal = () => {
         if (contactChoiceModal) {
             contactChoiceModal.style.opacity = '0';
@@ -78,121 +78,143 @@ document.addEventListener('DOMContentLoaded', async () => {
     const networkBtns = document.querySelectorAll('.network-btn');
 
     console.log('Crypto buttons found:', cryptoPayBtns.length);
-    
+
     // Only setup payment modals if they exist on this page
     if (cryptoModal && cryptoPayBtns.length > 0 && networkBtns.length > 0) {
         console.log('Setting up crypto payment modal...');
-        
+
         let currentCryptoProduct = '';
         let currentCryptoPriceDZD = 0;
         let selectedNetwork = 'TRC20';
         let selectedAddress = 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9';
 
         cryptoPayBtns.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Crypto button clicked!');
-            
-            currentCryptoProduct = button.getAttribute('data-product');
-            const priceDZD = button.getAttribute('data-price');
-            const priceUSD = button.getAttribute('data-price-usd') || Math.ceil(priceDZD / 230); // استخدام السعر الصحيح من data-price-usd
-
-            document.getElementById('crypto-product-name').textContent = currentCryptoProduct;
-            document.getElementById('crypto-price-dzd').textContent = priceDZD;
-            document.getElementById('crypto-price-usd').textContent = priceUSD;
-
-            selectedNetwork = 'TRC20';
-            selectedAddress = 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9';
-            updateWalletDisplay();
-
-            console.log('Opening Crypto Modal:', cryptoModal);
-            cryptoModal.style.display = 'flex';
-            cryptoModal.classList.remove('hidden');
-            cryptoModal.classList.add('show');
-        });
-    });
-
-    networkBtns.forEach(button => {
-        button.addEventListener('click', () => {
-            networkBtns.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-
-            selectedNetwork = button.getAttribute('data-network');
-            selectedAddress = button.getAttribute('data-address');
-            updateWalletDisplay();
-        });
-    });
-
-    function updateWalletDisplay() {
-        document.getElementById('selected-network').textContent = selectedNetwork;
-        document.getElementById('wallet-address').textContent = selectedAddress;
-        document.getElementById('network-warning').textContent = selectedNetwork;
-
-        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${selectedAddress}`;
-        document.getElementById('qr-code').src = qrCodeUrl;
-    }
-
-    if (cryptoCloseBtn) {
-        cryptoCloseBtn.addEventListener('click', () => {
-            cryptoModal.style.display = 'none';
-            cryptoModal.classList.remove('show');
-            cryptoModal.classList.add('hidden');
-        });
-    }
-
-    window.addEventListener('click', (event) => {
-        if (event.target === cryptoModal) {
-            cryptoModal.style.display = 'none';
-            cryptoModal.classList.remove('show');
-            cryptoModal.classList.add('hidden');
-        }
-    });
-
-    // RedotPay Modal - Only run if elements exist
-    const redotpayModal = document.getElementById('redotpay-modal');
-    const redotpayCloseBtn = document.querySelector('.redotpay-close');
-    const redotpayBtns = document.querySelectorAll('.redotpay-btn');
-
-    console.log('RedotPay buttons found:', redotpayBtns.length);
-
-    if (redotpayModal && redotpayBtns.length > 0) {
-        redotpayBtns.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('RedotPay button clicked!');
-                const productName = button.getAttribute('data-product');
+                console.log('Crypto button clicked!');
+
+                currentCryptoProduct = button.getAttribute('data-product');
                 const priceDZD = button.getAttribute('data-price');
                 const priceUSD = button.getAttribute('data-price-usd') || Math.ceil(priceDZD / 230); // استخدام السعر الصحيح من data-price-usd
 
-                document.getElementById('redotpay-product-name').textContent = productName;
-                document.getElementById('redotpay-price-dzd').textContent = priceDZD;
-                document.getElementById('redotpay-price-usd').textContent = priceUSD;
+                document.getElementById('crypto-product-name').textContent = currentCryptoProduct;
+                document.getElementById('crypto-price-dzd').textContent = priceDZD;
+                document.getElementById('crypto-price-usd').textContent = priceUSD;
 
-                console.log('Opening RedotPay Modal:', redotpayModal);
-                redotpayModal.style.display = 'flex';
-                redotpayModal.classList.remove('hidden');
-                redotpayModal.classList.add('show');
+                selectedNetwork = 'TRC20';
+                selectedAddress = 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9';
+                updateWalletDisplay();
+
+                console.log('Opening Crypto Modal:', cryptoModal);
+                cryptoModal.style.display = 'flex';
+                cryptoModal.classList.remove('hidden');
+                cryptoModal.classList.add('show');
+
+                // Track AddPaymentInfo when modal opens
+                // Prevent double tracking if PaymentManager is also tracking this
+                if (typeof fbq !== 'undefined' && !window.paymentManager) {
+                    fbq('track', 'AddPaymentInfo', {
+                        content_name: currentCryptoProduct,
+                        value: parseFloat(priceDZD),
+                        currency: 'DZD',
+                        content_category: 'Crypto'
+                    });
+                }
             });
         });
 
-        if (redotpayCloseBtn) {
-            redotpayCloseBtn.addEventListener('click', () => {
-                redotpayModal.style.display = 'none';
-                redotpayModal.classList.remove('show');
-                redotpayModal.classList.add('hidden');
+        networkBtns.forEach(button => {
+            button.addEventListener('click', () => {
+                networkBtns.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                selectedNetwork = button.getAttribute('data-network');
+                selectedAddress = button.getAttribute('data-address');
+                updateWalletDisplay();
+            });
+        });
+
+        function updateWalletDisplay() {
+            document.getElementById('selected-network').textContent = selectedNetwork;
+            document.getElementById('wallet-address').textContent = selectedAddress;
+            document.getElementById('network-warning').textContent = selectedNetwork;
+
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${selectedAddress}`;
+            document.getElementById('qr-code').src = qrCodeUrl;
+        }
+
+        if (cryptoCloseBtn) {
+            cryptoCloseBtn.addEventListener('click', () => {
+                cryptoModal.style.display = 'none';
+                cryptoModal.classList.remove('show');
+                cryptoModal.classList.add('hidden');
             });
         }
 
         window.addEventListener('click', (event) => {
-            if (event.target === redotpayModal) {
-                redotpayModal.style.display = 'none';
-                redotpayModal.classList.remove('show');
-                redotpayModal.classList.add('hidden');
+            if (event.target === cryptoModal) {
+                cryptoModal.style.display = 'none';
+                cryptoModal.classList.remove('show');
+                cryptoModal.classList.add('hidden');
             }
         });
-    } // End of redotpay modal check
+
+        // RedotPay Modal - Only run if elements exist
+        const redotpayModal = document.getElementById('redotpay-modal');
+        const redotpayCloseBtn = document.querySelector('.redotpay-close');
+        const redotpayBtns = document.querySelectorAll('.redotpay-btn');
+
+        console.log('RedotPay buttons found:', redotpayBtns.length);
+
+        if (redotpayModal && redotpayBtns.length > 0) {
+            redotpayBtns.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('RedotPay button clicked!');
+                    const productName = button.getAttribute('data-product');
+                    const priceDZD = button.getAttribute('data-price');
+                    const priceUSD = button.getAttribute('data-price-usd') || Math.ceil(priceDZD / 230); // استخدام السعر الصحيح من data-price-usd
+
+                    document.getElementById('redotpay-product-name').textContent = productName;
+                    document.getElementById('redotpay-price-dzd').textContent = priceDZD;
+                    document.getElementById('redotpay-price-usd').textContent = priceUSD;
+
+                    console.log('Opening RedotPay Modal:', redotpayModal);
+                    redotpayModal.style.display = 'flex';
+                    redotpayModal.classList.remove('hidden');
+                    redotpayModal.classList.add('show');
+
+                    // Track AddPaymentInfo when modal opens
+                    // Prevent double tracking if PaymentManager is also tracking this
+                    if (typeof fbq !== 'undefined' && !window.paymentManager) {
+                        fbq('track', 'AddPaymentInfo', {
+                            content_name: productName,
+                            value: parseFloat(priceDZD),
+                            currency: 'DZD',
+                            content_category: 'RedotPay'
+                        });
+                    }
+                });
+            });
+
+            if (redotpayCloseBtn) {
+                redotpayCloseBtn.addEventListener('click', () => {
+                    redotpayModal.style.display = 'none';
+                    redotpayModal.classList.remove('show');
+                    redotpayModal.classList.add('hidden');
+                });
+            }
+
+            window.addEventListener('click', (event) => {
+                if (event.target === redotpayModal) {
+                    redotpayModal.style.display = 'none';
+                    redotpayModal.classList.remove('show');
+                    redotpayModal.classList.add('hidden');
+                }
+            });
+        } // End of redotpay modal check
     } // End of crypto modal check
 
     // BaridiMob Modal - Only run if elements exist
@@ -201,43 +223,54 @@ document.addEventListener('DOMContentLoaded', async () => {
     const baridimobBtns = document.querySelectorAll('.baridimob-btn');
 
     console.log('BaridiMob buttons found:', baridimobBtns.length);
-    
+
     if (baridimobModal && baridimobBtns.length > 0) {
 
-    baridimobBtns.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('BaridiMob button clicked!');
-            
-            const productName = button.getAttribute('data-product');
-            const priceDZD = button.getAttribute('data-price');
+        baridimobBtns.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('BaridiMob button clicked!');
 
-            document.getElementById('baridimob-product-name').textContent = productName;
-            document.getElementById('baridimob-price-dzd').textContent = priceDZD;
+                const productName = button.getAttribute('data-product');
+                const priceDZD = button.getAttribute('data-price');
 
-            console.log('Opening BaridiMob Modal:', baridimobModal);
-            baridimobModal.style.display = 'flex';
-            baridimobModal.classList.remove('hidden');
-            baridimobModal.classList.add('show');
+                document.getElementById('baridimob-product-name').textContent = productName;
+                document.getElementById('baridimob-price-dzd').textContent = priceDZD;
+
+                console.log('Opening BaridiMob Modal:', baridimobModal);
+                baridimobModal.style.display = 'flex';
+                baridimobModal.classList.remove('hidden');
+                baridimobModal.classList.add('show');
+
+                // Track AddPaymentInfo when modal opens
+                // Prevent double tracking if PaymentManager is also tracking this
+                if (typeof fbq !== 'undefined' && !window.paymentManager) {
+                    fbq('track', 'AddPaymentInfo', {
+                        content_name: productName,
+                        value: parseFloat(priceDZD),
+                        currency: 'DZD',
+                        content_category: 'BaridiMob'
+                    });
+                }
+            });
         });
-    });
 
-    if (baridimobCloseBtn) {
-        baridimobCloseBtn.addEventListener('click', () => {
-            baridimobModal.style.display = 'none';
-            baridimobModal.classList.remove('show');
-            baridimobModal.classList.add('hidden');
-        });
-    }
-
-    window.addEventListener('click', (event) => {
-        if (event.target === baridimobModal) {
-            baridimobModal.style.display = 'none';
-            baridimobModal.classList.remove('show');
-            baridimobModal.classList.add('hidden');
+        if (baridimobCloseBtn) {
+            baridimobCloseBtn.addEventListener('click', () => {
+                baridimobModal.style.display = 'none';
+                baridimobModal.classList.remove('show');
+                baridimobModal.classList.add('hidden');
+            });
         }
-    });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === baridimobModal) {
+                baridimobModal.style.display = 'none';
+                baridimobModal.classList.remove('show');
+                baridimobModal.classList.add('hidden');
+            }
+        });
     } // End of baridimob modal check
 
     // Back to Top Button
@@ -747,7 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedRating = parseInt(star.getAttribute('data-rating'));
             ratingValue.value = selectedRating;
             updateStarDisplay(selectedRating);
-            
+
             // Show rating text
             const ratingText = document.getElementById('rating-text');
             if (ratingText) {
@@ -804,74 +837,74 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reviewForm) {
         reviewForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             if (!firebaseReady) {
                 alert('جاري التحميل... الرجاء المحاولة مرة أخرى');
                 return;
             }
-        
-        // Check if user already reviewed
-        if (hasUserReviewed()) {
-            const messages = {
-                ar: '⚠️ لقد قمت بإضافة تقييم مسبقاً!\n\nيمكنك إضافة تقييم واحد فقط.\nشكراً لك! 🙏',
-                en: '⚠️ You have already submitted a review!\n\nYou can only submit one review.\nThank you! 🙏',
-                fr: '⚠️ Vous avez déjà soumis un avis!\n\nVous ne pouvez soumettre qu\'un seul avis.\nMerci! 🙏'
+
+            // Check if user already reviewed
+            if (hasUserReviewed()) {
+                const messages = {
+                    ar: '⚠️ لقد قمت بإضافة تقييم مسبقاً!\n\nيمكنك إضافة تقييم واحد فقط.\nشكراً لك! 🙏',
+                    en: '⚠️ You have already submitted a review!\n\nYou can only submit one review.\nThank you! 🙏',
+                    fr: '⚠️ Vous avez déjà soumis un avis!\n\nVous ne pouvez soumettre qu\'un seul avis.\nMerci! 🙏'
+                };
+                alert(messages[currentLang] || messages.ar);
+                return;
+            }
+
+            const name = document.getElementById('reviewer-name').value.trim();
+            const rating = parseInt(document.getElementById('rating-value').value);
+            const platform = document.getElementById('platform').value;
+            const comment = document.getElementById('review-comment').value.trim();
+
+            if (!name || !rating || !platform) {
+                alert('الرجاء ملء جميع الحقول المطلوبة');
+                return;
+            }
+
+            const review = {
+                name: name,
+                rating: rating,
+                platform: platform,
+                comment: comment,
+                image: selectedImage,
+                date: new Date().toLocaleDateString('ar-DZ'),
+                timestamp: Date.now()
             };
-            alert(messages[currentLang] || messages.ar);
-            return;
-        }
-        
-        const name = document.getElementById('reviewer-name').value.trim();
-        const rating = parseInt(document.getElementById('rating-value').value);
-        const platform = document.getElementById('platform').value;
-        const comment = document.getElementById('review-comment').value.trim();
 
-        if (!name || !rating || !platform) {
-            alert('الرجاء ملء جميع الحقول المطلوبة');
-            return;
-        }
+            try {
+                // Add to Firebase
+                const { collection, addDoc } = window.firebaseModules;
+                await addDoc(collection(window.db, 'reviews'), review);
 
-        const review = {
-            name: name,
-            rating: rating,
-            platform: platform,
-            comment: comment,
-            image: selectedImage,
-            date: new Date().toLocaleDateString('ar-DZ'),
-            timestamp: Date.now()
-        };
+                // Send email notification
+                sendEmailNotification(review);
 
-        try {
-            // Add to Firebase
-            const { collection, addDoc } = window.firebaseModules;
-            await addDoc(collection(window.db, 'reviews'), review);
-            
-            // Send email notification
-            sendEmailNotification(review);
-            
-            // Reset form
-            document.getElementById('review-form').reset();
-            selectedRating = 0;
-            selectedImage = null;
-            updateStarDisplay(0);
-            imagePreview.classList.add('hidden');
-            imageName.textContent = '';
-            
-            // Refresh reviews display
-            await loadReviewsFromFirebase();
-            
-            // Mark user as reviewed
-            markUserAsReviewed();
-            
-            alert('شكراً لك! تم إضافة تقييمك بنجاح ✅');
-        } catch (error) {
-            console.error('Error adding review:', error);
-            alert('حدث خطأ أثناء إضافة التقييم. الرجاء المحاولة مرة أخرى.');
-        }
-    });
-    
-    // Check review status on page load
-    updateReviewFormStatus();
+                // Reset form
+                document.getElementById('review-form').reset();
+                selectedRating = 0;
+                selectedImage = null;
+                updateStarDisplay(0);
+                imagePreview.classList.add('hidden');
+                imageName.textContent = '';
+
+                // Refresh reviews display
+                await loadReviewsFromFirebase();
+
+                // Mark user as reviewed
+                markUserAsReviewed();
+
+                alert('شكراً لك! تم إضافة تقييمك بنجاح ✅');
+            } catch (error) {
+                console.error('Error adding review:', error);
+                alert('حدث خطأ أثناء إضافة التقييم. الرجاء المحاولة مرة أخرى.');
+            }
+        });
+
+        // Check review status on page load
+        updateReviewFormStatus();
     }
 });
 
@@ -911,12 +944,12 @@ function displayReviews() {
     reviewsToShow.forEach(review => {
         const reviewCard = document.createElement('div');
         reviewCard.className = 'bg-[#111]/80 rounded-lg border border-matrix-green/30 p-3 hover:border-matrix-green transition-all relative';
-        
+
         const starsHTML = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-        
+
         // Check if admin mode is active
         const isAdminMode = sessionStorage.getItem('adminMode') === 'true';
-        
+
         reviewCard.innerHTML = `
             ${isAdminMode ? `
                 <button onclick="deleteReview(${review.id})" 
@@ -933,9 +966,9 @@ function displayReviews() {
                 <span class="text-xs px-2 py-0.5 bg-matrix-green/20 text-matrix-green rounded-full">${review.platform}</span>
             </div>
             <div class="flex gap-0.5 mb-1.5">
-                ${starsHTML.split('').map(star => 
-                    `<span class="${star === '★' ? 'text-yellow-400' : 'text-gray-600'} text-base">${star}</span>`
-                ).join('')}
+                ${starsHTML.split('').map(star =>
+            `<span class="${star === '★' ? 'text-yellow-400' : 'text-gray-600'} text-base">${star}</span>`
+        ).join('')}
             </div>
             ${review.comment ? `<p class="text-gray-300 text-xs leading-relaxed mb-2">"${escapeHtml(review.comment)}"</p>` : ''}
             ${review.image ? `
@@ -947,7 +980,7 @@ function displayReviews() {
                 </div>
             ` : ''}
         `;
-        
+
         container.appendChild(reviewCard);
     });
 
@@ -978,7 +1011,7 @@ function updateAverageRating() {
 
     const averageStarsContainer = document.getElementById('average-stars');
     averageStarsContainer.innerHTML = '';
-    
+
     for (let i = 1; i <= 5; i++) {
         const star = document.createElement('span');
         star.className = i <= roundedRating ? 'text-yellow-400 text-2xl' : 'text-gray-600 text-2xl';
@@ -1027,15 +1060,15 @@ function getBrowserFingerprint() {
     ctx.textBaseline = 'top';
     ctx.font = '14px Arial';
     ctx.fillText('fingerprint', 2, 2);
-    
+
     const fingerprint = canvas.toDataURL();
     const userAgent = navigator.userAgent;
     const language = navigator.language;
     const platform = navigator.platform;
     const screenResolution = `${screen.width}x${screen.height}`;
-    
+
     const combined = fingerprint + userAgent + language + platform + screenResolution;
-    
+
     // Simple hash function
     let hash = 0;
     for (let i = 0; i < combined.length; i++) {
@@ -1043,7 +1076,7 @@ function getBrowserFingerprint() {
         hash = ((hash << 5) - hash) + char;
         hash = hash & hash;
     }
-    
+
     return 'fp_' + Math.abs(hash).toString(36);
 }
 
@@ -1051,9 +1084,9 @@ function getBrowserFingerprint() {
 function hasUserReviewed() {
     const fingerprint = getBrowserFingerprint();
     const reviewData = localStorage.getItem('trw_user_review');
-    
+
     if (!reviewData) return false;
-    
+
     try {
         const data = JSON.parse(reviewData);
         return data.fingerprint === fingerprint;
@@ -1070,7 +1103,7 @@ function markUserAsReviewed() {
         timestamp: Date.now(),
         date: new Date().toISOString()
     };
-    
+
     localStorage.setItem('trw_user_review', JSON.stringify(reviewData));
 }
 
@@ -1079,7 +1112,7 @@ function updateReviewFormStatus() {
     if (hasUserReviewed()) {
         const form = document.getElementById('review-form');
         const formContainer = form.parentElement;
-        
+
         // Add "already reviewed" message
         const messageDiv = document.createElement('div');
         messageDiv.className = 'bg-matrix-green/10 border border-matrix-green/30 rounded-xl p-4 text-center';
@@ -1087,7 +1120,7 @@ function updateReviewFormStatus() {
             <div class="text-matrix-green text-lg font-bold mb-2">✅ <span data-i18n="reviews.alreadyReviewed">شكراً لك!</span></div>
             <p class="text-gray-300 text-sm" data-i18n="reviews.alreadyReviewedMsg">لقد قمت بإضافة تقييمك مسبقاً. يمكنك إضافة تقييم واحد فقط.</p>
         `;
-        
+
         // Hide form and show message
         form.style.display = 'none';
         formContainer.insertBefore(messageDiv, form);
@@ -1107,9 +1140,9 @@ function sendEmailNotification(review) {
 
     // Send email using EmailJS
     emailjs.send('service_lz55dze', 'template_xvt5j6a', templateParams)
-        .then(function(response) {
+        .then(function (response) {
             console.log('Email sent successfully!', response.status, response.text);
-        }, function(error) {
+        }, function (error) {
             console.error('Failed to send email:', error);
         });
 }
@@ -1121,11 +1154,11 @@ async function loadReviewsFromFirebase() {
             console.log('Firebase not ready yet');
             return;
         }
-        
+
         const { collection, getDocs, query, orderBy } = window.firebaseModules;
         const q = query(collection(window.db, 'reviews'), orderBy('timestamp', 'desc'));
         const querySnapshot = await getDocs(q);
-        
+
         reviews = [];
         querySnapshot.forEach((doc) => {
             reviews.push({
@@ -1133,7 +1166,7 @@ async function loadReviewsFromFirebase() {
                 ...doc.data()
             });
         });
-        
+
         displayReviews();
         updateAverageRating();
     } catch (error) {
@@ -1148,18 +1181,18 @@ async function deleteReview(reviewId) {
         en: 'Are you sure you want to delete this review?',
         fr: 'Êtes-vous sûr de vouloir supprimer cet avis?'
     };
-    
+
     const message = confirmMessages[currentLang] || confirmMessages.ar;
-    
+
     if (confirm(message)) {
         try {
             // Delete from Firebase
             const { doc, deleteDoc } = window.firebaseModules;
             await deleteDoc(doc(window.db, 'reviews', reviewId));
-            
+
             // Refresh display
             await loadReviewsFromFirebase();
-            
+
             // Show success message
             const successMessages = {
                 ar: 'تم حذف التقييم بنجاح ✓',
@@ -1191,7 +1224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reviewsTitle) {
         reviewsTitle.addEventListener('click', () => {
             clickCount++;
-            
+
             if (clickCount === 1) {
                 clickTimer = setTimeout(() => {
                     clickCount = 0;
@@ -1199,10 +1232,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (clickCount === 3) {
                 clearTimeout(clickTimer);
                 clickCount = 0;
-                
+
                 // Toggle admin mode
                 const isAdminMode = sessionStorage.getItem('adminMode') === 'true';
-                
+
                 if (!isAdminMode) {
                     // Ask for password
                     const passwordMessages = {
@@ -1210,15 +1243,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         en: '🔐 Enter password to access admin mode:',
                         fr: '🔐 Entrez le mot de passe pour accéder au mode admin:'
                     };
-                    
+
                     const password = prompt(passwordMessages[currentLang] || passwordMessages.ar);
-                    
+
                     // Simple password check (you can change this password)
                     if (password === 'AYMEN2004') {
                         sessionStorage.setItem('adminMode', 'true');
                         document.getElementById('admin-controls').style.display = 'block';
                         displayReviews(); // Refresh to show delete buttons
-                        
+
                         const successMessages = {
                             ar: '✓ وضع الإدارة مفعّل! يمكنك الآن حذف التقييمات',
                             en: '✓ Admin mode activated! You can now delete reviews',
@@ -1238,7 +1271,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     sessionStorage.removeItem('adminMode');
                     document.getElementById('admin-controls').style.display = 'none';
                     displayReviews(); // Refresh to hide delete buttons
-                    
+
                     const deactivateMessages = {
                         ar: 'تم إلغاء وضع الإدارة',
                         en: 'Admin mode deactivated',
@@ -1249,7 +1282,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     // Check if admin mode is active on page load
     if (sessionStorage.getItem('adminMode') === 'true') {
         document.getElementById('admin-controls').style.display = 'block';
@@ -1263,9 +1296,9 @@ async function toggleAdminMode() {
         en: '⚠️ Warning!\n\nAre you sure you want to delete all reviews?\nThis action cannot be undone!',
         fr: '⚠️ Attention!\n\nÊtes-vous sûr de vouloir supprimer tous les avis?\nCette action est irréversible!'
     };
-    
+
     const message = confirmMessages[currentLang] || confirmMessages.ar;
-    
+
     if (confirm(message)) {
         // Double confirmation
         const doubleConfirmMessages = {
@@ -1273,38 +1306,38 @@ async function toggleAdminMode() {
             en: 'Final confirmation: Type "DELETE" to continue',
             fr: 'Confirmation finale: Tapez "SUPPRIMER" pour continuer'
         };
-        
+
         const confirmWords = {
             ar: 'حذف',
             en: 'DELETE',
             fr: 'SUPPRIMER'
         };
-        
+
         const userInput = prompt(doubleConfirmMessages[currentLang] || doubleConfirmMessages.ar);
-        
+
         if (userInput === confirmWords[currentLang]) {
             try {
                 // Delete all reviews from Firebase
                 const { collection, getDocs, deleteDoc, doc } = window.firebaseModules;
                 const querySnapshot = await getDocs(collection(window.db, 'reviews'));
-                
+
                 const deletePromises = [];
                 querySnapshot.forEach((document) => {
                     deletePromises.push(deleteDoc(doc(window.db, 'reviews', document.id)));
                 });
-                
+
                 await Promise.all(deletePromises);
-                
+
                 // Refresh display
                 await loadReviewsFromFirebase();
-                
+
                 const successMessages = {
                     ar: 'تم حذف جميع التقييمات بنجاح ✓',
                     en: 'All reviews deleted successfully ✓',
                     fr: 'Tous les avis supprimés avec succès ✓'
                 };
                 alert(successMessages[currentLang] || successMessages.ar);
-                
+
                 // Hide admin controls
                 document.getElementById('admin-controls').style.display = 'none';
             } catch (error) {
@@ -1319,12 +1352,12 @@ async function toggleAdminMode() {
 function updateSeatsCounter() {
     const seatsRemainingEl = document.getElementById('seats-remaining');
     const progressBar = document.getElementById('seats-progress');
-    
+
     // Check if elements exist (they might not be on all pages)
     if (!seatsRemainingEl || !progressBar) {
         return;
     }
-    
+
     const seatsRemaining = 12; // قم بتحديث هذا الرقم يدوياً حسب المبيعات
     const totalSeats = 15;
     const seatsTaken = totalSeats - seatsRemaining;
@@ -2863,12 +2896,12 @@ function changeLanguage(lang) {
 
     // Update price displays with correct currency symbol
     updatePriceDisplays(lang);
-    
+
     // Update product translations from Firebase (Requirements: 4.5)
     if (window.ProductTranslationsUI) {
         window.ProductTranslationsUI.onLanguageChange(lang);
     }
-    
+
     // Update availability texts for the new language
     if (window.AvailabilityUI) {
         window.AvailabilityUI.updateAvailabilityTextsForLanguage(lang);
@@ -2886,7 +2919,7 @@ function updatePriceDisplays(lang) {
         fr: 'DA'
     };
     const symbol = currencySymbols[lang] || currencySymbols.ar;
-    
+
     // Update price-tag elements
     document.querySelectorAll('.price-tag[data-price-dzd]').forEach(element => {
         const priceDZD = element.getAttribute('data-price-dzd');
@@ -2895,7 +2928,7 @@ function updatePriceDisplays(lang) {
             element.textContent = `${formattedPrice} ${symbol}`;
         }
     });
-    
+
     // Update status badges (Coming Soon, Unavailable)
     updateStatusBadges(lang);
 }
@@ -2914,7 +2947,7 @@ function updateStatusBadges(lang) {
             fr: { badge: '🔜 Bientôt', btn: '🔜 Bientôt' }
         }
     };
-    
+
     // Helper to detect status from text content
     function detectStatusFromText(text) {
         if (!text) return null;
@@ -2927,7 +2960,7 @@ function updateStatusBadges(lang) {
         }
         return null;
     }
-    
+
     // Update dynamic status badges (created by Firebase)
     document.querySelectorAll('.status-badge').forEach(badge => {
         let status = badge.getAttribute('data-status');
@@ -2942,7 +2975,7 @@ function updateStatusBadges(lang) {
             }
         }
     });
-    
+
     // Update disabled order buttons with data-status
     document.querySelectorAll('.order-btn[disabled]').forEach(btn => {
         let status = btn.getAttribute('data-status');
@@ -2975,21 +3008,21 @@ function startGiveaway() {
         alert('عدد التقييمات غير كافٍ! يجب أن يكون هناك 4 تقييمات على الأقل.');
         return;
     }
-    
+
     // Select 4 random winners
     const shuffled = [...reviews].sort(() => 0.5 - Math.random());
     const winners = shuffled.slice(0, 4);
-    
+
     // Create message
     let message = '🎉 الفائزون في Giveaway:\n\n';
     winners.forEach((winner, i) => {
         message += `${i + 1}. ${winner.name} - ${'⭐'.repeat(winner.rating)} (${winner.platform})\n`;
     });
     message += '\nمبروك للفائزين! 🎁';
-    
+
     // Show winners
     alert(message);
-    
+
     // Copy to clipboard
     if (confirm('هل تريد نسخ أسماء الفائزين؟')) {
         navigator.clipboard.writeText(message).then(() => {
@@ -3010,10 +3043,10 @@ function runGiveaway() {
 
     // Hide start button
     document.getElementById('start-button-container').style.display = 'none';
-    
+
     // Show spinning animation
     document.getElementById('spinning-wheel').style.display = 'block';
-    
+
     // Wait 3 seconds then show winners
     setTimeout(() => {
         selectRandomWinners();
@@ -3030,14 +3063,14 @@ function selectRandomWinners() {
 function displayWinners() {
     const container = document.getElementById('winners-container');
     container.innerHTML = '';
-    
+
     selectedWinners.forEach((winner, index) => {
         const card = document.createElement('div');
         card.className = 'winner-card';
         card.style.animationDelay = `${index * 0.2}s`;
-        
+
         const stars = '⭐'.repeat(winner.rating);
-        
+
         card.innerHTML = `
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 15px;">
@@ -3061,17 +3094,17 @@ function displayWinners() {
                 </div>
             ` : ''}
         `;
-        
+
         container.appendChild(card);
     });
-    
+
     document.getElementById('winners-list').style.display = 'block';
 }
 
 function copyWinners() {
     const winnerNames = selectedWinners.map((w, i) => `${i + 1}. ${w.name}`).join('\n');
     const text = `🎉 الفائزون في Giveaway:\n\n${winnerNames}\n\nمبروك للفائزين! 🎁`;
-    
+
     navigator.clipboard.writeText(text).then(() => {
         alert('✅ تم نسخ أسماء الفائزين!');
     });
@@ -3126,14 +3159,14 @@ const realReviews = [
     { name: "Mehdi K.", product: "The Real World", rating: 5, comment: "Excellent! Les cours sont mis à jour régulièrement et la communauté est très active. J'ai appris le trading et le copywriting.", date: "2024-11-18" },
     { name: "سارة محمود", product: "The Real World", rating: 5, comment: "منصة تعليمية متكاملة! المحتوى منظم بشكل ممتاز والكورسات متنوعة. أنصح بها بشدة لكل من يريد تطوير نفسه.", date: "2024-11-27" },
     { name: "Rayan A.", product: "The Real World", rating: 5, comment: "Best investment for self-improvement! Learned crypto trading, AI tools, and business strategies. The professors are real experts.", date: "2024-11-23" },
-    
+
     // ChatGPT Business Reviews
     { name: "Sarah K.", product: "ChatGPT Business", rating: 5, comment: "Excellent service! Got my account instantly and support is very responsive. ChatGPT helps me daily with work tasks.", date: "2024-11-20" },
     { name: "فاطمة الزهراء", product: "ChatGPT Business", rating: 5, comment: "خدمة احترافية وسريعة! الحساب يعمل بشكل ممتاز وأستخدمه يومياً في عملي. الدعم متجاوب جداً.", date: "2024-11-25" },
     { name: "Amina L.", product: "ChatGPT Business", rating: 5, comment: "Service impeccable! Le compte fonctionne parfaitement et le support est très réactif. Je l'utilise pour mon travail quotidien.", date: "2024-12-01" },
     { name: "محمد حسن", product: "ChatGPT Business", rating: 5, comment: "أداة رائعة! تساعدني في كتابة المحتوى والبرمجة. الحساب يعمل بدون مشاكل والسعر ممتاز.", date: "2024-11-29" },
     { name: "Emma W.", product: "ChatGPT Business", rating: 5, comment: "Amazing AI tool! Helps me with content creation, coding, and research. Fast delivery and great support!", date: "2024-11-26" },
-    
+
     // Adobe Creative Cloud Reviews
     { name: "محمد علي", product: "Adobe Creative Cloud", rating: 5, comment: "حساب شخصي يعمل بشكل مثالي! جميع التطبيقات تعمل بدون مشاكل. Photoshop و Illustrator يشتغلوا ممتاز.", date: "2024-11-18" },
     { name: "Youcef M.", product: "Adobe Creative Cloud", rating: 5, comment: "Parfait! Toutes les applications Adobe fonctionnent parfaitement. Service rapide et professionnel. Je recommande!", date: "2024-11-28" },
@@ -3152,7 +3185,7 @@ async function loadAllReviews() {
                     console.log('Firebase timeout, using local reviews');
                     resolve();
                 }, 3000);
-                
+
                 window.addEventListener('firebaseReady', () => {
                     clearTimeout(timeout);
                     resolve();
@@ -3161,15 +3194,15 @@ async function loadAllReviews() {
         }
 
         let allReviews = [];
-        
+
         // Try to load from Firebase
         if (window.db && window.firebaseModules) {
             const { collection, getDocs } = window.firebaseModules;
-            
+
             // Load from all collections
             const collections = [
-                'reviews', 
-                'chatgpt-reviews', 
+                'reviews',
+                'chatgpt-reviews',
                 'adobe-reviews',
                 'gamma-reviews',
                 'canva-reviews',
@@ -3179,7 +3212,7 @@ async function loadAllReviews() {
                 'tradingview-reviews',
                 'cursor-reviews'
             ];
-            
+
             for (const collectionName of collections) {
                 try {
                     const querySnapshot = await getDocs(collection(window.db, collectionName));
@@ -3202,7 +3235,7 @@ async function loadAllReviews() {
                 }
             }
         }
-        
+
         // If no reviews from Firebase, use local reviews
         if (allReviews.length === 0) {
             console.log('No Firebase reviews found, using local reviews');
@@ -3210,10 +3243,10 @@ async function loadAllReviews() {
         } else {
             console.log(`Loaded ${allReviews.length} reviews from Firebase`);
         }
-        
+
         // Sort by date (newest first)
         allReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
-        
+
         return allReviews;
     } catch (error) {
         console.error('Error loading reviews:', error);
@@ -3226,38 +3259,38 @@ async function displayHomepageReviews() {
     try {
         const reviews = await loadAllReviews();
         const reviewsGrid = document.getElementById('reviews-grid');
-        
+
         if (!reviewsGrid) {
             console.warn('reviews-grid element not found');
             return;
         }
-        
+
         if (!reviews || reviews.length === 0) {
             console.warn('No reviews to display');
             return;
         }
-        
+
         // Calculate average rating
         const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
         const totalReviews = reviews.length;
-        
+
         // Update average rating display
         const avgRatingElement = document.getElementById('average-rating-number');
         const totalReviewsElement = document.getElementById('total-reviews-count');
-        
+
         if (avgRatingElement) avgRatingElement.textContent = avgRating.toFixed(1);
         if (totalReviewsElement) totalReviewsElement.textContent = totalReviews;
         updateStars('average-stars', avgRating);
-        
+
         // Display first 6 reviews
         const displayReviews = reviews.slice(0, 6);
         reviewsGrid.innerHTML = '';
-        
+
         displayReviews.forEach(review => {
             const reviewCard = createReviewCard(review);
             reviewsGrid.appendChild(reviewCard);
         });
-        
+
         console.log(`✅ Displayed ${displayReviews.length} reviews`);
     } catch (error) {
         console.error('Error displaying reviews:', error);
@@ -3270,10 +3303,10 @@ function createReviewCard(review) {
     card.style.cssText = 'background: rgba(20, 24, 42, 0.8); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); transition: transform 0.3s;';
     card.onmouseenter = () => card.style.transform = 'translateY(-5px)';
     card.onmouseleave = () => card.style.transform = 'translateY(0)';
-    
+
     const stars = '⭐'.repeat(review.rating);
     const productEmoji = getProductEmoji(review.product);
-    
+
     card.innerHTML = `
         <div style="display: flex; align-items: center; margin-bottom: 20px;">
             <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-left: 15px;">
@@ -3287,7 +3320,7 @@ function createReviewCard(review) {
         </div>
         <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem;">${escapeHtml(review.comment)}</p>
     `;
-    
+
     return card;
 }
 
@@ -3310,11 +3343,11 @@ function getProductEmoji(product) {
 function updateStars(containerId, rating) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    
+
     const stars = container.querySelectorAll('span');
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
-    
+
     stars.forEach((star, index) => {
         if (index < fullStars) {
             star.textContent = '★';
@@ -3343,14 +3376,14 @@ function openAddReviewModal() {
         modal.classList.remove('hidden');
         modal.classList.add('show');
         modal.style.display = 'flex';
-        
+
         // Reset form
         const form = document.getElementById('add-review-form');
         if (form) form.reset();
-        
+
         const ratingInput = document.getElementById('review-rating');
         if (ratingInput) ratingInput.value = '';
-        
+
         document.querySelectorAll('.star-input').forEach(star => {
             star.textContent = '☆';
             star.style.color = '#666';
@@ -3375,12 +3408,12 @@ function closeAddReviewModal() {
 // Initialize star rating input
 document.addEventListener('DOMContentLoaded', () => {
     const starInputs = document.querySelectorAll('.star-input');
-    
+
     starInputs.forEach(star => {
         star.addEventListener('click', () => {
             const rating = parseInt(star.getAttribute('data-rating'));
             document.getElementById('review-rating').value = rating;
-            
+
             // Update star display
             starInputs.forEach((s, index) => {
                 if (index < rating) {
@@ -3392,7 +3425,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-        
+
         // Hover effect
         star.addEventListener('mouseenter', () => {
             const rating = parseInt(star.getAttribute('data-rating'));
@@ -3402,7 +3435,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-        
+
         star.addEventListener('mouseleave', () => {
             const currentRating = parseInt(document.getElementById('review-rating').value) || 0;
             starInputs.forEach((s, index) => {
@@ -3412,27 +3445,27 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-    
+
     // Handle image upload
     const imageInput = document.getElementById('review-image');
     const imagePreview = document.getElementById('image-preview');
     const previewImg = document.getElementById('preview-img');
     const imageName = document.getElementById('image-name');
     const removeImageBtn = document.getElementById('remove-image');
-    
+
     if (imageInput) {
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
                 // Check file size (max 5MB)
                 if (file.size > 5 * 1024 * 1024) {
-                    alert(currentLang === 'ar' ? 'حجم الصورة كبير جداً! الحد الأقصى 5MB' : 
-                          currentLang === 'fr' ? 'Image trop grande! Maximum 5MB' : 
-                          'Image too large! Maximum 5MB');
+                    alert(currentLang === 'ar' ? 'حجم الصورة كبير جداً! الحد الأقصى 5MB' :
+                        currentLang === 'fr' ? 'Image trop grande! Maximum 5MB' :
+                            'Image too large! Maximum 5MB');
                     imageInput.value = '';
                     return;
                 }
-                
+
                 // Show preview
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -3444,7 +3477,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     if (removeImageBtn) {
         removeImageBtn.addEventListener('click', () => {
             imageInput.value = '';
@@ -3453,55 +3486,55 @@ document.addEventListener('DOMContentLoaded', () => {
             previewImg.src = '';
         });
     }
-    
+
     // Handle form submission
     const form = document.getElementById('add-review-form');
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             // Check if user already submitted a review in the last 24 hours
             const lastReviewTime = localStorage.getItem('lastReviewTime');
             const now = Date.now();
             const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-            
+
             if (lastReviewTime && (now - parseInt(lastReviewTime)) < twentyFourHours) {
                 const hoursLeft = Math.ceil((twentyFourHours - (now - parseInt(lastReviewTime))) / (60 * 60 * 1000));
-                const message = currentLang === 'ar' 
+                const message = currentLang === 'ar'
                     ? `يمكنك إضافة تقييم واحد فقط كل 24 ساعة. الرجاء المحاولة بعد ${hoursLeft} ساعة.`
                     : currentLang === 'fr'
-                    ? `Vous ne pouvez ajouter qu'un avis toutes les 24 heures. Veuillez réessayer dans ${hoursLeft} heures.`
-                    : `You can only add one review every 24 hours. Please try again in ${hoursLeft} hours.`;
+                        ? `Vous ne pouvez ajouter qu'un avis toutes les 24 heures. Veuillez réessayer dans ${hoursLeft} heures.`
+                        : `You can only add one review every 24 hours. Please try again in ${hoursLeft} hours.`;
                 alert(message);
                 return;
             }
-            
+
             const name = document.getElementById('review-name').value;
             const product = document.getElementById('review-product').value;
             const source = document.getElementById('review-source').value;
             const rating = parseInt(document.getElementById('review-rating').value);
             const comment = document.getElementById('review-comment').value;
             const imageFile = document.getElementById('review-image').files[0];
-            
+
             if (!rating) {
                 alert(currentLang === 'ar' ? 'الرجاء اختيار التقييم' : currentLang === 'fr' ? 'Veuillez sélectionner une note' : 'Please select a rating');
                 return;
             }
-            
+
             if (!source) {
                 alert(currentLang === 'ar' ? 'الرجاء اختيار من أين عرفت عنا' : currentLang === 'fr' ? 'Veuillez sélectionner comment vous nous avez trouvé' : 'Please select how you found us');
                 return;
             }
-            
+
             // Show loading message
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.textContent;
             submitBtn.disabled = true;
             submitBtn.textContent = currentLang === 'ar' ? 'جاري الإرسال...' : currentLang === 'fr' ? 'Envoi en cours...' : 'Submitting...';
-            
+
             try {
                 let imageUrl = null;
-                
+
                 // Upload image if provided
                 if (imageFile && window.storage && window.firebaseModules) {
                     try {
@@ -3515,20 +3548,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.error('Error uploading image:', imgError);
                         console.log('Continuing without image...');
                         // Show warning but continue
-                        const warningMsg = currentLang === 'ar' 
-                            ? 'تعذر رفع الصورة، سيتم إرسال التقييم بدون صورة.' 
-                            : currentLang === 'fr' 
-                            ? 'Impossible de télécharger l\'image, l\'avis sera envoyé sans image.'
-                            : 'Failed to upload image, review will be submitted without image.';
+                        const warningMsg = currentLang === 'ar'
+                            ? 'تعذر رفع الصورة، سيتم إرسال التقييم بدون صورة.'
+                            : currentLang === 'fr'
+                                ? 'Impossible de télécharger l\'image, l\'avis sera envoyé sans image.'
+                                : 'Failed to upload image, review will be submitted without image.';
                         console.warn(warningMsg);
                     }
                 }
-                
+
                 // Send to Firebase
                 if (window.db && window.firebaseModules) {
                     console.log('Sending review to Firebase...');
                     const { collection, addDoc, serverTimestamp } = window.firebaseModules;
-                    
+
                     let collectionName = 'reviews';
                     if (product.includes('ChatGPT')) collectionName = 'chatgpt-reviews';
                     else if (product.includes('Adobe')) collectionName = 'adobe-reviews';
@@ -3538,7 +3571,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     else if (product.includes('Netflix')) collectionName = 'netflix-reviews';
                     else if (product.includes('Perplexity')) collectionName = 'perplexity-reviews';
                     else if (product.includes('TradingView')) collectionName = 'tradingview-reviews';
-                    
+
                     const reviewData = {
                         name: name,
                         platform: source, // Store source as platform
@@ -3549,38 +3582,38 @@ document.addEventListener('DOMContentLoaded', () => {
                         timestamp: serverTimestamp(),
                         approved: false // Requires admin approval
                     };
-                    
+
                     // Add image URL if available
                     if (imageUrl) {
                         reviewData.image = imageUrl;
                     }
-                    
+
                     await addDoc(collection(window.db, collectionName), reviewData);
                 }
-                
+
                 // Save timestamp to prevent multiple reviews in 24 hours
                 localStorage.setItem('lastReviewTime', Date.now().toString());
-                
+
                 console.log('Review submitted successfully!');
-                
+
                 // Show success message
-                const successMsg = currentLang === 'ar' ? 'شكراً! تم إرسال تقييمك بنجاح. سيتم مراجعته قريباً.' : 
-                                   currentLang === 'fr' ? 'Merci! Votre avis a été soumis avec succès. Il sera examiné bientôt.' :
-                                   'Thank you! Your review has been submitted successfully. It will be reviewed soon.';
+                const successMsg = currentLang === 'ar' ? 'شكراً! تم إرسال تقييمك بنجاح. سيتم مراجعته قريباً.' :
+                    currentLang === 'fr' ? 'Merci! Votre avis a été soumis avec succès. Il sera examiné bientôt.' :
+                        'Thank you! Your review has been submitted successfully. It will be reviewed soon.';
                 alert(successMsg);
-                
+
                 closeAddReviewModal();
-                
+
                 // Reload reviews
                 setTimeout(() => {
                     displayHomepageReviews();
                 }, 1000);
-                
+
             } catch (error) {
                 console.error('Error submitting review:', error);
                 const errorMsg = currentLang === 'ar' ? 'حدث خطأ. الرجاء المحاولة مرة أخرى.' :
-                                currentLang === 'fr' ? 'Une erreur s\'est produite. Veuillez réessayer.' :
-                                'An error occurred. Please try again.';
+                    currentLang === 'fr' ? 'Une erreur s\'est produite. Veuillez réessayer.' :
+                        'An error occurred. Please try again.';
                 alert(errorMsg);
             } finally {
                 // Re-enable button
@@ -3589,7 +3622,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     // Load reviews on page load
     displayHomepageReviews();
 });
@@ -3659,6 +3692,15 @@ function selectGammaType(type) {
         document.getElementById('gamma-prices-shared').style.display = 'none';
         document.getElementById('gamma-prices-personal').style.display = 'block';
     }
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'Gamma.AI',
+            variant: type,
+            currency: currency
+        });
+    }
 }
 
 // Cursor AI Duration Selection
@@ -3686,6 +3728,15 @@ function selectCursorType(type) {
         document.getElementById('cursor-prices-7days').style.display = 'none';
         document.getElementById('cursor-prices-30days').style.display = 'block';
     }
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'Cursor AI',
+            variant: type,
+            currency: currency
+        });
+    }
 }
 
 // Order Adobe with selected type
@@ -3693,7 +3744,35 @@ function orderAdobe() {
     const activeBtn = document.querySelector('.adobe-type-btn.active');
     const type = activeBtn ? activeBtn.getAttribute('data-type') : 'shared';
     const productName = type === 'shared' ? 'Adobe Creative Cloud - Shared' : 'Adobe Creative Cloud - Personal';
-    
+
+    // Detect current currency
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+
+    // Dynamically find price based on currency
+    let price = 0;
+    const priceDisplay = document.getElementById(type === 'shared' ? 'adobe-prices-shared' : 'adobe-prices-personal');
+    if (priceDisplay) {
+        const priceTag = priceDisplay.querySelector('.price-tag');
+        if (priceTag) {
+            const attr = currency === 'USD' ? 'data-price-usd' : 'data-price-dzd';
+            price = priceTag.getAttribute(attr) || priceTag.textContent.replace(/[^0-9.]/g, '');
+        }
+    }
+
+    // Track Facebook Events
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Lead', {
+            content_name: productName,
+            value: parseFloat(price) || 0,
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: productName,
+            value: parseFloat(price) || 0,
+            currency: currency
+        });
+    }
+
     // Store product name and open contact choice modal
     currentProductName = productName;
     const modal = document.getElementById('contact-choice-modal');
@@ -3709,7 +3788,35 @@ function orderGamma() {
     const activeBtn = document.querySelector('.gamma-type-btn.active');
     const type = activeBtn ? activeBtn.getAttribute('data-type') : 'shared';
     const productName = type === 'shared' ? 'Gamma.AI - Shared' : 'Gamma.AI - Personal';
-    
+
+    // Detect current currency
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+
+    // Dynamically find price based on currency
+    let price = 0;
+    const priceDisplay = document.getElementById(type === 'shared' ? 'gamma-prices-shared' : 'gamma-prices-personal');
+    if (priceDisplay) {
+        const priceTag = priceDisplay.querySelector('.price-tag');
+        if (priceTag) {
+            const attr = currency === 'USD' ? 'data-price-usd' : 'data-price-dzd';
+            price = priceTag.getAttribute(attr) || priceTag.textContent.replace(/[^0-9.]/g, '');
+        }
+    }
+
+    // Track Facebook Events
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Lead', {
+            content_name: productName,
+            value: parseFloat(price) || 0,
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: productName,
+            value: parseFloat(price) || 0,
+            currency: currency
+        });
+    }
+
     // Store product name and open contact choice modal
     currentProductName = productName;
     const modal = document.getElementById('contact-choice-modal');
@@ -3722,6 +3829,39 @@ function orderGamma() {
 
 // Generic order function for products without special options
 function orderProduct(productName) {
+    // Detect current currency
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+
+    // Dynamically find price
+    let price = 0;
+    // Find the button that was likely clicked to get context
+    const buttons = document.querySelectorAll(`[onclick*="orderProduct('${productName}')"]`);
+    buttons.forEach(btn => {
+        const card = btn.closest('.product-card');
+        if (card) {
+            const priceTag = card.querySelector('.price-tag');
+            if (priceTag) {
+                const attr = currency === 'USD' ? 'data-price-usd' : 'data-price-dzd';
+                const p = priceTag.getAttribute(attr);
+                if (p) price = p;
+            }
+        }
+    });
+
+    // Track Facebook Events
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Lead', {
+            content_name: productName,
+            value: parseFloat(price) || 0,
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: productName,
+            value: parseFloat(price) || 0,
+            currency: currency
+        });
+    }
+
     // Store product name and open contact choice modal
     currentProductName = productName;
     const modal = document.getElementById('contact-choice-modal');
@@ -3740,9 +3880,9 @@ function contactVia(platform) {
         en: `Hello 👋\nI would like to order: ${currentProductName}\n\nThank you 🙏`,
         fr: `Bonjour 👋\nJe voudrais commander: ${currentProductName}\n\nMerci 🙏`
     };
-    
+
     const message = messages[currentLang] || messages.ar;
-    
+
     // Open the selected platform
     if (platform === 'whatsapp') {
         window.open(`https://wa.me/213782125821?text=${encodeURIComponent(message)}`, '_blank');
@@ -3751,7 +3891,15 @@ function contactVia(platform) {
     } else if (platform === 'instagram') {
         window.open('https://www.instagram.com/market_algeriaa', '_blank');
     }
-    
+
+    // Track Facebook Contact event
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Contact', {
+            content_name: currentProductName,
+            content_category: platform
+        });
+    }
+
     // Close the modal
     const modal = document.getElementById('contact-choice-modal');
     if (modal) {
@@ -3781,7 +3929,7 @@ document.addEventListener('DOMContentLoaded', () => {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -3789,12 +3937,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, observerOptions);
-    
+
     // Observe all fade-in elements
     document.querySelectorAll('.fade-in').forEach(el => {
         observer.observe(el);
     });
-    
+
     // ═══════════════════════════════════════════════════════════════
     // مؤشر التمرير الأفقي لبطاقات المنتجات - Product Cards Scroll Indicator
     // ═══════════════════════════════════════════════════════════════
@@ -3802,13 +3950,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const productGrid = document.querySelector('.product-grid');
         const scrollDotsContainer = document.getElementById('scroll-dots');
         const scrollIndicator = document.getElementById('scroll-indicator');
-        
+
         if (!productGrid || !scrollDotsContainer || !scrollIndicator) return;
-        
+
         // Get all product cards
         const productCards = productGrid.querySelectorAll('.product-card');
         if (productCards.length === 0) return;
-        
+
         // Create dots for each product card
         scrollDotsContainer.innerHTML = '';
         productCards.forEach((card, index) => {
@@ -3825,7 +3973,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             scrollDotsContainer.appendChild(dot);
         });
-        
+
         // Update active dot on scroll
         let scrollTimeout;
         productGrid.addEventListener('scroll', () => {
@@ -3834,7 +3982,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const scrollPosition = productGrid.scrollLeft;
                 const cardWidth = productCards[0].offsetWidth + 16;
                 const activeIndex = Math.round(scrollPosition / cardWidth);
-                
+
                 // Update dots
                 const dots = scrollDotsContainer.querySelectorAll('.scroll-indicator-dot');
                 dots.forEach((dot, index) => {
@@ -3842,7 +3990,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }, 50);
         });
-        
+
         // Hide indicator on desktop
         function checkScreenSize() {
             if (window.innerWidth > 768) {
@@ -3851,14 +3999,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollIndicator.style.display = 'flex';
             }
         }
-        
+
         checkScreenSize();
         window.addEventListener('resize', checkScreenSize);
     }
-    
+
     // Initialize scroll indicator
     initProductScrollIndicator();
-    
+
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -3875,5 +4023,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+    });
+});
+
+// Scroll Tracking (DeepScroll)
+// Tracks when a user scrolls past 50% and 90% of the page
+document.addEventListener('DOMContentLoaded', function () {
+    let tracked50 = false;
+    let tracked90 = false;
+
+    window.addEventListener('scroll', function () {
+        if (typeof fbq === 'undefined') return;
+
+        // Calculate scroll percentage
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const winHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+        const scrollPercent = (scrollTop + winHeight) / docHeight;
+
+        // Track 50% scroll
+        if (scrollPercent >= 0.5 && !tracked50) {
+            tracked50 = true;
+            // Get page name from title or URL
+            const pageName = document.title || window.location.pathname;
+            fbq('trackCustom', 'DeepScroll', {
+                depth: '50%',
+                page: pageName
+            });
+        }
+
+        // Track 90% scroll (Bottom of page usually)
+        if (scrollPercent >= 0.9 && !tracked90) {
+            tracked90 = true;
+            const pageName = document.title || window.location.pathname;
+            fbq('trackCustom', 'DeepScroll', {
+                depth: '90%',
+                page: pageName
+            });
+        }
     });
 });
