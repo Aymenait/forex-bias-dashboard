@@ -11,7 +11,7 @@
     --card-bg: rgba(20, 24, 42, 0.75);
     --border-color: rgba(255, 255, 255, 0.08);
     --shadow: 0 24px 60px rgba(15, 17, 35, 0.45);
-    
+
     /* Spacing System */
     --spacing-xs: 4px;
     --spacing-sm: 8px;
@@ -19,19 +19,19 @@
     --spacing-lg: 24px;
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
-    
+
     /* Border Radius */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     --radius-xl: 24px;
     --radius-full: 999px;
-    
+
     /* Transitions */
     --transition-fast: 0.2s ease;
     --transition-base: 0.3s ease;
     --transition-slow: 0.5s ease;
-    
+
     /* Product Colors */
     --color-chatgpt: #10a37f;
     --color-adobe: #ff0000;
@@ -402,9 +402,12 @@ img {
 }
 
 @keyframes pulse-subtle {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.05);
     }
@@ -648,6 +651,61 @@ img {
     font-size: 1.3rem;
 }
 
+/* Segmented Selector for Product Types/Durations */
+.segmented-selector {
+    display: flex;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 4px;
+    gap: 4px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.segmented-btn {
+    flex: 1;
+    padding: 10px 4px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.segmented-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+
+.segmented-btn.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(255, 213, 111, 0.25);
+}
+
+.segmented-btn .btn-label {
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.segmented-btn .btn-subtext {
+    font-size: 0.65rem;
+    opacity: 0.6;
+    font-weight: 500;
+}
+
+.segmented-btn.active .btn-subtext {
+    opacity: 0.8;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    زر ORDER NOW - تصميم احترافي مع خلفية نجوم متحركة
    ═══════════════════════════════════════════════════════════════ */
@@ -664,7 +722,7 @@ img {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    box-shadow: 
+    box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.5),
         0 8px 30px rgba(0, 0, 0, 0.3);
     transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
@@ -686,7 +744,7 @@ img {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
+    background:
         radial-gradient(2px 2px at 10% 20%, white, transparent),
         radial-gradient(2px 2px at 20% 30%, white, transparent),
         radial-gradient(1.5px 1.5px at 30% 15%, white, transparent),
@@ -722,7 +780,7 @@ img {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
+    background:
         radial-gradient(1px 1px at 8% 12%, rgba(255, 255, 255, 0.9), transparent),
         radial-gradient(1px 1px at 18% 28%, rgba(255, 255, 255, 0.9), transparent),
         radial-gradient(1px 1px at 28% 45%, rgba(255, 255, 255, 0.9), transparent),
@@ -755,6 +813,7 @@ img {
     0% {
         background-position: 0% 0%;
     }
+
     100% {
         background-position: 100% 100%;
     }
@@ -762,7 +821,7 @@ img {
 
 .order-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
         0 6px 25px rgba(0, 0, 0, 0.6),
         0 12px 40px rgba(0, 0, 0, 0.4),
         0 0 20px rgba(255, 255, 255, 0.1);
@@ -781,7 +840,7 @@ img {
 
 .order-btn:active {
     transform: translateY(0);
-    box-shadow: 
+    box-shadow:
         0 2px 10px rgba(0, 0, 0, 0.3),
         inset 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -803,7 +862,7 @@ img {
     margin-bottom: 12px !important;
     text-decoration: none !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease !important;
-    box-shadow: 
+    box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.5),
         0 8px 30px rgba(0, 0, 0, 0.3) !important;
     position: relative;
@@ -827,7 +886,7 @@ img {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
+    background:
         radial-gradient(2px 2px at 10% 20%, white, transparent),
         radial-gradient(2px 2px at 20% 30%, white, transparent),
         radial-gradient(1.5px 1.5px at 30% 15%, white, transparent),
@@ -863,7 +922,7 @@ img {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
+    background:
         radial-gradient(1px 1px at 8% 12%, rgba(255, 255, 255, 0.9), transparent),
         radial-gradient(1px 1px at 18% 28%, rgba(255, 255, 255, 0.9), transparent),
         radial-gradient(1px 1px at 28% 45%, rgba(255, 255, 255, 0.9), transparent),
@@ -893,7 +952,7 @@ img {
 
 .discover-btn:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 
+    box-shadow:
         0 6px 25px rgba(0, 0, 0, 0.6),
         0 12px 40px rgba(0, 0, 0, 0.4),
         0 0 20px rgba(255, 213, 111, 0.2) !important;
@@ -913,7 +972,7 @@ img {
 
 .discover-btn:active {
     transform: translateY(0) !important;
-    box-shadow: 
+    box-shadow:
         0 2px 10px rgba(0, 0, 0, 0.3),
         inset 0 2px 5px rgba(0, 0, 0, 0.1) !important;
 }
@@ -1131,14 +1190,14 @@ img {
         width: 100%;
         margin-bottom: 8px;
     }
-    
+
     .currency-selector {
         display: flex;
         justify-content: center;
         width: 100%;
         margin-bottom: 8px;
     }
-    
+
     .currency-btn {
         flex: 1;
         justify-content: center;
@@ -1221,12 +1280,12 @@ img {
     /* ═══════════════════════════════════════════════════════════════
        تصميم جذري جديد لبطاقات العروض - Mobile Product Cards Redesign
        ═══════════════════════════════════════════════════════════════ */
-    
+
     /* ═══════════ تحسينات الأداء للموبايل ═══════════ */
     * {
         -webkit-tap-highlight-color: transparent;
     }
-    
+
     /* إلغاء backdrop-filter الثقيل */
     .modal-content,
     .floating-card,
@@ -1237,43 +1296,51 @@ img {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
     }
-    
+
     /* تقليل الـ animations للأداء */
     .product-grid * {
         animation: none !important;
         transition: none !important;
     }
-    
-    
+
+
     /* السماح بـ transition فقط للعناصر المهمة */
     .order-btn,
     .payment-btn-compact,
     .discover-btn {
         transition: transform 0.15s ease, background 0.15s ease !important;
     }
-    
+
     /* تعطيل animations الثقيلة */
     @keyframes float {
-        0%, 100% { transform: none; }
+
+        0%,
+        100% {
+            transform: none;
+        }
     }
-    
+
     @keyframes shimmer {
-        0%, 100% { left: 0; }
+
+        0%,
+        100% {
+            left: 0;
+        }
     }
-    
+
     /* قسم المنتجات */
     #products {
         padding: 30px 0 50px;
     }
-    
+
     #products .section-header {
         margin-bottom: 25px;
     }
-    
+
     #products .section-header h2 {
         font-size: 1.6rem;
     }
-    
+
     /* شبكة المنتجات - تمرير أفقي محسّن للأداء */
     .product-grid {
         display: flex !important;
@@ -1291,11 +1358,11 @@ img {
         transform: translateZ(0);
         backface-visibility: hidden;
     }
-    
+
     .product-grid::-webkit-scrollbar {
         display: none;
     }
-    
+
     /* بطاقة المنتج - تصميم مدمج وجميل للموبايل */
     .product-card {
         flex: 0 0 260px;
@@ -1320,7 +1387,7 @@ img {
         backface-visibility: hidden;
         will-change: transform;
     }
-    
+
     .product-card::before {
         content: '';
         position: absolute;
@@ -1332,13 +1399,13 @@ img {
         pointer-events: none;
         z-index: 0;
     }
-    
+
     /* إلغاء hover effects على الموبايل للأداء */
     .product-card:hover {
         transform: none;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
-    
+
     .product-card:active {
         transform: scale(0.98);
         transition: transform 0.1s ease;
@@ -1356,7 +1423,7 @@ img {
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
     }
-    
+
     /* إزالة pseudo-element للأداء */
     .product-image::after {
         display: none;
@@ -1383,11 +1450,12 @@ img {
         margin: 0;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-align: center;
     }
-    
+
     /* تقييم المنتج - مصغر */
     .product-card [id*="-rating-container"] {
         padding: 0 12px;
@@ -1414,18 +1482,18 @@ img {
         padding: 0 12px;
         margin: 8px 0;
     }
-    
+
     .product-features li {
         font-size: 0.72rem;
         padding: 4px 0;
         color: rgba(255, 255, 255, 0.7);
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
-    
+
     .product-features li:last-child {
         border-bottom: none;
     }
-    
+
     .product-features li::before {
         content: "✓";
         color: #4ade80;
@@ -1433,7 +1501,7 @@ img {
         font-size: 0.8rem;
         font-weight: bold;
     }
-    
+
     /* طرق الدفع - مصغرة وأنيقة للموبايل */
     .payment-methods-row {
         display: flex !important;
@@ -1445,7 +1513,7 @@ img {
         border-top: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 0 0 16px 16px;
     }
-    
+
     .payment-btn-compact {
         display: flex !important;
         flex-direction: column;
@@ -1462,16 +1530,16 @@ img {
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
     }
-    
+
     .payment-btn-compact:active {
         transform: scale(0.95);
     }
-    
+
     .payment-btn-compact svg {
         width: 16px !important;
         height: 16px !important;
     }
-    
+
     .payment-btn-compact span {
         font-size: 0.6rem !important;
         font-weight: 600;
@@ -1494,19 +1562,19 @@ img {
         transform: translateZ(0);
         /* النجوم تعمل على الهاتف أيضاً */
     }
-    
+
     /* النجوم على الهاتف - واضحة ولكن محسّنة للأداء */
     .discover-btn::before {
         opacity: 0.8 !important;
     }
-    
+
     .discover-btn::after {
         opacity: 0.6 !important;
     }
-    
+
     .discover-btn:active {
         transform: scale(0.98) !important;
-        box-shadow: 
+        box-shadow:
             0 2px 8px rgba(0, 0, 0, 0.4),
             inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
     }
@@ -1528,77 +1596,77 @@ img {
         transform: translateZ(0);
         /* النجوم تعمل على الهاتف أيضاً */
     }
-    
+
     /* النجوم على الهاتف - واضحة ولكن محسّنة للأداء */
     .order-btn::before {
         opacity: 0.8 !important;
     }
-    
+
     .order-btn::after {
         opacity: 0.6 !important;
     }
-    
+
     .order-btn:active {
         transform: scale(0.98) !important;
-        box-shadow: 
+        box-shadow:
             0 2px 8px rgba(0, 0, 0, 0.4),
             inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
     }
-    
+
     /* أزرار نوع Adobe - مصغرة */
     .adobe-account-type {
         padding: 0 12px;
         margin: 8px 0 !important;
     }
-    
-    .adobe-account-type > div {
+
+    .adobe-account-type>div {
         gap: 4px !important;
     }
-    
-    .adobe-account-type > p {
+
+    .adobe-account-type>p {
         font-size: 0.75rem !important;
         margin-bottom: 6px !important;
     }
-    
+
     .adobe-type-btn {
         padding: 6px 4px !important;
         font-size: 0.68rem !important;
         border-radius: 6px !important;
     }
-    
+
     .adobe-prices {
         padding: 0 12px;
     }
-    
+
     .price-options {
         display: flex;
         flex-direction: column;
         gap: 4px;
         text-align: center;
     }
-    
-    .price-options > span {
+
+    .price-options>span {
         font-size: 0.75rem !important;
     }
-    
+
     .price-options .price-tag {
         display: inline;
         padding: 3px 8px;
         font-size: 0.85rem;
         margin: 0 3px;
     }
-    
+
     /* مؤشر التمرير */
     .product-grid::after {
         content: '';
         flex: 0 0 10px;
     }
-    
+
     .product-grid::before {
         content: '';
         flex: 0 0 10px;
     }
-    
+
     /* ═══════════ نهاية تصميم بطاقات العروض ═══════════ */
 
     /* Reviews Section - عمودين على الهاتف */
@@ -1843,12 +1911,10 @@ img {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.3),
-        transparent
-    );
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
     transition: left 0.5s ease;
 }
 
@@ -2758,7 +2824,7 @@ img {
         width: 100%;
         justify-content: center;
     }
-    
+
     .currency-selector {
         order: -1;
         width: 100%;
@@ -3158,8 +3224,17 @@ img {
 }
 
 @keyframes scrollHint {
-    0%, 100% { transform: translateX(0); opacity: 0.5; }
-    50% { transform: translateX(-8px); opacity: 1; }
+
+    0%,
+    100% {
+        transform: translateX(0);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: translateX(-8px);
+        opacity: 1;
+    }
 }
 
 @media (max-width: 768px) {
@@ -3268,6 +3343,7 @@ img {
 
 /* ═══════════ Mobile Navigation ═══════════ */
 @media (max-width: 768px) {
+
     /* Show Hamburger Button */
     .hamburger-btn {
         display: flex;
@@ -3301,12 +3377,12 @@ img {
         right: 0;
         pointer-events: auto !important;
     }
-    
+
     /* تأكد من أن جميع العناصر داخل القائمة قابلة للنقر */
     .nav-actions.active * {
         pointer-events: auto !important;
     }
-    
+
     .nav-actions.active .lang-btn,
     .nav-actions.active .currency-btn,
     .nav-actions.active .btn {
@@ -3395,6 +3471,7 @@ img {
 
 /* ═══════════ تحسين Touch Targets ═══════════ */
 @media (max-width: 768px) {
+
     /* جميع الأزرار */
     .btn,
     button:not(.hamburger-btn) {
@@ -3474,57 +3551,58 @@ img {
 
 /* ═══════════ تحسينات إضافية للشاشات الصغيرة جداً ═══════════ */
 @media (max-width: 480px) {
-    
+
     /* ═══════ بطاقات المنتجات - شاشات صغيرة ═══════ */
     .product-grid {
         gap: 12px !important;
         padding: 8px 12px 16px !important;
     }
-    
+
     .product-card {
         flex: 0 0 240px !important;
         min-width: 240px !important;
         max-width: 240px !important;
     }
-    
+
     .product-image {
         height: 115px !important;
         min-height: 115px !important;
     }
-    
+
     .product-card h3 {
         font-size: 0.92rem !important;
         padding: 10px 10px 0 !important;
     }
-    
+
     .product-card .description {
         font-size: 0.72rem !important;
         padding: 4px 10px 0 !important;
         -webkit-line-clamp: 2 !important;
+        line-clamp: 2 !important;
     }
-    
+
     .price-tag {
         padding: 6px 10px !important;
         font-size: 0.88rem !important;
         margin: 6px 10px !important;
     }
-    
+
     .product-features {
         padding: 0 10px !important;
         margin: 6px 0 !important;
     }
-    
+
     .product-features li {
         font-size: 0.68rem !important;
         padding: 3px 0 !important;
     }
-    
+
     /* أزرار الدفع - مصغرة جداً وأنيقة */
     .payment-methods-row {
         padding: 6px 8px !important;
         gap: 3px !important;
     }
-    
+
     .payment-btn-compact {
         padding: 5px 6px !important;
         font-size: 0.58rem !important;
@@ -3532,23 +3610,23 @@ img {
         max-width: 65px !important;
         gap: 2px !important;
     }
-    
+
     .payment-btn-compact svg {
         width: 14px !important;
         height: 14px !important;
     }
-    
+
     .payment-btn-compact span {
         font-size: 0.55rem !important;
     }
-    
+
     .discover-btn {
         padding: 7px 12px !important;
         font-size: 0.7rem !important;
         min-height: 38px !important;
         margin: 0 10px 5px !important;
     }
-    
+
     .order-btn {
         padding: 12px 16px !important;
         font-size: 0.85rem !important;
@@ -3556,16 +3634,16 @@ img {
         margin: 0 10px 10px !important;
         width: calc(100% - 20px) !important;
     }
-    
+
     .adobe-account-type {
         padding: 0 10px !important;
     }
-    
+
     .adobe-type-btn {
         padding: 5px 3px !important;
         font-size: 0.62rem !important;
     }
-    
+
     .adobe-prices {
         padding: 0 10px !important;
     }
@@ -3618,58 +3696,58 @@ img {
         min-width: 220px !important;
         max-width: 220px !important;
     }
-    
+
     .product-image {
         height: 100px !important;
         min-height: 100px !important;
     }
-    
+
     .product-card h3 {
         font-size: 0.85rem !important;
         padding: 8px 8px 0 !important;
     }
-    
+
     .product-card .description {
         font-size: 0.68rem !important;
         padding: 3px 8px 0 !important;
     }
-    
+
     .price-tag {
         font-size: 0.82rem !important;
         padding: 5px 8px !important;
         margin: 5px 8px !important;
     }
-    
+
     .product-features li {
         font-size: 0.62rem !important;
     }
-    
+
     /* أزرار الدفع - مصغرة للشاشات الصغيرة جداً */
     .payment-methods-row {
         padding: 5px 6px !important;
     }
-    
+
     .payment-btn-compact {
         padding: 4px 5px !important;
         min-width: 42px !important;
         max-width: 58px !important;
     }
-    
+
     .payment-btn-compact svg {
         width: 12px !important;
         height: 12px !important;
     }
-    
+
     .payment-btn-compact span {
         font-size: 0.5rem !important;
     }
-    
+
     .discover-btn {
         margin: 0 8px 5px !important;
         padding: 6px !important;
         font-size: 0.7rem !important;
     }
-    
+
     .order-btn {
         padding: 8px 14px !important;
         font-size: 0.8rem !important;
@@ -3758,21 +3836,21 @@ img {
         padding: 8px 10px;
         gap: 6px;
     }
-    
+
     .sub-offer-btn {
         padding: 8px 12px;
         min-width: 80px;
         border-radius: 10px;
     }
-    
+
     .sub-offer-name {
         font-size: 0.75rem;
     }
-    
+
     .sub-offer-price {
         font-size: 0.68rem;
     }
-    
+
     .sub-offer-badge {
         font-size: 0.55rem;
         padding: 2px 6px;
@@ -3786,17 +3864,17 @@ img {
         padding: 6px 8px;
         gap: 5px;
     }
-    
+
     .sub-offer-btn {
         padding: 6px 10px;
         min-width: 70px;
         border-radius: 8px;
     }
-    
+
     .sub-offer-name {
         font-size: 0.68rem;
     }
-    
+
     .sub-offer-price {
         font-size: 0.62rem;
     }
@@ -3807,11 +3885,11 @@ img {
         padding: 5px 8px;
         min-width: 60px;
     }
-    
+
     .sub-offer-name {
         font-size: 0.62rem;
     }
-    
+
     .sub-offer-price {
         font-size: 0.58rem;
     }

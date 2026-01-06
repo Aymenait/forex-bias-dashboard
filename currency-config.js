@@ -36,7 +36,7 @@ const CURRENCIES = {
 function getCurrencySymbol(currencyCode, lang = 'ar') {
   const currency = CURRENCIES[currencyCode];
   if (!currency) return currencyCode;
-  
+
   if (typeof currency.symbol === 'object') {
     return currency.symbol[lang] || currency.symbol.ar;
   }
@@ -102,7 +102,7 @@ const PRODUCTS = {
     id: 'chatgpt',
     name: 'ChatGPT Business',
     price_dzd: 1200,
-    price_usd: 5,
+    price_usd: 4.5,
     description: {
       ar: 'حساب ChatGPT Business للاستخدام المشترك',
       en: 'ChatGPT Business shared account',
@@ -117,7 +117,7 @@ const PRODUCTS = {
     id: 'adobe',
     name: 'Adobe Creative Cloud',
     price_dzd: 1200,
-    price_usd: 5,
+    price_usd: 4.5,
     description: {
       ar: 'اشتراك Adobe Creative Cloud يشمل أكثر من 20 تطبيقًا احترافيًا',
       en: 'Adobe Creative Cloud subscription includes 20+ professional applications',
@@ -132,7 +132,7 @@ const PRODUCTS = {
     id: 'gamma',
     name: 'Gamma.AI',
     price_dzd: 1200,
-    price_usd: 6,
+    price_usd: 4.5,
     description: {
       ar: 'حساب Gamma.AI للعروض التقديمية',
       en: 'Gamma.AI account for presentations',
@@ -147,7 +147,7 @@ const PRODUCTS = {
     id: 'perplexity',
     name: 'Perplexity AI Pro',
     price_dzd: 1200,
-    price_usd: 6,
+    price_usd: 4.5,
     description: {
       ar: 'حساب Perplexity AI Pro للبحث الذكي',
       en: 'Perplexity AI Pro account for smart search',
@@ -162,7 +162,7 @@ const PRODUCTS = {
     id: 'canva',
     name: 'Canva Pro',
     price_dzd: 600,
-    price_usd: 3,
+    price_usd: 2.5,
     description: {
       ar: 'حساب Canva Pro للتصميم',
       en: 'Canva Pro account for design',
@@ -177,7 +177,7 @@ const PRODUCTS = {
     id: 'capcut',
     name: 'CapCut Pro',
     price_dzd: 1200,
-    price_usd: 6,
+    price_usd: 4.5,
     description: {
       ar: 'محرر فيديو احترافي مع مميزات الذكاء الاصطناعي - 30 يوم',
       en: 'Professional video editor with AI features - 30 days',
@@ -222,7 +222,7 @@ const PRODUCTS = {
     id: 'cursor',
     name: 'Cursor AI - 7 Days',
     price_dzd: 600,
-    price_usd: 3,
+    price_usd: 2.5,
     description: {
       ar: 'محرر أكواد ذكي بالذكاء الاصطناعي لمدة 7 أيام',
       en: 'AI-powered smart code editor for 7 days',
@@ -237,7 +237,7 @@ const PRODUCTS = {
     id: 'primevideo',
     name: 'Prime Video',
     price_dzd: 1200,
-    price_usd: 5,
+    price_usd: 4.5,
     description: {
       ar: 'اشتراك Amazon Prime Video لمدة 3 أشهر',
       en: 'Amazon Prime Video subscription for 3 months',
@@ -252,11 +252,26 @@ const PRODUCTS = {
     id: 'crunchyroll',
     name: 'Crunchyroll',
     price_dzd: 1200,
-    price_usd: 5,
+    price_usd: 4.5,
     description: {
       ar: 'اشتراك Crunchyroll Premium لمدة شهر واحد',
       en: 'Crunchyroll Premium subscription for 1 month',
       fr: 'Abonnement Crunchyroll Premium pour 1 mois'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'google-ai': {
+    id: 'google-ai',
+    name: 'Google AI Ultra & Veo 3',
+    price_dzd: 1800,
+    price_usd: 8,
+    description: {
+      ar: 'اشتراك Gemini Ultra و Veo 3 مع أدوات إنتاجية متقدمة',
+      en: 'Gemini Ultra and Veo 3 subscription with advanced productivity tools',
+      fr: 'Abonnement Gemini Ultra et Veo 3 avec outils de productivité avancés'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],
@@ -268,13 +283,13 @@ const PRODUCTS = {
 // Product Validation Function
 function validateProduct(product) {
   const errors = [];
-  
+
   // Check if product object exists
   if (!product || typeof product !== 'object') {
     console.error('❌ Product validation failed: Invalid product object');
     return false;
   }
-  
+
   // Check for required price_dzd field
   if (!product.hasOwnProperty('price_dzd')) {
     errors.push('Missing price_dzd field');
@@ -283,7 +298,7 @@ function validateProduct(product) {
   } else if (product.price_dzd <= 0) {
     errors.push('price_dzd must be a positive number');
   }
-  
+
   // Check for required price_usd field
   if (!product.hasOwnProperty('price_usd')) {
     errors.push('Missing price_usd field');
@@ -292,13 +307,13 @@ function validateProduct(product) {
   } else if (product.price_usd <= 0) {
     errors.push('price_usd must be a positive number');
   }
-  
+
   // Log errors if any
   if (errors.length > 0) {
     console.warn(`⚠️ Product validation warnings for "${product.name || product.id || 'unknown'}":`, errors);
     return false;
   }
-  
+
   return true;
 }
 
@@ -311,13 +326,13 @@ function validateAllProducts() {
       allValid = false;
     }
   });
-  
+
   if (allValid) {
     console.log('✅ All products validated successfully');
   } else {
     console.warn('⚠️ Some products have validation issues');
   }
-  
+
   return allValid;
 }
 
@@ -326,13 +341,13 @@ function getProductPrice(product, currency) {
   if (!product || !validateProduct(product)) {
     return null;
   }
-  
+
   if (currency === 'DZD') {
     return product.price_dzd;
   } else if (currency === 'USD') {
     return product.price_usd;
   }
-  
+
   return null;
 }
 

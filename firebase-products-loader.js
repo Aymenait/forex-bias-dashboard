@@ -33,27 +33,27 @@ async function loadProductsFromFirebase(db, firebaseModules) {
 
     try {
         const { collection, getDocs, query, where, orderBy } = firebaseModules;
-        
+
         // تحميل المنتجات غير المؤرشفة مرتبة حسب displayOrder
         const q = query(
             collection(db, PRODUCTS_COLLECTION),
             where('isArchived', '==', false),
             orderBy('displayOrder', 'asc')
         );
-        
+
         const querySnapshot = await getDocs(q);
         const products = [];
-        
+
         querySnapshot.forEach((docItem) => {
             products.push({
                 id: docItem.id,
                 ...docItem.data()
             });
         });
-        
+
         console.log('✅ تم تحميل', products.length, 'منتج من Firebase');
         return products;
-        
+
     } catch (error) {
         console.error('❌ خطأ في تحميل المنتجات:', error);
         return [];
@@ -81,12 +81,12 @@ function createProductCardHTML(product, lang = 'ar') {
     const features = product.features || [];
     const paymentMethods = product.paymentMethods || { usdt: true, redotpay: true, baridimob: true };
     const landingPage = product.landingPage || '';
-    
+
     // إنشاء شارة الحالة
     let statusBadge = '';
     let buttonDisabled = '';
     let cardOpacity = '';
-    
+
     if (availability === 'unavailable') {
         statusBadge = `
             <div class="status-badge unavailable-badge" data-status="unavailable"
@@ -103,7 +103,7 @@ function createProductCardHTML(product, lang = 'ar') {
         buttonDisabled = 'disabled style="opacity: 0.5; cursor: not-allowed;"';
         cardOpacity = 'style="position: relative; opacity: 0.9;"';
     }
-    
+
     // إنشاء عنصر الوسائط
     let mediaElement = '';
     if (mediaType === 'video') {
@@ -117,7 +117,7 @@ function createProductCardHTML(product, lang = 'ar') {
         mediaElement = `
             <div class="product-image" style="background-image: url('${mediaUrl}');" role="img" aria-label="${name}"></div>`;
     }
-    
+
     // إنشاء أزرار الدفع
     let paymentButtons = '';
     if (paymentMethods.usdt) {
@@ -147,7 +147,7 @@ function createProductCardHTML(product, lang = 'ar') {
                 <span>BaridiMob</span>
             </button>`;
     }
-    
+
     // إنشاء قائمة المميزات
     let featuresHTML = '';
     features.forEach((feature, index) => {
@@ -156,13 +156,13 @@ function createProductCardHTML(product, lang = 'ar') {
             featuresHTML += `<li data-i18n="product.${product.id}.feature${index + 1}">${featureText}</li>`;
         }
     });
-    
+
     // زر اكتشف المزيد
     let discoverBtn = '';
     if (landingPage) {
         discoverBtn = `<a href="${landingPage}" class="discover-btn" data-i18n="product.discoverMore">اكتشف المزيد</a>`;
     }
-    
+
     // إنشاء البطاقة الكاملة
     return `
         <div class="product-card fade-in" data-product-id="${product.id}" ${cardOpacity}>
@@ -200,18 +200,18 @@ function renderProducts(products, lang = 'ar') {
         console.warn('لم يتم العثور على شبكة المنتجات');
         return;
     }
-    
+
     // مسح المحتوى الحالي
     productGrid.innerHTML = '';
-    
+
     // إنشاء بطاقات المنتجات
     products.forEach(product => {
         const cardHTML = createProductCardHTML(product, lang);
         productGrid.insertAdjacentHTML('beforeend', cardHTML);
     });
-    
+
     console.log('✅ تم عرض', products.length, 'منتج في الصفحة');
-    
+
     // إعادة تهيئة الأحداث
     reinitializeEventListeners();
 }
@@ -224,12 +224,12 @@ function reinitializeEventListeners() {
     if (typeof initPaymentButtons === 'function') {
         initPaymentButtons();
     }
-    
+
     // إعادة تهيئة مؤشر التمرير
     if (typeof initProductScrollIndicator === 'function') {
         initProductScrollIndicator();
     }
-    
+
     // تحديث الأسعار حسب العملة الحالية
     if (typeof window !== 'undefined' && window.CurrencyManager) {
         const currentCurrency = window.currentCurrency || 'DZD';
@@ -248,29 +248,29 @@ function reinitializeEventListeners() {
 async function initFirebaseProducts() {
     // التحقق من توفر Firebase
     if (typeof window === 'undefined') return;
-    
+
     const db = window.db;
     const firebaseModules = window.firebaseModules;
-    
+
     if (!db || !firebaseModules) {
         console.log('Firebase غير متاح، سيتم استخدام HTML الثابت');
         return;
     }
-    
+
     try {
         // تحميل المنتجات
         const products = await loadProductsFromFirebase(db, firebaseModules);
-        
+
         if (products.length > 0) {
             // عرض المنتجات
             const currentLang = window.currentLang || 'ar';
             renderProducts(products, currentLang);
-            
+
             // حفظ في التخزين المؤقت
             if (window.SyncManager) {
                 window.SyncManager.cacheProducts(products);
             }
-            
+
             // تهيئة المزامنة الفورية
             if (window.SyncManager) {
                 window.SyncManager.initializeListeners(db, firebaseModules);
@@ -278,7 +278,7 @@ async function initFirebaseProducts() {
         } else {
             console.log('لا توجد منتجات في Firebase، سيتم استخدام HTML الثابت');
         }
-        
+
     } catch (error) {
         console.error('خطأ في تهيئة المنتجات:', error);
     }
@@ -297,7 +297,7 @@ if (typeof window !== 'undefined') {
         reinitializeEventListeners,
         initFirebaseProducts
     };
-    
+
     // تهيئة تلقائية عند تحميل الصفحة (اختياري - يمكن تفعيله لاحقاً)
     // document.addEventListener('DOMContentLoaded', initFirebaseProducts);
 }

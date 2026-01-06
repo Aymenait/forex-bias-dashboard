@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="veo.hero.title">Google AI Ultra & Veo 3 | قوة الذكاء الاصطناعي بين يديك</title>
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2046893892791206');
+        fbq('track', 'PageView');
+
+        const isUSD = location.search.includes('USD');
+        fbq('track', 'ViewContent', {
+            content_name: 'Google AI Ultra Veo Premium',
+            content_category: 'AI SaaS',
+            value: isUSD ? 8 : 1800,
+            currency: isUSD ? 'USD' : 'DZD'
+        });
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <style>
+        :root {
+            --google-blue: #3b82f6;
+            --google-red: #8b5cf6;
+            --google-yellow: #06b6d4;
+            --google-green: #10b981;
+            --bg-dark: #020617;
+            --accent: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f3f4f6;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            /* Keep it below everything */
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .glow-sphere {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Classes */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+        }
+
+        .premium-border {
+            position: relative;
+        }
+
+        .premium-border::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, var(--google-blue), var(--google-red), var(--google-yellow));
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateX(5px);
+        }
+
+        .nav-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-direction: row;
+            /* Force row direction in both RTL/LTR */
+        }
+
+        /* Support for LTR in navigation */
+        html[dir="ltr"] .back-btn {
+            flex-direction: row-reverse;
+            /* Arrow points left, text right */
+        }
+
+        html[dir="rtl"] .back-btn {
+            flex-direction: row;
+            /* Arrow points right? No, arrow usually points away */
+        }
+
+        .lang-switcher,
+        .currency-switcher {
+            display: flex;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn,
+        .currency-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 5px 12px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .lang-btn.active,
+        .currency-btn.active {
+            background: var(--google-blue);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .currency-flag {
+            margin-right: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 10px;
+            }
+
+            .back-btn span {
+                display: none;
+            }
+
+            .lang-btn,
+            .currency-btn {
+                padding: 5px 8px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Fix for background-clip */
+        .bg-clip-text {
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        /* Typography & Headings */
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 30%, rgba(255, 255, 255, 0.5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-google {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hero Image Container */
+        .hero-img-wrapper {
+            position: relative;
+            z-index: 20;
+        }
+
+        .hero-img-wrapper img {
+            transition: transform 0.5s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: float 6s ease-in-out infinite;
+            position: relative;
+            z-index: 21;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Stats Cards */
+        .stat-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--google-blue);
+        }
+
+        /* Buttons */
+        .btn-premium {
+            background: linear-gradient(135deg, var(--google-blue), #2563eb);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 20px -10px rgba(66, 133, 244, 0.5);
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 30px -10px rgba(66, 133, 244, 0.6);
+        }
+
+        /* Feature List Styling */
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .check-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            background: rgba(52, 168, 83, 0.2);
+            color: var(--google-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        /* Sections */
+        .section-padding {
+            padding: 100px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 60px 15px;
+            }
+
+            .hero-title {
+                font-size: 2.2rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="particles-js"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <a href="index.html" class="back-btn">
+            <span class="text-xl">←</span>
+            <span data-i18n="nav.home">الرئيسية</span>
+        </a>
+        <div class="nav-group">
+            <div class="currency-switcher">
+                <button class="currency-btn active" data-currency="DZD">
+                    <span class="currency-flag">🇩🇿</span>
+                    <span>DZD</span>
+                </button>
+                <button class="currency-btn" data-currency="USD">
+                    <span class="currency-flag">🇺🇸</span>
+                    <span>USD</span>
+                </button>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="ar">AR</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="fr">FR</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Decorative Blurs -->
+    <div class="glow-sphere" style="top: -100px; left: -100px;"></div>
+    <div class="glow-sphere"
+        style="top: 40%; right: -200px; background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);">
+    </div>
+
+
+
+    <!-- Hero Section -->
+    <section class="relative z-10 hero-container min-h-screen flex items-center pt-24">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div class="text-right">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border-white/10 mb-6 animate-pulse">
+                    <span class="w-2 h-2 rounded-full bg-google-green"
+                        style="background-color: var(--google-green);"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-white/60"
+                        data-i18n="veo.badge.offer">أقوى اشتراك متوفر
+                        حالياً</span>
+                </div>
+
+                <h1 class="hero-title text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+                    <span class="text-gradient block" data-i18n="veo.hero.title_prefix">أطلق العنان لـ</span>
+                    <span class="text-google block mt-2">Google AI Ultra</span>
+                </h1>
+
+                <p class="text-lg md:text-xl text-white/70 mb-10 max-w-xl ml-auto" data-i18n="veo.hero.subtitle">
+                    ارتقِ بصناعة المحتوى إلى مستوى هوليود مع تقنية <span class="text-white font-bold">Veo 3</span>.
+                    الحساب الأول المتكامل لمصممي الجرافيك، المبرمجين، والباحثين.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-start">
+                    <div class="glass p-6 border-white/10 flex flex-col items-start gap-1 min-w-[200px]">
+                        <span class="text-3xl font-black text-google price-tag" data-price-dzd="1800"
+                            data-price-usd="8">1800 د.ج</span>
+                        <span class="text-sm text-white/50" data-i18n="veo.period.monthly">شهر كامل</span>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/213782125821?text=مرحباً، أريد اشتراك Google AI Ultra & Veo 3"
+                    class="mt-8 inline-flex items-center justify-center btn-premium px-10 py-5 rounded-2xl text-lg font-bold text-white w-full sm:w-auto"
+                    data-i18n="veo.cta">
+                    ابدأ تجربتك الفائقة الآن
+                </a>
+            </div>
+
+            <div class="hero-img-wrapper">
+                <img src="https://i.pinimg.com/1200x/7e/62/16/7e6216341c4347f9d576b9b1644491eb.jpg" alt="Google Veo 3"
+                    class="w-full h-auto rounded-[2rem] border-8 border-white/5">
+
+                <!-- Floating Info Cards -->
+                <div class="absolute -bottom-6 -right-6 glass p-6 border-white/10 shadow-2xl hidden md:block"
+                    style="z-index: 30;">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400">
+                            🎬
+                        </div>
+                        <div>
+                            <p class="text-sm text-white/50" data-i18n="veo.stats.videos_desc">توليد فيديو</p>
+                            <p class="text-xl font-bold">2,250+</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Breakdown -->
+    <section class="relative z-10 section-padding overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+                <div class="glass stat-card p-8">
+                    <p class="text-4xl font-black mb-2 text-blue-400">45K</p>
+                    <p class="text-sm text-white/40 uppercase tracking-widest font-bold" data-i18n="veo.stats.credits">
+                        نقطة ائتمانية</p>
+                </div>
+                <div class="glass stat-card p-8" style="&::before { background: var(--google-red); }">
+                    <p class="text-4xl font-black mb-2 text-red-400">Ultra</p>
+                    <p class="text-sm text-white/40 uppercase tracking-widest font-bold" data-i18n="veo.stats.model">
+                        أذكى نموذج متاح</p>
+                </div>
+                <div class="glass stat-card p-8" style="&::before { background: var(--google-yellow); }">
+                    <p class="text-4xl font-black mb-2 text-yellow-400">2.2K</p>
+                    <p class="text-sm text-white/40 uppercase tracking-widest font-bold" data-i18n="veo.stats.video">
+                        فيديو بجودة 4K</p>
+                </div>
+                <div class="glass stat-card p-8" style="&::before { background: var(--google-green); }">
+                    <p class="text-4xl font-black mb-2 text-green-400">Private</p>
+                    <p class="text-sm text-white/40 uppercase tracking-widest font-bold" data-i18n="veo.stats.private">
+                        حساب شخصي آمن</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="relative z-10 section-padding">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-black mb-4" data-i18n="veo.section.what">ماذا ستفعل بهذا الحساب؟
+                </h2>
+                <p class="text-white/50 text-lg" data-i18n="veo.section.tools">أدوات جوجل الأكثر تقدماً في مكان واحد</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass p-10 border-white/5 flex flex-col gap-6">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center text-4xl shadow-inner">
+                        🎞️</div>
+                    <h3 class="text-2xl font-bold" data-i18n="veo.tool1.title">صناعة الأفلام (Veo 3)</h3>
+                    <p class="text-white/60" data-i18n="veo.tool1.desc">حول نصوصك لوحات سحرية. جرب قوة Veo 3 Neural
+                        Network لبناء فيديوهات دعائية
+                        واحترافية في ثوانٍ.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="glass p-10 border-white/5 flex flex-col gap-6">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center text-4xl shadow-inner">
+                        🔍</div>
+                    <h3 class="text-2xl font-bold" data-i18n="veo.tool2.title">Deep Research 2</h3>
+                    <p class="text-white/60" data-i18n="veo.tool2.desc">أداة البحث الأكثر عمقاً. ابحث في آلاف الأوراق
+                        البحثية، لخص المعلومات، واحصل
+                        على إجابات معقدة بدقة متناهية.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="glass p-10 border-white/5 flex flex-col gap-6">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-green-500/10 flex items-center justify-center text-4xl shadow-inner">
+                        🤖</div>
+                    <h3 class="text-2xl font-bold" data-i18n="veo.tool3.title">Agent Mode</h3>
+                    <p class="text-white/60" data-i18n="veo.tool3.desc">اجعل الذكاء الاصطناعي يعمل كفريق كامل. قم ببرمجة
+                        وبناء تطبيقات ومهام معقدة
+                        مع أدوات NotebookLM Plus.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing / Buy Card -->
+    <section class="relative z-10 section-padding">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="glass p-8 md:p-16 premium-border overflow-hidden">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-black mb-8" data-i18n="veo.delivery.title">تفاصيل استلام الحساب</h2>
+                        <div class="space-y-6">
+                            <div class="feature-item">
+                                <span class="check-icon">✓</span>
+                                <p class="font-bold" data-i18n="veo.delivery.item1">حساب Workspace شخصي (إيميل +
+                                    باسوورد)</p>
+                            </div>
+                            <div class="feature-item">
+                                <span class="check-icon">✓</span>
+                                <p class="font-bold" data-i18n="veo.delivery.item2">إمكانية تغيير كلمة السر ومعلومات
+                                    الاسترداد</p>
+                            </div>
+                            <div class="feature-item">
+                                <span class="check-icon">✓</span>
+                                <p class="font-bold" data-i18n="veo.delivery.item3">رابط دخول مباشر (Login Link) عند
+                                    الحاجة</p>
+                            </div>
+                            <div class="feature-item">
+                                <span class="check-icon">✓</span>
+                                <p class="font-bold" data-i18n="veo.delivery.item4">ضمان حقيقي لمدة 27 يوم</p>
+                            </div>
+                            <div class="feature-item">
+                                <span class="check-icon">✓</span>
+                                <p class="font-bold" data-i18n="veo.delivery.item5">تسليم فوري (Auto Delivery)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 rounded-3xl p-8 border border-white/10 text-center">
+                        <p class="text-white/40 uppercase font-black text-xs mb-4" data-i18n="veo.delivery.limited">عرض
+                            محدود لفترة وجيزة</p>
+                        <div class="flex items-center justify-center gap-2 mb-6">
+                            <span class="text-5xl font-black price-tag" data-price-dzd="1800" data-price-usd="8">1800
+                                د.ج</span>
+                        </div>
+                        <a id="pixel-order-btn"
+                            href="https://wa.me/213782125821?text=مرحباً، أريد اشتراك Google AI Ultra & Veo 3"
+                            class="w-full block py-5 rounded-2xl btn-premium text-lg font-bold"
+                            data-i18n="veo.delivery.wa">
+                            اطلب عبر واتساب الآن
+                        </a>
+                        <p class="mt-6 text-xs text-white/30" data-i18n="veo.delivery.payment">متوفر عبر BaridiMob / CCP
+                            / USDT</p>
+                    </div>
+                </div>
+
+                <div class="mt-12 pt-8 border-t border-white/5 text-center">
+                    <p class="text-red-400 text-sm font-medium" data-i18n="veo.disclaimer">⚠️ لا يدعم Google Antigravity
+                        أو Gemini CLI - مخصص
+                        للمبدعين فقط.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-12 border-t border-white/5 text-center text-white/30 text-sm">
+        <p data-i18n="footer.rightsText">© 2026 Market Algeria - شريكك الموثوق في الحلول الرقمية</p>
+    </footer>
+
+    <script src="currency-config.js"></script>
+    <script src="currency-manager.js"></script>
+    <script src="payment-manager.js"></script>
+    <script src="international-expansion-init.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Language Handling ---
+            const savedLang = localStorage.getItem('selectedLanguage') || 'ar';
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            const langToUse = langParam || savedLang;
+
+            // Wait for script.js to load (translations & changeLanguage)
+            const checkScriptLoaded = setInterval(() => {
+                if (window.translations && typeof changeLanguage === 'function') {
+                    // Apply initial language
+                    changeLanguage(langToUse);
+
+                    // Attach Language Listeners explicitly
+                    document.querySelectorAll('.lang-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const lang = btn.getAttribute('data-lang');
+                            changeLanguage(lang);
+                        });
+                    });
+
+                    // Initial Price Update for language specific formatting (currency symbol)
+                    updatePriceDisplays(langToUse);
+
+                    clearInterval(checkScriptLoaded);
+                }
+            }, 100);
+
+
+            // --- Currency Handling ---
+            // Wait for international-expansion-init.js functions
+            const checkCurrencyLoaded = setInterval(async () => {
+                if (typeof initInternationalExpansion === 'function') {
+                    // Initialize system if not correctly initialized by script.js
+                    // (script.js might fail on specific element lookups, so we ensure it runs here)
+                    if (!window.currencyManager) {
+                        try {
+                            const system = await initInternationalExpansion();
+                            window.currencyManager = system.currencyManager;
+                            window.paymentManager = system.paymentManager;
+                        } catch (e) {
+                            console.error('Manual init failed:', e);
+                        }
+                    } else {
+                        // If already initialized, just ensure the selector is bound 
+                        // (initInternationalExpansion might have run before this page's specific buttons were ready if script.js runs too early or relies on DOMContentLoaded)
+                        // Actually, script.js runs on DOMContentLoaded.
+
+                        // Re-bind currency selector just in case
+                        if (window.currencyManager && window.paymentManager) {
+                            initializeCurrencySelector(
+                                window.currencyManager.getCurrentCurrency(),
+                                window.currencyManager,
+                                window.paymentManager
+                            );
+
+                            // Force an update to the current currency
+                            const currentCurrency = window.currencyManager.getCurrentCurrency();
+                            window.currencyManager.updateAllPrices(currentCurrency);
+                        }
+                    }
+                    clearInterval(checkCurrencyLoaded);
+                }
+            }, 100);
+        });
+
+        // --- Pixel Tracking Helpers ---
+        function getPriceValue() {
+            if (window.currencyManager && window.currencyManager.getCurrentCurrency() === 'USD') {
+                return 8;
+            }
+            return 1800;
+        }
+
+        function getCurrencyCode() {
+            if (window.currencyManager && window.currencyManager.getCurrentCurrency() === 'USD') {
+                return 'USD';
+            }
+            return 'DZD';
+        }
+
+        document.getElementById('pixel-order-btn').addEventListener('click', function () {
+            const val = getPriceValue();
+            const cur = getCurrencyCode();
+            fbq('track', 'InterestedLead', {
+                content_name: 'Google AI Ultra Veo Premium',
+                content_category: 'AI SaaS',
+                value: val,
+                currency: cur
+            });
+            fbq('track', 'AddToCart', {
+                content_name: 'Google AI Ultra Veo Premium',
+                content_category: 'AI SaaS',
+                value: val,
+                currency: cur
+            });
+        });
+
+        // Background Particles
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.2, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 1, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+
+</html>
