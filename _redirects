@@ -1,0 +1,3 @@
+# Redirect the old netlify subdomain to the new custom domain
+https://marketalgeriaa.netlify.app/*  https://marketalgeria.store/:splat  301!
+/*  /index.html  200
