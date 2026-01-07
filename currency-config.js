@@ -164,9 +164,24 @@ const PRODUCTS = {
     price_dzd: 600,
     price_usd: 2.5,
     description: {
-      ar: 'حساب Canva Pro للتصميم',
-      en: 'Canva Pro account for design',
-      fr: 'Compte Canva Pro pour design'
+      ar: 'اشتراك Canva Pro الكامل مع جميع المميزات الاحترافية للتصميم والإبداع (سنة كاملة).',
+      en: 'Full Canva Pro subscription with all professional design and creativity features (1 Year).',
+      fr: 'Abonnement Canva Pro complet avec toutes les fonctionnalités professionnelles de design et créativité (1 An).'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'canva-reseller': {
+    id: 'canva-reseller',
+    name: 'Canva Reseller Offer',
+    price_dzd: 3900,
+    price_usd: 16,
+    description: {
+      ar: 'اشتراك Canva Pro للموزعين والوكالات - أضف حتى 500 مستخدم مع تحكم إداري كامل وحسابات مستقلة.',
+      en: 'Canva Pro Reseller & Agency Offer - Add up to 500 users with full administrative control and independent accounts.',
+      fr: 'Offre Canva Pro Revendeur & Agence - Ajoutez jusqu\'à 500 utilisateurs avec contrôle administratif complet et comptes indépendants.'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],

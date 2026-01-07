@@ -1889,6 +1889,14 @@ const translations = {
         'product.veo.feature1': 'توليد 2,500 فيديو عبر Veo 3',
         'product.veo.feature2': 'وصول لـ Gemini Ultra و Deep Research 2',
         'product.veo.feature3': 'حساب خاص Google Workspace بالكامل',
+        'product.canva.selectType': 'اختر نوع الاشتراك:',
+        'product.canva.standard': 'PRO (سنة)',
+        'product.canva.reseller': 'عرض الموزعين (500 مستخدم)',
+        'product.canva.reseller.desc': 'اشتراك Canva Pro للموزعين والوكالات - أضف حتى 500 مستخدم مع تحكم إداري كامل وحسابات مستقلة.',
+        'product.canva.reseller.feature1': 'تحكم كامل - تغيير البريد وكلمة السر في أي وقت',
+        'product.canva.reseller.feature2': 'يصل إلى 500 مستخدم - مثالي للفرق أو الموزعين',
+        'product.canva.reseller.feature3': 'رفع الخطوط والرسومات الشخصية',
+        'product.canva.reseller.feature4': 'إعداد عالي الجودة - تكوين مستقر',
     },
     en: {
         'brand.tagline': 'Digital Solutions That Boost Your Presence',
@@ -1951,6 +1959,14 @@ const translations = {
         'product.gamma.feature2': 'Design interactive documents and websites',
         'product.gamma.feature3': 'Ready templates and full customization',
         'product.canva.desc': 'Full Canva Pro subscription with all professional design and creativity features.',
+        'product.canva.selectType': 'Select Subscription Type:',
+        'product.canva.standard': 'PRO (Year)',
+        'product.canva.reseller': 'Reseller Offer (500 Users)',
+        'product.canva.reseller.desc': 'Canva Pro Reseller & Agency Offer - Add up to 500 users with full administrative control and independent accounts.',
+        'product.canva.reseller.feature1': 'Full control — change email & password anytime',
+        'product.canva.reseller.feature2': 'Up to 500 users — perfect for teams or resellers',
+        'product.canva.reseller.feature3': 'Upload personal fonts & graphics',
+        'product.canva.reseller.feature4': 'Premium quality setup — stable configuration',
         'product.canva.price': 'Price Coming Soon',
         'product.canva.feature1': 'Access to all premium templates',
         'product.canva.feature2': 'Background removal with one click',
@@ -2507,6 +2523,14 @@ const translations = {
         'product.gamma.feature2': 'Concevoir des documents et sites interactifs',
         'product.gamma.feature3': 'Modèles prêts et personnalisation complète',
         'product.canva.desc': 'Abonnement Canva Pro complet avec toutes les fonctionnalités professionnelles de design et créativité.',
+        'product.canva.selectType': 'Sélectionnez le type d\'abonnement :',
+        'product.canva.standard': 'PRO (An)',
+        'product.canva.reseller': 'Offre Revendeur (500 Utilisateurs)',
+        'product.canva.reseller.desc': 'Offre Canva Pro Revendeur & Agence - Ajoutez jusqu\'à 500 utilisateurs avec contrôle administratif complet et comptes indépendants.',
+        'product.canva.reseller.feature1': 'Contrôle total — changez l\'e-mail et le mot de passe à tout moment',
+        'product.canva.reseller.feature2': 'Jusqu\'à 500 utilisateurs — idéal pour les équipes ou revendeurs',
+        'product.canva.reseller.feature3': 'Téléchargez vos propres polices et graphiques',
+        'product.canva.reseller.feature4': 'Configuration de qualité premium — stable et sans blocages',
         'product.canva.price': 'Prix Bientôt Disponible',
         'product.canva.feature1': 'Accès à tous les modèles premium',
         'product.canva.feature2': 'Suppression d\'arrière-plan en un clic',
@@ -2767,8 +2791,14 @@ const translations = {
 
 let currentLang = 'ar';
 
+// Make translations and language state globally available
+window.translations = translations;
+window.currentLang = currentLang;
+window.changeLanguage = changeLanguage;
+
 function changeLanguage(lang) {
     currentLang = lang;
+    window.currentLang = lang; // Update global state
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
