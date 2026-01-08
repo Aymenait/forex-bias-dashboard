@@ -35,6 +35,23 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "الرئيسية",
+        "item": "https://marketalgeria.store/"
+      }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "المنتجات",
+        "item": "https://marketalgeria.store/#products"
+      }]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Market Algeriaa",
       "url": "https://marketalgeria.store/",
@@ -114,6 +131,24 @@
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
+
+    <!-- Speculation Rules for Instant Page Loading -->
+    <script type="speculationrules">
+    {
+      "prerender": [
+        {
+          "source": "list",
+          "urls": [
+            "netflix_landing.html",
+            "chatgpt_landing.html",
+            "canva_landing.html",
+            "trw_landing.html",
+            "reviews.html"
+          ]
+        }
+      ]
+    }
+    </script>
 
     <!-- Button Shine Effect CSS -->
     <style>
@@ -1920,6 +1955,23 @@
             setInterval(draw, 33);
         });
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "الرئيسية",
+        "item": "https://marketalgeria.store/"
+      }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "المنتجات",
+        "item": "https://marketalgeria.store/#products"
+      }]
+    }
+    </script>
     <!-- Vanilla Tilt Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
@@ -2298,10 +2350,44 @@
             });
         }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "الرئيسية",
+        "item": "https://marketalgeria.store/"
+      }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "المنتجات",
+        "item": "https://marketalgeria.store/#products"
+      }]
+    }
+    </script>
 
     <script>
         // Adobe Account Type Selection
 
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "الرئيسية",
+        "item": "https://marketalgeria.store/"
+      }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "المنتجات",
+        "item": "https://marketalgeria.store/#products"
+      }]
+    }
     </script>
 
     <!-- Secret Admin Access - 5 clicks on logo -->
@@ -2329,6 +2415,23 @@
                 });
             }
         })();
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "الرئيسية",
+        "item": "https://marketalgeria.store/"
+      }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "المنتجات",
+        "item": "https://marketalgeria.store/#products"
+      }]
+    }
     </script>
 
     <!-- Mobile Hamburger Menu -->
@@ -2701,19 +2804,26 @@
             if (type === 'plus') {
                 priceId = 'chatgpt-prices-plus';
                 name = 'ChatGPT Plus - 1 Month';
-                priceObj = { dzd: 1000, usd: 4 };
             } else if (type === 'teachers') {
                 priceId = 'chatgpt-prices-teachers';
                 name = 'ChatGPT Teachers - 12 Months';
-                priceObj = { dzd: 3200, usd: 13 };
             } else if (type === 'go') {
                 priceId = 'chatgpt-prices-go';
                 name = 'ChatGPT GO - 12 Months';
-                priceObj = { dzd: 1800, usd: 7 };
             }
 
             const priceEl = document.getElementById(priceId);
-            if (priceEl) priceEl.style.display = 'block';
+            if (priceEl) {
+                priceEl.style.display = 'block';
+                const priceTag = priceEl.querySelector('.price-tag');
+                if (priceTag) {
+                    priceObj = {
+                        dzd: parseFloat(priceTag.getAttribute('data-price-dzd')),
+                        usd: parseFloat(priceTag.getAttribute('data-price-usd'))
+                    };
+                }
+            }
+
 
             // Update order button
             const orderBtn = document.getElementById('chatgpt-order-btn');
@@ -2743,13 +2853,25 @@
 
             if (type === 'plus') {
                 productName = 'ChatGPT Plus - 1 Month';
-                priceObj = { dzd: 1000, usd: 4 };
+                const priceTag = document.querySelector('#chatgpt-prices-plus .price-tag');
+                priceObj = {
+                    dzd: parseFloat(priceTag.getAttribute('data-price-dzd')),
+                    usd: parseFloat(priceTag.getAttribute('data-price-usd'))
+                };
             } else if (type === 'teachers') {
                 productName = 'ChatGPT Teachers - 12 Months';
-                priceObj = { dzd: 3200, usd: 13 };
+                const priceTag = document.querySelector('#chatgpt-prices-teachers .price-tag');
+                priceObj = {
+                    dzd: parseFloat(priceTag.getAttribute('data-price-dzd')),
+                    usd: parseFloat(priceTag.getAttribute('data-price-usd'))
+                };
             } else if (type === 'go') {
                 productName = 'ChatGPT GO - 12 Months';
-                priceObj = { dzd: 1800, usd: 7 };
+                const priceTag = document.querySelector('#chatgpt-prices-go .price-tag');
+                priceObj = {
+                    dzd: parseFloat(priceTag.getAttribute('data-price-dzd')),
+                    usd: parseFloat(priceTag.getAttribute('data-price-usd'))
+                };
             }
 
             const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
