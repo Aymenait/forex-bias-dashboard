@@ -2620,9 +2620,14 @@
                 });
             }
 
-            const message = `مرحباً! أريد طلب ${productName} بسعر ${price} ${currency === 'USD' ? '$' : 'د.ج'}`;
-            const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+            // Store product name and open contact choice modal
+            window.currentProductName = productName;
+            const modal = document.getElementById('contact-choice-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.opacity = '1';
+                modal.classList.remove('hidden');
+            }
         }
 
         // Adobe Duration Selection Functions
@@ -2708,9 +2713,14 @@
                 });
             }
 
-            const message = `مرحباً! أريد طلب ${productName} بسعر ${price} ${currency === 'USD' ? '$' : 'د.ج'}`;
-            const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+            // Store product name and open contact choice modal
+            window.currentProductName = productName;
+            const modal = document.getElementById('contact-choice-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.opacity = '1';
+                modal.classList.remove('hidden');
+            }
         }
 
         // Gemini Duration Selection Functions
@@ -2781,9 +2791,14 @@
                 });
             }
 
-            const message = `مرحباً! أريد طلب ${productName} بسعر ${price} ${currency === 'USD' ? '$' : 'د.ج'}`;
-            const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+            // Store product name and open contact choice modal
+            window.currentProductName = productName;
+            const modal = document.getElementById('contact-choice-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.opacity = '1';
+                modal.classList.remove('hidden');
+            }
         }
 
         // ChatGPT Selection Functions
@@ -2890,9 +2905,14 @@
                 });
             }
 
-            const message = `مرحباً! أريد طلب ${productName} بسعر ${price} ${currency === 'USD' ? '$' : 'د.ج'}`;
-            const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+            // Store product name and open contact choice modal
+            window.currentProductName = productName;
+            const modal = document.getElementById('contact-choice-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.opacity = '1';
+                modal.classList.remove('hidden');
+            }
         }
 
         // Canva Selection Functions
