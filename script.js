@@ -3787,7 +3787,7 @@ function orderProduct(productName) {
 
     // Track Facebook Events
     if (typeof fbq !== 'undefined') {
-        fbq('track', 'Lead', {
+        fbq('track', 'AddToCart', {
             content_name: productName,
             value: parseFloat(price) || 0,
             currency: currency
