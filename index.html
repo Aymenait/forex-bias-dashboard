@@ -546,10 +546,7 @@
                                     onclick="selectChatGPTType('plus')">
                                     <span class="btn-label">Plus (1 Month)</span>
                                 </button>
-                                <button class="segmented-btn chatgpt-type-btn" data-type="teachers"
-                                    onclick="selectChatGPTType('teachers')">
-                                    <span class="btn-label">Teachers (1 Year)</span>
-                                </button>
+
                                 <button class="segmented-btn chatgpt-type-btn" data-type="go"
                                     onclick="selectChatGPTType('go')">
                                     <span class="btn-label">GO (1 Year)</span>
@@ -567,11 +564,7 @@
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                     data-i18n="product.chatgpt.oneMonth">شهر واحد</span></span>
                         </div>
-                        <div id="chatgpt-prices-teachers" class="chatgpt-prices" style="display: none;">
-                            <div class="price-tag" data-price-dzd="3200" data-price-usd="13">3200 د.ج</div>
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
-                                    data-i18n="product.chatgpt.twelveMonths">12 شهر</span></span>
-                        </div>
+
                         <div id="chatgpt-prices-go" class="chatgpt-prices" style="display: none;">
                             <div class="price-tag" data-price-dzd="1800" data-price-usd="7">1800 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
@@ -3059,9 +3052,6 @@
             if (type === 'plus') {
                 priceId = 'chatgpt-prices-plus';
                 name = 'ChatGPT Plus - 1 Month';
-            } else if (type === 'teachers') {
-                priceId = 'chatgpt-prices-teachers';
-                name = 'ChatGPT Teachers - 12 Months';
             } else if (type === 'go') {
                 priceId = 'chatgpt-prices-go';
                 name = 'ChatGPT GO - 12 Months';
@@ -3101,7 +3091,6 @@
 
             let productName = '';
             if (type === 'plus') productName = 'ChatGPT Plus - 1 Month';
-            else if (type === 'teachers') productName = 'ChatGPT Teachers - 12 Months';
             else if (type === 'go') productName = 'ChatGPT GO - 12 Months';
             else if (type === 'business') productName = 'ChatGPT Business - 12 Months';
 

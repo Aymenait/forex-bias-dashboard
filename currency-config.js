@@ -105,7 +105,7 @@ const PRODUCTS = {
     price_usd: 4,
     durations: {
       'plus': { dzd: 1000, usd: 4 },
-      'teachers': { dzd: 3200, usd: 13 },
+
       'go': { dzd: 1800, usd: 7 },
       'business': { dzd: 3000, usd: 12 }
     },
