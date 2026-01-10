@@ -276,30 +276,33 @@
         left: 15px !important;
     }
 
-    /* 13. تحسين أزرار الاختيار (Segmented Selector) - تمرير أفقي */
+    /* 13. تحسين أزرار الاختيار (Segmented Selector) - شبكي للموبايل */
     .segmented-selector {
         display: flex !important;
-        flex-wrap: nowrap !important;
-        overflow-x: auto !important;
-        scrollbar-width: none;
-        /* Firefox */
-        -ms-overflow-style: none;
-        /* IE 10+ */
-        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+        /* السماح بالالتفاف لسطر جديد */
+        overflow-x: visible !important;
+        /* إيقاف التمرير */
+        justify-content: space-between !important;
         padding: 4px !important;
-        -webkit-overflow-scrolling: touch;
-        gap: 6px !important;
+        gap: 8px !important;
     }
 
     .segmented-selector::-webkit-scrollbar {
         display: none;
-        /* Chrome/Safari/Webkit */
     }
 
     .segmented-btn {
-        flex: 0 0 auto !important;
+        flex: 1 1 45% !important;
+        /* عرض 45% تقريباً ليكون زرين في السطر */
         min-width: auto !important;
-        padding: 8px 16px !important;
-        white-space: nowrap !important;
+        padding: 12px 6px !important;
+        text-align: center !important;
+        white-space: normal !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px !important;
+        margin: 0 !important;
     }
 }
