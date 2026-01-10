@@ -20,6 +20,7 @@
         content="انضم إلى The Real World واحصل على وصول لجميع الكورسات التعليمية بأفضل الأسعار.">
     <meta property="og:image" content="https://i.pinimg.com/736x/87/11/44/87114406180735ba07865c3702a76f2d.jpg">
 
+    <script src="currency-config.js"></script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org/",
@@ -35,10 +36,23 @@
         "@type": "Offer",
         "url": "https://marketalgeria.store/trw_landing.html",
         "priceCurrency": "DZD",
-        "price": "6000",
+        "price": "2900",
         "availability": "https://schema.org/InStock"
       }
     }
+    </script>
+    <script>
+        // Sync schema price from config if available (will run after PRODUCTS is defined)
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof PRODUCTS !== 'undefined' && PRODUCTS['trw']) {
+                const schema = document.querySelector('script[type="application/ld+json"]');
+                if (schema) {
+                    const data = JSON.parse(schema.textContent);
+                    data.offers.price = PRODUCTS['trw'].price_dzd.toString();
+                    schema.textContent = JSON.stringify(data);
+                }
+            }
+        });
     </script>
 
     <!-- Meta Pixel Code -->
@@ -49,17 +63,21 @@
 
         // Detailed ViewContent and InterestedLead
         const isUSD = location.search.includes('USD');
+        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['trw'] : { price_dzd: 2900, price_usd: 12 };
+
         fbq('track', 'ViewContent', {
-            content_name: 'The Real World',
+            content_name: productData.name || 'The Real World Account',
             content_category: 'Courses',
-            value: isUSD ? 18 : 3750,
+            value: isUSD ? productData.price_usd : productData.price_dzd,
             currency: isUSD ? 'USD' : 'DZD'
         });
 
         setTimeout(function () {
             fbq('trackCustom', 'InterestedLead', {
-                content_name: 'The Real World',
-                time_on_page: '10s'
+                content_name: productData.name || 'The Real World Account',
+                time_on_page: '10s',
+                value: isUSD ? productData.price_usd : productData.price_dzd,
+                currency: isUSD ? 'USD' : 'DZD'
             });
         }, 10000);
     </script>
@@ -558,7 +576,7 @@
             THE REAL WORLD ACCOUNT <br class="hidden sm:block"> VETERAN PLAN ALL COURSES
         </h1>
         <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.price">
-            فقط بـ 15 USDT
+            فقط بـ 12 USDT
         </p>
 
         <!-- Payment Methods Section -->
@@ -570,7 +588,7 @@
                 <!-- RedotPay Button -->
                 <a href="javascript:void(0)"
                     class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer redotpay-btn payment-method-btn hover-lift"
-                    data-product="The Real World Account - Veteran Plan" data-price="3750" data-price-usd="15">
+                    data-product="The Real World Account - Veteran Plan" data-price="2900" data-price-usd="12">
                     <div
                         class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:shadow-[0_0_25px_rgba(220,38,38,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-white payment-btn-circle">
                         <span class="text-white font-bold text-sm sm:text-lg">Redot</span>
@@ -582,7 +600,7 @@
                 <!-- USDT Button -->
                 <a href="javascript:void(0)"
                     class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer crypto-pay-btn payment-method-btn hover-lift"
-                    data-product="The Real World Account - Veteran Plan" data-price="3750" data-price-usd="15">
+                    data-product="The Real World Account - Veteran Plan" data-price="2900" data-price-usd="12">
                     <div
                         class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-matrix-green flex items-center justify-center shadow-[0_0_15px_rgba(57,255,20,0.5)] group-hover:shadow-[0_0_25px_rgba(57,255,20,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-white payment-btn-circle">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="sm:w-10 sm:h-10"
@@ -602,7 +620,7 @@
                 <!-- BaridiMob Button -->
                 <a href="javascript:void(0)"
                     class="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer baridimob-btn payment-method-btn hover-lift"
-                    data-product="The Real World Account - Veteran Plan" data-price="3750" data-price-usd="15">
+                    data-product="The Real World Account - Veteran Plan" data-price="2900" data-price-usd="12">
                     <div
                         class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.5)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-all duration-300 border-2 border-transparent group-hover:border-matrix-green payment-btn-circle">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="sm:w-10 sm:h-10"
@@ -653,7 +671,7 @@
         </div>
 
         <a href="https://wa.me/213782125821"
-            onclick="if(typeof fbq !== 'undefined') { const isUSD = location.search.includes('USD'); const val = isUSD ? 18 : 3750; const cur = isUSD ? 'USD' : 'DZD'; fbq('track', 'Lead', {content_name: 'The Real World', value: val, currency: cur}); fbq('track', 'InitiateCheckout', {content_name: 'The Real World', value: val, currency: cur}); }"
+            onclick="if(typeof fbq !== 'undefined') { const isUSD = location.search.includes('USD'); const val = isUSD ? 12 : 2900; const cur = isUSD ? 'USD' : 'DZD'; fbq('track', 'Lead', {content_name: 'The Real World', value: val, currency: cur}); fbq('track', 'InitiateCheckout', {content_name: 'The Real World', value: val, currency: cur}); }"
             class="bg-matrix-green text-black font-bold text-base sm:text-xl py-3 px-6 sm:px-8 rounded-full hover:bg-green-400 transition-all transform hover:scale-105 matrix-glow shadow-lg cta-pulse cta-btn-mobile"
             data-i18n="hero.cta">
             انضم الآن
@@ -1446,7 +1464,7 @@
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="crypto-product-name">The Real World
                         Account - Veteran Plan</span></p>
                 <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
-                        id="crypto-price-usd">15</span> USDT</p>
+                        id="crypto-price-usd">12</span> USDT</p>
             </div>
 
             <div class="network-selector">
@@ -1520,7 +1538,7 @@
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="redotpay-product-name">The Real World
                         Account - Veteran Plan</span></p>
                 <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
-                        id="redotpay-price-usd">15</span> USD</p>
+                        id="redotpay-price-usd">12</span> USD</p>
             </div>
 
             <div class="crypto-wallet-info">
@@ -1738,6 +1756,9 @@
         }
     </style>
 
+    <script src="currency-manager.js"></script>
+    <script src="payment-manager.js"></script>
+    <script src="international-expansion-init.js"></script>
     <script src="modal_functions.js"></script>
     <script src="script.js"></script>
 </body>

@@ -86,8 +86,8 @@ const PRODUCTS = {
   'trw': {
     id: 'trw',
     name: 'The Real World Account',
-    price_dzd: 3750,
-    price_usd: 15,
+    price_dzd: 2900,
+    price_usd: 12,
     description: {
       ar: 'حساب مشترك للكورسات ومنصة The Real World',
       en: 'Shared account for courses and The Real World platform',
@@ -101,8 +101,13 @@ const PRODUCTS = {
   'chatgpt': {
     id: 'chatgpt',
     name: 'ChatGPT Business',
-    price_dzd: 1200,
-    price_usd: 4.5,
+    price_dzd: 1000,
+    price_usd: 4,
+    durations: {
+      'plus': { dzd: 1000, usd: 4 },
+      'teachers': { dzd: 3200, usd: 13 },
+      'go': { dzd: 1800, usd: 7 }
+    },
     description: {
       ar: 'حساب ChatGPT Business للاستخدام المشترك',
       en: 'ChatGPT Business shared account',
@@ -118,6 +123,11 @@ const PRODUCTS = {
     name: 'Adobe Creative Cloud',
     price_dzd: 1200,
     price_usd: 4.5,
+    durations: {
+      '1month': { dzd: 1200, usd: 4.5 },
+      '2months': { dzd: 2200, usd: 8.5 },
+      '3months': { dzd: 2900, usd: 11.5 }
+    },
     description: {
       ar: 'اشتراك Adobe Creative Cloud يشمل أكثر من 20 تطبيقًا احترافيًا',
       en: 'Adobe Creative Cloud subscription includes 20+ professional applications',
@@ -163,6 +173,10 @@ const PRODUCTS = {
     name: 'Canva Pro',
     price_dzd: 600,
     price_usd: 2.5,
+    durations: {
+      'standard': { dzd: 600, usd: 2.5 },
+      'reseller': { dzd: 3900, usd: 16 }
+    },
     description: {
       ar: 'اشتراك Canva Pro الكامل مع جميع المميزات الاحترافية للتصميم والإبداع (سنة كاملة).',
       en: 'Full Canva Pro subscription with all professional design and creativity features (1 Year).',
@@ -173,26 +187,20 @@ const PRODUCTS = {
       usd: ['binance', 'redotpay', 'crypto']
     }
   },
-  'canva-reseller': {
-    id: 'canva-reseller',
-    name: 'Canva Reseller Offer',
-    price_dzd: 3900,
-    price_usd: 16,
-    description: {
-      ar: 'اشتراك Canva Pro للموزعين والوكالات - أضف حتى 500 مستخدم مع تحكم إداري كامل وحسابات مستقلة.',
-      en: 'Canva Pro Reseller & Agency Offer - Add up to 500 users with full administrative control and independent accounts.',
-      fr: 'Offre Canva Pro Revendeur & Agence - Ajoutez jusqu\'à 500 utilisateurs avec contrôle administratif complet et comptes indépendants.'
-    },
-    paymentMethods: {
-      dzd: ['baridimob', 'crypto'],
-      usd: ['binance', 'redotpay', 'crypto']
-    }
-  },
   'capcut': {
     id: 'capcut',
     name: 'CapCut Pro',
-    price_dzd: 1200,
-    price_usd: 4.5,
+    price_dzd: 800,
+    price_usd: 3,
+    durations: {
+      '1month': { dzd: 800, usd: 3 },
+      '3months': { dzd: 1200, usd: 4.5 },
+      '6months': { dzd: 2000, usd: 8 },
+      '1year': { dzd: 3500, usd: 14 }
+    },
+    original_price: 1500,
+    features: ['all-platforms', 'no-watermark', 'cloud-storage'],
+    category: 'creative',
     description: {
       ar: 'محرر فيديو احترافي مع مميزات الذكاء الاصطناعي - 30 يوم',
       en: 'Professional video editor with AI features - 30 days',
@@ -248,6 +256,21 @@ const PRODUCTS = {
       usd: ['binance', 'redotpay', 'crypto']
     }
   },
+  'lovable': {
+    id: 'lovable',
+    name: 'Lovable AI',
+    price_dzd: 1300,
+    price_usd: 5.5,
+    description: {
+      ar: 'أداة متقدمة لبناء تطبيقات الويب بالذكاء الاصطناعي',
+      en: 'Advanced tool for building web apps with AI',
+      fr: 'Outil avancé pour créer des applications web avec l\'IA'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
   'primevideo': {
     id: 'primevideo',
     name: 'Prime Video',
@@ -283,6 +306,10 @@ const PRODUCTS = {
     name: 'Google AI Ultra & Veo 3',
     price_dzd: 1800,
     price_usd: 8,
+    durations: {
+      '1month': { dzd: 1800, usd: 8 },
+      '1year': { dzd: 0, usd: 0 }
+    },
     description: {
       ar: 'اشتراك Gemini Ultra و Veo 3 مع أدوات إنتاجية متقدمة',
       en: 'Gemini Ultra and Veo 3 subscription with advanced productivity tools',

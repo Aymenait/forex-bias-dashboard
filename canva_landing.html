@@ -19,6 +19,7 @@
     <meta property="og:description" content="احصل على اشتراك Canva Pro السنوي بـ 600 دج فقط. أدوات احترافية لتصميماتك.">
     <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg">
 
+    <script src="currency-config.js"></script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org/",
@@ -34,10 +35,23 @@
         "@type": "Offer",
         "url": "https://marketalgeria.store/canva_landing.html",
         "priceCurrency": "DZD",
-        "price": "500",
+        "price": "600",
         "availability": "https://schema.org/InStock"
       }
     }
+    </script>
+    <script>
+        // Sync schema price from config if available (will run after PRODUCTS is defined)
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof PRODUCTS !== 'undefined' && PRODUCTS['canva']) {
+                const schema = document.querySelector('script[type="application/ld+json"]');
+                if (schema) {
+                    const data = JSON.parse(schema.textContent);
+                    data.offers.price = PRODUCTS['canva'].price_dzd.toString();
+                    schema.textContent = JSON.stringify(data);
+                }
+            }
+        });
     </script>
     <link rel="icon" type="image/png" href="https://i.imgur.com/8D1hNuQ.png">
 
@@ -49,17 +63,21 @@
 
         // Detailed ViewContent and InterestedLead
         const isUSD = location.search.includes('USD');
+        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['canva'] : { price_dzd: 600, price_usd: 2.5 };
+
         fbq('track', 'ViewContent', {
-            content_name: 'Canva Pro',
+            content_name: productData.name || 'Canva Pro',
             content_category: 'Design',
-            value: isUSD ? 3 : 500,
+            value: isUSD ? productData.price_usd : productData.price_dzd,
             currency: isUSD ? 'USD' : 'DZD'
         });
 
         setTimeout(function () {
             fbq('trackCustom', 'InterestedLead', {
-                content_name: 'Canva Pro',
-                time_on_page: '10s'
+                content_name: productData.name || 'Canva Pro',
+                time_on_page: '10s',
+                value: isUSD ? productData.price_usd : productData.price_dzd,
+                currency: isUSD ? 'USD' : 'DZD'
             });
         }, 10000);
     </script>
@@ -637,9 +655,14 @@
                 </div>
             </div>
 
-            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Canva Pro"
-                onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Lead', {content_name: 'Canva Pro', value: 600, currency: 'DZD'}); fbq('track', 'InitiateCheckout', {content_name: 'Canva Pro', value: 600, currency: 'DZD'}); }"
-                class="cta-button" data-i18n="hero.cta">
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في Canva Pro" onclick="if(typeof fbq !== 'undefined') { 
+                    const isUSD = location.search.includes('USD'); 
+                    const pData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['canva'] : { price_dzd: 600, price_usd: 2.5 };
+                    const val = isUSD ? pData.price_usd : pData.price_dzd; 
+                    const cur = isUSD ? 'USD' : 'DZD'; 
+                    fbq('track', 'Lead', {content_name: pData.name, value: val, currency: cur}); 
+                    fbq('track', 'InitiateCheckout', {content_name: pData.name, value: val, currency: cur}); 
+                }" class="cta-button" data-i18n="hero.cta">
                 🚀 اطلب الآن
             </a>
         </div>
@@ -1018,7 +1041,11 @@
         });
     </script>
 
-    <!-- Language Switcher -->
+    <!-- Load scripts for payment modals -->
+    <script src="currency-manager.js"></script>
+    <script src="payment-manager.js"></script>
+    <script src="international-expansion-init.js"></script>
+    <script src="modal_functions.js"></script>
     <script src="script.js"></script>
     <script>
         // Language switching

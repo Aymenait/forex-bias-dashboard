@@ -392,12 +392,12 @@
 
                         <p class="description" data-i18n="product.trw.desc">حساب مشترك للكورسات ومنصة The Real World، مع
                             دعم فني وضمان كامل.</p>
-                        <div class="price-tag" data-price-dzd="3750" data-price-usd="15">3750 د.ج</div> <span
+                        <div class="price-tag" data-price-dzd="2900" data-price-usd="12">2900 د.ج</div> <span
                             style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="perMonth">للشهر</span></span>
 
                         <div class="payment-methods-row">
                             <button class="payment-btn-compact crypto-pay-btn" data-product="The Real World Account"
-                                data-price="3750" data-price-usd="15">
+                                data-price="2900" data-price-usd="12">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
@@ -405,7 +405,7 @@
                                 <span>USDT</span>
                             </button>
                             <button class="payment-btn-compact redotpay-btn" data-product="The Real World Account"
-                                data-price="3750" data-price-usd="15">
+                                data-price="2900" data-price-usd="12">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
@@ -413,7 +413,7 @@
                                 <span>RedotPay</span>
                             </button>
                             <button class="payment-btn-compact baridimob-btn" data-product="The Real World Account"
-                                data-price="3750" data-price-usd="15">
+                                data-price="2900" data-price-usd="12">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
@@ -1063,26 +1063,36 @@
                                     onclick="selectCapcutDuration('6months')">
                                     <span class="btn-label" data-i18n="product.capcut.sixMonths">6 أشهر</span>
                                 </button>
+                                <button class="segmented-btn capcut-duration-btn" data-duration="1year"
+                                    onclick="selectCapcutDuration('1year')">
+                                    <span class="btn-label" data-i18n="product.capcut.oneYear">سنة كاملة</span>
+                                </button>
                             </div>
                         </div>
 
                         <!-- Prices (will change based on selection) -->
                         <div class="capcut-prices" id="capcut-prices-1month">
-                            <div class="price-tag" data-price-dzd="1200" data-price-usd="4.5">1200 د.ج</div>
+                            <div class="price-tag" data-price-dzd="800" data-price-usd="3">800 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                     data-i18n="product.capcut.oneMonth">30 يوم</span></span>
                         </div>
 
                         <div class="capcut-prices" id="capcut-prices-3months" style="display: none;">
-                            <div class="price-tag" data-price-dzd="2900" data-price-usd="11.5">2900 د.ج</div>
+                            <div class="price-tag" data-price-dzd="1200" data-price-usd="4.5">1200 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                     data-i18n="product.capcut.threeMonths">3 أشهر</span></span>
                         </div>
 
                         <div class="capcut-prices" id="capcut-prices-6months" style="display: none;">
-                            <div class="price-tag" data-price-dzd="5000" data-price-usd="20">5000 د.ج</div>
+                            <div class="price-tag" data-price-dzd="2000" data-price-usd="8">2000 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                     data-i18n="product.capcut.sixMonths">6 أشهر</span></span>
+                        </div>
+
+                        <div class="capcut-prices" id="capcut-prices-1year" style="display: none;">
+                            <div class="price-tag" data-price-dzd="3500" data-price-usd="14">3500 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.capcut.oneYear">سنة كاملة</span></span>
                         </div>
 
                         <div class="payment-methods-row">
@@ -2546,16 +2556,18 @@
 
             // Activate selected button with shine effect
             const selectedBtn = document.querySelector(`.capcut-duration-btn[data-duration="${duration}"]`);
-            selectedBtn.classList.add('active');
-            selectedBtn.style.border = '2px solid var(--accent)';
-            selectedBtn.style.background = 'rgba(255, 213, 111, 0.15)';
-            selectedBtn.style.color = 'var(--text-primary)';
+            if (selectedBtn) {
+                selectedBtn.classList.add('active');
+                selectedBtn.style.border = '2px solid var(--accent)';
+                selectedBtn.style.background = 'rgba(255, 213, 111, 0.15)';
+                selectedBtn.style.color = 'var(--text-primary)';
 
-            // Trigger shine animation
-            setTimeout(() => {
-                selectedBtn.style.boxShadow = '0 0 20px rgba(255, 213, 111, 0.5)';
-                selectedBtn.style.transform = 'translateY(-1px)';
-            }, 100);
+                // Trigger shine animation
+                setTimeout(() => {
+                    selectedBtn.style.boxShadow = '0 0 20px rgba(255, 213, 111, 0.5)';
+                    selectedBtn.style.transform = 'translateY(-1px)';
+                }, 100);
+            }
 
             // Track CustomizeProduct (User is selecting options)
             if (typeof fbq !== 'undefined') {
@@ -2571,30 +2583,41 @@
             document.querySelectorAll('.capcut-prices').forEach(price => {
                 price.style.display = 'none';
             });
-            document.getElementById(`capcut-prices-${duration}`).style.display = 'block';
+            const priceDisplay = document.getElementById(`capcut-prices-${duration}`);
+            if (priceDisplay) priceDisplay.style.display = 'block';
 
-            // Update payment buttons
-            const prices = {
-                '1month': { dzd: 1200, usd: 4.5 },
-                '3months': { dzd: 2900, usd: 11.5 },
-                '6months': { dzd: 5000, usd: 20 }
-            };
+            // Update payment buttons from PRODUCTS config
+            const capcutConfig = PRODUCTS['capcut'];
+            const price = capcutConfig.durations[duration];
 
-            const price = prices[duration];
-            document.getElementById('capcut-usdt-btn').setAttribute('data-price', price.dzd);
-            document.getElementById('capcut-usdt-btn').setAttribute('data-price-usd', price.usd);
-            document.getElementById('capcut-redotpay-btn').setAttribute('data-price', price.dzd);
-            document.getElementById('capcut-redotpay-btn').setAttribute('data-price-usd', price.usd);
-            document.getElementById('capcut-baridimob-btn').setAttribute('data-price', price.dzd);
-            document.getElementById('capcut-baridimob-btn').setAttribute('data-price-usd', price.usd);
+            if (price) {
+                const usdtBtn = document.getElementById('capcut-usdt-btn');
+                const redotBtn = document.getElementById('capcut-redotpay-btn');
+                const baridiBtn = document.getElementById('capcut-baridimob-btn');
 
-            // Update order button
+                if (usdtBtn) {
+                    usdtBtn.setAttribute('data-price', price.dzd);
+                    usdtBtn.setAttribute('data-price-usd', price.usd);
+                }
+                if (redotBtn) {
+                    redotBtn.setAttribute('data-price', price.dzd);
+                    redotBtn.setAttribute('data-price-usd', price.usd);
+                }
+                if (baridiBtn) {
+                    baridiBtn.setAttribute('data-price', price.dzd);
+                    baridiBtn.setAttribute('data-price-usd', price.usd);
+                }
+            }
+
+            // Update order button text
             const productNames = {
                 '1month': 'CapCut Pro - 30 Days',
                 '3months': 'CapCut Pro - 3 Months',
-                '6months': 'CapCut Pro - 6 Months'
+                '6months': 'CapCut Pro - 6 Months',
+                '1year': 'CapCut Pro - 1 Year'
             };
-            document.getElementById('capcut-order-btn').setAttribute('data-product', productNames[duration]);
+            const orderBtn = document.getElementById('capcut-order-btn');
+            if (orderBtn) orderBtn.setAttribute('data-product', productNames[duration]);
         }
 
         // CapCut Order Function
@@ -2609,16 +2632,13 @@
             const productNames = {
                 '1month': 'CapCut Pro - 30 Days',
                 '3months': 'CapCut Pro - 3 Months',
-                '6months': 'CapCut Pro - 6 Months'
-            };
-            const prices = {
-                '1month': { dzd: 1200, usd: 4.5 },
-                '3months': { dzd: 2900, usd: 11.5 },
-                '6months': { dzd: 5000, usd: 20 }
+                '6months': 'CapCut Pro - 6 Months',
+                '1year': 'CapCut Pro - 1 Year'
             };
 
+            const capcutConfig = PRODUCTS['capcut'];
+            const priceObj = capcutConfig.durations[duration];
             const productName = productNames[duration];
-            const priceObj = prices[duration];
             const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
             // Track Facebook Events
@@ -2665,22 +2685,31 @@
             document.querySelectorAll('.adobe-prices').forEach(price => {
                 price.style.display = 'none';
             });
-            document.getElementById(`adobe-prices-${duration}`).style.display = 'block';
+            const priceEl = document.getElementById(`adobe-prices-${duration}`);
+            if (priceEl) priceEl.style.display = 'block';
 
-            // Update payment buttons
-            const prices = {
-                '1month': { dzd: 1200, usd: 4.5 },
-                '2months': { dzd: 2200, usd: 8.5 },
-                '3months': { dzd: 2900, usd: 11.5 }
-            };
+            // Update payment buttons from PRODUCTS config
+            const adobeConfig = PRODUCTS['adobe'];
+            const price = adobeConfig.durations[duration];
 
-            const price = prices[duration];
-            document.getElementById('adobe-usdt-btn').setAttribute('data-price', price.dzd);
-            document.getElementById('adobe-usdt-btn').setAttribute('data-price-usd', price.usd);
-            document.getElementById('adobe-redotpay-btn').setAttribute('data-price', price.dzd);
-            document.getElementById('adobe-redotpay-btn').setAttribute('data-price-usd', price.usd);
-            document.getElementById('adobe-baridimob-btn').setAttribute('data-price', price.dzd);
-            document.getElementById('adobe-baridimob-btn').setAttribute('data-price-usd', price.usd);
+            if (price) {
+                const usdtBtn = document.getElementById('adobe-usdt-btn');
+                const redotBtn = document.getElementById('adobe-redotpay-btn');
+                const baridiBtn = document.getElementById('adobe-baridimob-btn');
+
+                if (usdtBtn) {
+                    usdtBtn.setAttribute('data-price', price.dzd);
+                    usdtBtn.setAttribute('data-price-usd', price.usd);
+                }
+                if (redotBtn) {
+                    redotBtn.setAttribute('data-price', price.dzd);
+                    redotBtn.setAttribute('data-price-usd', price.usd);
+                }
+                if (baridiBtn) {
+                    baridiBtn.setAttribute('data-price', price.dzd);
+                    baridiBtn.setAttribute('data-price-usd', price.usd);
+                }
+            }
 
             // Update order button
             const productNames = {
@@ -2688,7 +2717,8 @@
                 '2months': 'Adobe Creative Cloud - 2 Months',
                 '3months': 'Adobe Creative Cloud - 3 Months'
             };
-            document.getElementById('adobe-order-btn').setAttribute('data-product', productNames[duration]);
+            const orderBtn = document.getElementById('adobe-order-btn');
+            if (orderBtn) orderBtn.setAttribute('data-product', productNames[duration]);
         }
 
         // Adobe Order Function
@@ -2704,14 +2734,10 @@
                 '2months': 'Adobe Creative Cloud - 2 Months',
                 '3months': 'Adobe Creative Cloud - 3 Months'
             };
-            const prices = {
-                '1month': { dzd: 1200, usd: 4.5 },
-                '2months': { dzd: 2200, usd: 8.5 },
-                '3months': { dzd: 2900, usd: 11.5 }
-            };
 
+            const adobeConfig = PRODUCTS['adobe'];
+            const priceObj = adobeConfig.durations[duration];
             const productName = productNames[duration];
-            const priceObj = prices[duration];
             const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
             // Track Facebook Events
@@ -2783,13 +2809,10 @@
                 '1month': 'Gemini Pro - 1 Month',
                 '1year': 'Gemini Pro - 1 Year'
             };
-            const prices = {
-                '1month': { dzd: 1200, usd: 4.5 },
-                '1year': { dzd: 0, usd: 0 } // Not available
-            };
 
+            const geminiConfig = PRODUCTS['google-ai'];
+            const priceObj = geminiConfig.durations[duration];
             const productName = productNames[duration];
-            const priceObj = prices[duration];
             const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
             // Track Facebook Events
@@ -2827,9 +2850,11 @@
         function updateChatGPTUI(type) {
             document.querySelectorAll('.chatgpt-prices').forEach(price => price.style.display = 'none');
 
+            const gptConfig = PRODUCTS['chatgpt'];
+            const priceObj = gptConfig.durations[type];
+
             let priceId = '';
             let name = '';
-            let priceObj = {};
 
             if (type === 'plus') {
                 priceId = 'chatgpt-prices-plus';
@@ -2843,27 +2868,17 @@
             }
 
             const priceEl = document.getElementById(priceId);
-            if (priceEl) {
-                priceEl.style.display = 'block';
-                const priceTag = priceEl.querySelector('.price-tag');
-                if (priceTag) {
-                    priceObj = {
-                        dzd: parseFloat(priceTag.getAttribute('data-price-dzd')),
-                        usd: parseFloat(priceTag.getAttribute('data-price-usd'))
-                    };
-                }
-            }
-
+            if (priceEl) priceEl.style.display = 'block';
 
             // Update order button
             const orderBtn = document.getElementById('chatgpt-order-btn');
             if (orderBtn) orderBtn.setAttribute('data-product', name);
 
-            // Update payment buttons
+            // Update payment buttons from PRODUCTS config
             const paymentButtons = ['chatgpt-crypto-btn', 'chatgpt-redotpay-btn', 'chatgpt-baridimob-btn'];
             paymentButtons.forEach(id => {
                 const btn = document.getElementById(id);
-                if (btn) {
+                if (btn && priceObj) {
                     btn.setAttribute('data-product', name);
                     btn.setAttribute('data-price', priceObj.dzd);
                     btn.setAttribute('data-price-usd', priceObj.usd);
@@ -2878,31 +2893,13 @@
             // Detect current currency
             const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
 
-            let productName = '';
-            let priceObj = {};
+            const gptConfig = PRODUCTS['chatgpt'];
+            const priceObj = gptConfig.durations[type];
 
-            if (type === 'plus') {
-                productName = 'ChatGPT Plus - 1 Month';
-                const priceTag = document.querySelector('#chatgpt-prices-plus .price-tag');
-                priceObj = {
-                    dzd: parseFloat(priceTag.getAttribute('data-price-dzd')),
-                    usd: parseFloat(priceTag.getAttribute('data-price-usd'))
-                };
-            } else if (type === 'teachers') {
-                productName = 'ChatGPT Teachers - 12 Months';
-                const priceTag = document.querySelector('#chatgpt-prices-teachers .price-tag');
-                priceObj = {
-                    dzd: parseFloat(priceTag.getAttribute('data-price-dzd')),
-                    usd: parseFloat(priceTag.getAttribute('data-price-usd'))
-                };
-            } else if (type === 'go') {
-                productName = 'ChatGPT GO - 12 Months';
-                const priceTag = document.querySelector('#chatgpt-prices-go .price-tag');
-                priceObj = {
-                    dzd: parseFloat(priceTag.getAttribute('data-price-dzd')),
-                    usd: parseFloat(priceTag.getAttribute('data-price-usd'))
-                };
-            }
+            let productName = '';
+            if (type === 'plus') productName = 'ChatGPT Plus - 1 Month';
+            else if (type === 'teachers') productName = 'ChatGPT Teachers - 12 Months';
+            else if (type === 'go') productName = 'ChatGPT GO - 12 Months';
 
             const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
@@ -2941,22 +2938,22 @@
         function updateCanvaUI(type) {
             document.querySelectorAll('.canva-prices').forEach(price => price.style.display = 'none');
 
+            const canvaConfig = PRODUCTS['canva'];
+            const priceObj = canvaConfig.durations[type];
+
             let priceId = '';
             let name = '';
-            let priceObj = {};
             let descKey = '';
             let features = [];
 
             if (type === 'standard') {
                 priceId = 'canva-prices-standard';
                 name = 'Canva Pro';
-                priceObj = { dzd: 600, usd: 2.5 };
                 descKey = 'product.canva.desc';
                 features = ['product.canva.feature1', 'product.canva.feature2', 'product.canva.feature3'];
             } else if (type === 'reseller') {
                 priceId = 'canva-prices-reseller';
                 name = 'Canva Reseller Offer';
-                priceObj = { dzd: 3900, usd: 16 };
                 descKey = 'product.canva.reseller.desc';
                 features = ['product.canva.reseller.feature1', 'product.canva.reseller.feature2', 'product.canva.reseller.feature3', 'product.canva.reseller.feature4'];
             }
@@ -2968,7 +2965,6 @@
             const descEl = document.getElementById('canva-description');
             if (descEl) {
                 descEl.setAttribute('data-i18n', descKey);
-                // Try to translate immediately if global translations are available
                 const lang = window.currentLang || 'ar';
                 if (window.translations && window.translations[lang] && window.translations[lang][descKey]) {
                     descEl.innerHTML = window.translations[lang][descKey];
@@ -2980,11 +2976,9 @@
             if (featuresEl) {
                 featuresEl.innerHTML = '';
                 const lang = window.currentLang || 'ar';
-
                 features.forEach(f => {
                     const li = document.createElement('li');
                     li.setAttribute('data-i18n', f);
-                    // Try to translate immediately
                     if (window.translations && window.translations[lang] && window.translations[lang][f]) {
                         li.innerHTML = window.translations[lang][f];
                     }
@@ -2992,20 +2986,15 @@
                 });
             }
 
-            // Trigger window.changeLanguage to ensure everything is synced (optional but safe)
-            // if (typeof window.changeLanguage === 'function') {
-            //     window.changeLanguage(window.currentLang || 'ar');
-            // }
-
             // Update order button
             const orderBtn = document.getElementById('canva-order-btn');
             if (orderBtn) orderBtn.setAttribute('data-product', name);
 
-            // Update payment buttons
+            // Update payment buttons from PRODUCTS config
             const paymentButtons = ['canva-usdt-btn', 'canva-redotpay-btn', 'canva-baridimob-btn'];
             paymentButtons.forEach(id => {
                 const btn = document.getElementById(id);
-                if (btn) {
+                if (btn && priceObj) {
                     btn.setAttribute('data-product', name);
                     btn.setAttribute('data-price', priceObj.dzd);
                     btn.setAttribute('data-price-usd', priceObj.usd);
@@ -3020,16 +3009,9 @@
             // Detect current currency
             const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
 
-            let productName = '';
-            let priceObj = {};
-
-            if (type === 'standard') {
-                productName = 'Canva Pro';
-                priceObj = { dzd: 600, usd: 2.5 };
-            } else if (type === 'reseller') {
-                productName = 'Canva Reseller Offer';
-                priceObj = { dzd: 3900, usd: 16 };
-            }
+            const canvaConfig = PRODUCTS['canva'];
+            const priceObj = canvaConfig.durations[type];
+            let productName = type === 'standard' ? 'Canva Pro' : 'Canva Reseller Offer';
 
             const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
@@ -3047,7 +3029,7 @@
                 });
             }
 
-            // Use the global currentProductName and open the contact choice modal
+            // Store product name and open contact choice modal
             window.currentProductName = productName;
             const modal = document.getElementById('contact-choice-modal');
             if (modal) {

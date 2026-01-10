@@ -1455,6 +1455,7 @@ const translations = {
         'product.capcut.oneMonth': '30 يوم',
         'product.capcut.threeMonths': '3 أشهر',
         'product.capcut.sixMonths': '6 أشهر',
+        'product.capcut.oneYear': 'سنة كاملة',
         'product.netflix.desc': 'حساب Netflix Premium مع إمكانية المشاهدة على 4 أجهزة بجودة 4K Ultra HD.',
         'product.netflix.price': 'السعر قريباً',
         'product.netflix.feature1': 'مشاهدة على 4 أجهزة في نفس الوقت',
@@ -1931,10 +1932,10 @@ const translations = {
         'product.adobe.threeMonths': '3 Months',
         'product.adobe.sixMonths': '6 Months',
         'product.adobe.selectDuration': 'Select Duration:',
-        'product.adobe.shared.price1': '1 Month: <strong>1500 DZD</strong>',
-        'product.adobe.shared.price2': '3 Months: <strong>3000 DZD</strong>',
-        'product.adobe.personal.price1': '1 Month: <strong>3000 DZD</strong>',
-        'product.adobe.personal.price2': '3 Months: <strong>4500 DZD</strong>',
+        'product.adobe.shared.price1': '1 Month',
+        'product.adobe.shared.price2': '3 Months',
+        'product.adobe.personal.price1': '1 Month (Keys)',
+        'product.adobe.personal.price2': '3 Months (Keys)',
         'product.gamma.selectType': 'Select Account Type:',
         'product.gamma.shared': 'Shared Account',
         'product.gamma.personal': 'Personal Account',
@@ -1980,6 +1981,7 @@ const translations = {
         'product.capcut.oneMonth': '30 Days',
         'product.capcut.threeMonths': '3 Months',
         'product.capcut.sixMonths': '6 Months',
+        'product.capcut.oneYear': '1 Year Full',
         'product.netflix.desc': 'Netflix Premium account with 4 simultaneous screens in 4K Ultra HD quality.',
         'product.netflix.price': 'Price Coming Soon',
         'product.netflix.feature1': 'Watch on 4 devices simultaneously',
@@ -2495,10 +2497,10 @@ const translations = {
         'product.adobe.threeMonths': '3 Mois',
         'product.adobe.sixMonths': '6 Mois',
         'product.adobe.selectDuration': 'Choisir la Durée:',
-        'product.adobe.shared.price1': '1 Mois: <strong>1500 DZD</strong>',
-        'product.adobe.shared.price2': '3 Mois: <strong>3000 DZD</strong>',
-        'product.adobe.personal.price1': '1 Mois: <strong>3000 DZD</strong>',
-        'product.adobe.personal.price2': '3 Mois: <strong>4500 DZD</strong>',
+        'product.adobe.shared.price1': '1 Mois',
+        'product.adobe.shared.price2': '3 Mois',
+        'product.adobe.personal.price1': '1 Mois (Keys)',
+        'product.adobe.personal.price2': '3 Mois (Keys)',
         'product.gamma.selectType': 'Sélectionnez le Type de Compte:',
         'product.gamma.shared': 'Compte Partagé',
         'product.gamma.personal': 'Compte Personnel',
@@ -2544,6 +2546,7 @@ const translations = {
         'product.capcut.oneMonth': '30 Jours',
         'product.capcut.threeMonths': '3 Mois',
         'product.capcut.sixMonths': '6 Mois',
+        'product.capcut.oneYear': '1 An Complet',
         'product.netflix.desc': 'Compte Netflix Premium avec 4 écrans simultanés en qualité 4K Ultra HD.',
         'product.netflix.price': 'Prix Bientôt Disponible',
         'product.netflix.feature1': 'Regarder sur 4 appareils simultanément',
@@ -3771,19 +3774,31 @@ function orderProduct(productName) {
 
     // Dynamically find price
     let price = 0;
-    // Find the button that was likely clicked to get context
-    const buttons = document.querySelectorAll(`[onclick*="orderProduct('${productName}')"]`);
-    buttons.forEach(btn => {
-        const card = btn.closest('.product-card');
-        if (card) {
-            const priceTag = card.querySelector('.price-tag');
-            if (priceTag) {
-                const attr = currency === 'USD' ? 'data-price-usd' : 'data-price-dzd';
-                const p = priceTag.getAttribute(attr);
-                if (p) price = p;
-            }
+
+    // First attempt: Try to find in PRODUCTS config
+    if (typeof PRODUCTS !== 'undefined') {
+        const product = Object.values(PRODUCTS).find(p => p.name === productName);
+        if (product) {
+            price = currency === 'USD' ? product.price_usd : product.price_dzd;
         }
-    });
+    }
+
+    // Second attempt: Scrape from DOM if still not found (legacy/dynamic products)
+    if (!price) {
+        // Find the button that was likely clicked to get context
+        const buttons = document.querySelectorAll(`[onclick*="orderProduct('${productName}')"]`);
+        buttons.forEach(btn => {
+            const card = btn.closest('.product-card');
+            if (card) {
+                const priceTag = card.querySelector('.price-tag');
+                if (priceTag) {
+                    const attr = currency === 'USD' ? 'data-price-usd' : 'data-price-dzd';
+                    const p = priceTag.getAttribute(attr);
+                    if (p) price = p;
+                }
+            }
+        });
+    }
 
     // Track Facebook Events
     if (typeof fbq !== 'undefined') {

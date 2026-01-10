@@ -116,12 +116,28 @@ async function openSaleModal() {
     // ملء قائمة المنتجات
     productSelect.innerHTML = '<option value="">-- اختر المنتج --</option>';
     allProducts.forEach(product => {
-        const option = document.createElement('option');
-        option.value = product.id;
-        option.textContent = `${product.name} (${product.price_dzd} د.ج / $${product.price_usd})`;
-        option.dataset.priceDzd = product.price_dzd;
-        option.dataset.priceUsd = product.price_usd;
-        productSelect.appendChild(option);
+        if (product.durations && Object.keys(product.durations).length > 0) {
+            // إضافة كل مدة كخيار منفصل
+            Object.entries(product.durations).forEach(([durationKey, price]) => {
+                const option = document.createElement('option');
+                option.value = `${product.id}_${durationKey}`;
+                option.textContent = `${product.name} - ${durationKey} (${price.dzd} د.ج / $${price.usd})`;
+                option.dataset.productId = product.id;
+                option.dataset.productName = `${product.name} - ${durationKey}`;
+                option.dataset.priceDzd = price.dzd;
+                option.dataset.priceUsd = price.usd;
+                productSelect.appendChild(option);
+            });
+        } else {
+            const option = document.createElement('option');
+            option.value = product.id;
+            option.textContent = `${product.name} (${product.price_dzd} د.ج / $${product.price_usd})`;
+            option.dataset.productId = product.id;
+            option.dataset.productName = product.name;
+            option.dataset.priceDzd = product.price_dzd;
+            option.dataset.priceUsd = product.price_usd;
+            productSelect.appendChild(option);
+        }
     });
 
     // إعادة تعيين النموذج
@@ -156,10 +172,11 @@ function closeSaleModal() {
 async function saveSale(event) {
     event.preventDefault();
 
-    const productId = document.getElementById('sale-product').value;
-    const product = allProducts.find(p => p.id === productId);
+    const productOption = document.getElementById('sale-product').options[document.getElementById('sale-product').selectedIndex];
+    const productId = productOption ? productOption.dataset.productId : null;
+    const productName = productOption ? productOption.dataset.productName : null;
 
-    if (!product) {
+    if (!productId) {
         showToast('يرجى اختيار منتج', 'error');
         return;
     }
@@ -178,8 +195,8 @@ async function saveSale(event) {
 
         for (let i = 0; i < quantity; i++) {
             const saleData = {
-                productId: product.id,
-                productName: product.name,
+                productId: productId,
+                productName: productName,
                 customerName: document.getElementById('sale-customer-name').value || 'عميل',
                 email: document.getElementById('sale-customer-contact').value || '',
                 phone: document.getElementById('sale-customer-contact').value || '',
@@ -209,7 +226,7 @@ async function saveSale(event) {
 
         closeSaleModal();
         showToast(`✅ تم تسجيل ${quantity} عملية بيع بنجاح!`);
-        logActivity('sale', 'created', `${product.name} x${quantity}`);
+        logActivity('sale', 'created', `${productName} x${quantity}`);
 
     } catch (error) {
         console.error('خطأ في حفظ البيع:', error);
@@ -1871,6 +1888,7 @@ async function loadProducts() {
                                 name: product.name,
                                 price_dzd: product.price_dzd,
                                 price_usd: product.price_usd,
+                                durations: product.durations || {},
                                 description: product.description || {},
                                 paymentMethods: product.paymentMethods || {},
                                 active: product.active !== false,

@@ -20,6 +20,7 @@
         content="احصل على اشتراك CapCut Pro الشخصي بـ 1200 دج. ميزات احترافية لمونتاج الفيديو.">
     <meta property="og:image" content="https://i.imgur.com/QzlT4Ch.gif">
 
+    <script src="currency-config.js"></script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org/",
@@ -35,10 +36,23 @@
         "@type": "Offer",
         "url": "https://marketalgeria.store/capcut_landing.html",
         "priceCurrency": "DZD",
-        "price": "1200",
+        "price": "800",
         "availability": "https://schema.org/InStock"
       }
     }
+    </script>
+    <script>
+        // Sync schema price from config if available (will run after PRODUCTS is defined)
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof PRODUCTS !== 'undefined' && PRODUCTS['capcut']) {
+                const schema = document.querySelector('script[type="application/ld+json"]');
+                if (schema) {
+                    const data = JSON.parse(schema.textContent);
+                    data.offers.price = PRODUCTS['capcut'].price_dzd.toString();
+                    schema.textContent = JSON.stringify(data);
+                }
+            }
+        });
     </script>
     <link rel="icon" type="image/png" href="https://i.imgur.com/8D1hNuQ.png">
 
@@ -47,10 +61,26 @@
         !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '2046893892791206');
         fbq('track', 'PageView');
-        fbq('track', 'ViewContent', { content_name: 'CapCut Pro', content_category: 'Design' });
+
+        // Detailed ViewContent
+        const isUSD = location.search.includes('USD');
+        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['capcut'] : { price_dzd: 800, price_usd: 3 };
+
+        fbq('track', 'ViewContent', {
+            content_name: productData.name || 'CapCut Pro',
+            content_category: 'Design',
+            value: isUSD ? productData.price_usd : productData.price_dzd,
+            currency: isUSD ? 'USD' : 'DZD'
+        });
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
+    <!-- Load scripts for payment modals -->
+    <script src="currency-manager.js"></script>
+    <script src="payment-manager.js"></script>
+    <script src="international-expansion-init.js"></script>
+    <script src="modal_functions.js"></script>
+    <script src="script.js"></script>
     <!-- End Meta Pixel Code -->
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -717,7 +747,7 @@
             </p>
 
             <div class="price-badge" data-i18n="hero.price">
-                فقط 1200 د.ج / $6
+                فقط 800 د.ج / $3
             </div>
 
             <!-- Payment Methods -->
@@ -754,7 +784,7 @@
             </div>
 
             <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في CapCut Pro"
-                onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Lead', {content_name: 'CapCut Pro', value: 1200, currency: 'DZD'}); fbq('track', 'InitiateCheckout', {content_name: 'CapCut Pro', value: 1200, currency: 'DZD'}); }"
+                onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Lead', {content_name: 'CapCut Pro', value: 800, currency: 'DZD'}); fbq('track', 'InitiateCheckout', {content_name: 'CapCut Pro', value: 800, currency: 'DZD'}); }"
                 class="cta-button" data-i18n="cta.button">
                 اطلب الآن عبر WhatsApp
             </a>
@@ -1016,7 +1046,7 @@
                 <p style="color: #fff; margin-bottom: 8px; font-size: 0.9rem;"><strong
                         id="baridimob-product">المنتج:</strong> CapCut Pro</p>
                 <p style="color: #fff; font-size: 0.9rem;"><strong id="baridimob-price">السعر:</strong> <span
-                        id="baridimob-price-value">1200 د.ج</span></p>
+                        id="baridimob-price-value">800 د.ج</span></p>
             </div>
 
             <div
@@ -1071,7 +1101,7 @@
                 style="background: rgba(255, 107, 107, 0.1); border: 1px solid #ff6b6b; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
                 <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> CapCut Pro</p>
                 <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span
-                        id="crypto-price-value">$6</span></p>
+                        id="crypto-price-value">$3</span></p>
             </div>
 
             <div style="margin-bottom: 15px;">
@@ -1120,7 +1150,7 @@
                     <li>انسخ عنوان المحفظة أو امسح QR Code</li>
                     <li>افتح تطبيق Binance أو أي محفظة USDT</li>
                     <li>تأكد من اختيار نفس الشبكة (<strong id="network-warning">TRC20</strong>)</li>
-                    <li>أرسل المبلغ المطلوب (6 دولارات)</li>
+                    <li>أرسل المبلغ المطلوب (3 دولارات)</li>
                     <li>احتفظ بـ Transaction ID</li>
                     <li>اضغط "تم الدفع" للتواصل معنا</li>
                 </ol>
@@ -1151,7 +1181,7 @@
                 <p style="color: #fff; margin-bottom: 8px; font-size: 0.9rem;"><strong
                         id="redotpay-product">المنتج:</strong> CapCut Pro</p>
                 <p style="color: #fff; font-size: 0.9rem;"><strong id="redotpay-price">السعر:</strong> <span
-                        id="redotpay-price-value">$6</span></p>
+                        id="redotpay-price-value">$3</span></p>
             </div>
 
             <div
@@ -1174,7 +1204,7 @@
                     <li>افتح تطبيق RedotPay</li>
                     <li>اختر "Send" أو "إرسال"</li>
                     <li>أدخل RedotPay ID: <strong>1117632168</strong></li>
-                    <li>أدخل المبلغ بالدولار (6 USD)</li>
+                    <li>أدخل المبلغ بالدولار (3 USD)</li>
                     <li>أكمل عملية الإرسال</li>
                     <li>احتفظ بإثبات التحويل</li>
                     <li>اضغط "تم الدفع" للتواصل معنا</li>
@@ -1230,7 +1260,7 @@
         // Payment Modal Functions
         function openBaridiMobModal() {
             document.getElementById('baridimob-modal').style.display = 'flex';
-            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'CapCut Pro', value: 1200, currency: 'DZD', content_category: 'BaridiMob' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'CapCut Pro', value: 800, currency: 'DZD', content_category: 'BaridiMob' }); }
         }
         function closeBaridiMobModal() {
             document.getElementById('baridimob-modal').style.display = 'none';
@@ -1242,12 +1272,12 @@
         }
         function confirmBaridiMobPayment() {
             window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر BaridiMob لـ CapCut Pro', '_blank');
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'CapCut Pro', value: 1200, currency: 'DZD', content_category: 'BaridiMob' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'CapCut Pro', value: 800, currency: 'DZD', content_category: 'BaridiMob' }); }
         }
 
         function openCryptoModal() {
             document.getElementById('crypto-modal').style.display = 'flex';
-            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'CapCut Pro', value: 1200, currency: 'DZD', content_category: 'Crypto' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'CapCut Pro', value: 800, currency: 'DZD', content_category: 'Crypto' }); }
         }
         function closeCryptoModal() {
             document.getElementById('crypto-modal').style.display = 'none';
@@ -1278,12 +1308,12 @@
         }
         function confirmCryptoPayment() {
             window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر USDT لـ CapCut Pro', '_blank');
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'CapCut Pro', value: 1200, currency: 'DZD', content_category: 'Crypto' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'CapCut Pro', value: 800, currency: 'DZD', content_category: 'Crypto' }); }
         }
 
         function openRedotPayModal() {
             document.getElementById('redotpay-modal').style.display = 'flex';
-            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'CapCut Pro', value: 1200, currency: 'DZD', content_category: 'RedotPay' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'CapCut Pro', value: 800, currency: 'DZD', content_category: 'RedotPay' }); }
         }
         function closeRedotPayModal() {
             document.getElementById('redotpay-modal').style.display = 'none';
@@ -1295,7 +1325,7 @@
         }
         function confirmRedotPayPayment() {
             window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر RedotPay لـ CapCut Pro', '_blank');
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'CapCut Pro', value: 1200, currency: 'DZD', content_category: 'RedotPay' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'CapCut Pro', value: 800, currency: 'DZD', content_category: 'RedotPay' }); }
         }
 
         // Translation System
@@ -1305,7 +1335,7 @@
                 'hero.title': 'CapCut Pro - حساب شخصي',
                 'hero.subtitle': 'أنشئ فيديوهات احترافية بجودة عالية مع جميع ميزات PRO',
                 'hero.duration': 'اشتراك لمدة 30 يوماً - يعمل على جميع أجهزتك',
-                'hero.price': 'فقط 1200 د.ج / $6',
+                'hero.price': 'فقط 800 د.ج / $3',
                 'payment.title': 'طرق الدفع المتاحة',
                 'cta.button': 'اطلب الآن عبر WhatsApp',
                 'desc.title': '🎬 أنشئ فيديوهات احترافية بجودة استوديو مع CapCut Pro',
@@ -1364,7 +1394,7 @@
                 'hero.title': 'CapCut Pro - Personal Account',
                 'hero.subtitle': 'Create stunning, professional-quality videos with all PRO features',
                 'hero.duration': '30-day subscription - Works on all your devices',
-                'hero.price': 'Only $6 / 1200 DZD',
+                'hero.price': 'Only $3 / 800 DZD',
                 'payment.title': 'Available Payment Methods',
                 'cta.button': 'Order Now via WhatsApp',
                 'desc.title': '🎬 Create Professional Studio-Quality Videos with CapCut Pro',
@@ -1425,7 +1455,7 @@
                 'hero.title': 'CapCut Pro - Compte Professionnel',
                 'hero.subtitle': 'Créez des vidéos professionnelles de haute qualité avec toutes les fonctionnalités PRO',
                 'hero.duration': 'Abonnement de 30 jours - Fonctionne sur tous vos appareils',
-                'hero.price': 'Seulement 6$ / 1200 DZD',
+                'hero.price': 'Seulement 3$ / 800 DZD',
                 'payment.title': 'Méthodes de paiement disponibles',
                 'cta.button': 'Commander maintenant via WhatsApp',
                 'desc.title': '🎬 Créez des Vidéos Professionnelles de Qualité Studio avec CapCut Pro',

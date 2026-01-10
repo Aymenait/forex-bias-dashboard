@@ -92,7 +92,7 @@ class PaymentManager {
   createPaymentButton(method, product, currency, isPrimary) {
     const button = document.createElement('button');
     button.className = `payment-btn-compact ${method.id}-btn`;
-    
+
     // Add primary styling for the first (highest priority) button
     if (isPrimary) {
       button.classList.add('primary-payment');
@@ -131,7 +131,7 @@ class PaymentManager {
 
     // Find all payment buttons and show/hide based on currency
     const allButtons = document.querySelectorAll('.payment-btn-compact');
-    
+
     allButtons.forEach(button => {
       // Determine which payment method this button is for
       let methodId = null;
@@ -160,7 +160,7 @@ class PaymentManager {
    */
   openPaymentModal(methodId, product, currency) {
     const method = this.paymentMethods[methodId];
-    
+
     if (!method) {
       console.error(`Payment method not found: ${methodId}`);
       return;
@@ -169,7 +169,7 @@ class PaymentManager {
     // Get the modal element
     const modalId = `${methodId}-modal`;
     const modal = document.getElementById(modalId);
-    
+
     if (!modal) {
       console.error(`Modal not found: ${modalId}`);
       return;
@@ -177,6 +177,17 @@ class PaymentManager {
 
     // Update modal content based on payment method
     this.updateModalContent(modal, method, product, currency);
+
+    // Track AddPaymentInfo event
+    if (typeof fbq !== 'undefined') {
+      const price = currency === 'USD' ? product.price_usd : product.price_dzd;
+      fbq('track', 'AddPaymentInfo', {
+        content_name: product.name || product.id,
+        value: parseFloat(price) || 0,
+        currency: currency,
+        content_category: method.name
+      });
+    }
 
     // Show the modal
     modal.style.display = 'flex';
@@ -201,11 +212,11 @@ class PaymentManager {
     // Update prices
     const priceDZDEl = modal.querySelector(`#${method.id}-price-dzd`);
     const priceUSDEl = modal.querySelector(`#${method.id}-price-usd`);
-    
+
     if (priceDZDEl) {
       priceDZDEl.textContent = product.price_dzd || 0;
     }
-    
+
     if (priceUSDEl) {
       priceUSDEl.textContent = product.price_usd || 0;
     }

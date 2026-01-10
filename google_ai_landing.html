@@ -19,6 +19,7 @@
     <meta property="og:description" content="اشترك في Google AI Ultra و Veo 3 بجودة 4K وميزات احترافية.">
     <meta property="og:image" content="https://i.pinimg.com/1200x/7e/62/16/7e6216341c4347f9d576b9b1644491eb.jpg">
 
+    <script src="currency-config.js"></script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org/",
@@ -39,6 +40,19 @@
       }
     }
     </script>
+    <script>
+        // Sync schema price from config if available (will run after PRODUCTS is defined)
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof PRODUCTS !== 'undefined' && PRODUCTS['google-ai']) {
+                const schema = document.querySelector('script[type="application/ld+json"]');
+                if (schema) {
+                    const data = JSON.parse(schema.textContent);
+                    data.offers.price = PRODUCTS['google-ai'].price_dzd.toString();
+                    schema.textContent = JSON.stringify(data);
+                }
+            }
+        });
+    </script>
 
     <!-- Meta Pixel Code -->
     <script>
@@ -47,10 +61,12 @@
         fbq('track', 'PageView');
 
         const isUSD = location.search.includes('USD');
+        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['google-ai'] : { price_dzd: 1800, price_usd: 8 };
+
         fbq('track', 'ViewContent', {
-            content_name: 'Google AI Ultra Veo Premium',
+            content_name: productData.name || 'Google AI Ultra & Veo 3',
             content_category: 'AI SaaS',
-            value: isUSD ? 8 : 1800,
+            value: isUSD ? productData.price_usd : productData.price_dzd,
             currency: isUSD ? 'USD' : 'DZD'
         });
     </script>
@@ -664,10 +680,11 @@
 
         // --- Pixel Tracking Helpers ---
         function getPriceValue() {
+            const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['google-ai'] : { price_dzd: 1800, price_usd: 8 };
             if (window.currencyManager && window.currencyManager.getCurrentCurrency() === 'USD') {
-                return 8;
+                return productData.price_usd;
             }
-            return 1800;
+            return productData.price_dzd;
         }
 
         function getCurrencyCode() {
@@ -680,14 +697,15 @@
         document.getElementById('pixel-order-btn').addEventListener('click', function () {
             const val = getPriceValue();
             const cur = getCurrencyCode();
+            const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['google-ai'] : { name: 'Google AI Ultra & Veo 3' };
             fbq('track', 'InterestedLead', {
-                content_name: 'Google AI Ultra Veo Premium',
+                content_name: productData.name,
                 content_category: 'AI SaaS',
                 value: val,
                 currency: cur
             });
             fbq('track', 'AddToCart', {
-                content_name: 'Google AI Ultra Veo Premium',
+                content_name: productData.name,
                 content_category: 'AI SaaS',
                 value: val,
                 currency: cur
