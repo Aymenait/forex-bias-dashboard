@@ -1341,13 +1341,21 @@ function showTab(tabName) {
     });
 
     // عرض التبويب المحدد
-    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+    const targetTab = document.getElementById(`tab-${tabName}`);
+    if (targetTab) {
+        targetTab.classList.remove('hidden');
+    }
 
     // تفعيل الزر المحدد
     const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
     if (activeBtn) {
         activeBtn.classList.add('active', 'border-purple-500', 'text-purple-400');
         activeBtn.classList.remove('border-transparent');
+    }
+
+    // وظائف اختيارية عند عرض تبويب معين
+    if (tabName === 'live-pricing') {
+        renderLivePricingList();
     }
 }
 
@@ -1843,126 +1851,99 @@ let charts = {};
  * تحميل المنتجات من Firebase أو currency-config.js
  */
 async function loadProducts() {
+    console.log('🔄 جاري تحميل المنتجات...');
     try {
+        const productMap = new Map();
         let productsFromFirebase = false;
 
-        // محاولة تحميل من Firebase أولاً (إذا كان متاحاً)
+        // 1. التحميل من Firebase
         if (window.db && window.firebaseModules) {
             try {
-                const { collection, getDocs, setDoc, doc } = window.firebaseModules;
+                const { collection, getDocs } = window.firebaseModules;
                 const querySnapshot = await getDocs(collection(window.db, 'products'));
-                allProducts = [];
+
                 querySnapshot.forEach((docItem) => {
-                    allProducts.push({
+                    const data = docItem.data();
+                    productMap.set(docItem.id, {
                         id: docItem.id,
-                        ...docItem.data()
+                        ...data,
+                        source: 'firebase'
                     });
                 });
 
-                if (allProducts.length > 0) {
+                if (productMap.size > 0) {
                     productsFromFirebase = true;
-                    console.log('تم تحميل', allProducts.length, 'منتج من Firebase');
+                    console.log(`✅ تم تحميل ${productMap.size} منتج من Firebase`);
                 }
-            } catch (error) {
-                console.log('لا توجد منتجات في Firebase أو Firebase غير متاح:', error);
+            } catch (fbError) {
+                console.warn('⚠️ تعذر التحميل من Firebase، سيتم استخدام البيانات المحلية:', fbError);
             }
         }
 
-        // إذا لم تكن موجودة في Firebase، استخدم البيانات من currency-config.js
-        if (!productsFromFirebase) {
-            if (typeof PRODUCTS !== 'undefined' && PRODUCTS && Object.keys(PRODUCTS).length > 0) {
-                console.log('استخدام بيانات المنتجات من currency-config.js');
-                allProducts = Object.keys(PRODUCTS).map(key => ({
-                    id: key,
-                    ...PRODUCTS[key],
-                    active: PRODUCTS[key].active !== false
-                }));
-
-                // حفظ المنتجات في Firebase للمرة الأولى (إذا كان Firebase متاحاً)
-                if (window.db && window.firebaseModules && allProducts.length > 0) {
-                    try {
-                        const { setDoc, doc } = window.firebaseModules;
-                        for (const product of allProducts) {
-                            await setDoc(doc(window.db, 'products', product.id), {
-                                id: product.id,
-                                name: product.name,
-                                price_dzd: product.price_dzd,
-                                price_usd: product.price_usd,
-                                durations: product.durations || {},
-                                description: product.description || {},
-                                paymentMethods: product.paymentMethods || {},
-                                active: product.active !== false,
-                                createdAt: new Date()
-                            }, { merge: true });
-                        }
-                        console.log('تم حفظ', allProducts.length, 'منتج في Firebase');
-                    } catch (error) {
-                        console.warn('لا يمكن حفظ المنتجات في Firebase:', error);
-                    }
+        // 2. الدمج مع المنتجات المحلية (من currency-config.js) لضمان عدم نقص أي منتج
+        if (typeof PRODUCTS !== 'undefined' && PRODUCTS) {
+            Object.keys(PRODUCTS).forEach(key => {
+                if (!productMap.has(key)) {
+                    productMap.set(key, {
+                        id: key,
+                        ...PRODUCTS[key],
+                        active: PRODUCTS[key].active !== false,
+                        source: 'local'
+                    });
+                    console.log(`ℹ️ إضافة منتج محلي: ${key}`);
                 }
-            } else {
-                // إذا لم يكن currency-config.js محمّلاً، أنشئ منتجات افتراضية
-                console.warn('لا توجد بيانات منتجات متاحة. إنشاء منتجات افتراضية...');
-                allProducts = [
-                    {
-                        id: 'trw',
-                        name: 'The Real World Account',
-                        price_dzd: 3750,
-                        price_usd: 15,
-                        description: { ar: 'حساب مشترك للكورسات ومنصة The Real World', en: 'Shared account', fr: 'Compte partagé' },
-                        paymentMethods: { dzd: ['baridimob', 'crypto'], usd: ['binance', 'redotpay', 'crypto'] },
-                        active: true
-                    },
-                    {
-                        id: 'chatgpt',
-                        name: 'ChatGPT Business',
-                        price_dzd: 1200,
-                        price_usd: 5,
-                        description: { ar: 'حساب ChatGPT Business للاستخدام المشترك', en: 'ChatGPT Business shared account', fr: 'Compte ChatGPT Business partagé' },
-                        paymentMethods: { dzd: ['baridimob', 'crypto'], usd: ['binance', 'redotpay', 'crypto'] },
-                        active: true
-                    },
-                    {
-                        id: 'adobe',
-                        name: 'Adobe Creative Cloud',
-                        price_dzd: 2500,
-                        price_usd: 6,
-                        description: { ar: 'حساب Adobe Creative Cloud مشترك', en: 'Adobe Creative Cloud shared account', fr: 'Compte Adobe Creative Cloud partagé' },
-                        paymentMethods: { dzd: ['baridimob', 'crypto'], usd: ['binance', 'redotpay', 'crypto'] },
-                        active: true
-                    },
-                    {
-                        id: 'netflix',
-                        name: 'Netflix Premium',
-                        price_dzd: 1500,
-                        price_usd: 6,
-                        description: { ar: 'حساب Netflix Premium مشترك', en: 'Netflix Premium shared account', fr: 'Compte Netflix Premium partagé' },
-                        paymentMethods: { dzd: ['baridimob', 'crypto'], usd: ['binance', 'redotpay', 'crypto'] },
-                        active: true
-                    },
-                    {
-                        id: 'tradingview',
-                        name: 'TradingView Premium',
-                        price_dzd: 1500,
-                        price_usd: 6,
-                        description: { ar: 'حساب TradingView Premium للتحليل المالي', en: 'TradingView Premium account', fr: 'Compte TradingView Premium' },
-                        paymentMethods: { dzd: ['baridimob', 'crypto'], usd: ['binance', 'redotpay', 'crypto'] },
-                        active: true
-                    }
-                ];
-                console.log('تم إنشاء', allProducts.length, 'منتج افتراضي');
-            }
+            });
         }
 
-        console.log('إجمالي المنتجات:', allProducts.length);
-        displayProductsTable();
+        // تحويل الخريطة إلى مصفوفة
+        allProducts = Array.from(productMap.values());
+
+        // 3. ترتيب المنتجات
+        allProducts.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+        console.log(`📊 إجمالي المنتجات الجاهزة: ${allProducts.length}`);
+
+        // تحديث الجدول المعروض
+        if (typeof displayProductsTable === 'function') {
+            displayProductsTable();
+        }
+
+        // مزامنة المنتجات المحلية إلى Firebase إذا كانت مفقودة هناك
+        if (window.db && window.firebaseModules && !productsFromFirebase && allProducts.length > 0) {
+            syncProductsToFirebase();
+        }
+
     } catch (error) {
-        console.error('خطأ في تحميل المنتجات:', error);
-        // عرض رسالة خطأ في الجدول
-        const tbody = document.getElementById('products-table-body');
-        if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-red-400">خطأ في تحميل المنتجات: ' + error.message + '</td></tr>';
+        console.error('❌ خطأ فادح في loadProducts:', error);
+        showToast('خطأ في تحميل المنتجات', 'error');
+    }
+}
+
+/**
+ * دالة مساعدة لمزامنة المنتجات إلى Firebase
+ */
+async function syncProductsToFirebase() {
+    if (!window.db || !window.firebaseModules) return;
+
+    console.log('📤 جاري مزامنة المنتجات مع السحابة...');
+    try {
+        const { setDoc, doc } = window.firebaseModules;
+        for (const product of allProducts) {
+            await setDoc(doc(window.db, 'products', product.id), {
+                id: product.id,
+                name: product.name,
+                price_dzd: product.price_dzd,
+                price_usd: product.price_usd,
+                durations: product.durations || {},
+                description: product.description || {},
+                paymentMethods: product.paymentMethods || {},
+                active: product.active !== false,
+                updatedAt: new Date()
+            }, { merge: true });
         }
+        console.log('✅ تم الانتهاء من المزامنة');
+    } catch (error) {
+        console.error('❌ فشل المزامنة:', error);
     }
 }
 
@@ -6568,19 +6549,249 @@ function initGiveawayEvents() {
     }
 }
 
-// تحميل المسابقة عند فتح التبويب
-const originalShowTabForGiveaway = window.showTab;
+// ═══════════════════════════════════════════════════════════════════════════
+// إدارة الأسعار المباشرة - Live Pricing Management
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Render Live Pricing Management List
+ */
+function renderLivePricingList() {
+    const container = document.getElementById('live-pricing-list');
+    if (!container) return;
+
+    if (!allProducts || allProducts.length === 0) {
+        container.innerHTML = '<div class="text-center py-12 text-gray-500">لا توجد منتجات محملة</div>';
+        return;
+    }
+
+    let html = '';
+
+    allProducts.forEach(product => {
+        const productName = typeof product.name === 'object' ? (product.name.ar || product.name.en || product.id) : (product.name || product.id);
+
+        html += `
+            <div class="rounded-xl p-6 bg-gray-800 border border-gray-700 shadow-xl product-live-card mb-4" data-product-id="${product.id}">
+                <div class="flex items-center gap-4 mb-4 pb-4 border-b border-gray-700">
+                    <div class="w-12 h-12 rounded-lg bg-purple-900/50 flex items-center justify-center text-2xl">📦</div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-lg font-bold text-white">${escapeHtml(productName)}</h3>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-gray-700 text-gray-400 uppercase">${product.source || 'db'}</span>
+                        </div>
+                        <p class="text-xs text-gray-500">ID: <code class="bg-gray-900 px-1 rounded text-purple-400">${product.id}</code></p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Main Price -->
+                    <div class="p-4 rounded-lg bg-gray-900/50 border border-gray-700">
+                        <label class="block text-sm text-gray-400 mb-2">السعر الأساسي</label>
+                        <div class="flex gap-2">
+                            <div class="flex-1">
+                                <span class="text-xs text-gray-500 mb-1 block">DZD</span>
+                                <input type="number" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded focus:border-green-500 outline-none text-white live-main-price-dzd" 
+                                    value="${product.price_dzd || 0}">
+                            </div>
+                            <div class="flex-1">
+                                <span class="text-xs text-gray-500 mb-1 block">USD</span>
+                                <input type="number" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded focus:border-green-500 outline-none text-white live-main-price-usd" 
+                                    value="${product.price_usd || 0}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Durations -->
+                    <div class="p-4 rounded-lg bg-gray-900/50 border border-gray-700">
+                         <label class="block text-sm text-gray-400 mb-2">الخيارات (Durations)</label>
+                         ${renderLiveDurations(product)}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+function renderLiveDurations(product) {
+    let html = '<div class="space-y-3 live-durations-container" data-product-id="' + product.id + '">';
+
+    if (product.durations && Object.keys(product.durations).length > 0) {
+        Object.entries(product.durations).forEach(([key, prices]) => {
+            const isAvailable = prices.available !== false;
+            html += `
+                <div class="p-3 bg-gray-800 rounded border border-gray-700 duration-row group relative" data-duration-id="${key}">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-purple-400">${key.toUpperCase()}</span>
+                            <label class="inline-flex items-center cursor-pointer ml-3">
+                                <input type="checkbox" class="sr-only peer live-duration-available" ${isAvailable ? 'checked' : ''}>
+                                <div class="w-7 h-4 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-green-600 relative"></div>
+                                <span class="ml-1 text-[10px] text-gray-400 peer-checked:text-green-400">متوفر</span>
+                            </label>
+                        </div>
+                        <button onclick="deleteLiveDuration('${product.id}', '${key}')" 
+                            class="text-red-400 hover:text-red-300 opacity-0 group-hover:opacity-100 transition-opacity p-1" title="حذف هذا العرض">
+                            🗑️
+                        </button>
+                    </div>
+                    <div class="flex gap-2">
+                        <div class="flex-1">
+                            <input type="number" class="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs text-white live-duration-dzd" 
+                                placeholder="DZD" value="${prices.dzd || 0}">
+                        </div>
+                        <div class="flex-1">
+                            <input type="number" class="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs text-white live-duration-usd" 
+                                placeholder="USD" value="${prices.usd || 0}">
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        html += '<p class="text-xs text-gray-500 italic no-durations-msg">لا توجد خيارات إضافية</p>';
+    }
+
+    html += `
+        <button onclick="addLiveDurationPrompt('${product.id}')" 
+            class="w-full py-2 mt-2 bg-purple-600/20 hover:bg-purple-600/40 border border-dashed border-purple-500/50 rounded-lg text-xs text-purple-300 transition-all">
+            ➕ إضافة فرع/مدة جديدة
+        </button>
+    </div>`;
+    return html;
+}
+
+/**
+ * Prompt to add a new duration
+ */
+function addLiveDurationPrompt(productId) {
+    const id = prompt('أدخل معرف الفرع الجديد (مثلاً: plus_3m أو teachers_1y)\n* استخدم أحرف إنجليزية فقط وبدون مسافات');
+    if (!id || id.trim() === '') return;
+
+    const dzd = prompt('السعر بالدينار (DZD):', '0');
+    const usd = prompt('السعر بالدولار (USD):', '0');
+
+    const product = allProducts.find(p => p.id === productId);
+    if (product) {
+        if (!product.durations) product.durations = {};
+        product.durations[id.toLowerCase().trim()] = {
+            dzd: parseFloat(dzd) || 0,
+            usd: parseFloat(usd) || 0,
+            available: true
+        };
+        renderLivePricingList();
+        showToast('تم إضافة الفرع مؤقتاً، اضغط حفظ للنشر ✅', 'info');
+    }
+}
+
+/**
+ * Delete a duration from local list
+ */
+function deleteLiveDuration(productId, durationId) {
+    if (!confirm(`هل أنت متأكد من حذف الفرع "${durationId}"؟`)) return;
+
+    const product = allProducts.find(p => p.id === productId);
+    if (product && product.durations && product.durations[durationId]) {
+        delete product.durations[durationId];
+        renderLivePricingList();
+        showToast('تم حذف الفرع مؤقتاً، اضغط حفظ للنشر ✅', 'info');
+    }
+}
+
+/**
+ * Save all prices from the live pricing UI to Firebase
+ */
+async function saveAllLivePrices() {
+    if (!window.db || !window.firebaseModules) {
+        showToast('Firebase غير متصل', 'error');
+        return;
+    }
+
+    const { doc, updateDoc } = window.firebaseModules;
+    const cards = document.querySelectorAll('.product-live-card');
+
+    showToast('جاري حفظ الأسعار... ⏳', 'info');
+    let successCount = 0;
+
+    try {
+        for (const card of cards) {
+            const productId = card.dataset.productId;
+            const mainDzd = card.querySelector('.live-main-price-dzd').value;
+            const mainUsd = card.querySelector('.live-main-price-usd').value;
+
+            // Collect durations
+            const durations = {};
+            card.querySelectorAll('.duration-row').forEach(row => {
+                const durId = row.dataset.durationId;
+                const durDzd = row.querySelector('.live-duration-dzd').value;
+                const durUsd = row.querySelector('.live-duration-usd').value;
+                const durAvailable = row.querySelector('.live-duration-available').checked;
+                durations[durId] = {
+                    dzd: parseFloat(durDzd),
+                    usd: parseFloat(durUsd),
+                    available: durAvailable
+                };
+            });
+
+            const updateData = {
+                price_dzd: parseFloat(mainDzd),
+                price_usd: parseFloat(mainUsd)
+            };
+
+            if (Object.keys(durations).length > 0) {
+                updateData.durations = durations;
+            }
+
+            await updateDoc(doc(window.db, 'products', productId), updateData);
+
+            // Update local memory
+            const prod = allProducts.find(p => p.id === productId);
+            if (prod) {
+                prod.price_dzd = updateData.price_dzd;
+                prod.price_usd = updateData.price_usd;
+                if (updateData.durations) prod.durations = updateData.durations;
+            }
+
+            successCount++;
+        }
+
+        showToast(`تم حفظ وتحديث أسعار ${successCount} منتج بنجاح! ✅`, 'success');
+        logActivity('product', 'live_price_update', `Updated ${successCount} product prices live`);
+
+        // Refresh the table in Products tab too
+        displayProductsTable();
+    } catch (error) {
+        console.error('Error saving live prices:', error);
+        showToast('حدث خطأ أثناء الحفظ. يرجى المحاولة مرة أخرى.', 'error');
+    }
+}
+
+// جعل الوظائف متاحة عالمياً
+window.renderLivePricingList = renderLivePricingList;
+window.saveAllLivePrices = saveAllLivePrices;
+window.addLiveDurationPrompt = addLiveDurationPrompt;
+window.deleteLiveDuration = deleteLiveDuration;
+
+// تحميل الميزات عند فتح التبويبات
+if (typeof window.originalShowTab === 'undefined') {
+    window.originalShowTab = window.showTab;
+}
 window.showTab = function (tabName) {
-    if (typeof originalShowTabForGiveaway === 'function') {
-        originalShowTabForGiveaway(tabName);
+    if (typeof window.originalShowTab === 'function') {
+        window.originalShowTab(tabName);
     }
 
     if (tabName === 'giveaway') {
-        loadGiveawaySettings();
+        if (typeof loadGiveawaySettings === 'function') loadGiveawaySettings();
+    }
+
+    if (tabName === 'live-pricing') {
+        renderLivePricingList();
     }
 };
 
 // تهيئة عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
-    initGiveawayEvents();
+    if (typeof initGiveawayEvents === 'function') initGiveawayEvents();
 });

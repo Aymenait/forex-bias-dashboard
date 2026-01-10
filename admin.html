@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم - Market Algeriaa</title>
-    
+
     <!-- Meta Pixel Code -->
     <script>
         !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
@@ -14,42 +15,44 @@
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="admin.css">
 </head>
+
 <body class="font-cairo bg-gray-900 text-white min-h-screen">
-    
+
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <!-- صفحة تسجيل الدخول - Login Page -->
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <div id="login-page" class="min-h-screen flex items-center justify-center p-4" style="background: var(--bg-dark);">
-        <div class="rounded-2xl p-8 w-full max-w-md shadow-2xl" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+        <div class="rounded-2xl p-8 w-full max-w-md shadow-2xl"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
             <!-- Logo -->
             <div class="text-center mb-8">
                 <div class="text-6xl mb-4">🔐</div>
                 <h1 class="text-2xl font-bold">لوحة التحكم</h1>
                 <p class="text-gray-400 mt-2">Market Algeriaa Admin</p>
             </div>
-            
+
             <!-- Login Form -->
             <form id="login-form" class="space-y-6">
                 <div>
                     <label class="block text-gray-300 mb-2">كلمة المرور</label>
-                    <input type="password" id="admin-password" 
+                    <input type="password" id="admin-password"
                         class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none text-white"
                         placeholder="أدخل كلمة المرور">
                 </div>
-                
-                <button type="submit" 
+
+                <button type="submit"
                     class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 rounded-lg hover:opacity-90 transition-all">
                     دخول 🚀
                 </button>
-                
+
                 <p id="login-error" class="text-red-400 text-center hidden">كلمة المرور غير صحيحة</p>
             </form>
-            
+
             <!-- Help -->
             <div class="mt-6 text-center text-gray-500 text-sm">
                 <p>🔐 كلمة المرور محفوظة في السحابة</p>
@@ -62,7 +65,7 @@
     <!-- لوحة التحكم الرئيسية - Main Dashboard -->
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <div id="dashboard-page" class="hidden">
-        
+
         <!-- Header -->
         <header class="bg-gray-800 border-b border-gray-700 px-6 py-4">
             <div class="flex items-center justify-between">
@@ -73,12 +76,13 @@
                         <p class="text-gray-400 text-sm">Market Algeriaa</p>
                     </div>
                 </div>
-                
+
                 <div class="flex items-center gap-4">
                     <a href="index.html" target="_blank" class="text-gray-400 hover:text-white transition-colors">
                         👁️ عرض الموقع
                     </a>
-                    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors">
+                    <button onclick="logout()"
+                        class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors">
                         خروج 🚪
                     </button>
                 </div>
@@ -86,51 +90,82 @@
         </header>
 
         <!-- Navigation Tabs -->
-        <nav class="px-6 overflow-x-auto" style="background: var(--card-bg); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+        <nav class="px-6 overflow-x-auto"
+            style="background: var(--card-bg); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(10px);">
             <div class="flex gap-1 min-w-max">
-                <button onclick="showTab('overview')" class="tab-btn active px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="overview">
+                <button onclick="showTab('overview')"
+                    class="tab-btn active px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="overview">
                     📊 نظرة عامة
                 </button>
-                <button onclick="showTab('products')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="products">
+                <button onclick="showTab('products')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="products">
                     📦 المنتجات
                 </button>
-                <button onclick="showTab('orders')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="orders">
+                <button onclick="showTab('orders')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="orders">
                     🛒 الطلبات
                 </button>
-                <button onclick="showTab('reviews')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="reviews">
+                <button onclick="showTab('reviews')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="reviews">
                     ⭐ التقييمات
                 </button>
-                <button onclick="showTab('customers')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="customers">
+                <button onclick="showTab('customers')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="customers">
                     👥 العملاء
                 </button>
-                <button onclick="showTab('analytics')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="analytics">
+                <button onclick="showTab('analytics')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="analytics">
                     📈 التحليلات
                 </button>
-                <button onclick="showTab('content')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="content">
+                <button onclick="showTab('content')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="content">
                     📝 المحتوى
                 </button>
-                <button onclick="showTab('integrations')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="integrations">
+                <button onclick="showTab('integrations')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="integrations">
                     🔗 التكاملات
                 </button>
-                <button onclick="showTab('tools')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="tools">
+                <button onclick="showTab('tools')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="tools">
                     🛠️ الأدوات
                 </button>
-                <button onclick="showTab('accounting')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="accounting">
+                <button onclick="showTab('accounting')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="accounting">
                     💰 المحاسبة
                 </button>
-                <button onclick="showTab('debtors')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="debtors">
+                <button onclick="showTab('debtors')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="debtors">
                     💳 المديونين
                 </button>
-                <button onclick="showTab('giveaway')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="giveaway">
+                <button onclick="showTab('giveaway')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="giveaway">
                     🎁 المسابقات
                 </button>
-                <button onclick="showTab('suppliers')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="suppliers">
+                <button onclick="showTab('suppliers')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="suppliers">
                     📦 الموردين
                 </button>
-                <button onclick="showTab('security')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="security">
+                <button onclick="showTab('security')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="security">
                     🔒 الأمان
                 </button>
-                <button onclick="showTab('settings')" class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap" data-tab="settings">
+                <button onclick="showTab('settings')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="settings">
                     ⚙️ الإعدادات
                 </button>
             </div>
@@ -138,11 +173,11 @@
 
         <!-- Main Content -->
         <main class="p-6">
-            
+
             <!-- ═══════════ Overview Tab ═══════════ -->
             <div id="tab-overview" class="tab-content">
                 <h2 class="text-2xl font-bold mb-6">📊 نظرة عامة</h2>
-                
+
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="stat-card rounded-xl p-6">
@@ -150,35 +185,36 @@
                         <div class="text-3xl font-bold" id="stat-total-reviews" style="color: var(--accent);">0</div>
                         <div style="color: var(--text-secondary);">إجمالي التقييمات</div>
                     </div>
-                    
+
                     <div class="stat-card rounded-xl p-6">
                         <div class="text-4xl mb-2" style="color: var(--accent);">📈</div>
                         <div class="text-3xl font-bold" id="stat-average" style="color: var(--accent);">0.0</div>
                         <div style="color: var(--text-secondary);">متوسط التقييم</div>
                     </div>
-                    
+
                     <div class="stat-card rounded-xl p-6">
                         <div class="text-4xl mb-2" style="color: var(--accent);">📦</div>
                         <div class="text-3xl font-bold" id="stat-products" style="color: var(--accent);">10</div>
                         <div style="color: var(--text-secondary);">المنتجات</div>
                     </div>
-                    
+
                     <div class="stat-card rounded-xl p-6">
                         <div class="text-4xl mb-2" style="color: var(--accent);">🕐</div>
                         <div class="text-3xl font-bold" id="stat-today" style="color: var(--accent);">0</div>
                         <div style="color: var(--text-secondary);">تقييمات اليوم</div>
                     </div>
                 </div>
-                
+
                 <!-- Recent Reviews -->
-                <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                <div class="rounded-xl p-6"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <h3 class="text-xl font-bold mb-4">🕐 آخر التقييمات</h3>
                     <div id="recent-reviews" class="space-y-4">
                         <p class="text-gray-400">جاري التحميل...</p>
                     </div>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Reviews Tab ═══════════ -->
             <div id="tab-reviews" class="tab-content hidden">
                 <div class="flex items-center justify-between mb-6">
@@ -187,9 +223,9 @@
                         <!-- Search -->
                         <input type="text" id="search-reviews" placeholder="🔍 بحث..."
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
-                        
+
                         <!-- Filter -->
-                        <select id="filter-product" 
+                        <select id="filter-product"
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                             <option value="all">جميع المنتجات</option>
                             <option value="The Real World">The Real World</option>
@@ -200,9 +236,10 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <!-- Reviews Table -->
-                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                <div class="rounded-xl overflow-hidden"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <table class="w-full">
                         <thead style="background: rgba(255, 255, 255, 0.05);">
                             <tr>
@@ -222,13 +259,13 @@
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Pagination Info -->
                 <div class="mt-4 text-gray-400 text-center">
                     <span id="reviews-count">0</span> تقييم
                 </div>
             </div>
-            
+
             <!-- ═══════════ Products Tab ═══════════ -->
             <div id="tab-products" class="tab-content hidden">
                 <!-- Header with Search & Filter -->
@@ -239,7 +276,7 @@
                         <input type="text" id="search-products" placeholder="🔍 بحث عن منتج..."
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none w-48">
                         <!-- Filter by Category -->
-                        <select id="filter-category" 
+                        <select id="filter-category"
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                             <option value="all">جميع الفئات</option>
                             <option value="subscriptions">اشتراكات</option>
@@ -249,7 +286,7 @@
                             <option value="other">أخرى</option>
                         </select>
                         <!-- Filter by Availability -->
-                        <select id="filter-availability" 
+                        <select id="filter-availability"
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                             <option value="all">الكل</option>
                             <option value="available">متوفر</option>
@@ -257,41 +294,49 @@
                             <option value="coming_soon">قريباً</option>
                         </select>
                         <!-- Migration Button -->
-                        <button onclick="runDataMigration()" id="migration-btn" class="px-4 py-2 rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white font-bold">
+                        <button onclick="runDataMigration()" id="migration-btn"
+                            class="px-4 py-2 rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white font-bold">
                             🔄 ترحيل البيانات
                         </button>
-                        <button onclick="openProductModal()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        <button onclick="openProductModal()" class="px-6 py-3 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             ➕ إضافة منتج جديد
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Products Stats -->
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="text-2xl font-bold" id="stat-products-total" style="color: var(--accent);">0</div>
                         <div class="text-gray-400 text-sm">إجمالي المنتجات</div>
                     </div>
-                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="text-2xl font-bold text-green-400" id="stat-products-available">0</div>
                         <div class="text-gray-400 text-sm">✅ متوفر</div>
                     </div>
-                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="text-2xl font-bold text-red-400" id="stat-products-unavailable">0</div>
                         <div class="text-gray-400 text-sm">❌ غير متوفر</div>
                     </div>
-                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="text-2xl font-bold text-yellow-400" id="stat-products-coming-soon">0</div>
                         <div class="text-gray-400 text-sm">🔜 قريباً</div>
                     </div>
-                    <div class="rounded-xl p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="text-2xl font-bold text-blue-400" id="stat-products-sales">0</div>
                         <div class="text-gray-400 text-sm">إجمالي المبيعات</div>
                     </div>
                 </div>
-                
+
                 <!-- Products Table -->
-                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                <div class="rounded-xl overflow-hidden"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <div class="overflow-x-auto">
                         <table class="w-full" id="products-table">
                             <thead style="background: rgba(255, 255, 255, 0.05);">
@@ -315,10 +360,10 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <!-- Drag & Drop Hint -->
                 <p class="text-gray-500 text-sm mt-3 text-center">💡 اسحب وأفلت الصفوف لتغيير ترتيب المنتجات</p>
-                
+
                 <!-- ═══════════ Archived Products Section ═══════════ -->
                 <div class="mt-8">
                     <div class="flex items-center justify-between mb-4">
@@ -326,14 +371,16 @@
                             📁 المنتجات المؤرشفة
                             <span id="archived-products-count" class="text-sm font-normal text-gray-400">(0)</span>
                         </h3>
-                        <button onclick="toggleArchivedSection()" id="toggle-archived-btn" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm">
+                        <button onclick="toggleArchivedSection()" id="toggle-archived-btn"
+                            class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm">
                             👁️ عرض المؤرشفة
                         </button>
                     </div>
-                    
+
                     <!-- Archived Products Table (Hidden by default) -->
                     <div id="archived-products-section" class="hidden">
-                        <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                        <div class="rounded-xl overflow-hidden"
+                            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                             <div class="overflow-x-auto">
                                 <table class="w-full" id="archived-products-table">
                                     <thead style="background: rgba(255, 255, 255, 0.05);">
@@ -347,23 +394,26 @@
                                     </thead>
                                     <tbody id="archived-products-table-body">
                                         <tr>
-                                            <td colspan="5" class="text-center py-8 text-gray-400">لا توجد منتجات مؤرشفة</td>
+                                            <td colspan="5" class="text-center py-8 text-gray-400">لا توجد منتجات مؤرشفة
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <p class="text-gray-500 text-sm mt-3 text-center">💡 يمكنك استعادة المنتجات المؤرشفة أو حذفها نهائياً</p>
+                        <p class="text-gray-500 text-sm mt-3 text-center">💡 يمكنك استعادة المنتجات المؤرشفة أو حذفها
+                            نهائياً</p>
                     </div>
                 </div>
             </div>
-            
+
+
             <!-- ═══════════ Orders Tab ═══════════ -->
             <div id="tab-orders" class="tab-content hidden">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-bold">🛒 إدارة الطلبات</h2>
                     <div class="flex gap-4">
-                        <select id="filter-order-status" 
+                        <select id="filter-order-status"
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                             <option value="all">جميع الحالات</option>
                             <option value="pending">قيد الانتظار</option>
@@ -375,8 +425,9 @@
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                     </div>
                 </div>
-                
-                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                <div class="rounded-xl overflow-hidden"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <table class="w-full">
                         <thead style="background: rgba(255, 255, 255, 0.05);">
                             <tr>
@@ -398,7 +449,7 @@
                     </table>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Customers Tab ═══════════ -->
             <div id="tab-customers" class="tab-content hidden">
                 <div class="flex items-center justify-between mb-6">
@@ -406,8 +457,9 @@
                     <input type="text" id="search-customers" placeholder="🔍 بحث..."
                         class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                 </div>
-                
-                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                <div class="rounded-xl overflow-hidden"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <table class="w-full">
                         <thead style="background: rgba(255, 255, 255, 0.05);">
                             <tr>
@@ -428,66 +480,74 @@
                     </table>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Analytics Tab ═══════════ -->
             <div id="tab-analytics" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-6">📈 التحليلات والإحصائيات</h2>
-                
+
                 <!-- ═══════════ إحصائيات الزوار - Visitor Statistics ═══════════ -->
-                <div class="rounded-xl p-6 mb-8" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1)); border: 1px solid rgba(147, 51, 234, 0.3); backdrop-filter: blur(10px);">
+                <div class="rounded-xl p-6 mb-8"
+                    style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1)); border: 1px solid rgba(147, 51, 234, 0.3); backdrop-filter: blur(10px);">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-xl font-bold flex items-center gap-2">
                             <span class="text-2xl">👁️</span>
                             إحصائيات الزوار
                         </h3>
-                        <button onclick="loadVisitorStats()" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(147, 51, 234, 0.3); border: 1px solid rgba(147, 51, 234, 0.5);">
+                        <button onclick="loadVisitorStats()" class="px-4 py-2 rounded-lg text-sm transition-colors"
+                            style="background: rgba(147, 51, 234, 0.3); border: 1px solid rgba(147, 51, 234, 0.5);">
                             🔄 تحديث
                         </button>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <!-- زوار اليوم -->
-                        <div class="rounded-xl p-4 text-center" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);">
+                        <div class="rounded-xl p-4 text-center"
+                            style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);">
                             <div class="text-3xl mb-2">📅</div>
                             <div class="text-3xl font-bold" id="visitors-today" style="color: #22c55e;">0</div>
                             <div class="text-gray-400 text-sm mt-1">زوار اليوم</div>
                         </div>
-                        
+
                         <!-- زوار الأسبوع -->
-                        <div class="rounded-xl p-4 text-center" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);">
+                        <div class="rounded-xl p-4 text-center"
+                            style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);">
                             <div class="text-3xl mb-2">📆</div>
                             <div class="text-3xl font-bold" id="visitors-week" style="color: #3b82f6;">0</div>
                             <div class="text-gray-400 text-sm mt-1">زوار الأسبوع</div>
                         </div>
-                        
+
                         <!-- زوار الشهر -->
-                        <div class="rounded-xl p-4 text-center" style="background: rgba(147, 51, 234, 0.1); border: 1px solid rgba(147, 51, 234, 0.3);">
+                        <div class="rounded-xl p-4 text-center"
+                            style="background: rgba(147, 51, 234, 0.1); border: 1px solid rgba(147, 51, 234, 0.3);">
                             <div class="text-3xl mb-2">🗓️</div>
                             <div class="text-3xl font-bold" id="visitors-month" style="color: #9333ea;">0</div>
                             <div class="text-gray-400 text-sm mt-1">زوار الشهر</div>
                         </div>
-                        
+
                         <!-- إجمالي الزوار -->
-                        <div class="rounded-xl p-4 text-center" style="background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <div class="rounded-xl p-4 text-center"
+                            style="background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.3);">
                             <div class="text-3xl mb-2">🌐</div>
                             <div class="text-3xl font-bold" id="visitors-total" style="color: #f97316;">0</div>
                             <div class="text-gray-400 text-sm mt-1">إجمالي الزوار</div>
                         </div>
                     </div>
-                    
+
                     <!-- رسم بياني للزوار -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="rounded-xl p-4"
+                            style="background: var(--card-bg); border: 1px solid var(--border-color);">
                             <h4 class="text-lg font-bold mb-4">📊 الزوار حسب اليوم (آخر 7 أيام)</h4>
                             <canvas id="visitors-daily-chart"></canvas>
                         </div>
-                        <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="rounded-xl p-4"
+                            style="background: var(--card-bg); border: 1px solid var(--border-color);">
                             <h4 class="text-lg font-bold mb-4">📱 نوع الجهاز</h4>
                             <canvas id="visitors-device-chart"></canvas>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- ═══════════ إحصائيات المبيعات الأصلية ═══════════ -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="stat-card rounded-xl p-6">
@@ -511,35 +571,40 @@
                         <div style="color: var(--text-secondary);">متوسط الطلب</div>
                     </div>
                 </div>
-                
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">📈 المبيعات حسب المنتج</h3>
                         <canvas id="sales-by-product-chart"></canvas>
                     </div>
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">📅 المبيعات حسب التاريخ</h3>
                         <canvas id="sales-by-date-chart"></canvas>
                     </div>
                 </div>
-                
-                <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                <div class="rounded-xl p-6"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <h3 class="text-xl font-bold mb-4">📊 طرق الدفع</h3>
                     <canvas id="payment-methods-chart"></canvas>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Content Tab ═══════════ -->
             <div id="tab-content" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-6">📝 إدارة المحتوى</h2>
-                
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">🌐 الترجمة</h3>
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-gray-300 mb-2">اللغة</label>
-                                <select id="translation-lang" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
+                                <select id="translation-lang"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                                     <option value="ar">العربية</option>
                                     <option value="en">English</option>
                                     <option value="fr">Français</option>
@@ -555,13 +620,15 @@
                                 <textarea id="translation-value" rows="4" placeholder="أدخل النص المترجم"
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
                             </div>
-                            <button onclick="saveTranslation()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            <button onclick="saveTranslation()" class="w-full px-6 py-3 rounded-lg transition-colors"
+                                style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                                 حفظ الترجمة
                             </button>
                         </div>
                     </div>
-                    
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">🎨 المظهر</h3>
                         <div class="space-y-4">
                             <div>
@@ -574,20 +641,22 @@
                                 <input type="color" id="secondary-color" value="#ffb347"
                                     class="w-full h-12 bg-gray-700 border border-gray-600 rounded-lg">
                             </div>
-                            <button onclick="saveTheme()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            <button onclick="saveTheme()" class="w-full px-6 py-3 rounded-lg transition-colors"
+                                style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                                 حفظ المظهر
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Integrations Tab ═══════════ -->
             <div id="tab-integrations" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-6">🔗 التكاملات</h2>
-                
+
                 <div class="space-y-6">
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">💳 طرق الدفع</h3>
                         <div class="space-y-4">
                             <div>
@@ -605,13 +674,15 @@
                                 <input type="text" id="usdt-trc20" value="TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9"
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                             </div>
-                            <button onclick="savePaymentMethods()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            <button onclick="savePaymentMethods()" class="px-6 py-3 rounded-lg transition-colors"
+                                style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                                 حفظ طرق الدفع
                             </button>
                         </div>
                     </div>
-                    
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">💬 التواصل</h3>
                         <div class="space-y-4">
                             <div>
@@ -624,13 +695,15 @@
                                 <input type="text" id="telegram-username" placeholder="@username"
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                             </div>
-                            <button onclick="saveContactInfo()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            <button onclick="saveContactInfo()" class="px-6 py-3 rounded-lg transition-colors"
+                                style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                                 حفظ معلومات التواصل
                             </button>
                         </div>
                     </div>
-                    
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">📊 Meta Pixel</h3>
                         <div class="space-y-4">
                             <div>
@@ -642,87 +715,104 @@
                                 <input type="checkbox" id="meta-pixel-enabled" checked class="w-5 h-5">
                                 <label for="meta-pixel-enabled" class="text-gray-300">تفعيل Meta Pixel</label>
                             </div>
-                            <button onclick="saveMetaPixel()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            <button onclick="saveMetaPixel()" class="px-6 py-3 rounded-lg transition-colors"
+                                style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                                 حفظ إعدادات Meta Pixel
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Tools Tab ═══════════ -->
             <div id="tab-tools" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-6">🛠️ الأدوات</h2>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">💾 النسخ الاحتياطي</h3>
                         <p class="text-gray-400 mb-4">إنشاء نسخة احتياطية من جميع البيانات</p>
-                        <button onclick="backupData()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        <button onclick="backupData()" class="w-full px-6 py-3 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             📥 تصدير البيانات
                         </button>
                     </div>
-                    
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">📤 الاستيراد</h3>
                         <p class="text-gray-400 mb-4">استيراد بيانات من ملف JSON</p>
                         <input type="file" id="import-file" accept=".json" class="hidden">
-                        <button onclick="document.getElementById('import-file').click()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        <button onclick="document.getElementById('import-file').click()"
+                            class="w-full px-6 py-3 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             📤 استيراد البيانات
                         </button>
                     </div>
-                    
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">🔧 وضع الصيانة</h3>
                         <p class="text-gray-400 mb-4">تفعيل/تعطيل وضع الصيانة</p>
                         <div class="flex items-center gap-2 mb-4">
                             <input type="checkbox" id="maintenance-mode" class="w-5 h-5">
                             <label for="maintenance-mode" class="text-gray-300">تفعيل وضع الصيانة</label>
                         </div>
-                        <button onclick="toggleMaintenanceMode()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        <button onclick="toggleMaintenanceMode()" class="w-full px-6 py-3 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             حفظ
                         </button>
                     </div>
-                    
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">🎟️ أكواد الخصم</h3>
                         <p class="text-gray-400 mb-4">إدارة أكواد الخصم والترويج</p>
-                        <button onclick="openPromoCodeModal()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        <button onclick="openPromoCodeModal()" class="w-full px-6 py-3 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             ➕ إضافة كود خصم
                         </button>
                     </div>
-                    
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">📊 تصدير التقارير</h3>
                         <p class="text-gray-400 mb-4">تصدير التقارير بصيغة CSV</p>
-                        <button onclick="exportReports()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        <button onclick="exportReports()" class="w-full px-6 py-3 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             📊 تصدير CSV
                         </button>
                     </div>
-                    
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">📦 إدارة المخزون</h3>
                         <p class="text-gray-400 mb-4">تتبع المخزون للمنتجات</p>
-                        <button onclick="showTab('products')" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        <button onclick="showTab('products')" class="w-full px-6 py-3 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             عرض المنتجات
                         </button>
                     </div>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Suppliers Tab ═══════════ -->
             <div id="tab-suppliers" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-6">📦 الموردين ومصادر السلع</h2>
-                
+
                 <!-- زر إضافة مورد جديد -->
                 <div class="mb-6">
-                    <button onclick="openSupplierModal()" class="px-6 py-3 rounded-lg transition-colors flex items-center gap-2" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                    <button onclick="openSupplierModal()"
+                        class="px-6 py-3 rounded-lg transition-colors flex items-center gap-2"
+                        style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                         ➕ إضافة مورد/مصدر جديد
                     </button>
                 </div>
-                
+
                 <!-- جدول الموردين -->
-                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                <div class="rounded-xl overflow-hidden"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <div class="p-4 border-b" style="border-color: var(--border-color);">
                         <h3 class="text-lg font-bold">🏪 قائمة الموردين ومصادر السلع</h3>
                         <p class="text-gray-400 text-sm mt-1">تذكير: من أين تستورد السلع وبكم سعرها</p>
@@ -750,37 +840,42 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <!-- إحصائيات سريعة -->
                 <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="rounded-xl p-4 text-center" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);">
                         <div class="text-3xl font-bold" id="total-suppliers-count" style="color: #22c55e;">0</div>
                         <div class="text-gray-400 text-sm mt-1">إجمالي الموردين</div>
                     </div>
-                    <div class="rounded-xl p-4 text-center" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);">
                         <div class="text-3xl font-bold" id="total-sources-count" style="color: #3b82f6;">0</div>
                         <div class="text-gray-400 text-sm mt-1">مصادر مختلفة</div>
                     </div>
-                    <div class="rounded-xl p-4 text-center" style="background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.3);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.3);">
                         <div class="text-3xl font-bold" id="total-products-suppliers" style="color: #f97316;">0</div>
                         <div class="text-gray-400 text-sm mt-1">منتجات مسجلة</div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Security Tab ═══════════ -->
             <div id="tab-security" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-6">🔒 الأمان والسجلات</h2>
-                
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">📋 سجل الأنشطة</h3>
                         <div id="activity-log" class="space-y-2 max-h-96 overflow-y-auto">
                             <p class="text-gray-400">جاري التحميل...</p>
                         </div>
                     </div>
-                    
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4">🔐 إعدادات الأمان</h3>
                         <div class="space-y-4">
                             <div class="flex items-center justify-between">
@@ -796,14 +891,17 @@
                                 <span class="text-gray-300">تسجيل جميع الأنشطة</span>
                                 <input type="checkbox" id="log-all-activities" checked class="w-5 h-5">
                             </div>
-                            <button onclick="saveSecuritySettings()" class="w-full px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            <button onclick="saveSecuritySettings()"
+                                class="w-full px-6 py-3 rounded-lg transition-colors"
+                                style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                                 حفظ الإعدادات
                             </button>
                         </div>
                     </div>
                 </div>
-                
-                <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+
+                <div class="rounded-xl p-6"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <h3 class="text-xl font-bold mb-4">📊 إحصائيات الجلسات</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="text-center p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
@@ -821,14 +919,14 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Accounting Tab ═══════════ -->
             <div id="tab-accounting" class="tab-content hidden">
                 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
                     <h2 class="text-2xl font-bold">💰 المحاسبة والأرباح</h2>
                     <div class="flex flex-wrap items-center gap-3">
                         <!-- Date Filter -->
-                        <select id="accounting-date-filter" 
+                        <select id="accounting-date-filter"
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                             <option value="all">كل الفترات</option>
                             <option value="today">اليوم</option>
@@ -839,14 +937,14 @@
                         </select>
                         <!-- Custom Date Range (hidden by default) -->
                         <div id="custom-date-range" class="hidden flex gap-2">
-                            <input type="date" id="accounting-date-from" 
+                            <input type="date" id="accounting-date-from"
                                 class="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                             <span class="text-gray-400 self-center">إلى</span>
-                            <input type="date" id="accounting-date-to" 
+                            <input type="date" id="accounting-date-to"
                                 class="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
                         <!-- Currency Toggle -->
-                        <select id="accounting-currency" 
+                        <select id="accounting-currency"
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                             <option value="both">عرض الكل</option>
                             <option value="dzd">DZD فقط</option>
@@ -855,27 +953,31 @@
                         <!-- USD Rate -->
                         <div class="flex items-center gap-1 bg-gray-800 rounded-lg px-2 py-1 border border-gray-700">
                             <span class="text-xs text-gray-400">💵 $1 =</span>
-                            <input type="number" id="usd-rate-input" 
+                            <input type="number" id="usd-rate-input"
                                 class="w-16 px-1 py-1 bg-transparent text-yellow-400 font-bold text-sm text-center focus:outline-none"
                                 onchange="updateUsdRate(this.value)">
                             <span class="text-xs text-gray-400">د.ج</span>
                         </div>
                         <!-- Action Buttons -->
-                        <button onclick="openPurchaseModal()" class="px-3 py-2 rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm">
+                        <button onclick="openPurchaseModal()"
+                            class="px-3 py-2 rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm">
                             📥 شراء
                         </button>
-                        <button onclick="openSaleModal()" class="px-3 py-2 rounded-lg transition-colors bg-green-600 hover:bg-green-700 text-white font-bold text-sm">
+                        <button onclick="openSaleModal()"
+                            class="px-3 py-2 rounded-lg transition-colors bg-green-600 hover:bg-green-700 text-white font-bold text-sm">
                             📤 بيع
                         </button>
-                        <button onclick="openExpenseModal()" class="px-3 py-2 rounded-lg transition-colors bg-red-600 hover:bg-red-700 text-white font-bold text-sm">
+                        <button onclick="openExpenseModal()"
+                            class="px-3 py-2 rounded-lg transition-colors bg-red-600 hover:bg-red-700 text-white font-bold text-sm">
                             💸 مصروف
                         </button>
-                        <button onclick="openMonthlyReportModal()" class="px-3 py-2 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700; font-size: 0.875rem;">
+                        <button onclick="openMonthlyReportModal()" class="px-3 py-2 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700; font-size: 0.875rem;">
                             📊 التقرير الشهري
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Accounting Stats Cards - Row 1: المبيعات -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                     <div class="stat-card rounded-xl p-3 text-center">
@@ -899,20 +1001,23 @@
                         <div class="text-gray-400 text-xs">مصاريف شخصية</div>
                     </div>
                 </div>
-                
+
                 <!-- Accounting Stats Cards - Row 2: الأرباح -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                    <div class="stat-card rounded-xl p-3 text-center" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));">
+                    <div class="stat-card rounded-xl p-3 text-center"
+                        style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));">
                         <div class="text-2xl mb-1">💼</div>
                         <div class="text-lg font-bold text-green-400" id="stat-gross-profit">0 د.ج</div>
                         <div class="text-gray-400 text-xs">ربح المنتجات</div>
                     </div>
-                    <div class="stat-card rounded-xl p-3 text-center" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));">
+                    <div class="stat-card rounded-xl p-3 text-center"
+                        style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));">
                         <div class="text-2xl mb-1">🏢</div>
                         <div class="text-lg font-bold text-blue-400" id="stat-net-business-profit">0 د.ج</div>
                         <div class="text-gray-400 text-xs">ربح العمل الصافي</div>
                     </div>
-                    <div class="stat-card rounded-xl p-3 text-center" style="background: linear-gradient(135deg, rgba(255, 213, 111, 0.15), rgba(255, 213, 111, 0.05));">
+                    <div class="stat-card rounded-xl p-3 text-center"
+                        style="background: linear-gradient(135deg, rgba(255, 213, 111, 0.15), rgba(255, 213, 111, 0.05));">
                         <div class="text-2xl mb-1">💰</div>
                         <div class="text-lg font-bold" id="stat-net-profit" style="color: var(--accent);">0 د.ج</div>
                         <div class="text-gray-400 text-xs">المتبقي (بعد المصاريف)</div>
@@ -923,21 +1028,24 @@
                         <div class="text-gray-400 text-xs">هامش الربح</div>
                     </div>
                 </div>
-                
+
                 <!-- Charts Section -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-lg font-bold mb-4">📈 الأرباح عبر الزمن</h3>
                         <canvas id="profit-over-time-chart"></canvas>
                     </div>
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-lg font-bold mb-4">🥧 توزيع الأرباح حسب المنتج</h3>
                         <canvas id="profit-by-product-chart"></canvas>
                     </div>
                 </div>
-                
+
                 <!-- Accounting Table -->
-                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                <div class="rounded-xl overflow-hidden"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm" id="accounting-table">
                             <thead style="background: rgba(255, 255, 255, 0.05);">
@@ -957,7 +1065,8 @@
                                     <td colspan="8" class="text-center py-8 text-gray-400">جاري التحميل...</td>
                                 </tr>
                             </tbody>
-                            <tfoot id="accounting-table-footer" style="background: rgba(255, 213, 111, 0.1); font-weight: bold;">
+                            <tfoot id="accounting-table-footer"
+                                style="background: rgba(255, 213, 111, 0.1); font-weight: bold;">
                                 <tr>
                                     <td class="px-3 py-3 text-right">الإجمالي</td>
                                     <td class="px-2 py-3 text-center" id="footer-total-purchased">0</td>
@@ -972,11 +1081,12 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <!-- Expenses Section -->
                 <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Business Expenses -->
-                    <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-bold text-orange-400">📢 مصاريف العمل</h3>
                             <span class="text-sm text-gray-400" id="business-expenses-total">0 د.ج</span>
@@ -985,9 +1095,10 @@
                             <p class="text-gray-500 text-sm text-center py-4">لا توجد مصاريف</p>
                         </div>
                     </div>
-                    
+
                     <!-- Personal Expenses -->
-                    <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-bold text-purple-400">👤 مصاريف شخصية</h3>
                             <span class="text-sm text-gray-400" id="personal-expenses-total">0 د.ج</span>
@@ -997,11 +1108,12 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Transactions Log -->
                 <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Purchases Log -->
-                    <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-bold text-blue-400">📥 سجل المشتريات</h3>
                             <span class="text-sm text-gray-400" id="purchases-count">0 عملية</span>
@@ -1010,9 +1122,10 @@
                             <p class="text-gray-500 text-sm text-center py-4">لا توجد عمليات شراء</p>
                         </div>
                     </div>
-                    
+
                     <!-- Sales Log -->
-                    <div class="rounded-xl p-4" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-bold text-green-400">📤 سجل المبيعات</h3>
                             <span class="text-sm text-gray-400" id="sales-count">0 عملية</span>
@@ -1022,185 +1135,223 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Suppliers Summary -->
-                <div class="mt-6 rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                <div class="mt-6 rounded-xl p-6"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <h3 class="text-lg font-bold mb-4">🏪 ملخص الموردين</h3>
                     <div id="suppliers-summary" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <p class="text-gray-400">جاري التحميل...</p>
                     </div>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Giveaway Tab ═══════════ -->
             <div id="tab-giveaway" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-6">🎁 إدارة المسابقات (Giveaway)</h2>
-                
+
                 <!-- Giveaway Status Card -->
-                <div id="giveaway-status-card" class="rounded-xl p-6 mb-6" style="background: linear-gradient(135deg, rgba(16, 163, 127, 0.15), rgba(255, 213, 111, 0.15)); border: 2px solid var(--accent);">
+                <div id="giveaway-status-card" class="rounded-xl p-6 mb-6"
+                    style="background: linear-gradient(135deg, rgba(16, 163, 127, 0.15), rgba(255, 213, 111, 0.15)); border: 2px solid var(--accent);">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-xl font-bold flex items-center gap-2">
                             <span class="text-2xl">🎉</span>
                             حالة المسابقة الحالية
                         </h3>
-                        <span id="giveaway-active-badge" class="px-4 py-2 rounded-full text-sm font-bold" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">
+                        <span id="giveaway-active-badge" class="px-4 py-2 rounded-full text-sm font-bold"
+                            style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">
                             ❌ غير مفعلة
                         </span>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                        <div class="rounded-lg p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
-                            <div class="text-2xl font-bold" id="giveaway-prize-display" style="color: var(--accent);">-</div>
+                        <div class="rounded-lg p-4 text-center"
+                            style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <div class="text-2xl font-bold" id="giveaway-prize-display" style="color: var(--accent);">-
+                            </div>
                             <div class="text-gray-400 text-sm">الجائزة</div>
                         </div>
-                        <div class="rounded-lg p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
-                            <div class="text-2xl font-bold" id="giveaway-participants-display" style="color: var(--accent);">0</div>
+                        <div class="rounded-lg p-4 text-center"
+                            style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <div class="text-2xl font-bold" id="giveaway-participants-display"
+                                style="color: var(--accent);">0</div>
                             <div class="text-gray-400 text-sm">المشاركين المؤهلين</div>
                         </div>
-                        <div class="rounded-lg p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
-                            <div class="text-2xl font-bold" id="giveaway-time-remaining" style="color: var(--accent);">-</div>
+                        <div class="rounded-lg p-4 text-center"
+                            style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <div class="text-2xl font-bold" id="giveaway-time-remaining" style="color: var(--accent);">-
+                            </div>
                             <div class="text-gray-400 text-sm">الوقت المتبقي</div>
                         </div>
-                        <div class="rounded-lg p-4 text-center" style="background: var(--card-bg); border: 1px solid var(--border-color);">
-                            <div class="text-2xl font-bold" id="giveaway-end-date-display" style="color: var(--accent);">-</div>
+                        <div class="rounded-lg p-4 text-center"
+                            style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <div class="text-2xl font-bold" id="giveaway-end-date-display"
+                                style="color: var(--accent);">-</div>
                             <div class="text-gray-400 text-sm">تاريخ السحب</div>
                         </div>
                     </div>
-                    
+
                     <!-- Quick Actions -->
                     <div class="flex flex-wrap gap-3">
-                        <button onclick="pickGiveawayWinner()" id="btn-pick-winner" class="px-6 py-3 rounded-lg font-bold transition-all hover:scale-105" style="background: linear-gradient(135deg, #10a37f, #0d8c6a); color: white;" disabled>
+                        <button onclick="pickGiveawayWinner()" id="btn-pick-winner"
+                            class="px-6 py-3 rounded-lg font-bold transition-all hover:scale-105"
+                            style="background: linear-gradient(135deg, #10a37f, #0d8c6a); color: white;" disabled>
                             🎲 اختر الفائز عشوائياً
                         </button>
-                        <button onclick="toggleGiveaway()" id="btn-toggle-giveaway" class="px-6 py-3 rounded-lg font-bold transition-all" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+                        <button onclick="toggleGiveaway()" id="btn-toggle-giveaway"
+                            class="px-6 py-3 rounded-lg font-bold transition-all"
+                            style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
                             ⏸️ إيقاف المسابقة
                         </button>
-                        <a href="reviews.html" target="_blank" class="px-6 py-3 rounded-lg font-bold transition-all" style="background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3);">
+                        <a href="reviews.html" target="_blank" class="px-6 py-3 rounded-lg font-bold transition-all"
+                            style="background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3);">
                             👁️ عرض صفحة التقييمات
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Create/Edit Giveaway Form -->
-                <div class="rounded-xl p-6 mb-6" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                <div class="rounded-xl p-6 mb-6"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color);">
                     <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
                         <span class="text-2xl">✨</span>
                         إنشاء / تعديل مسابقة
                     </h3>
-                    
+
                     <form id="giveaway-form" class="space-y-4">
                         <!-- Prize Selection -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-gray-300 mb-2">🎁 الجائزة (المنتج)</label>
-                                <input type="text" id="giveaway-prize" placeholder="مثال: ChatGPT Business, iPhone 15, Netflix Premium..."
+                                <input type="text" id="giveaway-prize"
+                                    placeholder="مثال: ChatGPT Business, iPhone 15, Netflix Premium..."
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                                 <p class="text-gray-500 text-sm mt-1">اكتب اسم الجائزة كما تريد أن يظهر للمشاركين</p>
                             </div>
                             <div>
                                 <label class="block text-gray-300 mb-2">⏱️ مدة الجائزة</label>
-                                <input type="text" id="giveaway-duration" placeholder="مثال: شهر، 3 أشهر، سنة، مدى الحياة..."
+                                <input type="text" id="giveaway-duration"
+                                    placeholder="مثال: شهر، 3 أشهر، سنة، مدى الحياة..."
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                                 <p class="text-gray-500 text-sm mt-1">اكتب مدة الاشتراك أو الجائزة</p>
                             </div>
                         </div>
-                        
+
                         <!-- Dates -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-gray-300 mb-2">📅 تاريخ بداية قبول التعليقات</label>
-                                <input type="datetime-local" id="giveaway-start-date" 
+                                <input type="datetime-local" id="giveaway-start-date"
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                                 <p class="text-gray-500 text-sm mt-1">التعليقات قبل هذا التاريخ لن تدخل القرعة</p>
                             </div>
                             <div>
                                 <label class="block text-gray-300 mb-2">🏁 تاريخ السحب (نهاية العداد التنازلي)</label>
-                                <input type="datetime-local" id="giveaway-end-date" 
+                                <input type="datetime-local" id="giveaway-end-date"
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                                 <p class="text-gray-500 text-sm mt-1">موعد اختيار الفائز</p>
                             </div>
                         </div>
-                        
+
                         <!-- Quick Duration Buttons -->
                         <div>
                             <label class="block text-gray-300 mb-2">⚡ اختيار سريع لمدة المسابقة</label>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" onclick="setGiveawayDuration(1)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                <button type="button" onclick="setGiveawayDuration(1)"
+                                    class="px-4 py-2 rounded-lg text-sm transition-colors"
+                                    style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
                                     يوم واحد
                                 </button>
-                                <button type="button" onclick="setGiveawayDuration(3)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                <button type="button" onclick="setGiveawayDuration(3)"
+                                    class="px-4 py-2 rounded-lg text-sm transition-colors"
+                                    style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
                                     3 أيام
                                 </button>
-                                <button type="button" onclick="setGiveawayDuration(7)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                <button type="button" onclick="setGiveawayDuration(7)"
+                                    class="px-4 py-2 rounded-lg text-sm transition-colors"
+                                    style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
                                     أسبوع
                                 </button>
-                                <button type="button" onclick="setGiveawayDuration(14)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                <button type="button" onclick="setGiveawayDuration(14)"
+                                    class="px-4 py-2 rounded-lg text-sm transition-colors"
+                                    style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
                                     أسبوعين
                                 </button>
-                                <button type="button" onclick="setGiveawayDuration(30)" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                                <button type="button" onclick="setGiveawayDuration(30)"
+                                    class="px-4 py-2 rounded-lg text-sm transition-colors"
+                                    style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
                                     شهر
                                 </button>
                             </div>
                         </div>
-                        
+
                         <!-- Giveaway Active Toggle -->
-                        <div class="flex items-center gap-4 p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                        <div class="flex items-center gap-4 p-4 rounded-lg"
+                            style="background: rgba(255, 255, 255, 0.05);">
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="giveaway-active" class="sr-only peer">
-                                <div class="w-14 h-7 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500"></div>
+                                <div
+                                    class="w-14 h-7 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500">
+                                </div>
                             </label>
                             <div>
                                 <span class="font-bold">تفعيل المسابقة</span>
                                 <p class="text-gray-400 text-sm">عند التفعيل، ستظهر المسابقة في صفحة التقييمات</p>
                             </div>
                         </div>
-                        
+
                         <!-- Submit Button -->
                         <div class="flex gap-3">
-                            <button type="submit" class="px-8 py-3 rounded-lg font-bold transition-all hover:scale-105" style="background: var(--accent); color: #1b1d32;">
+                            <button type="submit" class="px-8 py-3 rounded-lg font-bold transition-all hover:scale-105"
+                                style="background: var(--accent); color: #1b1d32;">
                                 💾 حفظ إعدادات المسابقة
                             </button>
-                            <button type="button" onclick="resetGiveawayForm()" class="px-6 py-3 rounded-lg font-bold transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                            <button type="button" onclick="resetGiveawayForm()"
+                                class="px-6 py-3 rounded-lg font-bold transition-colors"
+                                style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
                                 🔄 إعادة تعيين
                             </button>
                         </div>
                     </form>
                 </div>
-                
+
                 <!-- Eligible Participants List -->
-                <div class="rounded-xl p-6 mb-6" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                <div class="rounded-xl p-6 mb-6"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color);">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-xl font-bold flex items-center gap-2">
                             <span class="text-2xl">👥</span>
                             المشاركين المؤهلين للقرعة
                         </h3>
-                        <button onclick="loadGiveawayParticipants()" class="px-4 py-2 rounded-lg text-sm transition-colors" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
+                        <button onclick="loadGiveawayParticipants()"
+                            class="px-4 py-2 rounded-lg text-sm transition-colors"
+                            style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);">
                             🔄 تحديث القائمة
                         </button>
                     </div>
-                    
+
                     <div id="giveaway-participants-list" class="space-y-2 max-h-96 overflow-y-auto">
                         <p class="text-gray-400 text-center py-4">جاري التحميل...</p>
                     </div>
                 </div>
-                
+
                 <!-- Previous Winners -->
                 <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color);">
                     <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
                         <span class="text-2xl">🏆</span>
                         الفائزين السابقين
                     </h3>
-                    
+
                     <div id="previous-winners-list" class="space-y-3">
                         <p class="text-gray-400 text-center py-4">لا يوجد فائزين سابقين</p>
                     </div>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Settings Tab ═══════════ -->
             <div id="tab-settings" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-6">⚙️ الإعدادات</h2>
-                
+
                 <div class="max-w-2xl space-y-6">
                     <!-- Change Password -->
                     <div class="bg-gray-800 rounded-xl p-6">
@@ -1208,47 +1359,55 @@
                         <form id="change-password-form" class="space-y-4">
                             <div>
                                 <label class="block text-gray-300 mb-2">كلمة المرور الحالية</label>
-                                <input type="password" id="current-password" 
+                                <input type="password" id="current-password"
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                             </div>
                             <div>
                                 <label class="block text-gray-300 mb-2">كلمة المرور الجديدة</label>
-                                <input type="password" id="new-password" 
+                                <input type="password" id="new-password"
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                             </div>
                             <div>
                                 <label class="block text-gray-300 mb-2">تأكيد كلمة المرور الجديدة</label>
-                                <input type="password" id="confirm-password" 
+                                <input type="password" id="confirm-password"
                                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                             </div>
-                            <button type="submit" 
-                                class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                            <button type="submit" class="px-6 py-3 rounded-lg transition-colors"
+                                style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                                 حفظ كلمة المرور
                             </button>
                         </form>
                     </div>
-                    
+
                     <!-- Quick Links -->
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4" style="color: var(--accent);">🔗 روابط سريعة</h3>
                         <div class="grid grid-cols-2 gap-4">
-                            <a href="index.html" target="_blank" class="p-4 rounded-lg text-center transition-colors" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
+                            <a href="index.html" target="_blank" class="p-4 rounded-lg text-center transition-colors"
+                                style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
                                 🏠 الصفحة الرئيسية
                             </a>
-                            <a href="reviews.html" target="_blank" class="p-4 rounded-lg text-center transition-colors" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
+                            <a href="reviews.html" target="_blank" class="p-4 rounded-lg text-center transition-colors"
+                                style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
                                 ⭐ صفحة التقييمات
                             </a>
-                            <a href="https://console.firebase.google.com" target="_blank" class="p-4 rounded-lg text-center transition-colors" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
+                            <a href="https://console.firebase.google.com" target="_blank"
+                                class="p-4 rounded-lg text-center transition-colors"
+                                style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
                                 🔥 Firebase Console
                             </a>
-                            <a href="https://wa.me/213782125821" target="_blank" class="p-4 rounded-lg text-center transition-colors" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
+                            <a href="https://wa.me/213782125821" target="_blank"
+                                class="p-4 rounded-lg text-center transition-colors"
+                                style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);">
                                 💬 WhatsApp
                             </a>
                         </div>
                     </div>
-                    
+
                     <!-- Info -->
-                    <div class="rounded-xl p-6" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="rounded-xl p-6"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-xl font-bold mb-4" style="color: var(--accent);">ℹ️ معلومات</h3>
                         <div class="space-y-2 text-gray-400">
                             <p>📌 الإصدار: 2.0.0</p>
@@ -1258,7 +1417,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- ═══════════ Debtors Tab ═══════════ -->
             <div id="tab-debtors" class="tab-content hidden">
                 <!-- Header with Title and Add Button -->
@@ -1270,7 +1429,7 @@
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none w-48"
                             oninput="filterDebtorsBySearch(this.value)">
                         <!-- Status Filter -->
-                        <select id="filter-debtor-status" 
+                        <select id="filter-debtor-status"
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none"
                             onchange="filterDebtorsByStatus(this.value)">
                             <option value="all">جميع الحالات</option>
@@ -1279,36 +1438,41 @@
                             <option value="paid">مدفوع بالكامل</option>
                         </select>
                         <!-- Add Debtor Button -->
-                        <button onclick="openDebtorModal()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        <button onclick="openDebtorModal()" class="px-6 py-3 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             ➕ إضافة مدين
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <!-- Total Debt Card -->
-                    <div class="stat-card rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05)); border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <div class="stat-card rounded-xl p-4 text-center"
+                        style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05)); border: 1px solid rgba(239, 68, 68, 0.3);">
                         <div class="text-3xl mb-2">💰</div>
                         <div class="text-2xl font-bold text-red-400" id="stat-total-debt">0 د.ج</div>
                         <div class="text-gray-400 text-sm mt-1">إجمالي الديون المستحقة</div>
                     </div>
                     <!-- Debtors Count Card -->
-                    <div class="stat-card rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3);">
+                    <div class="stat-card rounded-xl p-4 text-center"
+                        style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3);">
                         <div class="text-3xl mb-2">👥</div>
                         <div class="text-2xl font-bold text-blue-400" id="stat-debtors-count">0</div>
                         <div class="text-gray-400 text-sm mt-1">عدد المديونين</div>
                     </div>
                     <!-- Overdue Count Card -->
-                    <div class="stat-card rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.05)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                    <div class="stat-card rounded-xl p-4 text-center"
+                        style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.05)); border: 1px solid rgba(249, 115, 22, 0.3);">
                         <div class="text-3xl mb-2">⚠️</div>
                         <div class="text-2xl font-bold text-orange-400" id="stat-overdue-count">0</div>
                         <div class="text-gray-400 text-sm mt-1">ديون متأخرة (أكثر من 7 أيام)</div>
                     </div>
                 </div>
-                
+
                 <!-- Debtors Table -->
-                <div class="rounded-xl overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                <div class="rounded-xl overflow-hidden"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <div class="overflow-x-auto">
                         <table class="w-full" id="debtors-table">
                             <thead style="background: rgba(255, 255, 255, 0.05);">
@@ -1330,53 +1494,63 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <!-- Debtors Count Info -->
                 <div class="mt-4 text-gray-400 text-center">
                     <span id="debtors-display-count">0</span> مدين
                 </div>
             </div>
-            
+
         </main>
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div id="delete-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-8 max-w-md w-full text-center" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+    <div id="delete-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-8 max-w-md w-full text-center"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
             <div class="text-6xl mb-4">⚠️</div>
             <h3 class="text-2xl font-bold mb-2">تأكيد الحذف</h3>
-            <p class="text-gray-400 mb-6" id="delete-modal-message">هل أنت متأكد من حذف هذا العنصر؟<br>لا يمكن التراجع عن هذا الإجراء.</p>
+            <p class="text-gray-400 mb-6" id="delete-modal-message">هل أنت متأكد من حذف هذا العنصر؟<br>لا يمكن التراجع
+                عن هذا الإجراء.</p>
             <div class="flex gap-4 justify-center">
-                <button onclick="closeDeleteModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                <button onclick="closeDeleteModal()"
+                    class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
                     إلغاء
                 </button>
-                <button onclick="confirmDelete()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--danger); color: white; font-weight: 700;">
+                <button onclick="confirmDelete()" class="px-6 py-3 rounded-lg transition-colors"
+                    style="background: var(--danger); color: white; font-weight: 700;">
                     حذف 🗑️
                 </button>
             </div>
         </div>
     </div>
-    
+
     <!-- Product Modal - Enhanced Version -->
-    <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-6 max-w-4xl w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
+    <div id="product-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-6 max-w-4xl w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold" id="product-modal-title">✏️ تعديل المنتج</h3>
-                <button type="button" onclick="closeProductModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                <button type="button" onclick="closeProductModal()"
+                    class="text-gray-400 hover:text-white text-2xl">&times;</button>
             </div>
             <form id="product-form" class="space-y-4">
-                
+
                 <!-- Section 1: Basic Information - المعلومات الأساسية -->
-                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📝 المعلومات الأساسية</h4>
-                    
+
                     <!-- Product ID (hidden for edit mode) -->
                     <input type="hidden" id="product-id">
-                    
+
                     <!-- Product Names - Multilingual -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div>
-                            <label class="block text-gray-300 mb-2">اسم المنتج (عربي) <span class="text-red-400">*</span></label>
+                            <label class="block text-gray-300 mb-2">اسم المنتج (عربي) <span
+                                    class="text-red-400">*</span></label>
                             <input type="text" id="product-name-ar" required placeholder="اسم المنتج بالعربية"
                                 class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
@@ -1391,10 +1565,10 @@
                                 class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
                     </div>
-                    
+
                     <!-- Legacy fields for backward compatibility -->
                     <input type="hidden" id="product-name">
-                    
+
                     <!-- Category -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -1415,13 +1589,15 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Section 2: Prices - الأسعار -->
-                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">💰 الأسعار</h4>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
-                            <label class="block text-gray-300 mb-2">السعر (د.ج) <span class="text-red-400">*</span></label>
+                            <label class="block text-gray-300 mb-2">السعر (د.ج) <span
+                                    class="text-red-400">*</span></label>
                             <input type="number" id="product-price-dzd" required min="0" step="0.01" placeholder="0"
                                 class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
@@ -1431,7 +1607,8 @@
                                 class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
                         <div>
-                            <label class="block text-gray-300 mb-2">السعر ($) <span class="text-red-400">*</span></label>
+                            <label class="block text-gray-300 mb-2">السعر ($) <span
+                                    class="text-red-400">*</span></label>
                             <input type="number" id="product-price-usd" required min="0" step="0.01" placeholder="0"
                                 class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
@@ -1442,9 +1619,10 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Section 2.5: Cost Prices & Supplier -->
-                <div class="p-4 rounded-lg" style="background: rgba(139, 92, 246, 0.1); border: 1px dashed rgba(139, 92, 246, 0.3);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(139, 92, 246, 0.1); border: 1px dashed rgba(139, 92, 246, 0.3);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📊 معلومات التكلفة (للمحاسبة)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
@@ -1464,28 +1642,39 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Section 3: Availability Status - حالة التوفر -->
-                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📊 حالة التوفر</h4>
                     <div class="flex flex-wrap gap-4">
-                        <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 transition-all availability-option" data-status="available">
-                            <input type="radio" name="product-availability" value="available" checked class="w-5 h-5 accent-green-500">
+                        <label
+                            class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 transition-all availability-option"
+                            data-status="available">
+                            <input type="radio" name="product-availability" value="available" checked
+                                class="w-5 h-5 accent-green-500">
                             <span class="text-green-400 font-bold">✅ متوفر</span>
                         </label>
-                        <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 transition-all availability-option" data-status="unavailable">
-                            <input type="radio" name="product-availability" value="unavailable" class="w-5 h-5 accent-red-500">
+                        <label
+                            class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 transition-all availability-option"
+                            data-status="unavailable">
+                            <input type="radio" name="product-availability" value="unavailable"
+                                class="w-5 h-5 accent-red-500">
                             <span class="text-red-400 font-bold">❌ غير متوفر</span>
                         </label>
-                        <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 transition-all availability-option" data-status="coming_soon">
-                            <input type="radio" name="product-availability" value="coming_soon" class="w-5 h-5 accent-yellow-500">
+                        <label
+                            class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 transition-all availability-option"
+                            data-status="coming_soon">
+                            <input type="radio" name="product-availability" value="coming_soon"
+                                class="w-5 h-5 accent-yellow-500">
                             <span class="text-yellow-400 font-bold">🔜 قريباً</span>
                         </label>
                     </div>
                 </div>
-                
+
                 <!-- Section 4: Media - الوسائط -->
-                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">🖼️ الوسائط (صورة أو فيديو من Imgur)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -1499,7 +1688,8 @@
                         </div>
                         <div>
                             <label class="block text-gray-300 mb-2">معاينة</label>
-                            <div id="product-media-preview" class="w-full h-32 bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden border border-gray-600">
+                            <div id="product-media-preview"
+                                class="w-full h-32 bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden border border-gray-600">
                                 <span class="text-gray-400">معاينة الوسائط</span>
                             </div>
                         </div>
@@ -1510,9 +1700,10 @@
                             class="w-full md:w-1/3 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                     </div>
                 </div>
-                
+
                 <!-- Section 5: Payment Methods - طرق الدفع -->
-                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">💳 طرق الدفع</h4>
                     <div class="flex flex-wrap gap-6">
                         <label class="flex items-center gap-2 cursor-pointer">
@@ -1528,29 +1719,35 @@
                             <span class="text-gray-300">📱 BaridiMob</span>
                         </label>
                     </div>
-                    <p id="payment-warning" class="text-red-400 text-sm mt-2 hidden">⚠️ تحذير: يجب تفعيل طريقة دفع واحدة على الأقل</p>
+                    <p id="payment-warning" class="text-red-400 text-sm mt-2 hidden">⚠️ تحذير: يجب تفعيل طريقة دفع واحدة
+                        على الأقل</p>
                 </div>
-                
+
                 <!-- Section 6: Features - المميزات -->
-                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">⭐ المميزات (حد أقصى 5)</h4>
                     <div id="features-container" class="space-y-2 mb-4">
                         <!-- Features will be added dynamically -->
                     </div>
-                    <button type="button" onclick="addFeatureRow()" id="add-feature-btn" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm">
+                    <button type="button" onclick="addFeatureRow()" id="add-feature-btn"
+                        class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm">
                         ➕ إضافة ميزة
                     </button>
-                    <p id="features-limit-warning" class="text-yellow-400 text-sm mt-2 hidden">⚠️ الحد الأقصى للمميزات هو 5</p>
+                    <p id="features-limit-warning" class="text-yellow-400 text-sm mt-2 hidden">⚠️ الحد الأقصى للمميزات
+                        هو 5</p>
                     <!-- Legacy field for backward compatibility -->
                     <textarea id="product-features" class="hidden"></textarea>
                 </div>
-                
+
                 <!-- Section 7: Descriptions - الوصف -->
-                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📝 الوصف</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-gray-300 mb-2">الوصف (عربي) <span class="text-red-400">*</span></label>
+                            <label class="block text-gray-300 mb-2">الوصف (عربي) <span
+                                    class="text-red-400">*</span></label>
                             <textarea id="product-desc-ar" rows="3" placeholder="وصف المنتج بالعربية"
                                 class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
                         </div>
@@ -1566,20 +1763,23 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Section 8: Sub-Offers - العروض الفرعية (اختياري) -->
-                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">📦 العروض الفرعية (اختياري)</h4>
                     <div id="sub-offers-container" class="space-y-3 mb-4">
                         <p class="text-gray-500 text-sm" id="no-sub-offers-msg">لا توجد عروض فرعية حالياً</p>
                     </div>
-                    <button type="button" onclick="openSubOfferModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm">
+                    <button type="button" onclick="openSubOfferModal()"
+                        class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm">
                         ➕ إضافة عرض فرعي
                     </button>
                 </div>
-                
+
                 <!-- Section 9: Additional Settings - إعدادات إضافية -->
-                <div class="p-4 rounded-lg" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                <div class="p-4 rounded-lg"
+                    style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
                     <h4 class="text-lg font-bold mb-4 flex items-center gap-2">⚙️ إعدادات إضافية</h4>
                     <div class="flex flex-wrap items-center gap-6">
                         <label class="flex items-center gap-2 cursor-pointer">
@@ -1603,17 +1803,20 @@
                         <p class="text-gray-500 text-xs mt-1">استخدم {product_name} لإدراج اسم المنتج تلقائياً</p>
                     </div>
                 </div>
-                
+
                 <!-- Buttons -->
                 <div class="flex gap-4 justify-between pt-4 border-t border-gray-700">
-                    <button type="button" onclick="previewProductChanges()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                    <button type="button" onclick="previewProductChanges()"
+                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
                         👁️ معاينة
                     </button>
                     <div class="flex gap-4">
-                        <button type="button" onclick="closeProductModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                        <button type="button" onclick="closeProductModal()"
+                            class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
                             إلغاء
                         </button>
-                        <button type="submit" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                        <button type="submit" class="px-6 py-3 rounded-lg transition-colors"
+                            style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                             💾 حفظ المنتج
                         </button>
                     </div>
@@ -1621,61 +1824,69 @@
             </form>
         </div>
     </div>
-    
+
     <!-- Product Preview Modal - Enhanced with Language Switching -->
-    <div id="product-preview-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+    <div id="product-preview-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
             <!-- Header with Language Switcher -->
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-bold">👁️ معاينة المنتج</h3>
                 <div class="flex items-center gap-3">
                     <!-- Language Switcher -->
                     <div class="flex gap-1 bg-gray-800 rounded-lg p-1" id="preview-lang-switcher">
-                        <button type="button" onclick="setPreviewLanguage('ar')" 
+                        <button type="button" onclick="setPreviewLanguage('ar')"
                             class="preview-lang-btn px-3 py-1 rounded text-sm transition-colors active" data-lang="ar">
                             العربية
                         </button>
-                        <button type="button" onclick="setPreviewLanguage('en')" 
+                        <button type="button" onclick="setPreviewLanguage('en')"
                             class="preview-lang-btn px-3 py-1 rounded text-sm transition-colors" data-lang="en">
                             English
                         </button>
-                        <button type="button" onclick="setPreviewLanguage('fr')" 
+                        <button type="button" onclick="setPreviewLanguage('fr')"
                             class="preview-lang-btn px-3 py-1 rounded text-sm transition-colors" data-lang="fr">
                             Français
                         </button>
                     </div>
-                    <button onclick="closePreviewModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                    <button onclick="closePreviewModal()"
+                        class="text-gray-400 hover:text-white text-2xl">&times;</button>
                 </div>
             </div>
-            
+
             <!-- Preview Content - Simulates Main Page Product Card -->
             <div id="product-preview-content" class="space-y-4">
                 <!-- Preview content will be populated by JavaScript -->
             </div>
-            
+
             <!-- Action Buttons -->
             <div class="flex gap-4 justify-end pt-4 mt-4 border-t border-gray-700" id="preview-action-buttons">
-                <button type="button" onclick="cancelPreviewChanges()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                <button type="button" onclick="cancelPreviewChanges()"
+                    class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
                     ❌ إلغاء
                 </button>
-                <button type="button" onclick="confirmAndPublish()" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                <button type="button" onclick="confirmAndPublish()" class="px-6 py-3 rounded-lg transition-colors"
+                    style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                     ✅ تأكيد ونشر
                 </button>
             </div>
         </div>
     </div>
-    
+
     <!-- Sub-Offer Modal - نافذة إضافة عرض فرعي -->
-    <div id="sub-offer-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-6 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+    <div id="sub-offer-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-6 max-w-md w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-xl font-bold" id="sub-offer-modal-title">➕ إضافة عرض فرعي</h3>
-                <button type="button" onclick="closeSubOfferModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                <button type="button" onclick="closeSubOfferModal()"
+                    class="text-gray-400 hover:text-white text-2xl">&times;</button>
             </div>
             <form id="sub-offer-form" class="space-y-4">
                 <input type="hidden" id="sub-offer-id">
                 <input type="hidden" id="sub-offer-index">
-                
+
                 <!-- Sub-Offer Names - Multilingual -->
                 <div>
                     <label class="block text-gray-300 mb-2">اسم العرض (عربي) <span class="text-red-400">*</span></label>
@@ -1692,7 +1903,7 @@
                     <input type="text" id="sub-offer-name-fr" placeholder="ex. Compte Partagé"
                         class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                 </div>
-                
+
                 <!-- Sub-Offer Prices -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -1706,42 +1917,49 @@
                             class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                     </div>
                 </div>
-                
+
                 <!-- Sub-Offer Availability -->
                 <div>
                     <label class="block text-gray-300 mb-2">حالة التوفر</label>
                     <div class="flex flex-wrap gap-3">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="sub-offer-availability" value="available" checked class="w-4 h-4 accent-green-500">
+                            <input type="radio" name="sub-offer-availability" value="available" checked
+                                class="w-4 h-4 accent-green-500">
                             <span class="text-green-400 text-sm">✅ متوفر</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="sub-offer-availability" value="unavailable" class="w-4 h-4 accent-red-500">
+                            <input type="radio" name="sub-offer-availability" value="unavailable"
+                                class="w-4 h-4 accent-red-500">
                             <span class="text-red-400 text-sm">❌ غير متوفر</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="sub-offer-availability" value="coming_soon" class="w-4 h-4 accent-yellow-500">
+                            <input type="radio" name="sub-offer-availability" value="coming_soon"
+                                class="w-4 h-4 accent-yellow-500">
                             <span class="text-yellow-400 text-sm">🔜 قريباً</span>
                         </label>
                     </div>
                 </div>
-                
+
                 <!-- Buttons -->
                 <div class="flex gap-4 justify-end pt-4 border-t border-gray-700">
-                    <button type="button" onclick="closeSubOfferModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                    <button type="button" onclick="closeSubOfferModal()"
+                        class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
                         إلغاء
                     </button>
-                    <button type="submit" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                    <button type="submit" class="px-6 py-3 rounded-lg transition-colors"
+                        style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                         💾 حفظ
                     </button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <!-- Promo Code Modal -->
-    <div id="promo-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-8 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+    <div id="promo-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-8 max-w-md w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
             <h3 class="text-2xl font-bold mb-6">إضافة كود خصم</h3>
             <form id="promo-form" class="space-y-4">
                 <div>
@@ -1765,26 +1983,31 @@
                         class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none">
                 </div>
                 <div class="flex gap-4 justify-end">
-                    <button type="button" onclick="closePromoModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                    <button type="button" onclick="closePromoModal()"
+                        class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
                         إلغاء
                     </button>
-                    <button type="submit" class="px-6 py-3 rounded-lg transition-colors" style="background: var(--accent); color: #1b1d32; font-weight: 700;">
+                    <button type="submit" class="px-6 py-3 rounded-lg transition-colors"
+                        style="background: var(--accent); color: #1b1d32; font-weight: 700;">
                         حفظ
                     </button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <!-- Order Details Modal -->
-    <div id="order-details-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-8 max-w-2xl w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y-auto;">
+    <div id="order-details-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-8 max-w-2xl w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y-auto;">
             <h3 class="text-2xl font-bold mb-6">تفاصيل الطلب</h3>
             <div id="order-details-content" class="space-y-4">
                 <!-- Content will be populated by JavaScript -->
             </div>
             <div class="flex gap-4 justify-end mt-6">
-                <button onclick="closeOrderDetailsModal()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                <button onclick="closeOrderDetailsModal()"
+                    class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
                     إغلاق
                 </button>
             </div>
@@ -1792,56 +2015,71 @@
     </div>
 
     <!-- Purchase Modal (تسجيل شراء من المورد) -->
-    <div id="purchase-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-5 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
+    <div id="purchase-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-5 max-w-md w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
             <h3 class="text-xl font-bold mb-4 text-blue-400">📥 تسجيل شراء من المورد</h3>
             <form id="purchase-form" class="space-y-3">
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">المنتج <span class="text-red-400">*</span></label>
-                    <select id="purchase-product" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    <select id="purchase-product" required
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                         <option value="">-- اختر المنتج --</option>
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-gray-300 mb-1 text-sm">الكمية المشتراة <span class="text-red-400">*</span></label>
-                        <input type="number" id="purchase-quantity" required min="1" value="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <label class="block text-gray-300 mb-1 text-sm">الكمية المشتراة <span
+                                class="text-red-400">*</span></label>
+                        <input type="number" id="purchase-quantity" required min="1" value="1"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                     <div>
-                        <label class="block text-gray-300 mb-1 text-sm">سعر الوحدة <span class="text-red-400">*</span></label>
-                        <input type="number" id="purchase-unit-price" required min="0" step="0.01" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <label class="block text-gray-300 mb-1 text-sm">سعر الوحدة <span
+                                class="text-red-400">*</span></label>
+                        <input type="number" id="purchase-unit-price" required min="0" step="0.01"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">العملة</label>
-                        <select id="purchase-currency" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <select id="purchase-currency"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                             <option value="DZD">🇩🇿 DZD</option>
                             <option value="USD">🇺🇸 USD</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">الإجمالي</label>
-                        <input type="text" id="purchase-total" readonly class="w-full px-3 py-2 bg-gray-600 border border-gray-600 rounded-lg text-sm text-yellow-400 font-bold">
+                        <input type="text" id="purchase-total" readonly
+                            class="w-full px-3 py-2 bg-gray-600 border border-gray-600 rounded-lg text-sm text-yellow-400 font-bold">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">اسم المورد</label>
-                        <input type="text" id="purchase-supplier" placeholder="من أين اشتريت؟" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <input type="text" id="purchase-supplier" placeholder="من أين اشتريت؟"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">📅 تاريخ الشراء</label>
-                        <input type="date" id="purchase-date" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <input type="date" id="purchase-date"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                 </div>
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">ملاحظات</label>
-                    <input type="text" id="purchase-notes" placeholder="ملاحظات..." class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    <input type="text" id="purchase-notes" placeholder="ملاحظات..."
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                 </div>
                 <div class="flex gap-3 pt-3 border-t border-gray-700">
-                    <button type="button" onclick="closePurchaseModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
-                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-bold">💾 حفظ</button>
+                    <button type="button" onclick="closePurchaseModal()"
+                        class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-bold">💾
+                        حفظ</button>
                 </div>
             </form>
         </div>
@@ -1849,36 +2087,43 @@
 
     <!-- Sale Modal (تسجيل بيع للعميل) -->
     <div id="sale-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-5 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
+        <div class="rounded-2xl p-5 max-w-md w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
             <h3 class="text-xl font-bold mb-4 text-green-400">📤 تسجيل بيع للعميل</h3>
             <form id="sale-form" class="space-y-3">
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">المنتج <span class="text-red-400">*</span></label>
-                    <select id="sale-product" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    <select id="sale-product" required
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                         <option value="">-- اختر المنتج --</option>
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">الكمية</label>
-                        <input type="number" id="sale-quantity" value="1" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <input type="number" id="sale-quantity" value="1" min="1"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                     <div>
-                        <label class="block text-gray-300 mb-1 text-sm">سعر البيع <span class="text-red-400">*</span></label>
-                        <input type="number" id="sale-amount" required min="0" step="0.01" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <label class="block text-gray-300 mb-1 text-sm">سعر البيع <span
+                                class="text-red-400">*</span></label>
+                        <input type="number" id="sale-amount" required min="0" step="0.01"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">العملة</label>
-                        <select id="sale-currency" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <select id="sale-currency"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                             <option value="DZD">🇩🇿 DZD</option>
                             <option value="USD">🇺🇸 USD</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">طريقة الدفع</label>
-                        <select id="sale-payment-method" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <select id="sale-payment-method"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                             <option value="BaridiMob">BaridiMob</option>
                             <option value="USDT">USDT</option>
                             <option value="Binance">Binance</option>
@@ -1890,39 +2135,48 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">اسم العميل</label>
-                        <input type="text" id="sale-customer-name" placeholder="المشتري" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <input type="text" id="sale-customer-name" placeholder="المشتري"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">التواصل</label>
-                        <input type="text" id="sale-customer-contact" placeholder="هاتف/بريد" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <input type="text" id="sale-customer-contact" placeholder="هاتف/بريد"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">📅 تاريخ البيع</label>
-                        <input type="date" id="sale-date" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <input type="date" id="sale-date"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">ملاحظات</label>
-                        <input type="text" id="sale-notes" placeholder="ملاحظات..." class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <input type="text" id="sale-notes" placeholder="ملاحظات..."
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                 </div>
                 <div class="flex gap-3 pt-3 border-t border-gray-700">
-                    <button type="button" onclick="closeSaleModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
-                    <button type="submit" class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm font-bold">💾 حفظ</button>
+                    <button type="button" onclick="closeSaleModal()"
+                        class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm font-bold">💾
+                        حفظ</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Expense Modal (تسجيل مصروف) -->
-    <div id="expense-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-5 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto;">
+    <div id="expense-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-5 max-w-md w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto;">
             <h3 class="text-xl font-bold mb-4 text-red-400">💸 تسجيل مصروف جديد</h3>
             <form id="expense-form" class="space-y-3">
                 <!-- Expense Type -->
                 <div class="grid grid-cols-2 gap-2">
-                    <button type="button" onclick="setExpenseType('business')" id="expense-type-business" 
+                    <button type="button" onclick="setExpenseType('business')" id="expense-type-business"
                         class="px-4 py-3 rounded-lg border-2 border-orange-500 bg-orange-500/20 text-orange-400 font-bold text-sm transition-all">
                         🏢 مصاريف العمل
                     </button>
@@ -1932,11 +2186,12 @@
                     </button>
                 </div>
                 <input type="hidden" id="expense-type" value="business">
-                
+
                 <!-- Category -->
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">الفئة <span class="text-red-400">*</span></label>
-                    <select id="expense-category" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                    <select id="expense-category" required
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                         <!-- Business Categories -->
                         <optgroup label="📢 مصاريف العمل" id="business-categories">
                             <option value="ads_facebook">📘 إعلانات Facebook</option>
@@ -1964,49 +2219,56 @@
                         </optgroup>
                     </select>
                 </div>
-                
+
                 <!-- Amount -->
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-gray-300 mb-1 text-sm">المبلغ <span class="text-red-400">*</span></label>
-                        <input type="number" id="expense-amount" required min="0" step="0.01" 
+                        <label class="block text-gray-300 mb-1 text-sm">المبلغ <span
+                                class="text-red-400">*</span></label>
+                        <input type="number" id="expense-amount" required min="0" step="0.01"
                             class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">العملة</label>
-                        <select id="expense-currency" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <select id="expense-currency"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                             <option value="DZD">🇩🇿 DZD</option>
                             <option value="USD">🇺🇸 USD</option>
                         </select>
                     </div>
                 </div>
-                
+
                 <!-- Description -->
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">الوصف</label>
-                    <input type="text" id="expense-description" placeholder="وصف المصروف..." 
+                    <input type="text" id="expense-description" placeholder="وصف المصروف..."
                         class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                 </div>
-                
+
                 <!-- Date -->
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">التاريخ</label>
-                    <input type="date" id="expense-date" 
+                    <input type="date" id="expense-date"
                         class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                 </div>
-                
+
                 <!-- Buttons -->
                 <div class="flex gap-3 pt-3 border-t border-gray-700">
-                    <button type="button" onclick="closeExpenseModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
-                    <button type="submit" class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-bold">💾 حفظ</button>
+                    <button type="button" onclick="closeExpenseModal()"
+                        class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-bold">💾
+                        حفظ</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Monthly Report Modal -->
-    <div id="monthly-report-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-6 max-w-4xl w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); max-height: 95vh; overflow-y: auto;">
+    <div id="monthly-report-modal"
+        class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-6 max-w-4xl w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); max-height: 95vh; overflow-y: auto;">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold">📊 التقرير الشهري</h3>
                 <div class="flex gap-2">
@@ -2026,13 +2288,15 @@
                     </select>
                     <select id="report-year" class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                     </select>
-                    <button onclick="generateMonthlyReport()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-bold">
+                    <button onclick="generateMonthlyReport()"
+                        class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-bold">
                         🔄 تحديث
                     </button>
-                    <button onclick="closeMonthlyReportModal()" class="px-3 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg">✕</button>
+                    <button onclick="closeMonthlyReportModal()"
+                        class="px-3 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg">✕</button>
                 </div>
             </div>
-            
+
             <!-- Report Content -->
             <div id="monthly-report-content" class="space-y-6">
                 <!-- Summary Cards -->
@@ -2054,55 +2318,62 @@
                         <div class="text-gray-400 text-sm">👤 مصاريف شخصية</div>
                     </div>
                 </div>
-                
+
                 <!-- Profit Summary -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05)); border: 1px solid rgba(34, 197, 94, 0.3);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05)); border: 1px solid rgba(34, 197, 94, 0.3);">
                         <div class="text-3xl mb-2">💼</div>
                         <div class="text-green-400 text-2xl font-bold" id="report-gross-profit">0 د.ج</div>
                         <div class="text-gray-400 text-sm">ربح المنتجات</div>
                         <div class="text-gray-500 text-xs mt-1">الإيرادات - تكلفة المنتجات</div>
                     </div>
-                    <div class="rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3);">
                         <div class="text-3xl mb-2">🏢</div>
                         <div class="text-blue-400 text-2xl font-bold" id="report-net-business">0 د.ج</div>
                         <div class="text-gray-400 text-sm">ربح العمل الصافي</div>
                         <div class="text-gray-500 text-xs mt-1">بعد خصم مصاريف العمل</div>
                     </div>
-                    <div class="rounded-xl p-4 text-center" style="background: linear-gradient(135deg, rgba(255, 213, 111, 0.2), rgba(255, 213, 111, 0.05)); border: 1px solid rgba(255, 213, 111, 0.4);">
+                    <div class="rounded-xl p-4 text-center"
+                        style="background: linear-gradient(135deg, rgba(255, 213, 111, 0.2), rgba(255, 213, 111, 0.05)); border: 1px solid rgba(255, 213, 111, 0.4);">
                         <div class="text-3xl mb-2">💰</div>
                         <div class="text-2xl font-bold" id="report-net-total" style="color: var(--accent);">0 د.ج</div>
                         <div class="text-gray-400 text-sm">المتبقي (الادخار)</div>
                         <div class="text-gray-500 text-xs mt-1">بعد كل المصاريف</div>
                     </div>
                 </div>
-                
+
                 <!-- Detailed Breakdown -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Sales Breakdown -->
-                    <div class="rounded-xl p-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4"
+                        style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
                         <h4 class="text-lg font-bold mb-3 text-green-400">💵 تفاصيل المبيعات</h4>
                         <div id="report-sales-breakdown" class="space-y-2 max-h-48 overflow-y-auto">
                             <p class="text-gray-500 text-sm">جاري التحميل...</p>
                         </div>
                     </div>
-                    
+
                     <!-- Expenses Breakdown -->
-                    <div class="rounded-xl p-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4"
+                        style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
                         <h4 class="text-lg font-bold mb-3 text-red-400">💸 تفاصيل المصاريف</h4>
                         <div id="report-expenses-breakdown" class="space-y-2 max-h-48 overflow-y-auto">
                             <p class="text-gray-500 text-sm">جاري التحميل...</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Charts -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="rounded-xl p-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4"
+                        style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
                         <h4 class="text-lg font-bold mb-3">📊 توزيع الإيرادات</h4>
                         <canvas id="report-revenue-chart"></canvas>
                     </div>
-                    <div class="rounded-xl p-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                    <div class="rounded-xl p-4"
+                        style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
                         <h4 class="text-lg font-bold mb-3">📉 توزيع المصاريف</h4>
                         <canvas id="report-expenses-chart"></canvas>
                     </div>
@@ -2112,8 +2383,10 @@
     </div>
 
     <!-- Supplier Modal (إضافة/تعديل مورد) -->
-    <div id="supplier-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-5 max-w-lg w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
+    <div id="supplier-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-5 max-w-lg w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-bold text-amber-400">📦 إضافة مورد/مصدر سلعة</h3>
                 <button onclick="closeSupplierModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -2121,31 +2394,35 @@
             <form id="supplier-form" onsubmit="saveSupplier(event)" class="space-y-4">
                 <input type="hidden" id="supplier-id" value="">
                 <div>
-                    <label class="block text-gray-300 mb-1 text-sm">اسم السلعة/المنتج <span class="text-red-400">*</span></label>
-                    <input type="text" id="supplier-product-name" required placeholder="مثال: ChatGPT Plus Account" 
+                    <label class="block text-gray-300 mb-1 text-sm">اسم السلعة/المنتج <span
+                            class="text-red-400">*</span></label>
+                    <input type="text" id="supplier-product-name" required placeholder="مثال: ChatGPT Plus Account"
                         class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-amber-500 focus:outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-gray-300 mb-1 text-sm">المصدر/الدولة <span class="text-red-400">*</span></label>
-                        <input type="text" id="supplier-source" required placeholder="مثال: أمريكا، تركيا..." 
+                        <label class="block text-gray-300 mb-1 text-sm">المصدر/الدولة <span
+                                class="text-red-400">*</span></label>
+                        <input type="text" id="supplier-source" required placeholder="مثال: أمريكا، تركيا..."
                             class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-amber-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">اسم المورد</label>
-                        <input type="text" id="supplier-name" placeholder="مثال: محمد، شركة XYZ..." 
+                        <input type="text" id="supplier-name" placeholder="مثال: محمد، شركة XYZ..."
                             class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-amber-500 focus:outline-none">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-gray-300 mb-1 text-sm">سعر الشراء <span class="text-red-400">*</span></label>
-                        <input type="number" id="supplier-price" required step="0.01" min="0" placeholder="0.00" 
+                        <label class="block text-gray-300 mb-1 text-sm">سعر الشراء <span
+                                class="text-red-400">*</span></label>
+                        <input type="number" id="supplier-price" required step="0.01" min="0" placeholder="0.00"
                             class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-amber-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">العملة</label>
-                        <select id="supplier-currency" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
+                        <select id="supplier-currency"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm">
                             <option value="DZD">🇩🇿 DZD</option>
                             <option value="USD" selected>🇺🇸 USD</option>
                             <option value="EUR">🇪🇺 EUR</option>
@@ -2154,83 +2431,93 @@
                 </div>
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">طريقة التواصل</label>
-                    <input type="text" id="supplier-contact" placeholder="رقم الهاتف، البريد، حساب تيليجرام..." 
+                    <input type="text" id="supplier-contact" placeholder="رقم الهاتف، البريد، حساب تيليجرام..."
                         class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-amber-500 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">ملاحظات للتذكير</label>
-                    <textarea id="supplier-notes" rows="3" placeholder="أي معلومات إضافية تريد تذكرها..." 
+                    <textarea id="supplier-notes" rows="3" placeholder="أي معلومات إضافية تريد تذكرها..."
                         class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-amber-500 focus:outline-none resize-none"></textarea>
                 </div>
                 <div class="flex gap-3 pt-3 border-t border-gray-700">
-                    <button type="button" onclick="closeSupplierModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
-                    <button type="submit" class="flex-1 px-4 py-2 bg-amber-600 hover:bg-amber-700 rounded-lg text-sm font-bold">💾 حفظ</button>
+                    <button type="button" onclick="closeSupplierModal()"
+                        class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm">إلغاء</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-amber-600 hover:bg-amber-700 rounded-lg text-sm font-bold">💾
+                        حفظ</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Debtor Modal (إضافة/تعديل مدين) -->
-    <div id="debtor-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-5 max-w-md w-full" style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
+    <div id="debtor-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="rounded-2xl p-5 max-w-md w-full"
+            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-bold text-purple-400" id="debtor-modal-title">💳 إضافة مدين جديد</h3>
                 <button onclick="closeDebtorModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
             </div>
             <form id="debtor-form" onsubmit="saveDebtor(event)" class="space-y-4">
                 <input type="hidden" id="debtor-id" value="">
-                
+
                 <!-- Name Field (Required) -->
                 <div>
-                    <label class="block text-gray-300 mb-1 text-sm">اسم المدين <span class="text-red-400">*</span></label>
-                    <input type="text" id="debtor-name" required placeholder="أدخل اسم المدين" 
+                    <label class="block text-gray-300 mb-1 text-sm">اسم المدين <span
+                            class="text-red-400">*</span></label>
+                    <input type="text" id="debtor-name" required placeholder="أدخل اسم المدين"
                         class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
                 </div>
-                
+
                 <!-- Phone Field -->
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">رقم الهاتف</label>
-                    <input type="tel" id="debtor-phone" placeholder="رقم الهاتف للتواصل" 
+                    <input type="tel" id="debtor-phone" placeholder="رقم الهاتف للتواصل"
                         class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
                 </div>
-                
+
                 <!-- Product Dropdown -->
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">المنتج</label>
-                    <select id="debtor-product" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                    <select id="debtor-product"
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
                         <option value="">-- اختر المنتج --</option>
                     </select>
                 </div>
-                
+
                 <!-- Amount and Currency -->
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-gray-300 mb-1 text-sm">المبلغ المستحق <span class="text-red-400">*</span></label>
-                        <input type="number" id="debtor-amount" required step="0.01" min="0.01" placeholder="0.00" 
+                        <label class="block text-gray-300 mb-1 text-sm">المبلغ المستحق <span
+                                class="text-red-400">*</span></label>
+                        <input type="number" id="debtor-amount" required step="0.01" min="0.01" placeholder="0.00"
                             class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-gray-300 mb-1 text-sm">العملة</label>
-                        <select id="debtor-currency" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                        <select id="debtor-currency"
+                            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
                             <option value="DZD">🇩🇿 DZD</option>
                             <option value="USD">🇺🇸 USD</option>
                         </select>
                     </div>
                 </div>
-                
+
                 <!-- Notes Field -->
                 <div>
                     <label class="block text-gray-300 mb-1 text-sm">ملاحظات</label>
-                    <textarea id="debtor-notes" rows="2" placeholder="أي ملاحظات إضافية..." 
+                    <textarea id="debtor-notes" rows="2" placeholder="أي ملاحظات إضافية..."
                         class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-purple-500 focus:outline-none resize-none"></textarea>
                 </div>
-                
+
                 <!-- Payment Recording Section (Edit Mode Only) -->
                 <div id="debtor-payment-section" class="hidden border-t border-gray-700 pt-4 mt-4">
                     <h4 class="text-md font-bold text-green-400 mb-3">💵 تسجيل دفعة</h4>
-                    
+
                     <!-- Remaining Amount Display -->
-                    <div class="rounded-lg p-3 mb-3" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <div class="rounded-lg p-3 mb-3"
+                        style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
                         <div class="flex justify-between items-center">
                             <span class="text-gray-300 text-sm">المبلغ المتبقي:</span>
                             <span class="text-red-400 font-bold" id="debtor-remaining-amount">0</span>
@@ -2240,47 +2527,52 @@
                             <span class="text-green-400 text-sm" id="debtor-paid-amount">0</span>
                         </div>
                     </div>
-                    
+
                     <!-- Payment Amount Input -->
                     <div class="flex gap-3">
                         <div class="flex-1">
-                            <input type="number" id="debtor-payment-amount" step="0.01" min="0.01" placeholder="مبلغ الدفعة" 
+                            <input type="number" id="debtor-payment-amount" step="0.01" min="0.01"
+                                placeholder="مبلغ الدفعة"
                                 class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm focus:border-green-500 focus:outline-none">
                         </div>
-                        <button type="button" onclick="recordDebtorPayment()" 
+                        <button type="button" onclick="recordDebtorPayment()"
                             class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm font-bold transition-colors">
                             💵 تسجيل دفعة
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Form Buttons -->
                 <div class="flex gap-3 pt-3 border-t border-gray-700">
-                    <button type="button" onclick="closeDebtorModal()" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm transition-colors">إلغاء</button>
-                    <button type="submit" class="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-bold transition-colors">💾 حفظ</button>
+                    <button type="button" onclick="closeDebtorModal()"
+                        class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm transition-colors">إلغاء</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-bold transition-colors">💾
+                        حفظ</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300">
+    <div id="toast"
+        class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300">
         <span id="toast-message">تم بنجاح!</span>
     </div>
 
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { 
-            getFirestore, 
-            collection, 
-            getDocs, 
+        import {
+            getFirestore,
+            collection,
+            getDocs,
             getDoc,
             addDoc,
             updateDoc,
-            deleteDoc, 
-            doc, 
-            query, 
+            deleteDoc,
+            doc,
+            query,
             orderBy,
             where,
             setDoc,
@@ -2301,59 +2593,59 @@
 
         // Make Firebase available globally
         window.db = db;
-        window.firebaseModules = { 
-            collection, 
-            getDocs, 
+        window.firebaseModules = {
+            collection,
+            getDocs,
             getDoc,
             addDoc,
             updateDoc,
-            deleteDoc, 
-            doc, 
-            query, 
+            deleteDoc,
+            doc,
+            query,
             orderBy,
             where,
             setDoc,
             serverTimestamp
         };
-        
+
         // Signal that Firebase is ready
         window.dispatchEvent(new Event('firebaseReady'));
     </script>
-    
+
     <!-- Chart.js for Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    
+
     <!-- Currency Config for Products -->
     <script src="currency-config.js"></script>
-    
+
     <!-- Admin Product Management UI -->
     <script src="admin-product-model.js"></script>
     <script src="admin-validation.js"></script>
     <script src="admin-product-controller.js" type="module"></script>
     <script src="admin-product-ui.js"></script>
-    
+
     <!-- Data Migration Script -->
     <script src="data-migration.js"></script>
-    
+
     <!-- Migration Function -->
     <script>
         // دالة تشغيل ترحيل البيانات
         async function runDataMigration() {
             const btn = document.getElementById('migration-btn');
-            
+
             if (!window.db || !window.firebaseModules) {
                 alert('❌ Firebase غير متاح. يرجى الانتظار حتى يتم تحميل Firebase.');
                 return;
             }
-            
+
             // التحقق من وجود منتجات مسبقاً
             if (window.DataMigration) {
                 try {
                     btn.disabled = true;
                     btn.innerHTML = '⏳ جاري الترحيل...';
-                    
+
                     const existingIds = await window.DataMigration.checkExistingProducts(window.db, window.firebaseModules);
-                    
+
                     if (existingIds.length > 0) {
                         const confirmOverwrite = confirm(`⚠️ يوجد ${existingIds.length} منتج في Firebase.\n\nهل تريد إعادة ترحيل البيانات؟ (سيتم تحديث المنتجات الموجودة)`);
                         if (!confirmOverwrite) {
@@ -2362,13 +2654,13 @@
                             return;
                         }
                     }
-                    
+
                     // تشغيل الترحيل
                     const results = await window.DataMigration.migrateAllProducts(window.db, window.firebaseModules);
-                    
+
                     btn.disabled = false;
                     btn.innerHTML = '🔄 ترحيل البيانات';
-                    
+
                     if (results.failed === 0) {
                         alert(`✅ تم ترحيل ${results.success} منتج بنجاح!`);
                         // إعادة تحميل جدول المنتجات
@@ -2378,7 +2670,7 @@
                     } else {
                         alert(`⚠️ تم ترحيل ${results.success} منتج.\n❌ فشل ترحيل ${results.failed} منتج.\n\nالأخطاء:\n${results.errors.map(e => e.productId + ': ' + e.error).join('\n')}`);
                     }
-                    
+
                 } catch (error) {
                     btn.disabled = false;
                     btn.innerHTML = '🔄 ترحيل البيانات';
@@ -2390,8 +2682,8 @@
             }
         }
     </script>
-    
+
     <script src="admin.js"></script>
 </body>
-</html>
 
+</html>

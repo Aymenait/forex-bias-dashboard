@@ -8,6 +8,49 @@
 // before this script in the HTML file via script tags
 
 /**
+ * Load product prices and configurations from Firebase or API
+ * This allows for real-time price updates without code changes
+ */
+async function loadLivePrices() {
+  if (typeof PRODUCTS === 'undefined') return;
+
+  try {
+    // Attempt to get prices from Firebase if it's initialized
+    if (window.db && window.firebaseModules) {
+      const { collection, getDocs } = window.firebaseModules;
+      const querySnapshot = await getDocs(collection(window.db, 'products'));
+
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach((doc) => {
+          const remoteProduct = doc.data();
+          const productId = doc.id;
+
+          if (PRODUCTS[productId]) {
+            // Update local product with remote data
+            // We only update specific fields to avoid breaking the local config structure
+            if (remoteProduct.price_dzd) PRODUCTS[productId].price_dzd = remoteProduct.price_dzd;
+            if (remoteProduct.price_usd) PRODUCTS[productId].price_usd = remoteProduct.price_usd;
+            if (remoteProduct.durations) {
+              // Merge durations
+              PRODUCTS[productId].durations = {
+                ...PRODUCTS[productId].durations,
+                ...remoteProduct.durations
+              };
+            }
+            if (remoteProduct.active !== undefined) PRODUCTS[productId].active = remoteProduct.active;
+
+            console.log(`✅ Updated ${productId} from Firebase`);
+          }
+        });
+      }
+    }
+  } catch (error) {
+    console.error('⚠️ Could not load live prices:', error);
+    // Fall back to local PRODUCTS config (already loaded)
+  }
+}
+
+/**
  * Main initialization function for the international expansion system
  * Loads preferences, detects location, initializes UI, and updates prices/payment methods
  */
@@ -47,20 +90,24 @@ async function initInternationalExpansion() {
     // Step 4: Initialize Currency Selector UI
     initializeCurrencySelector(activeCurrency, currencyManager, paymentManager);
 
-    // Step 5: Sync DOM with PRODUCTS config (Ensure all cards have correct prices from config)
+    // Step 5: Load Live Prices from Firebase (Requirement: Live Updates)
+    await loadLivePrices();
+    console.log('☁️ Loaded live prices from Firebase');
+
+    // Step 6: Sync DOM with PRODUCTS config (Ensure all cards have correct prices from config)
     syncDOMWithConfig();
     console.log('🔄 Synced DOM with PRODUCTS config');
 
-    // Step 6: Update all prices on the page with initial currency
+    // Step 7: Update all prices on the page with initial currency
     currencyManager.updateAllPrices(activeCurrency);
     console.log(`💰 Updated all prices to ${activeCurrency}`);
 
-    // Step 7: Update payment methods for initial currency
+    // Step 8: Update payment methods for initial currency
     paymentManager.setCurrency(activeCurrency);
     paymentManager.updateAllPaymentButtons(activeCurrency);
     console.log(`💳 Updated payment methods for ${activeCurrency}`);
 
-    // Step 8: Store managers globally for access by other scripts
+    // Step 9: Store managers globally for access by other scripts
     window.currencyManager = currencyManager;
     window.paymentManager = paymentManager;
 
@@ -177,6 +224,36 @@ function syncDOMWithConfig() {
         }
         btn.setAttribute('data-product', product.name);
       });
+
+      // Update duration buttons visibility/status
+      if (product.durations) {
+        Object.entries(product.durations).forEach(([key, durConfig]) => {
+          const isAvailable = durConfig.available !== false;
+          const btn = card.querySelector(`[data-duration="${key}"], [data-type="${key}"]`);
+          const priceContainer = card.querySelector(`[id*="-prices-${key}"]`);
+
+          if (btn) {
+            if (!isAvailable) {
+              btn.style.display = 'none';
+              // If the hidden button was active, we should try to switch to another active one
+              if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                const firstAvailable = Object.entries(product.durations).find(([k, v]) => v.available !== false);
+                if (firstAvailable) {
+                  const nextBtn = card.querySelector(`[data-duration="${firstAvailable[0]}"], [data-type="${firstAvailable[0]}"]`);
+                  if (nextBtn) nextBtn.click();
+                }
+              }
+            } else {
+              btn.style.display = ''; // Restore default
+            }
+          }
+
+          if (priceContainer) {
+            priceContainer.style.opacity = isAvailable ? '1' : '0.5';
+          }
+        });
+      }
 
       // Update order button
       const orderBtn = card.querySelector('.order-btn');
