@@ -673,19 +673,61 @@
                     <!-- Netflix Premium -->
                     <div class="product-card fade-in">
                         <div class="product-image"
-                            style="background-image: url('https://img.youtube.com/vi/GV3HUDMQ-F8/maxresdefault.jpg'); background-size: cover; background-position: center;"
+                            style="background-image: url('https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif'); background-size: cover; background-position: center;"
                             role="img" aria-label="Netflix Premium">
                         </div>
                         <h3>Netflix Premium</h3>
-                        <p class="description" data-i18n="product.netflix.desc">حساب مشترك مع بروفايل خاص - ضمان 4 أشهر
-                            كاملة</p>
-                        <div class="price-tag" data-price-dzd="1500" data-price-usd="6">1500 د.ج</div>
-                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.netflix.duration">4
-                                أشهر</span></span>
+                        <p class="description" data-i18n="product.netflix.desc">استمتع بأفضل الأفلام والمسلسلات بجودة 4K
+                            HDR ومحتوى حصري.</p>
 
-                        <div class="payment-methods-row">
-                            <button class="payment-btn-compact crypto-pay-btn" data-product="Netflix Premium"
-                                data-price="1500" data-price-usd="6">
+                        <!-- Duration Selection -->
+                        <div class="netflix-durations" style="margin: 16px 0;">
+                            <p
+                                style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                <span data-i18n="product.cursor.selectType">اختر المدة:</span>
+                            </p>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="netflix-type-btn active" data-type="1month"
+                                    onclick="selectNetflixType('1month')"
+                                    style="flex: 1; padding: 8px; border: 2px solid #E50914; background: rgba(229, 9, 20, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                    <span data-i18n="product.chatgpt.oneMonth">شهر واحد</span>
+                                </button>
+                                <button class="netflix-type-btn" data-type="3months"
+                                    onclick="selectNetflixType('3months')"
+                                    style="flex: 1; padding: 8px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                    <span data-i18n="product.adobe.3months">3 أشهر</span>
+                                </button>
+                                <button class="netflix-type-btn" data-type="12months"
+                                    onclick="selectNetflixType('12months')"
+                                    style="flex: 1; padding: 8px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                    <span data-i18n="product.adobe.12months">12 شهر</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Prices -->
+                        <div class="netflix-prices" id="netflix-prices-1month">
+                            <div class="price-tag" data-price-dzd="600" data-price-usd="2.5">600 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.chatgpt.oneMonth">شهر واحد</span></span>
+                        </div>
+
+                        <div class="netflix-prices" id="netflix-prices-3months" style="display: none;">
+                            <div class="price-tag" data-price-dzd="1200" data-price-usd="4.5">1200 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.adobe.3months">3
+                                    أشهر</span></span>
+                        </div>
+
+                        <div class="netflix-prices" id="netflix-prices-12months" style="display: none;">
+                            <div class="price-tag" data-price-dzd="2000" data-price-usd="8">2000 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.adobe.12months">12
+                                    شهر</span></span>
+                        </div>
+
+                        <div style="margin-top: 15px; margin-bottom: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
+                            <button class="payment-btn-compact crypto-btn" data-product="Netflix Premium"
+                                data-price="600" data-price-usd="2.5" id="netflix-usdt-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
@@ -693,7 +735,7 @@
                                 <span>USDT</span>
                             </button>
                             <button class="payment-btn-compact redotpay-btn" data-product="Netflix Premium"
-                                data-price="1500" data-price-usd="6">
+                                data-price="600" data-price-usd="2.5" id="netflix-redotpay-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
@@ -701,7 +743,7 @@
                                 <span>RedotPay</span>
                             </button>
                             <button class="payment-btn-compact baridimob-btn" data-product="Netflix Premium"
-                                data-price="1500" data-price-usd="6">
+                                data-price="600" data-price-usd="2.5" id="netflix-baridimob-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
@@ -711,16 +753,12 @@
                         </div>
 
                         <ul class="product-features">
-                            <li data-i18n="product.netflix.feature1">حساب مشترك - بروفايل خاص</li>
-                            <li data-i18n="product.netflix.feature2">جودة 4K Ultra HD</li>
-                            <li data-i18n="product.netflix.feature3">يعمل في جميع أنحاء العالم مع VPN</li>
+                            <li data-i18n="product.netflix.feature1">جودة 4K Ultra HD + HDR</li>
+                            <li data-i18n="product.netflix.feature2">مشاهدة بدون إعلانات</li>
+                            <li data-i18n="product.netflix.feature3">تنزيل المحتوى للمشاهدة بدون إنترنت</li>
                         </ul>
-                        <a href="netflix_landing.html" class="discover-btn" data-i18n="product.discoverMore"
-                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Netflix Premium', content_category: 'ProductClick' }); }">اكتشف
-                            المزيد</a>
-                        <button class="order-btn" data-product="Netflix Premium" data-i18n="product.orderNow"
-                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'AddToCart', { content_name: 'Netflix Premium' }); } orderProduct('Netflix Premium')">اطلب
-                            الآن</button>
+                        <button class="order-btn" data-product="Netflix Premium - 1 Month" id="netflix-order-btn"
+                            data-i18n="product.orderNow" onclick="orderNetflix()">اطلب الآن</button>
                     </div>
 
                     <!-- Prime Video -->
@@ -2522,7 +2560,7 @@
                     const durationMap = {
                         '1month': '1 Month',
                         '3months': '3 Months',
-                        '6months': '6 Months'
+                        '12months': '12 Months'
                     };
                     const durationText = durationMap[type];
                     orderBtn.setAttribute('data-product', `${productName} - ${durationText}`);
@@ -2540,7 +2578,7 @@
             const durationMap = {
                 '1month': '1 Month',
                 '3months': '3 Months',
-                '6months': '6 Months'
+                '12months': '12 Months'
             };
 
             const durationText = durationMap[selectedNetflixType];

@@ -219,7 +219,7 @@ const PRODUCTS = {
     durations: {
       '1month': { dzd: 600, usd: 2.5 },
       '3months': { dzd: 1200, usd: 4.5 },
-      '6months': { dzd: 2000, usd: 8 }
+      '12months': { dzd: 2000, usd: 8 }
     },
     description: {
       ar: 'حساب Netflix Premium مشترك',
