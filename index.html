@@ -1196,10 +1196,35 @@
                         <p class="description" data-i18n="product.lovable.desc">أداة متقدمة لبناء تطبيقات الويب بالذكاء
                             الاصطناعي بسهولة وسرعة.</p>
 
-                        <div style="display: flex; align-items: center; gap: 8px; margin: 12px 0;">
-                            <div class="price-tag" data-price-dzd="1300" data-price-usd="5.5">1300 د.ج</div>
+                        <!-- Duration Selection -->
+                        <div class="lovable-durations" style="margin: 16px 0;">
+                            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;"
+                                data-i18n="product.cursor.selectType">اختر المدة:</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="lovable-type-btn active" data-type="1month"
+                                    onclick="selectLovableType('1month')"
+                                    style="flex: 1; padding: 10px; border: 2px solid var(--accent); background: rgba(255, 213, 111, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    <span data-i18n="product.chatgpt.oneMonth">شهر واحد</span>
+                                </button>
+                                <button class="lovable-type-btn" data-type="3months"
+                                    onclick="selectLovableType('3months')"
+                                    style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    <span data-i18n="product.adobe.3months">3 أشهر</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Prices -->
+                        <div class="lovable-prices" id="lovable-prices-1month">
+                            <div class="price-tag" data-price-dzd="800" data-price-usd="3.5">800 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                     data-i18n="product.chatgpt.oneMonth">شهر واحد</span></span>
+                        </div>
+
+                        <div class="lovable-prices" id="lovable-prices-3months" style="display: none;">
+                            <div class="price-tag" data-price-dzd="2000" data-price-usd="8">2000 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.adobe.3months">3
+                                    أشهر</span></span>
                         </div>
 
                         <ul class="product-features">
@@ -1208,8 +1233,8 @@
                             <li data-i18n="product.lovable.feature3">تكامل مع أفضل أدوات التطوير</li>
                         </ul>
 
-                        <button class="order-btn" id="lovable-order-btn" data-product="Lovable AI"
-                            data-i18n="product.orderNow" onclick="orderProduct('Lovable AI')">اطلب الآن</button>
+                        <button class="order-btn" id="lovable-order-btn" data-product="Lovable AI - 1 Month"
+                            data-i18n="product.orderNow" onclick="orderLovable()">اطلب الآن</button>
                     </div>
 
 
@@ -2394,7 +2419,135 @@
     </script>
 
     <script>
-        // Adobe Account Type Selection
+        // Lovable AI Selection
+        let selectedLovableType = '1month';
+
+        function selectLovableType(type) {
+            selectedLovableType = type;
+
+            // Update Buttons
+            document.querySelectorAll('.lovable-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.border = '2px solid var(--border-color)';
+                btn.style.background = 'rgba(100, 100, 100, 0.1)';
+
+                if (btn.getAttribute('data-type') === type) {
+                    btn.classList.add('active');
+                    btn.style.border = '2px solid var(--accent)';
+                    btn.style.background = 'rgba(255, 213, 111, 0.15)';
+                }
+            });
+
+            // Hide all price sections first
+            document.querySelectorAll('.lovable-prices').forEach(el => el.style.display = 'none');
+
+            // Show selected price
+            const selectedPrice = document.getElementById(`lovable-prices-${type}`);
+            if (selectedPrice) {
+                selectedPrice.style.display = 'block';
+                selectedPrice.classList.add('fade-in');
+            }
+
+            // Update Order Button
+            const orderBtn = document.getElementById('lovable-order-btn');
+            if (orderBtn) {
+                // Get product details from config if available
+                let productName = 'Lovable AI';
+                if (typeof PRODUCTS !== 'undefined' && PRODUCTS.lovable) {
+                    productName = PRODUCTS.lovable.name;
+
+                    // Add duration info to button data
+                    const durationText = type === '1month' ? '1 Month' : '3 Months';
+                    orderBtn.setAttribute('data-product', `${productName} - ${durationText}`);
+                }
+            }
+        }
+
+        function orderLovable() {
+            let productName = 'Lovable AI';
+
+            if (typeof PRODUCTS !== 'undefined' && PRODUCTS.lovable) {
+                productName = PRODUCTS.lovable.name;
+            }
+
+            const durationMap = {
+                '1month': '1 Month',
+                '3months': '3 Months'
+            };
+
+            const durationText = durationMap[selectedLovableType];
+            const fullProductName = `${productName} - ${durationText}`; // e.g., "Lovable AI - 1 Month"
+
+            orderProduct(fullProductName);
+        }
+
+        // Netflix Selection
+        let selectedNetflixType = '1month';
+
+        function selectNetflixType(type) {
+            selectedNetflixType = type;
+
+            // Update Buttons
+            document.querySelectorAll('.netflix-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.border = '2px solid var(--border-color)';
+                btn.style.background = 'rgba(100, 100, 100, 0.1)';
+
+                if (btn.getAttribute('data-type') === type) {
+                    btn.classList.add('active');
+                    btn.style.border = '2px solid #E50914'; // Netflix Red
+                    btn.style.background = 'rgba(229, 9, 20, 0.15)';
+                }
+            });
+
+            // Hide all price sections first
+            document.querySelectorAll('.netflix-prices').forEach(el => el.style.display = 'none');
+
+            // Show selected price
+            const selectedPrice = document.getElementById(`netflix-prices-${type}`);
+            if (selectedPrice) {
+                selectedPrice.style.display = 'block';
+                selectedPrice.classList.add('fade-in');
+            }
+
+            // Update Order Button
+            const orderBtn = document.getElementById('netflix-order-btn');
+            if (orderBtn) {
+                // Get product details from config if available
+                let productName = 'Netflix Premium';
+                if (typeof PRODUCTS !== 'undefined' && PRODUCTS.netflix) {
+                    productName = PRODUCTS.netflix.name;
+
+                    // Add duration info to button data
+                    const durationMap = {
+                        '1month': '1 Month',
+                        '3months': '3 Months',
+                        '6months': '6 Months'
+                    };
+                    const durationText = durationMap[type];
+                    orderBtn.setAttribute('data-product', `${productName} - ${durationText}`);
+                }
+            }
+        }
+
+        function orderNetflix() {
+            let productName = 'Netflix Premium';
+
+            if (typeof PRODUCTS !== 'undefined' && PRODUCTS.netflix) {
+                productName = PRODUCTS.netflix.name;
+            }
+
+            const durationMap = {
+                '1month': '1 Month',
+                '3months': '3 Months',
+                '6months': '6 Months'
+            };
+
+            const durationText = durationMap[selectedNetflixType];
+            const fullProductName = `${productName} - ${durationText}`;
+
+            orderProduct(fullProductName);
+        }
 
     </script>
     <script type="application/ld+json">
