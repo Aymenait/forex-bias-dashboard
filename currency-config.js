@@ -125,8 +125,8 @@ const PRODUCTS = {
     price_usd: 4.5,
     durations: {
       '1month': { dzd: 1200, usd: 4.5 },
-      '2months': { dzd: 2200, usd: 8.5 },
-      '3months': { dzd: 2900, usd: 11.5 }
+      '2months': { dzd: 1800, usd: 7 },
+      '3months': { dzd: 2500, usd: 10 }
     },
     description: {
       ar: 'اشتراك Adobe Creative Cloud يشمل أكثر من 20 تطبيقًا احترافيًا',
@@ -214,8 +214,13 @@ const PRODUCTS = {
   'netflix': {
     id: 'netflix',
     name: 'Netflix Premium',
-    price_dzd: 1500,
-    price_usd: 6,
+    price_dzd: 600,
+    price_usd: 2.5,
+    durations: {
+      '1month': { dzd: 600, usd: 2.5 },
+      '3months': { dzd: 1200, usd: 4.5 },
+      '6months': { dzd: 2000, usd: 8 }
+    },
     description: {
       ar: 'حساب Netflix Premium مشترك',
       en: 'Netflix Premium shared account',
@@ -259,8 +264,12 @@ const PRODUCTS = {
   'lovable': {
     id: 'lovable',
     name: 'Lovable AI',
-    price_dzd: 1300,
-    price_usd: 5.5,
+    price_dzd: 800,
+    price_usd: 3.5,
+    durations: {
+      '1month': { dzd: 800, usd: 3.5 },
+      '3months': { dzd: 2000, usd: 8 }
+    },
     description: {
       ar: 'أداة متقدمة لبناء تطبيقات الويب بالذكاء الاصطناعي',
       en: 'Advanced tool for building web apps with AI',
