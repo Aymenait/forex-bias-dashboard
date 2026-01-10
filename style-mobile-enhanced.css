@@ -114,11 +114,11 @@
         transform: translateZ(0);
         backface-visibility: hidden;
     }
-    
+
     .product-grid::-webkit-scrollbar {
         display: none;
     }
-    
+
     /* بطاقة المنتج - تصميم مدمج وجميل للموبايل (التصميم الأصلي) */
     .product-card {
         flex: 0 0 260px !important;
@@ -140,7 +140,7 @@
         backface-visibility: hidden;
         will-change: transform;
     }
-    
+
     .product-card::before {
         content: '';
         position: absolute;
@@ -152,13 +152,13 @@
         pointer-events: none;
         z-index: 0;
     }
-    
+
     /* إلغاء hover effects على الموبايل للأداء */
     .product-card:hover {
         transform: none;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
-    
+
     .product-card:active {
         transform: scale(0.98);
         transition: transform 0.1s ease;
@@ -175,7 +175,7 @@
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
     }
-    
+
     /* إزالة pseudo-element للأداء */
     .product-image::after {
         display: none;
@@ -206,7 +206,7 @@
         overflow: hidden;
         text-align: center;
     }
-    
+
     /* تقييم المنتج - مصغر */
     .product-card [id*="-rating-container"] {
         padding: 0 12px;
@@ -233,7 +233,7 @@
         padding: 0 12px;
         margin: 8px 0;
     }
-    
+
     .product-features li {
         font-size: 0.72rem;
         padding: 3px 0;
@@ -274,5 +274,32 @@
     #scrollToTopBtn {
         bottom: 80px !important;
         left: 15px !important;
+    }
+
+    /* 13. تحسين أزرار الاختيار (Segmented Selector) - تمرير أفقي */
+    .segmented-selector {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE 10+ */
+        justify-content: flex-start !important;
+        padding: 4px !important;
+        -webkit-overflow-scrolling: touch;
+        gap: 6px !important;
+    }
+
+    .segmented-selector::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari/Webkit */
+    }
+
+    .segmented-btn {
+        flex: 0 0 auto !important;
+        min-width: auto !important;
+        padding: 8px 16px !important;
+        white-space: nowrap !important;
     }
 }
