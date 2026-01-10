@@ -554,6 +554,10 @@
                                     onclick="selectChatGPTType('go')">
                                     <span class="btn-label" data-i18n="product.chatgpt.go">GO</span>
                                 </button>
+                                <button class="segmented-btn chatgpt-type-btn" data-type="business"
+                                    onclick="selectChatGPTType('business')">
+                                    <span class="btn-label">Business</span>
+                                </button>
                             </div>
                         </div>
 
@@ -570,6 +574,11 @@
                         </div>
                         <div id="chatgpt-prices-go" class="chatgpt-prices" style="display: none;">
                             <div class="price-tag" data-price-dzd="1800" data-price-usd="7">1800 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.chatgpt.twelveMonths">12 شهر</span></span>
+                        </div>
+                        <div id="chatgpt-prices-business" class="chatgpt-prices" style="display: none;">
+                            <div class="price-tag" data-price-dzd="3000" data-price-usd="12">3000 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                     data-i18n="product.chatgpt.twelveMonths">12 شهر</span></span>
                         </div>
@@ -3056,6 +3065,9 @@
             } else if (type === 'go') {
                 priceId = 'chatgpt-prices-go';
                 name = 'ChatGPT GO - 12 Months';
+            } else if (type === 'business') {
+                priceId = 'chatgpt-prices-business';
+                name = 'ChatGPT Business - 12 Months';
             }
 
             const priceEl = document.getElementById(priceId);
@@ -3091,6 +3103,7 @@
             if (type === 'plus') productName = 'ChatGPT Plus - 1 Month';
             else if (type === 'teachers') productName = 'ChatGPT Teachers - 12 Months';
             else if (type === 'go') productName = 'ChatGPT GO - 12 Months';
+            else if (type === 'business') productName = 'ChatGPT Business - 12 Months';
 
             const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 

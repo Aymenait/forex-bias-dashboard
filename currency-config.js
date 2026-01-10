@@ -106,7 +106,8 @@ const PRODUCTS = {
     durations: {
       'plus': { dzd: 1000, usd: 4 },
       'teachers': { dzd: 3200, usd: 13 },
-      'go': { dzd: 1800, usd: 7 }
+      'go': { dzd: 1800, usd: 7 },
+      'business': { dzd: 3000, usd: 12 }
     },
     description: {
       ar: 'حساب ChatGPT Business للاستخدام المشترك',
