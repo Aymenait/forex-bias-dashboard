@@ -22,6 +22,7 @@ let allPurchases = [];         // جميع عمليات الشراء
 let allExpenses = [];          // جميع المصاريف
 let allSuppliers = [];         // جميع الموردين ومصادر السلع
 let allDebtors = [];           // جميع المديونين
+let startingCapital = 0;       // رأس المال الأساسي
 let reviewToDelete = null;     // التقييم المراد حذفه
 const DEFAULT_PASSWORD = 'admin123';  // كلمة المرور الافتراضية
 
@@ -62,6 +63,298 @@ function updateUsdRate(newRate) {
 window.updateUsdRate = updateUsdRate;
 window.usdToDzd = usdToDzd;
 window.dzdToUsd = dzdToUsd;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// إدارة رأس المال - Capital Management
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * فتح نافذة ضبط رأس المال
+ */
+function openCapitalModal() {
+    const modal = document.getElementById('capital-modal');
+    const input = document.getElementById('input-starting-capital');
+    if (modal) {
+        if (input) input.value = startingCapital || '';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+/**
+ * إغلاق نافذة ضبط رأس المال
+ */
+function closeCapitalModal() {
+    const modal = document.getElementById('capital-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+/**
+ * حفظ رأس المال في Firebase
+ */
+async function saveStartingCapital(event) {
+    if (event) event.preventDefault();
+    const input = document.getElementById('input-starting-capital');
+    const amount = parseFloat(input?.value) || 0;
+
+    try {
+        if (window.db && window.firebaseModules) {
+            const { doc, setDoc } = window.firebaseModules;
+            await setDoc(doc(window.db, 'settings', 'capital'), {
+                startingCapital: amount,
+                updatedAt: new Date().toISOString()
+            });
+        }
+
+        startingCapital = amount;
+        localStorage.setItem('startingCapital', amount.toString());
+
+        closeCapitalModal();
+        showToast(`✅ تم حفظ رأس المال: ${amount.toLocaleString()} د.ج`);
+
+        // تحديث العرض
+        updateCapitalDisplay();
+
+    } catch (error) {
+        console.error('خطأ في حفظ رأس المال:', error);
+        showToast('❌ خطأ في حفظ رأس المال', 'error');
+    }
+}
+
+/**
+ * تحميل رأس المال من Firebase
+ */
+async function loadStartingCapital() {
+    try {
+        // محاولة التحميل من Firebase
+        if (window.db && window.firebaseModules) {
+            const { doc, getDoc } = window.firebaseModules;
+            const docSnap = await getDoc(doc(window.db, 'settings', 'capital'));
+            if (docSnap.exists()) {
+                startingCapital = docSnap.data().startingCapital || 0;
+                localStorage.setItem('startingCapital', startingCapital.toString());
+                return;
+            }
+        }
+
+        // الرجوع إلى localStorage
+        startingCapital = parseFloat(localStorage.getItem('startingCapital')) || 0;
+
+    } catch (error) {
+        console.error('خطأ في تحميل رأس المال:', error);
+        startingCapital = parseFloat(localStorage.getItem('startingCapital')) || 0;
+    }
+}
+
+/**
+ * تحديث عرض رأس المال والرصيد الحالي
+ */
+function updateCapitalDisplay() {
+    // حساب الرصيد الحالي باستخدام التدفق النقدي
+    const totals = calculateTotalFinancials();
+    const currentBalance = startingCapital + totals.netCashFlow;
+    const performance = startingCapital > 0 ? ((currentBalance - startingCapital) / startingCapital * 100) : 0;
+
+    // تحديث العناصر في الصفحة
+    const balanceEl = document.getElementById('stat-current-balance');
+    const startingEl = document.getElementById('stat-starting-capital-display');
+    const badgeEl = document.getElementById('capital-performance-badge');
+
+    if (balanceEl) {
+        balanceEl.textContent = `${Math.round(currentBalance).toLocaleString()} د.ج`;
+        balanceEl.style.color = currentBalance >= startingCapital ? 'var(--accent)' : '#ef4444';
+    }
+
+    if (startingEl) {
+        startingEl.textContent = `${Math.round(startingCapital).toLocaleString()} د.ج`;
+    }
+
+    if (badgeEl) {
+        if (performance > 0) {
+            badgeEl.textContent = `↑ +${performance.toFixed(1)}% ربح`;
+            badgeEl.className = 'px-2 py-0.5 rounded text-xs font-bold bg-green-500/20 text-green-400';
+        } else if (performance < 0) {
+            badgeEl.textContent = `↓ ${performance.toFixed(1)}% خسارة`;
+            badgeEl.className = 'px-2 py-0.5 rounded text-xs font-bold bg-red-500/20 text-red-400';
+        } else {
+            badgeEl.textContent = '— متعادل';
+            badgeEl.className = 'px-2 py-0.5 rounded text-xs font-bold bg-gray-500/20 text-gray-400';
+        }
+    }
+}
+
+/**
+ * حساب إجمالي الماليات
+ */
+function calculateTotalFinancials() {
+    const dateFilter = document.getElementById('accounting-date-filter')?.value || 'all';
+
+    // إيرادات المبيعات
+    const filteredOrders = filterOrdersByDate(
+        allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed'),
+        dateFilter
+    );
+
+    let totalRevenue = 0;
+    let totalCost = 0;
+
+    filteredOrders.forEach(order => {
+        let amount = parseFloat(order.amount) || 0;
+        if (order.currency === 'USD') {
+            amount = amount * (order.exchangeRate || USD_TO_DZD_RATE);
+        }
+        totalRevenue += amount;
+
+        // تكلفة المنتج
+        const product = allProducts.find(p => p.name === order.productName || p.id === order.productId);
+        if (product) {
+            totalCost += product.cost_dzd || 0;
+        }
+    });
+
+    // تكلفة المشتريات (منفصلة للتدفق النقدي)
+    const filteredPurchases = filterOrdersByDate(allPurchases, dateFilter);
+    let purchasesCost = 0;
+    filteredPurchases.forEach(p => {
+        // البحث عن المبلغ في الحقول المختلفة
+        let amount = parseFloat(p.totalPrice || p.totalCost || p.amount) || 0;
+        if (p.currency === 'USD') {
+            amount = amount * (p.exchangeRate || USD_TO_DZD_RATE);
+        }
+        purchasesCost += amount;
+    });
+
+    // المصاريف
+    const filteredExpenses = filterExpensesByDate(allExpenses, dateFilter);
+    let businessExpenses = 0;
+    let personalExpenses = 0;
+
+    filteredExpenses.forEach(e => {
+        let amount = parseFloat(e.amount) || 0;
+        if (e.currency === 'USD') {
+            amount = amount * (e.exchangeRate || USD_TO_DZD_RATE);
+        }
+        if (e.type === 'business') {
+            businessExpenses += amount;
+        } else {
+            personalExpenses += amount;
+        }
+    });
+
+    const totalExpenses = businessExpenses + personalExpenses;
+
+    // حسابات الربح
+    const grossProfit = totalRevenue - totalCost;  // ربح المنتجات
+    const netBusinessProfit = grossProfit - businessExpenses;
+    const netProfit = netBusinessProfit - personalExpenses;
+
+    // التدفق النقدي الفعلي (للخزينة)
+    // = المبيعات - المشتريات - المصاريف
+    const netCashFlow = totalRevenue - purchasesCost - totalExpenses;
+
+    return {
+        revenue: totalRevenue,
+        cost: totalCost,
+        purchasesCost,
+        businessExpenses,
+        personalExpenses,
+        totalExpenses,
+        grossProfit,
+        netBusinessProfit,
+        netProfit,
+        netCashFlow
+    };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// إعادة ضبط الحسابات - Reset Accounting
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * فتح نافذة إعادة ضبط الحسابات
+ */
+function openResetAccountingModal() {
+    const modal = document.getElementById('reset-accounting-modal');
+    const checkbox = document.getElementById('confirm-reset-checkbox');
+    const btn = document.getElementById('reset-confirm-btn');
+
+    if (modal) {
+        if (checkbox) checkbox.checked = false;
+        if (btn) btn.disabled = true;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+/**
+ * إغلاق نافذة إعادة ضبط الحسابات
+ */
+function closeResetAccountingModal() {
+    const modal = document.getElementById('reset-accounting-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+/**
+ * تأكيد إعادة ضبط الحسابات وحذف كل البيانات
+ */
+async function confirmResetAccounting() {
+    try {
+        showToast('⏳ جاري حذف البيانات...', 'info');
+
+        if (window.db && window.firebaseModules) {
+            const { collection, getDocs, deleteDoc, doc } = window.firebaseModules;
+
+            // حذف المشتريات
+            const purchasesSnap = await getDocs(collection(window.db, 'purchases'));
+            for (const docSnap of purchasesSnap.docs) {
+                await deleteDoc(doc(window.db, 'purchases', docSnap.id));
+            }
+
+            // حذف المبيعات/الطلبات
+            const ordersSnap = await getDocs(collection(window.db, 'orders'));
+            for (const docSnap of ordersSnap.docs) {
+                await deleteDoc(doc(window.db, 'orders', docSnap.id));
+            }
+
+            // حذف المصاريف
+            const expensesSnap = await getDocs(collection(window.db, 'expenses'));
+            for (const docSnap of expensesSnap.docs) {
+                await deleteDoc(doc(window.db, 'expenses', docSnap.id));
+            }
+        }
+
+        // مسح البيانات المحلية
+        allPurchases = [];
+        allOrders = [];
+        allExpenses = [];
+
+        closeResetAccountingModal();
+        showToast('✅ تم حذف جميع البيانات بنجاح. يمكنك البدء من جديد!');
+
+        // إعادة تحميل الصفحة
+        loadAccountingData();
+
+    } catch (error) {
+        console.error('خطأ في إعادة ضبط الحسابات:', error);
+        showToast('❌ خطأ في حذف البيانات: ' + error.message, 'error');
+    }
+}
+
+// تصدير الوظائف
+window.openCapitalModal = openCapitalModal;
+window.closeCapitalModal = closeCapitalModal;
+window.saveStartingCapital = saveStartingCapital;
+window.loadStartingCapital = loadStartingCapital;
+window.updateCapitalDisplay = updateCapitalDisplay;
+window.openResetAccountingModal = openResetAccountingModal;
+window.closeResetAccountingModal = closeResetAccountingModal;
+window.confirmResetAccounting = confirmResetAccounting;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // فئات المصاريف - Expense Categories
@@ -1082,6 +1375,11 @@ async function deleteSale(orderId) {
         showToast('خطأ في الحذف', 'error');
     }
 }
+
+// تصدير دوال الحذف للاستخدام من HTML
+window.deletePurchase = deletePurchase;
+window.deleteSale = deleteSale;
+window.deleteExpense = deleteExpense;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // تسجيل الدخول - Login Functions
@@ -3772,6 +4070,9 @@ async function loadAccountingData() {
         const usdRateInput = document.getElementById('usd-rate-input');
         if (usdRateInput) usdRateInput.value = USD_TO_DZD_RATE;
 
+        // تحميل رأس المال
+        await loadStartingCapital();
+
         // التأكد من تحميل المنتجات والطلبات
         if (allProducts.length === 0) {
             await loadProducts();
@@ -3791,6 +4092,9 @@ async function loadAccountingData() {
         displaySuppliersSummary();
         displayExpensesList();
         displayTransactionsLog();
+
+        // تحديث عرض رأس المال والرصيد
+        updateCapitalDisplay();
 
     } catch (error) {
         console.error('خطأ في تحميل بيانات المحاسبة:', error);

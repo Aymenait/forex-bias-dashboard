@@ -978,6 +978,40 @@
                     </div>
                 </div>
 
+                <!-- بطاقة رأس المال الرئيسية -->
+                <div class="rounded-xl p-6 mb-6"
+                    style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(255, 213, 111, 0.1)); border: 2px solid var(--accent);">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-16 h-16 bg-purple-600/30 rounded-full flex items-center justify-center text-3xl">
+                                💹</div>
+                            <div>
+                                <div class="text-sm text-purple-300">رأس المال الحالي (الخزينة)</div>
+                                <div class="text-3xl font-bold" id="stat-current-balance" style="color: var(--accent);">
+                                    0 د.ج</div>
+                                <div class="text-xs mt-1">
+                                    <span class="text-gray-400">البداية:</span>
+                                    <span class="text-white font-bold" id="stat-starting-capital-display">0 د.ج</span>
+                                    <span class="mx-2">|</span>
+                                    <span id="capital-performance-badge"
+                                        class="px-2 py-0.5 rounded text-xs font-bold">--</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button onclick="openCapitalModal()"
+                                class="px-4 py-2 rounded-lg text-sm font-bold bg-purple-600 hover:bg-purple-700 text-white transition-all">
+                                ⚙️ ضبط رأس المال
+                            </button>
+                            <button onclick="openResetAccountingModal()"
+                                class="px-4 py-2 rounded-lg text-sm font-bold bg-red-600/20 hover:bg-red-600/40 text-red-400 border border-red-600/30 transition-all">
+                                🗑️ إعادة ضبط
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Accounting Stats Cards - Row 1: المبيعات -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                     <div class="stat-card rounded-xl p-3 text-center">
@@ -2684,6 +2718,75 @@
     </script>
 
     <script src="admin.js"></script>
+
+    <!-- Modal: ضبط رأس المال -->
+    <div id="capital-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+        <div class="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-purple-500/30 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-purple-400">💹 ضبط رأس المال</h3>
+                <button onclick="closeCapitalModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <form onsubmit="saveStartingCapital(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-300 text-sm mb-2">رأس المال الأساسي (الخزينة عند البداية)</label>
+                    <input type="number" id="input-starting-capital"
+                        class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white text-lg focus:border-purple-500 focus:outline-none"
+                        placeholder="مثال: 100000" min="0" step="100">
+                    <p class="text-gray-500 text-xs mt-2">💡 أدخل المبلغ الذي بدأت به عملك. سيتم حساب الأرباح والخسائر
+                        بناءً على هذا المبلغ.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit"
+                        class="flex-1 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors">
+                        💾 حفظ
+                    </button>
+                    <button type="button" onclick="closeCapitalModal()"
+                        class="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors">
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: إعادة ضبط الحسابات -->
+    <div id="reset-accounting-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+        <div class="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-red-500/30 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-red-400">🗑️ إعادة ضبط الحسابات</h3>
+                <button onclick="closeResetAccountingModal()"
+                    class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div class="mb-6">
+                <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-4">
+                    <p class="text-red-300 text-sm mb-2">⚠️ <strong>تحذير هام:</strong></p>
+                    <p class="text-gray-400 text-sm">سيتم حذف جميع بيانات المشتريات والمبيعات والمصاريف نهائياً. لا يمكن
+                        التراجع عن هذا الإجراء!</p>
+                </div>
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" id="confirm-reset-checkbox" class="w-5 h-5 accent-red-500">
+                    <span class="text-gray-300 text-sm">أفهم أن هذا سيحذف جميع البيانات نهائياً</span>
+                </label>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="confirmResetAccounting()" id="reset-confirm-btn" disabled
+                    class="flex-1 py-3 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    🗑️ حذف كل البيانات
+                </button>
+                <button onclick="closeResetAccountingModal()"
+                    class="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تفعيل زر الحذف عند تأكيد المستخدم
+        document.getElementById('confirm-reset-checkbox')?.addEventListener('change', function () {
+            document.getElementById('reset-confirm-btn').disabled = !this.checked;
+        });
+    </script>
 </body>
 
 </html>
