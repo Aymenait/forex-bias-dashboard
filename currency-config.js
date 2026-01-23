@@ -252,9 +252,10 @@ const PRODUCTS = {
     name: 'Cursor AI',
     price_dzd: 900,
     price_usd: 3.6,
+    cost_dzd: 300,
     durations: {
-      '7days': { dzd: 900, usd: 3.6 },
-      '30days': { dzd: 2900, usd: 11.6 }
+      '7days': { dzd: 900, usd: 3.6, cost_dzd: 300 },
+      '30days': { dzd: 2900, usd: 11.6, cost_dzd: 1500 }
     },
     description: {
       ar: 'محرر أكواد ذكي بالذكاء الاصطناعي (حساب خاص متوفر)',
@@ -358,8 +359,9 @@ const PRODUCTS = {
     name: 'Alight Motion PRO',
     price_dzd: 2500,
     price_usd: 10,
+    cost_dzd: 1800,
     durations: {
-      '1year': { dzd: 2500, usd: 10 }
+      '1year': { dzd: 2500, usd: 10, cost_dzd: 1800 }
     },
     description: {
       ar: 'اشتراك Alight Motion Pro لمدة سنة كاملة لتصميم الفيديو باحترافية.',
