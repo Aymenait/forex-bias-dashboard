@@ -868,31 +868,56 @@
                             role="img" aria-label="HMA VPN">
                         </div>
                         <h3>HMA VPN</h3>
-                        <p class="description" data-i18n="product.hma.desc">اشتراك HMA VPN لمدة سنتين بجودة عالية وخدمة
-                            مستقرة تضم آلاف الخوادم.</p>
-                        <div class="price-tag" data-price-dzd="2800" data-price-usd="11.2">2800 د.ج</div>
-                        <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.hma.twoYears">سنتين
-                                (24 شهر)</span></span>
+                        <p class="description" data-i18n="product.hma.desc">اشتراك HMA VPN بجودة عالية وخدمة مستقرة تضم
+                            آلاف الخوادم.</p>
+
+                        <!-- Duration Selection -->
+                        <div class="hma-duration-type" style="margin: 16px 0;">
+                            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;">اختر المدة:</p>
+                            <div class="segmented-selector">
+                                <button class="segmented-btn active hma-duration-btn" data-duration="1year"
+                                    onclick="selectHmaDuration('1year')">
+                                    <span class="btn-label">عام واحد</span>
+                                </button>
+                                <button class="segmented-btn hma-duration-btn" data-duration="2years"
+                                    onclick="selectHmaDuration('2years')">
+                                    <span class="btn-label">عامين</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Prices (will change based on selection) -->
+                        <div class="hma-prices" id="hma-prices-1year">
+                            <div class="price-tag" data-price-dzd="2000" data-price-usd="8">2000 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="product.hma.oneYear">عام
+                                    واحد</span></span>
+                        </div>
+
+                        <div class="hma-prices" id="hma-prices-2years" style="display: none;">
+                            <div class="price-tag" data-price-dzd="3200" data-price-usd="12.8">3200 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.hma.twoYears">عامين</span></span>
+                        </div>
 
                         <div class="payment-methods-row">
-                            <button class="payment-btn-compact crypto-pay-btn" data-product="HMA VPN" data-price="2800"
-                                data-price-usd="11.2">
+                            <button class="payment-btn-compact crypto-pay-btn" id="hma-usdt-btn"
+                                data-product="HMA VPN - 1 Year" data-price="2000" data-price-usd="8">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
                                 </svg>
                                 <span>USDT</span>
                             </button>
-                            <button class="payment-btn-compact redotpay-btn" data-product="HMA VPN" data-price="2800"
-                                data-price-usd="11.2">
+                            <button class="payment-btn-compact redotpay-btn" id="hma-redotpay-btn"
+                                data-product="HMA VPN - 1 Year" data-price="2000" data-price-usd="8">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
                                 </svg>
                                 <span>RedotPay</span>
                             </button>
-                            <button class="payment-btn-compact baridimob-btn" data-product="HMA VPN" data-price="2800"
-                                data-price-usd="11.2">
+                            <button class="payment-btn-compact baridimob-btn" id="hma-baridimob-btn"
+                                data-product="HMA VPN - 1 Year" data-price="2000" data-price-usd="8">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
@@ -906,8 +931,8 @@
                             <li data-i18n="product.hma.feature2">تفعيل على 5 أجهزة في نفس الوقت</li>
                             <li data-i18n="product.hma.feature3">سرعة فائقة وحماية كاملة للخصوصية</li>
                         </ul>
-                        <button class="order-btn" data-product="HMA VPN" data-i18n="product.orderNow"
-                            onclick="orderProduct('HMA VPN')">اطلب الآن</button>
+                        <button class="order-btn" id="hma-order-btn" data-product="HMA VPN - 1 Year"
+                            data-i18n="product.orderNow" onclick="orderHma()">اطلب الآن</button>
                     </div>
 
                     <!-- TradingView Premium -->
@@ -1234,8 +1259,7 @@
 
                         <!-- Account Type Selection -->
                         <div class="cursor-account-type" style="margin: 16px 0;">
-                            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;"
-                                data-i18n="product.cursor.selectType">اختر المدة:</p>
+                            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;">اختر النوع:</p>
                             <div style="display: flex; gap: 10px;">
                                 <button class="cursor-type-btn active" data-type="7days"
                                     onclick="selectCursorType('7days')"
@@ -1243,34 +1267,59 @@
                                     <span data-i18n="product.cursor.7days">7 DAYS TRIAL</span>
                                 </button>
                                 <button class="cursor-type-btn" data-type="30days" onclick="selectCursorType('30days')"
-                                    style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.3); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: all 0.3s; opacity: 0.5;"
-                                    disabled>
-                                    <span data-i18n="product.cursor.30days">30 D - غير متوفر</span>
+                                    style="flex: 1; padding: 10px; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    <span data-i18n="product.cursor.30days">Month - PRIVATE</span>
                                 </button>
                             </div>
                         </div>
 
                         <!-- Prices (will change based on selection) -->
                         <div class="cursor-prices" id="cursor-prices-7days">
-                            <div class="price-tag" data-price-dzd="600" data-price-usd="2.5">600 د.ج</div>
+                            <div class="price-tag" data-price-dzd="900" data-price-usd="3.6">900 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                     data-i18n="product.cursor.7daysDuration">7 أيام (ضمان كامل)</span></span>
                         </div>
 
                         <div class="cursor-prices" id="cursor-prices-30days" style="display: none;">
-                            <div
-                                style="opacity: 0.6; color: var(--text-secondary); font-size: 0.95rem; font-weight: 600;">
-                                <span data-i18n="product.cursor.notAvailable">غير متوفر</span>
-                            </div>
+                            <div class="price-tag" data-price-dzd="2900" data-price-usd="11.6">2900 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.cursor.30daysDuration">30 يوم (PRIVATE ACCOUNT)</span></span>
                         </div>
 
-                        <ul class="product-features" style="opacity: 0.7;">
+                        <div class="payment-methods-row">
+                            <button class="payment-btn-compact crypto-pay-btn" id="cursor-usdt-btn"
+                                data-product="Cursor AI - 7 Days" data-price="900" data-price-usd="3.6">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
+                                </svg>
+                                <span>USDT</span>
+                            </button>
+                            <button class="payment-btn-compact redotpay-btn" id="cursor-redotpay-btn"
+                                data-product="Cursor AI - 7 Days" data-price="900" data-price-usd="3.6">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                </svg>
+                                <span>RedotPay</span>
+                            </button>
+                            <button class="payment-btn-compact baridimob-btn" id="cursor-baridimob-btn"
+                                data-product="Cursor AI - 7 Days" data-price="900" data-price-usd="3.6">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
+                                </svg>
+                                <span>BaridiMob</span>
+                            </button>
+                        </div>
+
+                        <ul class="product-features" style="opacity: 1;">
                             <li data-i18n="product.cursor.feature1">إكمال تلقائي ذكي للكود</li>
                             <li data-i18n="product.cursor.feature2">دعم متعدد اللغات البرمجية</li>
                             <li data-i18n="product.cursor.feature3">تصحيح وتحسين الكود بالذكاء الاصطناعي</li>
                         </ul>
-                        <button class="order-btn" data-product="Cursor AI - 7 Days" data-i18n="product.orderNow"
-                            onclick="orderProduct('Cursor AI - 7 Days')">
+                        <button class="order-btn" id="cursor-order-btn" data-product="Cursor AI - 7 Days"
+                            data-i18n="product.orderNow" onclick="orderCursor()">
                             <span data-i18n="product.orderNow">اطلب الآن</span>
                         </button>
                     </div>
@@ -1354,6 +1403,58 @@
                         <button class="order-btn" id="veo-order-btn" data-product="Google AI Ultra & Veo 3"
                             data-i18n="product.orderNow" onclick="orderProduct('Google AI Ultra & Veo 3')">اطلب
                             الآن</button>
+                    </div>
+
+                    <!-- Alight Motion -->
+                    <div class="product-card fade-in" data-product-id="alight-motion">
+                        <div class="product-image"
+                            style="background-image: url('https://i.pinimg.com/originals/ad/8b/2c/ad8b2cf5e7b44514ab71b9fd9666ec16.jpg'); background-size: cover; background-position: center;"
+                            role="img" aria-label="Alight Motion">
+                        </div>
+                        <h3>Alight Motion PRO</h3>
+                        <p class="description" data-i18n="product.alight.desc">اشتراك Alight Motion Pro لمدة سنة كاملة
+                            لتصميم الفيديو باحترافية.</p>
+
+                        <div style="display: flex; align-items: center; gap: 8px; margin: 12px 0;">
+                            <div class="price-tag" data-price-dzd="2500" data-price-usd="10">2500 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.adobe.oneYear">عام كامل</span></span>
+                        </div>
+
+                        <div class="payment-methods-row">
+                            <button class="payment-btn-compact crypto-pay-btn" data-product="Alight Motion PRO - 1 Year"
+                                data-price="2500" data-price-usd="10">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
+                                </svg>
+                                <span>USDT</span>
+                            </button>
+                            <button class="payment-btn-compact redotpay-btn" data-product="Alight Motion PRO - 1 Year"
+                                data-price="2500" data-price-usd="10">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                </svg>
+                                <span>RedotPay</span>
+                            </button>
+                            <button class="payment-btn-compact baridimob-btn" data-product="Alight Motion PRO - 1 Year"
+                                data-price="2500" data-price-usd="10">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
+                                </svg>
+                                <span>BaridiMob</span>
+                            </button>
+                        </div>
+
+                        <ul class="product-features">
+                            <li data-i18n="product.alight.feature1">وصول لكافة ميزات Pro</li>
+                            <li data-i18n="product.alight.feature2">بدون علامة مائية</li>
+                            <li data-i18n="product.alight.feature3">دعم كافة الصيغ والجودات العالية</li>
+                        </ul>
+                        <button class="order-btn" data-product="Alight Motion PRO - 1 Year" data-i18n="product.orderNow"
+                            onclick="orderProduct('Alight Motion PRO - 1 Year')">اطلب الآن</button>
                     </div>
                 </div>
 

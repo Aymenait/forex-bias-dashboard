@@ -1910,11 +1910,21 @@ const translations = {
         'product.canva.reseller.feature2': 'يصل إلى 500 مستخدم - مثالي للفرق أو الموزعين',
         'product.canva.reseller.feature3': 'رفع الخطوط والرسومات الشخصية',
         'product.canva.reseller.feature4': 'إعداد عالي الجودة - تكوين مستقر',
-        'product.hma.desc': 'اشتراك HMA VPN لمدة سنتين بجودة عالية وخدمة مستقرة تضم آلاف الخوادم.',
+        'product.hma.desc': 'اشتراك HMA VPN بجودة عالية وخدمة مستقرة تضم آلاف الخوادم.',
         'product.hma.feature1': 'وصول لأكثر من 290 موقع خادم',
         'product.hma.feature2': 'تفعيل على 5 أجهزة في نفس الوقت',
         'product.hma.feature3': 'سرعة فائقة وحماية كاملة للخصوصية',
-        'product.hma.twoYears': 'سنتين (24 شهر)',
+        'product.hma.oneYear': 'عام واحد',
+        'product.hma.twoYears': 'عامين',
+        'product.cursor.desc': 'محرر أكواد ذكي بالذكاء الاصطناعي (حساب خاص متوفر)',
+        'product.cursor.7days': '7 أيام (تجريبي)',
+        'product.cursor.30days': 'شهر (حساب خاص)',
+        'product.cursor.7daysDuration': '7 أيام (ضمان كامل)',
+        'product.cursor.30daysDuration': '30 يوم (حساب خاص)',
+        'product.alight.desc': 'اشتراك Alight Motion Pro لمدة سنة كاملة لتصميم الفيديو باحترافية.',
+        'product.alight.feature1': 'وصول لكافة ميزات Pro',
+        'product.alight.feature2': 'بدون علامة مائية',
+        'product.alight.feature3': 'دعم كافة الصيغ والجودات العالية',
     },
     en: {
         'brand.tagline': 'Digital Solutions That Boost Your Presence',
@@ -2023,15 +2033,15 @@ const translations = {
         'product.crunchyroll.feature1': 'World\'s largest anime library',
         'product.crunchyroll.feature2': 'Ad-free viewing experience',
         'product.crunchyroll.feature3': 'New episodes 1 hour after Japan broadcast',
-        'product.cursor.desc': 'Smart AI code editor (7 Days Subscription) with full term guarantee.',
+        'product.cursor.desc': 'AI-powered smart code editor (Private account available)',
         'product.cursor.feature1': 'Intelligent code completion',
         'product.cursor.feature2': 'Multi-programming language support',
         'product.cursor.feature3': 'AI code correction and optimization',
+        'product.cursor.7days': '7 DAYS TRIAL',
+        'product.cursor.30days': 'Month - PRIVATE',
         'product.cursor.7daysDuration': '7 Days (Full Guarantee)',
-        'product.cursor.30days': '30 D - Not Available',
+        'product.cursor.30daysDuration': '30 Days (PRIVATE ACCOUNT)',
         'product.cursor.selectType': 'Select Duration:',
-        'product.cursor.7days': '7 Days Account (Full Guarantee)',
-        'product.cursor.30days': '30 Days Shared Pro Account',
         'product.cursor.notAvailable': 'Not available yet',
         'product.unavailable': '❌ Currently Unavailable',
         'product.unavailableBtn': '❌ Unavailable',
@@ -2480,11 +2490,19 @@ const translations = {
         'veo.disclaimer': '⚠️ Does not support Google Antigravity or Gemini CLI - Dedicated for creators only.',
         'veo.nav.back': 'Back to Store',
         'veo.stats.videos_desc': 'Generate video',
-        'product.hma.desc': 'HMA VPN 2-year subscription with premium quality and stable service across thousands of servers.',
+        'product.hma.desc': 'Premium HMA VPN subscription with stable service across thousands of servers.',
         'product.hma.feature1': 'Access to 290+ server locations',
         'product.hma.feature2': 'Active on 5 devices simultaneously',
         'product.hma.feature3': 'Ultra-fast speed and total privacy protection',
-        'product.hma.twoYears': '2 Years (24 Months)',
+        'product.hma.oneYear': '1 Year',
+        'product.hma.twoYears': '2 Years',
+        'product.cursor.desc': 'AI-powered smart code editor (Private account available)',
+        'product.cursor.30days': 'Month - PRIVATE',
+        'product.cursor.30daysDuration': '30 Days (PRIVATE ACCOUNT)',
+        'product.alight.desc': 'Alight Motion Pro 1-year subscription for professional video design.',
+        'product.alight.feature1': 'Access to all Pro features',
+        'product.alight.feature2': 'No watermark',
+        'product.alight.feature3': 'Support all formats and high qualities',
     },
     fr: {
         'brand.tagline': 'Solutions Numériques Qui Renforcent Votre Présence',
@@ -2593,15 +2611,15 @@ const translations = {
         'product.crunchyroll.feature1': 'Plus grande bibliothèque d\'anime au monde',
         'product.crunchyroll.feature2': 'Visionnage sans publicités',
         'product.crunchyroll.feature3': 'Nouveaux épisodes 1h après la diffusion au Japon',
-        'product.cursor.desc': 'Éditeur de code IA intelligent (Abonnement 7 Jours) avec garantie complète.',
+        'product.cursor.desc': 'Éditeur de code IA intelligent (Compte privé disponible)',
         'product.cursor.feature1': 'Auto-complétion de code intelligente',
         'product.cursor.feature2': 'Support multi-langages de programmation',
         'product.cursor.feature3': 'Correction et optimisation du code par IA',
         'product.cursor.7daysDuration': '7 Jours (Garantie Totale)',
-        'product.cursor.30days': '30 J - Non Disponible',
+        'product.cursor.30days': 'Mois - PRIVÉ',
+        'product.cursor.30daysDuration': '30 Jours (COMPTE PRIVÉ)',
         'product.cursor.selectType': 'Sélectionner la durée:',
         'product.cursor.7days': 'Compte 7 Jours (Garantie Totale)',
-        'product.cursor.30days': '30 jours compte partagé pro',
         'product.cursor.notAvailable': 'Pas encore disponible',
         'product.unavailable': '❌ Actuellement Indisponible',
         'product.unavailableBtn': '❌ Indisponible',
@@ -2811,11 +2829,21 @@ const translations = {
         'veo.disclaimer': '⚠️ Ne supporte pas Google Antigravity ou Gemini CLI - Dédié aux créateurs uniquement.',
         'veo.nav.back': 'Retour à la Boutique',
         'veo.stats.videos_desc': 'Génération vidéo',
-        'product.hma.desc': 'Abonnement HMA VPN de 2 ans avec une qualité premium et un service stable à travers des milliers de serveurs.',
+        'product.hma.desc': 'Abonnement HMA VPN premium avec un service stable sur des milliers de serveurs.',
         'product.hma.feature1': 'Accès à plus de 290 emplacements de serveurs',
         'product.hma.feature2': 'Activation sur 5 appareils en même temps',
         'product.hma.feature3': 'Vitesse ultra-rapide et protection totale de la vie privée',
-        'product.hma.twoYears': '2 Ans (24 Mois)',
+        'product.hma.oneYear': '1 An',
+        'product.hma.twoYears': '2 Ans',
+        'product.cursor.desc': 'Éditeur de code IA intelligent (Compte privé disponible)',
+        'product.cursor.7days': '7 Jours (Essai)',
+        'product.cursor.30days': 'Mois - PRIVÉ',
+        'product.cursor.7daysDuration': '7 Jours (Garantie Totale)',
+        'product.cursor.30daysDuration': '30 Jours (COMPTE PRIVÉ)',
+        'product.alight.desc': 'Abonnement Alight Motion Pro d\'un an pour la conception vidéo professionnelle.',
+        'product.alight.feature1': 'Accès à toutes les fonctionnalités Pro',
+        'product.alight.feature2': 'Sans filigrane',
+        'product.alight.feature3': 'Prend en charge tous les formats et hautes qualités',
     }
 };
 
@@ -3687,14 +3715,30 @@ function selectCursorType(type) {
         }
     });
 
-    // Show/hide prices
-    if (type === '7days') {
-        document.getElementById('cursor-prices-7days').style.display = 'block';
-        document.getElementById('cursor-prices-30days').style.display = 'none';
-    } else {
-        document.getElementById('cursor-prices-7days').style.display = 'none';
-        document.getElementById('cursor-prices-30days').style.display = 'block';
-    }
+    // Show/hide prices and update button data
+    const cursorConfig = PRODUCTS['cursor'];
+    const priceObj = cursorConfig.durations[type];
+    const name = type === '7days' ? 'Cursor AI - 7 Days' : 'Cursor AI - 30 Days (Private)';
+
+    document.querySelectorAll('.cursor-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`cursor-prices-${type}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('cursor-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['cursor-usdt-btn', 'cursor-redotpay-btn', 'cursor-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
     // Track CustomizeProduct
     if (typeof fbq !== 'undefined') {
         const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
@@ -3703,6 +3747,111 @@ function selectCursorType(type) {
             variant: type,
             currency: currency
         });
+    }
+}
+
+function orderCursor() {
+    const activeBtn = document.querySelector('.cursor-type-btn.active');
+    const type = activeBtn ? activeBtn.getAttribute('data-type') : '7days';
+    const name = type === '7days' ? 'Cursor AI - 7 Days' : 'Cursor AI - 30 Days (Private)';
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const cursorConfig = PRODUCTS['cursor'];
+    const priceObj = cursorConfig.durations[type];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+// HMA VPN Selection Functions
+function selectHmaDuration(duration) {
+    document.querySelectorAll('.hma-duration-btn').forEach(btn => btn.classList.remove('active'));
+    const selectedBtn = document.querySelector(`.hma-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) selectedBtn.classList.add('active');
+
+    const hmaConfig = PRODUCTS['hma-vpn'];
+    const priceObj = hmaConfig.durations[duration];
+    const name = duration === '1year' ? 'HMA VPN - 1 Year' : 'HMA VPN - 2 Years';
+
+    // Show/hide prices
+    document.querySelectorAll('.hma-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`hma-prices-${duration}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('hma-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['hma-usdt-btn', 'hma-redotpay-btn', 'hma-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'HMA VPN',
+            variant: duration,
+            currency: currency
+        });
+    }
+}
+
+function orderHma() {
+    const activeBtn = document.querySelector('.hma-duration-btn.active');
+    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1year';
+    const name = duration === '1year' ? 'HMA VPN - 1 Year' : 'HMA VPN - 2 Years';
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const hmaConfig = PRODUCTS['hma-vpn'];
+    const priceObj = hmaConfig.durations[duration];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
     }
 }
 

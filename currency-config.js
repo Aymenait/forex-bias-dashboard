@@ -249,13 +249,17 @@ const PRODUCTS = {
   },
   'cursor': {
     id: 'cursor',
-    name: 'Cursor AI - 7 Days',
-    price_dzd: 600,
-    price_usd: 2.5,
+    name: 'Cursor AI',
+    price_dzd: 900,
+    price_usd: 3.6,
+    durations: {
+      '7days': { dzd: 900, usd: 3.6 },
+      '30days': { dzd: 2900, usd: 11.6 }
+    },
     description: {
-      ar: 'محرر أكواد ذكي بالذكاء الاصطناعي لمدة 7 أيام',
-      en: 'AI-powered smart code editor for 7 days',
-      fr: 'Éditeur de code IA intelligent pour 7 jours'
+      ar: 'محرر أكواد ذكي بالذكاء الاصطناعي (حساب خاص متوفر)',
+      en: 'AI-powered smart code editor (Private account available)',
+      fr: 'Éditeur de code IA intelligent (Compte privé disponible)'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],
@@ -333,22 +337,42 @@ const PRODUCTS = {
   'hma-vpn': {
     id: 'hma-vpn',
     name: 'HMA VPN',
-    price_dzd: 2800,
-    price_usd: 11.2,
+    price_dzd: 2000,
+    price_usd: 8,
     durations: {
-      '2years': { dzd: 2800, usd: 11.2 }
+      '1year': { dzd: 2000, usd: 8 },
+      '2years': { dzd: 3200, usd: 12.8 }
     },
     description: {
-      ar: 'اشتراك HMA VPN لمدة سنتين مع وصول لكافة الخوادم.',
-      en: 'HMA VPN 2-year subscription with access to all servers.',
-      fr: 'Abonnement HMA VPN de 2 ans avec accès à tous les serveurs.'
+      ar: 'اشتراك HMA VPN مع وصول لكافة الخوادم.',
+      en: 'HMA VPN subscription with access to all servers.',
+      fr: 'Abonnement HMA VPN avec accès à tous les serveurs.'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'alight-motion': {
+    id: 'alight-motion',
+    name: 'Alight Motion PRO',
+    price_dzd: 2500,
+    price_usd: 10,
+    durations: {
+      '1year': { dzd: 2500, usd: 10 }
+    },
+    description: {
+      ar: 'اشتراك Alight Motion Pro لمدة سنة كاملة لتصميم الفيديو باحترافية.',
+      en: 'Alight Motion Pro 1-year subscription for professional video design.',
+      fr: 'Abonnement Alight Motion Pro d\'un an pour la conception vidéo professionnelle.'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],
       usd: ['binance', 'redotpay', 'crypto']
     }
   }
-};
+}
+
 
 // Product Validation Function
 function validateProduct(product) {
