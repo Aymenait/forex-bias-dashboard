@@ -1910,6 +1910,11 @@ const translations = {
         'product.canva.reseller.feature2': 'يصل إلى 500 مستخدم - مثالي للفرق أو الموزعين',
         'product.canva.reseller.feature3': 'رفع الخطوط والرسومات الشخصية',
         'product.canva.reseller.feature4': 'إعداد عالي الجودة - تكوين مستقر',
+        'product.hma.desc': 'اشتراك HMA VPN لمدة سنتين بجودة عالية وخدمة مستقرة تضم آلاف الخوادم.',
+        'product.hma.feature1': 'وصول لأكثر من 290 موقع خادم',
+        'product.hma.feature2': 'تفعيل على 5 أجهزة في نفس الوقت',
+        'product.hma.feature3': 'سرعة فائقة وحماية كاملة للخصوصية',
+        'product.hma.twoYears': 'سنتين (24 شهر)',
     },
     en: {
         'brand.tagline': 'Digital Solutions That Boost Your Presence',
@@ -2475,6 +2480,11 @@ const translations = {
         'veo.disclaimer': '⚠️ Does not support Google Antigravity or Gemini CLI - Dedicated for creators only.',
         'veo.nav.back': 'Back to Store',
         'veo.stats.videos_desc': 'Generate video',
+        'product.hma.desc': 'HMA VPN 2-year subscription with premium quality and stable service across thousands of servers.',
+        'product.hma.feature1': 'Access to 290+ server locations',
+        'product.hma.feature2': 'Active on 5 devices simultaneously',
+        'product.hma.feature3': 'Ultra-fast speed and total privacy protection',
+        'product.hma.twoYears': '2 Years (24 Months)',
     },
     fr: {
         'brand.tagline': 'Solutions Numériques Qui Renforcent Votre Présence',
@@ -2801,6 +2811,11 @@ const translations = {
         'veo.disclaimer': '⚠️ Ne supporte pas Google Antigravity ou Gemini CLI - Dédié aux créateurs uniquement.',
         'veo.nav.back': 'Retour à la Boutique',
         'veo.stats.videos_desc': 'Génération vidéo',
+        'product.hma.desc': 'Abonnement HMA VPN de 2 ans avec une qualité premium et un service stable à travers des milliers de serveurs.',
+        'product.hma.feature1': 'Accès à plus de 290 emplacements de serveurs',
+        'product.hma.feature2': 'Activation sur 5 appareils en même temps',
+        'product.hma.feature3': 'Vitesse ultra-rapide et protection totale de la vie privée',
+        'product.hma.twoYears': '2 Ans (24 Mois)',
     }
 };
 

@@ -329,6 +329,24 @@ const PRODUCTS = {
       dzd: ['baridimob', 'crypto'],
       usd: ['binance', 'redotpay', 'crypto']
     }
+  },
+  'hma-vpn': {
+    id: 'hma-vpn',
+    name: 'HMA VPN',
+    price_dzd: 2800,
+    price_usd: 11.2,
+    durations: {
+      '2years': { dzd: 2800, usd: 11.2 }
+    },
+    description: {
+      ar: 'اشتراك HMA VPN لمدة سنتين مع وصول لكافة الخوادم.',
+      en: 'HMA VPN 2-year subscription with access to all servers.',
+      fr: 'Abonnement HMA VPN de 2 ans avec accès à tous les serveurs.'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
   }
 };
 
