@@ -274,11 +274,12 @@ const PRODUCTS = {
   'lovable': {
     id: 'lovable',
     name: 'Lovable AI',
-    price_dzd: 800,
-    price_usd: 3.5,
+    price_dzd: 1300,
+    price_usd: 5.2,
     durations: {
-      '1month': { dzd: 800, usd: 3.5 },
-      '3months': { dzd: 2000, usd: 8 }
+      '1month': { dzd: 1300, usd: 5.2 },
+      '2months': { dzd: 2200, usd: 8.8 },
+      '3months': { dzd: 3000, usd: 12 }
     },
     description: {
       ar: 'أداة متقدمة لبناء تطبيقات الويب بالذكاء الاصطناعي',
