@@ -144,6 +144,10 @@ const PRODUCTS = {
     name: 'Gamma.AI',
     price_dzd: 1200,
     price_usd: 4.5,
+    durations: {
+      '1month': { dzd: 1200, usd: 4.5 },
+      '3months': { dzd: 2900, usd: 11.6 }
+    },
     description: {
       ar: 'حساب Gamma.AI للعروض التقديمية',
       en: 'Gamma.AI account for presentations',

@@ -35,7 +35,7 @@
         "@type": "Offer",
         "url": "https://marketalgeria.store/gamma_landing.html",
         "priceCurrency": "DZD",
-        "price": "1800",
+        "price": "1200",
         "priceValidUntil": "2026-12-31",
         "availability": "https://schema.org/InStock",
         "shippingDetails": {
@@ -752,8 +752,27 @@
                 اشتراك شهري - يعمل على جميع أجهزتك
             </p>
 
-            <div class="price-badge" data-i18n="hero.price">
-                من 1200 د.ج / $6 للشهر
+            <!-- Duration Selection -->
+            <div class="gamma-duration-selection" style="margin: 24px auto; max-width: 400px;">
+                <p style="font-weight: 600; margin-bottom: 12px; font-size: 1rem; color: rgba(255, 255, 255, 0.9);"
+                    data-i18n="product.adobe.selectDuration">اختر المدة:</p>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="gamma-duration-btn active" data-duration="1month"
+                        onclick="selectGammaDuration('1month')"
+                        style="flex: 1; padding: 12px; border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.2); color: white; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s;">
+                        <span data-i18n="product.adobe.oneMonth">شهر واحد</span>
+                    </button>
+                    <button class="gamma-duration-btn" data-duration="3months" onclick="selectGammaDuration('3months')"
+                        style="flex: 1; padding: 12px; border: 2px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.6); border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s;">
+                        <span data-i18n="product.adobe.threeMonths">3 أشهر</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="price-badge">
+                <span id="display-price">1200 د.ج</span> <span
+                    style="font-size: 1rem; opacity: 0.8; vertical-align: middle;">/ <span
+                        data-i18n="hero.price.suffix">للشهر</span></span>
             </div>
 
             <!-- Payment Methods -->
@@ -1298,8 +1317,11 @@
                 'nav.home': '← الرئيسية',
                 'hero.title': 'Gamma.AI - منصة الذكاء الاصطناعي',
                 'hero.subtitle': 'أنشئ عروض تقديمية، مستندات، ومواقع إلكترونية احترافية بمساعدة الذكاء الاصطناعي',
-                'hero.duration': 'اشتراك شهري - يعمل على جميع أجهزتك',
-                'hero.price': 'من 1200 د.ج / $6 للشهر',
+                'hero.duration': 'اشتراك احترافي - يعمل على جميع أجهزتك',
+                'hero.price.suffix': 'للمدة المختارة',
+                'product.adobe.selectDuration': 'اختر المدة:',
+                'product.adobe.oneMonth': 'شهر واحد',
+                'product.adobe.threeMonths': '3 أشهر',
                 'payment.title': 'طرق الدفع المتاحة',
                 'payment.crypto': '💰 USDT / عملات رقمية',
                 'payment.redotpay': '💳 RedotPay',
@@ -1371,8 +1393,11 @@
                 'nav.home': '← Home',
                 'hero.title': 'Gamma.AI - AI-Powered Platform',
                 'hero.subtitle': 'Create professional presentations, documents, and websites with AI assistance',
-                'hero.duration': 'Monthly subscription - Works on all your devices',
-                'hero.price': 'From $6 / 1200 DZD per month',
+                'hero.duration': 'Professional subscription - Works on all your devices',
+                'hero.price.suffix': 'per duration',
+                'product.adobe.selectDuration': 'Select Duration:',
+                'product.adobe.oneMonth': '1 Month',
+                'product.adobe.threeMonths': '3 Months',
                 'payment.title': 'Available Payment Methods',
                 'payment.crypto': '💰 USDT / Cryptocurrency',
                 'payment.redotpay': '💳 RedotPay',
@@ -1444,8 +1469,11 @@
                 'nav.home': '← Accueil',
                 'hero.title': 'Gamma.AI - Plateforme IA',
                 'hero.subtitle': 'Créez des présentations, documents et sites web professionnels avec l\'IA',
-                'hero.duration': 'Abonnement mensuel - Fonctionne sur tous vos appareils',
-                'hero.price': 'À partir de $6 / 1200 DZD par mois',
+                'hero.duration': 'Abonnement Professionnel - Fonctionne sur tous vos appareils',
+                'hero.price.suffix': 'par durée',
+                'product.adobe.selectDuration': 'Choisir la durée:',
+                'product.adobe.oneMonth': '1 Mois',
+                'product.adobe.threeMonths': '3 Mois',
                 'payment.title': 'Méthodes de Paiement Disponibles',
                 'payment.crypto': '💰 USDT / Cryptomonnaie',
                 'payment.redotpay': '💳 RedotPay',
@@ -1539,10 +1567,79 @@
             });
         }
 
+        let currentDuration = '1month';
+
+        function selectGammaDuration(duration) {
+            currentDuration = duration;
+            document.querySelectorAll('.gamma-duration-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                btn.style.background = 'rgba(255, 255, 255, 0.05)';
+                btn.style.color = 'rgba(255, 255, 255, 0.6)';
+            });
+
+            const selectedBtn = document.querySelector(`.gamma-duration-btn[data-duration="${duration}"]`);
+            if (selectedBtn) {
+                selectedBtn.classList.add('active');
+                selectedBtn.style.borderColor = '#6366f1';
+                selectedBtn.style.background = 'rgba(99, 102, 241, 0.2)';
+                selectedBtn.style.color = 'white';
+            }
+
+            // Track CustomizeProduct
+            if (typeof fbq !== 'undefined') {
+                const isUSD = location.search.includes('USD');
+                fbq('track', 'CustomizeProduct', {
+                    content_name: 'Gamma.AI',
+                    variant: duration,
+                    currency: isUSD ? 'USD' : 'DZD'
+                });
+            }
+
+            updatePricesInUI();
+        }
+
+        function updatePricesInUI() {
+            const isUSD = location.search.includes('USD');
+            const prices = {
+                '1month': { dzd: 1200, usd: 6, label_ar: 'شهر واحد', label_en: '1 Month', label_fr: '1 Mois' },
+                '3months': { dzd: 2900, usd: 12, label_ar: '3 أشهر', label_en: '3 Months', label_fr: '3 Mois' }
+            };
+
+            const selectedPrice = prices[currentDuration];
+            const displayPriceEl = document.getElementById('display-price');
+
+            if (isUSD) {
+                displayPriceEl.textContent = `$${selectedPrice.usd}`;
+            } else {
+                displayPriceEl.textContent = `${selectedPrice.dzd} د.ج`;
+            }
+
+            // Update modal prices
+            document.getElementById('baridimob-price-value').textContent = `${selectedPrice.dzd} د.ج`;
+            document.getElementById('crypto-price-value').textContent = `$${selectedPrice.usd}`;
+            document.getElementById('redotpay-price-value').textContent = `$${selectedPrice.usd}`;
+        }
+
+        // Generate WhatsApp Link based on selected duration
+        function getWhatsAppLink() {
+            const prices = {
+                '1month': { dzd: 1200, usd: 6, label_ar: 'شهر واحد', label_en: '1 Month', label_fr: '1 Mois' },
+                '3months': { dzd: 2900, usd: 12, label_ar: '3 أشهر', label_en: '3 Months', label_fr: '3 Mois' }
+            };
+            const selectedPrice = prices[currentDuration];
+            const durationLabel = selectedPrice[`label_${currentLang}`] || selectedPrice.label_ar;
+            const priceStr = location.search.includes('USD') ? `$${selectedPrice.usd}` : `${selectedPrice.dzd} د.ج`;
+
+            return `https://wa.me/213782125821?text=${encodeURIComponent(`مرحباً، أريد الاشتراك في Gamma.AI - المدة: ${durationLabel} - السعر: ${priceStr}`)}`;
+        }
+
         // Payment Modal Functions
         function openBaridiMobModal() {
+            const prices = { '1month': 1200, '3months': 2900 };
+            const val = prices[currentDuration];
             document.getElementById('baridimob-modal').style.display = 'flex';
-            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Gamma.AI', value: 1200, currency: 'DZD', content_category: 'BaridiMob' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Gamma.AI', value: val, currency: 'DZD', content_category: 'BaridiMob' }); }
         }
 
         function closeBaridiMobModal() {
@@ -1557,15 +1654,16 @@
         }
 
         function confirmBaridiMobPayment() {
-            const product = 'Gamma.AI';
-            const price = document.getElementById('baridimob-price-value').textContent;
-            window.location.href = `https://wa.me/213782125821?text=أريد شراء ${product} - ${price} عبر BaridiMob`;
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: product, value: 1200, currency: 'DZD', content_category: 'BaridiMob' }); }
+            const prices = { '1month': 1200, '3months': 2900 };
+            window.location.href = getWhatsAppLink() + ' (BaridiMob)';
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'DZD', content_category: 'BaridiMob' }); }
         }
 
         function openCryptoModal() {
+            const prices = { '1month': 6, '3months': 12 };
+            const val = prices[currentDuration];
             document.getElementById('crypto-modal').style.display = 'flex';
-            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Gamma.AI', value: 1200, currency: 'DZD', content_category: 'Crypto' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Gamma.AI', value: val, currency: 'USD', content_category: 'Crypto' }); }
         }
 
         function closeCryptoModal() {
@@ -1586,15 +1684,16 @@
         }
 
         function confirmCryptoPayment() {
-            const product = 'Gamma.AI';
-            const price = document.getElementById('crypto-price-value').textContent;
-            window.location.href = `https://wa.me/213782125821?text=أريد شراء ${product} - ${price} عبر USDT`;
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: product, value: 1200, currency: 'DZD', content_category: 'Crypto' }); }
+            const prices = { '1month': 6, '3months': 12 };
+            window.location.href = getWhatsAppLink() + ' (USDT)';
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'USD', content_category: 'Crypto' }); }
         }
 
         function openRedotPayModal() {
+            const prices = { '1month': 6, '3months': 12 };
+            const val = prices[currentDuration];
             document.getElementById('redotpay-modal').style.display = 'flex';
-            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Gamma.AI', value: 1200, currency: 'DZD', content_category: 'RedotPay' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Gamma.AI', value: val, currency: 'USD', content_category: 'RedotPay' }); }
         }
 
         function closeRedotPayModal() {
@@ -1609,10 +1708,9 @@
         }
 
         function confirmRedotPayPayment() {
-            const product = 'Gamma.AI';
-            const price = document.getElementById('redotpay-price-value').textContent;
-            window.location.href = `https://wa.me/213782125821?text=أريد شراء ${product} - ${price} عبر RedotPay`;
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: product, value: 1200, currency: 'DZD', content_category: 'RedotPay' }); }
+            const prices = { '1month': 6, '3months': 12 };
+            window.location.href = getWhatsAppLink() + ' (RedotPay)';
+            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'USD', content_category: 'RedotPay' }); }
         }
 
         // Close modals when clicking outside
@@ -1627,6 +1725,7 @@
         }
 
         updateTranslations();
+        updatePricesInUI();
     </script>
 </body>
 
