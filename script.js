@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         expansionSystem = await initInternationalExpansion();
         console.log('✅ International expansion system ready');
 
+        // Add class to body to show translated content and prevent flash
+        document.body.classList.add('i18n-ready');
+
         // Setup payment button event listeners
         setupPaymentButtonListeners(expansionSystem.paymentManager);
 
@@ -2993,6 +2996,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedLang && savedLang !== 'ar') {
         changeLanguage(savedLang);
     }
+    // Always mark as ready, even if Arabic (default)
+    document.body.classList.add('i18n-ready');
 });
 
 // Giveaway Functions

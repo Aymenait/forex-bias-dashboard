@@ -11,6 +11,21 @@
         content="Netflix Premium Algeria, حساب نيتفلكس الجزائر, اشتراك نيتفلكس رخيص, نيتفلكس 4K الجزائر, Netflix BaridiMob, تجديد نيتفلكس في الجزائر, Netflix Premium Account, 4K Ultra HD Streaming, Cinema at Home, Movies and Series, Compte Netflix, Streaming Illimité, Meilleur Prix, اشتراك بريميوم, حساب شخصي, مسلسلات وأفلام">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://marketalgeria.store/netflix_landing.html">
+    <meta name="google" content="notranslate">
+
+    <script>
+        // Early language detection to prevent flashing
+        (function () {
+            const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
+            document.documentElement.lang = savedLang;
+            document.documentElement.dir = (savedLang === 'ar') ? 'rtl' : 'ltr';
+
+            // Add a style to hide data-i18n elements immediately
+            const style = document.createElement('style');
+            style.innerHTML = '[data-i18n] { opacity: 0 !important; } .i18n-ready [data-i18n] { opacity: 1 !important; transition: opacity 0.2s ease-in; }';
+            document.head.appendChild(style);
+        })();
+    </script>
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -1777,6 +1792,8 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
                 changeLanguage(savedLang);
+                // Mark as ready
+                document.body.classList.add('i18n-ready');
             });
 
             // Language button click handlers
