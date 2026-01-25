@@ -479,47 +479,50 @@ document.addEventListener('DOMContentLoaded', async () => {
         let charIndex = 0;
         let isDeleting = false;
         let typingSpeed = 100;
+        let typingTimeout = null;
 
         function typeText() {
+            // Clear any existing timeout to prevent multiple loops
+            if (typingTimeout) clearTimeout(typingTimeout);
+
             const texts = animatedTexts[window.currentLang] || animatedTexts.en;
+            if (!texts[textIndex]) {
+                textIndex = 0;
+            }
             const currentText = texts[textIndex];
 
             if (isDeleting) {
                 animatedText.textContent = currentText.substring(0, charIndex - 1);
                 charIndex--;
-                typingSpeed = 50;
+                typingSpeed = 40; // Faster deleting
             } else {
                 animatedText.textContent = currentText.substring(0, charIndex + 1);
                 charIndex++;
-                typingSpeed = 100;
+                typingSpeed = 80; // Smooth typing
             }
 
             if (!isDeleting && charIndex === currentText.length) {
                 isDeleting = true;
-                typingSpeed = 2000;
+                typingSpeed = 1500; // Just a brief pause at full text
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 textIndex = (textIndex + 1) % texts.length;
-                typingSpeed = 500;
+                typingSpeed = 200; // Quick start to next text
             }
 
-            setTimeout(typeText, typingSpeed);
+            typingTimeout = setTimeout(typeText, typingSpeed);
         }
 
-        // Initialize with first text immediately based on detected language
-        const initTexts = animatedTexts[window.currentLang] || animatedTexts.ar;
-        animatedText.textContent = initTexts[0];
-
-        // Start typing effect after the page is fully loaded with a small delay
-        window.addEventListener('load', () => {
-            setTimeout(typeText, 2000); // 2 seconds delay to let user read first sentence
-        });
+        // Start immediately
+        typeText();
 
         // Update animated text when language changes
         window.updateAnimatedText = function () {
+            if (typingTimeout) clearTimeout(typingTimeout);
             textIndex = 0;
             charIndex = 0;
             isDeleting = false;
+            typeText();
         };
     }
 });
