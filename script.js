@@ -1,25 +1,76 @@
 // Global variable for current product name
 let currentProductName = '';
 
-document.addEventListener('DOMContentLoaded', async () => {
-    // Initialize International Expansion System
-    // This integrates Currency Manager, Payment Manager, and all UI components
-    let expansionSystem = null;
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Immediate UI Logic (Synchronous)
+    // Add i18n-ready class immediately
+    document.body.classList.add('i18n-ready');
 
-    try {
-        // Initialize the complete international expansion system
-        expansionSystem = await initInternationalExpansion();
-        console.log('✅ International expansion system ready');
+    // --- Animated Text Logic Start ---
+    const animatedText = document.querySelector('.animated-text');
+    if (animatedText) {
+        const animatedTexts = {
+            ar: ['الخدمات الرقمية الاحترافية', 'حسابات النخبة التعليمية', 'الإبداع بلا حدود', 'مستقبل الذكاء الاصطناعي', 'عروض حصرية واستثنائية', 'عالم من الإبهار', 'تجربة ترفيهية مميزة', 'احترافية تتجاوز التوقعات'],
+            en: ['Premium Digital Services', 'Elite Educational Accounts', 'Creativity Without Limits', 'The Future of AI', 'Exclusive & Exceptional Offers', 'A World of Wonder', 'Unique Entertainment Experience', 'Professionalism Beyond Expectations'],
+            fr: ['Services Numériques Premium', 'Comptes Éducatifs d\'Élite', 'Créativité Sans Limites', 'L\'Avenir de l\'IA', 'Offres Exclusives & Exceptionnelles', 'Un Monde d\'Émerveillement', 'Expérience de Divertissement Unique', 'Professionnalisme au-delà des Attentes']
+        };
 
-        // Add class to body to show translated content and prevent flash
-        document.body.classList.add('i18n-ready');
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingSpeed = 100;
+        let typingTimeout = null;
 
-        // Setup payment button event listeners
-        setupPaymentButtonListeners(expansionSystem.paymentManager);
+        function typeText() {
+            if (typingTimeout) clearTimeout(typingTimeout);
+            const texts = animatedTexts[window.currentLang] || animatedTexts.ar;
+            if (!texts[textIndex]) textIndex = 0;
+            const currentText = texts[textIndex];
 
-    } catch (error) {
-        console.error('❌ Failed to initialize international expansion:', error);
+            if (isDeleting) {
+                animatedText.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+                typingSpeed = 40;
+            } else {
+                animatedText.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+                typingSpeed = 80;
+            }
+
+            if (!isDeleting && charIndex === currentText.length) {
+                isDeleting = true;
+                typingSpeed = 1500;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % texts.length;
+                typingSpeed = 200;
+            }
+            typingTimeout = setTimeout(typeText, typingSpeed);
+        }
+
+        typeText();
+
+        window.updateAnimatedText = function () {
+            if (typingTimeout) clearTimeout(typingTimeout);
+            textIndex = 0;
+            charIndex = 0;
+            isDeleting = false;
+            typeText();
+        };
     }
+    // --- Animated Text Logic End ---
+
+    // 2. Async Initialization (Separate)
+    (async () => {
+        try {
+            const expansionSystem = await initInternationalExpansion();
+            console.log('✅ International expansion system ready');
+            setupPaymentButtonListeners(expansionSystem.paymentManager);
+        } catch (error) {
+            console.error('❌ Failed to initialize international expansion:', error);
+        }
+    })();
+
 
     // 3D Tilt effect removed for better performance
 
@@ -434,96 +485,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         setInterval(nextSlide, 5000);
-    }
-
-    // Animated Text
-    const animatedText = document.querySelector('.animated-text');
-    if (animatedText) {
-        const animatedTexts = {
-            ar: [
-                'الخدمات الرقمية الاحترافية',
-                'حسابات النخبة التعليمية',
-                'الإبداع بلا حدود',
-                'مستقبل الذكاء الاصطناعي',
-                'عروض حصرية واستثنائية',
-                'عالم من الإبهار',
-                'تجربة ترفيهية مميزة',
-                'احترافية تتجاوز التوقعات'
-            ],
-            en: [
-                'Premium Digital Services',
-                'Elite Educational Accounts',
-                'Creativity Without Limits',
-                'The Future of AI',
-                'Exclusive & Exceptional Offers',
-                'A World of Wonder',
-                'Unique Entertainment Experience',
-                'Professionalism Beyond Expectations'
-            ],
-            fr: [
-                'Services Numériques Premium',
-                'Comptes Éducatifs d\'Élite',
-                'Créativité Sans Limites',
-                'L\'Avenir de l\'IA',
-                'Offres Exclusives & Exceptionnelles',
-                'Un Monde d\'Émerveillement',
-                'Expérience de Divertissement Unique',
-                'Professionnalisme au-delà des Attentes'
-            ]
-        };
-
-        const savedLang = localStorage.getItem('preferredLanguage') || 'en';
-        let currentLangForTyping = savedLang;
-
-        let textIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typingSpeed = 100;
-        let typingTimeout = null;
-
-        function typeText() {
-            // Clear any existing timeout to prevent multiple loops
-            if (typingTimeout) clearTimeout(typingTimeout);
-
-            const texts = animatedTexts[window.currentLang] || animatedTexts.en;
-            if (!texts[textIndex]) {
-                textIndex = 0;
-            }
-            const currentText = texts[textIndex];
-
-            if (isDeleting) {
-                animatedText.textContent = currentText.substring(0, charIndex - 1);
-                charIndex--;
-                typingSpeed = 40; // Faster deleting
-            } else {
-                animatedText.textContent = currentText.substring(0, charIndex + 1);
-                charIndex++;
-                typingSpeed = 80; // Smooth typing
-            }
-
-            if (!isDeleting && charIndex === currentText.length) {
-                isDeleting = true;
-                typingSpeed = 1500; // Just a brief pause at full text
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                textIndex = (textIndex + 1) % texts.length;
-                typingSpeed = 200; // Quick start to next text
-            }
-
-            typingTimeout = setTimeout(typeText, typingSpeed);
-        }
-
-        // Start immediately
-        typeText();
-
-        // Update animated text when language changes
-        window.updateAnimatedText = function () {
-            if (typingTimeout) clearTimeout(typingTimeout);
-            textIndex = 0;
-            charIndex = 0;
-            isDeleting = false;
-            typeText();
-        };
     }
 });
 
