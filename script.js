@@ -506,9 +506,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             setTimeout(typeText, typingSpeed);
         }
 
+        // Initialize with first text immediately based on detected language
+        const initTexts = animatedTexts[window.currentLang] || animatedTexts.ar;
+        animatedText.textContent = initTexts[0];
+
         // Start typing effect after the page is fully loaded with a small delay
         window.addEventListener('load', () => {
-            setTimeout(typeText, 1500);
+            setTimeout(typeText, 2000); // 2 seconds delay to let user read first sentence
         });
 
         // Update animated text when language changes

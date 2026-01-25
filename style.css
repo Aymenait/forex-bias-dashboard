@@ -57,13 +57,11 @@ body {
 }
 
 /* Initial hide for translatable content to prevent Flash of Untranslated Content (FOTC) */
-[data-i18n],
-.animated-text {
+[data-i18n] {
     opacity: 0;
 }
 
-body.i18n-ready [data-i18n],
-body.i18n-ready .animated-text {
+body.i18n-ready [data-i18n] {
     opacity: 1;
     transition: opacity 0.2s ease-in;
 }
