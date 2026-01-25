@@ -8,16 +8,11 @@
     <meta name="google" content="notranslate">
 
     <script>
-        // Early language detection to prevent flashing
-        (function () {
+        // Early language detection
+        (function() {
             const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
             document.documentElement.lang = savedLang;
             document.documentElement.dir = (savedLang === 'ar') ? 'rtl' : 'ltr';
-
-            // Add a style to hide data-i18n elements immediately if script.css is slow
-            const style = document.createElement('style');
-            style.innerHTML = '[data-i18n] { opacity: 0 !important; } .i18n-ready [data-i18n] { opacity: 1 !important; }';
-            document.head.appendChild(style);
         })();
     </script>
 
