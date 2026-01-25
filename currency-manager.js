@@ -39,13 +39,13 @@ class CurrencyManager {
       }
 
       const data = await response.json();
-      
+
       if (!data.country) {
         throw new Error('Invalid geolocation response');
       }
 
       this.userCountry = data.country;
-      
+
       // Cache the result
       this.cacheLocation(data.country);
 
@@ -64,7 +64,8 @@ class CurrencyManager {
    * @returns {string} Currency code ('DZD' or 'USD')
    */
   determineCurrency(countryCode) {
-    if (countryCode === 'DZ') {
+    // Default to DZD for Algeria or if detection fails (null/undefined)
+    if (!countryCode || countryCode === 'DZ') {
       return 'DZD';
     }
     return 'USD';
@@ -186,7 +187,7 @@ class CurrencyManager {
     // If no preference, detect location
     const locationData = await this.detectLocation();
     const currency = this.determineCurrency(locationData.country);
-    
+
     this.currentCurrency = currency;
     this.saveCurrencyPreference(currency);
 
@@ -284,10 +285,10 @@ class CurrencyManager {
     }
 
     const activeCurrency = currency || this.currentCurrency;
-    
+
     // Select the correct price based on currency (no conversion)
     const price = activeCurrency === 'DZD' ? product.price_dzd : product.price_usd;
-    
+
     return this.formatPrice(price, activeCurrency);
   }
 
@@ -297,32 +298,32 @@ class CurrencyManager {
    */
   updateAllPrices(currency) {
     const activeCurrency = currency || this.currentCurrency;
-    
+
     // Use requestAnimationFrame for better performance
     requestAnimationFrame(() => {
       // Find all price elements in DOM
       const priceElements = document.querySelectorAll('[data-price-dzd][data-price-usd]');
-      
+
       priceElements.forEach(element => {
         // Add updating class for smooth transition
         element.classList.add('updating');
-        
+
         const priceDZD = parseFloat(element.getAttribute('data-price-dzd'));
         const priceUSD = parseFloat(element.getAttribute('data-price-usd'));
-        
+
         if (isNaN(priceDZD) || isNaN(priceUSD)) {
           console.warn('Invalid price data on element:', element);
           element.classList.remove('updating');
           return;
         }
-        
+
         const product = {
           price_dzd: priceDZD,
           price_usd: priceUSD
         };
-        
+
         const formattedPrice = this.displayPrice(product, activeCurrency);
-        
+
         // Update price with slight delay for smooth transition
         setTimeout(() => {
           element.textContent = formattedPrice;

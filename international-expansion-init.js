@@ -122,8 +122,8 @@ async function initInternationalExpansion() {
   } catch (error) {
     console.error('❌ Failed to initialize International Expansion System:', error);
 
-    // Fallback: Initialize with USD as default
-    console.log('⚠️ Falling back to USD as default currency');
+    // Fallback: Initialize with DZD as default
+    console.log('⚠️ Falling back to DZD as default currency');
 
     // Create fallback managers
     let fallbackCurrencyManager, fallbackPaymentManager;
@@ -132,13 +132,13 @@ async function initInternationalExpansion() {
       fallbackCurrencyManager = new CurrencyManager();
       fallbackPaymentManager = new PaymentManager(PAYMENT_METHODS);
 
-      fallbackCurrencyManager.setCurrency('USD');
-      fallbackPaymentManager.setCurrency('USD');
+      fallbackCurrencyManager.setCurrency('DZD');
+      fallbackPaymentManager.setCurrency('DZD');
 
-      initializeCurrencySelector('USD', fallbackCurrencyManager, fallbackPaymentManager);
+      initializeCurrencySelector('DZD', fallbackCurrencyManager, fallbackPaymentManager);
       syncDOMWithConfig(); // Sync DOM even in fallback
-      fallbackCurrencyManager.updateAllPrices('USD');
-      fallbackPaymentManager.updateAllPaymentButtons('USD');
+      fallbackCurrencyManager.updateAllPrices('DZD');
+      fallbackPaymentManager.updateAllPaymentButtons('DZD');
 
       window.currencyManager = fallbackCurrencyManager;
       window.paymentManager = fallbackPaymentManager;
@@ -146,7 +146,7 @@ async function initInternationalExpansion() {
       return {
         currencyManager: fallbackCurrencyManager,
         paymentManager: fallbackPaymentManager,
-        activeCurrency: 'USD'
+        activeCurrency: 'DZD'
       };
     } catch (fallbackError) {
       console.error('❌ Fallback initialization also failed:', fallbackError);
@@ -155,7 +155,7 @@ async function initInternationalExpansion() {
       return {
         currencyManager: null,
         paymentManager: null,
-        activeCurrency: 'USD',
+        activeCurrency: 'DZD',
         error: fallbackError
       };
     }
