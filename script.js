@@ -506,7 +506,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             setTimeout(typeText, typingSpeed);
         }
 
-        typeText();
+        // Start typing effect after the page is fully loaded with a small delay
+        window.addEventListener('load', () => {
+            setTimeout(typeText, 1500);
+        });
 
         // Update animated text when language changes
         window.updateAnimatedText = function () {
@@ -1393,9 +1396,9 @@ const translations = {
         'nav.reviews': '⭐ آراء النخبة',
         'nav.contact': 'واتساب',
         'nav.telegram': 'تيليجرام',
-        'hero.title': 'بوابتك الحصرية نحو عالم من',
-        'hero.description': 'استمتع بتجربة رقمية فريدة مع حسابات متميزة، أدوات إبداعية عالمية، وحلول ذكاء اصطناعي متطورة - فخامة الخدمة تلتقي مع أفضل الأسعار في الجزائر.',
-        'hero.explore': 'استكشف الفخامة',
+        'hero.title': 'منصتك المتكاملة لكل ما تحتاجه من',
+        'hero.description': 'حسابات تعليمية، أدوات إبداعية، وحلول ذكاء اصطناعي مصممة لدعم أعمالك ومشاريعك بأفضل الأسعار وخدمة عملاء احترافية.',
+        'hero.explore': 'استكشف المنتجات',
         'hero.learn': 'اكتشف خدماتنا',
         'badge.clients': 'عميل سعيد',
         'badge.support': 'دعم فني',
