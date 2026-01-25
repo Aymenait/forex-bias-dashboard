@@ -2432,7 +2432,12 @@
                     const productId = doc.id;
 
                     // تحديد حالة المنتج (دعم النظام الجديد والقديم)
-                    const productStatus = product.status || (product.available === false ? 'unavailable' : 'available');
+                    let productStatus = product.status || (product.available === false ? 'unavailable' : 'available');
+
+                    // FORCE GOOGLE AI SOLD OUT (Hardcoded Override)
+                    if (productId === 'google-ai' || (product.name && (product.name.includes('Google AI') || product.name.includes('Gemini')))) {
+                        productStatus = 'unavailable';
+                    }
 
                     console.log(`📦 منتج ${product.name}: حالة = ${productStatus}`);
 

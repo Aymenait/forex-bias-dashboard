@@ -324,6 +324,7 @@ const PRODUCTS = {
   'google-ai': {
     id: 'google-ai',
     name: 'Google AI Ultra & Veo 3',
+    available: false,
     price_dzd: 1800,
     price_usd: 8,
     durations: {
