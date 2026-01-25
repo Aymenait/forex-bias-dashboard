@@ -942,6 +942,10 @@ function displayReviews() {
     const container = document.getElementById('reviews-container');
     const showMoreContainer = document.getElementById('show-more-container');
     const showMoreBtn = document.getElementById('show-more-btn');
+
+    // Safety check: if container doesn't exist, exit function
+    if (!container) return;
+
     container.innerHTML = '';
 
     if (reviews.length === 0) {
@@ -950,7 +954,7 @@ function displayReviews() {
                 <p data-i18n="reviews.noReviews">كن أول من يضيف تقييم! ⭐</p>
             </div>
         `;
-        showMoreContainer.style.display = 'none';
+        if (showMoreContainer) showMoreContainer.style.display = 'none';
         return;
     }
 
@@ -1001,24 +1005,28 @@ function displayReviews() {
     });
 
     // Show/Hide "Show More" button
-    if (reviews.length > REVIEWS_PER_PAGE) {
-        showMoreContainer.style.display = 'block';
-        showMoreBtn.textContent = showAllReviews ? 'عرض أقل' : `عرض المزيد (${reviews.length - REVIEWS_PER_PAGE}+)`;
-        showMoreBtn.onclick = () => {
-            showAllReviews = !showAllReviews;
-            displayReviews();
-            if (!showAllReviews) {
-                document.getElementById('reviews-container').scrollIntoView({ behavior: 'smooth' });
-            }
-        };
-    } else {
-        showMoreContainer.style.display = 'none';
+    if (showMoreContainer && showMoreBtn) {
+        if (reviews.length > REVIEWS_PER_PAGE) {
+            showMoreContainer.style.display = 'block';
+            showMoreBtn.textContent = showAllReviews ? 'عرض أقل' : `عرض المزيد (${reviews.length - REVIEWS_PER_PAGE}+)`;
+            showMoreBtn.onclick = () => {
+                showAllReviews = !showAllReviews;
+                displayReviews();
+                if (!showAllReviews) {
+                    const reviewsContainer = document.getElementById('reviews-container');
+                    if (reviewsContainer) reviewsContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+        } else {
+            showMoreContainer.style.display = 'none';
+        }
     }
 }
 
 function updateAverageRating() {
     const totalReviews = reviews.length;
-    document.getElementById('total-reviews').textContent = totalReviews;
+    const totalReviewsEl = document.getElementById('total-reviews');
+    if (totalReviewsEl) totalReviewsEl.textContent = totalReviews;
 
     if (totalReviews === 0) return;
 
