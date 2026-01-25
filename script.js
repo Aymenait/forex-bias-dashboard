@@ -2995,11 +2995,38 @@ function updateStatusBadges(lang) {
 
 // Initialize language on page load
 document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('preferredLanguage');
-    if (savedLang && savedLang !== 'ar') {
-        changeLanguage(savedLang);
+    // 1. Check for saved preference
+    let savedLang = localStorage.getItem('preferredLanguage');
+
+    // 2. If no saved preference, detect from browser
+    if (!savedLang) {
+        const browserLang = navigator.language || navigator.userLanguage;
+        if (browserLang.startsWith('en')) {
+            savedLang = 'en';
+        } else if (browserLang.startsWith('fr')) {
+            savedLang = 'fr';
+        } else {
+            savedLang = 'ar'; // Default to Arabic for others
+        }
     }
-    // Always mark as ready, even if Arabic (default)
+
+    // 3. Apply the language
+    if (savedLang !== 'ar') {
+        changeLanguage(savedLang);
+
+        // 4. If language is English, and no currency preference yet, set to USD
+        const savedCurrency = localStorage.getItem('marketalgeriaa_currency');
+        if (savedLang === 'en' && !savedCurrency && window.currencyManager) {
+            window.currencyManager.setCurrency('USD');
+            window.currencyManager.updateAllPrices('USD');
+            if (window.paymentManager) {
+                window.paymentManager.setCurrency('USD');
+                window.paymentManager.updateAllPaymentButtons('USD');
+            }
+        }
+    }
+
+    // Always mark as ready
     document.body.classList.add('i18n-ready');
 });
 
