@@ -259,7 +259,7 @@ const PRODUCTS = {
     cost_dzd: 300,
     durations: {
       '7days': { dzd: 900, usd: 3.6, cost_dzd: 300 },
-      '30days': { dzd: 2900, usd: 11.6, cost_dzd: 1500 }
+      '30days': { dzd: 3800, usd: 15.2, cost_dzd: 1500 }
     },
     description: {
       ar: 'محرر أكواد ذكي بالذكاء الاصطناعي (حساب خاص متوفر)',

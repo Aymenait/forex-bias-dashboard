@@ -1319,7 +1319,7 @@
                         </div>
 
                         <div class="cursor-prices" id="cursor-prices-30days" style="display: none;">
-                            <div class="price-tag" data-price-dzd="2900" data-price-usd="11.6">2900 د.ج</div>
+                            <div class="price-tag" data-price-dzd="3800" data-price-usd="15.2">3800 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                     data-i18n="product.cursor.30daysDuration">30 يوم (PRIVATE ACCOUNT)</span></span>
                         </div>
@@ -2773,6 +2773,121 @@
 
             const durationText = durationMap[selectedLovableType];
             const fullProductName = `${lovableConfig.name} - ${durationText}`;
+            const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+            // Track Facebook Events
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'AddToCart', {
+                    content_name: fullProductName,
+                    value: parseFloat(price) || 0,
+                    currency: currency
+                });
+                fbq('track', 'InitiateCheckout', {
+                    content_name: fullProductName,
+                    value: parseFloat(price) || 0,
+                    currency: currency
+                });
+            }
+
+            // Store product name and open contact choice modal
+            window.currentProductName = fullProductName;
+            const modal = document.getElementById('contact-choice-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.opacity = '1';
+                modal.classList.remove('hidden');
+            }
+        }
+
+
+        // Cursor Selection
+        let selectedCursorType = '7days';
+
+        function selectCursorType(type) {
+            selectedCursorType = type;
+
+            // Update Buttons
+            document.querySelectorAll('.cursor-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.border = '2px solid var(--border-color)';
+                btn.style.background = 'transparent';
+                btn.style.color = 'var(--text-secondary)';
+
+                if (btn.getAttribute('data-type') === type) {
+                    btn.classList.add('active');
+                    btn.style.border = '2px solid var(--accent)';
+                    btn.style.background = 'rgba(255, 213, 111, 0.15)';
+                    btn.style.color = 'var(--text-primary)';
+                }
+            });
+
+            // Hide all price sections first
+            document.querySelectorAll('.cursor-prices').forEach(el => el.style.display = 'none');
+
+            // Show selected price
+            const selectedPrice = document.getElementById(`cursor-prices-${type}`);
+            if (selectedPrice) {
+                selectedPrice.style.display = 'block';
+                selectedPrice.classList.add('fade-in');
+            }
+
+            // Update Order Button
+            const orderBtn = document.getElementById('cursor-order-btn');
+            const cursorConfig = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.cursor : null;
+
+            if (cursorConfig && cursorConfig.durations[type]) {
+                const price = cursorConfig.durations[type];
+                const durationMap = {
+                    '7days': '7 Days',
+                    '30days': '30 Days'
+                };
+                const durationText = durationMap[type] || type;
+                const fullProductName = `${cursorConfig.name} - ${durationText}`;
+
+                if (orderBtn) {
+                    orderBtn.setAttribute('data-product', fullProductName);
+                }
+
+                // Update payment buttons
+                const usdtBtn = document.getElementById('cursor-usdt-btn');
+                const redotBtn = document.getElementById('cursor-redotpay-btn');
+                const baridiBtn = document.getElementById('cursor-baridimob-btn');
+
+                if (usdtBtn) {
+                    usdtBtn.setAttribute('data-product', fullProductName);
+                    usdtBtn.setAttribute('data-price', price.dzd);
+                    usdtBtn.setAttribute('data-price-usd', price.usd);
+                }
+                if (redotBtn) {
+                    redotBtn.setAttribute('data-product', fullProductName);
+                    redotBtn.setAttribute('data-price', price.dzd);
+                    redotBtn.setAttribute('data-price-usd', price.usd);
+                }
+                if (baridiBtn) {
+                    baridiBtn.setAttribute('data-product', fullProductName);
+                    baridiBtn.setAttribute('data-price', price.dzd);
+                    baridiBtn.setAttribute('data-price-usd', price.usd);
+                }
+            }
+        }
+
+        function orderCursor() {
+            const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+            const cursorConfig = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.cursor : null;
+
+            if (!cursorConfig) {
+                orderProduct('Cursor AI');
+                return;
+            }
+
+            const priceObj = cursorConfig.durations[selectedCursorType];
+            const durationMap = {
+                '7days': '7 Days',
+                '30days': '30 Days'
+            };
+
+            const durationText = durationMap[selectedCursorType];
+            const fullProductName = `${cursorConfig.name} - ${durationText}`;
             const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
             // Track Facebook Events
