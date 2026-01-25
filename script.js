@@ -441,36 +441,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (animatedText) {
         const animatedTexts = {
             ar: [
-                'الخدمات الرقمية الفاخرة',
+                'الخدمات الرقمية الاحترافية',
                 'حسابات النخبة التعليمية',
                 'الإبداع بلا حدود',
                 'مستقبل الذكاء الاصطناعي',
                 'عروض حصرية واستثنائية',
                 'عالم من الإبهار',
-                'تجربة ترفيهية ملكية',
+                'تجربة ترفيهية مميزة',
                 'احترافية تتجاوز التوقعات'
             ],
             en: [
-                'Digital Services',
-                'Educational Accounts',
-                'Creative Tools',
-                'AI Solutions',
-                'Professional Products',
-                'Design & Creativity',
-                'Entertainment Content',
-                'Video Editing'
+                'Premium Digital Services',
+                'Elite Educational Accounts',
+                'Creativity Without Limits',
+                'The Future of AI',
+                'Exclusive & Exceptional Offers',
+                'A World of Wonder',
+                'Unique Entertainment Experience',
+                'Professionalism Beyond Expectations'
             ],
             fr: [
-                'Services Numériques',
-                'Comptes Éducatifs',
-                'Outils Créatifs',
-                'Solutions IA',
-                'Produits Professionnels',
-                'Design & Créativité',
-                'Contenu Divertissement',
-                'Montage Vidéo'
+                'Services Numériques Premium',
+                'Comptes Éducatifs d\'Élite',
+                'Créativité Sans Limites',
+                'L\'Avenir de l\'IA',
+                'Offres Exclusives & Exceptionnelles',
+                'Un Monde d\'Émerveillement',
+                'Expérience de Divertissement Unique',
+                'Professionnalisme au-delà des Attentes'
             ]
         };
+
+        const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+        let currentLangForTyping = savedLang;
 
         let textIndex = 0;
         let charIndex = 0;
@@ -478,7 +481,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let typingSpeed = 100;
 
         function typeText() {
-            const texts = animatedTexts[currentLang] || animatedTexts.ar;
+            const texts = animatedTexts[window.currentLang] || animatedTexts.en;
             const currentText = texts[textIndex];
 
             if (isDeleting) {
@@ -2850,7 +2853,7 @@ const translations = {
     }
 };
 
-let currentLang = 'ar';
+let currentLang = localStorage.getItem('preferredLanguage') || 'ar';
 
 // Make translations and language state globally available
 window.translations = translations;
