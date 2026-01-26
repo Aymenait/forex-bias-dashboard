@@ -1910,6 +1910,7 @@ const translations = {
         'product.alight.feature1': 'وصول لكافة ميزات Pro',
         'product.alight.feature2': 'بدون علامة مائية',
         'product.alight.feature3': 'دعم كافة الصيغ والجودات العالية',
+        'product.soldOut': 'نفذت الكمية',
     },
     en: {
         'brand.tagline': 'Digital Solutions That Boost Your Presence',

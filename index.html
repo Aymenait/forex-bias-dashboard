@@ -1454,31 +1454,36 @@
 
 
                     <!-- Google AI Ultra / Veo 3 -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" style="opacity: 0.8;">
                         <div class="product-image"
-                            style="background-image: url('https://i.pinimg.com/1200x/7e/62/16/7e6216341c4347f9d576b9b1644491eb.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;"
+                            style="background-image: url('https://i.pinimg.com/1200x/7e/62/16/7e6216341c4347f9d576b9b1644491eb.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative;"
                             role="img" aria-label="Google AI Ultra & Veo 3">
+                            <div class="sold-out-badge"
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); background: rgba(220, 38, 38, 0.9); color: white; padding: 10px 20px; font-weight: 800; font-size: 1.5rem; border: 2px solid white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 10;">
+                                SOLD OUT</div>
                         </div>
                         <h3>Google AI Ultra & Veo 3</h3>
                         <p class="description" data-i18n="product.veo.desc">أقوى اشتراك من جوجل يشمل Gemini Ultra و Veo
                             3 مع 45,000 نقطة لتوليد الفيديوهات.</p>
 
                         <div style="display: flex; align-items: center; gap: 8px; margin: 12px 0;">
-                            <div class="price-tag" data-price-dzd="1800" data-price-usd="8">1800 د.ج</div>
+                            <div class="price-tag" data-price-dzd="1800" data-price-usd="8"
+                                style="text-decoration: line-through; opacity: 0.7;">1800 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                     data-i18n="product.chatgpt.oneMonth">شهر واحد</span></span>
                         </div>
 
-                        <ul class="product-features">
+                        <ul class="product-features" style="opacity: 0.6;">
                             <li data-i18n="product.veo.feature1">توليد 2,500 فيديو عبر Veo 3</li>
                             <li data-i18n="product.veo.feature2">وصول لـ Gemini Ultra و Deep Research 2</li>
                             <li data-i18n="product.veo.feature3">حساب خاص Google Workspace بالكامل</li>
                         </ul>
                         <a href="google_ai_landing" class="discover-btn" data-i18n="product.discoverMore">اكتشف
                             المزيد</a>
-                        <button class="order-btn" id="veo-order-btn" data-product="Google AI Ultra & Veo 3"
-                            data-i18n="product.orderNow" onclick="orderProduct('Google AI Ultra & Veo 3')">اطلب
-                            الآن</button>
+                        <button class="order-btn" id="veo-order-btn" data-product="Google AI Ultra & Veo 3" disabled
+                            style="background: #333 !important; cursor: not-allowed !important; border-color: #555 !important; opacity: 0.7;">
+                            <span data-i18n="product.soldOut">SOLD OUT</span>
+                        </button>
                     </div>
 
                     <!-- Alight Motion -->
