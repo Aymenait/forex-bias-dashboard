@@ -66,7 +66,8 @@ const PAYMENT_METHODS = {
         TRC20: 'TWTgY41LNFqZcgBiRCZYsSq6ooeCx8gus9',
         ERC20: 'ERC20_ADDRESS',
         BEP20: 'BEP20_ADDRESS'
-      }
+      },
+      binance_pay_id: 'ID_HERE'
     }
   },
   redotpay: {
@@ -453,10 +454,5 @@ function getProductPrice(product, currency) {
   return null;
 }
 
-// Export for use in other modules (CommonJS)
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { CURRENCIES, PAYMENT_METHODS, PRODUCTS, validateProduct, validateAllProducts, getProductPrice };
-}
-
-// ES6 exports for testing (commented out for browser compatibility)
-// export { CURRENCIES, PAYMENT_METHODS, PRODUCTS, validateProduct, validateAllProducts, getProductPrice };
+// Export for use in other modules
+export { CURRENCIES, PAYMENT_METHODS, PRODUCTS, validateProduct, validateAllProducts, getProductPrice };
