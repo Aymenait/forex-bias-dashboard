@@ -1910,6 +1910,10 @@ const translations = {
         'product.alight.feature1': 'وصول لكافة ميزات Pro',
         'product.alight.feature2': 'بدون علامة مائية',
         'product.alight.feature3': 'دعم كافة الصيغ والجودات العالية',
+        'product.scispace.desc': 'مساعد بحث علمي مدعوم بالذكاء الاصطناعي لتسهيل القراءة والكتابة والنشر.',
+        'product.scispace.feature1': 'مساعد قراءة ذكي (Copilot)',
+        'product.scispace.feature2': 'أدوات كشف السرقة الأدبية والتلخيص',
+        'product.scispace.feature3': 'صادرات بصيغ متنوعة ودعم فني',
         'product.soldOut': 'نفذت الكمية',
     },
     en: {
@@ -1997,6 +2001,10 @@ const translations = {
         'product.capcut.oneYear': '1 Year Full',
         'product.netflix.desc': 'Netflix Premium account with 4 simultaneous screens in 4K Ultra HD quality.',
         'product.netflix.price': 'Price Coming Soon',
+        'product.scispace.desc': 'AI-powered scientific research assistant for easier reading, writing, and publishing.',
+        'product.scispace.feature1': 'Smart Reading Assistant (Copilot)',
+        'product.scispace.feature2': 'Plagiarism Detection & Summerization tools',
+        'product.scispace.feature3': 'Multiple export formats & tech support',
         'product.netflix.feature1': 'Watch on 4 devices simultaneously',
         'product.netflix.feature2': '4K Ultra HD + HDR quality',
         'product.netflix.feature3': 'Download content for offline viewing',
@@ -2830,6 +2838,10 @@ const translations = {
         'product.alight.feature1': 'Accès à toutes les fonctionnalités Pro',
         'product.alight.feature2': 'Sans filigrane',
         'product.alight.feature3': 'Prend en charge tous les formats et hautes qualités',
+        'product.scispace.desc': 'Assistant de recherche scientifique IA pour faciliter la lecture, l\'écriture et la publication.',
+        'product.scispace.feature1': 'Assistant de lecture intelligent (Copilot)',
+        'product.scispace.feature2': 'Détection du plagiat et outils de résumé',
+        'product.scispace.feature3': 'Formats d\'exportation multiples et support technique',
     }
 };
 
@@ -3870,6 +3882,79 @@ function orderHma() {
     }
 }
 
+// SciSpace Selection Functions
+function selectScispaceDuration(duration) {
+    document.querySelectorAll('.scispace-duration-btn').forEach(btn => btn.classList.remove('active'));
+    const selectedBtn = document.querySelector(`.scispace-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) selectedBtn.classList.add('active');
+
+    const config = PRODUCTS['scispace'];
+    const priceObj = config.durations[duration];
+    const name = duration === '1month' ? 'SciSpace Premium - 1 Month' : 'SciSpace Premium - 3 Months';
+
+    // Show/hide prices
+    document.querySelectorAll('.scispace-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`scispace-prices-${duration}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('scispace-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['scispace-usdt-btn', 'scispace-redotpay-btn', 'scispace-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'SciSpace Premium',
+            variant: duration,
+            currency: currency
+        });
+    }
+}
+
+function orderScispace() {
+    const activeBtn = document.querySelector('.scispace-duration-btn.active');
+    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
+    const name = duration === '1month' ? 'SciSpace Premium - 1 Month' : 'SciSpace Premium - 3 Months';
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['scispace'];
+    const priceObj = config.durations[duration];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
 // Order Adobe with selected type
 function orderAdobe() {
     const activeBtn = document.querySelector('.adobe-type-btn.active');
@@ -4057,10 +4142,12 @@ function contactVia(platform) {
 // Make order functions globally available
 window.orderAdobe = orderAdobe;
 window.orderGamma = orderGamma;
+window.orderScispace = orderScispace;
 window.contactVia = contactVia;
 window.orderProduct = orderProduct;
 window.selectAdobeType = selectAdobeType;
 window.selectGammaType = selectGammaType;
+window.selectScispaceDuration = selectScispaceDuration;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Scroll Reveal Animation (Parallax removed for better performance)

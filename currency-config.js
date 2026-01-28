@@ -101,19 +101,17 @@ const PRODUCTS = {
   },
   'chatgpt': {
     id: 'chatgpt',
-    name: 'ChatGPT Business',
+    name: 'ChatGPT Plus',
     price_dzd: 1000,
     price_usd: 4,
     durations: {
       'plus': { dzd: 1000, usd: 4 },
-
-      'go': { dzd: 1800, usd: 7 },
-      'business': { dzd: 3000, usd: 12 }
+      'go': { dzd: 1800, usd: 7 }
     },
     description: {
-      ar: 'حساب ChatGPT Business للاستخدام المشترك',
-      en: 'ChatGPT Business shared account',
-      fr: 'Compte ChatGPT Business partagé'
+      ar: 'حساب ChatGPT Plus للاستخدام المشترك',
+      en: 'ChatGPT Plus shared account',
+      fr: 'Compte ChatGPT Plus partagé'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],
@@ -374,6 +372,25 @@ const PRODUCTS = {
       ar: 'اشتراك Alight Motion Pro لمدة سنة كاملة لتصميم الفيديو باحترافية.',
       en: 'Alight Motion Pro 1-year subscription for professional video design.',
       fr: 'Abonnement Alight Motion Pro d\'un an pour la conception vidéo professionnelle.'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'scispace': {
+    id: 'scispace',
+    name: 'SciSpace Premium',
+    price_dzd: 1800,
+    price_usd: 7.2,
+    durations: {
+      '1month': { dzd: 1800, usd: 7.2 },
+      '3months': { dzd: 3000, usd: 12 }
+    },
+    description: {
+      ar: 'مساعد بحث علمي مدعوم بالذكاء الاصطناعي لتسهيل القراءة والكتابة والنشر.',
+      en: 'AI-powered scientific research assistant for easier reading, writing, and publishing.',
+      fr: 'Assistant de recherche scientifique alimenté par l\'IA pour faciliter la lecture, l\'écriture et la publication.'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],
