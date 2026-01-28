@@ -105,13 +105,12 @@ const PRODUCTS = {
     price_dzd: 1000,
     price_usd: 4,
     durations: {
-      'plus': { dzd: 1000, usd: 4 },
-      'go': { dzd: 1800, usd: 7 }
+      'plus': { dzd: 1000, usd: 4 }
     },
     description: {
-      ar: 'حساب ChatGPT Plus للاستخدام المشترك',
-      en: 'ChatGPT Plus shared account',
-      fr: 'Compte ChatGPT Plus partagé'
+      ar: 'حساب ChatGPT Plus شخصي (Private Account)',
+      en: 'ChatGPT Plus private account',
+      fr: 'Compte ChatGPT Plus privé'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],
@@ -125,8 +124,8 @@ const PRODUCTS = {
     price_usd: 4.5,
     durations: {
       '1month': { dzd: 1200, usd: 4.5 },
-      '2months': { dzd: 1800, usd: 7 },
-      '3months': { dzd: 2500, usd: 10 }
+      '2months': { dzd: 2200, usd: 8.5 },
+      '3months': { dzd: 2900, usd: 11.6 }
     },
     description: {
       ar: 'اشتراك Adobe Creative Cloud يشمل أكثر من 20 تطبيقًا احترافيًا',
@@ -471,5 +470,4 @@ function getProductPrice(product, currency) {
   return null;
 }
 
-// Export for use in other modules
-export { CURRENCIES, PAYMENT_METHODS, PRODUCTS, validateProduct, validateAllProducts, getProductPrice };
+// End of file - Removed export to ensure global compatibility in browser script tags.

@@ -3662,64 +3662,104 @@ window.openAddReviewModal = openAddReviewModal;
 window.closeAddReviewModal = closeAddReviewModal;
 
 
-// Adobe Account Type Selection
-function selectAdobeType(type) {
-    const buttons = document.querySelectorAll('.adobe-type-btn');
-    buttons.forEach(btn => {
-        if (btn.getAttribute('data-type') === type) {
-            btn.classList.add('active');
-            btn.style.border = '2px solid var(--accent)';
-            btn.style.background = 'rgba(255, 213, 111, 0.15)';
-            btn.style.color = 'var(--text-primary)';
-        } else {
-            btn.classList.remove('active');
-            btn.style.border = '2px solid var(--border-color)';
-            btn.style.background = 'transparent';
-            btn.style.color = 'var(--text-secondary)';
+// Adobe Duration Selection
+function selectAdobeDuration(duration) {
+    document.querySelectorAll('.adobe-duration-btn').forEach(btn => btn.classList.remove('active'));
+    const selectedBtn = document.querySelector(`.adobe-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) selectedBtn.classList.add('active');
+
+    const config = PRODUCTS['adobe'];
+    const priceObj = config.durations[duration];
+    const productNames = {
+        '1month': 'Adobe Creative Cloud - 1 Month',
+        '2months': 'Adobe Creative Cloud - 2 Months',
+        '3months': 'Adobe Creative Cloud - 3 Months'
+    };
+    const name = productNames[duration];
+
+    // Show/hide prices
+    document.querySelectorAll('.adobe-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`adobe-prices-${duration}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('adobe-order-btn');
+    if (orderBtn) {
+        orderBtn.setAttribute('data-product', name);
+    }
+
+    // Update payment buttons
+    const paymentButtons = ['adobe-usdt-btn', 'adobe-redotpay-btn', 'adobe-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
         }
     });
 
-    // Show/hide prices
-    if (type === 'shared') {
-        document.getElementById('adobe-prices-shared').style.display = 'block';
-        document.getElementById('adobe-prices-personal').style.display = 'none';
-    } else {
-        document.getElementById('adobe-prices-shared').style.display = 'none';
-        document.getElementById('adobe-prices-personal').style.display = 'block';
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'Adobe Creative Cloud',
+            variant: duration,
+            currency: currency
+        });
     }
 }
 
-// Gamma.AI Account Type Selection
-function selectGammaType(type) {
-    const buttons = document.querySelectorAll('.gamma-type-btn');
-    buttons.forEach(btn => {
-        if (btn.getAttribute('data-type') === type) {
-            btn.classList.add('active');
-            btn.style.border = '2px solid var(--accent)';
-            btn.style.background = 'rgba(255, 213, 111, 0.15)';
-            btn.style.color = 'var(--text-primary)';
-        } else {
-            btn.classList.remove('active');
-            btn.style.border = '2px solid var(--border-color)';
-            btn.style.background = 'transparent';
-            btn.style.color = 'var(--text-secondary)';
+// Gamma.AI Duration Selection
+function selectGammaDuration(duration) {
+    document.querySelectorAll('.gamma-duration-btn').forEach(btn => btn.classList.remove('active'));
+    const selectedBtn = document.querySelector(`.gamma-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) selectedBtn.classList.add('active');
+
+    const config = PRODUCTS['gamma'];
+    const priceObj = config.durations[duration];
+    const productNames = {
+        '1month': 'Gamma.AI - 1 Month',
+        '3months': 'Gamma.AI - 3 Months'
+    };
+    const name = productNames[duration];
+
+    // Show/hide prices
+    document.querySelectorAll('.gamma-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`gamma-prices-${duration}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('gamma-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['gamma-usdt-btn', 'gamma-redotpay-btn', 'gamma-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
         }
     });
 
-    // Show/hide prices
-    if (type === 'shared') {
-        document.getElementById('gamma-prices-shared').style.display = 'block';
-        document.getElementById('gamma-prices-personal').style.display = 'none';
-    } else {
-        document.getElementById('gamma-prices-shared').style.display = 'none';
-        document.getElementById('gamma-prices-personal').style.display = 'block';
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
     }
+
     // Track CustomizeProduct
     if (typeof fbq !== 'undefined') {
         const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
         fbq('track', 'CustomizeProduct', {
             content_name: 'Gamma.AI',
-            variant: type,
+            variant: duration,
             currency: currency
         });
     }
@@ -3765,6 +3805,11 @@ function selectCursorType(type) {
             btn.setAttribute('data-price-usd', priceObj.usd);
         }
     });
+
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
 
     // Track CustomizeProduct
     if (typeof fbq !== 'undefined') {
@@ -3839,6 +3884,11 @@ function selectHmaDuration(duration) {
         }
     });
 
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
     // Track CustomizeProduct
     if (typeof fbq !== 'undefined') {
         const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
@@ -3912,6 +3962,11 @@ function selectScispaceDuration(duration) {
         }
     });
 
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
     // Track CustomizeProduct
     if (typeof fbq !== 'undefined') {
         const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
@@ -3955,42 +4010,36 @@ function orderScispace() {
     }
 }
 
-// Order Adobe with selected type
+// Order Adobe
 function orderAdobe() {
-    const activeBtn = document.querySelector('.adobe-type-btn.active');
-    const type = activeBtn ? activeBtn.getAttribute('data-type') : 'shared';
-    const productName = type === 'shared' ? 'Adobe Creative Cloud - Shared' : 'Adobe Creative Cloud - Personal';
+    const activeBtn = document.querySelector('.adobe-duration-btn.active');
+    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
+    const productNames = {
+        '1month': 'Adobe Creative Cloud - 1 Month',
+        '2months': 'Adobe Creative Cloud - 2 Months',
+        '3months': 'Adobe Creative Cloud - 3 Months'
+    };
+    const name = productNames[duration];
 
-    // Detect current currency
     const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['adobe'];
+    const priceObj = config.durations[duration];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
-    // Dynamically find price based on currency
-    let price = 0;
-    const priceDisplay = document.getElementById(type === 'shared' ? 'adobe-prices-shared' : 'adobe-prices-personal');
-    if (priceDisplay) {
-        const priceTag = priceDisplay.querySelector('.price-tag');
-        if (priceTag) {
-            const attr = currency === 'USD' ? 'data-price-usd' : 'data-price-dzd';
-            price = priceTag.getAttribute(attr) || priceTag.textContent.replace(/[^0-9.]/g, '');
-        }
-    }
-
-    // Track Facebook Events
     if (typeof fbq !== 'undefined') {
-        fbq('track', 'Lead', {
-            content_name: productName,
-            value: parseFloat(price) || 0,
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
             currency: currency
         });
         fbq('track', 'InitiateCheckout', {
-            content_name: productName,
-            value: parseFloat(price) || 0,
+            content_name: name,
+            value: parseFloat(price),
             currency: currency
         });
     }
 
-    // Store product name and open contact choice modal
-    currentProductName = productName;
+    window.currentProductName = name;
     const modal = document.getElementById('contact-choice-modal');
     if (modal) {
         modal.style.display = 'flex';
@@ -3999,42 +4048,560 @@ function orderAdobe() {
     }
 }
 
-// Order Gamma with selected type
+// Order Gamma
 function orderGamma() {
-    const activeBtn = document.querySelector('.gamma-type-btn.active');
-    const type = activeBtn ? activeBtn.getAttribute('data-type') : 'shared';
-    const productName = type === 'shared' ? 'Gamma.AI - Shared' : 'Gamma.AI - Personal';
+    const activeBtn = document.querySelector('.gamma-duration-btn.active');
+    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
+    const productNames = {
+        '1month': 'Gamma.AI - 1 Month',
+        '3months': 'Gamma.AI - 3 Months'
+    };
+    const name = productNames[duration];
 
-    // Detect current currency
     const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['gamma'];
+    const priceObj = config.durations[duration];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
-    // Dynamically find price based on currency
-    let price = 0;
-    const priceDisplay = document.getElementById(type === 'shared' ? 'gamma-prices-shared' : 'gamma-prices-personal');
-    if (priceDisplay) {
-        const priceTag = priceDisplay.querySelector('.price-tag');
-        if (priceTag) {
-            const attr = currency === 'USD' ? 'data-price-usd' : 'data-price-dzd';
-            price = priceTag.getAttribute(attr) || priceTag.textContent.replace(/[^0-9.]/g, '');
-        }
-    }
-
-    // Track Facebook Events
     if (typeof fbq !== 'undefined') {
-        fbq('track', 'Lead', {
-            content_name: productName,
-            value: parseFloat(price) || 0,
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
             currency: currency
         });
         fbq('track', 'InitiateCheckout', {
-            content_name: productName,
-            value: parseFloat(price) || 0,
+            content_name: name,
+            value: parseFloat(price),
             currency: currency
         });
     }
 
-    // Store product name and open contact choice modal
-    currentProductName = productName;
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+// ChatGPT Selection Functions
+function selectChatGPTType(type) {
+    document.querySelectorAll('.chatgpt-type-btn').forEach(btn => btn.classList.remove('active'));
+    const selectedBtn = document.querySelector(`.chatgpt-type-btn[data-type="${type}"]`);
+    if (selectedBtn) selectedBtn.classList.add('active');
+
+    const config = PRODUCTS['chatgpt'];
+    const priceObj = config.durations[type];
+    const names = {
+        'plus': 'ChatGPT Plus - 1 Month',
+        'go': 'ChatGPT GO - 12 Months',
+        'business': 'ChatGPT Business - 12 Months'
+    };
+    const name = names[type];
+
+    // Show/hide prices
+    document.querySelectorAll('.chatgpt-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`chatgpt-prices-${type}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('chatgpt-order-btn');
+    if (orderBtn) {
+        orderBtn.setAttribute('data-product', name);
+    }
+
+    // Update payment buttons
+    const paymentButtons = ['chatgpt-crypto-btn', 'chatgpt-redotpay-btn', 'chatgpt-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'ChatGPT',
+            variant: type,
+            currency: currency
+        });
+    }
+}
+
+function orderChatGPT() {
+    const activeBtn = document.querySelector('.chatgpt-type-btn.active');
+    const type = activeBtn ? activeBtn.getAttribute('data-type') : 'plus';
+    const names = {
+        'plus': 'ChatGPT Plus - 1 Month',
+        'go': 'ChatGPT GO - 12 Months',
+        'business': 'ChatGPT Business - 12 Months'
+    };
+    const name = names[type];
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['chatgpt'];
+    const priceObj = config.durations[type];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+// CapCut Selection Functions
+function selectCapcutDuration(duration) {
+    document.querySelectorAll('.capcut-duration-btn').forEach(btn => btn.classList.remove('active'));
+    const selectedBtn = document.querySelector(`.capcut-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) selectedBtn.classList.add('active');
+
+    const config = PRODUCTS['capcut'];
+    const priceObj = config.durations[duration];
+    const names = {
+        '1month': 'CapCut Pro - 30 Days',
+        '3months': 'CapCut Pro - 3 Months',
+        '6months': 'CapCut Pro - 6 Months',
+        '1year': 'CapCut Pro - 1 Year'
+    };
+    const name = names[duration];
+
+    // Show/hide prices
+    document.querySelectorAll('.capcut-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`capcut-prices-${duration}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('capcut-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['capcut-usdt-btn', 'capcut-redotpay-btn', 'capcut-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'CapCut Pro',
+            variant: duration,
+            currency: currency
+        });
+    }
+}
+
+function orderCapcut() {
+    const activeBtn = document.querySelector('.capcut-duration-btn.active');
+    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
+    const names = {
+        '1month': 'CapCut Pro - 30 Days',
+        '3months': 'CapCut Pro - 3 Months',
+        '6months': 'CapCut Pro - 6 Months',
+        '1year': 'CapCut Pro - 1 Year'
+    };
+    const name = names[duration];
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['capcut'];
+    const priceObj = config.durations[duration];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+// Lovable Selection Functions
+function selectLovableType(type) {
+    const buttons = document.querySelectorAll('.lovable-type-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        // Reset inline styles
+        btn.style.border = '2px solid var(--border-color)';
+        btn.style.background = 'rgba(100, 100, 100, 0.1)';
+        btn.style.color = 'var(--text-secondary)';
+    });
+
+    const selectedBtn = document.querySelector(`.lovable-type-btn[data-type="${type}"]`);
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+        // Apply active inline styles
+        selectedBtn.style.border = '2px solid var(--accent)';
+        selectedBtn.style.background = 'rgba(255, 213, 111, 0.15)';
+        selectedBtn.style.color = 'var(--text-primary)';
+    }
+
+    const config = PRODUCTS['lovable'];
+    const priceObj = config.durations[type];
+    const names = {
+        '1month': 'Lovable AI - 1 Month',
+        '2months': 'Lovable AI - 2 Months',
+        '3months': 'Lovable AI - 3 Months'
+    };
+    const name = names[type];
+
+    // Show/hide prices
+    document.querySelectorAll('.lovable-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`lovable-prices-${type}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('lovable-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['lovable-usdt-btn', 'lovable-redotpay-btn', 'lovable-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'Lovable AI',
+            variant: type,
+            currency: currency
+        });
+    }
+}
+
+function orderLovable() {
+    const activeBtn = document.querySelector('.lovable-type-btn.active');
+    const type = activeBtn ? activeBtn.getAttribute('data-type') : '1month';
+    const names = {
+        '1month': 'Lovable AI - 1 Month',
+        '2months': 'Lovable AI - 2 Months',
+        '3months': 'Lovable AI - 3 Months'
+    };
+    const name = names[type];
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['lovable'];
+    const priceObj = config.durations[type];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+// Netflix Selection Functions
+function selectNetflixType(type) {
+    const buttons = document.querySelectorAll('.netflix-type-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        // Reset inline styles
+        btn.style.border = '2px solid var(--border-color)';
+        btn.style.background = 'rgba(100, 100, 100, 0.1)';
+        btn.style.color = 'var(--text-secondary)';
+    });
+
+    const selectedBtn = document.querySelector(`.netflix-type-btn[data-type="${type}"]`);
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+        // Apply active inline styles (Netflix Red)
+        selectedBtn.style.border = '2px solid #E50914';
+        selectedBtn.style.background = 'rgba(229, 9, 20, 0.15)';
+        selectedBtn.style.color = 'var(--text-primary)';
+    }
+
+    const config = PRODUCTS['netflix'];
+    const priceObj = config.durations[type];
+    const names = {
+        '1month': 'Netflix Premium - 1 Month',
+        '3months': 'Netflix Premium - 3 Months',
+        '12months': 'Netflix Premium - 1 Year'
+    };
+    const name = names[type];
+
+    // Show/hide prices
+    document.querySelectorAll('.netflix-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`netflix-prices-${type}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('netflix-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['netflix-usdt-btn', 'netflix-redotpay-btn', 'netflix-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'Netflix Premium',
+            variant: type,
+            currency: currency
+        });
+    }
+}
+
+function orderNetflix() {
+    const activeBtn = document.querySelector('.netflix-type-btn.active');
+    const type = activeBtn ? activeBtn.getAttribute('data-type') : '1month';
+    const names = {
+        '1month': 'Netflix Premium - 1 Month',
+        '3months': 'Netflix Premium - 3 Months',
+        '12months': 'Netflix Premium - 1 Year'
+    };
+    const name = names[type];
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['netflix'];
+    const priceObj = config.durations[type];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+// Canva Selection Functions
+function selectCanvaType(type) {
+    document.querySelectorAll('.canva-type-btn').forEach(btn => btn.classList.remove('active'));
+    const selectedBtn = document.querySelector(`.canva-type-btn[data-type="${type}"]`);
+    if (selectedBtn) selectedBtn.classList.add('active');
+
+    const config = PRODUCTS['canva'];
+    const priceObj = config.durations[type];
+    const name = type === 'standard' ? 'Canva Pro' : 'Canva Reseller Offer';
+
+    // Show/hide prices
+    document.querySelectorAll('.canva-prices').forEach(price => price.style.display = 'none');
+    const priceId = type === 'standard' ? 'canva-prices-standard' : 'canva-prices-reseller';
+    const priceEl = document.getElementById(priceId);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('canva-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['canva-usdt-btn', 'canva-redotpay-btn', 'canva-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'Canva Pro',
+            variant: type,
+            currency: currency
+        });
+    }
+}
+
+function orderCanva() {
+    const activeBtn = document.querySelector('.canva-type-btn.active');
+    const type = activeBtn ? activeBtn.getAttribute('data-type') : 'standard';
+    const name = type === 'standard' ? 'Canva Pro' : 'Canva Reseller Offer';
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['canva'];
+    const priceObj = config.durations[type];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+// Gemini Selection Functions
+function selectGeminiDuration(duration) {
+    document.querySelectorAll('.gemini-duration-btn').forEach(btn => btn.classList.remove('active'));
+    const selectedBtn = document.querySelector(`.gemini-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) selectedBtn.classList.add('active');
+
+    const config = PRODUCTS['google-ai'];
+    const priceObj = config.durations[duration];
+    const name = duration === '1month' ? 'Gemini Pro - 1 Month' : 'Gemini Pro - 1 Year';
+
+    // Show/hide prices
+    document.querySelectorAll('.gemini-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`gemini-prices-${duration}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('gemini-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'Gemini Pro',
+            variant: duration,
+            currency: currency
+        });
+    }
+}
+
+function orderGemini() {
+    const activeBtn = document.querySelector('.gemini-duration-btn.active');
+    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
+    const name = duration === '1month' ? 'Gemini Pro - 1 Month' : 'Gemini Pro - 1 Year';
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['google-ai'];
+    const priceObj = config.durations[duration];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
     const modal = document.getElementById('contact-choice-modal');
     if (modal) {
         modal.style.display = 'flex';
@@ -4139,15 +4706,31 @@ function contactVia(platform) {
     }
 }
 
-// Make order functions globally available
+// Make selection and order functions globally available
+window.selectAdobeDuration = selectAdobeDuration;
 window.orderAdobe = orderAdobe;
+window.selectGammaDuration = selectGammaDuration;
 window.orderGamma = orderGamma;
+window.selectChatGPTType = selectChatGPTType;
+window.orderChatGPT = orderChatGPT;
+window.selectCapcutDuration = selectCapcutDuration;
+window.orderCapcut = orderCapcut;
+window.selectLovableType = selectLovableType;
+window.orderLovable = orderLovable;
+window.selectNetflixType = selectNetflixType;
+window.orderNetflix = orderNetflix;
+window.selectCanvaType = selectCanvaType;
+window.orderCanva = orderCanva;
+window.selectGeminiDuration = selectGeminiDuration;
+window.orderGemini = orderGemini;
+window.selectHmaDuration = selectHmaDuration;
+window.orderHma = orderHma;
+window.selectCursorType = selectCursorType;
+window.orderCursor = orderCursor;
+window.selectScispaceDuration = selectScispaceDuration;
 window.orderScispace = orderScispace;
 window.contactVia = contactVia;
 window.orderProduct = orderProduct;
-window.selectAdobeType = selectAdobeType;
-window.selectGammaType = selectGammaType;
-window.selectScispaceDuration = selectScispaceDuration;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Scroll Reveal Animation (Parallax removed for better performance)
