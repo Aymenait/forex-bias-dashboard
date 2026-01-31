@@ -1656,7 +1656,7 @@
         function confirmBaridiMobPayment() {
             const prices = { '1month': 1200, '3months': 2900 };
             window.location.href = getWhatsAppLink() + ' (BaridiMob)';
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'DZD', content_category: 'BaridiMob' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'DZD', content_category: 'BaridiMob' }); }
         }
 
         function openCryptoModal() {
@@ -1686,7 +1686,7 @@
         function confirmCryptoPayment() {
             const prices = { '1month': 6, '3months': 12 };
             window.location.href = getWhatsAppLink() + ' (USDT)';
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'USD', content_category: 'Crypto' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'USD', content_category: 'Crypto' }); }
         }
 
         function openRedotPayModal() {
@@ -1710,7 +1710,7 @@
         function confirmRedotPayPayment() {
             const prices = { '1month': 6, '3months': 12 };
             window.location.href = getWhatsAppLink() + ' (RedotPay)';
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'USD', content_category: 'RedotPay' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'USD', content_category: 'RedotPay' }); }
         }
 
         // Close modals when clicking outside

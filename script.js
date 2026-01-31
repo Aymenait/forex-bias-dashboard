@@ -513,9 +513,9 @@ function confirmCryptoPayment() {
     const priceUSD = document.getElementById('crypto-price-usd').textContent;
     const network = document.getElementById('selected-network').textContent;
 
-    // Track Purchase event with Meta Pixel (USD for Crypto payments)
+    // Track Lead event with Meta Pixel (USD for Crypto payments)
     if (typeof fbq !== 'undefined') {
-        fbq('track', 'Purchase', {
+        fbq('track', 'Lead', {
             value: parseFloat(priceUSD),
             currency: 'USD',
             content_name: productName,
@@ -590,9 +590,9 @@ function confirmRedotPayPayment() {
     const productName = document.getElementById('redotpay-product-name').textContent;
     const priceUSD = document.getElementById('redotpay-price-usd').textContent;
 
-    // Track Purchase event with Meta Pixel (USD for RedotPay payments)
+    // Track Lead event with Meta Pixel (USD for RedotPay payments)
     if (typeof fbq !== 'undefined') {
-        fbq('track', 'Purchase', {
+        fbq('track', 'Lead', {
             value: parseFloat(priceUSD),
             currency: 'USD',
             content_name: productName,
@@ -668,9 +668,9 @@ function confirmBaridiMobPayment() {
     const productName = document.getElementById('baridimob-product-name').textContent;
     const priceDZD = document.getElementById('baridimob-price-dzd').textContent;
 
-    // Track Purchase event with Meta Pixel (DZD for BaridiMob/CCP payments)
+    // Track Lead event with Meta Pixel (DZD for BaridiMob/CCP payments)
     if (typeof fbq !== 'undefined') {
-        fbq('track', 'Purchase', {
+        fbq('track', 'Lead', {
             value: parseFloat(priceDZD),
             currency: 'DZD',
             content_name: productName,
@@ -1532,14 +1532,11 @@ const translations = {
         'footer.rights': 'جميع الحقوق محفوظة',
         'footer.instagram': 'إنستغرام',
         'footer.whatsapp': 'واتساب',
-        'footer.telegram': 'تيليجرام',
         'contact.whatsapp': 'تواصل عبر واتساب',
-        'contact.telegram': 'تواصل عبر تيليجرام',
         'contact.instagram': 'تابعنا على إنستغرام',
         'modal.chooseContact': 'اختر وسيلة التواصل',
         'modal.chooseContactDesc': 'اختر الطريقة المفضلة لديك لإتمام الطلب',
         'modal.whatsapp': 'واتساب',
-        'modal.telegram': 'تيليجرام',
         'modal.instagram': 'إنستغرام',
         'modal.product': 'المنتج:',
         'modal.price': 'السعر:',
@@ -2148,14 +2145,11 @@ const translations = {
         'footer.rights': 'All rights reserved',
         'footer.instagram': 'Instagram',
         'footer.whatsapp': 'WhatsApp',
-        'footer.telegram': 'Telegram',
         'contact.whatsapp': 'Contact via WhatsApp',
-        'contact.telegram': 'Contact via Telegram',
         'contact.instagram': 'Follow us on Instagram',
         'modal.chooseContact': 'Choose Contact Method',
         'modal.chooseContactDesc': 'Choose your preferred way to complete the order',
         'modal.whatsapp': 'WhatsApp',
-        'modal.telegram': 'Telegram',
         'modal.instagram': 'Instagram',
         'modal.product': 'Product:',
         'modal.price': 'Price:',
@@ -2719,14 +2713,11 @@ const translations = {
         'footer.rights': 'Tous droits réservés',
         'footer.instagram': 'Instagram',
         'footer.whatsapp': 'WhatsApp',
-        'footer.telegram': 'Telegram',
         'contact.whatsapp': 'Contactez via WhatsApp',
-        'contact.telegram': 'Contactez via Telegram',
         'contact.instagram': 'Suivez-nous sur Instagram',
         'modal.chooseContact': 'Choisissez le Moyen de Contact',
         'modal.chooseContactDesc': 'Choisissez votre méthode préférée pour finaliser la commande',
         'modal.whatsapp': 'WhatsApp',
-        'modal.telegram': 'Telegram',
         'modal.instagram': 'Instagram',
         'modal.product': 'Produit:',
         'modal.price': 'Prix:',
@@ -4650,7 +4641,7 @@ function orderProduct(productName) {
             value: parseFloat(price) || 0,
             currency: currency
         });
-        fbq('track', 'InitiateCheckout', {
+        fbq('track', 'Lead', {
             content_name: productName,
             value: parseFloat(price) || 0,
             currency: currency
@@ -4681,8 +4672,6 @@ function contactVia(platform) {
     // Open the selected platform
     if (platform === 'whatsapp') {
         window.open(`https://wa.me/213782125821?text=${encodeURIComponent(message)}`, '_blank');
-    } else if (platform === 'telegram') {
-        window.open(`https://t.me/+213656165400?text=${encodeURIComponent(message)}`, '_blank');
     } else if (platform === 'instagram') {
         window.open('https://www.instagram.com/market_algeriaa', '_blank');
     }

@@ -1132,7 +1132,7 @@
             const product = 'Canva Pro';
             const price = document.getElementById('baridimob-price-value').textContent;
             window.location.href = `https://wa.me/213782125821?text=أريد شراء ${product} - ${price} عبر BaridiMob`;
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: product, value: 600, currency: 'DZD', content_category: 'BaridiMob' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: product, value: 600, currency: 'DZD', content_category: 'BaridiMob' }); }
         }
 
         function openCryptoModal() {
@@ -1173,7 +1173,7 @@
             const product = 'Canva Pro';
             const price = document.getElementById('crypto-price-value').textContent;
             window.location.href = `https://wa.me/213782125821?text=أريد شراء ${product} - ${price} عبر USDT`;
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: product, value: 600, currency: 'DZD', content_category: 'Crypto' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: product, value: 600, currency: 'DZD', content_category: 'Crypto' }); }
         }
 
         function openRedotPayModal() {
@@ -1196,7 +1196,7 @@
             const product = 'Canva Pro';
             const price = document.getElementById('redotpay-price-value').textContent;
             window.location.href = `https://wa.me/213782125821?text=أريد شراء ${product} - ${price} عبر RedotPay`;
-            if (typeof fbq !== 'undefined') { fbq('track', 'Purchase', { content_name: product, value: 600, currency: 'DZD', content_category: 'RedotPay' }); }
+            if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: product, value: 600, currency: 'DZD', content_category: 'RedotPay' }); }
         }
 
         // Make functions global

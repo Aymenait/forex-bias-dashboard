@@ -110,7 +110,7 @@ Thank you!`;
         const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
         const value = currency === 'USD' ? parseFloat(priceUSD) : parseFloat(priceDZD);
 
-        fbq('track', 'Purchase', {
+        fbq('track', 'Lead', {
             content_name: productName,
             value: value || 0,
             currency: currency,
@@ -147,7 +147,7 @@ Thank you!`;
         const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
         const value = currency === 'USD' ? parseFloat(priceUSD) : parseFloat(priceDZD);
 
-        fbq('track', 'Purchase', {
+        fbq('track', 'Lead', {
             content_name: productName,
             value: value || 0,
             currency: currency,
@@ -180,7 +180,7 @@ Thank you!`;
     // Track Facebook Purchase event
     if (typeof fbq !== 'undefined') {
         // BaridiMob is usually DZD only, but we keep it consistent
-        fbq('track', 'Purchase', {
+        fbq('track', 'Lead', {
             content_name: productName,
             value: parseFloat(priceDZD) || 0,
             currency: 'DZD',
