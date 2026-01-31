@@ -4030,13 +4030,7 @@ function orderAdobe() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // Order Gamma
@@ -4067,13 +4061,7 @@ function orderGamma() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // ChatGPT Selection Functions
@@ -4157,13 +4145,7 @@ function orderChatGPT() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // CapCut Selection Functions
@@ -4247,13 +4229,7 @@ function orderCapcut() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // Lovable Selection Functions
@@ -4349,13 +4325,7 @@ function orderLovable() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // Netflix Selection Functions
@@ -4451,13 +4421,7 @@ function orderNetflix() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // Canva Selection Functions
@@ -4530,13 +4494,7 @@ function orderCanva() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // Gemini Selection Functions
@@ -4592,13 +4550,32 @@ function orderGemini() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
+    redirectToWhatsApp(name, price, currency);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NEW: Central WhatsApp Redirection Function
+// ═══════════════════════════════════════════════════════════════════════════
+
+function redirectToWhatsApp(productName, price, currency) {
+    const currencySym = currency === 'USD' ? '$' : 'DA';
+    const messageAr = `مرحباً 👋\nأريد طلب: ${productName}\nالسعر: ${price} ${currencySym}\n\nشكراً 🙏`;
+    const messageEn = `Hello 👋\nI would like to order: ${productName}\nPrice: ${price} ${currencySym}\n\nThank you 🙏`;
+
+    const message = (window.currentLang === 'ar') ? messageAr : messageEn;
+
+    // Track Facebook Contact event
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Contact', {
+            content_name: productName,
+            content_category: 'whatsapp',
+            value: parseFloat(price),
+            currency: currency
+        });
     }
+
+    // Direct redirection
+    window.open(`https://wa.me/213782125821?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 // Generic order function for products without special options
@@ -4648,40 +4625,17 @@ function orderProduct(productName) {
         });
     }
 
-    // Store product name and open contact choice modal
-    currentProductName = productName;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(productName, price, currency);
 }
 
-// Contact via selected platform
+// Contact via selected platform (Legacy support for modals if still lingering)
 function contactVia(platform) {
-    // Multilingual messages
-    const messages = {
-        ar: `مرحباً 👋\nأريد طلب: ${currentProductName}\n\nشكراً 🙏`,
-        en: `Hello 👋\nI would like to order: ${currentProductName}\n\nThank you 🙏`,
-        fr: `Bonjour 👋\nJe voudrais commander: ${currentProductName}\n\nMerci 🙏`
-    };
-
-    const message = messages[currentLang] || messages.ar;
-
-    // Open the selected platform
     if (platform === 'whatsapp') {
-        window.open(`https://wa.me/213782125821?text=${encodeURIComponent(message)}`, '_blank');
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        // Try to estimate price or just send product name
+        redirectToWhatsApp(window.currentProductName || 'Product', '', currency);
     } else if (platform === 'instagram') {
         window.open('https://www.instagram.com/market_algeriaa', '_blank');
-    }
-
-    // Track Facebook Contact event
-    if (typeof fbq !== 'undefined') {
-        fbq('track', 'Contact', {
-            content_name: currentProductName,
-            content_category: platform
-        });
     }
 
     // Close the modal
