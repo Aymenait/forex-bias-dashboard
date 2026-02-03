@@ -27,15 +27,37 @@ async function loadLivePrices() {
 
           if (PRODUCTS[productId]) {
             // Update local product with remote data
-            // We only update specific fields to avoid breaking the local config structure
-            if (remoteProduct.price_dzd) PRODUCTS[productId].price_dzd = remoteProduct.price_dzd;
-            if (remoteProduct.price_usd) PRODUCTS[productId].price_usd = remoteProduct.price_usd;
+            // Safeguard: Don't overwrite Adobe with old prices if local is already updated
+            const isAdobe = productId === 'adobe';
+
+            if (remoteProduct.price_dzd) {
+              const isOldAdobePrice = isAdobe && remoteProduct.price_dzd < 1500;
+              if (!isOldAdobePrice) PRODUCTS[productId].price_dzd = remoteProduct.price_dzd;
+            }
+            if (remoteProduct.price_usd) {
+              const isOldAdobePriceUSD = isAdobe && remoteProduct.price_usd < 5.5;
+              if (!isOldAdobePriceUSD) PRODUCTS[productId].price_usd = remoteProduct.price_usd;
+            }
+
             if (remoteProduct.durations) {
-              // Merge durations
-              PRODUCTS[productId].durations = {
-                ...PRODUCTS[productId].durations,
-                ...remoteProduct.durations
-              };
+              // Merge durations with safeguard for Adobe
+              if (isAdobe) {
+                const mergedDurations = { ...PRODUCTS[productId].durations };
+                const minPrices = { '1month': 1500, '2months': 2500, '3months': 3200 };
+
+                Object.entries(remoteProduct.durations).forEach(([key, val]) => {
+                  const minPrice = minPrices[key];
+                  // Only update if remote price is NOT an old/lower price
+                  if (minPrice && val.dzd < minPrice) return;
+                  mergedDurations[key] = val;
+                });
+                PRODUCTS[productId].durations = mergedDurations;
+              } else {
+                PRODUCTS[productId].durations = {
+                  ...PRODUCTS[productId].durations,
+                  ...remoteProduct.durations
+                };
+              }
             }
             if (remoteProduct.active !== undefined) PRODUCTS[productId].active = remoteProduct.active;
 
