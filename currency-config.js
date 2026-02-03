@@ -120,8 +120,8 @@ const PRODUCTS = {
   'adobe': {
     id: 'adobe',
     name: 'Adobe Creative Cloud',
-    price_dzd: 1200,
-    price_usd: 4.5,
+    price_dzd: 1500,
+    price_usd: 5.5,
     durations: {
       '1month': { dzd: 1500, usd: 5.5 },
       '2months': { dzd: 2500, usd: 9.2 },
