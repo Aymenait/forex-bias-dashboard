@@ -123,9 +123,9 @@ const PRODUCTS = {
     price_dzd: 1200,
     price_usd: 4.5,
     durations: {
-      '1month': { dzd: 1200, usd: 4.5 },
-      '2months': { dzd: 2200, usd: 8.5 },
-      '3months': { dzd: 2900, usd: 11.6 }
+      '1month': { dzd: 1500, usd: 5.5 },
+      '2months': { dzd: 2500, usd: 9.2 },
+      '3months': { dzd: 3200, usd: 11.8 }
     },
     description: {
       ar: 'اشتراك Adobe Creative Cloud يشمل أكثر من 20 تطبيقًا احترافيًا',
