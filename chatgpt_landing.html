@@ -102,9 +102,9 @@
         // Detailed ViewContent and InterestedLead
         const isUSD = location.search.includes('USD');
         fbq('track', 'ViewContent', {
-            content_name: 'ChatGPT Plus',
+            content_name: 'ChatGPT Business',
             content_category: 'AI Tools',
-            value: isUSD ? 4 : 1000,
+            value: isUSD ? 6 : 1200,
             currency: isUSD ? 'USD' : 'DZD'
         });
 
@@ -699,7 +699,7 @@
             </p>
 
             <div class="price-badge" data-i18n="hero.price">
-                فقط بـ 6 دولارات
+                فقط بـ 1200 دج
             </div>
 
             <!-- Payment Methods -->
@@ -735,8 +735,8 @@
                 </div>
             </div>
 
-            <a href="https://wa.me/213782125821?text=????? ???? ?????"
-                onclick="if(typeof fbq !== 'undefined') { const isUSD = location.search.includes('USD'); const val = isUSD ? 6 : 1000; const cur = isUSD ? 'USD' : 'DZD'; fbq('track', 'Lead', {content_name: 'ChatGPT Plus', value: val, currency: cur}); fbq('track', 'InitiateCheckout', {content_name: 'ChatGPT Plus', value: val, currency: cur}); }"
+            <a href="https://wa.me/213782125821?text=مرحباً، أريد الاشتراك في ChatGPT"
+                onclick="if(typeof fbq !== 'undefined') { const isUSD = location.search.includes('USD'); const val = isUSD ? 6 : 1200; const cur = isUSD ? 'USD' : 'DZD'; fbq('track', 'Lead', {content_name: 'ChatGPT Business', value: val, currency: cur}); fbq('track', 'InitiateCheckout', {content_name: 'ChatGPT Business', value: val, currency: cur}); }"
                 class="cta-button" data-i18n="cta.button">
                 اطلب الآن عبر WhatsApp
             </a>
@@ -1013,8 +1013,8 @@
                 style="background: rgba(16, 163, 127, 0.1); border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
                 <p style="color: #fff; margin-bottom: 10px;"><strong id="baridimob-product">المنتج:</strong> ChatGPT
                     Business (GPT-5.1)</p>
-                <p style="color: #fff;"><strong id="baridimob-price">السعر:</strong> <span id="baridimob-price-value">6
-                        دولارات</span></p>
+                <p style="color: #fff;"><strong id="baridimob-price">السعر:</strong> <span
+                        id="baridimob-price-value">1200 دج</span></p>
             </div>
 
             <div
@@ -1067,8 +1067,8 @@
                 style="background: rgba(16, 163, 127, 0.1); border: 1px solid #10a37f; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
                 <p style="color: #fff; margin-bottom: 10px;"><strong id="crypto-product">المنتج:</strong> ChatGPT
                     Business (GPT-5.1)</p>
-                <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">6
-                        دولارات</span></p>
+                <p style="color: #fff;"><strong id="crypto-price">السعر:</strong> <span id="crypto-price-value">6 USD
+                        (1200 دج)</span></p>
             </div>
 
             <div style="margin-bottom: 20px;">
@@ -1145,7 +1145,7 @@
                 <p style="color: #fff; margin-bottom: 10px;"><strong id="redotpay-product">المنتج:</strong> ChatGPT
                     Business (GPT-5.1)</p>
                 <p style="color: #fff;"><strong id="redotpay-price">السعر:</strong> <span id="redotpay-price-value">6
-                        دولارات</span></p>
+                        USD (1200 دج)</span></p>
             </div>
 
             <div
@@ -1327,8 +1327,8 @@
             alert('تم نسخ RedotPay ID بنجاح!');
         }
         function confirmRedotPayPayment() {
-            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر RedotPay لـ ChatGPT Plus', '_blank');
-            if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: 'ChatGPT Plus', value: 1000, currency: 'DZD', content_category: 'RedotPay' }); }
+            window.open('https://wa.me/213782125821?text=مرحباً، قمت بالدفع عبر RedotPay لـ ChatGPT Business', '_blank');
+            if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: 'ChatGPT Business', value: 1200, currency: 'DZD', content_category: 'RedotPay' }); }
         }
 
         // Add click events to payment buttons
@@ -1402,39 +1402,45 @@
     const translations = {
         ar: {
             'nav.home': '← الرئيسية',
-            'hero.title': 'ChatGPT Plus',
+            'hero.title': 'ChatGPT Plus & Business',
             'hero.subtitle': 'مساحة عمل خاصة بأمان تام ورسائل غير محدودة',
-            'hero.price': 'فقط بـ 4 دولارات',
+            'hero.price': 'فقط بـ 1200 دج',
             'payment.title': 'طرق الدفع المتاحة',
             'cta.button': 'اطلب الآن عبر WhatsApp',
             'desc.title': 'ارتقِ بإنتاجيتك إلى مستوى الشركات الكبرى',
             'desc.subtitle': 'لا تدفع شيئاً حتى تستلم حسابك وتجربه بنفسك.',
-            'desc.text': 'هل ما زلت تعتمد على النسخة المجانية المحدودة أو اشتراك Plus الذي يشاركك فيه الملايين؟ حان الوقت لتمتلك مساحة عمل احترافية (Workspace) خاصة بك، مدعومة بأقوى نموذج ذكاء اصطناعي في العالم',
-            'desc.text2': '، مع ضمان الخصوصية الكاملة لبياناتك.',
-            'comp.title': '📊 لماذا يجب أن تنتقل إلى ChatGPT Plus الآن؟',
-            'comp.subtitle': 'من خلال تحليلنا للخطط المتوفرة، إليك الفروقات الجوهرية التي تجعل اشتراك Plus هو الخيار الوحيد للمحترفين:',
+            'desc.text': 'هل ما زلت تعتمد على النسخة المجانية المحدودة؟ حان الوقت لتمتلك حساب Business احترافي (Workspace) خاص بك، مدعوم بأقوى نموذج ذكاء اصطناعي في العالم (GPT-5)، مع تفعيل بسيط على إيميلك الشخصي.',
+            'desc.text2': '',
+            'comp.title': '📊 لماذا يجب أن تنتقل إلى ChatGPT Business الآن؟',
+            'comp.subtitle': 'من خلال تحليلنا للخطط المتوفرة، إليك الفروقات الجوهرية التي تجعل اشتراك Business هو الخيار الأفضل للمحترفين:',
             'comp.free.title': 'الخطة المجانية',
             'comp.free.subtitle': '"مجرد تجربة"',
             'comp.free.item1': '❌ ذاكرة ضعيفة وسياق محدود',
             'comp.free.item2': '❌ للإجابات السريعة فقط',
             'comp.free.item3': '❌ لا يصلح للأعمال الجادة',
             'comp.plus.title': 'خطة Plus',
-            'comp.plus.price': '20$/شهرياً',
-            'comp.plus.item1': '✅ Sora و Codex',
-            'comp.plus.item2': '⚠️ محدودة بعدد رسائل معين',
+            'comp.plus.price': '1000 دج/شهر',
+            'comp.plus.item1': '✅ GPT-4o, Sora, Canvas',
+            'comp.plus.item2': '⚠️ تفعيل عبر إيميل وباسورد',
             'comp.plus.item3': '⚠️ بياناتك قد تُستخدم للتدريب',
-            'comp.business.title': 'خطة Plus',
-            'comp.business.price': '4$/شهرياً',
+            'comp.business.title': 'خطة Business',
+            'comp.business.price': '1200 دج/شهر',
             'comp.business.badge': 'الأفضل 🚀',
-            'comp.business.item1': '✅ رسائل غير محدودة مع GPT-5.1',
-            'comp.business.item2': '✅ خصوصية تامة - لا تدريب على بياناتك',
-            'comp.business.item3': '✅ تحليلات احترافية',
-            'comp.business.item4': '✅ وكلاء ومساعدين متطورين',
-            'features.title': '✨ كل ما تحصل عليه مع خطة Plus',
+            'comp.business.item1': '✅ رسائل غير محدودة (GPT-5)',
+            'comp.business.item2': '✅ تفعيل على إيميلك الشخصي',
+            'comp.business.item3': '✅ خصوصية تامة للبيانات',
+            'comp.business.item4': '✅ دعم GPT-4o Pro المعقد',
+            'comp.wholesale.title': 'عرض الجملة (Resellers)',
+            'comp.wholesale.price': '2000 دج فقط',
+            'comp.wholesale.item1': '✅ حساب كامل (Email + Password)',
+            'comp.wholesale.item2': '✅ إضافة 5 أشخاص (أنت + 5)',
+            'comp.wholesale.item3': '✅ تفعيل سريع (5-30 دقيقة)',
+            'comp.wholesale.item4': '⚠️ التفعيل بعد الدفع مباشرة',
+            'features.title': '✨ كل ما تحصل عليه مع خطة Business',
             'features.price.official': 'السعر الرسمي',
-            'features.price.official.value': '$25/شهر',
+            'features.price.official.value': '30$/شهر',
             'features.price.our': 'سعرنا',
-            'features.price.only': '4$ فقط!',
+            'features.price.only': '1200 دج فقط!',
             'feature1.title': 'تحليلات احترافية',
             'feature1.desc': 'قم بإجراء تحليلات متقدمة للبيانات وإنشاء رسوم بيانية وعروض تقديمية',
             'feature2.title': 'رسائل غير محدودة مع GPT-5',
@@ -1459,15 +1465,15 @@
             'feature11.desc': 'مساعد برمجة متقدم لكتابة وتحسين الأكواد',
             'feature12.title': 'تصفح الإنترنت والبحث الفوري',
             'feature12.desc': 'الحصول على معلومات محدثة من الويب في الوقت الفعلي',
-            'features.final': '🎯 كل هذا بسعر 4 دولارات فقط!',
-            'features.save': 'وفّر $21 شهرياً مقارنة بالسعر الرسمي',
-            'footer.text': '© 2024 ChatGPT Plus. جميع الحقوق محفوظة.',
+            'features.final': '🎯 كل هذا بسعر 1200 دج فقط!',
+            'features.save': 'وفّر أكثر من 4000 دج شهرياً مقارنة بالسعر الرسمي',
+            'footer.text': '© 2024 ChatGPT Business. جميع الحقوق محفوظة.',
             'trust.title': '🛡️ ضمان الثقة والخصوصية (عرضنا الحصري)',
             'trust.subtitle': 'نحن ندرك أن السوق مليء بالحسابات المشتركة والوهمية، لذلك نقدم لك عرضاً يكسر كل قواعد الخوف:',
             'trust.private.title': '✅ حساب خاص وليس مشترك',
             'trust.private.desc': 'أنت لا تشتري "إيميلاً وباسورد" يدخل عليه 10 أشخاص. أنت تشتري دعوة رسمية لمساحة عمل خاصة بك وحدك (Private Workspace).',
             'trust.payment.title': '💰 الدفع بعد التفعيل',
-            'trust.payment.desc': 'ثقتنا في خدمتنا تجعلنا لا نطلب منك فلساً واحداً مقدماً. أرسل إيميلك، استقبل الدعوة، فعّل حسابك وتأكد من عمل GPT-5.1، ثم ادفع.',
+            'trust.payment.desc': 'ثقتنا في خدمتنا تجعلنا لا نطلب منك فلساً واحداً مقدماً. أرسل إيميلك، استقبل الدعوة، فعّل حسابك وتأكد من عمل GPT-5، ثم ادفع.',
             'trust.monthly.title': '🔄 نظام الاشتراك الشهري',
             'trust.monthly.desc': 'الخدمة تعمل بنظام "الحساب الشهري" (30 يوماً كاملة). بعد انتهاء الشهر، يُغلق الحساب تلقائياً ولا يتم التجديد عليه لضمان أقصى درجات الأمان والبدء بداية نظيفة كل شهر.',
             'howto.title': '📝 كيف تحصل على اشتراكك؟ (3 خطوات بسيطة)',
@@ -1478,20 +1484,20 @@
             'howto.step3.title': 'الاستمتاع والدفع',
             'howto.step3.desc': 'بمجرد دخولك للوحة التحكم والتأكد من المميزات، يمكنك إتمام عملية الدفع.',
             'final.title': '⚠️ لا تضيع وقتك مع القيود',
-            'final.subtitle': 'امتلك قوة GPT-5.1 اللامحدودة اليوم!',
+            'final.subtitle': 'امتلك قوة GPT-5 اللامحدودة اليوم!',
             'final.button': '🚀 اشترك الآن'
         },
         en: {
             'nav.home': '← Home',
-            'hero.title': 'ChatGPT Plus',
+            'hero.title': 'ChatGPT Plus & Business',
             'hero.subtitle': 'Private workspace with complete security and unlimited messages',
-            'hero.price': 'Only $4',
+            'hero.price': 'Only 1200 DZD',
             'payment.title': 'Available Payment Methods',
             'cta.button': 'Order Now via WhatsApp',
             'desc.title': 'Elevate Your Productivity to Enterprise Level',
             'desc.subtitle': 'Don\'t pay anything until you receive and test your account.',
-            'desc.text': 'Are you still relying on the limited free version or the Plus subscription shared by millions? It\'s time to own a professional Workspace of your own, powered by the world\'s most powerful AI model',
-            'desc.text2': ', with complete privacy guarantee for your data.',
+            'desc.text': 'Are you still relying on the limited free version? It\'s time to own a professional Business (Workspace) of your own, powered by the world\'s most powerful AI model (GPT-5), with simple activation on your personal email.',
+            'desc.text2': '',
             'comp.title': '📊 Why Should You Switch to ChatGPT Business Now?',
             'comp.subtitle': 'Through our analysis of available plans, here are the fundamental differences that make Business subscription the only choice for professionals:',
             'comp.free.title': 'Free Plan',
@@ -1500,22 +1506,28 @@
             'comp.free.item2': '❌ For quick answers only',
             'comp.free.item3': '❌ Not suitable for serious work',
             'comp.plus.title': 'Plus Plan',
-            'comp.plus.price': '$20/month',
-            'comp.plus.item1': '✅ Sora and Codex',
-            'comp.plus.item2': '⚠️ Limited by message count',
+            'comp.plus.price': '1000 DZD/month',
+            'comp.plus.item1': '✅ GPT-4o, Sora, Canvas',
+            'comp.plus.item2': '⚠️ Email & Password activation',
             'comp.plus.item3': '⚠️ Your data may be used for training',
-            'comp.business.title': 'Plus Plan',
-            'comp.business.price': '$4/month',
+            'comp.business.title': 'Business Plan',
+            'comp.business.price': '1200 DZD/month',
             'comp.business.badge': 'Best 🚀',
-            'comp.business.item1': '✅ Unlimited messages with GPT-5.1',
-            'comp.business.item2': '✅ Complete privacy - no training on your data',
-            'comp.business.item3': '✅ Professional analytics',
-            'comp.business.item4': '✅ Advanced agents and assistants',
-            'features.title': '✨ Everything You Get with Plus Plan',
+            'comp.business.item1': '✅ Unlimited messages (GPT-5)',
+            'comp.business.item2': '✅ Activation on your personal email',
+            'comp.business.item3': '✅ Total data privacy',
+            'comp.business.item4': '✅ Complex GPT-4o Pro support',
+            'comp.wholesale.title': 'Wholesale (Resellers)',
+            'comp.wholesale.price': '2000 DZD Only',
+            'comp.wholesale.item1': '✅ Full Account (Email + Password)',
+            'comp.wholesale.item2': '✅ Add 5 People (You + 5)',
+            'comp.wholesale.item3': '✅ Fast Activation (5-30 mins)',
+            'comp.wholesale.item4': '⚠️ Activation after payment',
+            'features.title': '✨ Everything You Get with Business Plan',
             'features.price.official': 'Official Price',
-            'features.price.official.value': '$25/month',
+            'features.price.official.value': '$30/month',
             'features.price.our': 'Our Price',
-            'features.price.only': 'Only $4!',
+            'features.price.only': 'Only 1200 DZD!',
             'feature1.title': 'Professional Analytics',
             'feature1.desc': 'Perform advanced data analysis and create charts and presentations',
             'feature2.title': 'Unlimited Messages with GPT-5',
@@ -1540,15 +1552,15 @@
             'feature11.desc': 'Advanced programming assistant for writing and improving code',
             'feature12.title': 'Web Browsing and Real-time Search',
             'feature12.desc': 'Get updated information from the web in real-time',
-            'features.final': '🎯 All this for only $6!',
-            'features.save': 'Save $19 monthly compared to official price',
+            'features.final': '🎯 All this for only 1200 DZD!',
+            'features.save': 'Save more than 4000 DZD monthly compared to official price',
             'footer.text': '© 2024 ChatGPT Business. All rights reserved.',
             'trust.title': '🛡️ Trust & Privacy Guarantee (Our Exclusive Offer)',
             'trust.subtitle': 'We know the market is full of shared and fake accounts, so we offer you a deal that breaks all fear rules:',
             'trust.private.title': '✅ Private Account, Not Shared',
             'trust.private.desc': 'You\'re not buying an "email and password" that 10 people access. You\'re buying an official invitation to your own private workspace.',
             'trust.payment.title': '💰 Pay After Activation',
-            'trust.payment.desc': 'Our confidence in our service means we don\'t ask for a penny upfront. Send your email, receive the invitation, activate your account and verify GPT-5.1 works, then pay.',
+            'trust.payment.desc': 'Our confidence in our service means we don\'t ask for a penny upfront. Send your email, receive the invitation, activate your account and verify GPT-5 works, then pay.',
             'trust.monthly.title': '🔄 Monthly Subscription System',
             'trust.monthly.desc': 'The service works on a "monthly account" system (full 30 days). After the month ends, the account closes automatically with no renewal to ensure maximum security and a fresh start each month.',
             'howto.title': '📝 How to Get Your Subscription? (3 Simple Steps)',
@@ -1559,20 +1571,20 @@
             'howto.step3.title': 'Enjoy and Pay',
             'howto.step3.desc': 'Once you enter the dashboard and verify the features, you can complete the payment process.',
             'final.title': '⚠️ Don\'t Waste Time with Limitations',
-            'final.subtitle': 'Own the Unlimited Power of GPT-5.1 Today!',
+            'final.subtitle': 'Own the Unlimited Power of GPT-5 Today!',
             'final.button': '🚀 Subscribe Now'
         },
         fr: {
             'nav.home': '← Accueil',
-            'hero.title': 'ChatGPT Plus',
+            'hero.title': 'ChatGPT Plus & Business',
             'hero.subtitle': 'Espace de travail privé avec sécurité totale et messages illimités',
-            'hero.price': 'Seulement 4$',
+            'hero.price': 'Seulement 1200 DZD',
             'payment.title': 'Méthodes de paiement disponibles',
             'cta.button': 'Commander maintenant via WhatsApp',
             'desc.title': 'Élevez votre productivité au niveau des grandes entreprises',
             'desc.subtitle': 'Ne payez rien avant de recevoir et tester votre compte.',
-            'desc.text': 'Comptez-vous toujours sur la version gratuite limitée ou l\'abonnement Plus partagé par des millions? Il est temps de posséder un Workspace professionnel qui vous est propre, alimenté par le modèle d\'IA le plus puissant au monde',
-            'desc.text2': ', avec une garantie de confidentialité complète pour vos données.',
+            'desc.text': 'Comptez-vous toujours sur la version gratuite limitée? Il est temps de posséder un Business (Workspace) professionnel qui vous est propre, alimenté par le modèle d\'IA le plus puissant au monde (GPT-5), avec une activation simple sur votre e-mail personnel.',
+            'desc.text2': '',
             'comp.title': '📊 Pourquoi devriez-vous passer à ChatGPT Business maintenant?',
             'comp.subtitle': 'Grâce à notre analyse des plans disponibles, voici les différences fondamentales qui font de l\'abonnement Business le seul choix pour les professionnels:',
             'comp.free.title': 'Plan Gratuit',
@@ -1581,22 +1593,28 @@
             'comp.free.item2': '❌ Pour réponses rapides seulement',
             'comp.free.item3': '❌ Ne convient pas au travail sérieux',
             'comp.plus.title': 'Plan Plus',
-            'comp.plus.price': '20$/mois',
-            'comp.plus.item1': '✅ Sora et Codex',
-            'comp.plus.item2': '⚠️ Limité par nombre de messages',
+            'comp.plus.price': '1000 DZD/mois',
+            'comp.plus.item1': '✅ GPT-4o, Sora, Canvas',
+            'comp.plus.item2': '⚠️ Activation par e-mail et mot de passe',
             'comp.plus.item3': '⚠️ Vos données peuvent être utilisées pour l\'entraînement',
-            'comp.business.title': 'Plan Plus',
-            'comp.business.price': '4$/mois',
+            'comp.business.title': 'Plan Business',
+            'comp.business.price': '1200 DZD/mois',
             'comp.business.badge': 'Meilleur 🚀',
-            'comp.business.item1': '✅ Messages illimités avec GPT-5.1',
-            'comp.business.item2': '✅ Confidentialité totale - pas d\'entraînement sur vos données',
-            'comp.business.item3': '✅ Analyses professionnelles',
-            'comp.business.item4': '✅ Agents et assistants avancés',
-            'features.title': '✨ Tout ce que vous obtenez avec le plan Plus',
+            'comp.business.item1': '✅ Messages illimités (GPT-5)',
+            'comp.business.item2': '✅ Activation sur votre e-mail personnel',
+            'comp.business.item3': '✅ Confidentialité totale des données',
+            'comp.business.item4': '✅ Support GPT-4o Pro complexe',
+            'comp.wholesale.title': 'Offre de Gros (Revendeurs)',
+            'comp.wholesale.price': '2000 DZD seulement',
+            'comp.wholesale.item1': '✅ Compte complet (Email + Password)',
+            'comp.wholesale.item2': '✅ Ajouter 5 personnes (Vous + 5)',
+            'comp.wholesale.item3': '✅ Activation rapide (5-30 min)',
+            'comp.wholesale.item4': '⚠️ Activation après paiement',
+            'features.title': '✨ Tout ce que vous obtenez avec le plan Business',
             'features.price.official': 'Prix officiel',
-            'features.price.official.value': '25$/mois',
+            'features.price.official.value': '30$/mois',
             'features.price.our': 'Notre prix',
-            'features.price.only': 'Seulement 4$!',
+            'features.price.only': '1200 DZD seulement!',
             'feature1.title': 'Analyses professionnelles',
             'feature1.desc': 'Effectuez des analyses de données avancées et créez des graphiques et présentations',
             'feature2.title': 'Messages illimités avec GPT-5',
@@ -1621,8 +1639,8 @@
             'feature11.desc': 'Assistant de programmation avancé pour écrire et améliorer le code',
             'feature12.title': 'Navigation Web et recherche en temps réel',
             'feature12.desc': 'Obtenez des informations mises à jour du web en temps réel',
-            'features.final': '🎯 Tout cela pour seulement 6$!',
-            'features.save': 'Économisez 19$ par mois par rapport au prix officiel',
+            'features.final': '🎯 Tout cela pour seulement 1200 DZD!',
+            'features.save': 'Économisez plus de 4000 DZD par mois par rapport au prix officiel',
             'footer.text': '© 2024 ChatGPT Business. Tous droits réservés.',
             'trust.title': '🛡️ Garantie de confiance et de confidentialité (Notre offre exclusive)',
             'trust.subtitle': 'Nous savons que le marché est plein de comptes partagés et faux, nous vous offrons donc une offre qui brise toutes les règles de peur:',
@@ -1983,4 +2001,3 @@
 </body>
 
 </html>
-
