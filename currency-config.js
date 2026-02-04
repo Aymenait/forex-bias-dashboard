@@ -101,18 +101,18 @@ const PRODUCTS = {
   },
   'chatgpt': {
     id: 'chatgpt',
-    name: 'ChatGPT Plus & Business',
-    price_dzd: 1200,
-    price_usd: 6,
+    name: 'ChatGPT 5.2 (Plus & Business)',
+    price_dzd: 1000,
+    price_usd: 5,
     durations: {
-      'plus': { dzd: 1000, usd: 4 },
-      'business': { dzd: 1200, usd: 6 },
+      'business': { dzd: 1000, usd: 5 },
+      'plus': { dzd: 1200, usd: 6 },
       'reseller': { dzd: 2000, usd: 10 }
     },
     description: {
-      ar: 'اشتراك ChatGPT Plus أو Business بميزات احترافية',
-      en: 'ChatGPT Plus or Business subscription with professional features',
-      fr: 'Abonnement ChatGPT Plus ou Business avec fonctionnalités professionnelles'
+      ar: 'اشتراك ChatGPT 5.2 بميزات احترافية ونماذج متطورة',
+      en: 'ChatGPT 5.2 subscription with professional features and advanced models',
+      fr: 'Abonnement ChatGPT 5.2 avec fonctionnalités professionnelles et modèles avancés'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],

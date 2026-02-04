@@ -4079,10 +4079,9 @@ function selectChatGPTType(type) {
     const config = PRODUCTS['chatgpt'];
     const priceObj = config.durations[type];
     const names = {
-        'plus': 'ChatGPT Plus - 1 Month',
-        'go': 'ChatGPT GO - 12 Months',
-        'business': 'ChatGPT Business - 1 Month',
-        'reseller': 'ChatGPT Business Wholesale (Reseller)'
+        'plus': 'ChatGPT 5.2 Plus - 1 Month',
+        'business': 'ChatGPT 5.2 Business - 1 Month',
+        'reseller': 'ChatGPT 5.2 Reseller Pack (1+5)'
     };
     const name = names[type];
 
@@ -4090,6 +4089,11 @@ function selectChatGPTType(type) {
     document.querySelectorAll('.chatgpt-prices').forEach(price => price.style.display = 'none');
     const priceEl = document.getElementById(`chatgpt-prices-${type}`);
     if (priceEl) priceEl.style.display = 'block';
+
+    // Show/hide features
+    document.querySelectorAll('.chatgpt-features').forEach(feat => feat.style.display = 'none');
+    const featEl = document.getElementById(`chatgpt-features-${type}`);
+    if (featEl) featEl.style.display = 'block';
 
     // Update order button
     const orderBtn = document.getElementById('chatgpt-order-btn');
@@ -4117,7 +4121,7 @@ function selectChatGPTType(type) {
     if (typeof fbq !== 'undefined') {
         const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
         fbq('track', 'CustomizeProduct', {
-            content_name: 'ChatGPT',
+            content_name: 'ChatGPT 5.2',
             variant: type,
             currency: currency
         });

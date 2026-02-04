@@ -548,103 +548,120 @@
                         <button class="order-btn" data-product="Adobe Creative Cloud - 1 Month" id="adobe-order-btn"
                             data-i18n="product.orderNow" onclick="orderAdobe()">اطلب الآن</button>
                     </div>
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" id="product-chatgpt" data-category="ai">
                         <div class="product-image" style="background-image: url('https://i.imgur.com/FDZBdd9.gif');"
-                            role="img" aria-label="Chat GPT"></div>
-                        <h3>Chat GPT</h3>
-
-                        <!-- Rating Display - Hidden by default, shown when reviews exist -->
-                        <div id="chatgpt-rating-container"
-                            style="display: none; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
-                            <div style="display: flex; gap: 2px;" id="chatgpt-stars">
-                                <span style="color: #fbbf24; font-size: 16px;">★</span>
-                                <span style="color: #fbbf24; font-size: 16px;">★</span>
-                                <span style="color: #fbbf24; font-size: 16px;">★</span>
-                                <span style="color: #fbbf24; font-size: 16px;">★</span>
-                                <span style="color: #fbbf24; font-size: 16px;">★</span>
+                            role="img" aria-label="ChatGPT 5.2"></div>
+                        <div class="product-badge" data-i18n="products.badge">عروض مميزة</div>
+                        <div class="product-content">
+                            <div class="product-header">
+                                <div class="product-icon" style="background: rgba(16, 163, 127, 0.1); color: #10a37f;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </div>
+                                <h3 class="product-title">ChatGPT 5.2</h3>
                             </div>
-                            <span style="color: #9ca3af; font-size: 12px;">(<span
-                                    id="chatgpt-review-count">0</span>)</span>
-                        </div>
+                            <p class="description">أحدث نماذج الذكاء الاصطناعي GPT-5.2 متوفرة الآن بأفضل العروض.</p>
 
-                        <p class="description" data-i18n="product.chatgpt.desc">حسابات ChatGPT و Teachers فردية
-                            بمساحة عمل خاصة وأمان تام.</p>
+                            <!-- ChatGPT Selection -->
+                            <div class="chatgpt-selection" style="margin: 16px 0;">
+                                <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;">اختر نوع
+                                    الاشتراك:</p>
+                                <div class="segmented-selector">
+                                    <button class="segmented-btn active chatgpt-type-btn" data-type="business"
+                                        onclick="selectChatGPTType('business')">
+                                        <span class="btn-label">Business (1000 DA)</span>
+                                    </button>
+                                    <button class="segmented-btn chatgpt-type-btn" data-type="plus"
+                                        onclick="selectChatGPTType('plus')">
+                                        <span class="btn-label">Plus (1200 DA)</span>
+                                    </button>
+                                    <button class="segmented-btn chatgpt-type-btn" data-type="reseller"
+                                        onclick="selectChatGPTType('reseller')">
+                                        <span class="btn-label">Reseller (2000 DA)</span>
+                                    </button>
+                                </div>
+                            </div>
 
-                        <!-- ChatGPT Selection -->
-                        <div class="chatgpt-selection" style="margin: 16px 0;">
-                            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;"
-                                data-i18n="product.chatgpt.selectType">اختر نوع الاشتراك:</p>
-                            <div class="segmented-selector">
-                                <button class="segmented-btn chatgpt-type-btn" data-type="plus"
-                                    onclick="selectChatGPTType('plus')">
-                                    <span class="btn-label">Plus (1 Month)</span>
+                            <div id="chatgpt-prices-business" class="chatgpt-prices">
+                                <div class="price-tag" data-price-dzd="1000" data-price-usd="5">1000 د.ج</div>
+                                <span style="color: #9ca3af; font-size: 0.9rem;">/ شهر واحد</span>
+                            </div>
+
+                            <div id="chatgpt-prices-plus" class="chatgpt-prices" style="display: none;">
+                                <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div>
+                                <span style="color: #9ca3af; font-size: 0.9rem;">/ شهر واحد</span>
+                            </div>
+
+                            <div id="chatgpt-prices-reseller" class="chatgpt-prices" style="display: none;">
+                                <div class="price-tag" data-price-dzd="2000" data-price-usd="10">2000 د.ج</div>
+                                <span style="color: #9ca3af; font-size: 0.9rem;">/ حساب (1+5)</span>
+                            </div>
+
+                            <div class="payment-methods-row">
+                                <button class="payment-btn-compact crypto-pay-btn" id="chatgpt-crypto-btn"
+                                    data-product="ChatGPT 5.2 Business - 1 Month" data-price="1000" data-price-usd="5">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
+                                    </svg>
+                                    <span>USDT</span>
                                 </button>
-                                <button class="segmented-btn active chatgpt-type-btn" data-type="business"
-                                    onclick="selectChatGPTType('business')">
-                                    <span class="btn-label">Business (1 Month)</span>
+                                <button class="payment-btn-compact redotpay-btn" id="chatgpt-redotpay-btn"
+                                    data-product="ChatGPT 5.2 Business - 1 Month" data-price="1000" data-price-usd="5">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                    </svg>
+                                    <span>RedotPay</span>
                                 </button>
-                                <button class="segmented-btn chatgpt-type-btn" data-type="reseller"
-                                    onclick="selectChatGPTType('reseller')">
-                                    <span class="btn-label" data-i18n="product.chatgpt.wholesale">جملة (Reseller)</span>
+                                <button class="payment-btn-compact baridimob-btn" id="chatgpt-baridimob-btn"
+                                    data-product="ChatGPT 5.2 Business - 1 Month" data-price="1000" data-price-usd="5">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
+                                    </svg>
+                                    <span>BaridiMob</span>
                                 </button>
                             </div>
-                        </div>
 
-                        <div id="chatgpt-prices-plus" class="chatgpt-prices" style="display: none;">
-                            <div class="price-tag" data-price-dzd="1000" data-price-usd="4">1000 د.ج</div>
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
-                                    data-i18n="product.chatgpt.oneMonth">شهر واحد</span></span>
-                        </div>
+                            <div id="chatgpt-features-business" class="chatgpt-features">
+                                <ul class="product-features">
+                                    <li>تفعيل على إيميلك الشخصي</li>
+                                    <li>يشمل ميزات الـ PRO الكاملة</li>
+                                    <li>تنبيه: Workspace يغلق بعد شهر</li>
+                                    <li>(جرب الأول ومن بعد خلصنا)</li>
+                                </ul>
+                            </div>
 
-                        <div id="chatgpt-prices-business" class="chatgpt-prices">
-                            <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div>
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
-                                    data-i18n="product.chatgpt.oneMonth">شهر واحد</span></span>
-                        </div>
+                            <div id="chatgpt-features-plus" class="chatgpt-features" style="display: none;">
+                                <ul class="product-features">
+                                    <li>حساب خاص جديد (Email/Pass)</li>
+                                    <li>استخدام غير محدود Unlimited</li>
+                                    <li>يبقى مفتوح (Free Plan) بعد شهر</li>
+                                    <li>السجل History يبقى محفوظ دائماً</li>
+                                </ul>
+                            </div>
 
-                        <div id="chatgpt-prices-reseller" class="chatgpt-prices" style="display: none;">
-                            <div class="price-tag" data-price-dzd="2000" data-price-usd="10">2000 د.ج</div>
-                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
-                                    data-i18n="product.chatgpt.resellerPack">حساب (1+5)</span></span>
-                        </div>
+                            <div id="chatgpt-features-reseller" class="chatgpt-features" style="display: none;">
+                                <ul class="product-features">
+                                    <li>حساب Business كامل (1+5 أشخاص)</li>
+                                    <li>مثالي للموزعين أو المجموعات</li>
+                                    <li>توفير كبير في التكلفة</li>
+                                </ul>
+                            </div>
 
-                        <div class="payment-methods-row">
-                            <button class="payment-btn-compact crypto-pay-btn" id="chatgpt-crypto-btn"
-                                data-product="ChatGPT Business - 1 Month" data-price="1200" data-price-usd="6">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
+                            <button class="order-btn" id="chatgpt-order-btn"
+                                data-product="ChatGPT 5.2 Business - 1 Month" onclick="orderChatGPT()">
+                                <span data-i18n="product.orderNow">اطلب الآن</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
                                 </svg>
-                                <span>USDT</span>
-                            </button>
-                            <button class="payment-btn-compact redotpay-btn" id="chatgpt-redotpay-btn"
-                                data-product="ChatGPT Business - 1 Month" data-price="1200" data-price-usd="6">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
-                                </svg>
-                                <span>RedotPay</span>
-                            </button>
-                            <button class="payment-btn-compact baridimob-btn" id="chatgpt-baridimob-btn"
-                                data-product="ChatGPT Business - 1 Month" data-price="1200" data-price-usd="6">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
-                                </svg>
-                                <span>BaridiMob</span>
                             </button>
                         </div>
-                        <ul class="product-features">
-                            <li data-i18n="product.chatgpt.feature1">وصول إلى GPT الأحدث</li>
-                            <li data-i18n="product.chatgpt.feature2">مساحة عمل خاصة وآمنة</li>
-                            <li data-i18n="product.chatgpt.feature3">تكامل مع أدواتك المفضلة</li>
-                        </ul>
-                        <a href="chatgpt_landing" class="discover-btn" data-i18n="product.discoverMore">اكتشف
-                            المزيد</a>
-                        <button class="order-btn" id="chatgpt-order-btn" data-product="ChatGPT Business - 1 Month"
-                            data-i18n="product.orderNow" onclick="orderChatGPT()">اطلب الآن</button>
                     </div>
-
                     <!-- Gamma.AI -->
                     <div class="product-card fade-in" id="gamma-card">
                         <div class="product-image"
@@ -718,7 +735,8 @@
                         </div>
 
                         <ul class="product-features">
-                            <li data-i18n="product.gamma.feature1">إنشاء عروض تقديمية احترافية بالذكاء الاصطناعي</li>
+                            <li data-i18n="product.gamma.feature1">إنشاء عروض تقديمية احترافية بالذكاء الاصطناعي
+                            </li>
                             <li data-i18n="product.gamma.feature2">تصميم مستندات ومواقع تفاعلية</li>
                             <li data-i18n="product.gamma.feature3">قوالب جاهزة وتخصيص كامل</li>
                         </ul>
@@ -735,7 +753,8 @@
                             style="background-image: url('https://i.pinimg.com/736x/8f/0f/c0/8f0fc0b860650c2e1bc7125c1ac4db37.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="SciSpace Premium"></div>
                         <h3>SciSpace Premium</h3>
-                        <p class="description" data-i18n="product.scispace.desc">مساعد بحث علمي مدعوم بالذكاء الاصطناعي
+                        <p class="description" data-i18n="product.scispace.desc">مساعد بحث علمي مدعوم بالذكاء
+                            الاصطناعي
                             لتسهيل القراءة والكتابة والنشر.</p>
 
                         <!-- Duration Selection -->
@@ -807,7 +826,8 @@
                             role="img" aria-label="Netflix Premium">
                         </div>
                         <h3>Netflix Premium</h3>
-                        <p class="description" data-i18n="product.netflix.desc">استمتع بأفضل الأفلام والمسلسلات بجودة 4K
+                        <p class="description" data-i18n="product.netflix.desc">استمتع بأفضل الأفلام والمسلسلات
+                            بجودة 4K
                             HDR ومحتوى حصري.</p>
 
                         <!-- Duration Selection -->
@@ -898,7 +918,8 @@
                             role="img" aria-label="Prime Video">
                         </div>
                         <h3>Prime Video</h3>
-                        <p class="description" data-i18n="product.primevideo.desc">اشتراك Amazon Prime Video مع مكتبة
+                        <p class="description" data-i18n="product.primevideo.desc">اشتراك Amazon Prime Video مع
+                            مكتبة
                             ضخمة من الأفلام والمسلسلات الحصرية.</p>
                         <div class="price-tag" data-price-dzd="1200" data-price-usd="4.5">1200 د.ج</div>
                         <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
@@ -947,7 +968,8 @@
                             role="img" aria-label="Crunchyroll">
                         </div>
                         <h3>Crunchyroll</h3>
-                        <p class="description" data-i18n="product.crunchyroll.desc">اشتراك Crunchyroll Premium مع أكبر
+                        <p class="description" data-i18n="product.crunchyroll.desc">اشتراك Crunchyroll Premium مع
+                            أكبر
                             مكتبة أنمي في العالم بدون إعلانات.</p>
                         <div class="price-tag" data-price-dzd="1200" data-price-usd="4.5">1200 د.ج</div>
                         <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
@@ -983,7 +1005,8 @@
                         <ul class="product-features">
                             <li data-i18n="product.crunchyroll.feature1">أكبر مكتبة أنمي في العالم</li>
                             <li data-i18n="product.crunchyroll.feature2">مشاهدة بدون إعلانات</li>
-                            <li data-i18n="product.crunchyroll.feature3">حلقات جديدة بعد ساعة من البث في اليابان</li>
+                            <li data-i18n="product.crunchyroll.feature3">حلقات جديدة بعد ساعة من البث في اليابان
+                            </li>
                         </ul>
                         <button class="order-btn" data-product="Crunchyroll" data-i18n="product.orderNow"
                             onclick="orderProduct('Crunchyroll')">اطلب الآن</button>
@@ -996,7 +1019,8 @@
                             role="img" aria-label="HMA VPN">
                         </div>
                         <h3>HMA VPN</h3>
-                        <p class="description" data-i18n="product.hma.desc">اشتراك HMA VPN بجودة عالية وخدمة مستقرة تضم
+                        <p class="description" data-i18n="product.hma.desc">اشتراك HMA VPN بجودة عالية وخدمة مستقرة
+                            تضم
                             آلاف الخوادم.</p>
 
                         <!-- Duration Selection -->
@@ -1070,7 +1094,8 @@
                             role="img" aria-label="TradingView Premium">
                         </div>
                         <h3>TradingView Premium</h3>
-                        <p class="description" data-i18n="product.tradingview.desc">منصة تحليل فني احترافية للمتداولين
+                        <p class="description" data-i18n="product.tradingview.desc">منصة تحليل فني احترافية
+                            للمتداولين
                             مع مؤشرات متقدمة وبيانات في الوقت الفعلي.</p>
                         <div class="price-tag" data-price-dzd="1500" data-price-usd="6">1500 د.ج</div>
 
@@ -1123,11 +1148,12 @@
                             </video>
                         </div>
                         <h3>Perplexity AI Pro</h3>
-                        <p class="description" data-i18n="product.perplexity.desc">محرك بحث ذكي مدعوم بالذكاء الاصطناعي
+                        <p class="description" data-i18n="product.perplexity.desc">محرك بحث ذكي مدعوم بالذكاء
+                            الاصطناعي
                             مع إجابات دقيقة ومصادر موثوقة.</p>
                         <div class="price-tag" style="opacity: 0.5;">(Sold Out)</div>
-                        <span style="color: #9ca3af; font-size: 0.9rem; text-decoration: line-through;">1200 د.ج / <span
-                                data-i18n="perYear">للسنة</span></span>
+                        <span style="color: #9ca3af; font-size: 0.9rem; text-decoration: line-through;">1200 د.ج /
+                            <span data-i18n="perYear">للسنة</span></span>
 
                         <div class="payment-methods-row" style="pointer-events: none; opacity: 0.4;">
                             <button class="payment-btn-compact crypto-pay-btn"><span>USDT</span></button>
@@ -1172,7 +1198,8 @@
                                     id="canva-review-count">0</span>)</span>
                         </div>
 
-                        <p class="description" id="canva-description" data-i18n="product.canva.desc">اشتراك Canva Pro
+                        <p class="description" id="canva-description" data-i18n="product.canva.desc">اشتراك Canva
+                            Pro
                             الكامل مع جميع المميزات
                             الاحترافية للتصميم والإبداع.</p>
 
@@ -1362,7 +1389,8 @@
                             role="img" aria-label="Cursor">
                         </div>
                         <h3>Cursor AI</h3>
-                        <p class="description" data-i18n="product.cursor.desc">محرر أكواد ذكي مدعوم بالذكاء الاصطناعي.
+                        <p class="description" data-i18n="product.cursor.desc">محرر أكواد ذكي مدعوم بالذكاء
+                            الاصطناعي.
                         </p>
 
                         <!-- Account Type Selection -->
@@ -1439,7 +1467,8 @@
                             role="img" aria-label="Lovable AI">
                         </div>
                         <h3>Lovable AI</h3>
-                        <p class="description" data-i18n="product.lovable.desc">أداة متقدمة لبناء تطبيقات الويب بالذكاء
+                        <p class="description" data-i18n="product.lovable.desc">أداة متقدمة لبناء تطبيقات الويب
+                            بالذكاء
                             الاصطناعي بسهولة وسرعة.</p>
 
                         <!-- Duration Selection -->
@@ -1533,7 +1562,8 @@
                                 SOLD OUT</div>
                         </div>
                         <h3>Google AI Ultra & Veo 3</h3>
-                        <p class="description" data-i18n="product.veo.desc">أقوى اشتراك من جوجل يشمل Gemini Ultra و Veo
+                        <p class="description" data-i18n="product.veo.desc">أقوى اشتراك من جوجل يشمل Gemini Ultra و
+                            Veo
                             3 مع 45,000 نقطة لتوليد الفيديوهات.</p>
 
                         <div style="display: flex; align-items: center; gap: 8px; margin: 12px 0;">
@@ -1563,7 +1593,8 @@
                             role="img" aria-label="Alight Motion">
                         </div>
                         <h3>Alight Motion PRO</h3>
-                        <p class="description" data-i18n="product.alight.desc">اشتراك Alight Motion Pro لمدة سنة كاملة
+                        <p class="description" data-i18n="product.alight.desc">اشتراك Alight Motion Pro لمدة سنة
+                            كاملة
                             لتصميم الفيديو باحترافية.</p>
 
                         <div style="display: flex; align-items: center; gap: 8px; margin: 12px 0;">
@@ -1605,7 +1636,8 @@
                             <li data-i18n="product.alight.feature3">دعم كافة الصيغ والجودات العالية</li>
                         </ul>
                         <button class="order-btn" data-product="Alight Motion PRO - 1 Year" data-i18n="product.orderNow"
-                            onclick="orderProduct('Alight Motion PRO - 1 Year')">اطلب الآن</button>
+                            onclick="orderProduct('Alight Motion PRO - 1 Year')">اطلب
+                            الآن</button>
                     </div>
                 </div>
 
