@@ -53,16 +53,16 @@ async function loadProductsV2(db, firebaseModules) {
 
     try {
         const { collection, getDocs, query, orderBy } = firebaseModules;
-        
+
         // Query products ordered by displayOrder
         const q = query(
             collection(db, PRODUCTS_V2_COLLECTION),
             orderBy('displayOrder', 'asc')
         );
-        
+
         const querySnapshot = await getDocs(q);
         const products = [];
-        
+
         querySnapshot.forEach((docItem) => {
             const data = docItem.data();
             // Use ProductModel to convert from Firebase format if available
@@ -75,10 +75,10 @@ async function loadProductsV2(db, firebaseModules) {
                 });
             }
         });
-        
+
         console.log('تم تحميل', products.length, 'منتج من products_v2');
         return products;
-        
+
     } catch (error) {
         console.error('خطأ في تحميل المنتجات:', error);
         throw error;
@@ -99,10 +99,10 @@ async function loadProductById(productId, db, firebaseModules) {
 
     try {
         const { doc, getDoc } = firebaseModules;
-        
+
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
-        
+
         if (docSnap.exists()) {
             const data = docSnap.data();
             if (ProductModel && typeof ProductModel.productFromFirebase === 'function') {
@@ -113,9 +113,9 @@ async function loadProductById(productId, db, firebaseModules) {
                 ...data
             };
         }
-        
+
         return null;
-        
+
     } catch (error) {
         console.error('خطأ في تحميل المنتج:', error);
         throw error;
@@ -151,20 +151,20 @@ async function saveProduct(product, db, firebaseModules) {
 
     try {
         const { doc, setDoc, serverTimestamp } = firebaseModules;
-        
+
         // Generate ID if not provided
         const productId = product.id || generateProductId();
-        
+
         // Prepare product data for Firebase
         const productData = prepareProductForSave(product, serverTimestamp);
-        
+
         // Save to Firebase
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         await setDoc(docRef, productData, { merge: true });
-        
+
         console.log('تم حفظ المنتج:', productId);
         return productId;
-        
+
     } catch (error) {
         console.error('خطأ في حفظ المنتج:', error);
         throw error;
@@ -179,7 +179,7 @@ async function saveProduct(product, db, firebaseModules) {
  */
 function prepareProductForSave(product, serverTimestamp) {
     const now = serverTimestamp ? serverTimestamp() : new Date();
-    
+
     return {
         name: product.name || { ar: '', en: '', fr: '' },
         description: product.description || { ar: '', en: '', fr: '' },
@@ -223,14 +223,14 @@ async function deleteProduct(productId, db, firebaseModules) {
 
     try {
         const { doc, deleteDoc } = firebaseModules;
-        
+
         // Delete the product document
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         await deleteDoc(docRef);
-        
+
         console.log('تم حذف المنتج:', productId);
         return true;
-        
+
     } catch (error) {
         console.error('خطأ في حذف المنتج:', error);
         throw error;
@@ -260,16 +260,16 @@ async function archiveProduct(productId, db, firebaseModules) {
 
     try {
         const { doc, updateDoc, serverTimestamp } = firebaseModules;
-        
+
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         await updateDoc(docRef, {
             isArchived: true,
             updatedAt: serverTimestamp()
         });
-        
+
         console.log('تم أرشفة المنتج:', productId);
         return true;
-        
+
     } catch (error) {
         console.error('خطأ في أرشفة المنتج:', error);
         throw error;
@@ -294,16 +294,16 @@ async function restoreProduct(productId, db, firebaseModules) {
 
     try {
         const { doc, updateDoc, serverTimestamp } = firebaseModules;
-        
+
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         await updateDoc(docRef, {
             isArchived: false,
             updatedAt: serverTimestamp()
         });
-        
+
         console.log('تم استعادة المنتج:', productId);
         return true;
-        
+
     } catch (error) {
         console.error('خطأ في استعادة المنتج:', error);
         throw error;
@@ -324,17 +324,17 @@ async function loadArchivedProducts(db, firebaseModules) {
 
     try {
         const { collection, getDocs, query, where, orderBy } = firebaseModules;
-        
+
         // Query archived products
         const q = query(
             collection(db, PRODUCTS_V2_COLLECTION),
             where('isArchived', '==', true),
             orderBy('updatedAt', 'desc')
         );
-        
+
         const querySnapshot = await getDocs(q);
         const products = [];
-        
+
         querySnapshot.forEach((docItem) => {
             const data = docItem.data();
             if (ProductModel && typeof ProductModel.productFromFirebase === 'function') {
@@ -346,10 +346,10 @@ async function loadArchivedProducts(db, firebaseModules) {
                 });
             }
         });
-        
+
         console.log('تم تحميل', products.length, 'منتج مؤرشف');
         return products;
-        
+
     } catch (error) {
         console.error('خطأ في تحميل المنتجات المؤرشفة:', error);
         throw error;
@@ -370,17 +370,17 @@ async function loadActiveProducts(db, firebaseModules) {
 
     try {
         const { collection, getDocs, query, where, orderBy } = firebaseModules;
-        
+
         // Query active (non-archived) products
         const q = query(
             collection(db, PRODUCTS_V2_COLLECTION),
             where('isArchived', '==', false),
             orderBy('displayOrder', 'asc')
         );
-        
+
         const querySnapshot = await getDocs(q);
         const products = [];
-        
+
         querySnapshot.forEach((docItem) => {
             const data = docItem.data();
             if (ProductModel && typeof ProductModel.productFromFirebase === 'function') {
@@ -392,10 +392,10 @@ async function loadActiveProducts(db, firebaseModules) {
                 });
             }
         });
-        
+
         console.log('تم تحميل', products.length, 'منتج نشط');
         return products;
-        
+
     } catch (error) {
         console.error('خطأ في تحميل المنتجات النشطة:', error);
         throw error;
@@ -438,17 +438,17 @@ async function updatePrices(productId, priceDZD, priceUSD, db, firebaseModules) 
 
     try {
         const { doc, updateDoc, serverTimestamp } = firebaseModules;
-        
+
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         await updateDoc(docRef, {
             priceDZD: Number(priceDZD),
             priceUSD: Number(priceUSD),
             updatedAt: serverTimestamp()
         });
-        
+
         console.log('تم تحديث أسعار المنتج:', productId);
         return true;
-        
+
     } catch (error) {
         console.error('خطأ في تحديث الأسعار:', error);
         throw error;
@@ -477,21 +477,21 @@ const AVAILABILITY_STATUSES = {
  */
 function validateAvailabilityStatus(status) {
     const validStatuses = Object.values(AVAILABILITY_STATUSES);
-    
+
     if (!status || typeof status !== 'string') {
         return {
             valid: false,
             errors: ['حالة التوفر مطلوبة']
         };
     }
-    
+
     if (!validStatuses.includes(status)) {
         return {
             valid: false,
             errors: [`حالة التوفر غير صالحة. الحالات المتاحة: ${validStatuses.join(', ')}`]
         };
     }
-    
+
     return { valid: true, errors: [] };
 }
 
@@ -520,16 +520,16 @@ async function updateAvailability(productId, status, db, firebaseModules) {
 
     try {
         const { doc, updateDoc, serverTimestamp } = firebaseModules;
-        
+
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         await updateDoc(docRef, {
             availability: status,
             updatedAt: serverTimestamp()
         });
-        
+
         console.log('تم تحديث حالة توفر المنتج:', productId, '→', status);
         return true;
-        
+
     } catch (error) {
         console.error('خطأ في تحديث حالة التوفر:', error);
         throw error;
@@ -574,10 +574,10 @@ function getAvailabilityTextByLang(status, lang = 'ar') {
             fr: 'Bientôt'
         }
     };
-    
+
     const statusTexts = texts[status];
     if (!statusTexts) return 'غير معروف';
-    
+
     return statusTexts[lang] || statusTexts.ar;
 }
 
@@ -734,10 +734,10 @@ async function addSubOffer(productId, subOffer, db, firebaseModules) {
 
     try {
         const { doc, getDoc, updateDoc, serverTimestamp, arrayUnion } = firebaseModules;
-        
+
         // Generate ID for the sub-offer
         const subOfferId = subOffer.id || generateSubOfferId();
-        
+
         // Prepare sub-offer data
         const subOfferData = {
             id: subOfferId,
@@ -751,32 +751,32 @@ async function addSubOffer(productId, subOffer, db, firebaseModules) {
             availability: subOffer.availability || AVAILABILITY_STATUSES.AVAILABLE,
             order: typeof subOffer.order === 'number' ? subOffer.order : 0
         };
-        
+
         // Get current product to append sub-offer
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
-        
+
         if (!docSnap.exists()) {
             throw new Error('المنتج غير موجود');
         }
-        
+
         const currentData = docSnap.data();
         const currentSubOffers = Array.isArray(currentData.subOffers) ? currentData.subOffers : [];
-        
+
         // Set order to be at the end if not specified
         if (typeof subOffer.order !== 'number') {
             subOfferData.order = currentSubOffers.length;
         }
-        
+
         // Add sub-offer to array
         await updateDoc(docRef, {
             subOffers: [...currentSubOffers, subOfferData],
             updatedAt: serverTimestamp()
         });
-        
+
         console.log('تم إضافة العرض الفرعي:', subOfferId, 'للمنتج:', productId);
         return subOfferId;
-        
+
     } catch (error) {
         console.error('خطأ في إضافة العرض الفرعي:', error);
         throw error;
@@ -813,24 +813,24 @@ async function updateSubOffer(productId, subOfferId, subOffer, db, firebaseModul
 
     try {
         const { doc, getDoc, updateDoc, serverTimestamp } = firebaseModules;
-        
+
         // Get current product
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
-        
+
         if (!docSnap.exists()) {
             throw new Error('المنتج غير موجود');
         }
-        
+
         const currentData = docSnap.data();
         const currentSubOffers = Array.isArray(currentData.subOffers) ? currentData.subOffers : [];
-        
+
         // Find and update the sub-offer
         const subOfferIndex = currentSubOffers.findIndex(s => s.id === subOfferId);
         if (subOfferIndex === -1) {
             throw new Error('العرض الفرعي غير موجود');
         }
-        
+
         // Update sub-offer data
         const updatedSubOffer = {
             id: subOfferId,
@@ -844,19 +844,19 @@ async function updateSubOffer(productId, subOfferId, subOffer, db, firebaseModul
             availability: subOffer.availability || currentSubOffers[subOfferIndex].availability || AVAILABILITY_STATUSES.AVAILABLE,
             order: typeof subOffer.order === 'number' ? subOffer.order : currentSubOffers[subOfferIndex].order || 0
         };
-        
+
         // Replace the sub-offer in the array
         currentSubOffers[subOfferIndex] = updatedSubOffer;
-        
+
         // Update product
         await updateDoc(docRef, {
             subOffers: currentSubOffers,
             updatedAt: serverTimestamp()
         });
-        
+
         console.log('تم تحديث العرض الفرعي:', subOfferId, 'للمنتج:', productId);
         return true;
-        
+
     } catch (error) {
         console.error('خطأ في تحديث العرض الفرعي:', error);
         throw error;
@@ -886,35 +886,35 @@ async function deleteSubOffer(productId, subOfferId, db, firebaseModules) {
 
     try {
         const { doc, getDoc, updateDoc, serverTimestamp } = firebaseModules;
-        
+
         // Get current product
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
-        
+
         if (!docSnap.exists()) {
             throw new Error('المنتج غير موجود');
         }
-        
+
         const currentData = docSnap.data();
         const currentSubOffers = Array.isArray(currentData.subOffers) ? currentData.subOffers : [];
-        
+
         // Filter out the sub-offer to delete
         const updatedSubOffers = currentSubOffers.filter(s => s.id !== subOfferId);
-        
+
         // Check if sub-offer was found
         if (updatedSubOffers.length === currentSubOffers.length) {
             throw new Error('العرض الفرعي غير موجود');
         }
-        
+
         // Update product
         await updateDoc(docRef, {
             subOffers: updatedSubOffers,
             updatedAt: serverTimestamp()
         });
-        
+
         console.log('تم حذف العرض الفرعي:', subOfferId, 'من المنتج:', productId);
         return true;
-        
+
     } catch (error) {
         console.error('خطأ في حذف العرض الفرعي:', error);
         throw error;
@@ -935,17 +935,17 @@ async function getSubOffers(productId, db, firebaseModules) {
 
     try {
         const { doc, getDoc } = firebaseModules;
-        
+
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
-        
+
         if (!docSnap.exists()) {
             return [];
         }
-        
+
         const data = docSnap.data();
         return Array.isArray(data.subOffers) ? data.subOffers : [];
-        
+
     } catch (error) {
         console.error('خطأ في تحميل العروض الفرعية:', error);
         return [];
@@ -1001,33 +1001,35 @@ if (typeof window !== 'undefined') {
     };
 }
 
+/*
 // ES Module exports للاستخدام في Node.js (للاختبارات)
-export {
-    PRODUCTS_V2_COLLECTION,
-    AVAILABILITY_STATUSES,
-    loadProductsV2,
-    loadProductById,
-    saveProduct,
-    deleteProduct,
-    updatePrices,
-    updateAvailability,
-    validateProductData,
-    validatePriceValue,
-    validateAvailabilityStatus,
-    generateProductId,
-    prepareProductForSave,
-    getAvailabilityText,
-    getAvailabilityTextByLang,
-    // Sub-offer functions
-    validateSubOffer,
-    generateSubOfferId,
-    addSubOffer,
-    updateSubOffer,
-    deleteSubOffer,
-    getSubOffers,
-    // Archive functions
-    archiveProduct,
-    restoreProduct,
-    loadArchivedProducts,
-    loadActiveProducts
-};
+// export {
+//     PRODUCTS_V2_COLLECTION,
+//     AVAILABILITY_STATUSES,
+//     loadProductsV2,
+//     loadProductById,
+//     saveProduct,
+//     deleteProduct,
+//     updatePrices,
+//     updateAvailability,
+//     validateProductData,
+//     validatePriceValue,
+//     validateAvailabilityStatus,
+//     generateProductId,
+//     prepareProductForSave,
+//     getAvailabilityText,
+//     getAvailabilityTextByLang,
+//     // Sub-offer functions
+//     validateSubOffer,
+//     generateSubOfferId,
+//     addSubOffer,
+//     updateSubOffer,
+//     deleteSubOffer,
+//     getSubOffers,
+//     // Archive functions
+//     archiveProduct,
+//     restoreProduct,
+//     loadArchivedProducts,
+//     loadActiveProducts
+// };
+*/

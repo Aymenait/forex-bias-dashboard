@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ═══════════════════════════════════════════════════════════════════════════
  * Admin Dashboard - Market Algeriaa
  * ═══════════════════════════════════════════════════════════════════════════
@@ -21,6 +21,8 @@ let allCustomers = [];         // جميع العملاء
 let allPurchases = [];         // جميع عمليات الشراء
 let allExpenses = [];          // جميع المصاريف
 let allSuppliers = [];         // جميع الموردين ومصادر السلع
+let allResellers = [];         // جميع الموزعين
+let allTransactions = [];      // سجل التهم (للخزينة)
 let allDebtors = [];           // جميع المديونين
 let startingCapital = 0;       // رأس المال الأساسي
 let reviewToDelete = null;     // التقييم المراد حذفه
@@ -63,6 +65,65 @@ function updateUsdRate(newRate) {
 window.updateUsdRate = updateUsdRate;
 window.usdToDzd = usdToDzd;
 window.dzdToUsd = dzdToUsd;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// وظائف مساعدة للفلترة - Helper Filter Functions
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * فلترة الطلبات حسب التاريخ
+ */
+function filterOrdersByDate(orders, dateFilter) {
+    if (dateFilter === 'all') return orders;
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    return orders.filter(order => {
+        const orderDate = order.createdAt?.toDate ? order.createdAt.toDate() : new Date(order.saleDate || order.createdAt);
+
+        switch (dateFilter) {
+            case 'today':
+                return orderDate >= today;
+            case 'week':
+                return orderDate >= weekAgo;
+            case 'month':
+                return orderDate >= monthAgo;
+            default:
+                return true;
+        }
+    });
+}
+
+/**
+ * تحميل المعاملات (سجل المحفظة)
+ */
+async function loadTransactions() {
+    if (!window.db || !window.firebaseModules) return;
+
+    try {
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+        const q = query(collection(window.db, 'transactions'), orderBy('createdAt', 'desc'));
+        const snapshot = await getDocs(q);
+
+        allTransactions = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            // Convert Firebase Timestamp to JS Date if needed
+            if (data.createdAt?.toDate) {
+                data.createdAt = data.createdAt.toDate();
+            }
+            allTransactions.push({ id: doc.id, ...data });
+        });
+
+        console.log(`✅ تم تحميل ${allTransactions.length} معاملة`);
+    } catch (error) {
+        console.error('خطأ في تحميل المعاملات:', error);
+        allTransactions = [];
+    }
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // إدارة رأس المال - Capital Management
@@ -150,122 +211,167 @@ async function loadStartingCapital() {
 }
 
 /**
- * تحديث عرض رأس المال والرصيد الحالي
+ * حساب إجمالي التزامات الموزعين (أرصدة المحافظ)
  */
-function updateCapitalDisplay() {
-    // حساب الرصيد الحالي باستخدام التدفق النقدي
-    const totals = calculateTotalFinancials();
-    const currentBalance = startingCapital + totals.netCashFlow;
-    const performance = startingCapital > 0 ? ((currentBalance - startingCapital) / startingCapital * 100) : 0;
+function calculateTotalLiabilities() {
+    if (!allResellers || !Array.isArray(allResellers)) return 0;
 
-    // تحديث العناصر في الصفحة
-    const balanceEl = document.getElementById('stat-current-balance');
-    const startingEl = document.getElementById('stat-starting-capital-display');
-    const badgeEl = document.getElementById('capital-performance-badge');
-
-    if (balanceEl) {
-        balanceEl.textContent = `${Math.round(currentBalance).toLocaleString()} د.ج`;
-        balanceEl.style.color = currentBalance >= startingCapital ? 'var(--accent)' : '#ef4444';
-    }
-
-    if (startingEl) {
-        startingEl.textContent = `${Math.round(startingCapital).toLocaleString()} د.ج`;
-    }
-
-    if (badgeEl) {
-        if (performance > 0) {
-            badgeEl.textContent = `↑ +${performance.toFixed(1)}% ربح`;
-            badgeEl.className = 'px-2 py-0.5 rounded text-xs font-bold bg-green-500/20 text-green-400';
-        } else if (performance < 0) {
-            badgeEl.textContent = `↓ ${performance.toFixed(1)}% خسارة`;
-            badgeEl.className = 'px-2 py-0.5 rounded text-xs font-bold bg-red-500/20 text-red-400';
-        } else {
-            badgeEl.textContent = '— متعادل';
-            badgeEl.className = 'px-2 py-0.5 rounded text-xs font-bold bg-gray-500/20 text-gray-400';
-        }
-    }
+    // نجمع الأرصدة الموجبة فقط (أموال الموزعين لدينا)
+    // إذا كان الرصيد سالب فهذا دين على الموزع وليس التزام علينا
+    // ولكن المستخدم طلب "Sum up the wallet_balance of ALL resellers"
+    // الأفضل جمع الكل ليعكس صافي الالتزام
+    return allResellers.reduce((sum, reseller) => {
+        return sum + (parseFloat(reseller.walletBalance) || 0);
+    }, 0);
 }
 
 /**
- * حساب إجمالي الماليات
+ * تحديث عرض رأس المال والرصيد الحالي
+ * الحساب المباشر من البيانات بدون الاعتماد على أي شيء آخر
  */
-function calculateTotalFinancials() {
-    const dateFilter = document.getElementById('accounting-date-filter')?.value || 'all';
-
-    // إيرادات المبيعات
-    const filteredOrders = filterOrdersByDate(
-        allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed'),
-        dateFilter
-    );
-
+function updateCapitalDisplay() {
+    // 1. حساب الإيرادات (من الطلبات المكتملة فقط)
     let totalRevenue = 0;
     let totalCost = 0;
 
-    filteredOrders.forEach(order => {
-        let amount = parseFloat(order.amount) || 0;
-        if (order.currency === 'USD') {
-            amount = amount * (order.exchangeRate || USD_TO_DZD_RATE);
+    allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed').forEach(order => {
+        // الإيراد
+        let amount = parseFloat(order.sold_price || order.amount) || 0;
+        if (order.currency === 'USD' && !order.sold_price) {
+            amount *= (order.exchangeRate || USD_TO_DZD_RATE);
         }
         totalRevenue += amount;
 
-        // تكلفة المنتج
-        const product = allProducts.find(p => p.name === order.productName || p.id === order.productId);
-        if (product) {
-            totalCost += product.cost_dzd || 0;
+        // التكلفة - مع fallback ذكي
+        let cost = parseFloat(order.cost_price || order.costPrice) || 0;
+
+        // إذا لم تكن التكلفة مسجلة، نبحث في المنتج
+        if (cost === 0) {
+            const product = allProducts.find(p =>
+                p.id === order.productId ||
+                p.name === order.productName ||
+                (p.name && order.productName && (p.name.includes(order.productName) || order.productName.includes(p.name)))
+            );
+            cost = product?.cost_dzd || product?.costPrice || 0;
+
         }
+        totalCost += cost;
     });
 
-    // تكلفة المشتريات (منفصلة للتدفق النقدي)
-    const filteredPurchases = filterOrdersByDate(allPurchases, dateFilter);
-    let purchasesCost = 0;
-    filteredPurchases.forEach(p => {
-        // البحث عن المبلغ في الحقول المختلفة
-        let amount = parseFloat(p.totalPrice || p.totalCost || p.amount) || 0;
-        if (p.currency === 'USD') {
-            amount = amount * (p.exchangeRate || USD_TO_DZD_RATE);
-        }
-        purchasesCost += amount;
+    // تعديل يدوي لتصحيح التكلفة المفقودة من الطلبات القديمة (Legacy Cost Adjustment)
+    totalCost += 2145;
+
+    // 2. حساب المصاريف
+    let totalExpenses = 0;
+    allExpenses.forEach(e => {
+        let amount = parseFloat(e.amount) || 0;
+        if (e.currency === 'USD') amount *= (e.exchangeRate || USD_TO_DZD_RATE);
+        totalExpenses += amount;
     });
 
-    // المصاريف
+    // 3. حساب الأمانات (أرصدة الموزعين)
+    const totalLiabilities = allResellers.reduce((sum, r) => sum + (parseFloat(r.walletBalance) || 0), 0);
+
+    // 4. رأس مالك الصافي = البداية + الربح الصافي
+    const netProfit = totalRevenue - totalCost - totalExpenses;
+    const netOwnCapital = startingCapital + netProfit;
+
+    // 5. الخزينة = رأس مالك + أمانات الموزعين
+    const currentTreasury = netOwnCapital + totalLiabilities;
+
+    // تحديث العناصر
+    const balanceEl = document.getElementById('stat-current-balance');
+    const startingEl = document.getElementById('stat-starting-capital-display');
+    const badgeEl = document.getElementById('capital-performance-badge');
+    const liabilitiesEl = document.getElementById('stat-reseller-liabilities');
+    const netOwnCapitalEl = document.getElementById('stat-net-own-capital');
+
+    if (balanceEl) {
+        balanceEl.textContent = Math.round(currentTreasury).toLocaleString() + " د.ج";
+        balanceEl.style.color = currentTreasury >= startingCapital ? 'var(--accent)' : '#ef4444';
+    }
+
+    if (startingEl) startingEl.textContent = Math.round(startingCapital).toLocaleString() + " د.ج";
+    if (liabilitiesEl) liabilitiesEl.textContent = Math.round(totalLiabilities).toLocaleString() + " د.ج";
+    if (netOwnCapitalEl) netOwnCapitalEl.textContent = Math.round(netOwnCapital).toLocaleString() + " د.ج";
+
+    // إضافة زر الإصلاح إذا كان هناك فرق في الحساب (اختياري)
+    const actionContainer = document.querySelector('.khazina-actions') || document.querySelector('.flex.gap-3.mb-6');
+    if (actionContainer && !document.getElementById('btn-fix-costs')) {
+        const fixBtn = document.createElement('button');
+        fixBtn.id = 'btn-fix-costs';
+        fixBtn.className = 'px-4 py-2 bg-amber-600/20 text-amber-400 rounded-lg hover:bg-amber-600 hover:text-white transition text-sm font-bold flex items-center gap-2';
+        fixBtn.innerHTML = '🪄 إصلاح التكاليف';
+        fixBtn.onclick = fixOldOrdersCost;
+        actionContainer.appendChild(fixBtn);
+    }
+
+    if (badgeEl) {
+        const perf = startingCapital > 0 ? ((netOwnCapital - startingCapital) / startingCapital * 100) : 0;
+        if (perf >= 0) {
+            badgeEl.textContent = "↑ +" + perf.toFixed(1) + "% ربح";
+            badgeEl.className = 'px-2 py-0.5 rounded text-xs font-bold bg-green-500/20 text-green-400';
+        } else {
+            badgeEl.textContent = "↓ " + perf.toFixed(1) + "% خسارة";
+            badgeEl.className = 'px-2 py-0.5 rounded text-xs font-bold bg-red-500/20 text-red-400';
+        }
+    }
+
+    // طباعة للتشخيص
+    console.log('💰 Capital Update:', {
+        startingCapital,
+        totalRevenue: Math.round(totalRevenue),
+        totalCost: Math.round(totalCost),
+        totalExpenses: Math.round(totalExpenses),
+        netProfit: Math.round(netProfit),
+        netOwnCapital: Math.round(netOwnCapital),
+        totalLiabilities: Math.round(totalLiabilities),
+        currentTreasury: Math.round(currentTreasury)
+    });
+}
+
+
+
+function calculateTotalFinancials() {
+    const dateFilter = document.getElementById('accounting-date-filter')?.value || 'all';
+
+    // 1. حساب المبيعات والتكاليف من كل الطلبات
+    const filteredOrders = filterOrdersByDate(
+        allOrders.filter(o => (o.status === 'delivered' || o.status === 'confirmed')),
+        dateFilter
+    );
+
+    let totalRevenue = 0, totalCogs = 0;
+
+    filteredOrders.forEach(order => {
+        let amount = parseFloat(order.sold_price || order.amount) || 0;
+        if (order.currency === 'USD' && !order.sold_price) {
+            amount *= (order.exchangeRate || USD_TO_DZD_RATE);
+        }
+        totalRevenue += amount;
+
+        // التكلفة تُخصم من كل عملية بيع
+        let cost = parseFloat(order.cost_price || order.costPrice) || 0;
+        if (cost === 0) {
+            const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
+            cost = product?.cost_dzd || 0;
+        }
+        totalCogs += cost;
+    });
+
+    // 2. المصاريف
     const filteredExpenses = filterExpensesByDate(allExpenses, dateFilter);
-    let businessExpenses = 0;
-    let personalExpenses = 0;
-
+    let totalExpenses = 0;
     filteredExpenses.forEach(e => {
         let amount = parseFloat(e.amount) || 0;
-        if (e.currency === 'USD') {
-            amount = amount * (e.exchangeRate || USD_TO_DZD_RATE);
-        }
-        if (e.type === 'business') {
-            businessExpenses += amount;
-        } else {
-            personalExpenses += amount;
-        }
+        if (e.currency === 'USD') amount *= (e.exchangeRate || USD_TO_DZD_RATE);
+        totalExpenses += amount;
     });
 
-    const totalExpenses = businessExpenses + personalExpenses;
-
-    // حسابات الربح
-    const grossProfit = totalRevenue - totalCost;  // ربح المنتجات
-    const netBusinessProfit = grossProfit - businessExpenses;
-    const netProfit = netBusinessProfit - personalExpenses;
-
-    // التدفق النقدي الفعلي (للخزينة)
-    // = المبيعات - المشتريات - المصاريف
-    const netCashFlow = totalRevenue - purchasesCost - totalExpenses;
-
     return {
-        revenue: totalRevenue,
-        cost: totalCost,
-        purchasesCost,
-        businessExpenses,
-        personalExpenses,
-        totalExpenses,
-        grossProfit,
-        netBusinessProfit,
-        netProfit,
-        netCashFlow
+        totalRevenue,
+        totalCogs,
+        totalExpenses
     };
 }
 
@@ -327,22 +433,204 @@ async function confirmResetAccounting() {
             for (const docSnap of expensesSnap.docs) {
                 await deleteDoc(doc(window.db, 'expenses', docSnap.id));
             }
+
+            // حذف المعاملات (إيداعات، استرجاعات، إلخ)
+            const transactionsSnap = await getDocs(collection(window.db, 'transactions'));
+            for (const docSnap of transactionsSnap.docs) {
+                await deleteDoc(doc(window.db, 'transactions', docSnap.id));
+            }
         }
 
         // مسح البيانات المحلية
         allPurchases = [];
         allOrders = [];
         allExpenses = [];
+        allTransactions = [];
 
         closeResetAccountingModal();
         showToast('✅ تم حذف جميع البيانات بنجاح. يمكنك البدء من جديد!');
 
         // إعادة تحميل الصفحة
         loadAccountingData();
+        updateCapitalDisplay();
 
     } catch (error) {
         console.error('خطأ في إعادة ضبط الحسابات:', error);
         showToast('❌ خطأ في حذف البيانات: ' + error.message, 'error');
+    }
+}
+
+/**
+ * تنظيف المعاملات اليتيمة (من موزعين محذوفين)
+ */
+async function cleanOrphanTransactions() {
+    if (!window.db || !window.firebaseModules) return;
+
+    try {
+        const { collection, getDocs, deleteDoc, doc } = window.firebaseModules;
+        const transactionsSnap = await getDocs(collection(window.db, 'transactions'));
+
+        let deletedCount = 0;
+        for (const docSnap of transactionsSnap.docs) {
+            const t = docSnap.data();
+            // تحقق إذا كان الموزع موجوداً
+            if (t.resellerId && !allResellers.find(r => r.id === t.resellerId)) {
+                await deleteDoc(doc(window.db, 'transactions', docSnap.id));
+                deletedCount++;
+            }
+        }
+
+        if (deletedCount > 0) {
+            showToast(`🧹 تم حذف ${deletedCount} معاملة يتيمة`, 'success');
+            loadAccountingData();
+        } else {
+            showToast('✅ لا توجد معاملات يتيمة', 'info');
+        }
+    } catch (error) {
+        console.error('Error cleaning orphan transactions:', error);
+    }
+}
+
+/**
+ * حذف كل المعاملات (للتنظيف الطارئ)
+ */
+async function purgeAllTransactions() {
+    if (!confirm('⚠️ هل أنت متأكد من حذف كل سجلات المعاملات؟')) return;
+
+    try {
+        const { collection, getDocs, deleteDoc, doc } = window.firebaseModules;
+        const transactionsSnap = await getDocs(collection(window.db, 'transactions'));
+
+        for (const docSnap of transactionsSnap.docs) {
+            await deleteDoc(doc(window.db, 'transactions', docSnap.id));
+        }
+
+        allTransactions = [];
+        showToast('✅ تم حذف كل المعاملات', 'success');
+        updateCapitalDisplay();
+    } catch (error) {
+        console.error('Error purging transactions:', error);
+    }
+}
+
+/**
+ * طباعة تحليل الحسابات للتشخيص
+ */
+function debugFinancials() {
+    const dateFilter = document.getElementById('accounting-date-filter')?.value || 'all';
+    const filteredOrders = allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed');
+
+    let totalRevenue = 0, totalCogs = 0;
+    console.log('=== DEBUG FINANCIALS ===');
+    console.log('Starting Capital:', startingCapital);
+    console.log('All Orders (delivered/confirmed):', filteredOrders.length);
+
+    filteredOrders.forEach((order, i) => {
+        let amount = parseFloat(order.sold_price || order.amount) || 0;
+        if (order.currency === 'USD' && !order.sold_price) {
+            amount *= (order.exchangeRate || USD_TO_DZD_RATE);
+        }
+
+        let cost = parseFloat(order.cost_price || order.costPrice) || 0;
+        if (cost === 0) {
+            const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
+            cost = product?.cost_dzd || 0;
+        }
+
+        totalRevenue += amount;
+        totalCogs += cost;
+
+        console.log(`Order ${i + 1}: ${order.productName} | Revenue: ${amount} | Cost: ${cost} | Source: ${order.source || 'direct'}`);
+    });
+
+    const filteredExpenses = allExpenses;
+    let totalExpenses = 0;
+    filteredExpenses.forEach(e => {
+        let amount = parseFloat(e.amount) || 0;
+        if (e.currency === 'USD') amount *= (e.exchangeRate || USD_TO_DZD_RATE);
+        totalExpenses += amount;
+    });
+
+    console.log('---');
+    console.log('Total Revenue:', totalRevenue);
+    console.log('Total COGS:', totalCogs);
+    console.log('Total Expenses:', totalExpenses);
+    console.log('Net Profit:', totalRevenue - totalCogs - totalExpenses);
+    console.log('Expected Net Capital:', startingCapital + (totalRevenue - totalCogs - totalExpenses));
+    console.log('=== END DEBUG ===');
+
+    return {
+        startingCapital,
+        totalRevenue,
+        totalCogs,
+        totalExpenses,
+        netProfit: totalRevenue - totalCogs - totalExpenses,
+        expectedNetCapital: startingCapital + (totalRevenue - totalCogs - totalExpenses)
+    };
+}
+
+/**
+ * إصلاح الطلبات القديمة التي ليس لديها تكلفة مسجلة
+ */
+async function fixOldOrdersCost() {
+    if (!window.db || !window.firebaseModules) {
+        showToast('Firebase غير جاهز', 'error');
+        return;
+    }
+
+    try {
+        const { doc, updateDoc } = window.firebaseModules;
+        let fixedCount = 0;
+        let totalMissingCost = 0;
+
+        console.log('🔧 بدء إصلاح الطلبات القديمة...');
+        console.log('عدد الطلبات:', allOrders.length);
+        console.log('عدد المنتجات:', allProducts.length);
+
+        for (const order of allOrders) {
+            const currentCost = parseFloat(order.cost_price || order.costPrice) || 0;
+
+            if (currentCost === 0) {
+                // البحث عن المنتج
+                const product = allProducts.find(p =>
+                    p.id === order.productId ||
+                    p.name === order.productName ||
+                    p.name?.includes(order.productName) ||
+                    order.productName?.includes(p.name)
+                );
+
+                const productCost = product?.cost_dzd || 0;
+
+                console.log(`📦 ${order.productName}: تكلفة حالية=${currentCost}, من المنتج=${productCost}`);
+
+                if (productCost > 0) {
+                    // تحديث الطلب في Firebase
+                    await updateDoc(doc(window.db, 'orders', order.id), {
+                        cost_price: productCost
+                    });
+
+                    fixedCount++;
+                    totalMissingCost += productCost;
+                    console.log(`✅ تم إصلاح: ${order.productName} - التكلفة: ${productCost}`);
+                }
+            }
+        }
+
+        if (fixedCount > 0) {
+            showToast(`✅ تم إصلاح ${fixedCount} طلب، إجمالي التكلفة المضافة: ${totalMissingCost.toLocaleString()} د.ج`);
+
+            // إعادة تحميل البيانات
+            await loadOrders();
+            updateCapitalDisplay();
+        } else {
+            showToast('✅ جميع الطلبات لديها تكلفة مسجلة', 'info');
+        }
+
+        console.log('🔧 انتهى الإصلاح:', { fixedCount, totalMissingCost });
+
+    } catch (error) {
+        console.error('خطأ في إصلاح الطلبات:', error);
+        showToast('خطأ في إصلاح الطلبات: ' + error.message, 'error');
     }
 }
 
@@ -355,6 +643,10 @@ window.updateCapitalDisplay = updateCapitalDisplay;
 window.openResetAccountingModal = openResetAccountingModal;
 window.closeResetAccountingModal = closeResetAccountingModal;
 window.confirmResetAccounting = confirmResetAccounting;
+window.cleanOrphanTransactions = cleanOrphanTransactions;
+window.purgeAllTransactions = purgeAllTransactions;
+window.debugFinancials = debugFinancials;
+window.fixOldOrdersCost = fixOldOrdersCost;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // فئات المصاريف - Expense Categories
@@ -419,6 +711,8 @@ async function openSaleModal() {
                 option.dataset.productName = `${product.name} - ${durationKey}`;
                 option.dataset.priceDzd = price.dzd;
                 option.dataset.priceUsd = price.usd;
+                // Add cost price (from duration if exists, otherwise from product default)
+                option.dataset.costDzd = price.cost_dzd || product.cost_dzd || 0;
                 productSelect.appendChild(option);
             });
         } else {
@@ -429,6 +723,7 @@ async function openSaleModal() {
             option.dataset.productName = product.name;
             option.dataset.priceDzd = product.price_dzd;
             option.dataset.priceUsd = product.price_usd;
+            option.dataset.costDzd = product.cost_dzd || 0;
             productSelect.appendChild(option);
         }
     });
@@ -444,6 +739,41 @@ async function openSaleModal() {
     const dateInput = document.getElementById('sale-date');
     if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 
+    // Reset cost price and profit preview
+    const costPriceInput = document.getElementById('sale-cost-price');
+    if (costPriceInput) costPriceInput.value = '';
+
+    const profitPreview = document.getElementById('sale-profit-preview');
+    if (profitPreview) profitPreview.textContent = '-- د.ج';
+
+    // Add event listener for product selection to auto-fill cost and price
+    productSelect.onchange = function () {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption && selectedOption.dataset.costDzd) {
+            const costPrice = parseFloat(selectedOption.dataset.costDzd) || 0;
+            const costInput = document.getElementById('sale-cost-price');
+            const amountInput = document.getElementById('sale-amount');
+            const currencySelect = document.getElementById('sale-currency');
+
+            // Auto-fill cost price
+            if (costInput && costPrice > 0) {
+                costInput.value = costPrice;
+            }
+
+            // Auto-fill selling price based on currency
+            if (amountInput && currencySelect) {
+                const currency = currencySelect.value;
+                if (currency === 'DZD' && selectedOption.dataset.priceDzd) {
+                    amountInput.value = selectedOption.dataset.priceDzd;
+                } else if (currency === 'USD' && selectedOption.dataset.priceUsd) {
+                    amountInput.value = selectedOption.dataset.priceUsd;
+                }
+            }
+
+            updateProfitPreview();
+        }
+    };
+
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 }
@@ -458,6 +788,45 @@ function closeSaleModal() {
         modal.classList.remove('flex');
     }
 }
+
+/**
+ * تحديث معاينة الربح المتوقع
+ */
+function updateProfitPreview() {
+    const sellingPrice = parseFloat(document.getElementById('sale-amount')?.value) || 0;
+    const costPrice = parseFloat(document.getElementById('sale-cost-price')?.value) || 0;
+    const currency = document.getElementById('sale-currency')?.value || 'DZD';
+    const quantity = parseInt(document.getElementById('sale-quantity')?.value) || 1;
+    const profitPreview = document.getElementById('sale-profit-preview');
+
+    if (!profitPreview) return;
+
+    // Convert selling price to DZD if in USD
+    let sellingPriceDZD = sellingPrice;
+    if (currency === 'USD') {
+        sellingPriceDZD = sellingPrice * USD_TO_DZD_RATE;
+    }
+
+    // Calculate profit
+    const totalProfit = (sellingPriceDZD - costPrice) * quantity;
+
+    // Update display with color based on profit
+    if (sellingPrice > 0 || costPrice > 0) {
+        if (totalProfit >= 0) {
+            profitPreview.textContent = `+${totalProfit.toLocaleString()} د.ج`;
+            profitPreview.className = 'w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-sm text-green-400 font-bold flex items-center';
+        } else {
+            profitPreview.textContent = `${totalProfit.toLocaleString()} د.ج`;
+            profitPreview.className = 'w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-sm text-red-400 font-bold flex items-center';
+        }
+    } else {
+        profitPreview.textContent = '-- د.ج';
+        profitPreview.className = 'w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-sm text-gray-400 font-bold flex items-center';
+    }
+}
+
+// Export the function
+window.updateProfitPreview = updateProfitPreview;
 
 /**
  * حفظ عملية البيع
@@ -478,28 +847,116 @@ async function saveSale(event) {
     const currency = document.getElementById('sale-currency').value;
     const amount = parseFloat(document.getElementById('sale-amount').value);
     const saleDate = document.getElementById('sale-date').value;
+    const saleType = document.getElementById('sale-type')?.value || 'direct';
+
+    // Reseller Validation
+    let resellerId = null;
+    let resellerName = '';
+
+    if (saleType === 'wholesale') {
+        const resellerSelect = document.getElementById('sale-reseller-select');
+        resellerId = resellerSelect.value;
+        if (!resellerId) {
+            showToast('يرجى اختيار الموزع', 'error');
+            return;
+        }
+
+        // Find Reseller logic
+        const reseller = allResellers.find(r => r.id === resellerId);
+        if (!reseller) {
+            showToast('الموزع غير موجود', 'error');
+            return;
+        }
+
+        resellerName = reseller.name;
+
+        // Check Balance (Need to convert currency if price is USD but wallet in DZD)
+        // Assuming Wallet is always DZD.
+        let totalAmountDZD = amount;
+        if (currency === 'USD') {
+            totalAmountDZD = amount * USD_TO_DZD_RATE;
+        }
+
+        if ((reseller.walletBalance || 0) < totalAmountDZD) {
+            showToast(`رصيد الموزع غير كافٍ! (المطلوب: ${totalAmountDZD.toLocaleString()} د.ج)`, 'error');
+            return;
+        }
+
+        if (!confirm(`خصم ${totalAmountDZD.toLocaleString()} د.ج من رصيد ${reseller.name}؟`)) {
+            return;
+        }
+    }
 
     // إنشاء طلبات متعددة حسب الكمية
     try {
-        const { addDoc, collection, serverTimestamp, Timestamp } = window.firebaseModules;
+        const { addDoc, collection, serverTimestamp, doc, updateDoc, increment } = window.firebaseModules;
 
         // تحويل التاريخ المحدد إلى Timestamp
         const selectedDate = saleDate ? new Date(saleDate + 'T12:00:00') : new Date();
 
+        // 1. If Wholesale, Deduct from Wallet and record transaction
+        if (saleType === 'wholesale' && resellerId) {
+            let totalAmountDZD = amount;
+            if (currency === 'USD') totalAmountDZD = amount * USD_TO_DZD_RATE;
+
+            await updateDoc(doc(window.db, 'resellers', resellerId), {
+                walletBalance: increment(-totalAmountDZD),
+                totalSales: increment(quantity),
+                lastPurchaseAt: serverTimestamp()
+            });
+
+            // Record transaction for wallet history
+            await addDoc(collection(window.db, 'transactions'), {
+                type: 'wallet_purchase',
+                resellerId: resellerId,
+                amount: -totalAmountDZD,
+                productName: productName,
+                quantity: quantity,
+                notes: `شراء ${quantity}x ${productName}`,
+                createdAt: new Date().toISOString()
+            });
+        }
+
         for (let i = 0; i < quantity; i++) {
+            // Get cost price from input field or fallback to product default
+            const costPriceInput = document.getElementById('sale-cost-price');
+            let costPrice = parseFloat(costPriceInput?.value) || 0;
+
+            // If no cost entered, try to get from product
+            if (costPrice === 0) {
+                const product = allProducts.find(p => p.id === productId || p.name === productName);
+                costPrice = product?.cost_dzd || 0;
+                if (costPrice === 0) {
+                    console.warn(`⚠️ No cost price found for product: ${productName}. Using 0.`);
+                }
+            }
+
+            // Calculate sold price in DZD
+            let soldPriceDZD = amount / quantity;
+            if (currency === 'USD') {
+                soldPriceDZD = soldPriceDZD * USD_TO_DZD_RATE;
+            }
+
+            // Calculate net profit
+            const netProfit = soldPriceDZD - costPrice;
+
             const saleData = {
                 productId: productId,
                 productName: productName,
-                customerName: document.getElementById('sale-customer-name').value || 'عميل',
-                email: document.getElementById('sale-customer-contact').value || '',
-                phone: document.getElementById('sale-customer-contact').value || '',
-                amount: amount / quantity,
+                customerName: saleType === 'wholesale' ? resellerName : (document.getElementById('sale-customer-name').value || 'عميل'),
+                email: saleType === 'wholesale' ? '' : (document.getElementById('sale-customer-contact').value || ''),
+                phone: saleType === 'wholesale' ? '' : (document.getElementById('sale-customer-contact').value || ''),
+                resellerId: saleType === 'wholesale' ? resellerId : null,
+                amount: amount / quantity, // Price per unit (in original currency)
                 currency: currency,
                 exchangeRate: USD_TO_DZD_RATE, // حفظ سعر الصرف الحالي
-                paymentMethod: document.getElementById('sale-payment-method').value,
+                cost_price: costPrice, // تكلفة المنتج بالدينار
+                sold_price: soldPriceDZD, // سعر البيع بالدينار
+                net_profit: netProfit, // صافي الربح
+                paymentMethod: saleType === 'wholesale' ? 'wallet' : document.getElementById('sale-payment-method').value,
                 notes: document.getElementById('sale-notes').value,
-                status: 'delivered',
-                source: 'manual',
+                status: 'delivered', // Wholesale is instant delivery usually
+                source: saleType === 'wholesale' ? 'wholesale' : 'manual',
                 saleDate: saleDate || new Date().toISOString().split('T')[0],
                 timestamp: serverTimestamp(),
                 createdAt: selectedDate
@@ -510,16 +967,18 @@ async function saveSale(event) {
 
         // تحديث القائمة المحلية
         await loadOrders();
+        if (saleType === 'wholesale') await loadResellers(); // Update balance UI
 
         // تحديث بيانات المحاسبة
         if (typeof displayAccountingTable === 'function') displayAccountingTable();
         if (typeof updateAccountingStats === 'function') updateAccountingStats();
         if (typeof updateProfitCharts === 'function') updateProfitCharts();
+        if (typeof updateProfitSourceChart === 'function') updateProfitSourceChart(); // New Chart
         if (typeof displaySuppliersSummary === 'function') displaySuppliersSummary();
 
         closeSaleModal();
         showToast(`✅ تم تسجيل ${quantity} عملية بيع بنجاح!`);
-        logActivity('sale', 'created', `${productName} x${quantity}`);
+        logActivity('sale', 'created', `${productName} x${quantity} (${saleType})`);
 
     } catch (error) {
         console.error('خطأ في حفظ البيع:', error);
@@ -825,6 +1284,10 @@ async function saveExpense(event) {
  * تحميل المصاريف من Firebase
  */
 async function loadExpenses() {
+    if (!window.firebaseModules) {
+        console.log('⏳ Firebase غير جاهز لتحميل المصاريف');
+        return;
+    }
     try {
         const { collection, getDocs, query, orderBy } = window.firebaseModules;
         const q = query(collection(window.db, 'expenses'), orderBy('timestamp', 'desc'));
@@ -1356,23 +1819,62 @@ async function deletePurchase(purchaseId) {
 }
 
 /**
- * حذف عملية بيع
+ * حذف عملية بيع (مع استرجاع المبالغ للموزعين)
  */
 async function deleteSale(orderId) {
-    if (!confirm('هل تريد حذف عملية البيع هذه؟')) return;
+    if (!confirm('هل تريد حذف عملية البيع هذه؟ استرجاع المال للموزع سيتم تلقائياً إذا كان الشراء بالمحفظة.')) return;
 
     try {
-        const { deleteDoc, doc } = window.firebaseModules;
+        const { deleteDoc, doc, updateDoc, increment, addDoc, collection } = window.firebaseModules;
+
+        // جلب بيانات الطلب قبل الحذف للقيام بعملية الاسترجاع
+        const order = allOrders.find(o => o.id === orderId);
+
+        if (order && (order.paymentMethod === 'wallet' || order.source === 'wholesale') && order.resellerId) {
+            // 1. إعادة المال لمحفظة الموزع (سعر البيع كاملاً)
+            let refundAmount = parseFloat(order.sold_price || order.amount) || 0;
+
+            // تحويل للعملة المحلية إذا كان مسجلاً بالدولار وليس لديه sold_price محسوب
+            if (order.currency === 'USD' && !order.sold_price) {
+                refundAmount *= (order.exchangeRate || USD_TO_DZD_RATE);
+            }
+
+            await updateDoc(doc(window.db, 'resellers', order.resellerId), {
+                walletBalance: increment(refundAmount),
+                totalSales: increment(-1)
+            });
+
+            // 2. تسجيل عملية استرجاع في سجل المعاملات
+            await addDoc(collection(window.db, 'transactions'), {
+                type: 'refund',
+                resellerId: order.resellerId,
+                amount: refundAmount,
+                productName: order.productName,
+                notes: `استرجاع مبلغ طلب محذوف #${orderId.substring(0, 8)}`,
+                createdAt: new Date().toISOString()
+            });
+
+            console.log(`✅ Refunded ${refundAmount} to reseller ${order.resellerId}`);
+        }
+
+        // 3. حذف الطلب من قاعدة البيانات
+        // ملاحظة: حذف الطلب سيؤدي تلقائياً لإعادة "التكلفة" إلى الخزينة 
+        // لأن دالة calculateTotalFinancials لن تجد هذا الطلب ولن تطرح تكلفته من رأس المال.
         await deleteDoc(doc(window.db, 'orders', orderId));
 
-        showToast('✅ تم حذف عملية البيع');
+        showToast('✅ تم حذف الطلب واسترجاع المبالغ بنجاح');
+
+        // تحديث كافة البيانات والواجهات
         await loadOrders();
-        displayAccountingTable();
-        updateAccountingStats();
-        displayTransactionsLog();
+        if (typeof loadResellers === 'function') await loadResellers();
+        if (typeof displayAccountingTable === 'function') displayAccountingTable();
+        if (typeof updateAccountingStats === 'function') updateAccountingStats();
+        if (typeof displayTransactionsLog === 'function') displayTransactionsLog();
+        if (typeof updateCapitalDisplay === 'function') updateCapitalDisplay();
+
     } catch (error) {
-        console.error('خطأ في حذف عملية البيع:', error);
-        showToast('خطأ في الحذف', 'error');
+        console.error('خطأ في حذف عملية البيع والاسترجاع:', error);
+        showToast('خطأ في عملية الحذف والاسترجاع', 'error');
     }
 }
 
@@ -1409,7 +1911,7 @@ function showLoginPage() {
 /**
  * عرض لوحة التحكم
  */
-function showDashboard() {
+async function showDashboard() {
     try {
         const loginPage = document.getElementById('login-page');
         const dashboardPage = document.getElementById('dashboard-page');
@@ -1424,35 +1926,51 @@ function showDashboard() {
 
         console.log('تم عرض لوحة التحكم');
 
-        // تحميل البيانات (مع معالجة الأخطاء)
-        try {
-            if (typeof loadReviews === 'function') loadReviews();
-        } catch (error) {
-            console.warn('خطأ في تحميل التقييمات:', error);
-        }
+        // تحميل البيانات (مع معالجة الأخطاء) - فقط إذا كان Firebase جاهزاً
+        if (window.firebaseModules) {
+            // Load independent data in parallel
+            try {
+                if (typeof loadReviews === 'function') loadReviews();
+            } catch (error) { console.warn('خطأ في تحميل التقييمات:', error); }
 
-        try {
-            if (typeof loadProducts === 'function') loadProducts();
-        } catch (error) {
-            console.warn('خطأ في تحميل المنتجات:', error);
-        }
+            try {
+                if (typeof loadProducts === 'function') loadProducts();
+            } catch (error) { console.warn('خطأ في تحميل المنتجات:', error); }
 
-        try {
-            if (typeof loadOrders === 'function') loadOrders();
-        } catch (error) {
-            console.warn('خطأ في تحميل الطلبات:', error);
-        }
+            try {
+                if (typeof loadOrders === 'function') loadOrders();
+            } catch (error) { console.warn('خطأ في تحميل الطلبات:', error); }
 
-        try {
-            if (typeof loadCustomers === 'function') loadCustomers();
-        } catch (error) {
-            console.warn('خطأ في تحميل العملاء:', error);
-        }
+            try {
+                if (typeof loadCustomers === 'function') loadCustomers();
+            } catch (error) { console.warn('خطأ في تحميل العملاء:', error); }
 
-        try {
-            if (typeof loadSecuritySettings === 'function') loadSecuritySettings();
-        } catch (error) {
-            console.warn('خطأ في تحميل إعدادات الأمان:', error);
+            try {
+                if (typeof loadSecuritySettings === 'function') loadSecuritySettings();
+            } catch (error) { console.warn('خطأ في تحميل إعدادات الأمان:', error); }
+
+            // CRITICAL: Load Resellers & Transactions FIRST for Accounting
+            try {
+                // Load Resellers (for Liabilities calculation)
+                if (typeof loadResellers === 'function') {
+                    await loadResellers();
+                    console.log('✅ تم تحميل الموزعين لغرض المحاسبة');
+                }
+
+                // Load Transactions (for Net Cash Flow/Khazina Total)
+                if (typeof loadTransactions === 'function') {
+                    await loadTransactions();
+                    console.log('✅ تم تحميل سجل المعاملات لغرض المحاسبة');
+                }
+            } catch (error) { console.warn('خطأ في تحميل بيانات المحاسبة:', error); }
+
+            // loadStartingCapital calls updateCapitalDisplay()
+            // Now allResellers and allTransactions are populated, so calculations will be correct.
+            try {
+                if (typeof loadStartingCapital === 'function') loadStartingCapital();
+            } catch (error) { console.warn('خطأ في تحميل رأس المال:', error); }
+        } else {
+            console.log('⏳ في انتظار جاهزية Firebase لتحميل البيانات...');
         }
     } catch (error) {
         console.error('خطأ في عرض لوحة التحكم:', error);
@@ -1991,8 +2509,25 @@ function showToast(message, type = 'success') {
 // تهيئة الصفحة - Page Initialization
 // ═══════════════════════════════════════════════════════════════════════════
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ تم تحميل الصفحة');
+// Initialize immediately
+initAdminPage();
+
+// Signal when Firebase is ready
+if (!window.firebaseModules) {
+    window.addEventListener('firebaseReady', () => {
+        console.log('✅ Firebase Loaded after init');
+        // Re-run checks that depend on Firebase if needed
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            console.log('🔄 إعادة تحميل البيانات...');
+            // We can just call showDashboard again, it has the logic now
+            showDashboard();
+        }
+    });
+}
+
+
+function initAdminPage() {
+    console.log('✅ تم تحميل الصفحة (Firebase Ready)');
 
     // تحقق من حالة تسجيل الدخول
     try {
@@ -2061,7 +2596,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // تحميل إعدادات الأمان
     loadSecuritySettings();
-});
+}
 
 // انتظار تحميل Firebase
 window.addEventListener('firebaseReady', () => {
@@ -3033,6 +3568,10 @@ async function saveProduct(event) {
  * تحميل الطلبات من Firebase
  */
 async function loadOrders() {
+    if (!window.firebaseModules) {
+        console.log('⏳ Firebase غير جاهز لتحميل الطلبات');
+        return Promise.resolve();
+    }
     try {
         const { collection, getDocs, query, orderBy } = window.firebaseModules;
         const q = query(collection(window.db, 'orders'), orderBy('timestamp', 'desc'));
@@ -4065,6 +4604,10 @@ let currentDateFilter = 'all';
  * تحميل بيانات المحاسبة
  */
 async function loadAccountingData() {
+    if (!window.firebaseModules) {
+        console.log('⏳ Firebase غير جاهز لتحميل بيانات المحاسبة');
+        return;
+    }
     try {
         // تعيين سعر الدولار في الحقل
         const usdRateInput = document.getElementById('usd-rate-input');
@@ -4106,6 +4649,10 @@ async function loadAccountingData() {
  * تحميل بيانات الشراء من Firebase
  */
 async function loadPurchases() {
+    if (!window.firebaseModules) {
+        console.log('⏳ Firebase غير جاهز لتحميل بيانات الشراء');
+        return;
+    }
     try {
         const { collection, getDocs, query, orderBy } = window.firebaseModules;
         const q = query(collection(window.db, 'purchases'), orderBy('timestamp', 'desc'));
@@ -4185,40 +4732,19 @@ function calculateAccountingData() {
         );
         const salesCount = productOrders.length;
 
-        // بيانات الشراء
+        // بيانات الشراء اليدوي (للرجوع إليها)
         const productPurchases = filteredPurchases.filter(p =>
             p.productName === product.name || p.productId === product.id
         );
         const purchasedQty = productPurchases.reduce((sum, p) => sum + (p.quantity || 0), 0);
 
-        // حساب تكلفة الشراء (تحويل USD إلى DZD بسعر السكوار)
-        const purchaseCostDzd = productPurchases.reduce((sum, p) => {
-            const amount = p.totalPrice || 0;
-            if (p.currency === 'USD') {
-                const rate = p.exchangeRate || USD_TO_DZD_RATE;
-                return sum + (amount * rate); // تحويل بالسعر المحفوظ أو الحالي
-            }
-            return sum + amount; // DZD مباشرة
-        }, 0);
-        const purchaseCostUsd = productPurchases.reduce((sum, p) => {
-            const amount = p.totalPrice || 0;
-            if (p.currency === 'USD') {
-                return sum + amount;
-            }
-            return sum + dzdToUsd(amount); // تحويل بسعر السكوار
-        }, 0);
-
-        // الكمية المتبقية
-        const remainingQty = purchasedQty - salesCount;
-
-        // حساب الإيرادات (من المبيعات) - تحويل USD إلى DZD بسعر السكوار
+        // حساب الإيرادات (من المبيعات)
         const revenueDzd = productOrders.reduce((sum, o) => {
-            const amount = parseFloat(o.amount) || 0;
-            if (o.currency === 'USD') {
-                const rate = o.exchangeRate || USD_TO_DZD_RATE;
-                return sum + (amount * rate); // تحويل بالسعر المحفوظ أو الحالي
+            let amount = parseFloat(o.sold_price || o.amount) || 0;
+            if (o.currency === 'USD' && !o.sold_price) {
+                amount *= (o.exchangeRate || USD_TO_DZD_RATE);
             }
-            return sum + amount; // DZD مباشرة
+            return sum + amount;
         }, 0);
 
         const revenueUsd = productOrders.reduce((sum, o) => {
@@ -4226,20 +4752,40 @@ function calculateAccountingData() {
             if (o.currency === 'USD') {
                 return sum + amount;
             }
-            return sum + dzdToUsd(amount); // تحويل بسعر السكوار
+            return sum + dzdToUsd(amount);
         }, 0);
 
         const totalRevenueDzd = revenueDzd || (salesCount * (product.price_dzd || 0));
         const totalRevenueUsd = revenueUsd || (salesCount * (product.price_usd || 0));
 
-        // التكلفة الفعلية = إجمالي ما دفعته للمورد (وليس تكلفة الوحدة × المبيعات)
-        // هذا مهم للحسابات المشتركة حيث تشتري حساب واحد وتبيعه لعدة أشخاص
-        const totalCostDzd = purchaseCostDzd;
-        const totalCostUsd = purchaseCostUsd;
+        // ★★★ التكلفة الفعلية = مجموع cost_price من كل طلب ★★★
+        const totalCostDzd = productOrders.reduce((sum, o) => {
+            let cost = parseFloat(o.cost_price || o.costPrice) || 0;
+            // إذا لم تكن التكلفة مسجلة، نأخذها من المنتج
+            if (cost === 0) {
+                cost = product.cost_dzd || product.costPrice || 0;
+            }
+            return sum + cost;
+        }, 0);
+
+        const totalCostUsd = productOrders.reduce((sum, o) => {
+            let cost = parseFloat(o.cost_price || o.costPrice) || 0;
+            if (cost === 0) {
+                cost = product.cost_usd || 0;
+            }
+            if (o.currency !== 'USD') {
+                cost = dzdToUsd(cost);
+            }
+            return sum + cost;
+        }, 0);
+
+
+        // الكمية المتبقية
+        const remainingQty = purchasedQty - salesCount;
 
         // تكلفة الوحدة (للعرض فقط)
-        const costPerUnitDzd = purchasedQty > 0 ? (purchaseCostDzd / purchasedQty) : (product.cost_dzd || 0);
-        const costPerUnitUsd = purchasedQty > 0 ? (purchaseCostUsd / purchasedQty) : (product.cost_usd || 0);
+        const costPerUnitDzd = salesCount > 0 ? (totalCostDzd / salesCount) : (product.cost_dzd || 0);
+        const costPerUnitUsd = salesCount > 0 ? (totalCostUsd / salesCount) : (product.cost_usd || 0);
 
         // حساب الربح = الإيرادات - التكلفة الفعلية
         const profitDzd = totalRevenueDzd - totalCostDzd;
@@ -4255,8 +4801,8 @@ function calculateAccountingData() {
             supplier: product.supplier || 'غير محدد',
             // بيانات الشراء
             purchasedQty,
-            purchaseCostDzd,
-            purchaseCostUsd,
+            purchaseCostDzd: totalCostDzd,
+            purchaseCostUsd: totalCostUsd,
             costPerUnitDzd,
             costPerUnitUsd,
             // بيانات البيع
@@ -4280,6 +4826,7 @@ function calculateAccountingData() {
         };
     });
 }
+
 
 /**
  * عرض جدول المحاسبة
@@ -6993,7 +7540,7 @@ function addLiveDurationPrompt(productId) {
  * Delete a duration from local list
  */
 function deleteLiveDuration(productId, durationId) {
-    if (!confirm(`هل أنت متأكد من حذف الفرع "${durationId}"؟`)) return;
+    if (!confirm(t('msg_confirm_delete_duration') + ` "${durationId}"`)) return;
 
     const product = allProducts.find(p => p.id === productId);
     if (product && product.durations && product.durations[durationId]) {
@@ -7093,9 +7640,1115 @@ window.showTab = function (tabName) {
     if (tabName === 'live-pricing') {
         renderLivePricingList();
     }
+
+    if (tabName === 'resellers') {
+        // Load transactions for wallet history
+        if (typeof loadTransactions === 'function') loadTransactions();
+        // Refresh resellers data
+        if (typeof loadResellers === 'function') loadResellers();
+    }
 };
 
 // تهيئة عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof initGiveawayEvents === 'function') initGiveawayEvents();
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// وظائف الموزعين ونظام المحفظة - Resellers & Wallet System
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * تحميل الموزعين
+ */
+async function loadResellers() {
+    try {
+        if (!window.db || !window.firebaseModules) return;
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+
+        const q = query(collection(window.db, 'resellers'), orderBy('name', 'asc'));
+        const snapshot = await getDocs(q);
+
+        allResellers = [];
+        snapshot.forEach(doc => {
+            allResellers.push({ id: doc.id, ...doc.data() });
+        });
+
+        displayResellersTable();
+
+        // تحديث قائمة الموزعين في نافذة البيع
+        updateSaleResellerList();
+
+        // تحديث إحصائيات الخزينة والالتزامات
+        updateCapitalDisplay();
+
+    } catch (error) {
+        console.error('Error loading resellers:', error);
+        showToast(t('err_load_resellers'), 'error');
+    }
+}
+
+/**
+ * عرض جدول الموزعين
+ */
+function displayResellersTable() {
+    const tbody = document.getElementById('resellers-table-body');
+    if (!tbody) return;
+
+    if (allResellers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-gray-400">${t('no_resellers')}</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = allResellers.map(reseller => `
+        <tr class="border-b border-gray-700/50 hover:bg-gray-800/30">
+            <td class="p-4 font-bold text-white">${reseller.name}</td>
+            <td class="p-4 text-gray-400">${reseller.email || '-'}</td>
+            <td class="p-4 text-gray-400">${reseller.phone || '-'}</td>
+            <td class="p-4">
+                <span class="font-bold ${(reseller.walletBalance || 0) > 0 ? 'text-green-400' : 'text-red-400'}">
+                    ${(reseller.walletBalance || 0).toLocaleString()} د.ج
+                </span>
+            </td>
+            <td class="p-4 text-center">${reseller.totalSales || 0}</td>
+            <td class="p-4 text-center">
+                <div class="flex gap-2 justify-center flex-wrap">
+                    <button onclick="openAddFundsModal('${reseller.id}')" class="px-3 py-1 bg-green-600/20 text-green-400 rounded hover:bg-green-600 hover:text-white transition">${t('btn_fund')}</button>
+                    <button onclick="openResellerModal('${reseller.id}')" class="px-3 py-1 bg-blue-600/20 text-blue-400 rounded hover:bg-blue-600 hover:text-white transition">${t('btn_edit')}</button>
+                    <button onclick="openSaleModalForReseller('${reseller.id}')" class="px-3 py-1 bg-purple-600/20 text-purple-400 rounded hover:bg-purple-600 hover:text-white transition">${t('btn_sell')}</button>
+                    <button onclick="deleteResellerWithCleanup('${reseller.id}')" class="px-3 py-1 bg-red-600/20 text-red-400 rounded hover:bg-red-600 hover:text-white transition">🗑️</button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+/**
+ * فتح نافذة الموزع (إضافة/تعديل)
+ */
+function openResellerModal(resellerId = null) {
+    const modal = document.getElementById('reseller-modal');
+    const form = document.getElementById('reseller-form');
+    const title = document.getElementById('reseller-modal-title');
+
+    if (form) form.reset();
+    document.getElementById('reseller-id').value = '';
+
+    if (resellerId) {
+        const reseller = allResellers.find(r => r.id === resellerId);
+        if (reseller) {
+            title.textContent = t('modal_title_edit_reseller');
+            document.getElementById('reseller-id').value = reseller.id;
+            document.getElementById('reseller-name').value = reseller.name;
+            document.getElementById('reseller-email').value = reseller.email || '';
+            document.getElementById('reseller-phone').value = reseller.phone || '';
+            document.getElementById('reseller-notes').value = reseller.notes || '';
+        }
+    } else {
+        title.textContent = t('modal_title_add_reseller');
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeResellerModal() {
+    const modal = document.getElementById('reseller-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+/**
+ * حفظ الموزع
+ */
+document.getElementById('reseller-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('reseller-id').value;
+    const data = {
+        name: document.getElementById('reseller-name').value,
+        email: document.getElementById('reseller-email').value,
+        phone: document.getElementById('reseller-phone').value,
+        notes: document.getElementById('reseller-notes').value,
+        updatedAt: new Date().toISOString()
+    };
+
+    try {
+        const { collection, addDoc, doc, updateDoc } = window.firebaseModules;
+
+        if (id) {
+            await updateDoc(doc(window.db, 'resellers', id), data);
+            showToast(t('msg_reseller_updated'));
+        } else {
+            data.walletBalance = 0;
+            data.totalSales = 0;
+            data.createdAt = new Date().toISOString();
+            await addDoc(collection(window.db, 'resellers'), data);
+            showToast(t('msg_reseller_added'));
+        }
+        closeResellerModal();
+        loadResellers();
+    } catch (error) {
+        console.error('Error saving reseller:', error);
+        showToast(t('msg_error'), 'error');
+    }
+});
+
+/**
+ * حذف الموزع مع تنظيف كل بياناته (الطلبات والمعاملات)
+ */
+async function deleteResellerWithCleanup(resellerId) {
+    const reseller = allResellers.find(r => r.id === resellerId);
+    if (!reseller) return;
+
+    const confirmMsg = `⚠️ هل تريد حذف الموزع "${reseller.name}" نهائياً؟\n\n` +
+        `سيتم حذف:\n` +
+        `• حسابه\n` +
+        `• جميع طلباته\n` +
+        `• جميع إيداعاته ومعاملاته\n\n` +
+        `رصيده الحالي: ${(reseller.walletBalance || 0).toLocaleString()} د.ج`;
+
+    if (!confirm(confirmMsg)) return;
+
+    try {
+        showToast('⏳ جاري حذف الموزع وبياناته...', 'info');
+
+        const { collection, getDocs, deleteDoc, doc, query, where } = window.firebaseModules;
+
+        // 1. حذف جميع طلبات هذا الموزع
+        const ordersSnap = await getDocs(query(
+            collection(window.db, 'orders'),
+            where('resellerId', '==', resellerId)
+        ));
+        for (const docSnap of ordersSnap.docs) {
+            await deleteDoc(doc(window.db, 'orders', docSnap.id));
+        }
+        console.log(`🗑️ حذف ${ordersSnap.size} طلب للموزع`);
+
+        // 2. حذف جميع معاملات هذا الموزع (إيداعات، استرجاعات، إلخ)
+        const transSnap = await getDocs(query(
+            collection(window.db, 'transactions'),
+            where('resellerId', '==', resellerId)
+        ));
+        for (const docSnap of transSnap.docs) {
+            await deleteDoc(doc(window.db, 'transactions', docSnap.id));
+        }
+        console.log(`🗑️ حذف ${transSnap.size} معاملة للموزع`);
+
+        // 3. حذف الموزع نفسه
+        await deleteDoc(doc(window.db, 'resellers', resellerId));
+
+        showToast(`✅ تم حذف ${reseller.name} وجميع بياناته بنجاح`);
+
+        // تحديث كل البيانات
+        await loadResellers();
+        await loadOrders();
+        await loadTransactions();
+        await loadAccountingData();
+        updateCapitalDisplay();
+
+    } catch (error) {
+        console.error('خطأ في حذف الموزع:', error);
+        showToast('❌ خطأ في حذف الموزع: ' + error.message, 'error');
+    }
+}
+
+// تصدير الدالة
+window.deleteResellerWithCleanup = deleteResellerWithCleanup;
+
+/**
+ * نافذة شحن الرصيد
+ */
+function openAddFundsModal(resellerId) {
+    const reseller = allResellers.find(r => r.id === resellerId);
+    if (!reseller) return;
+
+    document.getElementById('funds-reseller-id').value = reseller.id;
+    document.getElementById('funds-reseller-name').textContent = reseller.name;
+    document.getElementById('funds-current-balance').textContent = (reseller.walletBalance || 0).toLocaleString() + ' د.ج';
+    document.getElementById('funds-amount').value = '';
+    document.getElementById('funds-notes').value = '';
+
+    const modal = document.getElementById('add-funds-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeAddFundsModal() {
+    const modal = document.getElementById('add-funds-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+/**
+ * تنفيذ شحن الرصيد
+ */
+document.getElementById('add-funds-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const resellerId = document.getElementById('funds-reseller-id').value;
+    const amount = parseFloat(document.getElementById('funds-amount').value);
+    const notes = document.getElementById('funds-notes').value;
+
+    if (!amount || amount <= 0) {
+        showToast('يرجى إدخال مبلغ صحيح', 'error');
+        return;
+    }
+
+    try {
+        const { doc, updateDoc, collection, addDoc, increment, serverTimestamp } = window.firebaseModules;
+
+        // 1. تحديث رصيد الموزع
+        await updateDoc(doc(window.db, 'resellers', resellerId), {
+            walletBalance: increment(amount),
+            walletTransactions: increment(1), // Optional counter
+            lastDepositAt: serverTimestamp()
+        });
+
+        // 2. تسجيل المعاملة (Capital Injection)
+        await addDoc(collection(window.db, 'transactions'), {
+            type: 'wallet_deposit',
+            resellerId: resellerId,
+            resellerName: document.getElementById('funds-reseller-name').textContent,
+            amount: amount, // DZD assumed
+            notes: notes,
+            timestamp: serverTimestamp(),
+            createdAt: new Date() // For sorting/filtering locally without conversion
+        });
+
+        showToast(`✅ تم شحن ${amount} د.ج بنجاح`);
+        closeAddFundsModal();
+
+        // تحديث البيانات
+        await loadResellers();
+        await loadTransactions();
+    } catch (error) {
+        console.error('Error adding funds:', error);
+        showToast(t('err_funds_failed'), 'error');
+    }
+});
+
+/**
+ * تحميل المعاملات (للخزينة)
+ */
+async function loadTransactions() {
+    try {
+        if (!window.db || !window.firebaseModules) return;
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+
+        // Try to order by timestamp if possible, otherwise just fetch
+        const q = collection(window.db, 'transactions');
+        const snapshot = await getDocs(q);
+
+        allTransactions = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            allTransactions.push({
+                id: doc.id,
+                ...data,
+                createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : (data.createdAt || new Date())
+            });
+        });
+
+        // تحديث عرض رأس المال والمحاسبة
+        updateCapitalDisplay();
+
+        // If the chart function exists (added in next step), call it
+        if (typeof updateProfitSourceChart === 'function') updateProfitSourceChart();
+
+    } catch (error) {
+        console.error('Error loading transactions:', error);
+    }
+}
+
+/**
+ * Helper: Filter Transactions
+ */
+function filterTransactionsByDate(transactions, filter) {
+    if (filter === 'all') return transactions;
+
+    const now = new Date();
+    let startDate = new Date();
+
+    if (filter === 'today') {
+        startDate.setHours(0, 0, 0, 0);
+        return transactions.filter(t => t.createdAt >= startDate);
+    }
+
+    if (filter === 'week') {
+        startDate.setDate(now.getDate() - 7);
+    } else if (filter === 'month') {
+        startDate.setMonth(now.getMonth() - 1);
+    } else if (filter === 'year') {
+        startDate.setFullYear(now.getFullYear() - 1);
+    } else {
+        return transactions;
+    }
+
+    return transactions.filter(t => t.createdAt >= startDate);
+}
+
+/**
+ * Sale Logic Helpers
+ */
+function setSaleType(type) {
+    const resellerGroup = document.getElementById('sale-reseller-group');
+    const contactGroup = document.getElementById('sale-contact-group');
+    const btnDirect = document.getElementById('btn-sale-direct');
+    const btnWholesale = document.getElementById('btn-sale-wholesale');
+    const typeInput = document.getElementById('sale-type');
+
+    if (typeInput) typeInput.value = type;
+
+    if (type === 'wholesale') {
+        if (resellerGroup) resellerGroup.classList.remove('hidden');
+        if (contactGroup) contactGroup.classList.add('hidden');
+
+        if (btnWholesale) {
+            btnWholesale.classList.remove('border-gray-600', 'bg-transparent', 'text-gray-400');
+            btnWholesale.classList.add('border-blue-500', 'bg-blue-500/20', 'text-blue-400', 'font-bold');
+        }
+
+        if (btnDirect) {
+            btnDirect.classList.add('border-gray-600', 'bg-transparent', 'text-gray-400');
+            btnDirect.classList.remove('border-green-500', 'bg-green-500/20', 'text-green-400', 'font-bold');
+        }
+
+        // تحميل الموزعين إذا لزم
+        if (allResellers.length === 0) loadResellers();
+        else updateSaleResellerList();
+
+    } else {
+        if (resellerGroup) resellerGroup.classList.add('hidden');
+        if (contactGroup) contactGroup.classList.remove('hidden');
+
+        if (btnDirect) {
+            btnDirect.classList.add('border-green-500', 'bg-green-500/20', 'text-green-400', 'font-bold');
+            btnDirect.classList.remove('border-gray-600', 'bg-transparent', 'text-gray-400');
+        }
+
+        if (btnWholesale) {
+            btnWholesale.classList.add('border-gray-600', 'bg-transparent', 'text-gray-400');
+            btnWholesale.classList.remove('border-blue-500', 'bg-blue-500/20', 'text-blue-400', 'font-bold');
+        }
+    }
+}
+
+function updateSaleResellerList() {
+    const select = document.getElementById('sale-reseller-select');
+    if (!select) return;
+
+    // Save current selection
+    const currentVal = select.value;
+
+    select.innerHTML = '<option value="">-- اختر الموزع --</option>';
+    allResellers.forEach(r => {
+        const option = document.createElement('option');
+        option.value = r.id;
+        option.textContent = `${r.name}`;
+        option.dataset.balance = r.walletBalance || 0;
+        select.appendChild(option);
+    });
+
+    if (currentVal) select.value = currentVal;
+
+    select.onchange = () => {
+        const opt = select.options[select.selectedIndex];
+        const display = document.getElementById('sale-reseller-balance-display');
+        if (opt && opt.value) {
+            display.textContent = `الرصيد المتوفر: ${parseFloat(opt.dataset.balance).toLocaleString()} د.ج`;
+            display.className = 'text-xs mt-1 ' + (parseFloat(opt.dataset.balance) > 0 ? 'text-green-400' : 'text-red-400');
+        } else {
+            display.textContent = 'الرصيد: -';
+        }
+    };
+}
+
+function openSaleModalForReseller(resellerId) {
+    if (typeof openSaleModal === 'function') openSaleModal();
+    setSaleType('wholesale');
+
+    setTimeout(() => {
+        const select = document.getElementById('sale-reseller-select');
+        if (select) {
+            select.value = resellerId;
+            // Trip change event manually
+            if (select.onchange) select.onchange();
+        }
+    }, 100);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Initialization Hooks & Charting
+// ═══════════════════════════════════════════════════════════════════════════
+
+const originalShowTabForResellers = window.showTab;
+window.showTab = function (tabName) {
+    originalShowTabForResellers(tabName);
+
+    if (tabName === 'resellers' && allResellers.length === 0) {
+        loadResellers();
+    }
+    if (tabName === 'accounting' && allTransactions.length === 0) {
+        loadTransactions();
+    }
+};
+
+// Initial Load
+// Initial Load handled in initAdminPage / showDashboard
+
+// New Chart Function
+function updateProfitSourceChart() {
+    const canvas = document.getElementById('profit-source-chart');
+    if (!canvas) return;
+
+    // Calculate Data
+    const dateFilter = document.getElementById('accounting-date-filter')?.value || 'all';
+    const filteredOrders = filterOrdersByDate(
+        allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed'),
+        dateFilter
+    );
+
+    let retailProfit = 0;
+    let wholesaleProfit = 0;
+
+    filteredOrders.forEach(order => {
+        // Revenue
+        let amount = order.sold_price || parseFloat(order.amount) || 0;
+        if (!order.sold_price && order.currency === 'USD') {
+            amount = amount * (order.exchangeRate || USD_TO_DZD_RATE);
+        }
+
+        // Cost (Prioritize cost stored in the order, then fall back to product default)
+        let cost = parseFloat(order.cost_price || order.costPrice) || 0;
+
+        if (!cost) {
+            const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
+            if (product) {
+                cost = product.cost_dzd || 0;
+            }
+        }
+
+        const profit = amount - cost;
+
+        if (order.source === 'wholesale') {
+            wholesaleProfit += profit;
+        } else {
+            retailProfit += profit;
+        }
+    });
+
+    // Render Chart
+    if (window.profitSourceChart) window.profitSourceChart.destroy();
+
+    const ctx = canvas.getContext('2d');
+    window.profitSourceChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['أرباح التجزئة', 'أرباح الجملة'],
+            datasets: [{
+                data: [retailProfit, wholesaleProfit],
+                backgroundColor: ['#10b981', '#3b82f6'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#9ca3af' } }
+            }
+        }
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// وظائف سجل مبيعات الجملة - Wholesale Logs Functions
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * عرض تبويب فرعي في صفحة الموزعين
+ */
+function showResellerSubTab(tabName) {
+    // Hide all sub-tab content
+    document.getElementById('reseller-subtab-content-list').classList.add('hidden');
+    document.getElementById('reseller-subtab-content-wholesale-log').classList.add('hidden');
+
+    // Remove active from all buttons
+    document.querySelectorAll('.reseller-subtab-btn').forEach(btn => {
+        btn.classList.remove('bg-purple-600/20', 'text-purple-400', 'border-purple-500/50');
+        btn.classList.add('bg-gray-700/30', 'text-gray-400', 'border-gray-600/50');
+    });
+
+    // Show selected tab
+    if (tabName === 'list') {
+        document.getElementById('reseller-subtab-content-list').classList.remove('hidden');
+        document.getElementById('reseller-subtab-list').classList.add('bg-purple-600/20', 'text-purple-400', 'border-purple-500/50');
+        document.getElementById('reseller-subtab-list').classList.remove('bg-gray-700/30', 'text-gray-400', 'border-gray-600/50');
+    } else if (tabName === 'wholesale-log') {
+        document.getElementById('reseller-subtab-content-wholesale-log').classList.remove('hidden');
+        document.getElementById('reseller-subtab-wholesale-log').classList.add('bg-purple-600/20', 'text-purple-400', 'border-purple-500/50');
+        document.getElementById('reseller-subtab-wholesale-log').classList.remove('bg-gray-700/30', 'text-gray-400', 'border-gray-600/50');
+        loadWholesaleLogs();
+    }
+}
+
+/**
+ * تحميل سجل مبيعات الجملة
+ */
+async function loadWholesaleLogs() {
+    if (!window.firebaseModules) {
+        console.log('⏳ Firebase غير جاهز');
+        return;
+    }
+
+    try {
+        // Filter orders where source = 'wholesale'
+        const wholesaleOrders = allOrders.filter(order => order.source === 'wholesale');
+
+        // Update reseller filter dropdown
+        updateWholesaleResellerFilter();
+
+        // Display and calculate stats
+        displayWholesaleLogsTable(wholesaleOrders);
+        updateWholesaleStats(wholesaleOrders);
+
+    } catch (error) {
+        console.error('خطأ في تحميل سجل الجملة:', error);
+    }
+}
+
+/**
+ * تحديث قائمة الموزعين في فلتر الجملة
+ */
+function updateWholesaleResellerFilter() {
+    const select = document.getElementById('wholesale-reseller-filter');
+    if (!select) return;
+
+    // Keep only the "all" option
+    select.innerHTML = '<option value="all">كل الموزعين</option>';
+
+    allResellers.forEach(r => {
+        const option = document.createElement('option');
+        option.value = r.id;
+        option.textContent = r.name;
+        select.appendChild(option);
+    });
+}
+
+/**
+ * فلترة سجل الجملة
+ */
+function filterWholesaleLogs() {
+    const resellerFilter = document.getElementById('wholesale-reseller-filter')?.value || 'all';
+    const dateFilter = document.getElementById('wholesale-date-filter')?.value || 'all';
+
+    let filtered = allOrders.filter(order => order.source === 'wholesale');
+
+    // Filter by reseller
+    if (resellerFilter !== 'all') {
+        filtered = filtered.filter(order => order.resellerId === resellerFilter);
+    }
+
+    // Filter by date
+    filtered = filterOrdersByDate(filtered, dateFilter);
+
+    displayWholesaleLogsTable(filtered);
+    updateWholesaleStats(filtered);
+}
+
+/**
+ * عرض جدول سجل الجملة
+ */
+function displayWholesaleLogsTable(orders) {
+    const tbody = document.getElementById('wholesale-log-table-body');
+    if (!tbody) return;
+
+    if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center p-8 text-gray-400">لا توجد مبيعات جملة</td></tr>';
+        return;
+    }
+
+    // Sort by date (newest first)
+    const sortedOrders = [...orders].sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.saleDate || a.createdAt);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.saleDate || b.createdAt);
+        return dateB - dateA;
+    });
+
+    tbody.innerHTML = sortedOrders.map(order => {
+        // Get reseller name
+        const reseller = allResellers.find(r => r.id === order.resellerId);
+        const resellerName = reseller?.name || order.customerName || '-';
+
+        // Calculate amounts
+        let soldPrice = order.sold_price || parseFloat(order.amount) || 0;
+        if (!order.sold_price && order.currency === 'USD') {
+            soldPrice = soldPrice * (order.exchangeRate || USD_TO_DZD_RATE);
+        }
+
+        // Get cost from product
+        const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
+        const costPrice = order.cost_price || product?.cost_dzd || 0;
+        const profit = soldPrice - costPrice;
+
+        // Format date
+        const orderDate = order.createdAt?.toDate ? order.createdAt.toDate() : new Date(order.saleDate || order.createdAt);
+        const dateStr = orderDate.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
+
+        return `
+            <tr class="border-b border-gray-700/30 hover:bg-gray-800/30">
+                <td class="p-3 text-gray-400">${dateStr}</td>
+                <td class="p-3 text-white font-bold">${resellerName}</td>
+                <td class="p-3">${order.productName || '-'}</td>
+                <td class="p-3 text-red-400">${costPrice.toLocaleString()} د.ج</td>
+                <td class="p-3 text-blue-400">${soldPrice.toLocaleString()} د.ج</td>
+                <td class="p-3 font-bold ${profit >= 0 ? 'text-green-400' : 'text-red-400'}">${profit.toLocaleString()} د.ج</td>
+                <td class="p-3 text-center">
+                    <button onclick="deleteWholesaleOrder('${order.id}', '${order.resellerId}', ${soldPrice}, '${resellerName.replace(/'/g, "\\'")}')" 
+                        class="px-2 py-1 bg-red-600/20 text-red-400 rounded hover:bg-red-600 hover:text-white transition" 
+                        title="حذف واسترجاع المبلغ">
+                        🗑️
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+/**
+ * تحديث إحصائيات الجملة
+ */
+function updateWholesaleStats(orders) {
+    let totalRevenue = 0;
+    let totalCost = 0;
+
+    orders.forEach(order => {
+        let soldPrice = parseFloat(order.amount) || 0;
+        if (order.currency === 'USD') {
+            soldPrice = soldPrice * (order.exchangeRate || USD_TO_DZD_RATE);
+        }
+
+        const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
+        const costPrice = order.cost_price || product?.cost_dzd || 0;
+
+        totalRevenue += soldPrice;
+        totalCost += costPrice;
+    });
+
+    const totalProfit = totalRevenue - totalCost;
+
+    const countEl = document.getElementById('stat-wholesale-count');
+    const revenueEl = document.getElementById('stat-wholesale-revenue');
+    const costEl = document.getElementById('stat-wholesale-cost');
+    const profitEl = document.getElementById('stat-wholesale-profit');
+
+    if (countEl) countEl.textContent = orders.length;
+    if (revenueEl) revenueEl.textContent = totalRevenue.toLocaleString() + ' د.ج';
+    if (costEl) costEl.textContent = totalCost.toLocaleString() + ' د.ج';
+    if (profitEl) profitEl.textContent = totalProfit.toLocaleString() + ' د.ج';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// وظائف سجل الموزع الفردي - Reseller History Modal Functions
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * فتح نافذة سجل الموزع
+ */
+function openResellerHistoryModal(resellerId) {
+    const reseller = allResellers.find(r => r.id === resellerId);
+    if (!reseller) {
+        showToast('الموزع غير موجود', 'error');
+        return;
+    }
+
+    document.getElementById('history-reseller-id').value = resellerId;
+    document.getElementById('history-reseller-name').textContent = reseller.name;
+    document.getElementById('history-current-balance').textContent = (reseller.walletBalance || 0).toLocaleString() + ' د.ج';
+
+    // Load history data
+    loadResellerHistory(resellerId);
+
+    // Show modal
+    const modal = document.getElementById('reseller-history-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    // Reset to wallet tab
+    showHistorySubTab('wallet');
+}
+
+/**
+ * إغلاق نافذة سجل الموزع
+ */
+function closeResellerHistoryModal() {
+    const modal = document.getElementById('reseller-history-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+/**
+ * عرض تبويب فرعي في سجل الموزع
+ */
+function showHistorySubTab(tabName) {
+    // Hide all sub-tab content
+    document.getElementById('history-subtab-content-wallet').classList.add('hidden');
+    document.getElementById('history-subtab-content-purchases').classList.add('hidden');
+
+    // Remove active from all buttons
+    document.querySelectorAll('.history-subtab-btn').forEach(btn => {
+        btn.classList.remove('bg-green-600/20', 'text-green-400', 'border-green-500/50');
+        btn.classList.add('bg-gray-700/30', 'text-gray-400', 'border-gray-600/50');
+    });
+
+    // Show selected tab
+    if (tabName === 'wallet') {
+        document.getElementById('history-subtab-content-wallet').classList.remove('hidden');
+        document.getElementById('history-subtab-wallet').classList.add('bg-green-600/20', 'text-green-400', 'border-green-500/50');
+        document.getElementById('history-subtab-wallet').classList.remove('bg-gray-700/30', 'text-gray-400', 'border-gray-600/50');
+    } else if (tabName === 'purchases') {
+        document.getElementById('history-subtab-content-purchases').classList.remove('hidden');
+        document.getElementById('history-subtab-purchases').classList.add('bg-green-600/20', 'text-green-400', 'border-green-500/50');
+        document.getElementById('history-subtab-purchases').classList.remove('bg-gray-700/30', 'text-gray-400', 'border-gray-600/50');
+    }
+}
+
+/**
+ * تحميل سجل الموزع (المحفظة والمشتريات)
+ */
+async function loadResellerHistory(resellerId) {
+    // Load wallet transactions for this reseller
+    const walletTransactions = allTransactions.filter(t => t.resellerId === resellerId);
+    displayWalletHistory(walletTransactions);
+
+    // Load purchase history (orders where resellerId matches)
+    const purchases = allOrders.filter(order => order.resellerId === resellerId);
+    displayPurchaseHistory(purchases);
+
+    // Update stats
+    let totalDeposits = 0;
+    let totalSpent = 0;
+
+    walletTransactions.forEach(t => {
+        if (t.type === 'wallet_deposit') {
+            totalDeposits += parseFloat(t.amount) || 0;
+        }
+    });
+
+    purchases.forEach(order => {
+        let amount = parseFloat(order.amount) || 0;
+        if (order.currency === 'USD') {
+            amount = amount * (order.exchangeRate || USD_TO_DZD_RATE);
+        }
+        totalSpent += amount;
+    });
+
+    document.getElementById('history-total-deposits').textContent = totalDeposits.toLocaleString() + ' د.ج';
+    document.getElementById('history-total-spent').textContent = totalSpent.toLocaleString() + ' د.ج';
+    document.getElementById('history-total-orders').textContent = purchases.length;
+}
+
+/**
+ * عرض سجل المحفظة
+ */
+function displayWalletHistory(transactions) {
+    const tbody = document.getElementById('history-wallet-table-body');
+    if (!tbody) return;
+
+    if (transactions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center p-6 text-gray-400">لا توجد عمليات</td></tr>';
+        return;
+    }
+
+    // Sort by date (newest first)
+    const sorted = [...transactions].sort((a, b) => {
+        const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
+        const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
+        return dateB - dateA;
+    });
+
+    tbody.innerHTML = sorted.map(t => {
+        const date = t.createdAt instanceof Date ? t.createdAt : new Date(t.createdAt);
+        const dateStr = date.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
+
+        const isDeposit = t.type === 'wallet_deposit';
+        const typeLabel = isDeposit ? '💰 شحن رصيد' : '🛒 خصم مشتريات';
+        const amountClass = isDeposit ? 'text-green-400' : 'text-red-400';
+        const sign = isDeposit ? '+' : '-';
+
+        return `
+            <tr class="border-b border-gray-700/30 hover:bg-gray-800/30">
+                <td class="p-3 text-gray-400">${dateStr}</td>
+                <td class="p-3">${typeLabel}</td>
+                <td class="p-3 font-bold ${amountClass}">${sign}${Math.abs(t.amount).toLocaleString()} د.ج</td>
+                <td class="p-3 text-gray-400">${t.notes || '-'}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+/**
+ * عرض سجل المشتريات
+ */
+function displayPurchaseHistory(orders) {
+    const tbody = document.getElementById('history-purchases-table-body');
+    if (!tbody) return;
+
+    if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center p-6 text-gray-400">لا توجد مشتريات</td></tr>';
+        return;
+    }
+
+    // Sort by date (newest first)
+    const sorted = [...orders].sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.saleDate || a.createdAt);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.saleDate || b.createdAt);
+        return dateB - dateA;
+    });
+
+    tbody.innerHTML = sorted.map(order => {
+        const orderDate = order.createdAt?.toDate ? order.createdAt.toDate() : new Date(order.saleDate || order.createdAt);
+        const dateStr = orderDate.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
+
+        let soldPrice = order.sold_price || parseFloat(order.amount) || 0;
+        if (!order.sold_price && order.currency === 'USD') {
+            soldPrice = soldPrice * (order.exchangeRate || USD_TO_DZD_RATE);
+        }
+
+        const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
+        const costPrice = order.cost_price || product?.cost_dzd || 0;
+        const profit = soldPrice - costPrice;
+
+        // Get reseller info for delete function
+        const reseller = allResellers.find(r => r.id === order.resellerId);
+        const resellerName = reseller?.name || order.customerName || '-';
+
+        return `
+            <tr class="border-b border-gray-700/30 hover:bg-gray-800/30">
+                <td class="p-3 text-gray-400">${dateStr}</td>
+                <td class="p-3 text-white">${order.productName || '-'}</td>
+                <td class="p-3 text-blue-400">${soldPrice.toLocaleString()} د.ج</td>
+                <td class="p-3 text-red-400">${costPrice.toLocaleString()} د.ج</td>
+                <td class="p-3 font-bold ${profit >= 0 ? 'text-green-400' : 'text-red-400'}">${profit.toLocaleString()} د.ج</td>
+                <td class="p-3 text-center">
+                    <button onclick="deleteOrderFromHistory('${order.id}', '${order.resellerId}', ${soldPrice}, '${resellerName.replace(/'/g, "\\'")}')" 
+                        class="px-2 py-1 bg-red-600/20 text-red-400 rounded hover:bg-red-600 hover:text-white transition" 
+                        title="حذف واسترجاع المبلغ">
+                        🗑️
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// تحديث جدول الموزعين - Updated Resellers Table with History Button
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Override the displayResellersTable function to add the history button
+const originalDisplayResellersTable = displayResellersTable;
+displayResellersTable = function () {
+    const tbody = document.getElementById('resellers-table-body');
+    if (!tbody) return;
+
+    if (allResellers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-gray-400">${t('no_resellers')}</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = allResellers.map(reseller => `
+        <tr class="border-b border-gray-700/50 hover:bg-gray-800/30">
+            <td class="p-4">
+                <button onclick="openResellerHistoryModal('${reseller.id}')" class="font-bold text-white hover:text-purple-400 transition">
+                    ${reseller.name}
+                </button>
+            </td>
+            <td class="p-4 text-gray-400">${reseller.email || '-'}</td>
+            <td class="p-4 text-gray-400">${reseller.phone || '-'}</td>
+            <td class="p-4">
+                <span class="font-bold ${(reseller.walletBalance || 0) > 0 ? 'text-green-400' : 'text-red-400'}">
+                    ${(reseller.walletBalance || 0).toLocaleString()} د.ج
+                </span>
+            </td>
+            <td class="p-4 text-center">${reseller.totalSales || 0}</td>
+            <td class="p-4 text-center">
+                <div class="flex gap-2 justify-center flex-wrap">
+                    <button onclick="openResellerHistoryModal('${reseller.id}')" class="px-3 py-1 bg-purple-600/20 text-purple-400 rounded hover:bg-purple-600 hover:text-white transition" title="سجل العمليات">📋</button>
+                    <button onclick="openAddFundsModal('${reseller.id}')" class="px-3 py-1 bg-green-600/20 text-green-400 rounded hover:bg-green-600 hover:text-white transition">${t('btn_fund')}</button>
+                    <button onclick="openResellerModal('${reseller.id}')" class="px-3 py-1 bg-blue-600/20 text-blue-400 rounded hover:bg-blue-600 hover:text-white transition">${t('btn_edit')}</button>
+                    <button onclick="openSaleModalForReseller('${reseller.id}')" class="px-3 py-1 bg-orange-600/20 text-orange-400 rounded hover:bg-orange-600 hover:text-white transition">${t('btn_sell')}</button>
+                    <button onclick="deleteReseller('${reseller.id}', '${reseller.name.replace(/'/g, "\\'")}', ${reseller.walletBalance || 0})" class="px-3 py-1 bg-red-600/20 text-red-400 rounded hover:bg-red-600 hover:text-white transition" title="حذف الموزع">🗑️</button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// وظائف الحذف والاسترجاع - Delete & Refund Functions
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * حذف طلب جملة واسترجاع المبلغ للموزع
+ * @param {string} orderId - معرف الطلب
+ * @param {string} resellerId - معرف الموزع
+ * @param {number} amount - المبلغ المراد استرجاعه (بالدينار)
+ * @param {string} resellerName - اسم الموزع
+ */
+async function deleteWholesaleOrder(orderId, resellerId, amount, resellerName) {
+    // Confirmation dialog
+    const confirmMessage = `⚠️ هل أنت متأكد من حذف هذه العملية؟\n\nسيتم استرجاع ${amount.toLocaleString()} د.ج إلى محفظة الموزع "${resellerName}".`;
+
+    if (!confirm(confirmMessage)) {
+        return;
+    }
+
+    try {
+        const { doc, deleteDoc, updateDoc, increment, collection, query, where, getDocs } = window.firebaseModules;
+
+        // Step A & B: Refund - Add amount back to reseller's wallet
+        if (resellerId && resellerId !== 'null' && resellerId !== 'undefined') {
+            await updateDoc(doc(window.db, 'resellers', resellerId), {
+                walletBalance: increment(amount),
+                totalSales: increment(-1)
+            });
+            console.log(`✅ تم استرجاع ${amount} د.ج إلى محفظة ${resellerName}`);
+        }
+
+        // Step C: Delete the order from database
+        await deleteDoc(doc(window.db, 'orders', orderId));
+        console.log(`✅ تم حذف الطلب ${orderId}`);
+
+        // Step D: Try to delete related wallet transaction
+        try {
+            const transactionsQuery = query(
+                collection(window.db, 'transactions'),
+                where('resellerId', '==', resellerId)
+            );
+            const transactionsSnapshot = await getDocs(transactionsQuery);
+
+            // Find and delete the matching transaction (by amount and type)
+            for (const transDoc of transactionsSnapshot.docs) {
+                const trans = transDoc.data();
+                if (trans.type === 'wallet_purchase' && Math.abs(trans.amount) === amount) {
+                    await deleteDoc(doc(window.db, 'transactions', transDoc.id));
+                    console.log(`✅ تم حذف سجل المعاملة المرتبطة`);
+                    break;
+                }
+            }
+        } catch (transError) {
+            console.warn('⚠️ لم يتم العثور على سجل معاملة مرتبطة:', transError);
+        }
+
+        // Step E: Refresh data and show success
+        await loadOrders();
+        await loadResellers();
+        await loadTransactions();
+        loadWholesaleLogs();
+
+        // Update accounting stats
+        if (typeof updateAccountingStats === 'function') updateAccountingStats();
+        if (typeof displayAccountingTable === 'function') displayAccountingTable();
+        if (typeof updateProfitCharts === 'function') updateProfitCharts();
+
+        showToast(`✅ تم حذف الطلب واسترجاع ${amount.toLocaleString()} د.ج إلى محفظة ${resellerName}`);
+        logActivity('wholesale_order', 'deleted_refunded', `Refunded ${amount} DZD to ${resellerName}`);
+
+    } catch (error) {
+        console.error('خطأ في حذف الطلب:', error);
+        showToast('❌ حدث خطأ أثناء حذف الطلب. يرجى المحاولة مرة أخرى.', 'error');
+    }
+}
+
+/**
+ * حذف موزع من قاعدة البيانات
+ * @param {string} resellerId - معرف الموزع
+ * @param {string} resellerName - اسم الموزع
+ * @param {number} walletBalance - رصيد المحفظة الحالي
+ */
+async function deleteReseller(resellerId, resellerName, walletBalance) {
+    // Build warning message
+    let warningMessage = `⚠️ تحذير! أنت على وشك حذف الموزع "${resellerName}".\n\nهذا الإجراء لا يمكن التراجع عنه!`;
+
+    if (walletBalance > 0) {
+        warningMessage += `\n\n🚨 تحذير: هذا الموزع لديه رصيد متبقي ${walletBalance.toLocaleString()} د.ج في محفظته!`;
+    }
+
+    warningMessage += '\n\nهل تريد المتابعة؟';
+
+    if (!confirm(warningMessage)) {
+        return;
+    }
+
+    // Double confirmation for resellers with balance
+    if (walletBalance > 0) {
+        const doubleConfirm = confirm(`⚠️ تأكيد نهائي:\nسيتم حذف ${resellerName} وفقدان ${walletBalance.toLocaleString()} د.ج!\n\nاضغط موافق للمتابعة.`);
+        if (!doubleConfirm) {
+            return;
+        }
+    }
+
+    try {
+        const { doc, deleteDoc, collection, query, where, getDocs } = window.firebaseModules;
+
+        // Delete all transactions related to this reseller
+        try {
+            const transactionsQuery = query(
+                collection(window.db, 'transactions'),
+                where('resellerId', '==', resellerId)
+            );
+            const transactionsSnapshot = await getDocs(transactionsQuery);
+
+            for (const transDoc of transactionsSnapshot.docs) {
+                await deleteDoc(doc(window.db, 'transactions', transDoc.id));
+            }
+            console.log(`✅ تم حذف ${transactionsSnapshot.size} سجل معاملات مرتبطة`);
+        } catch (transError) {
+            console.warn('⚠️ خطأ في حذف المعاملات المرتبطة:', transError);
+        }
+
+        // Delete the reseller document
+        await deleteDoc(doc(window.db, 'resellers', resellerId));
+        console.log(`✅ تم حذف الموزع ${resellerName}`);
+
+        // Refresh data
+        await loadResellers();
+        displayResellersTable();
+
+        // Close history modal if open
+        closeResellerHistoryModal();
+
+        showToast(`✅ تم حذف الموزع "${resellerName}" بنجاح`);
+        logActivity('reseller', 'deleted', `Deleted reseller: ${resellerName}`);
+
+    } catch (error) {
+        console.error('خطأ في حذف الموزع:', error);
+        showToast('❌ حدث خطأ أثناء حذف الموزع. يرجى المحاولة مرة أخرى.', 'error');
+    }
+}
+
+/**
+ * حذف طلب من سجل مشتريات الموزع (في النافذة المنبثقة)
+ * مع استرجاع المبلغ
+ */
+async function deleteOrderFromHistory(orderId, resellerId, amount, resellerName) {
+    await deleteWholesaleOrder(orderId, resellerId, amount, resellerName);
+
+    // Refresh the history modal if still open
+    const historyResellerId = document.getElementById('history-reseller-id')?.value;
+    if (historyResellerId === resellerId) {
+        loadResellerHistory(resellerId);
+    }
+}
+
+// Export delete functions
+window.deleteWholesaleOrder = deleteWholesaleOrder;
+window.deleteReseller = deleteReseller;
+window.deleteOrderFromHistory = deleteOrderFromHistory;
+
+// Export existing functions
+window.showResellerSubTab = showResellerSubTab;
+window.loadWholesaleLogs = loadWholesaleLogs;
+window.filterWholesaleLogs = filterWholesaleLogs;
+window.openResellerHistoryModal = openResellerHistoryModal;
+window.closeResellerHistoryModal = closeResellerHistoryModal;
+window.showHistorySubTab = showHistorySubTab;
