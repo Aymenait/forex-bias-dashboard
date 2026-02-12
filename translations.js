@@ -1,13 +1,13 @@
 
-// Translations for Admin Dashboard - Market Algeriaa
+// Translations for Admin Dashboard - 3Ahub
 // Using global assignment for file:// protocol compatibility
 window.translations = {
     // ═══════════════════════════════════════════════════════════════════════════
     // Core & Navigation
     // ═══════════════════════════════════════════════════════════════════════════
-    "page_title": { ar: "لوحة التحكم - Market Algeriaa", en: "Admin Dashboard - Market Algeriaa", fr: "Tableau de Bord - Market Algeriaa" },
+    "page_title": { ar: "لوحة التحكم - 3Ahub", en: "Admin Dashboard - 3Ahub", fr: "Tableau de Bord - 3Ahub" },
     "login_title": { ar: "لوحة التحكم", en: "Admin Dashboard", fr: "Tableau de Bord" },
-    "login_subtitle": { ar: "Market Algeriaa Admin", en: "Market Algeriaa Admin", fr: "Admin Market Algeriaa" },
+    "login_subtitle": { ar: "3Ahub Admin", en: "3Ahub Admin", fr: "Admin 3Ahub" },
     "lbl_password": { ar: "كلمة المرور", en: "Password", fr: "Mot de passe" },
     "btn_login": { ar: "دخول 🚀", en: "Login 🚀", fr: "Connexion 🚀" },
     "login_footer_1": { ar: "🔐 كلمة المرور محفوظة في السحابة", en: "🔐 Password saved in cloud", fr: "🔐 Mot de passe sauvegardé" },

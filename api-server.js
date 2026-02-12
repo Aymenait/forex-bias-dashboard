@@ -16,7 +16,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.json({
         status: 'ok',
-        message: 'Market Algeria Products API',
+        message: '3Ahub Products API',
         version: '1.0.0',
         endpoints: {
             all_products: '/api/products',

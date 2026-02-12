@@ -1,9 +1,45 @@
-/* Mobile Enhanced Version - تجريبي */
-/* هذا الملف يحتوي على تحسينات إضافية للهاتف */
+/* Mobile Enhanced Version - v2 Performance + Comfort */
+/* تحسينات السرعة وراحة الاستخدام على الهاتف */
 
 @media (max-width: 768px) {
 
-    /* 1. تصغير الشعار والعلامة التجارية */
+    /* ═══════ Global Mobile Performance ═══════ */
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Eliminate 300ms tap delay on all interactive elements */
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    [onclick],
+    .btn,
+    .order-btn,
+    .payment-btn-compact,
+    .discover-btn,
+    .segmented-btn,
+    .lang-btn,
+    .currency-btn,
+    .slider-btn,
+    .dot {
+        touch-action: manipulation;
+    }
+
+    /* Smooth overscroll across the page */
+    html,
+    body {
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Hide particles canvas on mobile */
+    #particles-js {
+        display: none !important;
+    }
+
+    /* ═══════ 1. Compact Header / Nav ═══════ */
     .logo {
         width: 50px !important;
         height: 50px !important;
@@ -17,34 +53,61 @@
         font-size: 0.75rem !important;
     }
 
-    /* 2. إخفاء السلايدر لتوفير مساحة */
+    .nav-bar {
+        padding: 12px 0 !important;
+        gap: 8px !important;
+    }
+
+    .mobile-reviews-btn {
+        font-size: 0.85rem !important;
+        padding: 6px 12px !important;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* ═══════ 2. Hero Section - Compact ═══════ */
     .hero-slider {
         display: none !important;
     }
 
-    /* 3. إخفاء البطاقات العائمة */
-    .floating-card {
-        display: none !important;
-    }
-
+    .floating-card,
     .hero-card {
         display: none !important;
     }
 
-    /* 4. تقليل padding في Hero */
     .hero {
-        padding: 20px 0 10px !important;
+        padding: 15px 0 10px !important;
     }
 
     .site-header {
-        padding-bottom: 20px !important;
+        padding-bottom: 15px !important;
     }
 
     .hero-text {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
-    /* 5. تصغير الشارات */
+    .hero-text h1 {
+        margin-bottom: 10px !important;
+        font-size: 1.8rem !important;
+    }
+
+    .hero-text p {
+        font-size: 0.9rem !important;
+        margin-bottom: 12px !important;
+    }
+
+    .hero-buttons {
+        gap: 10px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .hero-buttons .btn {
+        min-height: 48px;
+    }
+
+    /* ═══════ 3. Trust Badges - Compact ═══════ */
     .badge {
         flex: 1 1 30% !important;
         padding: 8px 10px !important;
@@ -61,7 +124,12 @@
         font-size: 0.7rem !important;
     }
 
-    /* 6. تحسين أحجام اللمس للأزرار */
+    .trust-badges {
+        gap: 8px !important;
+        margin-top: 12px !important;
+    }
+
+    /* ═══════ 4. Buttons - 44px Touch Targets (Apple HIG) ═══════ */
     .btn {
         min-height: 44px !important;
         padding: 10px 16px !important;
@@ -72,43 +140,26 @@
         padding: 10px 12px !important;
     }
 
-    /* 7. تقليل المسافات العامة */
-    .trust-badges {
-        gap: 8px !important;
-        margin-top: 15px !important;
-    }
-
-    .hero-buttons {
-        gap: 10px !important;
-        margin-bottom: 15px !important;
-    }
-
-    .hero-text h1 {
-        margin-bottom: 12px !important;
-        font-size: 1.8rem !important;
-    }
-
-    .hero-text p {
-        font-size: 0.9rem !important;
-        margin-bottom: 15px !important;
-    }
-
-    /* 8. تحسين قسم المنتجات - تمرير أفقي (التصميم الأصلي) */
+    /* ═══════ 5. Product Section - Smoother ═══════ */
     .section {
-        padding: 30px 0 !important;
+        padding: 25px 0 !important;
     }
 
-    /* شبكة المنتجات - تمرير أفقي محسّن للأداء (التصميم الأصلي) */
+    /* Product grid: softer snap + better scroll feel */
     .product-grid {
         display: flex !important;
         flex-wrap: nowrap !important;
-        gap: 16px;
-        padding: 10px 20px 20px;
+        gap: 14px;
+        padding: 10px 20px 24px;
         overflow-x: auto;
-        scroll-snap-type: x mandatory;
+        /* proximity = softer snap, doesn't fight the finger */
+        scroll-snap-type: x proximity;
+        scroll-padding: 0 20px;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         margin: 0 -20px;
+        /* Smooth momentum */
+        overscroll-behavior-x: contain;
         will-change: scroll-position;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
@@ -119,11 +170,11 @@
         display: none;
     }
 
-    /* بطاقة المنتج - تصميم مدمج وجميل للموبايل (التصميم الأصلي) */
+    /* Product card - compact and comfortable */
     .product-card {
-        flex: 0 0 260px !important;
-        min-width: 260px !important;
-        max-width: 260px !important;
+        flex: 0 0 265px !important;
+        min-width: 265px !important;
+        max-width: 265px !important;
         scroll-snap-align: center;
         padding: 0;
         border-radius: 16px;
@@ -138,7 +189,6 @@
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
         backface-visibility: hidden;
-        will-change: transform;
     }
 
     .product-card::before {
@@ -153,7 +203,7 @@
         z-index: 0;
     }
 
-    /* إلغاء hover effects على الموبايل للأداء */
+    /* Disable hover on mobile, add comfortable active state */
     .product-card:hover {
         transform: none;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -164,7 +214,7 @@
         transition: transform 0.1s ease;
     }
 
-    /* صورة المنتج - مصغرة للموبايل */
+    /* ═══════ 6. Product Card Content ═══════ */
     .product-image {
         height: 130px !important;
         min-height: 130px !important;
@@ -176,12 +226,10 @@
         transform: translateZ(0);
     }
 
-    /* إزالة pseudo-element للأداء */
     .product-image::after {
         display: none;
     }
 
-    /* محتوى البطاقة - مصغر */
     .product-card h3 {
         font-size: 1rem !important;
         margin: 0;
@@ -207,13 +255,11 @@
         text-align: center;
     }
 
-    /* تقييم المنتج - مصغر */
     .product-card [id*="-rating-container"] {
         padding: 0 12px;
         margin: 6px 0 !important;
     }
 
-    /* السعر - مصغر وأنيق */
     .price-tag {
         padding: 8px 12px !important;
         font-size: 0.95rem !important;
@@ -227,7 +273,6 @@
         color: var(--accent);
     }
 
-    /* المميزات - مدمجة */
     .product-features {
         display: block;
         padding: 0 12px;
@@ -236,15 +281,14 @@
 
     .product-features li {
         font-size: 0.72rem;
-        padding: 3px 0;
+        padding: 4px 0;
         line-height: 1.3;
     }
 
-    /* 9. جعل الأيقونات الاجتماعية العائمة أصغر */
+    /* ═══════ 7. Social / Scroll Buttons ═══════ */
     .floating-social {
         gap: 6px !important;
         bottom: 80px !important;
-        /* Move up slightly to avoid footer */
         right: 15px !important;
     }
 
@@ -253,36 +297,22 @@
         height: 45px !important;
     }
 
-    /* 10. تحسين النافبار */
-    .nav-bar {
-        padding: 15px 0 !important;
-        gap: 10px !important;
-    }
-
-    .mobile-reviews-btn {
-        font-size: 0.85rem !important;
-        padding: 6px 12px !important;
-    }
-
-    /* 11. جعل container أوسع قليلاً */
-    .container {
-        width: 96% !important;
-        padding: 0 6px !important;
-    }
-
-    /* 12. Fix Scroll To Top button position */
     #scrollToTopBtn {
         bottom: 80px !important;
         left: 15px !important;
     }
 
-    /* 13. تحسين أزرار الاختيار (Segmented Selector) - شبكي للموبايل */
+    /* ═══════ 8. Container ═══════ */
+    .container {
+        width: 96% !important;
+        padding: 0 6px !important;
+    }
+
+    /* ═══════ 9. Segmented Selector - Grid Layout ═══════ */
     .segmented-selector {
         display: flex !important;
         flex-wrap: wrap !important;
-        /* السماح بالالتفاف لسطر جديد */
         overflow-x: visible !important;
-        /* إيقاف التمرير */
         justify-content: space-between !important;
         padding: 4px !important;
         gap: 8px !important;
@@ -294,10 +324,9 @@
 
     .segmented-btn {
         flex: 1 1 45% !important;
-        /* عرض 45% تقريباً ليكون زرين في السطر */
         min-width: auto !important;
+        min-height: 44px !important;
         padding: 10px 4px !important;
-        /* تقليل الحشو الجانبي */
         text-align: center !important;
         white-space: normal !important;
         display: flex !important;
@@ -306,7 +335,125 @@
         border-radius: 8px !important;
         margin: 0 !important;
         font-size: 0.75rem !important;
-        /* تصغير الخط ليتناسب مع النص الطويل */
         line-height: 1.2 !important;
+        touch-action: manipulation;
+    }
+
+    /* ═══════ 10. Modal Comfort on Mobile ═══════ */
+    .modal-content {
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 16px 16px 0 0 !important;
+        margin-top: auto !important;
+    }
+
+    .modal {
+        align-items: flex-end !important;
+    }
+
+    /* ═══════ 11. Scroll indicator hint for products ═══════ */
+    .product-grid::after {
+        content: '';
+        flex: 0 0 20px;
+        /* Adds padding at the end of the scroll */
+    }
+
+    /* ═══════ 12. Contact Section - Compact Mobile ═══════ */
+    #contact {
+        padding: 30px 0 !important;
+    }
+
+    .contact-card {
+        padding: 20px 16px !important;
+        gap: 18px !important;
+        border-radius: 18px !important;
+        grid-template-columns: 1fr !important;
+    }
+
+    .contact-text h2 {
+        font-size: 1.3rem !important;
+        line-height: 1.4;
+        margin-bottom: 8px;
+    }
+
+    .contact-text p {
+        font-size: 0.85rem !important;
+        margin: 8px 0 12px !important;
+        line-height: 1.5;
+    }
+
+    /* International banner - more compact */
+    .contact-text>div[style*="border-left"] {
+        margin: 12px 0 !important;
+        padding: 10px 12px !important;
+        border-radius: 10px !important;
+    }
+
+    .contact-text>div[style*="border-left"] p {
+        font-size: 0.82rem !important;
+        margin: 0 0 4px !important;
+    }
+
+    .contact-text>div[style*="border-left"] p:last-child {
+        margin-bottom: 0 !important;
+    }
+
+    /* Contact buttons - compact and elegant */
+    .contact-actions {
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100%;
+    }
+
+    .contact-actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 12px 16px !important;
+        font-size: 0.9rem !important;
+        border-radius: 12px !important;
+        min-height: 48px !important;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    /* Contact info items - compact */
+    .contact-info {
+        gap: 10px !important;
+    }
+
+    .info-item {
+        padding: 12px 14px !important;
+        border-radius: 12px !important;
+    }
+
+    .info-label {
+        font-size: 0.8rem !important;
+        margin-bottom: 3px !important;
+    }
+
+    .info-item a,
+    .info-item span:not(.info-label) {
+        font-size: 0.85rem !important;
+    }
+
+    /* Footer - compact */
+    .site-footer {
+        padding: 18px 0 !important;
+    }
+
+    .footer-content {
+        flex-direction: column !important;
+        text-align: center;
+        gap: 8px !important;
+        font-size: 0.8rem;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .social-links a {
+        font-size: 0.85rem;
     }
 }

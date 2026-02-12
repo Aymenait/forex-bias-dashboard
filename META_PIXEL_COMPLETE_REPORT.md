@@ -163,5 +163,5 @@ fbq('track', 'Contact');
 ---
 
 *Generated on: January 4, 2026*  
-*Project: Market Algeriaa Website*  
+*Project: 3Ahub Website*  
 *Meta Pixel Installation: Complete*

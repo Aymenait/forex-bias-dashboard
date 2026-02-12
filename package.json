@@ -1,7 +1,7 @@
 {
   "name": "market-algeriaa",
   "version": "1.0.0",
-  "description": "Market Algeriaa - International Expansion",
+  "description": "3Ahub - International Expansion",
   "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",

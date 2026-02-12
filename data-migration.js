@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * Data Migration Script - Market Algeriaa
+ * Data Migration Script - 3Ahub
  * ═══════════════════════════════════════════════════════════════════════════
  * 
  * سكريبت ترحيل البيانات من index.html إلى Firebase products_v2 collection

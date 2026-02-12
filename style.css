@@ -132,11 +132,41 @@ img {
 }
 
 .logo {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 3px solid var(--accent);
-    box-shadow: 0 8px 30px rgba(255, 213, 111, 0.25);
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 15px rgba(255, 213, 111, 0.3));
+    animation: logoGlow 3s ease-in-out infinite, logoFloat 4s ease-in-out infinite;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.1);
+}
+
+@keyframes logoGlow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 4px 15px rgba(255, 213, 111, 0.3));
+    }
+
+    50% {
+        filter: drop-shadow(0 4px 25px rgba(255, 213, 111, 0.7));
+    }
+}
+
+@keyframes logoFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
 }
 
 .brand-text {
@@ -1586,12 +1616,14 @@ img {
         /* النجوم تعمل على الهاتف أيضاً */
     }
 
-    /* النجوم على الهاتف - واضحة ولكن محسّنة للأداء */
-    .discover-btn::before {
-        opacity: 0.8 !important;
-    }
-
-    .discover-btn::after {
+    /* ═══════ إلغاء حركة النجوم على الموبايل للأداء ═══════ */
+    .discover-btn::before,
+    .discover-btn::after,
+    .order-btn::before,
+    .order-btn::after {
+        animation: none !important;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%) !important;
+        background-size: 100% 100% !important;
         opacity: 0.6 !important;
     }
 
@@ -1611,22 +1643,11 @@ img {
         margin: 0 12px 12px !important;
         width: calc(100% - 24px) !important;
         letter-spacing: 0.3px !important;
-        /* تحسينات الأداء */
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3);
         touch-action: manipulation;
         user-select: none;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
-        /* النجوم تعمل على الهاتف أيضاً */
-    }
-
-    /* النجوم على الهاتف - واضحة ولكن محسّنة للأداء */
-    .order-btn::before {
-        opacity: 0.8 !important;
-    }
-
-    .order-btn::after {
-        opacity: 0.6 !important;
     }
 
     .order-btn:active {
@@ -1634,6 +1655,11 @@ img {
         box-shadow:
             0 2px 8px rgba(0, 0, 0, 0.4),
             inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* تقليل pulse animation على الموبايل */
+    .badge {
+        animation: none !important;
     }
 
     /* أزرار نوع Adobe - مصغرة */
