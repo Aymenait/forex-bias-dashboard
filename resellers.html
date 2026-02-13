@@ -178,9 +178,459 @@
     }
     </script>
 
-    <!-- Button Shine Effect CSS -->
+    <!-- Resellers Page Premium Design -->
     <style>
-        /* Shine effect for interactive buttons */
+        /* ═══════ RESELLERS PAGE - PREMIUM DESIGN SYSTEM ═══════ */
+
+        /* Animated gradient mesh background for hero */
+        .hero {
+            position: relative;
+            padding: 50px 0 30px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(255, 213, 111, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            animation: meshFloat 15s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes meshFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(2%, -2%) rotate(1deg);
+            }
+
+            66% {
+                transform: translate(-1%, 1%) rotate(-0.5deg);
+            }
+        }
+
+        /* Hero content layout */
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-text {
+            text-align: right;
+        }
+
+        [dir="ltr"] .hero-text {
+            text-align: left;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.3;
+            background: linear-gradient(135deg, #ffffff 0%, #ffd56f 50%, #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes textShimmer {
+
+            0%,
+            100% {
+                background-position: 0% center;
+            }
+
+            50% {
+                background-position: 200% center;
+            }
+        }
+
+        .hero-text p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons .btn.primary {
+            background: linear-gradient(135deg, #ffd56f, #ffb347);
+            color: #1b1d32;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 30px rgba(255, 179, 71, 0.3);
+        }
+
+        .hero-buttons .btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(255, 179, 71, 0.5);
+        }
+
+        .hero-buttons .btn.secondary {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .hero-buttons .btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 213, 111, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Trust Badges - Glassmorphism */
+        .trust-badges {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .trust-badges .badge {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 16px 20px;
+            min-width: 110px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            animation: none;
+        }
+
+        .trust-badges .badge:hover {
+            border-color: rgba(255, 213, 111, 0.2);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .trust-badges .badge strong {
+            display: block;
+            font-size: 1.4rem;
+            color: #ffd56f;
+            margin-bottom: 4px;
+        }
+
+        .trust-badges .badge span {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ═══ Hero Slider - Premium ═══ */
+        .hero-slider {
+            margin-top: 0;
+        }
+
+        .slider-container {
+            border-radius: 20px;
+            background: rgba(15, 18, 35, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+
+        .slide {
+            max-height: 320px;
+            overflow: hidden;
+        }
+
+        .slide img,
+        .slide video {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+        .slide-info h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .wholesale-status-badge {
+            font-size: 0.85rem;
+            padding: 5px 14px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            color: #34d399;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* ═══ SYSTEMS SECTION - Premium Cards ═══ */
+        #how-it-works {
+            position: relative;
+        }
+
+        #how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 213, 111, 0.2), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 640px;
+            margin: 0 auto 50px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, rgba(255, 213, 111, 0.1), rgba(255, 179, 71, 0.05));
+            border: 1px solid rgba(255, 213, 111, 0.2);
+            color: #ffd56f;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .section-header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .system-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Gradient top border on hover */
+        .system-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd56f, #ff6b6b, #4ecdc4);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .system-card:hover::before {
+            opacity: 1;
+        }
+
+        .system-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Numbered indicator */
+        .system-card::after {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(255, 213, 111, 0.04);
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .system-card:nth-child(1)::after {
+            content: '01';
+        }
+
+        .system-card:nth-child(2)::after {
+            content: '02';
+        }
+
+        .system-card:nth-child(3)::after {
+            content: '03';
+        }
+
+        .system-icon {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            filter: drop-shadow(0 0 15px rgba(255, 213, 111, 0.2));
+        }
+
+        .system-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 14px;
+            color: #ffd56f;
+            font-weight: 700;
+        }
+
+        .system-card p {
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        /* ═══ PRODUCTS SECTION - Premium Grid ═══ */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .product-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255, 213, 111, 0), rgba(255, 213, 111, 0.1), rgba(255, 213, 111, 0));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            background-size: cover !important;
+            background-position: center !important;
+            position: relative;
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+        }
+
+        .product-card h3,
+        .product-card .product-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 14px 18px 6px;
+            margin: 0;
+        }
+
+        .product-card .wholesale-status-badge {
+            margin: 4px 18px 16px;
+        }
+
+        .product-card .product-content {
+            padding: 0;
+        }
+
+        /* Product badge pulse animation */
+        .product-badge-wholesale {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .scroll-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+        }
+
+        /* ═══ Button Shine Effects ═══ */
         .adobe-duration-btn,
         .capcut-duration-btn,
         .gamma-type-btn,
@@ -210,12 +660,12 @@
             left: 100%;
         }
 
-        .adobe-duration-btn.active::before,
-        .capcut-duration-btn.active::before,
-        .gamma-type-btn.active::before,
-        .cursor-type-btn.active::before {
-            left: 100%;
-            animation: shine 0.6s ease;
+        .adobe-duration-btn.active,
+        .capcut-duration-btn.active,
+        .gamma-type-btn.active,
+        .cursor-type-btn.active {
+            box-shadow: 0 0 20px rgba(255, 213, 111, 0.5);
+            transform: translateY(-1px);
         }
 
         @keyframes shine {
@@ -228,111 +678,279 @@
             }
         }
 
-        /* Enhanced active state with glow */
-        .adobe-duration-btn.active,
-        .capcut-duration-btn.active,
-        .gamma-type-btn.active,
-        .cursor-type-btn.active {
-            box-shadow: 0 0 20px rgba(255, 213, 111, 0.5);
-            transform: translateY(-1px);
-        }
-
-        /* Click animation */
-        .adobe-duration-btn:active,
-        .capcut-duration-btn:active,
-        .gamma-type-btn:active,
-        .cursor-type-btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 10px rgba(255, 213, 111, 0.3);
-        }
-
-        /* Reseller Systems Grid styles */
-        .systems-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, min-minmax(300px, 1fr));
-            gap: 24px;
-            margin-top: 40px;
-        }
-
-        .system-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 40px 32px;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .system-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 213, 111, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .system-icon {
-            font-size: 3rem;
-            margin-bottom: 24px;
-            display: inline-block;
-            filter: drop-shadow(0 0 10px rgba(255, 213, 111, 0.3));
-        }
-
-        .system-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 16px;
-            color: #ffd56f;
-        }
-
-        .system-card p {
-            color: #9ca3af;
-            line-height: 1.7;
-            font-size: 1rem;
-        }
-
-        .product-badge-wholesale {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #10b981;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            z-index: 10;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            animation: pulse-green 2s infinite;
-        }
-
-        @keyframes pulse-green {
-            0% {
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-            }
-
-            70% {
-                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-            }
-        }
-
-        /* Mobile adjustments for systems-grid */
-        @media (max-width: 768px) {
-            .systems-grid {
+        /* ═══════════════════════════════════════════════════════════
+           MOBILE RESPONSIVE DESIGN
+           ═══════════════════════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .hero-content {
                 grid-template-columns: 1fr;
-                gap: 16px;
+                gap: 30px;
+            }
+
+            .hero-text {
+                text-align: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .trust-badges {
+                justify-content: center;
+            }
+
+            .systems-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            /* ── Hero ── */
+            .hero {
+                padding: 20px 0 15px !important;
+            }
+
+            .hero-text h1 {
+                font-size: 1.6rem !important;
+                line-height: 1.3 !important;
+                -webkit-text-fill-color: unset;
+                background: none;
+                color: #fff;
+            }
+
+            .hero-text p {
+                font-size: 0.9rem !important;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+
+            .hero-buttons {
+                flex-direction: column !important;
+                width: 100% !important;
+            }
+
+            .hero-buttons .btn {
+                width: 100% !important;
+                min-height: 48px !important;
+                font-size: 0.95rem !important;
+                justify-content: center !important;
+                border-radius: 12px !important;
+            }
+
+            .trust-badges {
+                justify-content: center;
+                gap: 8px !important;
+            }
+
+            .trust-badges .badge {
+                padding: 10px 8px !important;
+                min-width: 0 !important;
+            }
+
+            .trust-badges .badge strong {
+                font-size: 1.1rem !important;
+            }
+
+            .trust-badges .badge span {
+                font-size: 0.7rem !important;
+            }
+
+            /* ── Slider ── */
+            .hero-slider {
+                display: block !important;
+                margin-top: 15px !important;
+            }
+
+            .slider-container {
+                border-radius: 12px !important;
+                max-height: 220px !important;
+            }
+
+            .slide {
+                max-height: 180px !important;
+            }
+
+            .slide img,
+            .slide video {
+                height: 150px !important;
+            }
+
+            .slide-info h4 {
+                font-size: 0.9rem !important;
+            }
+
+            .wholesale-status-badge {
+                font-size: 0.75rem !important;
+                padding: 3px 8px !important;
+            }
+
+            .slider-btn {
+                width: 28px !important;
+                height: 28px !important;
+                font-size: 1.1rem !important;
+            }
+
+            /* ── Hide floating cards ── */
+            .hero-card,
+            .floating-card {
+                display: none !important;
+            }
+
+            /* ── Systems ── */
+            .systems-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+                margin-top: 24px !important;
             }
 
             .system-card {
-                padding: 30px 20px;
+                padding: 24px 18px;
+                border-radius: 16px;
+            }
+
+            .system-card:hover {
+                transform: none;
+            }
+
+            .system-icon {
+                font-size: 2rem;
+                margin-bottom: 12px;
+            }
+
+            .system-card h3 {
+                font-size: 1.1rem;
+                margin-bottom: 8px;
+            }
+
+            .system-card p {
+                font-size: 0.85rem;
+                line-height: 1.6;
+            }
+
+            /* ── Section headers ── */
+            .section-header h2 {
+                font-size: 1.4rem !important;
+            }
+
+            .section-header p {
+                font-size: 0.85rem !important;
+            }
+
+            .section-badge {
+                font-size: 0.78rem !important;
+            }
+
+            .section {
+                padding: 30px 0 !important;
+            }
+
+            /* ── Products - Horizontal Scroll ── */
+            .product-grid {
+                display: flex !important;
+                overflow-x: auto !important;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                gap: 12px !important;
+                padding: 10px 4px 20px !important;
+                scrollbar-width: none;
+            }
+
+            .product-grid::-webkit-scrollbar {
+                display: none;
+            }
+
+            .product-card {
+                flex: 0 0 250px !important;
+                min-width: 250px !important;
+                scroll-snap-align: center;
+                border-radius: 14px !important;
+            }
+
+            .product-card:hover {
+                transform: none;
+            }
+
+            .product-image {
+                height: 130px !important;
+            }
+
+            .product-card h3,
+            .product-card .product-title {
+                font-size: 0.95rem !important;
+                padding: 10px 14px 4px !important;
+            }
+
+            .product-card .wholesale-status-badge {
+                margin: 4px 14px 12px !important;
+            }
+
+            /* ── Reviews ── */
+            #reviews-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+
+            /* ── Contact ── */
+            .contact-card {
+                flex-direction: column !important;
+                gap: 20px !important;
+                padding: 24px 16px !important;
+            }
+
+            .contact-text h2 {
+                font-size: 1.3rem !important;
+            }
+
+            .contact-actions {
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+
+            .contact-actions .btn {
+                width: 100% !important;
+                min-height: 48px !important;
+                justify-content: center !important;
+                font-size: 0.9rem !important;
+                border-radius: 12px !important;
+            }
+
+            /* ── Footer ── */
+            .footer-content {
+                flex-direction: column !important;
+                text-align: center !important;
+                gap: 10px !important;
+                padding: 16px 10px !important;
+            }
+
+            .footer-content p {
+                font-size: 0.8rem !important;
+            }
+
+            .social-links {
+                justify-content: center !important;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .hero-text h1 {
+                font-size: 1.3rem !important;
+            }
+
+            .product-card {
+                flex: 0 0 220px !important;
+                min-width: 220px !important;
+            }
+
+            .system-card {
+                padding: 20px 14px;
             }
         }
     </style>
@@ -345,8 +963,8 @@
     <header class="site-header">
         <nav class="container nav-bar">
             <div class="brand">
-                <img src="https://i.imgur.com/hyjvY4Z.png" alt="3Ahub Logo" class="logo" width="70"
-                    height="70" loading="eager" fetchpriority="high" id="secret-logo" style="cursor: pointer;">
+                <img src="https://i.imgur.com/hyjvY4Z.png" alt="3Ahub Logo" class="logo" width="70" height="70"
+                    loading="eager" fetchpriority="high" id="secret-logo" style="cursor: pointer;">
                 <div class="brand-text">
                     <span class="brand-name">3Ahub</span>
                     <span class="brand-tagline" data-i18n="brand.tagline">حلول رقمية تعزز حضورك</span>
@@ -387,12 +1005,13 @@
         <div class="hero">
             <div class="container hero-content">
                 <div class="hero-text">
-                    <h1>ابدأ تجارتك الرقمية اليوم</h1>
-                    <p>نظام جملة مرن، أسعار تنافسية، وتسليم فوري.</p>
+                    <h1 data-i18n="reseller.hero.title">ابدأ تجارتك الرقمية اليوم</h1>
+                    <p data-i18n="reseller.hero.subtitle">نظام جملة مرن، أسعار تنافسية، وتسليم فوري.</p>
                     <div class="hero-buttons">
-                        <a href="https://wa.me/213782125821?text=أريد%20الانضمام%20كموزع" class="btn primary">انضم
+                        <a href="https://wa.me/213782125821?text=أريد%20الانضمام%20كموزع" class="btn primary"
+                            data-i18n="reseller.hero.join">انضم
                             عبر واتساب</a>
-                        <a href="#how-it-works" class="btn secondary">كيف
+                        <a href="#how-it-works" class="btn secondary" data-i18n="reseller.hero.howItWorks">كيف
                             يعمل النظام؟</a>
                     </div>
                     <div class="trust-badges">
@@ -413,41 +1032,40 @@
                         <div class="slider-container">
                             <div class="slider-track">
                                 <div class="slide active">
-                                    <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World" loading="lazy">
-                                    <div class="slide-info">
-                                        <h4>The Real World</h4>
-                                        <div class="wholesale-status-badge">✅ متوفر جملة</div>
-                                    </div>
-                                </div>
-                                <div class="slide">
                                     <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg"
                                         alt="Adobe Creative Cloud" loading="lazy">
                                     <div class="slide-info">
                                         <h4>Adobe Creative Cloud</h4>
-                                        <div class="wholesale-status-badge">✅ متوفر جملة</div>
+                                        <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesale">✅ متوفر
+                                            جملة</div>
                                     </div>
                                 </div>
                                 <div class="slide">
                                     <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT" loading="lazy">
                                     <div class="slide-info">
                                         <h4>ChatGPT Business</h4>
-                                        <div class="wholesale-status-badge">✅ متوفر جملة</div>
+                                        <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesale">✅ متوفر
+                                            جملة</div>
                                     </div>
                                 </div>
                                 <div class="slide">
-                                    <img src="https://i.imgur.com/ZpMzFGa.mp4" alt="CapCut Pro" loading="lazy"
-                                        style="object-fit: cover;">
+                                    <video autoplay loop muted playsinline style="object-fit: cover;">
+                                        <source src="https://i.imgur.com/ZpMzFGa.mp4" type="video/mp4">
+                                    </video>
                                     <div class="slide-info">
                                         <h4>CapCut Pro</h4>
-                                        <div class="wholesale-status-badge">✅ متوفر جملة</div>
+                                        <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesale">✅ متوفر
+                                            جملة</div>
                                     </div>
                                 </div>
                                 <div class="slide">
-                                    <img src="https://i.imgur.com/DvPmjNv.mp4" alt="Canva Pro" loading="lazy"
-                                        style="object-fit: cover;">
+                                    <video autoplay loop muted playsinline style="object-fit: cover;">
+                                        <source src="https://i.imgur.com/DvPmjNv.mp4" type="video/mp4">
+                                    </video>
                                     <div class="slide-info">
                                         <h4>Canva Pro</h4>
-                                        <div class="wholesale-status-badge">✅ متوفر جملة</div>
+                                        <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesale">✅ متوفر
+                                            جملة</div>
                                     </div>
                                 </div>
                             </div>
@@ -459,7 +1077,6 @@
                             <span class="dot" data-slide="1"></span>
                             <span class="dot" data-slide="2"></span>
                             <span class="dot" data-slide="3"></span>
-                            <span class="dot" data-slide="4"></span>
                         </div>
                     </div>
                 </div>
@@ -531,7 +1148,8 @@
                             style="background-image: url('https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="Adobe Creative Cloud"></div>
                         <h3>Adobe Creative Cloud</h3>
-                        <div class="wholesale-status-badge">✅ متوفر جملة (Disponible Gros)</div>
+                        <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesaleFull">✅ متوفر جملة
+                            (Disponible Gros)</div>
                     </div>
 
                     <!-- ChatGPT Plus -->
@@ -542,7 +1160,8 @@
                             <div class="product-header">
                                 <h3 class="product-title">ChatGPT Plus</h3>
                             </div>
-                            <div class="wholesale-status-badge">✅ متوفر جملة (Disponible Gros)</div>
+                            <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesaleFull">✅ متوفر جملة
+                                (Disponible Gros)</div>
                         </div>
                     </div>
 
@@ -553,7 +1172,8 @@
                             role="img" aria-label="Netflix Premium">
                         </div>
                         <h3>Netflix Premium</h3>
-                        <div class="wholesale-status-badge">✅ متوفر جملة (Disponible Gros)</div>
+                        <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesaleFull">✅ متوفر جملة
+                            (Disponible Gros)</div>
                     </div>
 
                     <!-- CapCut Pro -->
@@ -566,7 +1186,8 @@
                             </video>
                         </div>
                         <h3>CapCut Pro</h3>
-                        <div class="wholesale-status-badge">✅ متوفر جملة (Disponible Gros)</div>
+                        <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesaleFull">✅ متوفر جملة
+                            (Disponible Gros)</div>
                     </div>
 
                     <!-- Lovable AI -->
@@ -576,7 +1197,22 @@
                             role="img" aria-label="Lovable AI">
                         </div>
                         <h3>Lovable AI</h3>
-                        <div class="wholesale-status-badge">✅ متوفر جملة (Disponible Gros)</div>
+                        <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesaleFull">✅ متوفر جملة
+                            (Disponible Gros)</div>
+                    </div>
+
+                    <!-- Canva Pro -->
+                    <div class="product-card fade-in" id="canva-card">
+                        <div class="product-image" style="background: #000; position: relative; overflow: hidden;"
+                            role="img" aria-label="Canva Pro">
+                            <video autoplay loop muted playsinline
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                                <source src="https://i.imgur.com/DvPmjNv.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <h3>Canva Pro</h3>
+                        <div class="wholesale-status-badge" data-i18n="reseller.badge.wholesaleFull">✅ متوفر جملة
+                            (Disponible Gros)</div>
                     </div>
                 </div>
 
