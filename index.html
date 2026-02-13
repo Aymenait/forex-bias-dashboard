@@ -1894,6 +1894,15 @@
             /* ═══ CUSTOMER GALLERY - PREMIUM DESIGN ═══ */
             #customer-gallery {
                 background: linear-gradient(180deg, rgba(10, 10, 30, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+                direction: ltr;
+            }
+
+            #customer-gallery .section-header {
+                direction: inherit;
+            }
+
+            [dir="rtl"] #customer-gallery .section-header {
+                direction: rtl;
             }
 
             .gallery-marquee {
@@ -1908,6 +1917,7 @@
                 display: flex;
                 gap: 16px;
                 width: max-content;
+                direction: ltr;
             }
 
             .gallery-track-rtl {
