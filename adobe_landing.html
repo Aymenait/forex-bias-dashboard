@@ -464,6 +464,7 @@
 
     <!-- Navigation -->
     <nav class="nav-container">
+        <!-- ... existing nav content ... -->
         <a href="/" class="back-btn">
             <span id="back-arrow">←</span> <span data-i18n="nav_home">الرئيسية</span>
         </a>
@@ -554,6 +555,22 @@
             <a href="#" id="order-btn-main" class="cta-button" onclick="orderProduct('general')" data-i18n="cta_order">
                 🚀 اطلب الآن عبر الواتساب
             </a>
+
+            <!-- Wholesale Option (Glassy, Animated, Red-Blue) -->
+            <div onclick="orderWholesale()" class="w-full max-w-md mx-auto cursor-pointer mt-8 py-3 px-6 rounded-2xl text-sm font-bold 
+                        bg-gradient-to-r from-red-500/10 via-white/5 to-blue-500/10 
+                        backdrop-blur-xl border border-white/10 hover:border-white/30 
+                        shadow-[0_0_15px_rgba(255,255,255,0.05)]
+                        hover:scale-[1.02] transition-all duration-300 animate-[pulse_3s_infinite]">
+                <div class="flex items-center justify-center gap-2">
+                    <span class="text-xl filter drop-shadow no-underline" style="text-decoration:none">🏢</span>
+                    <span
+                        class="bg-gradient-to-r from-red-200 via-white to-blue-200 bg-clip-text text-transparent drop-shadow-sm"
+                        data-i18n="wholesale_text">
+                        متوفر بيع بالجملة للشركات والتجار بأسعار خاصة!
+                    </span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -632,7 +649,8 @@
                 fe_apps_desc: "سجل دخولك مباشرة عبر موقع Adobe.com الرسمي. لا كراكات ولا برامج مشبوهة.",
                 fe_ai_title: "4000 رصيد ذكاء اصطناعي",
                 fe_privacy_title: "إيميل Outlook خاص",
-                fe_privacy_desc: "تستلم حساب جديد مع إيميل Outlook رسمي. لك الحرية الكاملة في تغيير كلمة المرور والبيانات."
+                fe_privacy_desc: "تستلم حساب جديد مع إيميل Outlook رسمي. لك الحرية الكاملة في تغيير كلمة المرور والبيانات.",
+                wholesale_text: "متوفر بيع بالجملة للشركات والتجار بأسعار خاصة!"
             },
             fr: {
                 nav_home: "Accueil",
@@ -659,7 +677,8 @@
                 fe_apps_desc: "Connectez-vous directement sur Adobe.com. Pas de cracks ni de logiciels suspects.",
                 fe_ai_title: "4000 Crédits IA",
                 fe_privacy_title: "Email Outlook Privé",
-                fe_privacy_desc: "Recevez un nouveau compte avec email Outlook officiel. Contrôle total sur le mot de passe et les données."
+                fe_privacy_desc: "Recevez un nouveau compte avec email Outlook officiel. Contrôle total sur le mot de passe et les données.",
+                wholesale_text: "Vente en gros pour revendeurs et entreprises !"
             },
             en: {
                 nav_home: "Home",
@@ -686,9 +705,31 @@
                 fe_apps_desc: "Log in directly via Adobe.com. No cracks, no suspicious software.",
                 fe_ai_title: "4000 AI Credits",
                 fe_privacy_title: "Private Outlook Email",
-                fe_privacy_desc: "Receive a new account with official Outlook email. Full control to change password and details."
+                fe_privacy_desc: "Receive a new account with official Outlook email. Full control to change password and details.",
+                wholesale_text: "Wholesale deals available for companies & resellers!"
             }
         };
+
+        // Product Configuration
+        // ... (existing code)
+
+        // ... (existing functions)
+
+        function orderWholesale() {
+            const phone = "213782125821";
+            let message = "";
+
+            if (currentLang === 'ar') {
+                message = "مرحبا، أنا تاجر/شركة وأريد الاستفسار عن أسعار الجملة لـ Adobe Creative Cloud.";
+            } else if (currentLang === 'fr') {
+                message = "Bonjour, je suis un revendeur/entreprise et je souhaite connaître les prix de gros pour Adobe Creative Cloud.";
+            } else {
+                message = "Hello, I am a reseller/company and I want to inquire about wholesale prices for Adobe Creative Cloud.";
+            }
+
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
 
         // Product Configuration
         const PRODUCT_CONFIG = {
