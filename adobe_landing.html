@@ -792,29 +792,91 @@
 
             // DYNAMIC CONTENT UPDATE BASED ON DURATION
             const t = TRANSLATIONS[currentLang] || TRANSLATIONS['ar'];
-            const suffix = currentDuration === '1year' ? '_yearly' : '_monthly';
+            let suffix = '_monthly';
 
-            // Update Subtitle
+            if (currentDuration === '1year') {
+                suffix = '_yearly';
+            } else if (currentDuration === '3months') {
+                suffix = '_3months';
+            } else if (currentDuration === '2months') {
+                suffix = '_2months';
+            }
+
+            // Fallback to monthly if specific key doesn't exist
+            // Actually, we need to add these keys to TRANSLATIONS or make the monthly one dynamic
+            // Let's adding keys is safer for full control.
+            // But for now, let's use a dynamic replacement approach for the subtitle to avoid huge translation obj
+
+            // Strategy: Use the base monthly text but replace "33 days" with the correct duration if needed
+            // OR better: Just define the text for each duration. It's cleaner.
+
+            // Let's update TRANSLATIONS object first (I will do this in a separate edit to be safe, but wait, I must do it here or it breaks)
+            // Actually, the user issue is that "33 days" is static.
+
+            // Let's map duration to label
+            const durationLabels = {
+                '1month': { ar: '33 يوم', fr: '33 jours', en: '33 days' },
+                '2months': { ar: '60 يوم', fr: '60 jours', en: '60 days' },
+                '3months': { ar: '90 يوم', fr: '90 jours', en: '90 days' },
+                '1year': { ar: 'سنة كاملة', fr: 'un an', en: '1 year' }
+            };
+
+            // Update Subtitle dynamically
             const subtitleEl = document.querySelector('[data-i18n="hero_subtitle"]');
-            if (subtitleEl && t[`hero_subtitle${suffix}`]) {
-                subtitleEl.textContent = t[`hero_subtitle${suffix}`];
+            if (subtitleEl) {
+                if (currentDuration === '1year') {
+                    subtitleEl.textContent = t['hero_subtitle_yearly'];
+                } else {
+                    // Replace "33 days" with actual duration in the monthly string
+                    let text = t['hero_subtitle_monthly'];
+                    const daysLabel = durationLabels[currentDuration][currentLang];
+                    // Flexible replacement: look for 33 days/jours/يوم and replace
+                    text = text.replace(/33 (days|jours|يوم)/gi, daysLabel);
+                    subtitleEl.textContent = text;
+                }
+            }
+
+            // Update Guarantee Desc dynamically
+            const guarDescEl = document.querySelector('[data-i18n="fe_guarantee_desc"]');
+            if (guarDescEl) {
+                if (currentDuration === '1year') {
+                    guarDescEl.textContent = t['fe_guarantee_desc_yearly'];
+                } else {
+                    let text = t['fe_guarantee_desc_monthly'];
+                    const daysLabel = durationLabels[currentDuration][currentLang];
+                    const guaranteeDays = currentDuration === '1month' ? '30' : (currentDuration === '2months' ? '60' : '90');
+
+                    // Improve replacement logic: The text has "33 days (guarantee 30 days)"
+                    // We need to update both numbers.
+
+                    // Let's just create a constructed string, it's safer.
+                    if (currentLang === 'ar') {
+                        guarDescEl.textContent = `اشتراك رسمي صالح لمدة ${daysLabel} (ضمان كامل) مع دعم فني كامل واستبدال فوري.`;
+                    } else if (currentLang === 'fr') {
+                        guarDescEl.textContent = `Abonnement officiel valide ${daysLabel} (garantie complète) avec support complet et remplacement immédiat.`;
+                    } else {
+                        guarDescEl.textContent = `Official subscription valid for ${daysLabel} (full guarantee) with full support and replacement.`;
+                    }
+                }
             }
 
             // Update AI Desc
             const aiDescEl = document.querySelector('[data-i18n="fe_ai_desc"]');
-            if (aiDescEl && t[`fe_ai_desc${suffix}`]) {
-                aiDescEl.textContent = t[`fe_ai_desc${suffix}`];
+            if (aiDescEl && t[`fe_ai_desc${currentDuration === '1year' ? '_yearly' : '_monthly'}`]) {
+                aiDescEl.textContent = t[`fe_ai_desc${currentDuration === '1year' ? '_yearly' : '_monthly'}`];
             }
 
-            // Update Guarantee Title & Desc
+            // Update Guarantee Title
             const guarTitleEl = document.querySelector('[data-i18n="fe_guarantee_title"]');
-            const guarDescEl = document.querySelector('[data-i18n="fe_guarantee_desc"]');
-
-            if (guarTitleEl && t[`fe_guarantee_title${suffix}`]) {
-                guarTitleEl.textContent = t[`fe_guarantee_title${suffix}`];
-            }
-            if (guarDescEl && t[`fe_guarantee_desc${suffix}`]) {
-                guarDescEl.textContent = t[`fe_guarantee_desc${suffix}`];
+            if (guarTitleEl) {
+                if (currentDuration === '1year') {
+                    guarTitleEl.textContent = t['fe_guarantee_title_yearly'];
+                } else {
+                    // Update title to match duration approx
+                    if (currentLang === 'ar') guarTitleEl.textContent = `ضمان ${durationLabels[currentDuration]['ar']}`;
+                    else if (currentLang === 'fr') guarTitleEl.textContent = `Garantie ${durationLabels[currentDuration]['fr']}`;
+                    else guarTitleEl.textContent = `${durationLabels[currentDuration]['en']} Guarantee`;
+                }
             }
 
             // Animate Price Change
