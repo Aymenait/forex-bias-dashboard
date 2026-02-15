@@ -4318,7 +4318,6 @@ function orderGamma() {
 }
 
 // ChatGPT Selection Functions
-// ChatGPT Selection Functions
 function selectChatGPTDuration(duration) {
     document.querySelectorAll('.chatgpt-duration-btn').forEach(btn => btn.classList.remove('active'));
     const selectedBtn = document.querySelector(`.chatgpt-duration-btn[data-duration="${duration}"]`);

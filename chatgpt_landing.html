@@ -277,7 +277,7 @@
                 <div class="flex flex-col items-center md:rtl:items-start md:ltr:items-start gap-4">
                     <div class="text-4xl md:text-5xl font-black tracking-tight mb-2 flex items-baseline gap-2">
                         <span id="main-price-display" class="text-white">1200 DA</span>
-                        <span id="usd-price-display" class="text-2xl text-emerald-400 font-bold">(6$)</span>
+                        <span id="usd-price-display" class="text-2xl text-emerald-400 font-bold">(4.8$)</span>
                         <span class="text-lg text-gray-500 font-normal" data-i18n="price.per_month">/ للشهر</span>
                     </div>
                 </div>
@@ -688,9 +688,9 @@
 
         // Data & State
         const prices = {
-            '1month': { dzd: 1200, usd: 6, label: '1200 DA' },
-            '3months': { dzd: 3000, usd: 15, label: '3000 DA' },
-            '6months': { dzd: 5500, usd: 27.5, label: '5500 DA' },
+            '1month': { dzd: 1200, usd: 4.8, label: '1200 DA' },
+            '3months': { dzd: 3000, usd: 12, label: '3000 DA' },
+            '6months': { dzd: 5500, usd: 22, label: '5500 DA' },
         };
         let currentDuration = '1month';
         let currentLang = localStorage.getItem('lang') || 'ar'; // Default language
