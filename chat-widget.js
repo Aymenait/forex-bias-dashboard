@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 📊 Track Visit
     async function trackVisit() {
         try {
-            await fetch('http://localhost:8000/api/visit', {
+            await fetch('https://motionless-appolonia-3a-5a61944b.koyeb.app/api/visit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ deviceId, userAgent: navigator.userAgent })
@@ -23,6 +23,50 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { console.error('Tracking Error:', e); }
     }
     trackVisit();
+
+    // ... (rest of code) ...
+
+    submitFeedback.addEventListener('click', async () => {
+        // ...
+        try {
+            await fetch('https://motionless-appolonia-3a-5a61944b.koyeb.app/api/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    deviceId,
+                    rating: currentRating,
+                    comment: comment
+                })
+            });
+
+            // ...
+        } catch (error) {
+            // ...
+        }
+    });
+
+    // ...
+
+    // Send Message
+    async function sendMessage() {
+        // ...
+        try {
+            // Send to Backend
+            const response = await fetch('https://motionless-appolonia-3a-5a61944b.koyeb.app/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: text,
+                    history: history,
+                    language: selectedLang // Pass language
+                })
+            });
+
+            // ...
+        } catch (error) {
+            // ...
+        }
+    }
 
     // Inject HTML for the chat widget
     const chatWidgetHTML = `
