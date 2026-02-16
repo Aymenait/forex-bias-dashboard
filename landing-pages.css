@@ -17,7 +17,7 @@
     --card-bg: rgba(20, 24, 42, 0.75);
     --border-color: rgba(255, 255, 255, 0.08);
     --shadow: 0 24px 60px rgba(15, 17, 35, 0.45);
-    
+
     /* Product Colors */
     --color-chatgpt: #10a37f;
     --color-adobe: #ff0000;
@@ -25,7 +25,7 @@
     --color-netflix: #e50914;
     --color-tradingview: #2962FF;
     --color-perplexity: #1FB6FF;
-    --color-gamma: #6366f1;
+    --color-gamma: #ffd56f;
     --color-canva: #00c4cc;
     --color-capcut: #ff6b6b;
 }
@@ -70,9 +70,17 @@ body {
 }
 
 @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* Navigation */
@@ -171,8 +179,15 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 .landing-hero h1 {
@@ -274,9 +289,12 @@ body {
 }
 
 @keyframes ctaPulse {
-    0%, 100% {
+
+    0%,
+    100% {
         box-shadow: 0 8px 25px rgba(255, 213, 111, 0.4);
     }
+
     50% {
         box-shadow: 0 8px 35px rgba(255, 213, 111, 0.8), 0 0 50px rgba(255, 213, 111, 0.4);
     }
@@ -373,26 +391,26 @@ body {
     .landing-hero {
         padding: 100px 20px 40px;
     }
-    
+
     .product-logo {
         width: 80px;
         height: 80px;
     }
-    
+
     .payment-methods {
         gap: 15px;
     }
-    
+
     .payment-method-btn {
         min-width: 80px;
         padding: 15px;
     }
-    
+
     .payment-icon {
         width: 40px;
         height: 40px;
     }
-    
+
     .features-grid {
         grid-template-columns: 1fr;
         gap: 20px;

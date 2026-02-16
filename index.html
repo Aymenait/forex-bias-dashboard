@@ -242,6 +242,19 @@
             transform: translateY(1px);
             box-shadow: 0 2px 10px rgba(255, 213, 111, 0.3);
         }
+
+        /* Gamma Gold Theme Enforcers */
+        .gamma-tab-active {
+            background: #ffd56f !important;
+            color: black !important;
+            border: none !important;
+        }
+
+        .gamma-btn-active {
+            background: rgba(255, 213, 111, 0.2) !important;
+            border: 1px solid #ffd56f !important;
+            color: #ffd56f !important;
+        }
     </style>
 </head>
 
@@ -691,7 +704,7 @@
                                 style="display: flex; gap: 8px; margin-bottom: 12px; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 8px;">
                                 <button id="index-tab-shared" class="account-tab active gamma-tab"
                                     onclick="switchGammaTabMain('shared')"
-                                    style="flex: 1; padding: 8px; border-radius: 6px; border: none; background: #6366f1; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.9rem;">
+                                    style="flex: 1; padding: 8px; border-radius: 6px; border: none; background: #ffd56f; color: black; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.9rem;">
                                     <span data-i18n="product.gamma.tabShared">Shared</span>
                                 </button>
                                 <button id="index-tab-private" class="account-tab gamma-tab"
@@ -705,7 +718,7 @@
                             <div id="index-shared-options" style="display: block;">
                                 <button class="segmented-btn active gamma-duration-btn" data-duration="1month"
                                     onclick="selectGammaDuration('1month')"
-                                    style="width: 100%; border-radius: 8px; padding: 10px; background: rgba(255, 255, 255, 0.05);">
+                                    style="width: 100%; border-radius: 8px; padding: 10px; background: rgba(255, 213, 111, 0.2); border: 1px solid #ffd56f; color: #ffd56f;">
                                     <span class="btn-label" data-i18n="product.gamma.oneMonth">1 شهر (Pro Shared)</span>
                                 </button>
                             </div>
@@ -770,7 +783,7 @@
                             <li data-i18n="product.gamma.feature2">تصميم مستندات ومواقع تفاعلية</li>
                             <li data-i18n="product.gamma.feature3">قوالب جاهزة وتخصيص كامل</li>
                         </ul>
-                        <a href="gamma_landing" class="discover-btn" data-i18n="product.discoverMore"
+                        <a href="gamma_landing.html" class="discover-btn" data-i18n="product.discoverMore"
                             onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Gamma.AI', content_category: 'ProductClick' }); }">اكتشف
                             المزيد</a>
                         <button class="order-btn" id="gamma-order-btn" data-product="Gamma.AI - 1 Month (Pro Shared)"

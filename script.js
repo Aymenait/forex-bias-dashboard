@@ -4253,19 +4253,129 @@ function orderAdobe() {
     redirectToWhatsApp(name, price, currency);
 }
 
-// Order Gamma
+// Gamma Selection Functions
+function switchGammaTabMain(tab) {
+    const tabShared = document.getElementById('index-tab-shared');
+    const tabPrivate = document.getElementById('index-tab-private');
+    const optsShared = document.getElementById('index-shared-options');
+    const optsPrivate = document.getElementById('index-private-options');
+
+    // Reset styles
+    [tabShared, tabPrivate].forEach(t => {
+        if (!t) return;
+        t.style.background = 'transparent';
+        t.style.color = 'rgba(255,255,255,0.6)';
+        t.classList.remove('active');
+        t.classList.remove('gamma-tab-active');
+    });
+
+    // Activate selected
+    const activeTab = tab === 'shared' ? tabShared : tabPrivate;
+    if (activeTab) {
+        // Use the CSS class for better enforcement + inline as backup
+        activeTab.classList.add('active');
+        activeTab.classList.add('gamma-tab-active');
+        activeTab.style.background = '#ffd56f';
+        activeTab.style.color = 'black';
+    }
+
+    // Toggle visibility
+    if (tab === 'shared') {
+        if (optsShared) optsShared.style.display = 'block';
+        if (optsPrivate) optsPrivate.style.display = 'none';
+        selectGammaDuration('1month');
+    } else {
+        if (optsShared) optsShared.style.display = 'none';
+        if (optsPrivate) optsPrivate.style.display = 'flex';
+        // Select default private option if coming from shared
+        const currentBtn = document.querySelector('.gamma-duration-btn.active');
+        if (currentBtn && (currentBtn.dataset.duration === '1month' || !currentBtn.dataset.duration.includes('private'))) {
+            selectGammaDuration('private_1month');
+        }
+    }
+}
+
+function selectGammaDuration(duration) {
+    const buttons = document.querySelectorAll('.gamma-duration-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.classList.remove('gamma-btn-active');
+        // Reset inline styles
+        btn.style.border = '2px solid rgba(255, 255, 255, 0.1)';
+        btn.style.background = 'rgba(255, 255, 255, 0.05)';
+        btn.style.color = 'rgba(255, 255, 255, 0.6)';
+    });
+
+    const selectedBtn = document.querySelector(`.gamma-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+        selectedBtn.classList.add('gamma-btn-active');
+        // Apply Gold Theme
+        selectedBtn.style.border = '2px solid #ffd56f';
+        selectedBtn.style.background = 'rgba(255, 213, 111, 0.2)';
+        selectedBtn.style.color = '#ffd56f';
+    }
+
+    const config = PRODUCTS['gamma'];
+    if (!config || !config.durations) return;
+
+    const priceObj = config.durations[duration];
+    const productNames = {
+        '1month': 'Gamma.AI - 1 Month (Pro Shared)',
+        'private_1month': 'Gamma.AI - 1 Month (Plus Private)',
+        'private_pro_1month': 'Gamma.AI - 1 Month (Pro Private)'
+    };
+    const name = productNames[duration] || 'Gamma.AI';
+
+    // Show/hide prices
+    document.querySelectorAll('.gamma-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`gamma-prices-${duration}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('gamma-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['gamma-usdt-btn', 'gamma-redotpay-btn', 'gamma-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'Gamma.AI',
+            variant: duration,
+            currency: currency
+        });
+    }
+}
+
 function orderGamma() {
     const activeBtn = document.querySelector('.gamma-duration-btn.active');
     const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
     const productNames = {
-        '1month': 'Gamma.AI - 1 Month',
-        '3months': 'Gamma.AI - 3 Months'
+        '1month': 'Gamma.AI - 1 Month (Pro Shared)',
+        'private_1month': 'Gamma.AI - 1 Month (Plus Private)',
+        'private_pro_1month': 'Gamma.AI - 1 Month (Pro Private)'
     };
-    const name = productNames[duration];
+    const name = productNames[duration] || 'Gamma.AI';
 
     const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
     const config = PRODUCTS['gamma'];
-    const priceObj = config.durations[duration];
+    const priceObj = (config && config.durations && config.durations[duration]) ? config.durations[duration] : { dzd: 0, usd: 0 };
     const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
     if (typeof fbq !== 'undefined') {
@@ -4283,6 +4393,7 @@ function orderGamma() {
 
     redirectToWhatsApp(name, price, currency);
 }
+
 
 // ChatGPT Selection Functions
 function selectChatGPTDuration(duration) {
@@ -4717,141 +4828,7 @@ function orderCanva() {
     redirectToWhatsApp(name, price, currency);
 }
 
-// Gamma.AI Tab Switching
-function switchGammaTabMain(tab) {
-    const tabShared = document.getElementById('index-tab-shared');
-    const tabPrivate = document.getElementById('index-tab-private');
-    const optsShared = document.getElementById('index-shared-options');
-    const optsPrivate = document.getElementById('index-private-options');
 
-    if (!tabShared || !tabPrivate) return;
-
-    // Reset styles
-    [tabShared, tabPrivate].forEach(t => {
-        t.style.background = 'transparent';
-        t.style.color = 'rgba(255,255,255,0.6)';
-        t.classList.remove('active');
-    });
-
-    // Activate selected
-    const activeTab = tab === 'shared' ? tabShared : tabPrivate;
-    activeTab.style.background = '#6366f1';
-    activeTab.style.color = 'white';
-    activeTab.classList.add('active');
-
-    // Toggle visibility
-    if (tab === 'shared') {
-        optsShared.style.display = 'block';
-        optsPrivate.style.display = 'none';
-        selectGammaDuration('1month');
-    } else {
-        optsShared.style.display = 'none';
-        optsPrivate.style.display = 'flex';
-        // Select default private option if coming from shared
-        const currentBtn = document.querySelector('.gamma-duration-btn.active');
-        if (currentBtn && currentBtn.dataset.duration === '1month') {
-            selectGammaDuration('private_1month');
-        }
-    }
-}
-
-// Gamma Selection Functions
-function selectGammaDuration(duration) {
-    const buttons = document.querySelectorAll('.gamma-duration-btn');
-    buttons.forEach(btn => {
-        btn.classList.remove('active');
-        // Reset inline styles
-        btn.style.border = '2px solid var(--border-color)';
-        btn.style.background = 'rgba(100, 100, 100, 0.1)';
-        btn.style.color = 'var(--text-secondary)';
-    });
-
-    const selectedBtn = document.querySelector(`.gamma-duration-btn[data-duration="${duration}"]`);
-    if (selectedBtn) {
-        selectedBtn.classList.add('active');
-        // Apply active inline styles
-        selectedBtn.style.border = '2px solid var(--accent)';
-        selectedBtn.style.background = 'rgba(255, 213, 111, 0.15)';
-        selectedBtn.style.color = 'var(--text-primary)';
-    }
-
-    const config = PRODUCTS['gamma'];
-    const priceObj = (config && config.durations && config.durations[duration]) ? config.durations[duration] : { dzd: 0, usd: 0 };
-
-    const names = {
-        '1month': 'Gamma.AI - 1 Month (Pro Shared)',
-        'private_1month': 'Gamma.AI - 1 Month (Plus Private)',
-        'private_pro_1month': 'Gamma.AI - 1 Month (Pro Private)'
-    };
-    const name = names[duration] || 'Gamma.AI';
-
-    // Show/hide prices
-    document.querySelectorAll('.gamma-prices').forEach(price => price.style.display = 'none');
-    const priceEl = document.getElementById(`gamma-prices-${duration}`);
-    if (priceEl) priceEl.style.display = 'block';
-
-    // Update order button
-    const orderBtn = document.getElementById('gamma-order-btn');
-    if (orderBtn) orderBtn.setAttribute('data-product', name);
-
-    // Update payment buttons
-    const paymentButtons = ['gamma-usdt-btn', 'gamma-redotpay-btn', 'gamma-baridimob-btn'];
-    paymentButtons.forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn && priceObj) {
-            btn.setAttribute('data-product', name);
-            btn.setAttribute('data-price', priceObj.dzd);
-            btn.setAttribute('data-price-usd', priceObj.usd);
-        }
-    });
-
-    // Sync prices text content
-    if (window.currencyManager) {
-        window.currencyManager.updateAllPrices();
-    }
-
-    // Track CustomizeProduct
-    if (typeof fbq !== 'undefined') {
-        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-        fbq('track', 'CustomizeProduct', {
-            content_name: 'Gamma.AI',
-            variant: duration,
-            currency: currency
-        });
-    }
-}
-
-function orderGamma() {
-    const activeBtn = document.querySelector('.gamma-duration-btn.active');
-    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
-    const names = {
-        '1month': 'Gamma.AI - 1 Month (Pro Shared)',
-        'private_1month': 'Gamma.AI - 1 Month (Plus Private)',
-        'private_pro_1month': 'Gamma.AI - 1 Month (Pro Private)'
-    };
-    const name = names[duration] || 'Gamma.AI';
-
-    const config = PRODUCTS['gamma'];
-    const priceObj = (config && config.durations && config.durations[duration]) ? config.durations[duration] : { dzd: 0, usd: 0 };
-
-    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
-
-    if (typeof fbq !== 'undefined') {
-        fbq('track', 'AddToCart', {
-            content_name: name,
-            value: parseFloat(price),
-            currency: currency
-        });
-        fbq('track', 'InitiateCheckout', {
-            content_name: name,
-            value: parseFloat(price),
-            currency: currency
-        });
-    }
-
-    redirectToWhatsApp(name, price, currency);
-}
 
 // Make globally available
 window.selectGammaDuration = selectGammaDuration;
