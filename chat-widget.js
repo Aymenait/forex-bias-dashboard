@@ -24,50 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     trackVisit();
 
-    // ... (rest of code) ...
-
-    submitFeedback.addEventListener('click', async () => {
-        // ...
-        try {
-            await fetch('https://motionless-appolonia-3a-5a61944b.koyeb.app/api/feedback', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    deviceId,
-                    rating: currentRating,
-                    comment: comment
-                })
-            });
-
-            // ...
-        } catch (error) {
-            // ...
-        }
-    });
-
-    // ...
-
-    // Send Message
-    async function sendMessage() {
-        // ...
-        try {
-            // Send to Backend
-            const response = await fetch('https://motionless-appolonia-3a-5a61944b.koyeb.app/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: text,
-                    history: history,
-                    language: selectedLang // Pass language
-                })
-            });
-
-            // ...
-        } catch (error) {
-            // ...
-        }
-    }
-
     // Inject HTML for the chat widget
     const chatWidgetHTML = `
         <div class="chat-widget-fab" id="chatFab">
@@ -101,26 +57,26 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="chat-messages" id="chatMessages">
                 <!-- Initial: Language Selection -->
                 <div class="language-selection" id="languageSelection">
-                    <div class="lang-header">
+                    <div class="chat-lang-header">
                         <p>Select Language / اختر لغة</p>
                     </div>
                     
-                    <button class="lang-btn" data-lang="ar" dir="rtl">
-                        <span class="lang-flag">🇩🇿</span>
-                        <span class="lang-text">العربية</span>
-                        <span class="lang-arrow">←</span>
+                    <button class="chat-lang-btn" data-lang="ar" dir="rtl">
+                        <span class="chat-lang-flag">🇩🇿</span>
+                        <span class="chat-lang-text">العربية</span>
+                        <span class="chat-lang-arrow">←</span>
                     </button>
                     
-                    <button class="lang-btn" data-lang="fr">
-                        <span class="lang-flag">🇫🇷</span>
-                        <span class="lang-text">Français</span>
-                        <span class="lang-arrow">→</span>
+                    <button class="chat-lang-btn" data-lang="fr">
+                        <span class="chat-lang-flag">🇫🇷</span>
+                        <span class="chat-lang-text">Français</span>
+                        <span class="chat-lang-arrow">→</span>
                     </button>
                     
-                    <button class="lang-btn" data-lang="en">
-                        <span class="lang-flag">🇺🇸</span>
-                        <span class="lang-text">English</span>
-                        <span class="lang-arrow">→</span>
+                    <button class="chat-lang-btn" data-lang="en">
+                        <span class="chat-lang-flag">🇺🇸</span>
+                        <span class="chat-lang-text">English</span>
+                        <span class="chat-lang-arrow">→</span>
                     </button>
                 </div>
             </div>
@@ -146,325 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>
             </div>
         </div>
-
-        <style>
-            /* --- Main Chat Widget Styles (Restored) --- */
-            .chat-widget-fab {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                width: 60px;
-                height: 60px;
-                background: linear-gradient(135deg, #2563eb, #1e40af);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                cursor: pointer;
-                box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                z-index: 9999;
-            }
-            .chat-widget-fab:hover {
-                transform: scale(1.1);
-            }
-            .chat-widget-fab svg {
-                width: 30px;
-                height: 30px;
-            }
-
-            .chat-window {
-                position: fixed;
-                bottom: 90px;
-                right: 20px;
-                width: 350px;
-                height: 500px;
-                background: #ffffff;
-                border-radius: 20px;
-                box-shadow: 0 5px 30px rgba(0,0,0,0.15);
-                display: flex;
-                flex-direction: column;
-                z-index: 9999;
-                opacity: 0;
-                pointer-events: none;
-                transform: translateY(20px);
-                transition: all 0.3s ease;
-                overflow: hidden;
-            }
-            .chat-window.open {
-                opacity: 1;
-                pointer-events: all;
-                transform: translateY(0);
-            }
-
-            .chat-header {
-                background: linear-gradient(135deg, #0f172a, #334155);
-                color: white;
-                padding: 15px 20px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                border-radius: 20px 20px 0 0;
-            }
-            .chat-header h3 {
-                margin: 0;
-                font-size: 16px;
-                font-weight: 600;
-            }
-
-            .chat-messages {
-                flex: 1;
-                padding: 20px;
-                overflow-y: auto;
-                background: #f8fafc;
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .message {
-                max-width: 80%;
-                padding: 10px 15px;
-                border-radius: 15px;
-                font-size: 14px;
-                line-height: 1.4;
-                word-wrap: break-word;
-            }
-            .message.user {
-                align-self: flex-end;
-                background: #2563eb;
-                color: white;
-                border-bottom-right-radius: 2px;
-            }
-            .message.bot {
-                align-self: flex-start;
-                background: #e2e8f0;
-                color: #1e293b;
-                border-bottom-left-radius: 2px;
-            }
-
-            .chat-input-area {
-                padding: 15px;
-                border-top: 1px solid #e2e8f0;
-                background: white;
-                display: flex;
-                gap: 10px;
-            }
-            .chat-input-area input {
-                flex: 1;
-                border: 1px solid #cbd5e1;
-                border-radius: 25px;
-                padding: 10px 15px;
-                outline: none;
-                transition: border-color 0.2s;
-            }
-            .chat-input-area input:focus {
-                border-color: #2563eb;
-            }
-            .chat-send-btn {
-                background: #2563eb;
-                color: white;
-                border: none;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: background 0.2s;
-            }
-            .chat-send-btn:hover {
-                background: #1d4ed8;
-            }
-
-            /* Typing Indicator */
-            .typing-indicator {
-                display: flex;
-                gap: 5px;
-                padding: 10px;
-                background: #e2e8f0;
-                border-radius: 15px;
-                align-self: flex-start;
-                width: fit-content;
-            }
-            .typing-dot {
-                width: 8px;
-                height: 8px;
-                background: #94a3b8;
-                border-radius: 50%;
-                animation: typing 1.4s infinite ease-in-out;
-            }
-            .typing-dot:nth-child(1) { animation-delay: 0s; }
-            .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-            .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-            @keyframes typing {
-                0%, 100% { transform: scale(1); opacity: 0.5; }
-                50% { transform: scale(1.2); opacity: 1; }
-            }
-
-            /* --- Language & Feedback Styles (Preserved) --- */
-
-            /* Language Header */
-            .lang-header p {
-                text-align: center;
-                font-weight: 800;
-                margin-bottom: 20px;
-                color: #334155;
-                font-size: 16px;
-                letter-spacing: 0.5px;
-                text-transform: uppercase;
-            }
-
-            /* Premium Language Buttons */
-            .lang-btn {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                background: #ffffff;
-                border: 1px solid #e2e8f0;
-                padding: 16px 20px;
-                border-radius: 16px;
-                width: 100%;
-                margin-bottom: 12px;
-                cursor: pointer;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-                position: relative;
-                overflow: hidden;
-            }
-
-            .lang-btn::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 4px;
-                height: 100%;
-                background: #e2e8f0;
-                transition: background 0.3s;
-            }
-
-            .lang-btn:hover {
-                border-color: #fbbf24;
-                transform: translateY(-3px);
-                box-shadow: 0 12px 20px -5px rgba(251, 191, 36, 0.15);
-                background: #fffcf5; /* Subtle yellow tint */
-            }
-
-            .lang-btn:hover::before {
-                background: #fbbf24; /* Gold bar on hover */
-            }
-
-            .lang-flag {
-                font-size: 28px;
-                margin-right: 15px;
-                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-            }
-
-            .lang-text {
-                font-weight: 700;
-                color: #1e293b;
-                font-size: 17px;
-                flex-grow: 1;
-                text-align: left;
-            }
-            
-            /* RTL specific adjust for Arabic */
-            .lang-btn[dir="rtl"] .lang-text {
-                text-align: right;
-                margin-right: 15px;
-            }
-            .lang-btn[dir="rtl"] .lang-flag {
-                margin-right: 0;
-                margin-left: 15px;
-            }
-            .lang-btn[dir="rtl"] .lang-arrow {
-                transform: rotate(180deg);
-            }
-
-            .lang-arrow {
-                color: #cbd5e1;
-                font-weight: bold;
-                transition: color 0.3s, transform 0.3s;
-            }
-
-            .lang-btn:hover .lang-arrow {
-                color: #fbbf24;
-                transform: translateX(3px);
-            }
-
-            /* Reuse other styles */
-            .chat-header-btn {
-                background: none;
-                border: none;
-                color: white;
-                cursor: pointer;
-                padding: 5px;
-            }
-            .chat-header-btn svg {
-                width: 20px;
-                height: 20px;
-            }
-            .chat-header-btn:hover {
-                opacity: 0.8;
-            }
-
-            /* ... Feedback Modal Styles (Kept same) ... */
-            .feedback-modal {
-                position: absolute;
-                top: 60px;
-                left: 10px;
-                right: 10px;
-                background: white;
-                padding: 20px;
-                border-radius: 12px;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-                z-index: 100;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                border: 1px solid #e2e8f0;
-            }
-            .feedback-modal h4 {
-                margin: 0 0 15px 0;
-                color: #1e293b;
-            }
-            .stars {
-                font-size: 32px;
-                color: #cbd5e1;
-                cursor: pointer;
-                margin-bottom: 15px;
-            }
-            .stars span.active {
-                color: #fbbf24;
-            }
-            .stars span:hover {
-                color: #fbbf24; 
-            }
-            .feedback-modal textarea {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #cbd5e1;
-                border-radius: 8px;
-                margin-bottom: 15px;
-                font-family: inherit;
-                resize: none;
-            }
-            .feedback-modal button#submitFeedback {
-                background: linear-gradient(135deg, #FFB400, #F59E0B);
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 8px;
-                cursor: pointer;
-                width: 100%;
-                font-weight: bold;
-            }
-
-        </style>
     `;
 
     // Append to body
@@ -481,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.getElementById('chatMessages');
     const chatInputArea = document.getElementById('chatInputArea');
     const languageSelection = document.getElementById('languageSelection');
-    const langBtns = document.querySelectorAll('.lang-btn');
+    const langBtns = document.querySelectorAll('.chat-lang-btn');
 
     // Feedback Elements
     const openFeedbackBtn = document.getElementById('openFeedback');
@@ -549,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.innerText = 'Sending...';
 
         try {
-            await fetch('http://localhost:8000/api/feedback', {
+            await fetch('https://motionless-appolonia-3a-5a61944b.koyeb.app/api/feedback', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -625,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Send to Backend
-            const response = await fetch('http://localhost:8000/api/chat', {
+            const response = await fetch('https://motionless-appolonia-3a-5a61944b.koyeb.app/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
