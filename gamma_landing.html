@@ -755,16 +755,41 @@
             <!-- Duration Selection -->
             <div class="gamma-duration-selection" style="margin: 24px auto; max-width: 400px;">
                 <p style="font-weight: 600; margin-bottom: 12px; font-size: 1rem; color: rgba(255, 255, 255, 0.9);"
-                    data-i18n="product.adobe.selectDuration">اختر المدة:</p>
-                <div style="display: flex; gap: 10px; justify-content: center;">
+                    data-i18n="product.gamma.selectDuration">اختر نوع الاشتراك:</p>
+
+                <!-- Account Type Tabs -->
+                <div class="account-type-tabs"
+                    style="display: flex; gap: 8px; margin-bottom: 16px; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 12px;">
+                    <button id="tab-shared" class="account-tab active" onclick="switchGammaTab('shared')"
+                        style="flex: 1; padding: 10px; border-radius: 8px; border: none; background: #6366f1; color: white; cursor: pointer; font-weight: 700; transition: all 0.3s;">
+                        <span data-i18n="product.gamma.tabShared">مشترك (Shared)</span>
+                    </button>
+                    <button id="tab-private" class="account-tab" onclick="switchGammaTab('private')"
+                        style="flex: 1; padding: 10px; border-radius: 8px; border: none; background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; font-weight: 700; transition: all 0.3s;">
+                        <span data-i18n="product.gamma.tabPrivate">خاص (Private)</span>
+                    </button>
+                </div>
+
+                <!-- Shared Options -->
+                <div id="shared-options" style="display: block; width: 100%;">
                     <button class="gamma-duration-btn active" data-duration="1month"
                         onclick="selectGammaDuration('1month')"
-                        style="flex: 1; padding: 12px; border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.2); color: white; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s;">
-                        <span data-i18n="product.adobe.oneMonth">شهر واحد</span>
+                        style="width: 100%; padding: 14px; border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.2); color: white; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; text-align: center;">
+                        <span data-i18n="product.gamma.oneMonth">1 شهر (Pro Shared)</span>
                     </button>
-                    <button class="gamma-duration-btn" data-duration="3months" onclick="selectGammaDuration('3months')"
-                        style="flex: 1; padding: 12px; border: 2px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.6); border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s;">
-                        <span data-i18n="product.adobe.threeMonths">3 أشهر</span>
+                </div>
+
+                <!-- Private Options -->
+                <div id="private-options" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
+                    <button class="gamma-duration-btn" data-duration="private_1month"
+                        onclick="selectGammaDuration('private_1month')"
+                        style="width: 100%; padding: 14px; border: 2px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.6); border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; text-align: center;">
+                        <span data-i18n="product.gamma.privateOneMonth">1 شهر (Plus Private)</span>
+                    </button>
+                    <button class="gamma-duration-btn" data-duration="private_pro_1month"
+                        onclick="selectGammaDuration('private_pro_1month')"
+                        style="width: 100%; padding: 14px; border: 2px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.6); border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; text-align: center;">
+                        <span data-i18n="product.gamma.privateProOneMonth">1 شهر (Pro Private)</span>
                     </button>
                 </div>
             </div>
@@ -1324,9 +1349,12 @@
                 'hero.subtitle': 'أنشئ عروض تقديمية، مستندات، ومواقع إلكترونية احترافية بمساعدة الذكاء الاصطناعي',
                 'hero.duration': 'اشتراك احترافي - يعمل على جميع أجهزتك',
                 'hero.price.suffix': 'للمدة المختارة',
-                'product.adobe.selectDuration': 'اختر المدة:',
-                'product.adobe.oneMonth': 'شهر واحد',
-                'product.adobe.threeMonths': '3 أشهر',
+                'product.gamma.selectDuration': 'اختر نوع الاشتراك:',
+                'product.gamma.tabShared': 'مشترك (Shared)',
+                'product.gamma.tabPrivate': 'خاص (Private)',
+                'product.gamma.oneMonth': '1 شهر (Pro Shared)',
+                'product.gamma.privateOneMonth': '1 شهر (Plus Private)',
+                'product.gamma.privateProOneMonth': '1 شهر (Pro Private)',
                 'payment.title': 'طرق الدفع المتاحة',
                 'payment.crypto': '💰 USDT / عملات رقمية',
                 'payment.redotpay': '💳 RedotPay',
@@ -1374,7 +1402,7 @@
                 'notes.item3': 'التحديثات: جميع المميزات الجديدة متاحة تلقائياً في حسابك',
                 'faq.title': '❓ الأسئلة الشائعة',
                 'faq.q1.question': 'س: ما الفرق بين الحساب المشترك والحساب الشخصي؟',
-                'faq.q1.answer': 'ج: الحساب المشترك أرخص (1200 دج) لكن قد يكون مشترك مع مستخدمين آخرين. الحساب الشخصي (2000 دج) خاص بك فقط وأكثر أماناً.',
+                'faq.q1.answer': 'ج: الحساب المشترك أرخص (1200 دج) لكن قد يكون مشترك مع مستخدمين آخرين. الحساب الشخصي (يبدأ من 2500 دج) خاص بك فقط وأكثر أماناً.',
                 'faq.q2.question': 'س: هل يمكنني استخدام Gamma على الهاتف؟',
                 'faq.q2.answer': 'ج: نعم! Gamma يعمل على جميع الأجهزة - الكمبيوتر، الهاتف المحمول، التابلت، والمتصفحات.',
                 'faq.q3.question': 'س: هل يمكنني تصدير العروض إلى PowerPoint؟',
@@ -1401,9 +1429,12 @@
                 'hero.subtitle': 'Create professional presentations, documents, and websites with AI assistance',
                 'hero.duration': 'Professional subscription - Works on all your devices',
                 'hero.price.suffix': 'per duration',
-                'product.adobe.selectDuration': 'Select Duration:',
-                'product.adobe.oneMonth': '1 Month',
-                'product.adobe.threeMonths': '3 Months',
+                'product.gamma.selectDuration': 'Select Account Type:',
+                'product.gamma.tabShared': 'Shared Account',
+                'product.gamma.tabPrivate': 'Private Account',
+                'product.gamma.oneMonth': '1 Month (Pro Shared)',
+                'product.gamma.privateOneMonth': '1 Month (Plus Private)',
+                'product.gamma.privateProOneMonth': '1 Month (Pro Private)',
                 'payment.title': 'Available Payment Methods',
                 'payment.crypto': '💰 USDT / Cryptocurrency',
                 'payment.redotpay': '💳 RedotPay',
@@ -1451,7 +1482,7 @@
                 'notes.item3': 'Updates: All new features are automatically available in your account',
                 'faq.title': '❓ Frequently Asked Questions',
                 'faq.q1.question': 'Q: What\'s the difference between shared and personal account?',
-                'faq.q1.answer': 'A: Shared account is cheaper (1200 DZD) but may be shared with other users. Personal account (2000 DZD) is yours only and more secure.',
+                'faq.q1.answer': 'A: Shared account is cheaper (1200 DZD) but may be shared with other users. Personal account (starting at 2500 DZD) is yours only and more secure.',
                 'faq.q2.question': 'Q: Can I use Gamma on my phone?',
                 'faq.q2.answer': 'A: Yes! Gamma works on all devices - computer, mobile phone, tablet, and browsers.',
                 'faq.q3.question': 'Q: Can I export presentations to PowerPoint?',
@@ -1478,9 +1509,12 @@
                 'hero.subtitle': 'Créez des présentations, documents et sites web professionnels avec l\'IA',
                 'hero.duration': 'Abonnement Professionnel - Fonctionne sur tous vos appareils',
                 'hero.price.suffix': 'par durée',
-                'product.adobe.selectDuration': 'Choisir la durée:',
-                'product.adobe.oneMonth': '1 Mois',
-                'product.adobe.threeMonths': '3 Mois',
+                'product.gamma.selectDuration': 'Choisir le type de compte:',
+                'product.gamma.tabShared': 'Compte Partagé',
+                'product.gamma.tabPrivate': 'Compte Privé',
+                'product.gamma.oneMonth': '1 Mois (Pro Shared)',
+                'product.gamma.privateOneMonth': '1 Mois (Plus Private)',
+                'product.gamma.privateProOneMonth': '1 Mois (Pro Private)',
                 'payment.title': 'Méthodes de Paiement Disponibles',
                 'payment.crypto': '💰 USDT / Cryptomonnaie',
                 'payment.redotpay': '💳 RedotPay',
@@ -1528,7 +1562,7 @@
                 'notes.item3': 'Mises à Jour: Toutes les nouvelles fonctionnalités sont automatiquement disponibles dans votre compte',
                 'faq.title': '❓ Questions Fréquemment Posées',
                 'faq.q1.question': 'Q: Quelle est la différence entre compte partagé et personnel?',
-                'faq.q1.answer': 'R: Le compte partagé est moins cher (1200 DZD) mais peut être partagé avec d\'autres utilisateurs. Le compte personnel (2000 DZD) est le vôtre uniquement et plus sécurisé.',
+                'faq.q1.answer': 'R: Le compte partagé est moins cher (1200 DZD) mais peut être partagé avec d\'autres utilisateurs. Le compte personnel (à partir de 2500 DZD) est le vôtre uniquement et plus sécurisé.',
                 'faq.q2.question': 'Q: Puis-je utiliser Gamma sur mon téléphone?',
                 'faq.q2.answer': 'R: Oui! Gamma fonctionne sur tous les appareils - ordinateur, téléphone portable, tablette et navigateurs.',
                 'faq.q3.question': 'Q: Puis-je exporter les présentations vers PowerPoint?',
@@ -1575,6 +1609,49 @@
             });
         }
 
+        function switchGammaTab(tab) {
+            const tabShared = document.getElementById('tab-shared');
+            const tabPrivate = document.getElementById('tab-private');
+            const optsShared = document.getElementById('shared-options');
+            const optsPrivate = document.getElementById('private-options');
+
+            // Reset styles
+            [tabShared, tabPrivate].forEach(t => {
+                t.style.background = 'transparent';
+                t.style.color = 'rgba(255,255,255,0.6)';
+                t.classList.remove('active');
+            });
+
+            // Activate selected
+            const activeTab = tab === 'shared' ? tabShared : tabPrivate;
+            activeTab.style.background = '#6366f1';
+            activeTab.style.color = 'white';
+            activeTab.classList.add('active');
+
+            // Toggle visibility
+            if (tab === 'shared') {
+                optsShared.style.display = 'block';
+                optsPrivate.style.display = 'none';
+                selectGammaDuration('1month');
+            } else {
+                optsShared.style.display = 'none';
+                optsPrivate.style.display = 'flex';
+                // If currently selected is shared, switch to default private
+                const currentBtn = document.querySelector('.gamma-duration-btn.active');
+                if (currentBtn && currentBtn.dataset.duration === '1month') {
+                    selectGammaDuration('private_1month');
+                }
+            }
+        }
+
+        // Initialize tabs
+        // window.onload may be overwritten, so we call it directly if script is at end of body
+        // But here it is in head/body so we wait for DOMContentLoaded or just put it after.
+        // We will call it after DOM load.
+        document.addEventListener('DOMContentLoaded', () => {
+            switchGammaTab('shared');
+        });
+
         let currentDuration = '1month';
 
         function selectGammaDuration(duration) {
@@ -1610,8 +1687,9 @@
         function updatePricesInUI() {
             const isUSD = location.search.includes('USD');
             const prices = {
-                '1month': { dzd: 1200, usd: 6, label_ar: 'شهر واحد', label_en: '1 Month', label_fr: '1 Mois' },
-                '3months': { dzd: 2900, usd: 12, label_ar: '3 أشهر', label_en: '3 Months', label_fr: '3 Mois' }
+                '1month': { dzd: 1200, usd: 6, label_ar: '1 شهر (Pro Shared)', label_en: '1 Month (Pro Shared)', label_fr: '1 Mois (Pro Shared)' },
+                'private_1month': { dzd: 2500, usd: 10, label_ar: '1 شهر (Plus Private)', label_en: '1 Month (Plus Private)', label_fr: '1 Mois (Plus Private)' },
+                'private_pro_1month': { dzd: 3500, usd: 14, label_ar: '1 شهر (Pro Private)', label_en: '1 Month (Pro Private)', label_fr: '1 Mois (Pro Private)' }
             };
 
             const selectedPrice = prices[currentDuration];
@@ -1632,8 +1710,9 @@
         // Generate WhatsApp Link based on selected duration
         function getWhatsAppLink() {
             const prices = {
-                '1month': { dzd: 1200, usd: 6, label_ar: 'شهر واحد', label_en: '1 Month', label_fr: '1 Mois' },
-                '3months': { dzd: 2900, usd: 12, label_ar: '3 أشهر', label_en: '3 Months', label_fr: '3 Mois' }
+                '1month': { dzd: 1200, usd: 6, label_ar: '1 شهر (Pro Shared)', label_en: '1 Month (Pro Shared)', label_fr: '1 Mois (Pro Shared)' },
+                'private_1month': { dzd: 2500, usd: 10, label_ar: '1 شهر (Plus Private)', label_en: '1 Month (Plus Private)', label_fr: '1 Mois (Plus Private)' },
+                'private_pro_1month': { dzd: 3500, usd: 14, label_ar: '1 شهر (Pro Private)', label_en: '1 Month (Pro Private)', label_fr: '1 Mois (Pro Private)' }
             };
             const selectedPrice = prices[currentDuration];
             const durationLabel = selectedPrice[`label_${currentLang}`] || selectedPrice.label_ar;
@@ -1644,7 +1723,7 @@
 
         // Payment Modal Functions
         function openBaridiMobModal() {
-            const prices = { '1month': 1200, '3months': 2900 };
+            const prices = { '1month': 1200, 'private_1month': 2500, 'private_pro_1month': 3500 };
             const val = prices[currentDuration];
             document.getElementById('baridimob-modal').style.display = 'flex';
             if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Gamma.AI', value: val, currency: 'DZD', content_category: 'BaridiMob' }); }
@@ -1662,13 +1741,13 @@
         }
 
         function confirmBaridiMobPayment() {
-            const prices = { '1month': 1200, '3months': 2900 };
+            const prices = { '1month': 1200, 'private_1month': 2500, 'private_pro_1month': 3500 };
             window.location.href = getWhatsAppLink() + ' (BaridiMob)';
             if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'DZD', content_category: 'BaridiMob' }); }
         }
 
         function openCryptoModal() {
-            const prices = { '1month': 6, '3months': 12 };
+            const prices = { '1month': 6, 'private_1month': 10, 'private_pro_1month': 14 };
             const val = prices[currentDuration];
             document.getElementById('crypto-modal').style.display = 'flex';
             if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Gamma.AI', value: val, currency: 'USD', content_category: 'Crypto' }); }
@@ -1692,13 +1771,13 @@
         }
 
         function confirmCryptoPayment() {
-            const prices = { '1month': 6, '3months': 12 };
+            const prices = { '1month': 6, 'private_1month': 10, 'private_pro_1month': 14 };
             window.location.href = getWhatsAppLink() + ' (USDT)';
             if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'USD', content_category: 'Crypto' }); }
         }
 
         function openRedotPayModal() {
-            const prices = { '1month': 6, '3months': 12 };
+            const prices = { '1month': 6, 'private_1month': 10, 'private_pro_1month': 14 };
             const val = prices[currentDuration];
             document.getElementById('redotpay-modal').style.display = 'flex';
             if (typeof fbq !== 'undefined') { fbq('track', 'AddPaymentInfo', { content_name: 'Gamma.AI', value: val, currency: 'USD', content_category: 'RedotPay' }); }
@@ -1716,7 +1795,7 @@
         }
 
         function confirmRedotPayPayment() {
-            const prices = { '1month': 6, '3months': 12 };
+            const prices = { '1month': 6, 'private_1month': 10, 'private_pro_1month': 14 };
             window.location.href = getWhatsAppLink() + ' (RedotPay)';
             if (typeof fbq !== 'undefined') { fbq('track', 'Lead', { content_name: 'Gamma.AI', value: prices[currentDuration], currency: 'USD', content_category: 'RedotPay' }); }
         }

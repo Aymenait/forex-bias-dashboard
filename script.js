@@ -1438,6 +1438,11 @@ const translations = {
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'منصة ذكاء اصطناعي متقدمة لإنشاء العروض التقديمية والمستندات والمواقع بشكل احترافي.',
         'product.gamma.price': 'السعر قريباً',
+        'product.gamma.oneMonth': '1 شهر (Pro Shared)',
+        'product.gamma.privateOneMonth': '1 شهر (Plus Private)',
+        'product.gamma.privateProOneMonth': '1 شهر (Pro Private)',
+        'product.gamma.tabShared': 'مشترك (Shared)',
+        'product.gamma.tabPrivate': 'خاص (Private)',
         'product.gamma.feature1': 'إنشاء عروض تقديمية احترافية بالذكاء الاصطناعي',
         'product.gamma.feature2': 'تصميم مستندات ومواقع تفاعلية',
         'product.gamma.feature3': 'قوالب جاهزة وتخصيص كامل',
@@ -2079,6 +2084,11 @@ const translations = {
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'Advanced AI platform for creating professional presentations, documents and websites.',
         'product.gamma.price': 'Price Coming Soon',
+        'product.gamma.oneMonth': '1 Month (Pro Shared)',
+        'product.gamma.privateOneMonth': '1 Month (Plus Private)',
+        'product.gamma.privateProOneMonth': '1 Month (Pro Private)',
+        'product.gamma.tabShared': 'Shared',
+        'product.gamma.tabPrivate': 'Private',
         'product.gamma.feature1': 'Create professional presentations with AI',
         'product.gamma.feature2': 'Design interactive documents and websites',
         'product.gamma.feature3': 'Ready templates and full customization',
@@ -2731,6 +2741,11 @@ const translations = {
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'Plateforme IA avancée pour créer des présentations, documents et sites web professionnels.',
         'product.gamma.price': 'Prix Bientôt Disponible',
+        'product.gamma.oneMonth': '1 Mois (Pro Shared)',
+        'product.gamma.privateOneMonth': '1 Mois (Plus Private)',
+        'product.gamma.privateProOneMonth': '1 Mois (Pro Private)',
+        'product.gamma.tabShared': 'Partagé',
+        'product.gamma.tabPrivate': 'Privé',
         'product.gamma.feature1': 'Créer des présentations professionnelles avec IA',
         'product.gamma.feature2': 'Concevoir des documents et sites interactifs',
         'product.gamma.feature3': 'Modèles prêts et personnalisation complète',
@@ -3959,55 +3974,7 @@ function selectAdobeDuration(duration) {
     }
 }
 
-// Gamma.AI Duration Selection
-function selectGammaDuration(duration) {
-    document.querySelectorAll('.gamma-duration-btn').forEach(btn => btn.classList.remove('active'));
-    const selectedBtn = document.querySelector(`.gamma-duration-btn[data-duration="${duration}"]`);
-    if (selectedBtn) selectedBtn.classList.add('active');
 
-    const config = PRODUCTS['gamma'];
-    const priceObj = config.durations[duration];
-    const productNames = {
-        '1month': 'Gamma.AI - 1 Month',
-        '3months': 'Gamma.AI - 3 Months'
-    };
-    const name = productNames[duration];
-
-    // Show/hide prices
-    document.querySelectorAll('.gamma-prices').forEach(price => price.style.display = 'none');
-    const priceEl = document.getElementById(`gamma-prices-${duration}`);
-    if (priceEl) priceEl.style.display = 'block';
-
-    // Update order button
-    const orderBtn = document.getElementById('gamma-order-btn');
-    if (orderBtn) orderBtn.setAttribute('data-product', name);
-
-    // Update payment buttons
-    const paymentButtons = ['gamma-usdt-btn', 'gamma-redotpay-btn', 'gamma-baridimob-btn'];
-    paymentButtons.forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn && priceObj) {
-            btn.setAttribute('data-product', name);
-            btn.setAttribute('data-price', priceObj.dzd);
-            btn.setAttribute('data-price-usd', priceObj.usd);
-        }
-    });
-
-    // Sync prices text content
-    if (window.currencyManager) {
-        window.currencyManager.updateAllPrices();
-    }
-
-    // Track CustomizeProduct
-    if (typeof fbq !== 'undefined') {
-        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-        fbq('track', 'CustomizeProduct', {
-            content_name: 'Gamma.AI',
-            variant: duration,
-            currency: currency
-        });
-    }
-}
 
 // Cursor AI Duration Selection
 function selectCursorType(type) {
@@ -4749,6 +4716,146 @@ function orderCanva() {
 
     redirectToWhatsApp(name, price, currency);
 }
+
+// Gamma.AI Tab Switching
+function switchGammaTabMain(tab) {
+    const tabShared = document.getElementById('index-tab-shared');
+    const tabPrivate = document.getElementById('index-tab-private');
+    const optsShared = document.getElementById('index-shared-options');
+    const optsPrivate = document.getElementById('index-private-options');
+
+    if (!tabShared || !tabPrivate) return;
+
+    // Reset styles
+    [tabShared, tabPrivate].forEach(t => {
+        t.style.background = 'transparent';
+        t.style.color = 'rgba(255,255,255,0.6)';
+        t.classList.remove('active');
+    });
+
+    // Activate selected
+    const activeTab = tab === 'shared' ? tabShared : tabPrivate;
+    activeTab.style.background = '#6366f1';
+    activeTab.style.color = 'white';
+    activeTab.classList.add('active');
+
+    // Toggle visibility
+    if (tab === 'shared') {
+        optsShared.style.display = 'block';
+        optsPrivate.style.display = 'none';
+        selectGammaDuration('1month');
+    } else {
+        optsShared.style.display = 'none';
+        optsPrivate.style.display = 'flex';
+        // Select default private option if coming from shared
+        const currentBtn = document.querySelector('.gamma-duration-btn.active');
+        if (currentBtn && currentBtn.dataset.duration === '1month') {
+            selectGammaDuration('private_1month');
+        }
+    }
+}
+
+// Gamma Selection Functions
+function selectGammaDuration(duration) {
+    const buttons = document.querySelectorAll('.gamma-duration-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        // Reset inline styles
+        btn.style.border = '2px solid var(--border-color)';
+        btn.style.background = 'rgba(100, 100, 100, 0.1)';
+        btn.style.color = 'var(--text-secondary)';
+    });
+
+    const selectedBtn = document.querySelector(`.gamma-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+        // Apply active inline styles
+        selectedBtn.style.border = '2px solid var(--accent)';
+        selectedBtn.style.background = 'rgba(255, 213, 111, 0.15)';
+        selectedBtn.style.color = 'var(--text-primary)';
+    }
+
+    const config = PRODUCTS['gamma'];
+    const priceObj = (config && config.durations && config.durations[duration]) ? config.durations[duration] : { dzd: 0, usd: 0 };
+
+    const names = {
+        '1month': 'Gamma.AI - 1 Month (Pro Shared)',
+        'private_1month': 'Gamma.AI - 1 Month (Plus Private)',
+        'private_pro_1month': 'Gamma.AI - 1 Month (Pro Private)'
+    };
+    const name = names[duration] || 'Gamma.AI';
+
+    // Show/hide prices
+    document.querySelectorAll('.gamma-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`gamma-prices-${duration}`);
+    if (priceEl) priceEl.style.display = 'block';
+
+    // Update order button
+    const orderBtn = document.getElementById('gamma-order-btn');
+    if (orderBtn) orderBtn.setAttribute('data-product', name);
+
+    // Update payment buttons
+    const paymentButtons = ['gamma-usdt-btn', 'gamma-redotpay-btn', 'gamma-baridimob-btn'];
+    paymentButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn && priceObj) {
+            btn.setAttribute('data-product', name);
+            btn.setAttribute('data-price', priceObj.dzd);
+            btn.setAttribute('data-price-usd', priceObj.usd);
+        }
+    });
+
+    // Sync prices text content
+    if (window.currencyManager) {
+        window.currencyManager.updateAllPrices();
+    }
+
+    // Track CustomizeProduct
+    if (typeof fbq !== 'undefined') {
+        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+        fbq('track', 'CustomizeProduct', {
+            content_name: 'Gamma.AI',
+            variant: duration,
+            currency: currency
+        });
+    }
+}
+
+function orderGamma() {
+    const activeBtn = document.querySelector('.gamma-duration-btn.active');
+    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
+    const names = {
+        '1month': 'Gamma.AI - 1 Month (Pro Shared)',
+        'private_1month': 'Gamma.AI - 1 Month (Plus Private)',
+        'private_pro_1month': 'Gamma.AI - 1 Month (Pro Private)'
+    };
+    const name = names[duration] || 'Gamma.AI';
+
+    const config = PRODUCTS['gamma'];
+    const priceObj = (config && config.durations && config.durations[duration]) ? config.durations[duration] : { dzd: 0, usd: 0 };
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    redirectToWhatsApp(name, price, currency);
+}
+
+// Make globally available
+window.selectGammaDuration = selectGammaDuration;
+window.orderGamma = orderGamma;
 
 // Gemini Selection Functions
 function selectGeminiDuration(duration) {

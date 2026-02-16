@@ -149,7 +149,8 @@ const PRODUCTS = {
     price_usd: 4.5,
     durations: {
       '1month': { dzd: 1200, usd: 4.5 },
-      '3months': { dzd: 2900, usd: 11.6 }
+      'private_1month': { dzd: 2500, usd: 10 },
+      'private_pro_1month': { dzd: 3500, usd: 14 }
     },
     description: {
       ar: 'حساب Gamma.AI للعروض التقديمية',

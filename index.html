@@ -686,14 +686,43 @@
                                 style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
                                 <span data-i18n="product.adobe.selectDuration">اختر المدة:</span>
                             </p>
-                            <div class="segmented-selector">
-                                <button class="segmented-btn active gamma-duration-btn" data-duration="1month"
-                                    onclick="selectGammaDuration('1month')">
-                                    <span class="btn-label" data-i18n="product.adobe.oneMonth">شهر واحد</span>
+                            <!-- Tabs -->
+                            <div class="account-type-tabs"
+                                style="display: flex; gap: 8px; margin-bottom: 12px; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 8px;">
+                                <button id="index-tab-shared" class="account-tab active gamma-tab"
+                                    onclick="switchGammaTabMain('shared')"
+                                    style="flex: 1; padding: 8px; border-radius: 6px; border: none; background: #6366f1; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.9rem;">
+                                    <span data-i18n="product.gamma.tabShared">Shared</span>
                                 </button>
-                                <button class="segmented-btn gamma-duration-btn" data-duration="3months"
-                                    onclick="selectGammaDuration('3months')">
-                                    <span class="btn-label" data-i18n="product.adobe.threeMonths">3 أشهر</span>
+                                <button id="index-tab-private" class="account-tab gamma-tab"
+                                    onclick="switchGammaTabMain('private')"
+                                    style="flex: 1; padding: 8px; border-radius: 6px; border: none; background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.9rem;">
+                                    <span data-i18n="product.gamma.tabPrivate">Private</span>
+                                </button>
+                            </div>
+
+                            <!-- Shared Options -->
+                            <div id="index-shared-options" style="display: block;">
+                                <button class="segmented-btn active gamma-duration-btn" data-duration="1month"
+                                    onclick="selectGammaDuration('1month')"
+                                    style="width: 100%; border-radius: 8px; padding: 10px; background: rgba(255, 255, 255, 0.05);">
+                                    <span class="btn-label" data-i18n="product.gamma.oneMonth">1 شهر (Pro Shared)</span>
+                                </button>
+                            </div>
+
+                            <!-- Private Options -->
+                            <div id="index-private-options" style="display: none; flex-direction: column; gap: 8px;">
+                                <button class="segmented-btn gamma-duration-btn" data-duration="private_1month"
+                                    onclick="selectGammaDuration('private_1month')"
+                                    style="width: 100%; border-radius: 8px; padding: 10px; background: rgba(255, 255, 255, 0.05);">
+                                    <span class="btn-label" data-i18n="product.gamma.privateOneMonth">1 شهر (Plus
+                                        Private)</span>
+                                </button>
+                                <button class="segmented-btn gamma-duration-btn" data-duration="private_pro_1month"
+                                    onclick="selectGammaDuration('private_pro_1month')"
+                                    style="width: 100%; border-radius: 8px; padding: 10px; background: rgba(255, 255, 255, 0.05);">
+                                    <span class="btn-label" data-i18n="product.gamma.privateProOneMonth">1 شهر (Pro
+                                        Private)</span>
                                 </button>
                             </div>
                         </div>
@@ -702,13 +731,19 @@
                         <div class="gamma-prices" id="gamma-prices-1month">
                             <div class="price-tag" data-price-dzd="1200" data-price-usd="4.5">1200 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
-                                    data-i18n="product.adobe.oneMonth">شهر واحد</span></span>
+                                    data-i18n="product.gamma.oneMonth">1 شهر (Pro Shared)</span></span>
                         </div>
 
-                        <div class="gamma-prices" id="gamma-prices-3months" style="display: none;">
-                            <div class="price-tag" data-price-dzd="2900" data-price-usd="11.6">2900 د.ج</div>
+                        <div class="gamma-prices" id="gamma-prices-private_1month" style="display: none;">
+                            <div class="price-tag" data-price-dzd="2500" data-price-usd="10">2500 د.ج</div>
                             <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
-                                    data-i18n="product.adobe.threeMonths">3 أشهر</span></span>
+                                    data-i18n="product.gamma.privateOneMonth">1 شهر (Plus Private)</span></span>
+                        </div>
+
+                        <div class="gamma-prices" id="gamma-prices-private_pro_1month" style="display: none;">
+                            <div class="price-tag" data-price-dzd="3500" data-price-usd="14">3500 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                    data-i18n="product.gamma.privateProOneMonth">1 شهر (Pro Private)</span></span>
                         </div>
 
 
@@ -738,7 +773,7 @@
                         <a href="gamma_landing" class="discover-btn" data-i18n="product.discoverMore"
                             onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Gamma.AI', content_category: 'ProductClick' }); }">اكتشف
                             المزيد</a>
-                        <button class="order-btn" id="gamma-order-btn" data-product="Gamma.AI - 1 Month"
+                        <button class="order-btn" id="gamma-order-btn" data-product="Gamma.AI - 1 Month (Pro Shared)"
                             data-i18n="product.orderNow" onclick="orderGamma()">اطلب الآن</button>
                     </div>
 
