@@ -101,10 +101,27 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="chat-messages" id="chatMessages">
                 <!-- Initial: Language Selection -->
                 <div class="language-selection" id="languageSelection">
-                    <p style="text-align:center; font-weight:bold; margin-bottom:15px; color:#334155;">Choose your language / اختر لغتك</p>
-                    <button class="lang-btn" data-lang="ar" dir="rtl">🇩🇿 العربية</button>
-                    <button class="lang-btn" data-lang="fr">🇫🇷 Français</button>
-                    <button class="lang-btn" data-lang="en">🇺🇸 English</button>
+                    <div class="lang-header">
+                        <p>Select Language / اختر لغة</p>
+                    </div>
+                    
+                    <button class="lang-btn" data-lang="ar" dir="rtl">
+                        <span class="lang-flag">🇩🇿</span>
+                        <span class="lang-text">العربية</span>
+                        <span class="lang-arrow">←</span>
+                    </button>
+                    
+                    <button class="lang-btn" data-lang="fr">
+                        <span class="lang-flag">🇫🇷</span>
+                        <span class="lang-text">Français</span>
+                        <span class="lang-arrow">→</span>
+                    </button>
+                    
+                    <button class="lang-btn" data-lang="en">
+                        <span class="lang-flag">🇺🇸</span>
+                        <span class="lang-text">English</span>
+                        <span class="lang-arrow">→</span>
+                    </button>
                 </div>
             </div>
 
@@ -131,6 +148,254 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <style>
+            /* --- Main Chat Widget Styles (Restored) --- */
+            .chat-widget-fab {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(135deg, #2563eb, #1e40af);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 9999;
+            }
+            .chat-widget-fab:hover {
+                transform: scale(1.1);
+            }
+            .chat-widget-fab svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .chat-window {
+                position: fixed;
+                bottom: 90px;
+                right: 20px;
+                width: 350px;
+                height: 500px;
+                background: #ffffff;
+                border-radius: 20px;
+                box-shadow: 0 5px 30px rgba(0,0,0,0.15);
+                display: flex;
+                flex-direction: column;
+                z-index: 9999;
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(20px);
+                transition: all 0.3s ease;
+                overflow: hidden;
+            }
+            .chat-window.open {
+                opacity: 1;
+                pointer-events: all;
+                transform: translateY(0);
+            }
+
+            .chat-header {
+                background: linear-gradient(135deg, #0f172a, #334155);
+                color: white;
+                padding: 15px 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-radius: 20px 20px 0 0;
+            }
+            .chat-header h3 {
+                margin: 0;
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            .chat-messages {
+                flex: 1;
+                padding: 20px;
+                overflow-y: auto;
+                background: #f8fafc;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .message {
+                max-width: 80%;
+                padding: 10px 15px;
+                border-radius: 15px;
+                font-size: 14px;
+                line-height: 1.4;
+                word-wrap: break-word;
+            }
+            .message.user {
+                align-self: flex-end;
+                background: #2563eb;
+                color: white;
+                border-bottom-right-radius: 2px;
+            }
+            .message.bot {
+                align-self: flex-start;
+                background: #e2e8f0;
+                color: #1e293b;
+                border-bottom-left-radius: 2px;
+            }
+
+            .chat-input-area {
+                padding: 15px;
+                border-top: 1px solid #e2e8f0;
+                background: white;
+                display: flex;
+                gap: 10px;
+            }
+            .chat-input-area input {
+                flex: 1;
+                border: 1px solid #cbd5e1;
+                border-radius: 25px;
+                padding: 10px 15px;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+            .chat-input-area input:focus {
+                border-color: #2563eb;
+            }
+            .chat-send-btn {
+                background: #2563eb;
+                color: white;
+                border: none;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .chat-send-btn:hover {
+                background: #1d4ed8;
+            }
+
+            /* Typing Indicator */
+            .typing-indicator {
+                display: flex;
+                gap: 5px;
+                padding: 10px;
+                background: #e2e8f0;
+                border-radius: 15px;
+                align-self: flex-start;
+                width: fit-content;
+            }
+            .typing-dot {
+                width: 8px;
+                height: 8px;
+                background: #94a3b8;
+                border-radius: 50%;
+                animation: typing 1.4s infinite ease-in-out;
+            }
+            .typing-dot:nth-child(1) { animation-delay: 0s; }
+            .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+            .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+            @keyframes typing {
+                0%, 100% { transform: scale(1); opacity: 0.5; }
+                50% { transform: scale(1.2); opacity: 1; }
+            }
+
+            /* --- Language & Feedback Styles (Preserved) --- */
+
+            /* Language Header */
+            .lang-header p {
+                text-align: center;
+                font-weight: 800;
+                margin-bottom: 20px;
+                color: #334155;
+                font-size: 16px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+            }
+
+            /* Premium Language Buttons */
+            .lang-btn {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                padding: 16px 20px;
+                border-radius: 16px;
+                width: 100%;
+                margin-bottom: 12px;
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .lang-btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 4px;
+                height: 100%;
+                background: #e2e8f0;
+                transition: background 0.3s;
+            }
+
+            .lang-btn:hover {
+                border-color: #fbbf24;
+                transform: translateY(-3px);
+                box-shadow: 0 12px 20px -5px rgba(251, 191, 36, 0.15);
+                background: #fffcf5; /* Subtle yellow tint */
+            }
+
+            .lang-btn:hover::before {
+                background: #fbbf24; /* Gold bar on hover */
+            }
+
+            .lang-flag {
+                font-size: 28px;
+                margin-right: 15px;
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            }
+
+            .lang-text {
+                font-weight: 700;
+                color: #1e293b;
+                font-size: 17px;
+                flex-grow: 1;
+                text-align: left;
+            }
+            
+            /* RTL specific adjust for Arabic */
+            .lang-btn[dir="rtl"] .lang-text {
+                text-align: right;
+                margin-right: 15px;
+            }
+            .lang-btn[dir="rtl"] .lang-flag {
+                margin-right: 0;
+                margin-left: 15px;
+            }
+            .lang-btn[dir="rtl"] .lang-arrow {
+                transform: rotate(180deg);
+            }
+
+            .lang-arrow {
+                color: #cbd5e1;
+                font-weight: bold;
+                transition: color 0.3s, transform 0.3s;
+            }
+
+            .lang-btn:hover .lang-arrow {
+                color: #fbbf24;
+                transform: translateX(3px);
+            }
+
+            /* Reuse other styles */
             .chat-header-btn {
                 background: none;
                 border: none;
@@ -146,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 opacity: 0.8;
             }
 
-            /* Feedback Modal Styles */
+            /* ... Feedback Modal Styles (Kept same) ... */
             .feedback-modal {
                 position: absolute;
                 top: 60px;
@@ -199,34 +464,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 font-weight: bold;
             }
 
-            .lang-btn {
-                background: linear-gradient(to bottom, #ffffff, #f8fafc);
-                border: 1px solid #cbd5e1;
-                color: #0f172a; /* Dark text for visibility */
-                padding: 14px;
-                border-radius: 12px;
-                width: 100%;
-                margin-bottom: 10px;
-                cursor: pointer;
-                font-family: inherit;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                transition: all 0.2s ease;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                font-size: 16px;
-            }
-            .lang-btn:hover {
-                background: #f1f5f9;
-                border-color: #94a3b8;
-                transform: translateY(-2px);
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            }
-            .lang-btn:active {
-                transform: translateY(0);
-            }
         </style>
     `;
 
