@@ -102,14 +102,14 @@ const PRODUCTS = {
   'chatgpt': {
     id: 'chatgpt',
     name: 'ChatGPT Plus (GPT-4o)',
-    price_dzd: 1200,
-    price_usd: 4.8,
+    price_dzd: 800,
+    price_usd: 3.2,
     durations: {
-      '1month': { dzd: 1200, usd: 4.8 },
-      '3months': { dzd: 3000, usd: 12 },
-      '6months': { dzd: 5500, usd: 22 },
-      'business': { dzd: 1200, usd: 4.8 },
-      'plus': { dzd: 1200, usd: 4.8 }
+      '1month': { dzd: 800, usd: 3.2 },
+      '3months': { dzd: 2200, usd: 8.8 },
+      '6months': { dzd: 4000, usd: 16 },
+      'business': { dzd: 800, usd: 3.2 },
+      'plus': { dzd: 800, usd: 3.2 }
     },
     description: {
       ar: 'اشتراك ChatGPT Plus مع GPT-4o وميزات متقدمة',

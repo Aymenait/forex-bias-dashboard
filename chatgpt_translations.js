@@ -7,7 +7,7 @@ const translations = {
         // Hero Section
         'hero.title': 'ChatGPT (GPT-5.1)',
         'hero.subtitle': 'مساحة عمل خاصة بأمان تام ورسائل غير محدودة',
-        'hero.price': 'فقط بـ 6 دولارات',
+        'hero.price': 'فقط بـ 3.2 دولار',
         'payment.title': 'طرق الدفع المتاحة',
         'cta.button': 'اطلب الآن عبر WhatsApp',
 
@@ -27,9 +27,9 @@ const translations = {
 
         // Features
         'features.title': '✨ كل ما تحصل عليه مع خطة Business',
-        'features.price': 'السعر الرسمي $25/شهر - سعرنا 6$ فقط!',
-        'features.save': 'وفّر $19 شهرياً مقارنة بالسعر الرسمي',
-        'features.final': '🎯 كل هذا بسعر 6 دولارات فقط!',
+        'features.price': 'السعر الرسمي $25/شهر - سعرنا 3.2$ فقط!',
+        'features.save': 'وفّر $21.8 شهرياً مقارنة بالسعر الرسمي',
+        'features.final': '🎯 كل هذا بسعر 3.2 دولار فقط!',
 
         // Trust Section
         'trust.title': '🛡️ ضمان الثقة والخصوصية (عرضنا الحصري)',
@@ -71,7 +71,7 @@ const translations = {
         // Hero Section
         'hero.title': 'ChatGPT (GPT-5.1)',
         'hero.subtitle': 'Private workspace with complete security and unlimited messages',
-        'hero.price': 'Only $6',
+        'hero.price': 'Only $3.2',
         'payment.title': 'Available Payment Methods',
         'cta.button': 'Order Now via WhatsApp',
 
@@ -91,9 +91,9 @@ const translations = {
 
         // Features
         'features.title': '✨ Everything You Get with Business Plan',
-        'features.price': 'Official Price $25/month - Our Price Only $6!',
-        'features.save': 'Save $19 monthly compared to official price',
-        'features.final': '🎯 All this for only $6!',
+        'features.price': 'Official Price $25/month - Our Price Only $3.2!',
+        'features.save': 'Save $21.8 monthly compared to official price',
+        'features.final': '🎯 All this for only $3.2!',
 
         // Trust Section
         'trust.title': '🛡️ Trust & Privacy Guarantee (Our Exclusive Offer)',
@@ -135,7 +135,7 @@ const translations = {
         // Hero Section
         'hero.title': 'ChatGPT (GPT-5.1)',
         'hero.subtitle': 'Espace de travail privé avec sécurité totale et messages illimités',
-        'hero.price': 'Seulement 6$',
+        'hero.price': 'Seulement 3.2$',
         'payment.title': 'Méthodes de paiement disponibles',
         'cta.button': 'Commander maintenant via WhatsApp',
 
@@ -155,9 +155,9 @@ const translations = {
 
         // Features
         'features.title': '✨ Tout ce que vous obtenez avec le plan Business',
-        'features.price': 'Prix officiel 25$/mois - Notre prix seulement 6$!',
-        'features.save': 'Économisez 19$ par mois par rapport au prix officiel',
-        'features.final': '🎯 Tout cela pour seulement 6$!',
+        'features.price': 'Prix officiel 25$/mois - Notre prix seulement 3.2$!',
+        'features.save': 'Économisez 21.8$ par mois par rapport au prix officiel',
+        'features.final': '🎯 Tout cela pour seulement 3.2$!',
 
         // Trust Section
         'trust.title': '🛡️ Garantie de confiance et de confidentialité (Notre offre exclusive)',

@@ -109,6 +109,7 @@
         .text-gradient {
             background: linear-gradient(135deg, #fff 0%, #10a37f 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -257,27 +258,27 @@
                         class="duration-tab active flex-1 md:flex-none px-4 md:px-6 py-3 rounded-xl text-sm font-bold"
                         data-duration="1month">
                         <span data-i18n="duration.1month">شهر واحد</span>
-                        <div class="text-xs opacity-70 mt-1" data-price-key="1month">1200 DA</div>
+                        <div class="text-xs opacity-70 mt-1" data-price-key="1month">800 DA</div>
                     </button>
                     <button onclick="selectDuration('3months')"
                         class="duration-tab flex-1 md:flex-none px-4 md:px-6 py-3 rounded-xl text-sm font-bold"
                         data-duration="3months">
                         <span data-i18n="duration.3months">3 أشهر</span>
-                        <div class="text-xs opacity-70 mt-1" data-price-key="3months">3000 DA</div>
+                        <div class="text-xs opacity-70 mt-1" data-price-key="3months">2200 DA</div>
                     </button>
                     <button onclick="selectDuration('6months')"
                         class="duration-tab flex-1 md:flex-none px-4 md:px-6 py-3 rounded-xl text-sm font-bold text-yellow-400"
                         data-duration="6months">
                         <span data-i18n="duration.6months">6 أشهر</span>
-                        <div class="text-xs opacity-70 mt-1" data-price-key="6months">5500 DA</div>
+                        <div class="text-xs opacity-70 mt-1" data-price-key="6months">4000 DA</div>
                     </button>
                 </div>
 
                 <!-- Price and CTA -->
                 <div class="flex flex-col items-center md:rtl:items-start md:ltr:items-start gap-4">
                     <div class="text-4xl md:text-5xl font-black tracking-tight mb-2 flex items-baseline gap-2">
-                        <span id="main-price-display" class="text-white">1200 DA</span>
-                        <span id="usd-price-display" class="text-2xl text-emerald-400 font-bold">(4.8$)</span>
+                        <span id="main-price-display" class="text-white">800 DA</span>
+                        <span id="usd-price-display" class="text-2xl text-emerald-400 font-bold">(3.2$)</span>
                         <span class="text-lg text-gray-500 font-normal" data-i18n="price.per_month">/ للشهر</span>
                     </div>
                 </div>
@@ -688,9 +689,9 @@
 
         // Data & State
         const prices = {
-            '1month': { dzd: 1200, usd: 4.8, label: '1200 DA' },
-            '3months': { dzd: 3000, usd: 12, label: '3000 DA' },
-            '6months': { dzd: 5500, usd: 22, label: '5500 DA' },
+            '1month': { dzd: 800, usd: 3.2, label: '800 DA' },
+            '3months': { dzd: 2200, usd: 8.8, label: '2200 DA' },
+            '6months': { dzd: 4000, usd: 16, label: '4000 DA' },
         };
         let currentDuration = '1month';
         let currentLang = localStorage.getItem('lang') || 'ar'; // Default language
