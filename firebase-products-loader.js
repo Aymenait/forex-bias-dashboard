@@ -73,6 +73,12 @@ async function loadProductsFromFirebase(db, firebaseModules) {
 function createProductCardHTML(product, lang = 'ar') {
     const name = product.name?.[lang] || product.name?.ar || 'منتج';
     const description = product.description?.[lang] || product.description?.ar || '';
+    // Hotfix: Force correct retail prices for ChatGPT
+    if (product.id === 'chatgpt') {
+        product.priceDZD = 900;
+        product.priceUSD = 3.6;
+    }
+
     const priceDZD = product.priceDZD || 0;
     const priceUSD = product.priceUSD || 0;
     const mediaUrl = product.mediaUrl || '';

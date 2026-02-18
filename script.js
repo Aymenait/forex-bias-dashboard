@@ -4401,19 +4401,33 @@ function selectChatGPTDuration(duration) {
     const selectedBtn = document.querySelector(`.chatgpt-duration-btn[data-duration="${duration}"]`);
     if (selectedBtn) selectedBtn.classList.add('active');
 
-    const config = PRODUCTS['chatgpt'];
-    const priceObj = config.durations[duration];
-    const names = {
-        '1month': 'ChatGPT Premium - 1 Month',
-        '3months': 'ChatGPT Premium - 3 Months',
-        '6months': 'ChatGPT Premium - 6 Months'
+    // Force correct prices
+    const prices = {
+        '1month': { dzd: 900, usd: 3.6, name: 'ChatGPT Premium - 1 Month' },
+        '3months': { dzd: 2200, usd: 8.8, name: 'ChatGPT Premium - 3 Months' },
+        '6months': { dzd: 4000, usd: 16.0, name: 'ChatGPT Premium - 6 Months' }
     };
-    const name = names[duration];
 
-    // Show/hide prices
+    const priceInfo = prices[duration] || prices['1month'];
+    const name = priceInfo.name;
+
+    // Show/hide prices and FORCE update text/attributes
     document.querySelectorAll('.chatgpt-prices').forEach(price => price.style.display = 'none');
     const priceEl = document.getElementById(`chatgpt-prices-${duration}`);
-    if (priceEl) priceEl.style.display = 'block';
+    if (priceEl) {
+        priceEl.style.display = 'block';
+        const tag = priceEl.querySelector('.price-tag');
+        if (tag) {
+            tag.setAttribute('data-price-dzd', priceInfo.dzd);
+            tag.setAttribute('data-price-usd', priceInfo.usd);
+            // Update text immediately to prevent flickering
+            if (window.currencyManager && window.currencyManager.currentCurrency === 'USD') {
+                tag.textContent = '$' + priceInfo.usd;
+            } else {
+                tag.textContent = priceInfo.dzd + ' د.ج';
+            }
+        }
+    }
 
     // Update order button
     const orderBtn = document.getElementById('chatgpt-order-btn');
@@ -4425,14 +4439,14 @@ function selectChatGPTDuration(duration) {
     const paymentButtons = ['chatgpt-crypto-btn', 'chatgpt-redotpay-btn', 'chatgpt-baridimob-btn'];
     paymentButtons.forEach(id => {
         const btn = document.getElementById(id);
-        if (btn && priceObj) {
+        if (btn) {
             btn.setAttribute('data-product', name);
-            btn.setAttribute('data-price', priceObj.dzd);
-            btn.setAttribute('data-price-usd', priceObj.usd);
+            btn.setAttribute('data-price', priceInfo.dzd);
+            btn.setAttribute('data-price-usd', priceInfo.usd);
         }
     });
 
-    // Sync prices text content
+    // Sync prices text content (double check)
     if (window.currencyManager) {
         window.currencyManager.updateAllPrices();
     }
@@ -4459,8 +4473,15 @@ function orderChatGPT() {
     const name = names[duration];
 
     const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-    const config = PRODUCTS['chatgpt'];
-    const priceObj = config.durations[duration];
+
+    // Force correct prices
+    const prices = {
+        '1month': { dzd: 900, usd: 3.6 },
+        '3months': { dzd: 2200, usd: 8.8 },
+        '6months': { dzd: 4000, usd: 16.0 }
+    };
+
+    const priceObj = prices[duration] || prices['1month'];
     const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
     if (typeof fbq !== 'undefined') {

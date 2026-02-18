@@ -305,6 +305,11 @@ class CurrencyManager {
       const priceElements = document.querySelectorAll('[data-price-dzd][data-price-usd]');
 
       priceElements.forEach(element => {
+        // Skip elements that are part of the ChatGPT pricing block to avoid overwriting the hardcoded fix
+        if (element.closest('.chatgpt-prices') || element.id.includes('chatgpt')) {
+          return;
+        }
+
         // Add updating class for smooth transition
         element.classList.add('updating');
 
