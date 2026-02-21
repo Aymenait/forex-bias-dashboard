@@ -37,7 +37,7 @@
         "@type": "Offer",
         "url": "https://marketalgeria.store/perplexity_landing.html",
         "priceCurrency": "DZD",
-        "price": "1200",
+        "price": "800",
         "priceValidUntil": "2026-12-31",
         "availability": "https://schema.org/InStock",
         "shippingDetails": {
@@ -115,7 +115,7 @@
 
         // Detailed ViewContent and InterestedLead
         const isUSD = location.search.includes('USD');
-        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['perplexity'] : { price_dzd: 1200, price_usd: 4.5 };
+        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['perplexity'] : { price_dzd: 800, price_usd: 3 };
 
         fbq('track', 'ViewContent', {
             content_name: productData.name || 'Perplexity AI Pro',
@@ -723,7 +723,7 @@
             <!-- Payment Methods -->
             <div class="payment-grid">
                 <div class="payment-card redotpay-btn" data-product="Perplexity AI Pro" data-price="800"
-                    data-price-usd="3">
+                    data-price-usd="3.2">
                     <div class="payment-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
                         <span style="color: white; font-weight: 700;">Redot</span>
                     </div>
@@ -731,7 +731,7 @@
                 </div>
 
                 <div class="payment-card crypto-pay-btn" data-product="Perplexity AI Pro" data-price="800"
-                    data-price-usd="3">
+                    data-price-usd="3.2">
                     <div class="payment-icon" style="background: linear-gradient(135deg, #1FB6FF, #0D8ABC);">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
                             stroke="white" stroke-width="2">
@@ -744,7 +744,7 @@
                 </div>
 
                 <div class="payment-card baridimob-btn" data-product="Perplexity AI Pro" data-price="800"
-                    data-price-usd="3">
+                    data-price-usd="3.2">
                     <div class="payment-icon" style="background: linear-gradient(135deg, #ffffff, #e5e5e5);">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
                             stroke="#0066cc" stroke-width="2">
@@ -911,7 +911,7 @@
             <p class="feature-text mb-2 text-lg">
                 <span class="line-through text-gray-500">السعر الرسمي: $20/شهر ($240/سنة)</span>
             </p>
-            <p class="text-[#1FB6FF] font-bold text-3xl mb-2">💰 سعرنا: 1200 د.ج للسنة الكاملة!</p>
+            <p class="text-[#1FB6FF] font-bold text-3xl mb-2">💰 سعرنا: 800 د.ج / شهر!</p>
             <p class="feature-text">وفّر أكثر من 20,000 دج سنوياً مقارنة بالسعر الرسمي</p>
         </div>
     </section>
@@ -944,7 +944,7 @@
                 <div class="feature-icon">3️⃣</div>
                 <h4 class="feature-title">مبروك! 🎉</h4>
                 <p class="feature-text">
-                    استمتع بـ <strong style="color: #1FB6FF;">12 شهراً</strong> من الوصول الكامل (Pro Access) بدون
+                    استمتع بـ <strong style="color: #1FB6FF;">شهر كامل</strong> من الوصول الكامل (Pro Access) بدون
                     انقطاع
                 </p>
             </div>
@@ -962,7 +962,7 @@
                     احصل على Perplexity AI Pro بأفضل سعر في الجزائر!
                 </p>
                 <a href="https://wa.me/213782125821?text=????? ???? ?????"
-                    onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Lead', {content_name: 'Perplexity AI Pro', value: 1200, currency: 'DZD'}); fbq('track', 'InitiateCheckout', {content_name: 'Perplexity AI Pro', value: 1200, currency: 'DZD'}); }"
+                    onclick="if(typeof fbq !== 'undefined') { fbq('track', 'Lead', {content_name: 'Perplexity AI Pro', value: 800, currency: 'DZD'}); fbq('track', 'InitiateCheckout', {content_name: 'Perplexity AI Pro', value: 800, currency: 'DZD'}); }"
                     class="bg-[#1FB6FF] text-white font-bold text-xl py-4 px-12 rounded-full hover:bg-[#0D8ABC] transition-all transform hover:scale-105 perplexity-glow shadow-lg inline-block cta-pulse"
                     data-i18n="final.button">
                     🎯 اشترك الآن
@@ -1041,9 +1041,9 @@
                 <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>المنتج:</strong> <span
                         id="crypto-product-name">Perplexity AI Pro</span></p>
                 <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>السعر:</strong> <span
-                        id="crypto-price-dzd">1200</span> د.ج</p>
+                        id="crypto-price-dzd">800</span> د.ج</p>
                 <p style="color: #fff; font-size: 0.9rem;"><strong>المبلغ بالدولار:</strong> <span
-                        id="crypto-price-usd">6</span> USDT</p>
+                        id="crypto-price-usd">3</span> USDT</p>
             </div>
 
             <div style="margin-bottom: 15px;">
@@ -1111,9 +1111,9 @@
                 <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>المنتج:</strong> <span
                         id="redotpay-product-name">Perplexity AI Pro</span></p>
                 <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>السعر:</strong> <span
-                        id="redotpay-price-dzd">1200</span> د.ج</p>
+                        id="redotpay-price-dzd">800</span> د.ج</p>
                 <p style="color: #fff; font-size: 0.9rem;"><strong>المبلغ بالدولار:</strong> <span
-                        id="redotpay-price-usd">6</span> USD</p>
+                        id="redotpay-price-usd">3</span> USD</p>
             </div>
 
             <div
@@ -1161,7 +1161,7 @@
                 <p style="color: #fff; margin-bottom: 5px; font-size: 0.9rem;"><strong>المنتج:</strong> <span
                         id="baridimob-product-name">Perplexity AI Pro</span></p>
                 <p style="color: #fff; font-size: 0.9rem;"><strong>السعر:</strong> <span
-                        id="baridimob-price-dzd">1200</span> د.ج</p>
+                        id="baridimob-price-dzd">800</span> د.ج</p>
             </div>
 
             <div

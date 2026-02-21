@@ -352,17 +352,6 @@ function initializeListeners(db, firebaseModules) {
 
                 snapshot.forEach((docItem) => {
                     const data = docItem.data();
-                    // Hotfix: Force Perplexity data
-                    if (docItem.id === 'perplexity' || (data.name && typeof data.name === 'string' && data.name.toLowerCase().includes('perplexity')) || (data.name && data.name.en && data.name.en.toLowerCase().includes('perplexity'))) {
-                        data.priceDZD = 800;
-                        data.priceUSD = 3;
-                        data.availability = 'available';
-                        data.description = {
-                            ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
-                            en: 'Perplexity AI Pro account for smart search (1 Month)',
-                            fr: 'Compte Perplexity AI Pro pour recherche intelligente (1 Mois)'
-                        };
-                    }
                     products.push({
                         id: docItem.id,
                         ...data
@@ -372,17 +361,6 @@ function initializeListeners(db, firebaseModules) {
                 // تتبع التغييرات
                 snapshot.docChanges().forEach((change) => {
                     const data = change.doc.data();
-                    // Hotfix: Force Perplexity data
-                    if (change.doc.id === 'perplexity' || (data.name && typeof data.name === 'string' && data.name.toLowerCase().includes('perplexity')) || (data.name && data.name.en && data.name.en.toLowerCase().includes('perplexity'))) {
-                        data.priceDZD = 800;
-                        data.priceUSD = 3;
-                        data.availability = 'available';
-                        data.description = {
-                            ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
-                            en: 'Perplexity AI Pro account for smart search (1 Month)',
-                            fr: 'Compte Perplexity AI Pro pour recherche intelligente (1 Mois)'
-                        };
-                    }
                     changes.push({
                         type: change.type, // 'added', 'modified', 'removed'
                         product: {

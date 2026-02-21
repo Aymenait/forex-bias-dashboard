@@ -442,8 +442,8 @@ const CURRENT_PRODUCTS = [
         },
         mediaUrl: 'https://i.imgur.com/mEy5oXF.mp4',
         mediaType: 'video',
-        priceDZD: 1200,
-        priceUSD: 6,
+        priceDZD: 800,
+        priceUSD: 3.2,
         availability: 'available',
         features: [
             {

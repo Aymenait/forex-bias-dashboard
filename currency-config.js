@@ -166,9 +166,9 @@ const PRODUCTS = {
     id: 'perplexity',
     name: 'Perplexity AI Pro',
     price_dzd: 800,
-    price_usd: 3,
+    price_usd: 3.2,
     durations: {
-      '1month': { dzd: 800, usd: 3 }
+      '1month': { dzd: 800, usd: 3.2 }
     },
     description: {
       ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
