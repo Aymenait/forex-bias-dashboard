@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duolingo Family Super - تعلم اللغات باحترافية</title>
+    <meta name="description"
+        content="انضم إلى خطة عائلة Duolingo Super واستمتع بتجربة تعلم لغات خالية من الإعلانات، قلوب غير محدودة، وميزات حصرية. سعر لا يصدق!">
+    <meta name="keywords"
+        content="Duolingo Super, Duolingo Family Plan, Learn Languages, اشتراك دولينجو, تعلم اللغات, تطبيق دولينجو, Duolingo Algeria, بدون إعلانات">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://marketalgeria.store/duolingo_landing.html">
+    <meta name="google" content="notranslate">
+
+    <script>
+        // Early language detection
+        (function () {
+            const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
+            document.documentElement.lang = savedLang;
+            document.documentElement.dir = (savedLang === 'ar') ? 'rtl' : 'ltr';
+
+            const style = document.createElement('style');
+            style.innerHTML = '[data-i18n] { opacity: 0 !important; } .i18n-ready [data-i18n] { opacity: 1 !important; transition: opacity 0.2s ease-in; }';
+            document.head.appendChild(style);
+        })();
+    </script>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://marketalgeria.store/duolingo_landing.html">
+    <meta property="og:title" content="Duolingo Family Super - تعلم اللغات بلا حدود">
+    <meta property="og:description"
+        content="اشتراك Duolingo Super لمدة سنة كاملة بسعر خيالي. قلوب غير محدودة وبدون إعلانات.">
+    <meta property="og:image" content="https://i.pinimg.com/736x/8d/68/70/8d687002027201b7027581728271799a.jpg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2046893892791206');
+        fbq('track', 'PageView');
+        fbq('track', 'ViewContent', { content_name: 'Duolingo Super', content_category: 'Education', value: 2800, currency: 'DZD' });
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
+
+    <style>
+        :root {
+            --duo-green: #58cc02;
+            --duo-dark-green: #46a302;
+            --duo-blue: #ce82ff;
+            /* Super theme color */
+            --bg-dark: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-dark);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(88, 204, 2, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(206, 130, 255, 0.1) 0px, transparent 50%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--duo-green);
+            box-shadow: 0 12px 40px rgba(88, 204, 2, 0.2);
+        }
+
+        /* Hero */
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #58cc02, #ce82ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .price-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(88, 204, 2, 0.2), rgba(206, 130, 255, 0.2));
+            border: 2px solid var(--duo-green);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 700;
+            color: var(--duo-green);
+            margin: 24px 0;
+            box-shadow: 0 0 20px rgba(88, 204, 2, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(88, 204, 2, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(88, 204, 2, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(88, 204, 2, 0);
+            }
+        }
+
+        /* Video Container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto 30px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-iframe {
+            width: 100%;
+            height: 600px;
+            /* Pinterest embed height */
+            border: none;
+        }
+
+        /* Feature Grid */
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--duo-green);
+            margin-bottom: 10px;
+        }
+
+        .feature-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            background: linear-gradient(135deg, var(--duo-green), var(--duo-dark-green));
+            color: white;
+            font-weight: 800;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 6px 0 #2b6b00;
+            margin-top: 20px;
+        }
+
+        .cta-button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #2b6b00;
+        }
+
+        /* Nav */
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body class="i18n-ready">
+    <div id="particles-js"></div>
+
+    <nav class="nav-container">
+        <a href="index.html" class="back-btn" data-i18n="nav.home">← الرئيسية</a>
+
+        <!-- Language Switcher -->
+        <div class="flex gap-2" style="direction: ltr;">
+            <button onclick="changeLanguage('fr')"
+                class="lang-btn text-white px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-all text-sm font-bold"
+                data-lang="fr">FR</button>
+            <button onclick="changeLanguage('en')"
+                class="lang-btn text-white px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-all text-sm font-bold"
+                data-lang="en">EN</button>
+            <button onclick="changeLanguage('ar')"
+                class="lang-btn text-white px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-all text-sm font-bold"
+                data-lang="ar">AR</button>
+        </div>
+    </nav>
+
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 pt-20">
+
+        <!-- Main Content -->
+        <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            <!-- Left Column: Video/Visual -->
+            <div class="order-2 lg:order-1 flex justify-center">
+                <div class="video-container">
+                    <img src="https://i.pinimg.com/originals/98/59/12/98591272861e66a02eecf5dae0450c73.gif"
+                        alt="Duolingo Super Animation" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+
+            <!-- Right Column: Text & Features -->
+            <div class="order-1 lg:order-2 text-center lg:text-right">
+
+
+                <h1 class="hero-title" data-i18n="duo.title">Duolingo Family Super</h1>
+                <p class="text-xl text-gray-300 mb-6" data-i18n="duo.subtitle">
+                    خطة عائلة لمدة 12 شهر - مقعد واحد متاح (1 Slot Available)
+                </p>
+
+                <div class="price-badge" data-i18n="duo.price">2800 دج / سنة</div>
+
+                <div class="glass-card p-6 mb-8 text-right bg-opacity-20">
+                    <h3 class="text-xl font-bold mb-4 text-[#ce82ff]" data-i18n="duo.benefits_title">✨ مميزات الاشتراك:
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 text-xl">❤</span>
+                            <div>
+                                <strong class="block text-white" data-i18n="duo.hearts.title">Unlimited Hearts (قلوب غير
+                                    محدودة)</strong>
+                                <span class="text-sm text-gray-400" data-i18n="duo.hearts.desc">تعلم بدون توقف، واخطأ
+                                    كما تشاء بدون انتظار.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 text-xl">🚫</span>
+                            <div>
+                                <strong class="block text-white" data-i18n="duo.noads.title">No Ads (بدون
+                                    إعلانات)</strong>
+                                <span class="text-sm text-gray-400" data-i18n="duo.noads.desc">تجربة تعلم سلسة تماماً
+                                    بدون أي مقاطعة.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 text-xl">🎯</span>
+                            <div>
+                                <strong class="block text-white" data-i18n="duo.skills.title">Skills Practice (تمارين
+                                    المهارات)</strong>
+                                <span class="text-sm text-gray-400" data-i18n="duo.skills.desc">تمارين مخصصة لتقوية نقاط
+                                    ضعفك.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 text-xl">🔄</span>
+                            <div>
+                                <strong class="block text-white" data-i18n="duo.mistakes.title">Mistakes Review (مراجعة
+                                    الأخطاء)</strong>
+                                <span class="text-sm text-gray-400" data-i18n="duo.mistakes.desc">تعلم من أخطائك مع
+                                    ملاحظات مخصصة.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <p class="text-amber-400 text-sm mb-6 border border-amber-400/30 p-3 rounded-lg bg-amber-400/10">
+                    ⚠ <span data-i18n="duo.note">ملاحظة هامة: بعد الطلب، يرجى إرسال البريد الإلكتروني (Email) أو اسم
+                        المستخدم (User ID) وليس الاسم المستعار (Nick Name).</span>
+                </p>
+
+                <button onclick="orderDuolingo()" class="cta-button w-full md:w-auto" data-i18n="order.now">
+                    اطلب الانضمام للعائلة 🚀
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 30 },
+                "size": { "value": 3 },
+                "color": { "value": "#58cc02" },
+                "line_linked": { "enable": true, "color": "#ffffff", "opacity": 0.1 }
+            }
+        });
+
+        function orderDuolingo() {
+            // This function is defined in script.js, but we'll add a fallback just in case
+            if (typeof window.orderDuolingo === 'function') {
+                window.orderDuolingo();
+            } else {
+                const name = 'Duolingo Family Super - 1 Year';
+                const price = 2800;
+                const currency = 'DZD';
+                const message = `مرحباً 👋\nأريد الانضمام لعائلة Duolingo Super:\nالمنتج: ${name}\nالسعر: ${price} ${currency}\n\nشكراً 🙏`;
+                window.open(`https://wa.me/213782125821?text=${encodeURIComponent(message)}`, '_blank');
+            }
+        }
+    </script>
+</body>
+
+</html>

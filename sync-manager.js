@@ -86,11 +86,11 @@ function getConnectionStatus() {
 function setConnectionStatus(connected) {
     const wasConnected = isConnected;
     isConnected = connected;
-    
+
     // إشعار المستمعين إذا تغيرت الحالة
     if (wasConnected !== connected) {
         notifyConnectionListeners(connected);
-        
+
         if (connected) {
             console.log('✅ تم استعادة الاتصال بـ Firebase');
             hideConnectionWarning();
@@ -111,10 +111,10 @@ function setConnectionStatus(connected) {
 function onConnectionChange(callback) {
     if (typeof callback === 'function') {
         connectionListeners.push(callback);
-        
+
         // إرسال الحالة الحالية فوراً
         callback(isConnected);
-        
+
         // إرجاع دالة إلغاء الاشتراك
         return () => {
             const index = connectionListeners.indexOf(callback);
@@ -123,7 +123,7 @@ function onConnectionChange(callback) {
             }
         };
     }
-    return () => {};
+    return () => { };
 }
 
 /**
@@ -161,7 +161,7 @@ function createConnectionWarningElement() {
             <span class="connection-warning-text" data-lang="fr" style="display:none;">Connexion perdue - Données sauvegardées localement</span>
         </div>
     `;
-    
+
     // إضافة الأنماط
     warning.style.cssText = `
         position: fixed;
@@ -178,7 +178,7 @@ function createConnectionWarningElement() {
         animation: slideDown 0.3s ease-out;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     `;
-    
+
     // إضافة الأنيميشن
     const style = document.createElement('style');
     style.textContent = `
@@ -200,12 +200,12 @@ function createConnectionWarningElement() {
             font-size: 1.2rem;
         }
     `;
-    
+
     if (!document.querySelector('#connection-warning-styles')) {
         style.id = 'connection-warning-styles';
         document.head.appendChild(style);
     }
-    
+
     return warning;
 }
 
@@ -214,19 +214,19 @@ function createConnectionWarningElement() {
  */
 function showConnectionWarning() {
     if (typeof document === 'undefined') return;
-    
+
     if (!connectionWarningElement) {
         connectionWarningElement = createConnectionWarningElement();
         document.body.appendChild(connectionWarningElement);
     }
-    
+
     // تحديث النص حسب اللغة الحالية
     const currentLang = (typeof window !== 'undefined' && window.currentLang) || 'ar';
     const texts = connectionWarningElement.querySelectorAll('.connection-warning-text');
     texts.forEach(text => {
         text.style.display = text.getAttribute('data-lang') === currentLang ? 'inline' : 'none';
     });
-    
+
     connectionWarningElement.style.display = 'block';
     connectionWarningElement.style.animation = 'slideDown 0.3s ease-out';
 }
@@ -257,7 +257,7 @@ function hideConnectionWarning() {
  */
 function cacheProducts(products) {
     if (typeof localStorage === 'undefined') return;
-    
+
     try {
         localStorage.setItem(CACHE_KEY, JSON.stringify(products));
         localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
@@ -273,7 +273,7 @@ function cacheProducts(products) {
  */
 function getCachedProducts() {
     if (typeof localStorage === 'undefined') return [];
-    
+
     try {
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
@@ -289,7 +289,7 @@ function getCachedProducts() {
     } catch (error) {
         console.warn('⚠️ فشل استرجاع المنتجات من التخزين المؤقت:', error.message);
     }
-    
+
     return [];
 }
 
@@ -298,7 +298,7 @@ function getCachedProducts() {
  */
 function clearCache() {
     if (typeof localStorage === 'undefined') return;
-    
+
     try {
         localStorage.removeItem(CACHE_KEY);
         localStorage.removeItem(CACHE_TIMESTAMP_KEY);
@@ -323,59 +323,83 @@ function initializeListeners(db, firebaseModules) {
     if (!db || !firebaseModules) {
         console.warn('⚠️ Firebase غير متاح لتهيئة المستمعين');
         setConnectionStatus(false);
-        return () => {};
+        return () => { };
     }
-    
+
     // إلغاء الاشتراك السابق إذا وجد
     if (unsubscribeProducts) {
         unsubscribeProducts();
     }
-    
+
     try {
         const { collection, onSnapshot, query, where, orderBy } = firebaseModules;
-        
+
         // إنشاء استعلام للمنتجات غير المؤرشفة
         const q = query(
             collection(db, PRODUCTS_V2_COLLECTION),
             where('isArchived', '==', false),
             orderBy('displayOrder', 'asc')
         );
-        
+
         // إعداد المستمع
-        unsubscribeProducts = onSnapshot(q, 
+        unsubscribeProducts = onSnapshot(q,
             (snapshot) => {
                 // الاتصال ناجح
                 setConnectionStatus(true);
-                
+
                 const products = [];
                 const changes = [];
-                
+
                 snapshot.forEach((docItem) => {
+                    const data = docItem.data();
+                    // Hotfix: Force Perplexity data
+                    if (docItem.id === 'perplexity' || (data.name && typeof data.name === 'string' && data.name.toLowerCase().includes('perplexity')) || (data.name && data.name.en && data.name.en.toLowerCase().includes('perplexity'))) {
+                        data.priceDZD = 800;
+                        data.priceUSD = 3;
+                        data.availability = 'available';
+                        data.description = {
+                            ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
+                            en: 'Perplexity AI Pro account for smart search (1 Month)',
+                            fr: 'Compte Perplexity AI Pro pour recherche intelligente (1 Mois)'
+                        };
+                    }
                     products.push({
                         id: docItem.id,
-                        ...docItem.data()
+                        ...data
                     });
                 });
-                
+
                 // تتبع التغييرات
                 snapshot.docChanges().forEach((change) => {
+                    const data = change.doc.data();
+                    // Hotfix: Force Perplexity data
+                    if (change.doc.id === 'perplexity' || (data.name && typeof data.name === 'string' && data.name.toLowerCase().includes('perplexity')) || (data.name && data.name.en && data.name.en.toLowerCase().includes('perplexity'))) {
+                        data.priceDZD = 800;
+                        data.priceUSD = 3;
+                        data.availability = 'available';
+                        data.description = {
+                            ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
+                            en: 'Perplexity AI Pro account for smart search (1 Month)',
+                            fr: 'Compte Perplexity AI Pro pour recherche intelligente (1 Mois)'
+                        };
+                    }
                     changes.push({
                         type: change.type, // 'added', 'modified', 'removed'
                         product: {
                             id: change.doc.id,
-                            ...change.doc.data()
+                            ...data
                         }
                     });
                 });
-                
+
                 // حفظ في التخزين المؤقت
                 cacheProducts(products);
-                
+
                 // معالجة التغييرات بالـ batching
                 if (changes.length > 0) {
                     queueUpdates(changes);
                 }
-                
+
                 console.log('🔄 تم استلام تحديث من Firebase:', products.length, 'منتج');
             },
             (error) => {
@@ -383,14 +407,14 @@ function initializeListeners(db, firebaseModules) {
                 setConnectionStatus(false);
             }
         );
-        
+
         console.log('✅ تم تهيئة مستمعي Firebase Real-time');
         return unsubscribeProducts;
-        
+
     } catch (error) {
         console.error('❌ خطأ في تهيئة المستمعين:', error);
         setConnectionStatus(false);
-        return () => {};
+        return () => { };
     }
 }
 
@@ -417,12 +441,12 @@ function stopListeners() {
  */
 function queueUpdates(updates) {
     pendingUpdates.push(...updates);
-    
+
     // إلغاء المؤقت السابق
     if (batchTimer) {
         clearTimeout(batchTimer);
     }
-    
+
     // إعداد مؤقت جديد لمعالجة التحديثات
     batchTimer = setTimeout(() => {
         processBatchedUpdates();
@@ -434,18 +458,18 @@ function queueUpdates(updates) {
  */
 function processBatchedUpdates() {
     if (pendingUpdates.length === 0) return;
-    
+
     const updates = [...pendingUpdates];
     pendingUpdates = [];
     batchTimer = null;
-    
+
     console.log('📦 معالجة', updates.length, 'تحديث مجمع');
-    
+
     // إشعار المستمعين بالتغييرات
     updates.forEach(update => {
         notifyProductChangeListeners(update.product, update.type);
     });
-    
+
     // تحديث الصفحة الرئيسية
     updateMainPage(updates);
 }
@@ -458,7 +482,7 @@ function processBatchedUpdates() {
 function onProductChange(callback) {
     if (typeof callback === 'function') {
         productChangeListeners.push(callback);
-        
+
         // إرجاع دالة إلغاء الاشتراك
         return () => {
             const index = productChangeListeners.indexOf(callback);
@@ -467,7 +491,7 @@ function onProductChange(callback) {
             }
         };
     }
-    return () => {};
+    return () => { };
 }
 
 /**
@@ -496,23 +520,23 @@ function notifyProductChangeListeners(product, changeType) {
  */
 function updateMainPage(updates) {
     if (typeof document === 'undefined') return;
-    
+
     updates.forEach(update => {
         const { product, type } = update;
-        
+
         switch (type) {
             case 'added':
                 // منتج جديد - قد يحتاج إضافة بطاقة جديدة
                 console.log('➕ منتج جديد:', product.name?.ar || product.id);
                 updateProductCard(product);
                 break;
-                
+
             case 'modified':
                 // تحديث منتج موجود
                 console.log('✏️ تحديث منتج:', product.name?.ar || product.id);
                 updateProductCard(product);
                 break;
-                
+
             case 'removed':
                 // حذف منتج
                 console.log('🗑️ حذف منتج:', product.name?.ar || product.id);
@@ -528,31 +552,31 @@ function updateMainPage(updates) {
  */
 function updateProductCard(product) {
     if (!product) return;
-    
+
     // البحث عن بطاقة المنتج
     const card = findProductCard(product);
-    
+
     if (!card) {
         console.log('⚠️ لم يتم العثور على بطاقة للمنتج:', product.name?.ar || product.id);
         return;
     }
-    
+
     const currentLang = (typeof window !== 'undefined' && window.currentLang) || 'ar';
-    
+
     // تحديث حالة التوفر
     updateAvailabilityUI(card, product, currentLang);
-    
+
     // تحديث الأسعار
     updatePricesUI(card, product);
-    
+
     // تحديث طرق الدفع
     updatePaymentMethodsUI(card, product);
-    
+
     // تحديث الترجمات إذا كان ProductTranslationsUI متاحاً
     if (typeof window !== 'undefined' && window.ProductTranslationsUI) {
         window.ProductTranslationsUI.updateProductCardTranslations(card, product, currentLang);
     }
-    
+
     console.log('✅ تم تحديث بطاقة المنتج:', product.name?.ar || product.id);
 }
 
@@ -563,18 +587,18 @@ function updateProductCard(product) {
  */
 function findProductCard(product) {
     if (!product || typeof document === 'undefined') return null;
-    
+
     // استخدام ProductTranslationsUI إذا كان متاحاً
     if (typeof window !== 'undefined' && window.ProductTranslationsUI) {
         return window.ProductTranslationsUI.findProductCard(product);
     }
-    
+
     // البحث بواسطة data-product-id
     let card = document.querySelector(`[data-product-id="${product.id}"]`);
     if (card) {
         return card.closest('.product-card') || card;
     }
-    
+
     // البحث بواسطة اسم المنتج
     const names = [product.name?.ar, product.name?.en, product.name?.fr].filter(Boolean);
     for (const name of names) {
@@ -583,7 +607,7 @@ function findProductCard(product) {
             return orderBtn.closest('.product-card');
         }
     }
-    
+
     return null;
 }
 
@@ -614,24 +638,24 @@ function removeProductCard(product) {
  */
 function updateAvailabilityUI(card, product, lang) {
     if (!card || !product) return;
-    
+
     // استخدام AvailabilityUI إذا كان متاحاً
     if (typeof window !== 'undefined' && window.AvailabilityUI) {
         window.AvailabilityUI.updateProductAvailabilityUI(card, product.availability, lang);
         return;
     }
-    
+
     // Fallback implementation
     const status = product.availability || 'available';
-    
+
     // إزالة الشارات الموجودة
     const existingBadges = card.querySelectorAll('.status-badge, .coming-soon-badge, .unavailable-badge');
     existingBadges.forEach(badge => badge.remove());
-    
+
     // الحصول على زر الطلب وأزرار الدفع
     const orderBtn = card.querySelector('.order-btn');
     const paymentBtns = card.querySelectorAll('.payment-btn-compact');
-    
+
     if (status === 'available') {
         // تفعيل الأزرار
         if (orderBtn) {
@@ -658,12 +682,12 @@ function updateAvailabilityUI(card, product, lang) {
                 fr: '🔜 Bientôt'
             }
         };
-        
+
         const badgeText = statusTexts[status]?.[lang] || statusTexts[status]?.ar || status;
-        const badgeColor = status === 'unavailable' 
-            ? 'linear-gradient(135deg, #e50914, #b20710)' 
+        const badgeColor = status === 'unavailable'
+            ? 'linear-gradient(135deg, #e50914, #b20710)'
             : 'linear-gradient(135deg, #f59e0b, #d97706)';
-        
+
         // إضافة شارة
         const badge = document.createElement('div');
         badge.className = 'status-badge';
@@ -684,7 +708,7 @@ function updateAvailabilityUI(card, product, lang) {
         `;
         card.style.position = 'relative';
         card.insertBefore(badge, card.firstChild);
-        
+
         // تعطيل الأزرار
         if (orderBtn) {
             orderBtn.disabled = true;
@@ -706,16 +730,19 @@ function updateAvailabilityUI(card, product, lang) {
  */
 function updatePricesUI(card, product) {
     if (!card || !product) return;
-    
+
     const currentCurrency = (typeof window !== 'undefined' && window.currentCurrency) || 'DZD';
-    
+
     // تحديث عناصر السعر
     const priceElements = card.querySelectorAll('.price-tag, [data-price-dzd]');
     priceElements.forEach(el => {
+        // Skip elements marked as no-update
+        if (el.classList.contains('no-currency-update') || el.closest('.no-currency-update')) return;
+
         if (el.hasAttribute('data-price-dzd')) {
             el.setAttribute('data-price-dzd', product.priceDZD || 0);
             el.setAttribute('data-price-usd', product.priceUSD || 0);
-            
+
             // تحديث النص المعروض
             if (currentCurrency === 'USD') {
                 el.textContent = `${product.priceUSD || 0} $`;
@@ -724,7 +751,7 @@ function updatePricesUI(card, product) {
             }
         }
     });
-    
+
     // تحديث أزرار الدفع
     const paymentBtns = card.querySelectorAll('.crypto-pay-btn, .redotpay-btn, .baridimob-btn');
     paymentBtns.forEach(btn => {
@@ -740,28 +767,28 @@ function updatePricesUI(card, product) {
  */
 function updatePaymentMethodsUI(card, product) {
     if (!card || !product || !product.paymentMethods) return;
-    
+
     // استخدام PaymentUI إذا كان متاحاً
     if (typeof window !== 'undefined' && window.PaymentUI) {
         window.PaymentUI.updatePaymentButtonsVisibility(card, product.paymentMethods);
         return;
     }
-    
+
     // Fallback implementation
     const methods = product.paymentMethods;
-    
+
     // USDT button
     const usdtBtn = card.querySelector('.crypto-pay-btn');
     if (usdtBtn) {
         usdtBtn.style.display = methods.usdt ? '' : 'none';
     }
-    
+
     // RedotPay button
     const redotpayBtn = card.querySelector('.redotpay-btn');
     if (redotpayBtn) {
         redotpayBtn.style.display = methods.redotpay ? '' : 'none';
     }
-    
+
     // BaridiMob button
     const baridimobBtn = card.querySelector('.baridimob-btn');
     if (baridimobBtn) {
@@ -779,40 +806,40 @@ function updatePaymentMethodsUI(card, product) {
  */
 async function syncPendingChanges() {
     console.log('🔄 جاري مزامنة التغييرات المعلقة...');
-    
+
     // في هذه الحالة، Firebase يتولى المزامنة تلقائياً
     // لكن يمكننا إعادة تحميل البيانات للتأكد
-    
+
     if (typeof window !== 'undefined' && window.db && window.firebaseModules) {
         try {
             const { collection, getDocs, query, where, orderBy } = window.firebaseModules;
-            
+
             const q = query(
                 collection(window.db, PRODUCTS_V2_COLLECTION),
                 where('isArchived', '==', false),
                 orderBy('displayOrder', 'asc')
             );
-            
+
             const snapshot = await getDocs(q);
             const products = [];
-            
+
             snapshot.forEach((docItem) => {
                 products.push({
                     id: docItem.id,
                     ...docItem.data()
                 });
             });
-            
+
             // تحديث التخزين المؤقت
             cacheProducts(products);
-            
+
             // تحديث الصفحة
             products.forEach(product => {
                 updateProductCard(product);
             });
-            
+
             console.log('✅ تم مزامنة', products.length, 'منتج');
-            
+
         } catch (error) {
             console.error('❌ خطأ في مزامنة التغييرات:', error);
         }
@@ -832,13 +859,13 @@ async function syncPendingChanges() {
  */
 function initSyncManager(db, firebaseModules) {
     console.log('🚀 جاري تهيئة نظام المزامنة...');
-    
+
     // تهيئة المستمعين
     const unsubscribe = initializeListeners(db, firebaseModules);
-    
+
     // إعداد مراقبة الاتصال بالإنترنت
     setupNetworkMonitoring();
-    
+
     // تحميل البيانات المخزنة مؤقتاً كـ fallback
     const cachedProducts = getCachedProducts();
     if (cachedProducts.length > 0 && !isConnected) {
@@ -847,28 +874,28 @@ function initSyncManager(db, firebaseModules) {
             updateProductCard(product);
         });
     }
-    
+
     console.log('✅ تم تهيئة نظام المزامنة بنجاح');
-    
+
     return {
         // Connection management
         getConnectionStatus,
         onConnectionChange,
-        
+
         // Product change listeners
         onProductChange,
-        
+
         // Cache management
         getCachedProducts,
         clearCache,
-        
+
         // Sync control
         syncPendingChanges,
         stopListeners: () => {
             stopListeners();
             stopNetworkMonitoring();
         },
-        
+
         // Manual refresh
         refresh: () => syncPendingChanges()
     };
@@ -885,24 +912,24 @@ let networkCheckInterval = null;
  */
 function setupNetworkMonitoring() {
     if (typeof window === 'undefined') return;
-    
+
     // الاستماع لأحداث الاتصال/قطع الاتصال
     window.addEventListener('online', () => {
         console.log('🌐 الاتصال بالإنترنت متاح');
         setConnectionStatus(true);
     });
-    
+
     window.addEventListener('offline', () => {
         console.log('📴 الاتصال بالإنترنت مقطوع');
         setConnectionStatus(false);
     });
-    
+
     // فحص دوري للاتصال
     networkCheckInterval = setInterval(() => {
         if (typeof navigator !== 'undefined') {
             const wasConnected = isConnected;
             const nowOnline = navigator.onLine;
-            
+
             if (wasConnected && !nowOnline) {
                 setConnectionStatus(false);
             }
@@ -931,26 +958,26 @@ if (typeof window !== 'undefined') {
         initSyncManager,
         initializeListeners,
         stopListeners,
-        
+
         // Connection management
         getConnectionStatus,
         setConnectionStatus,
         onConnectionChange,
         showConnectionWarning,
         hideConnectionWarning,
-        
+
         // Product change listeners
         onProductChange,
-        
+
         // Cache management
         cacheProducts,
         getCachedProducts,
         clearCache,
-        
+
         // Sync functions
         syncPendingChanges,
         queueUpdates,
-        
+
         // UI update functions
         updateMainPage,
         updateProductCard,
@@ -959,11 +986,11 @@ if (typeof window !== 'undefined') {
         updateAvailabilityUI,
         updatePricesUI,
         updatePaymentMethodsUI,
-        
+
         // Network monitoring
         setupNetworkMonitoring,
         stopNetworkMonitoring,
-        
+
         // Constants
         PRODUCTS_V2_COLLECTION,
         CACHE_KEY
@@ -976,26 +1003,26 @@ export {
     initSyncManager,
     initializeListeners,
     stopListeners,
-    
+
     // Connection management
     getConnectionStatus,
     setConnectionStatus,
     onConnectionChange,
     showConnectionWarning,
     hideConnectionWarning,
-    
+
     // Product change listeners
     onProductChange,
-    
+
     // Cache management
     cacheProducts,
     getCachedProducts,
     clearCache,
-    
+
     // Sync functions
     syncPendingChanges,
     queueUpdates,
-    
+
     // UI update functions
     updateMainPage,
     updateProductCard,
@@ -1004,11 +1031,11 @@ export {
     updateAvailabilityUI,
     updatePricesUI,
     updatePaymentMethodsUI,
-    
+
     // Network monitoring
     setupNetworkMonitoring,
     stopNetworkMonitoring,
-    
+
     // Constants
     PRODUCTS_V2_COLLECTION,
     CACHE_KEY

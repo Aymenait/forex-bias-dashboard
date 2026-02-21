@@ -85,6 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // This ensures the onclick handlers work properly on mobile
     orderBtns.forEach(btn => {
         btn.addEventListener('click', function (e) {
+            // Allow default navigation for links with href
+            if (this.tagName === 'A' && this.getAttribute('href') && this.getAttribute('href') !== '#') {
+                return;
+            }
             e.preventDefault();
             const onclickAttr = this.getAttribute('onclick');
             if (onclickAttr) {
@@ -1979,6 +1983,32 @@ const translations = {
         'product.scispace.feature1': 'مساعد قراءة ذكي (Copilot)',
         'product.scispace.feature2': 'أدوات كشف السرقة الأدبية والتلخيص',
         'product.scispace.feature3': 'صادرات بصيغ متنوعة ودعم فني',
+        'product.youtube.title': 'YouTube Premium',
+        'product.youtube.desc': 'استمتع بمشاهدة YouTube بدون إعلانات مع تشغيل في الخلفية وYouTube Music.',
+        'product.youtube.feature1': 'حساب خاص (Private) لمدة شهر',
+        'product.youtube.feature2': 'بدون إعلانات + تشغيل في الخلفية',
+        'product.youtube.feature3': 'يتضمن YouTube Music Premium',
+        'product.youtube.1month': 'شهر واحد',
+        'product.duolingo.title': 'Duolingo Super',
+        'product.duolingo.desc': 'خط العائلة 12 شهر (سنة كاملة) - حسابك الخاص.',
+        'product.duolingo.feature1': 'قلوب غير محدودة (Unlimited Hearts)',
+        'product.duolingo.feature2': 'بدون إعلانات (No Ads)',
+        'product.duolingo.feature3': 'مراجعة الأخطاء وتمارين مخصصة',
+        'product.duolingo.1year': 'سنة كاملة',
+        'duo.title': 'Duolingo Family Super',
+        'duo.subtitle': 'خطة عائلة لمدة 12 شهر - مقعد واحد متاح (1 Slot Available)',
+        'duo.price': '2800 دج / سنة',
+        'duo.benefits_title': '✨ مميزات الاشتراك:',
+        'duo.benefit1.title': 'قلوب غير محدودة (Unlimited Hearts)',
+        'duo.benefit1.desc': 'تعلم بدون توقف، واخطأ كما تشاء بدون انتظار.',
+        'duo.benefit2.title': 'بدون إعلانات (No Ads)',
+        'duo.benefit2.desc': 'تجربة تعلم سلسة تماماً بدون أي مقاطعة.',
+        'duo.benefit3.title': 'تمارين المهارات (Skills Practice)',
+        'duo.benefit3.desc': 'تمارين مخصصة لتقوية نقاط ضعفك.',
+        'duo.benefit4.title': 'مراجعة الأخطاء (Mistakes Review)',
+        'duo.benefit4.desc': 'تعلم من أخطائك مع ملاحظات مخصصة.',
+        'duo.note': '⚠ ملاحظة هامة: بعد الطلب، يرجى إرسال البريد الإلكتروني (Email) أو اسم المستخدم (User ID) وليس الاسم المستعار (Nick Name).',
+        'duo.cta': 'اطلب الانضمام للعائلة 🚀',
         'product.soldOut': 'نفذت الكمية',
         'aria.openMenu': 'فتح القائمة',
         'aria.closeMenu': 'إغلاق القائمة',
@@ -2011,6 +2041,25 @@ const translations = {
         'reviews.gallery.title': 'شاهد رسائل عملائنا الحقيقية',
         'reviews.gallery.subtitle': 'أكثر من 50 محادثة حقيقية تثبت جودة خدماتنا',
         'reviews.gallery.showMore': 'عرض جميع الرسائل (50+)',
+        'duo.title': 'Duolingo Family Super',
+        'duo.subtitle': 'خطة عائلة لمدة 12 شهر - مقعد واحد متاح (1 Slot Available)',
+        'duo.benefits_title': '✨ مميزات الاشتراك:',
+        'order.now': 'اطلب الانضمام للعائلة 🚀',
+        'duo.hearts.title': 'Unlimited Hearts (قلوب غير محدودة)',
+        'duo.hearts.desc': 'تعلم بدون توقف، واخطأ كما تشاء بدون انتظار.',
+        'duo.noads.title': 'No Ads (بدون إعلانات)',
+        'duo.noads.desc': 'تجربة تعلم سلسة تماماً بدون أي مقاطعة.',
+        'duo.skills.title': 'Skills Practice (تمارين المهارات)',
+        'duo.skills.desc': 'تمارين مخصصة لتقوية نقاط ضعفك.',
+        'duo.mistakes.title': 'Mistakes Review (مراجعة الأخطاء)',
+        'duo.mistakes.desc': 'تعلم من أخطائك مع ملاحظات مخصصة.',
+        'duo.note': 'ملاحظة هامة: بعد الطلب، يرجى إرسال البريد الإلكتروني (Email) أو اسم المستخدم (User ID) وليس الاسم المستعار (Nick Name).',
+        'duo.price': '2800 دج / سنة',
+        'product.perplexity.title': 'Perplexity AI Pro',
+        'product.perplexity.desc': 'محرك بحث ذكي مدعوم بالذكاء الاصطناعي مع إجابات دقيقة ومصادر موثوقة (اشتراك شهر).',
+        'product.perplexity.feature1': 'بحث ذكي بالذكاء الاصطناعي',
+        'product.perplexity.feature2': 'إجابات مع مصادر موثوقة',
+        'product.perplexity.feature3': 'استخدام غير محدود للنماذج المتقدمة',
     },
     en: {
         'brand.tagline': 'Digital Solutions That Boost Your Presence',
@@ -2151,6 +2200,32 @@ const translations = {
         'product.crunchyroll.feature1': 'World\'s largest anime library',
         'product.crunchyroll.feature2': 'Ad-free viewing experience',
         'product.crunchyroll.feature3': 'New episodes 1 hour after Japan broadcast',
+        'product.youtube.title': 'YouTube Premium',
+        'product.youtube.desc': 'Enjoy ad-free YouTube with background play and YouTube Music.',
+        'product.youtube.feature1': 'Private Account for 1 Month',
+        'product.youtube.feature2': 'Ad-free + Background Play',
+        'product.youtube.feature3': 'Includes YouTube Music Premium',
+        'product.youtube.1month': '1 Month',
+        'product.duolingo.title': 'Duolingo Super',
+        'product.duolingo.desc': 'Family Plan 12 Months (1 Year) - Your Own Account.',
+        'product.duolingo.feature1': 'Unlimited Hearts',
+        'product.duolingo.feature2': 'No Ads',
+        'product.duolingo.feature3': 'Mistakes Review & Tailored Practice',
+        'product.duolingo.1year': '1 Year',
+        'duo.title': 'Duolingo Family Super',
+        'duo.subtitle': '12-Month Family Plan - 1 Slot Available',
+        'duo.price': '2800 DZD / Year',
+        'duo.benefits_title': '✨ Subscription Features:',
+        'duo.benefit1.title': 'Unlimited Hearts',
+        'duo.benefit1.desc': 'Learn non-stop and make mistakes without waiting.',
+        'duo.benefit2.title': 'No Ads',
+        'duo.benefit2.desc': 'A completely smooth learning experience without interruptions.',
+        'duo.benefit3.title': 'Skills Practice',
+        'duo.benefit3.desc': 'Custom exercises to strengthen your weak points.',
+        'duo.benefit4.title': 'Mistakes Review',
+        'duo.benefit4.desc': 'Learn from your mistakes with personalized feedback.',
+        'duo.note': '⚠ Important: After ordering, please send your Email or User ID, not your Nickname.',
+        'duo.cta': 'Join the Family Now 🚀',
         'product.cursor.title': 'Cursor AI',
         'product.cursor.desc': 'AI-powered smart code editor (Private account available)',
         'product.cursor.feature1': 'Intelligent code completion',
@@ -2246,6 +2321,32 @@ const translations = {
         'veo.period.monthly': 'Full Month Subscription',
         'reviews.customer3.name': 'Mohamed K.',
         'reviews.customer3.text': 'The Real World is the best investment! Valuable content and excellent technical support. Highly recommend.',
+        'product.youtube.title': 'YouTube Premium',
+        'product.youtube.desc': 'Profitez de YouTube sans publicité avec lecture en arrière-plan et YouTube Music.',
+        'product.youtube.feature1': 'Compte Privé pour 1 Mois',
+        'product.youtube.feature2': 'Sans publicité + Lecture en arrière-plan',
+        'product.youtube.feature3': 'Inclus YouTube Music Premium',
+        'product.youtube.1month': '1 Mois',
+        'product.duolingo.title': 'Duolingo Super',
+        'product.duolingo.desc': 'Plan Famille 12 Mois (1 An) - Votre Propre Compte.',
+        'product.duolingo.feature1': 'Vies Illimitées (Unlimited Hearts)',
+        'product.duolingo.feature2': 'Sans Publicité (No Ads)',
+        'product.duolingo.feature3': 'Révision des Erreurs et Pratique Personnalisée',
+        'product.duolingo.1year': '1 An',
+        'duo.title': 'Duolingo Family Super',
+        'duo.subtitle': 'Plan Famille 12 Mois - 1 Place Disponible',
+        'duo.price': '2800 DZD / An',
+        'duo.benefits_title': '✨ Fonctionnalités:',
+        'duo.benefit1.title': 'Vies Illimitées',
+        'duo.benefit1.desc': 'Apprenez sans arrêt et faites des erreurs sans attendre.',
+        'duo.benefit2.title': 'Sans Publicité',
+        'duo.benefit2.desc': 'Une expérience d\'apprentissage fluide sans interruption.',
+        'duo.benefit3.title': 'Pratique des Compétences',
+        'duo.benefit3.desc': 'Exercices personnalisés pour renforcer vos points faibles.',
+        'duo.benefit4.title': 'Révision des Erreurs',
+        'duo.benefit4.desc': 'Apprenez de vos erreurs avec des commentaires personnalisés.',
+        'duo.note': '⚠ Important: Après la commande, veuillez envoyer votre Email ou User ID, pas votre Surnom.',
+        'duo.cta': 'Rejoindre la Famille 🚀',
         'reviews.title': 'Customer Reviews',
         'reviews.subtitle': 'What our customers say about our services',
         'reviews.reviewsCount': 'reviews',
@@ -2668,6 +2769,25 @@ const translations = {
         'reviews.gallery.title': 'See Our Real Customer Messages',
         'reviews.gallery.subtitle': 'Over 50 real conversations proving the quality of our services',
         'reviews.gallery.showMore': 'Show All Messages (50+)',
+        'duo.title': 'Duolingo Family Super',
+        'duo.subtitle': '1-Year Family Plan - Only 1 Slot Available',
+        'duo.benefits_title': '✨ Subscription Features:',
+        'order.now': 'Join the Family Now 🚀',
+        'duo.hearts.title': 'Unlimited Hearts',
+        'duo.hearts.desc': 'Learn without stopping, make as many mistakes as you want without waiting.',
+        'duo.noads.title': 'No Ads',
+        'duo.noads.desc': 'A completely smooth learning experience without interruptions.',
+        'duo.skills.title': 'Skills Practice',
+        'duo.skills.desc': 'Customized exercises to strengthen your weak points.',
+        'duo.mistakes.title': 'Mistakes Review',
+        'duo.mistakes.desc': 'Learn from your mistakes with personalized notes.',
+        'duo.note': 'Important Note: After ordering, please send your Email or User ID (not Nick Name).',
+        'duo.price': '2800 DZD / Year',
+        'product.perplexity.title': 'Perplexity AI Pro',
+        'product.perplexity.desc': 'AI-powered smart search engine with accurate answers and reliable sources (1 Month Sub).',
+        'product.perplexity.feature1': 'Smart AI Search',
+        'product.perplexity.feature2': 'Answers with Reliable Sources',
+        'product.perplexity.feature3': 'Unlimited Use of Advanced Models',
     },
     fr: {
         'brand.tagline': 'Solutions Numériques Qui Renforcent Votre Présence',
@@ -3085,6 +3205,25 @@ const translations = {
         'reviews.gallery.title': 'Découvrez les Vrais Messages de Nos Clients',
         'reviews.gallery.subtitle': 'Plus de 50 conversations réelles prouvant la qualité de nos services',
         'reviews.gallery.showMore': 'Afficher Tous les Messages (50+)',
+        'duo.title': 'Duolingo Family Super',
+        'duo.subtitle': 'Plan Famille 1 An - Seulement 1 Place Disponible',
+        'duo.benefits_title': '✨ Fonctionnalités de l\'abonnement :',
+        'order.now': 'Rejoindre la Famille Maintenant 🚀',
+        'duo.hearts.title': 'Vies Illimitées',
+        'duo.hearts.desc': 'Apprenez sans arrêt, faites autant d\'erreurs que vous voulez sans attendre.',
+        'duo.noads.title': 'Pas de Publicités',
+        'duo.noads.desc': 'Une expérience d\'apprentissage fluide sans aucune interruption.',
+        'duo.skills.title': 'Pratique des Compétences',
+        'duo.skills.desc': 'Des exercices personnalisés pour renforcer vos points faibles.',
+        'duo.mistakes.title': 'Révision des Erreurs',
+        'duo.mistakes.desc': 'Apprenez de vos erreurs avec des notes personnalisées.',
+        'duo.note': 'Note Importante : Après la commande, veuillez envoyer votre Email ou User ID (pas le Nick Name).',
+        'duo.price': '2800 DZD / An',
+        'product.perplexity.title': 'Perplexity AI Pro',
+        'product.perplexity.desc': 'Moteur de recherche intelligent IA avec des réponses précises et des sources fiables (Abo 1 Mois).',
+        'product.perplexity.feature1': 'Recherche Intelligente IA',
+        'product.perplexity.feature2': 'Réponses avec Sources Fiables',
+        'product.perplexity.feature3': 'Utilisation Illimitée des Modèles Avancés',
     }
 };
 
@@ -3174,6 +3313,9 @@ function updatePriceDisplays(lang) {
 
     // Update price-tag elements
     document.querySelectorAll('.price-tag[data-price-dzd]').forEach(element => {
+        // Skip elements marked as no-update
+        if (element.classList.contains('no-currency-update') || element.closest('.no-currency-update')) return;
+
         const priceDZD = element.getAttribute('data-price-dzd');
         if (priceDZD) {
             const formattedPrice = Number(priceDZD).toLocaleString();
@@ -4221,6 +4363,65 @@ function orderScispace() {
     }
 }
 
+// Order Duolingo
+function orderDuolingo() {
+    const name = 'Duolingo Family Super - 12 Months';
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const duoConfig = PRODUCTS['duolingo'];
+    const priceObj = duoConfig.durations['1year'];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
+function orderPerplexity() {
+    const name = 'Perplexity AI Pro - 1 Month';
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['perplexity'];
+    const priceObj = config.durations['1month'];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    window.currentProductName = name;
+    const modal = document.getElementById('contact-choice-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.remove('hidden');
+    }
+}
+
 // Order Adobe
 function orderAdobe() {
     const activeBtn = document.querySelector('.adobe-duration-btn.active');
@@ -4911,6 +5112,54 @@ function orderGemini() {
     redirectToWhatsApp(name, price, currency);
 }
 
+// YouTube Selection Functions
+function orderYouTube() {
+    const name = 'YouTube Premium - 1 Month';
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['youtube'];
+    const priceObj = config.durations['1month'];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    redirectToWhatsApp(name, price, currency);
+}
+
+// Duolingo Selection Functions
+function orderDuolingo() {
+    const name = 'Duolingo Family Super - 1 Year';
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const config = PRODUCTS['duolingo'];
+    const priceObj = config.durations['1year'];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+        fbq('track', 'InitiateCheckout', {
+            content_name: name,
+            value: parseFloat(price),
+            currency: currency
+        });
+    }
+
+    redirectToWhatsApp(name, price, currency);
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // NEW: Central WhatsApp Redirection Function
 // ═══════════════════════════════════════════════════════════════════════════
@@ -5030,6 +5279,8 @@ window.selectCursorType = selectCursorType;
 window.orderCursor = orderCursor;
 window.selectScispaceDuration = selectScispaceDuration;
 window.orderScispace = orderScispace;
+window.orderYouTube = orderYouTube;
+window.orderDuolingo = orderDuolingo;
 window.contactVia = contactVia;
 window.orderProduct = orderProduct;
 

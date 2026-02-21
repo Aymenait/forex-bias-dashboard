@@ -165,12 +165,15 @@ const PRODUCTS = {
   'perplexity': {
     id: 'perplexity',
     name: 'Perplexity AI Pro',
-    price_dzd: 1200,
-    price_usd: 4.5,
+    price_dzd: 800,
+    price_usd: 3,
+    durations: {
+      '1month': { dzd: 800, usd: 3 }
+    },
     description: {
-      ar: 'حساب Perplexity AI Pro للبحث الذكي',
-      en: 'Perplexity AI Pro account for smart search',
-      fr: 'Compte Perplexity AI Pro pour recherche intelligente'
+      ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
+      en: 'Perplexity AI Pro account for smart search (1 Month)',
+      fr: 'Compte Perplexity AI Pro pour recherche intelligente (1 Mois)'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],
@@ -396,6 +399,24 @@ const PRODUCTS = {
       ar: 'مساعد بحث علمي مدعوم بالذكاء الاصطناعي لتسهيل القراءة والكتابة والنشر.',
       en: 'AI-powered scientific research assistant for easier reading, writing, and publishing.',
       fr: 'Assistant de recherche scientifique alimenté par l\'IA pour faciliter la lecture, l\'écriture et la publication.'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'duolingo': {
+    id: 'duolingo',
+    name: 'Duolingo Super',
+    price_dzd: 2800,
+    price_usd: 10,
+    durations: {
+      '1year': { dzd: 2800, usd: 10 }
+    },
+    description: {
+      ar: 'انضم إلى عائلة Duolingo Super واستمتع بتعلم لغات غير محدود.',
+      en: 'Join Duolingo Super Family and enjoy unlimited language learning.',
+      fr: 'Rejoignez la famille Duolingo Super et profitez d\'un apprentissage illimité.'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],

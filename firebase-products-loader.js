@@ -78,6 +78,20 @@ function createProductCardHTML(product, lang = 'ar') {
         product.priceDZD = 900;
         product.priceUSD = 3.6;
     }
+    // Hotfix: Force correct retail prices for Perplexity
+    // Use the resolved 'name' variable which is definitely a string
+    if (product.id === 'perplexity' || (name && name.toLowerCase().includes('perplexity'))) {
+        product.priceDZD = 800;
+        product.priceUSD = 3;
+        product.availability = 'available';
+        product.description = {
+            ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
+            en: 'Perplexity AI Pro account for smart search (1 Month)',
+            fr: 'Compte Perplexity AI Pro pour recherche intelligente (1 Mois)'
+        };
+        // Also force ID to match our config if it differs
+        product.id = 'perplexity';
+    }
 
     const priceDZD = product.priceDZD || 0;
     const priceUSD = product.priceUSD || 0;
@@ -176,7 +190,12 @@ function createProductCardHTML(product, lang = 'ar') {
             ${mediaElement}
             <h3>${name}</h3>
             <p class="description" data-i18n="product.${product.id}.desc">${description}</p>
-            <div class="price-tag" data-price-dzd="${priceDZD}" data-price-usd="${priceUSD}">${priceDZD} د.ج</div>
+            ${product.id === 'perplexity' ?
+            `<div class="price-tag no-currency-update">
+                <span data-price-dzd="${priceDZD}" data-price-usd="${priceUSD}">${priceDZD} د.ج</span>
+                <span style="font-size: 0.8em; font-weight: normal;">/ <span data-i18n="perMonth">شهر</span></span>
+            </div>` :
+            `<div class="price-tag" data-price-dzd="${priceDZD}" data-price-usd="${priceUSD}">${priceDZD} د.ج</div>`}
             
             <div class="payment-methods-row">
                 ${paymentButtons}
@@ -186,7 +205,7 @@ function createProductCardHTML(product, lang = 'ar') {
                 ${featuresHTML}
             </ul>
             ${discoverBtn}
-            <button class="order-btn" data-product="${name}" data-i18n="product.orderNow" onclick="orderProduct('${name}')" ${buttonDisabled}>اطلب الآن</button>
+            <button class="order-btn" data-product="${name}" data-i18n="product.orderNow" onclick="${product.id === 'perplexity' ? 'orderPerplexity()' : `orderProduct('${name}')`}" ${buttonDisabled}>اطلب الآن</button>
         </div>
     `;
 }
