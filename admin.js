@@ -1730,7 +1730,7 @@ function displayPurchasesLog() {
 
     container.innerHTML = filteredPurchases.slice(0, 20).map(p => {
         const date = p.timestamp?.toDate ? p.timestamp.toDate() : new Date(p.createdAt);
-        const dateStr = date.toLocaleDateString('ar-DZ', { day: 'numeric', month: 'short' });
+        const dateStr = date.toLocaleDateString('fr-DZ', { day: 'numeric', month: 'short' });
 
         return `
             <div class="flex justify-between items-center p-2 rounded-lg bg-gray-800/50 text-sm">
@@ -1776,7 +1776,7 @@ function displaySalesLog() {
 
     container.innerHTML = filteredOrders.slice(0, 20).map(o => {
         const date = o.timestamp?.toDate ? o.timestamp.toDate() : new Date(o.createdAt);
-        const dateStr = date.toLocaleDateString('ar-DZ', { day: 'numeric', month: 'short' });
+        const dateStr = date.toLocaleDateString('fr-DZ', { day: 'numeric', month: 'short' });
 
         return `
             <div class="flex justify-between items-center p-2 rounded-lg bg-gray-800/50 text-sm">
@@ -2451,7 +2451,7 @@ function formatDate(timestamp) {
 
     try {
         const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-        return date.toLocaleDateString('ar-DZ', {
+        return date.toLocaleDateString('fr-DZ', {
             year: 'numeric',
             month: 'short',
             day: 'numeric'
@@ -2593,7 +2593,7 @@ function initAdminPage() {
 
     // عرض تاريخ آخر تحديث
     const lastUpdateEl = document.getElementById('last-update');
-    if (lastUpdateEl) lastUpdateEl.textContent = new Date().toLocaleDateString('ar-DZ');
+    if (lastUpdateEl) lastUpdateEl.textContent = new Date().toLocaleDateString('fr-DZ');
 
     // تحميل إعدادات الأمان
     loadSecuritySettings();
@@ -5605,7 +5605,7 @@ function updateDailyVisitorsChart() {
         const dateStr = date.toISOString().split('T')[0];
 
         // اسم اليوم بالعربية
-        const dayName = date.toLocaleDateString('ar-DZ', { weekday: 'short' });
+        const dayName = date.toLocaleDateString('fr-DZ', { weekday: 'short' });
         days.push(dayName);
 
         // عدد الزوار في هذا اليوم
@@ -6519,7 +6519,7 @@ function displayDebtorsTable() {
         let dateStr = '-';
         if (debtor.createdAt) {
             const date = debtor.createdAt?.toDate ? debtor.createdAt.toDate() : new Date(debtor.createdAt);
-            dateStr = date.toLocaleDateString('ar-DZ');
+            dateStr = date.toLocaleDateString('fr-DZ');
         }
 
         // تنسيق المبلغ
@@ -8292,7 +8292,7 @@ function displayWholesaleLogsTable(orders) {
 
         // Format date
         const orderDate = order.createdAt?.toDate ? order.createdAt.toDate() : new Date(order.saleDate || order.createdAt);
-        const dateStr = orderDate.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
+        const dateStr = orderDate.toLocaleDateString('fr-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
 
         return `
             <tr class="border-b border-gray-700/30 hover:bg-gray-800/30">
@@ -8468,7 +8468,7 @@ function displayWalletHistory(transactions) {
 
     tbody.innerHTML = sorted.map(t => {
         const date = t.createdAt instanceof Date ? t.createdAt : new Date(t.createdAt);
-        const dateStr = date.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
+        const dateStr = date.toLocaleDateString('fr-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
 
         const isDeposit = t.type === 'wallet_deposit';
         const typeLabel = isDeposit ? '💰 شحن رصيد' : '🛒 خصم مشتريات';
@@ -8507,7 +8507,7 @@ function displayPurchaseHistory(orders) {
 
     tbody.innerHTML = sorted.map(order => {
         const orderDate = order.createdAt?.toDate ? order.createdAt.toDate() : new Date(order.saleDate || order.createdAt);
-        const dateStr = orderDate.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
+        const dateStr = orderDate.toLocaleDateString('fr-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
 
         let soldPrice = order.sold_price || parseFloat(order.amount) || 0;
         if (!order.sold_price && order.currency === 'USD') {
@@ -8784,7 +8784,7 @@ async function loadLeads() {
             allLeads.push({
                 id: doc.id,
                 ...data,
-                formattedDate: leadDate.toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' })
+                formattedDate: leadDate.toLocaleString('fr-DZ', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })
             });
 
             if (data.product) {

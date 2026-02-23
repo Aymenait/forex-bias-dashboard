@@ -21,6 +21,14 @@
         return true;
     }
 
+    // 💱 Convert any price to USD for Meta Pixel (1 USD = 250 DZD)
+    const DZD_TO_USD_RATE = 250;
+    function toPixelUSD(value, currency) {
+        const num = parseFloat(value) || 0;
+        if (currency === 'USD') return parseFloat(num.toFixed(2));
+        return parseFloat((num / DZD_TO_USD_RATE).toFixed(2)); // DZD → USD
+    }
+
     // 2. Initialize Modal HTML
     document.addEventListener('DOMContentLoaded', () => {
         const modalHTML = `
@@ -35,12 +43,22 @@
                         <h2 id="order-form-title">إتمام الطلب</h2>
                         <p id="order-form-subtitle">يرجى ملء البيانات للمتابعة إلى الواتساب</p>
                     </div>
+
+                    <!-- Product Summary Card -->
+                    <div id="product-summary" class="product-summary">
+                        <span id="summary-product">📦 ---</span>
+                        <span id="summary-price" class="summary-price">💰 ---</span>
+                    </div>
+
                     <form id="order-info-form">
-                        <div class="form-group">
+                        <div class="form-group input-validated">
                             <label for="customer-name" data-i18n="form.name">الاسم الكامل</label>
-                            <input type="text" id="customer-name" name="name" required placeholder="مثال: محمد علي">
+                            <div class="input-wrapper">
+                                <input type="text" id="customer-name" name="name" required placeholder="e.g. John Doe">
+                                <span class="field-status" id="name-status"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group input-validated">
                             <label for="customer-contact" data-i18n="form.contact">رقم الهاتف (أو الإيميل)</label>
                             <div class="phone-input-group">
                                 <select id="country-code" class="country-select">
@@ -79,6 +97,7 @@
                         <input type="hidden" id="order-product-name">
                         <input type="hidden" id="order-product-price">
                         <input type="hidden" id="order-product-currency">
+                        <span class="field-status" id="contact-status" style="display:block; text-align:right; margin-top:4px; font-size:0.75rem;"></span>
                         <button type="submit" class="submit-order-btn">
                             <span data-i18n="form.submit">تأكيد ومتابعة للواتساب</span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -109,6 +128,18 @@
                             <span id="trust-3">دعم 24/7</span>
                         </div>
                     </div>
+
+                    <!-- Success Screen (hidden by default) -->
+                    <div id="success-screen" class="success-screen" style="display:none;">
+                        <div class="success-checkmark">
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="11" stroke="#4ade80" stroke-width="2" opacity="0.3"/>
+                                <path d="M7 12.5l3 3 7-7" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="check-path"/>
+                            </svg>
+                        </div>
+                        <h3 id="success-title">✅ تم بنجاح!</h3>
+                        <p id="success-subtitle">جاري التحويل إلى الواتساب...</p>
+                    </div>
                 </div>
             </div>
         `;
@@ -131,9 +162,75 @@
 
         form.addEventListener('submit', handleOrderSubmit);
 
+        // ── 1. LIVE VALIDATION ──────────────────────────────────────
+        const nameInput = document.getElementById('customer-name');
+        const contactInput = document.getElementById('customer-contact');
+        const nameStatus = document.getElementById('name-status');
+        const contactStatus = document.getElementById('contact-status');
+
+        nameInput.addEventListener('input', () => {
+            const val = nameInput.value.trim();
+            if (val.length >= 2) {
+                nameStatus.textContent = '✅';
+                nameStatus.style.color = '#4ade80';
+            } else if (val.length > 0) {
+                nameStatus.textContent = '❌';
+                nameStatus.style.color = '#f87171';
+            } else {
+                nameStatus.textContent = '';
+            }
+        });
+
+        contactInput.addEventListener('input', () => {
+            const val = contactInput.value.trim();
+            const isEmail = val.includes('@');
+            const isPhone = /^\d{5,}$/.test(val.replace(/\s/g, ''));
+            if (isEmail || isPhone) {
+                contactStatus.textContent = '✅ Looks good!';
+                contactStatus.style.color = '#4ade80';
+            } else if (val.length > 2) {
+                contactStatus.textContent = '❌ Enter a valid phone or email';
+                contactStatus.style.color = '#f87171';
+            } else {
+                contactStatus.textContent = '';
+            }
+        });
+
+        // ── 2. SWIPE TO CLOSE (mobile) ──────────────────────────────
+        const modalContent = modal.querySelector('.modal-content');
+        let touchStartY = 0;
+        modalContent.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        modalContent.addEventListener('touchmove', (e) => {
+            const delta = e.touches[0].clientY - touchStartY;
+            if (delta > 0) {
+                modalContent.style.transform = `translateY(${Math.min(delta * 0.5, 80)}px)`;
+                modalContent.style.transition = 'none';
+            }
+        }, { passive: true });
+        modalContent.addEventListener('touchend', (e) => {
+            const delta = e.changedTouches[0].clientY - touchStartY;
+            modalContent.style.transition = '';
+            modalContent.style.transform = '';
+            if (delta > 80) {
+                modal.classList.remove('show');
+            }
+        });
+
+        // ── 3. AUTO-FILL from localStorage ─────────────────────────
+        const savedName = localStorage.getItem('3ahub_name');
+        const savedContact = localStorage.getItem('3ahub_contact');
+        const savedCode = localStorage.getItem('3ahub_code');
+        if (savedName) nameInput.value = savedName;
+        if (savedContact) contactInput.value = savedContact;
+        if (savedCode) {
+            const sel = document.getElementById('country-code');
+            if (sel) sel.value = savedCode;
+        }
+
         // Setup Translation for the form
         if (window.i18n) {
-            // If i18n is already initialized
             translateForm();
         }
     });
@@ -208,6 +305,21 @@
         document.getElementById('trust-1').innerText = t.trust1;
         document.getElementById('trust-2').innerText = t.trust2;
         document.getElementById('trust-3').innerText = t.trust3;
+
+        // Populate Product Summary Card
+        const productName = document.getElementById('order-product-name')?.value;
+        const price = document.getElementById('order-product-price')?.value;
+        const currency = document.getElementById('order-product-currency')?.value || 'DZD';
+        const currSym = currency === 'USD' ? '$' : 'DA';
+
+        const summaryEl = document.getElementById('product-summary');
+        if (summaryEl && productName && productName !== '') {
+            summaryEl.style.display = '';
+            document.getElementById('summary-product').innerText = '📦 ' + productName;
+            document.getElementById('summary-price').innerText = '💰 ' + price + ' ' + currSym;
+        } else if (summaryEl) {
+            summaryEl.style.display = 'none';
+        }
     }
 
     // Intercept original order functions
@@ -263,14 +375,15 @@
             }
         }
 
-        // 1. Track InitiateCheckout
+        // 1. Track InitiateCheckout (always in USD)
         if (typeof fbq !== 'undefined' && canTrack()) {
+            const usdValue = toPixelUSD(price, currency);
             fbq('track', 'InitiateCheckout', {
                 content_name: productName,
-                value: parseFloat(price) || 0,
-                currency: currency
+                value: usdValue,
+                currency: 'USD'
             });
-            console.log('🎯 Meta Pixel tracked: InitiateCheckout');
+            console.log(`🎯 Meta Pixel InitiateCheckout: $${usdValue} USD (from ${price} ${currency})`);
         }
 
         // 2. Populate and Show Modal
@@ -278,7 +391,13 @@
         document.getElementById('order-product-price').value = price;
         document.getElementById('order-product-currency').value = currency;
 
-        translateForm(); // Refresh translation
+        // Reset: show form, hide success screen
+        document.getElementById('order-info-form').style.display = '';
+        document.querySelector('.modal-footer-text').style.display = '';
+        document.querySelector('.trust-badges').style.display = '';
+        document.getElementById('success-screen').style.display = 'none';
+
+        translateForm(); // Refresh translation + populate product summary
         document.getElementById('order-form-modal').classList.add('show');
     };
 
@@ -397,6 +516,11 @@
         const currency = document.getElementById('order-product-currency').value;
         const fbclid = localStorage.getItem('fbclid') || '';
 
+        // 💾 Save to localStorage for next auto-fill
+        localStorage.setItem('3ahub_name', name);
+        localStorage.setItem('3ahub_contact', contactRaw);
+        localStorage.setItem('3ahub_code', countryCode);
+
         // 1. Send Lead Event to Meta Pixel with Advanced Matching
         if (typeof fbq !== 'undefined') {
             const isEmail = contact.includes('@');
@@ -418,16 +542,17 @@
             // Set user data BEFORE tracking the lead
             fbq('set', 'user_data', userData);
 
+            const usdValueLead = toPixelUSD(price, currency);
             fbq('track', 'Lead', {
                 content_name: productName,
-                value: parseFloat(price) || 0,
-                currency: currency,
+                value: usdValueLead,
+                currency: 'USD',
                 content_category: 'Prospect',
                 page_location: window.location.href
             }, {
                 eventID: 'lead_' + Date.now()
             });
-            console.log('🎯 Meta Pixel Lead tracked with Enhanced Matching');
+            console.log(`🎯 Meta Pixel Lead: $${usdValueLead} USD (from ${price} ${currency})`);
         }
 
         // 2. Save to Firebase
@@ -451,21 +576,48 @@
             }
         }
 
-        // 3. Final Redirect to WhatsApp
+        // 3. Show SUCCESS screen
+        const lang = window.currentLang || 'ar';
+        const successTitles = { ar: '✅ تم بنجاح!', en: '✅ Success!', fr: '✅ Succès !' };
+        const successSubs = { ar: 'جاري التحويل إلى الواتساب...', en: 'Redirecting to WhatsApp...', fr: 'Redirection vers WhatsApp...' };
+
+        // Hide form, show success
+        document.getElementById('order-info-form').style.display = 'none';
+        document.querySelector('.modal-footer-text').style.display = 'none';
+        document.querySelector('.trust-badges').style.display = 'none';
+        document.getElementById('product-summary').style.display = 'none';
+
+        const successScreen = document.getElementById('success-screen');
+        successScreen.style.display = 'flex';
+        document.getElementById('success-title').innerText = successTitles[lang] || successTitles.ar;
+        document.getElementById('success-subtitle').innerText = successSubs[lang] || successSubs.ar;
+
+        // 4. After 1.5s, redirect to WhatsApp
         const currencySym = currency === 'USD' ? '$' : 'DA';
         const messageAr = `مرحباً 👋\nلقد قمت بملء طلب في الموقع:\n\n👤 الاسم: ${name}\n📞 التواصل: ${contact}\n📦 الطلب: ${productName}\n💰 السعر: ${price} ${currencySym}\n\nشكراً 🙏`;
         const messageEn = `Hello 👋\nI just filled an order on the website:\n\n👤 Name: ${name}\n📞 Contact: ${contact}\n📦 Order: ${productName}\n💰 Price: ${price} ${currencySym}\n\nThank you 🙏`;
+        const messageFr = `Bonjour 👋\nJ'ai rempli une commande sur le site :\n\n👤 Nom: ${name}\n📞 Contact: ${contact}\n📦 Commande: ${productName}\n💰 Prix: ${price} ${currencySym}\n\nMerci 🙏`;
 
-        const finalMessage = (window.currentLang === 'ar') ? messageAr : messageEn;
+        const finalMessage = lang === 'fr' ? messageFr : lang === 'en' ? messageEn : messageAr;
 
-        // Hide modal
-        document.getElementById('order-form-modal').classList.remove('show');
+        setTimeout(() => {
+            // 💾 Save last order to localStorage for Thank You page
+            localStorage.setItem('3ahub_last_product', productName);
+            localStorage.setItem('3ahub_last_price', price);
+            localStorage.setItem('3ahub_last_currency', currency);
 
-        // Open WhatsApp
-        window.open(`https://wa.me/213782125821?text=${encodeURIComponent(finalMessage)}`, '_blank');
+            // Redirect to Thank You page — WhatsApp button is there
+            const tyParams = new URLSearchParams({
+                product: productName,
+                price: price,
+                currency: currency,
+                name: name,
+                contact: contactRaw,
+                msg: finalMessage
+            });
+            window.location.href = `thank-you.html?${tyParams.toString()}`;
 
-        // Reset flag after a delay
-        setTimeout(() => { form.dataset.submitting = 'false'; }, 1000);
+        }, 1500);
     }
 
 })();
