@@ -29,6 +29,9 @@
                 <div class="modal-content glass-effect">
                     <button class="modal-close" id="close-order-form">&times;</button>
                     <div class="modal-header">
+                        <div id="social-proof" class="social-proof-badge">
+                            <span>🔥 12 people ordered today</span>
+                        </div>
                         <h2 id="order-form-title">إتمام الطلب</h2>
                         <p id="order-form-subtitle">يرجى ملء البيانات للمتابعة إلى الواتساب</p>
                     </div>
@@ -83,7 +86,29 @@
                             </svg>
                         </button>
                     </form>
-                    <p class="modal-footer-text" data-i18n="form.footer">بياناتك آمنة وتُستخدم لتسهيل عملية طلبك فقط.</p>
+                    <p class="modal-footer-text" data-i18n="form.footer">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-bottom: -2px;">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0110 0v4"></path>
+                        </svg>
+                        بياناتك آمنة ومحمية
+                    </p>
+
+                    <!-- Trust Badges -->
+                    <div class="trust-badges">
+                        <div class="trust-item">
+                            <div class="trust-icon">🛡️</div>
+                            <span id="trust-1">ضمان 100%</span>
+                        </div>
+                        <div class="trust-item">
+                            <div class="trust-icon">⚡</div>
+                            <span id="trust-2">تسليم فوري</span>
+                        </div>
+                        <div class="trust-item">
+                            <div class="trust-icon">💬</div>
+                            <span id="trust-3">دعم 24/7</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -122,8 +147,12 @@
                 contact: 'رقم الهاتف (أو الإيميل)',
                 placeholderContact: '770XXXXXX أو الإيميل',
                 submit: 'تأكيد ومتابعة للواتساب',
-                footer: 'بياناتك آمنة وتُستخدم لتسهيل عملية طلبك فقط.',
-                redirecting: 'جاري التحويل... ⏳'
+                footer: 'بياناتك آمنة ومحمية',
+                redirecting: 'جاري التحويل... ⏳',
+                social: '🔥 طلب ${n} زبائن هذا المنتج اليوم',
+                trust1: 'ضمان 100%',
+                trust2: 'تسليم فوري',
+                trust3: 'دعم 24/7'
             },
             en: {
                 title: 'Complete Order',
@@ -132,8 +161,12 @@
                 contact: 'Phone Number (or Email)',
                 placeholderContact: '770XXXXXX or Email',
                 submit: 'Confirm & Continue to WhatsApp',
-                footer: 'Your data is safe and used only for your order.',
-                redirecting: 'Redirecting... ⏳'
+                footer: 'Your data is safe and protected',
+                redirecting: 'Redirecting... ⏳',
+                social: '🔥 ${n} people ordered this today',
+                trust1: '100% Guarantee',
+                trust2: 'Instant Delivery',
+                trust3: '24/7 Support'
             },
             fr: {
                 title: 'Finaliser la commande',
@@ -142,13 +175,20 @@
                 contact: 'Numéro de téléphone (ou Email)',
                 placeholderContact: '770XXXXXX ou Email',
                 submit: 'Confirmer et continuer sur WhatsApp',
-                footer: 'Vos données sont sécurisées et utilisées uniquement pour votre commande.',
-                redirecting: 'Redirection... ⏳'
+                footer: 'Vos données sont sécurisées et protégées',
+                redirecting: 'Redirection... ⏳',
+                social: '🔥 ${n} personnes ont commandé aujourd\'hui',
+                trust1: 'Garantie 100%',
+                trust2: 'Livraison Instantanée',
+                trust3: 'Support 24/7'
             }
         };
 
         const lang = window.currentLang || 'ar';
         const t = translations[lang] || translations.ar;
+
+        // Random Social Proof Number between 8 and 25
+        const randomNum = Math.floor(Math.random() * (25 - 8 + 1)) + 8;
 
         document.getElementById('order-form-title').innerText = t.title;
         document.getElementById('order-form-subtitle').innerText = t.subtitle;
@@ -156,7 +196,18 @@
         document.querySelector('label[for="customer-contact"]').innerText = t.contact;
         document.getElementById('customer-contact').placeholder = t.placeholderContact;
         document.querySelector('.submit-order-btn span').innerText = t.submit;
-        document.querySelector('.modal-footer-text').innerText = t.footer;
+        document.querySelector('.modal-footer-text').innerHTML = `
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-bottom: -2px;">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0110 0v4"></path>
+            </svg>
+            ${t.footer}
+        `;
+
+        document.getElementById('social-proof').innerText = t.social.replace('${n}', randomNum);
+        document.getElementById('trust-1').innerText = t.trust1;
+        document.getElementById('trust-2').innerText = t.trust2;
+        document.getElementById('trust-3').innerText = t.trust3;
     }
 
     // Intercept original order functions
