@@ -154,11 +154,7 @@
             modal.classList.remove('show');
         });
 
-        window.addEventListener('click', (e) => {
-            if (e.target === modal.querySelector('.modal-overlay')) {
-                modal.classList.remove('show');
-            }
-        });
+        // Overlay click DISABLED — only the ✕ button closes the modal
 
         form.addEventListener('submit', handleOrderSubmit);
 
@@ -197,15 +193,21 @@
         });
 
         // ── 2. SWIPE TO CLOSE (mobile) ──────────────────────────────
+        // Only trigger when user is at the TOP of modal content (scrollTop ≈ 0)
+        // and swipes down a significant distance (150px+)
         const modalContent = modal.querySelector('.modal-content');
         let touchStartY = 0;
+        let swipeEnabled = false;
         modalContent.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
+            // Only allow swipe-close if content is scrolled to the very top
+            swipeEnabled = modalContent.scrollTop <= 5;
         }, { passive: true });
         modalContent.addEventListener('touchmove', (e) => {
+            if (!swipeEnabled) return;
             const delta = e.touches[0].clientY - touchStartY;
             if (delta > 0) {
-                modalContent.style.transform = `translateY(${Math.min(delta * 0.5, 80)}px)`;
+                modalContent.style.transform = `translateY(${Math.min(delta * 0.4, 100)}px)`;
                 modalContent.style.transition = 'none';
             }
         }, { passive: true });
@@ -213,9 +215,11 @@
             const delta = e.changedTouches[0].clientY - touchStartY;
             modalContent.style.transition = '';
             modalContent.style.transform = '';
-            if (delta > 80) {
+            // Require 150px+ deliberate swipe AND must have been at scroll top
+            if (swipeEnabled && delta > 150) {
                 modal.classList.remove('show');
             }
+            swipeEnabled = false;
         });
 
         // ── 3. AUTO-FILL from localStorage ─────────────────────────
