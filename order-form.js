@@ -32,31 +32,6 @@
                         <h2 id="order-form-title">إتمام الطلب</h2>
                         <p id="order-form-subtitle">يرجى ملء البيانات للمتابعة إلى الواتساب</p>
                     </div>
-                    <style>
-                        .phone-input-group {
-                            display: flex;
-                            gap: 8px;
-                            direction: ltr; /* Always LTR for phone numbers */
-                        }
-                        .country-select {
-                            width: 110px;
-                            background: rgba(255, 255, 255, 0.05);
-                            border: 2px solid rgba(255, 255, 255, 0.1);
-                            border-radius: 12px;
-                            color: white;
-                            padding: 10px 5px;
-                            font-size: 14px;
-                            cursor: pointer;
-                        }
-                        .country-select option {
-                            background: #1b1d32;
-                            color: white;
-                        }
-                        .phone-input-group input {
-                            flex: 1;
-                        }
-                        [dir="rtl"] .form-group label { text-align: right; display: block; }
-                    </style>
                     <form id="order-info-form">
                         <div class="form-group">
                             <label for="customer-name" data-i18n="form.name">الاسم الكامل</label>
