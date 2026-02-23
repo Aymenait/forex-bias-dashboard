@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3Ahub - Leads Dashboard</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ffd56f;
+            --accent: #ffb347;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            min-h: 100vh;
+        }
+
+        .glass-effect {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-card {
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128c7e;
+            transform: scale(1.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        #login-overlay {
+            position: fixed;
+            inset: 0;
+            background: #0f172a;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8">
+
+    <!-- Login Overlay -->
+    <div id="login-overlay">
+        <div class="glass-effect p-8 rounded-2xl w-full max-w-md shadow-2xl text-center">
+            <h1 class="text-2xl font-black mb-6" style="color: var(--primary);">دخول لوحة الزبائن (Leads)</h1>
+            <input type="password" id="admin-pass" placeholder="أدخل كلمة المرور"
+                class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 mb-4 text-center focus:outline-none focus:border-yellow-500 transition-all">
+            <button onclick="checkAuth()"
+                class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-slate-900 font-bold py-3 rounded-lg hover:opacity-90 transition-all">
+                فتح اللوحة 🔓
+            </button>
+            <p id="login-error" class="text-red-500 mt-4 text-sm hidden">كلمة المرور غير صحيحة!</p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="main-content" class="hidden max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+            <div>
+                <h1 class="text-3xl font-black mb-2">قائمة الزبائن المهتمين <span class="text-yellow-500">(Leads)</span>
+                </h1>
+                <p class="text-slate-400">هنا ستجد كل الأشخاص الذين ملأوا نموذج الطلب في الموقع.</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="exportToCSV()"
+                    class="bg-green-600/20 text-green-400 px-4 py-2 rounded-lg hover:bg-green-600 hover:text-white transition flex items-center gap-2">تصدير
+                    لفيسبوك 📁</button>
+                <button onclick="location.reload()"
+                    class="glass-effect px-4 py-2 rounded-lg hover:bg-slate-700 transition">تحديث البيانات 🔄</button>
+                <button onclick="logout()"
+                    class="bg-red-500/20 text-red-400 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white transition">خروج
+                    🚪</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="glass-effect p-6 rounded-2xl stat-card">
+                <p class="text-slate-400 text-sm mb-1 text-right">إجمالي الزبائن</p>
+                <h3 class="text-4xl font-black text-yellow-500" id="total-leads">0</h3>
+            </div>
+            <div class="glass-effect p-6 rounded-2xl stat-card">
+                <p class="text-slate-400 text-sm mb-1 text-right">زبائن اليوم</p>
+                <h3 class="text-4xl font-black text-green-500" id="today-leads">0</h3>
+            </div>
+            <div class="glass-effect p-6 rounded-2xl stat-card">
+                <p class="text-slate-400 text-sm mb-1 text-right">أكثر منتج مطلوب</p>
+                <h3 class="text-xl font-bold text-blue-400" id="top-product">--</h3>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="glass-effect p-4 rounded-2xl mb-6 flex flex-col md:flex-row gap-4 items-center">
+            <div class="relative w-full md:w-1/2">
+                <span class="absolute right-3 top-3 text-slate-500">🔍</span>
+                <input type="text" id="search-input" onkeyup="filterLeads()" placeholder="ابحث باسم الزبون أو الهاتف..."
+                    class="w-full bg-slate-800/50 border border-slate-700 rounded-xl py-2 pr-10 pl-4 focus:outline-none focus:border-yellow-500 transition">
+            </div>
+            <select id="product-filter" onchange="filterLeads()"
+                class="w-full md:w-1/4 bg-slate-800/50 border border-slate-700 rounded-xl py-2 px-4 focus:outline-none">
+                <option value="">كل المنتجات</option>
+            </select>
+        </div>
+
+        <!-- Leads Table -->
+        <div class="glass-effect rounded-2xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="bg-slate-800/50 text-slate-300">
+                            <th class="p-4 border-b border-slate-700">التاريخ</th>
+                            <th class="p-4 border-b border-slate-700">الاسم</th>
+                            <th class="p-4 border-b border-slate-700">التواصل / الهاتف</th>
+                            <th class="p-4 border-b border-slate-700">المنتج والخدمة</th>
+                            <th class="p-4 border-b border-slate-700 text-center">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leads-table-body">
+                        <tr>
+                            <td colspan="5" class="p-10 text-center text-slate-500">جاري تحميل البيانات من السحابة...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Your Firebase Config (Found in admin.html)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw",
+            authDomain: "the-real-world-review.firebaseapp.com",
+            projectId: "the-real-world-review",
+            storageBucket: "the-real-world-review.firebasestorage.app",
+            messagingSenderId: "324349726142",
+            appId: "1:324349726142:web:eff2cde07b569ed0a3bdef"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allLeads = [];
+
+        async function fetchLeads() {
+            const tableBody = document.getElementById('leads-table-body');
+            try {
+                const q = query(collection(db, "leads"), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                allLeads = [];
+                const productSet = new Set();
+                let todayCount = 0;
+                const todayStr = new Date().toLocaleDateString();
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const leadDate = data.timestamp ? data.timestamp.toDate() : new Date();
+                    if (leadDate.toLocaleDateString() === todayStr) todayCount++;
+
+                    allLeads.push({
+                        id: doc.id,
+                        ...data,
+                        formattedDate: leadDate.toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' })
+                    });
+                    if (data.product) productSet.add(data.product);
+                });
+
+                updateStats(allLeads, todayCount);
+                populateProductFilter(productSet);
+                renderTable(allLeads);
+
+            } catch (error) {
+                console.error("Error fetching leads:", error);
+                tableBody.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-red-500">حدث خطأ أثناء تحميل البيانات: ${error.message}</td></tr>`;
+            }
+        }
+
+        function renderTable(leads) {
+            const tableBody = document.getElementById('leads-table-body');
+            if (leads.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-slate-500">لا يوجد بيانات حالياً.</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = leads.map(lead => `
+                <tr class="hover:bg-slate-700/30 transition border-b border-slate-700">
+                    <td class="p-4 text-xs text-slate-400">${lead.formattedDate}</td>
+                    <td class="p-4 font-bold text-slate-200">${lead.name || '---'}</td>
+                    <td class="p-4 font-mono text-slate-400 text-sm">${lead.contact || '---'}</td>
+                    <td class="p-4">
+                        <span class="bg-yellow-500/10 text-yellow-500 px-3 py-1 rounded-full text-xs font-bold ring-1 ring-yellow-500/30">
+                            ${lead.product || 'غير محدد'}
+                        </span>
+                        <div class="text-[10px] text-slate-500 mt-1">${lead.source || '/'}</div>
+                    </td>
+                    <td class="p-4 text-center">
+                        <button onclick="contactLead('${lead.name}', '${lead.contact}', '${lead.product}')" 
+                            class="btn-whatsapp px-4 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 mx-auto shadow-lg shadow-green-500/20">
+                            <span>واتساب</span>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats(leads, todayCount) {
+            document.getElementById('total-leads').innerText = leads.length;
+            document.getElementById('today-leads').innerText = todayCount;
+
+            // Find most popular product
+            if (leads.length > 0) {
+                const productCounts = {};
+                leads.forEach(l => {
+                    if (l.product) productCounts[l.product] = (productCounts[l.product] || 0) + 1;
+                });
+                const topProd = Object.keys(productCounts).sort((a, b) => productCounts[b] - productCounts[a])[0];
+                document.getElementById('top-product').innerText = topProd || '--';
+            }
+        }
+
+        function populateProductFilter(products) {
+            const select = document.getElementById('product-filter');
+            products.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p;
+                opt.innerText = p;
+                select.appendChild(opt);
+            });
+        }
+
+        // Expose functions globally
+        window.filterLeads = () => {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const product = document.getElementById('product-filter').value;
+
+            const filtered = allLeads.filter(lead => {
+                const matchSearch = (lead.name?.toLowerCase().includes(search) || lead.contact?.toLowerCase().includes(search));
+                const matchProduct = product === "" || lead.product === product;
+                return matchSearch && matchProduct;
+            });
+            renderTable(filtered);
+        };
+
+        window.contactLead = (name, contact, product) => {
+            const cleanPhone = contact.replace(/\D/g, '');
+            // Only format if it looks like a phone number
+            const phone = (cleanPhone.length >= 9) ? (cleanPhone.startsWith('213') ? cleanPhone : '213' + (cleanPhone.startsWith('0') ? cleanPhone.slice(1) : cleanPhone)) : null;
+
+            const msg = `مرحباً ${name}، رأيت تواصلك في الموقع بخصوص طلب ${product}. كيف يمكنني مساعدتك؟`;
+            const url = phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/213782125821?text=Contact+Lead:+${encodeURIComponent(name)}+${encodeURIComponent(contact)}`;
+            window.open(url, '_blank');
+        };
+
+        window.checkAuth = () => {
+            const pass = document.getElementById('admin-pass').value;
+            // Matches your existing admin password logic
+            if (pass === 'admin123' || pass === localStorage.getItem('adminPassword')) {
+                document.getElementById('login-overlay').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                localStorage.setItem('leads_auth', 'true');
+                fetchLeads();
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        };
+
+        window.logout = () => {
+            localStorage.removeItem('leads_auth');
+            location.reload();
+        };
+
+        window.exportToCSV = () => {
+            if (allLeads.length === 0) return;
+
+            // CSV Header (Email, Phone, First Name, Last Name, External ID) - Meta Format
+            let csv = "email,phone,fn,ln,external_id,product\n";
+
+            allLeads.forEach(lead => {
+                const isEmail = lead.contact?.includes('@');
+                const email = isEmail ? lead.contact : "";
+
+                let phone = "";
+                if (!isEmail) {
+                    phone = lead.contact?.replace(/\D/g, '') || "";
+                    if (phone.length > 0 && !phone.startsWith('213')) {
+                        phone = '213' + (phone.startsWith('0') ? phone.slice(1) : phone);
+                    }
+                }
+
+                const names = (lead.name || "").split(' ');
+                const fn = names[0] || "";
+                const ln = names.slice(1).join(' ') || "";
+
+                csv += `${email},${phone},${fn},${ln},${lead.fbclid || ""},${lead.product}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `3Ahub_Leads_Lookalike_${new Date().toLocaleDateString()}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Auto-login if session exists
+        if (localStorage.getItem('leads_auth') === 'true') {
+            document.getElementById('login-overlay').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            fetchLeads();
+        }
+
+    </script>
+</body>
+
+</html>

@@ -172,6 +172,11 @@
                     data-tab="suppliers" data-i18n="nav_suppliers">
                     📦 الموردين
                 </button>
+                <button onclick="showTab('leads')"
+                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
+                    data-tab="leads" data-i18n="nav_leads">
+                    🚀 الزبائن (Leads)
+                </button>
                 <button onclick="showTab('security')"
                     class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
                     data-tab="security" data-i18n="nav_security">
@@ -1749,6 +1754,64 @@
                 <!-- Debtors Count Info -->
                 <div class="mt-4 text-gray-400 text-center">
                     <span id="debtors-display-count">0</span> مدين
+                </div>
+            </div>
+
+            <!-- ═══════════ Leads Tab (New) ═══════════ -->
+            <div id="tab-leads" class="tab-content hidden">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+                    <h2 class="text-2xl font-bold">🚀 الزبائن المهتمين (Leads)</h2>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button onclick="exportLeadsToCSV()"
+                            class="px-4 py-2 bg-green-600/20 text-green-400 rounded-lg hover:bg-green-600 hover:text-white transition flex items-center gap-2 text-sm font-bold">
+                            📁 تصدير لفيسبوك
+                        </button>
+                        <button onclick="loadLeads()"
+                            class="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition text-sm">
+                            🔄 تحديث
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="stat-card rounded-xl p-4 text-center"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="text-gray-400 text-sm mb-1">إجمالي Leads</div>
+                        <div class="text-2xl font-bold text-yellow-500" id="stat-total-leads">0</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-4 text-center"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="text-gray-400 text-sm mb-1">طلب اليوم</div>
+                        <div class="text-2xl font-bold text-green-500" id="stat-today-leads">0</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-4 text-center"
+                        style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="text-gray-400 text-sm mb-1">أكثر منتج</div>
+                        <div class="text-xl font-bold text-blue-400 truncate px-2" id="stat-top-lead-product">--</div>
+                    </div>
+                </div>
+
+                <div class="rounded-xl overflow-hidden shadow-2xl"
+                    style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right border-collapse">
+                            <thead style="background: rgba(255, 255, 255, 0.05);">
+                                <tr>
+                                    <th class="p-4 border-b border-slate-700">التاريخ</th>
+                                    <th class="p-4 border-b border-slate-700">الاسم</th>
+                                    <th class="p-4 border-b border-slate-700">التواصل</th>
+                                    <th class="p-4 border-b border-slate-700">المنتج</th>
+                                    <th class="p-4 border-b border-slate-700">المصدر</th>
+                                    <th class="p-4 border-b border-slate-700 text-center">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leads-table-body">
+                                <tr>
+                                    <td colspan="6" class="p-10 text-center text-slate-500">جاري التحميل...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

@@ -4322,13 +4322,7 @@ function orderCursor() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // HMA VPN Selection Functions
@@ -4400,13 +4394,7 @@ function orderHma() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // SciSpace Selection Functions
@@ -4478,13 +4466,7 @@ function orderScispace() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // Order Duolingo
@@ -4508,13 +4490,7 @@ function orderDuolingo() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 function orderPerplexity() {
@@ -4537,13 +4513,7 @@ function orderPerplexity() {
         });
     }
 
-    window.currentProductName = name;
-    const modal = document.getElementById('contact-choice-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.classList.remove('hidden');
-    }
+    redirectToWhatsApp(name, price, currency);
 }
 
 // Order Adobe
@@ -5363,10 +5333,7 @@ function orderProduct(productName) {
 function contactVia(platform) {
     if (platform === 'whatsapp') {
         const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-        // Try to estimate price or just send product name
         redirectToWhatsApp(window.currentProductName || 'Product', '', currency);
-    } else if (platform === 'instagram') {
-        window.open('https://www.instagram.com/market_algeriaa', '_blank');
     }
 
     // Close the modal

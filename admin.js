@@ -22,6 +22,7 @@ let allPurchases = [];         // جميع عمليات الشراء
 let allExpenses = [];          // جميع المصاريف
 let allSuppliers = [];         // جميع الموردين ومصادر السلع
 let allResellers = [];         // جميع الموزعين
+let allLeads = [];             // جميع الزبائن المهتمين
 let allTransactions = [];      // سجل التهم (للخزينة)
 let allDebtors = [];           // جميع المديونين
 let startingCapital = 0;       // رأس المال الأساسي
@@ -8752,3 +8753,187 @@ window.filterWholesaleLogs = filterWholesaleLogs;
 window.openResellerHistoryModal = openResellerHistoryModal;
 window.closeResellerHistoryModal = closeResellerHistoryModal;
 window.showHistorySubTab = showHistorySubTab;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// إدارة الزبائن المهتمين - Leads Management
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * تحميل بيانات الزبائن من Firebase
+ */
+async function loadLeads() {
+    if (!window.db || !window.firebaseModules) return;
+    const tableBody = document.getElementById('leads-table-body');
+    if (tableBody) tableBody.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-slate-500">جاري التحميل...</td></tr>';
+
+    try {
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+        const q = query(collection(window.db, "leads"), orderBy("timestamp", "desc"));
+        const querySnapshot = await getDocs(q);
+
+        allLeads = [];
+        let todayCount = 0;
+        const todayStr = new Date().toLocaleDateString();
+        const productCounts = {};
+
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const leadDate = data.timestamp ? data.timestamp.toDate() : new Date();
+            if (leadDate.toLocaleDateString() === todayStr) todayCount++;
+
+            allLeads.push({
+                id: doc.id,
+                ...data,
+                formattedDate: leadDate.toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' })
+            });
+
+            if (data.product) {
+                productCounts[data.product] = (productCounts[data.product] || 0) + 1;
+            }
+        });
+
+        // تحديث الإحصائيات في التبويب
+        const totalEl = document.getElementById('stat-total-leads');
+        const todayEl = document.getElementById('stat-today-leads');
+        const topEl = document.getElementById('stat-top-lead-product');
+
+        if (totalEl) totalEl.innerText = allLeads.length;
+        if (todayEl) todayEl.innerText = todayCount;
+        if (topEl) {
+            const topProd = Object.keys(productCounts).sort((a, b) => productCounts[b] - productCounts[a])[0];
+            topEl.innerText = topProd || '--';
+        }
+
+        renderLeadsTable(allLeads);
+    } catch (error) {
+        console.error("Error loading leads:", error);
+        showToast('❌ خطأ في تحميل بيانات الزبائن', 'error');
+    }
+}
+
+/**
+ * عرض جدول الزبائن
+ */
+function renderLeadsTable(leads) {
+    const tableBody = document.getElementById('leads-table-body');
+    if (!tableBody) return;
+
+    if (leads.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-slate-500">لا يوجد زبائن حالياً.</td></tr>';
+        return;
+    }
+
+    tableBody.innerHTML = leads.map(lead => `
+        <tr class="hover:bg-gray-700/30 transition border-b border-gray-700">
+            <td class="p-4 text-xs text-gray-400">${lead.formattedDate}</td>
+            <td class="p-4 font-bold text-gray-200">${lead.name || '---'}</td>
+            <td class="p-4 font-mono text-gray-400 text-sm italic">${lead.contact || '---'}</td>
+            <td class="p-4">
+                <span class="bg-yellow-500/10 text-yellow-500 px-3 py-1 rounded-full text-xs font-bold ring-1 ring-yellow-500/30">
+                    ${lead.product || 'غير محدد'}
+                </span>
+            </td>
+            <td class="p-4 text-xs text-gray-500 truncate max-w-[150px]" title="${lead.source || '/'}">${lead.source || '/'}</td>
+            <td class="p-4 text-center flex items-center justify-center gap-2">
+                <button onclick="contactLead('${lead.name}', '${lead.contact}', '${lead.product ? lead.product.replace(/'/g, "\\'") : ""}')" 
+                    class="bg-green-600 hover:bg-green-700 text-white px-2 py-1.5 rounded-lg text-[10px] font-bold transition shadow-lg shadow-green-900/10">
+                    واتساب
+                </button>
+                <button onclick="deleteLead('${lead.id}', '${lead.name ? lead.name.replace(/'/g, "\\'") : ""}')" 
+                    class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-2 py-1.5 rounded-lg text-[10px] font-bold transition border border-red-500/20">
+                    حذف 🗑️
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+/**
+ * حذف زبون مهتم
+ */
+async function deleteLead(leadId, leadName) {
+    if (!confirm(`⚠️ هل أنت متأكد من حذف الزبون "${leadName}"؟`)) return;
+
+    try {
+        const { doc, deleteDoc } = window.firebaseModules;
+        await deleteDoc(doc(window.db, "leads", leadId));
+
+        showToast('✅ تم حذف الزبون بنجاح');
+
+        // تحديث القائمة محلياً فوراً
+        allLeads = allLeads.filter(l => l.id !== leadId);
+        renderLeadsTable(allLeads);
+
+        // تحديث إحصائيات الإجمالي
+        const totalEl = document.getElementById('stat-total-leads');
+        if (totalEl) totalEl.innerText = allLeads.length;
+
+    } catch (error) {
+        console.error("Error deleting lead:", error);
+        showToast('❌ خطأ في حذف الزبون', 'error');
+    }
+}
+
+/**
+ * تواصل مع الزبون عبر واتساب
+ */
+function contactLead(name, contact, product) {
+    const cleanPhone = contact.replace(/\D/g, '');
+    let phoneNum = cleanPhone;
+    if (cleanPhone.length >= 9) {
+        phoneNum = cleanPhone.startsWith('213') ? cleanPhone : '213' + (cleanPhone.startsWith('0') ? cleanPhone.slice(1) : cleanPhone);
+    }
+
+    const msg = `مرحباً ${name}، بخصوص طلبك لـ ${product} من موقع 3Ahub. كيف يمكنني مساعدتك؟`;
+    window.open(`https://wa.me/${phoneNum}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+/**
+ * تصدير البيانات بصيغة CSV لفيسبوك
+ */
+function exportLeadsToCSV() {
+    if (allLeads.length === 0) {
+        showToast('⚠️ لا توجد بيانات للتصدير', 'info');
+        return;
+    }
+
+    let csv = "email,phone,fn,ln,external_id,product,date\n";
+    allLeads.forEach(lead => {
+        const isEmail = lead.contact?.includes('@');
+        const email = isEmail ? lead.contact : "";
+        let phone = "";
+        if (!isEmail) {
+            phone = lead.contact?.replace(/\D/g, '') || "";
+            if (phone.length > 0 && !phone.startsWith('213')) {
+                phone = '213' + (phone.startsWith('0') ? phone.slice(1) : phone);
+            }
+        }
+        const names = (lead.name || "").split(' ');
+        csv += `${email},${phone},${names[0] || ""},${names.slice(1).join(' ') || ""},${lead.fbclid || ""},${lead.product},${lead.formattedDate}\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `3Ahub_Leads_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+}
+
+// تحديث وظيفة showTab لدمج تحميل الزبائن
+if (typeof window.originalShowTab === 'undefined') {
+    window.originalShowTab = window.showTab;
+}
+window.showTab = (function (oldShowTab) {
+    return function (tabName) {
+        if (typeof oldShowTab === 'function') oldShowTab(tabName);
+        if (tabName === 'leads') {
+            loadLeads();
+        }
+    };
+})(window.showTab);
+
+// جعل الوظائف متاحة عالمياً
+window.loadLeads = loadLeads;
+window.exportLeadsToCSV = exportLeadsToCSV;
+window.contactLead = contactLead;
+window.deleteLead = deleteLead;
