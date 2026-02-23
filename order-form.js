@@ -555,33 +555,49 @@
             console.log(`🎯 Meta Pixel Lead: $${usdValueLead} USD (from ${price} ${currency})`);
         }
 
-        // 2. Save to Firebase
+        // 2. Save to Firebase — FIRE AND FORGET (no await, runs in background)
         if (window.db) {
-            try {
-                const { collection, addDoc, serverTimestamp } = window.firebaseFirestore || window.firebaseModules;
-                await addDoc(collection(window.db, "leads"), {
-                    name: name,
-                    contact: contact,
-                    product: productName,
-                    price: price,
-                    currency: currency,
-                    fbclid: fbclid,
-                    source: window.location.pathname,
-                    timestamp: serverTimestamp(),
-                    status: 'new'
-                });
-                console.log('📦 Lead saved to Firebase');
-            } catch (err) {
-                console.error('❌ Error saving to Firebase:', err);
-            }
+            const { collection, addDoc, serverTimestamp } = window.firebaseFirestore || window.firebaseModules;
+            addDoc(collection(window.db, "leads"), {
+                name: name,
+                contact: contact,
+                product: productName,
+                price: price,
+                currency: currency,
+                fbclid: fbclid,
+                source: window.location.pathname,
+                timestamp: serverTimestamp(),
+                status: 'new'
+            }).then(() => console.log('📦 Lead saved to Firebase'))
+                .catch(err => console.error('❌ Firebase save error:', err));
         }
 
-        // 3. Show SUCCESS screen
+        // 3. Build Thank You URL immediately (before showing success screen)
+        const currencySym = currency === 'USD' ? '$' : 'DA';
         const lang = window.currentLang || 'ar';
-        const successTitles = { ar: '✅ تم بنجاح!', en: '✅ Success!', fr: '✅ Succès !' };
-        const successSubs = { ar: 'جاري التحويل إلى الواتساب...', en: 'Redirecting to WhatsApp...', fr: 'Redirection vers WhatsApp...' };
+        const messageAr = `مرحباً 👋\nلقد قمت بملء طلب في الموقع:\n\n👤 الاسم: ${name}\n📞 التواصل: ${contact}\n📦 الطلب: ${productName}\n💰 السعر: ${price} ${currencySym}\n\nشكراً 🙏`;
+        const messageEn = `Hello 👋\nI just filled an order on the website:\n\n👤 Name: ${name}\n📞 Contact: ${contact}\n📦 Order: ${productName}\n💰 Price: ${price} ${currencySym}\n\nThank you 🙏`;
+        const messageFr = `Bonjour 👋\nJ'ai rempli une commande sur le site :\n\n👤 Nom: ${name}\n📞 Contact: ${contact}\n📦 Commande: ${productName}\n💰 Prix: ${price} ${currencySym}\n\nMerci 🙏`;
+        const finalMessage = lang === 'fr' ? messageFr : lang === 'en' ? messageEn : messageAr;
 
-        // Hide form, show success
+        localStorage.setItem('3ahub_last_product', productName);
+        localStorage.setItem('3ahub_last_price', price);
+        localStorage.setItem('3ahub_last_currency', currency);
+
+        const tyParams = new URLSearchParams({
+            product: productName,
+            price: price,
+            currency: currency,
+            name: name,
+            contact: contactRaw,
+            msg: finalMessage
+        });
+        const tyUrl = `thank-you.html?${tyParams.toString()}`;
+
+        // 4. Show SUCCESS screen instantly — redirect after 800ms only
+        const successTitles = { ar: '✅ تم بنجاح!', en: '✅ Success!', fr: '✅ Succès !' };
+        const successSubs = { ar: 'جاري التحويل...', en: 'Redirecting...', fr: 'Redirection...' };
+
         document.getElementById('order-info-form').style.display = 'none';
         document.querySelector('.modal-footer-text').style.display = 'none';
         document.querySelector('.trust-badges').style.display = 'none';
@@ -592,32 +608,10 @@
         document.getElementById('success-title').innerText = successTitles[lang] || successTitles.ar;
         document.getElementById('success-subtitle').innerText = successSubs[lang] || successSubs.ar;
 
-        // 4. After 1.5s, redirect to WhatsApp
-        const currencySym = currency === 'USD' ? '$' : 'DA';
-        const messageAr = `مرحباً 👋\nلقد قمت بملء طلب في الموقع:\n\n👤 الاسم: ${name}\n📞 التواصل: ${contact}\n📦 الطلب: ${productName}\n💰 السعر: ${price} ${currencySym}\n\nشكراً 🙏`;
-        const messageEn = `Hello 👋\nI just filled an order on the website:\n\n👤 Name: ${name}\n📞 Contact: ${contact}\n📦 Order: ${productName}\n💰 Price: ${price} ${currencySym}\n\nThank you 🙏`;
-        const messageFr = `Bonjour 👋\nJ'ai rempli une commande sur le site :\n\n👤 Nom: ${name}\n📞 Contact: ${contact}\n📦 Commande: ${productName}\n💰 Prix: ${price} ${currencySym}\n\nMerci 🙏`;
-
-        const finalMessage = lang === 'fr' ? messageFr : lang === 'en' ? messageEn : messageAr;
-
+        // ⚡ Redirect after 800ms (was 1500ms)
         setTimeout(() => {
-            // 💾 Save last order to localStorage for Thank You page
-            localStorage.setItem('3ahub_last_product', productName);
-            localStorage.setItem('3ahub_last_price', price);
-            localStorage.setItem('3ahub_last_currency', currency);
-
-            // Redirect to Thank You page — WhatsApp button is there
-            const tyParams = new URLSearchParams({
-                product: productName,
-                price: price,
-                currency: currency,
-                name: name,
-                contact: contactRaw,
-                msg: finalMessage
-            });
-            window.location.href = `thank-you.html?${tyParams.toString()}`;
-
-        }, 1500);
+            window.location.href = tyUrl;
+        }, 800);
     }
 
 })();

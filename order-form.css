@@ -432,109 +432,160 @@
 }
 
 /* ═══════════════════════════════════════
-   Mobile Responsive (≤ 480px)
+   Mobile Responsive (≤ 600px) — Bottom Sheet Style
    ═══════════════════════════════════════ */
-@media (max-width: 480px) {
-    .modal-content.glass-effect {
-        padding: 22px 18px;
-        width: 92%;
-        border-radius: 18px;
-        max-height: 85vh;
+@media (max-width: 600px) {
+
+    /* On mobile: slide up from bottom like a native sheet */
+    .custom-modal {
+        align-items: flex-end;
+        padding-bottom: 0;
     }
 
+    .modal-content.glass-effect {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 20px 20px 0 0;
+        padding: 18px 16px 24px;
+        max-height: 92dvh;
+        /* dynamic viewport height avoids browser chrome */
+        transform: translateY(40px) scale(1);
+    }
+
+    .custom-modal.show .modal-content {
+        transform: translateY(0) scale(1);
+    }
+
+    /* Drag handle pill at top */
+    .modal-content.glass-effect::after {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 4px;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Header */
     .modal-header {
-        margin-bottom: 14px;
-    }
-
-    .modal-header h2 {
-        font-size: 1.2rem;
-    }
-
-    .modal-header p {
-        font-size: 0.78rem;
-    }
-
-    .social-proof-badge {
-        font-size: 0.65rem;
-        padding: 3px 10px;
-        margin-bottom: 10px;
-    }
-
-    .form-group {
-        margin-bottom: 10px;
-    }
-
-    .form-group label {
-        font-size: 0.78rem;
-        margin-bottom: 4px;
-    }
-
-    .form-group input {
-        padding: 10px 12px;
-        font-size: 0.85rem;
-        border-radius: 8px;
-    }
-
-    .country-select {
-        width: 85px;
-        min-width: 85px;
-        padding: 10px 3px;
-        font-size: 12px;
-        border-radius: 8px;
-    }
-
-    .submit-order-btn {
-        padding: 11px;
-        font-size: 0.88rem;
-        border-radius: 8px;
-    }
-
-    .modal-close {
-        top: 10px;
-        right: 10px;
-        width: 28px;
-        height: 28px;
-        font-size: 16px;
-    }
-
-    .trust-badges {
-        margin-top: 12px;
-        padding-top: 10px;
-    }
-
-    .trust-icon {
-        width: 20px;
-        height: 20px;
-        font-size: 11px;
-    }
-
-    .trust-item span {
-        font-size: 0.55rem;
-    }
-
-    .modal-footer-text {
+        margin-bottom: 12px;
         margin-top: 8px;
-        font-size: 0.65rem;
-    }
-}
-
-/* Extra small phones */
-@media (max-width: 360px) {
-    .modal-content.glass-effect {
-        padding: 18px 14px;
     }
 
     .modal-header h2 {
         font-size: 1.1rem;
+        letter-spacing: -0.3px;
     }
 
-    .phone-input-group {
-        flex-direction: column;
-        gap: 6px;
+    .modal-header p {
+        font-size: 0.76rem;
     }
 
+    /* Social proof badge */
+    .social-proof-badge {
+        font-size: 0.62rem;
+        padding: 3px 9px;
+        margin-bottom: 10px;
+    }
+
+    /* Form fields — compact */
+    .form-group {
+        margin-bottom: 9px;
+    }
+
+    .form-group label {
+        font-size: 0.74rem;
+        margin-bottom: 4px;
+    }
+
+    .form-group input {
+        padding: 9px 11px;
+        font-size: 0.84rem;
+        border-radius: 8px;
+    }
+
+    /* Phone row */
     .country-select {
-        width: 100%;
+        width: 82px;
+        min-width: 82px;
+        padding: 9px 3px;
+        font-size: 12px;
+        border-radius: 8px;
+    }
+
+    /* Product summary */
+    .product-summary {
+        padding: 7px 10px;
+        margin-bottom: 10px;
+    }
+
+    .product-summary span {
+        font-size: 0.72rem;
+    }
+
+    .product-summary .summary-price {
+        font-size: 0.76rem;
+    }
+
+    /* Submit button — ALWAYS one line */
+    .submit-order-btn {
+        padding: 12px 10px;
+        font-size: clamp(0.72rem, 3.5vw, 0.88rem);
+        /* shrinks to fit */
+        border-radius: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 6px;
+    }
+
+    /* Close button */
+    .modal-close {
+        top: 18px;
+        right: 14px;
+        width: 26px;
+        height: 26px;
+        font-size: 15px;
+    }
+
+    /* Trust badges — smaller */
+    .trust-badges {
+        margin-top: 10px;
+        padding-top: 10px;
+        gap: 4px;
+    }
+
+    .trust-icon {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+    }
+
+    .trust-item span {
+        font-size: 0.5rem;
+    }
+
+    .modal-footer-text {
+        margin-top: 7px;
+        font-size: 0.62rem;
+    }
+}
+
+/* Extra small phones (iPhone SE, Galaxy A series) */
+@media (max-width: 375px) {
+    .modal-content.glass-effect {
+        padding: 14px 13px 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 1rem;
+    }
+
+    .submit-order-btn {
+        font-size: clamp(0.65rem, 3.2vw, 0.82rem);
     }
 }
 
