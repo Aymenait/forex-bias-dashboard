@@ -922,29 +922,45 @@
                     فوري</span></div>
             <img src="https://i.imgur.com/QzlT4Ch.gif" alt="The Real World" class="trw-hero-img">
             <h1 style="margin-bottom: 8px;">THE REAL WORLD ACCOUNT<br>VETERAN PLAN — ALL COURSES</h1>
-            <p class="trw-hero-price" style="margin-bottom: 32px; font-size: 1.4rem;">
-                <strong style="color: var(--trw-gold-light);">2900 DZD</strong> / Month
-                <span style="font-size: 1rem; color: var(--trw-text-dim); margin: 0 8px;">|</span>
-                <strong style="color: var(--trw-gold-light);">12 USDT</strong>
-            </p>
+            <div class="trw-hero-pricing"
+                style="margin-bottom: 32px; display: flex; flex-direction: column; align-items: center;">
+                <div dir="ltr"
+                    style="font-size: 2.22rem; font-weight: 900; color: var(--trw-gold-light); margin-bottom: 8px; text-shadow: 0 0 20px rgba(212, 168, 67, 0.2);">
+                    2900 DZD <span style="font-size: 1.1rem; color: var(--trw-text-dim); font-weight: 400;">/
+                        Month</span>
+                </div>
+                <div
+                    style="font-size: 1.3rem; color: var(--trw-text-dim); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    <span style="opacity: 0.6;">أو</span>
+                    <span dir="ltr"
+                        style="color: var(--trw-gold-light); font-weight: 800; border-bottom: 1px dashed rgba(212,168,67,0.3);">12
+                        USDT</span>
+                </div>
+            </div>
 
             <!-- Payment Methods -->
-            <div class="trw-payments">
-                <a href="javascript:void(0)" class="trw-pay-btn redotpay-btn payment-method-btn"
-                    data-product="The Real World Account - Veteran Plan" data-price="2900" data-price-usd="12">
-                    <div class="trw-pay-icon trw-pay-redot">Redot</div>
-                    <span>RedotPay</span>
-                </a>
-                <a href="javascript:void(0)" class="trw-pay-btn crypto-pay-btn payment-method-btn"
-                    data-product="The Real World Account - Veteran Plan" data-price="2900" data-price-usd="12">
-                    <div class="trw-pay-icon trw-pay-usdt">USDT</div>
-                    <span>USDT</span>
-                </a>
-                <a href="javascript:void(0)" class="trw-pay-btn baridimob-btn payment-method-btn"
-                    data-product="The Real World Account - Veteran Plan" data-price="2900" data-price-usd="12">
-                    <div class="trw-pay-icon trw-pay-baridi">Baridi</div>
-                    <span>BaridiMob</span>
-                </a>
+            <div class="trw-payments" style="display: flex; gap: 25px; justify-content: center; margin: 30px 0;">
+                <div class="trw-pay-btn" onclick="openPaymentModal('baridimob', 'trw', 2900, 12)"
+                    style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
+                    <div class="trw-pay-icon trw-pay-baridi"
+                        style="width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-weight: 900; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); border: 2px solid rgba(255,255,255,0.1);">
+                        Baridi</div>
+                    <span style="font-size: 0.8rem; color: var(--trw-text-dim); font-weight: 700;">BaridiMob</span>
+                </div>
+                <div class="trw-pay-btn" onclick="openPaymentModal('crypto', 'trw', 2900, 12)"
+                    style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
+                    <div class="trw-pay-icon trw-pay-usdt"
+                        style="width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #059669, #047857); color: #fff; font-weight: 900; box-shadow: 0 10px 20px rgba(5, 150, 105, 0.3); border: 2px solid rgba(255,255,255,0.1);">
+                        USDT</div>
+                    <span style="font-size: 0.8rem; color: var(--trw-text-dim); font-weight: 700;">USDT</span>
+                </div>
+                <div class="trw-pay-btn" onclick="openPaymentModal('redotpay', 'trw', 2900, 12)"
+                    style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
+                    <div class="trw-pay-icon trw-pay-redot"
+                        style="width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; font-weight: 900; box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3); border: 2px solid rgba(255,255,255,0.1);">
+                        Redot</div>
+                    <span style="font-size: 0.8rem; color: var(--trw-text-dim); font-weight: 700;">RedotPay</span>
+                </div>
             </div>
 
             <!-- Scarcity -->
@@ -954,7 +970,7 @@
                     الدعم، نقبل فقط <strong style="color:var(--trw-red)">10-15 عميل شهرياً</strong></p>
                 <div class="trw-scarcity-nums">
                     <div>
-                        <div class="trw-scarcity-big" id="seats-remaining">12</div>
+                        <div class="trw-scarcity-big" id="trw-seats-remaining">5</div>
                         <p style="font-size:0.72rem;color:var(--trw-text-dim)" data-i18n="scarcity.remaining">مقعد متبقي
                         </p>
                     </div>
@@ -964,109 +980,115 @@
                         <p style="font-size:0.72rem;color:var(--trw-text-dim)" data-i18n="scarcity.total">إجمالي</p>
                     </div>
                 </div>
-                <div class="trw-progress">
-                    <div class="trw-progress-fill" style="width:20%" id="seats-progress"></div>
+                <div class="trw-progress"
+                    style="width: 100%; height: 12px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); position: relative;">
+                    <div class="trw-progress-fill"
+                        style="width: 80%; height: 100%; background: linear-gradient(90deg, #ff4d4d, #f59e0b); box-shadow: 0 0 15px rgba(255, 77, 77, 0.6); transition: width 1s ease-in-out;"
+                        id="trw-seats-progress"></div>
                 </div>
-                <p style="color:var(--trw-amber);font-size:0.78rem;font-weight:600" data-i18n="scarcity.warning">⏰ احجز
-                    مقعدك الآن قبل نفاد الكمية!</p>
             </div>
+            <p style="color:var(--trw-amber);font-size:0.78rem;font-weight:600;margin-top:10px"
+                data-i18n="scarcity.warning">⏰ احجز مقعدك الآن قبل نفاد الكمية!</p>
+    </div>
 
-            <a href="https://wa.me/213782125821"
-                onclick="if(typeof fbq!=='undefined'){const u=location.search.includes('USD'),v=u?12:2900,c=u?'USD':'DZD';fbq('track','Lead',{content_name:'The Real World',value:v,currency:c});fbq('track','InitiateCheckout',{content_name:'The Real World',value:v,currency:c});}"
-                class="trw-cta" data-i18n="hero.cta">انضم الآن</a>
-        </section>
+    <div style="width: 100%; display: flex; justify-content: center; margin-top: 30px;">
+        <a href="javascript:void(0)"
+            onclick="if(typeof orderProduct === 'function') { orderProduct('trw'); } else { window.location.href='https://wa.me/213782125821'; }"
+            class="trw-cta" data-i18n="hero.cta">انضم الآن</a>
+    </div>
+    </section>
 
-        <!-- REVIEWS -->
-        <section class="trw-section reveal">
-            <div class="trw-reviews-header">
-                <h2 class="trw-section-title" data-i18n="reviews.title">⭐ تقييمات العملاء</h2>
-                <div class="trw-stars" id="average-stars">★★★★★</div>
-                <p style="color:var(--trw-text-dim);font-size:0.85rem;">(<span id="total-reviews">0</span> <span
-                        data-i18n="reviews.reviews">تقييم</span>)</p>
-            </div>
+    <!-- REVIEWS -->
+    <section class="trw-section reveal">
+        <div class="trw-reviews-header">
+            <h2 class="trw-section-title" data-i18n="reviews.title">⭐ تقييمات العملاء</h2>
+            <div class="trw-stars" id="average-stars">★★★★★</div>
+            <p style="color:var(--trw-text-dim);font-size:0.85rem;">(<span id="total-reviews">0</span> <span
+                    data-i18n="reviews.reviews">تقييم</span>)</p>
+        </div>
 
-            <!-- Review Form -->
-            <div class="trw-review-form">
-                <h3 data-i18n="reviews.addReview">أضف تقييمك</h3>
-                <form id="review-form">
-                    <div class="trw-form-row">
-                        <div class="trw-form-group">
-                            <label data-i18n="reviews.yourName">اسمك:</label>
-                            <input type="text" id="reviewer-name" required
-                                data-i18n-placeholder="reviews.namePlaceholder" placeholder="أدخل اسمك">
-                        </div>
-                        <div class="trw-form-group">
-                            <label data-i18n="reviews.platform">من أين عرفت عنا؟</label>
-                            <select id="platform" required>
-                                <option value="" data-i18n="reviews.selectPlatform">اختر المنصة</option>
-                                <option value="Instagram">📸 Instagram</option>
-                                <option value="Facebook">👥 Facebook</option>
-                                <option value="Twitter">🐦 Twitter/X</option>
-                                <option value="TikTok">🎵 TikTok</option>
-                                <option value="WhatsApp">💬 WhatsApp</option>
-                                <option value="Friend" data-i18n="reviews.friend">👤 صديق</option>
-                                <option value="Other" data-i18n="reviews.other">🌐 أخرى</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="trw-form-group" style="text-align:center">
-                        <label data-i18n="reviews.rating">التقييم:</label>
-                        <p style="color:var(--trw-text-dim);font-size:0.72rem;margin-bottom:8px"
-                            data-i18n="reviews.clickStars">اضغط على النجوم لاختيار تقييمك</p>
-                        <div id="star-rating" style="display:flex;gap:6px;justify-content:center">
-                            <span class="star" data-rating="1" title="سيء">★</span>
-                            <span class="star" data-rating="2" title="مقبول">★</span>
-                            <span class="star" data-rating="3" title="جيد">★</span>
-                            <span class="star" data-rating="4" title="ممتاز">★</span>
-                            <span class="star" data-rating="5" title="رائع">★</span>
-                        </div>
-                        <p id="rating-text"
-                            style="color:var(--trw-gold);font-size:0.82rem;margin-top:6px;min-height:20px"></p>
-                        <input type="hidden" id="rating-value" required>
+        <!-- Review Form -->
+        <div class="trw-review-form">
+            <h3 data-i18n="reviews.addReview">أضف تقييمك</h3>
+            <form id="review-form">
+                <div class="trw-form-row">
+                    <div class="trw-form-group">
+                        <label data-i18n="reviews.yourName">اسمك:</label>
+                        <input type="text" id="reviewer-name" required data-i18n-placeholder="reviews.namePlaceholder"
+                            placeholder="أدخل اسمك">
                     </div>
                     <div class="trw-form-group">
-                        <label data-i18n="reviews.comment">تعليقك (اختياري):</label>
-                        <textarea id="review-comment" rows="2" data-i18n-placeholder="reviews.commentPlaceholder"
-                            placeholder="شارك تجربتك معنا..." style="resize:none"></textarea>
+                        <label data-i18n="reviews.platform">من أين عرفت عنا؟</label>
+                        <select id="platform" required>
+                            <option value="" data-i18n="reviews.selectPlatform">اختر المنصة</option>
+                            <option value="Instagram">📸 Instagram</option>
+                            <option value="Facebook">👥 Facebook</option>
+                            <option value="Twitter">🐦 Twitter/X</option>
+                            <option value="TikTok">🎵 TikTok</option>
+                            <option value="WhatsApp">💬 WhatsApp</option>
+                            <option value="Friend" data-i18n="reviews.friend">👤 صديق</option>
+                            <option value="Other" data-i18n="reviews.other">🌐 أخرى</option>
+                        </select>
                     </div>
-                    <div class="trw-form-group">
-                        <label data-i18n="reviews.image">أضف صورة (اختياري):</label>
-                        <div style="display:flex;align-items:center;gap:10px">
-                            <label for="review-image"
-                                style="cursor:pointer;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;font-size:0.82rem;color:var(--trw-text-dim);transition:border-color 0.3s">
-                                📷 <span data-i18n="reviews.chooseImage">اختر صورة</span>
-                            </label>
-                            <input type="file" id="review-image" accept="image/jpeg,image/jpg,image/png,image/webp"
-                                class="hidden" style="display:none">
-                            <span id="image-name" style="color:var(--trw-text-dim);font-size:0.72rem"></span>
-                        </div>
-                        <div id="image-preview" class="hidden" style="display:none;margin-top:8px">
-                            <img id="preview-img"
-                                style="max-width:100%;height:80px;border-radius:8px;border:1px solid rgba(212,168,67,0.2)">
-                            <button type="button" id="remove-image"
-                                style="color:var(--trw-red);font-size:0.72rem;background:none;border:none;cursor:pointer;margin-top:4px">✕
-                                <span data-i18n="reviews.removeImage">إزالة الصورة</span></button>
-                        </div>
+                </div>
+                <div class="trw-form-group" style="text-align:center">
+                    <label data-i18n="reviews.rating">التقييم:</label>
+                    <p style="color:var(--trw-text-dim);font-size:0.72rem;margin-bottom:8px"
+                        data-i18n="reviews.clickStars">اضغط على النجوم لاختيار تقييمك</p>
+                    <div id="star-rating" style="display:flex;gap:6px;justify-content:center">
+                        <span class="star" data-rating="1" title="سيء">★</span>
+                        <span class="star" data-rating="2" title="مقبول">★</span>
+                        <span class="star" data-rating="3" title="جيد">★</span>
+                        <span class="star" data-rating="4" title="ممتاز">★</span>
+                        <span class="star" data-rating="5" title="رائع">★</span>
                     </div>
-                    <button type="submit" class="trw-submit-review" data-i18n="reviews.submit">إرسال التقييم</button>
-                </form>
-            </div>
+                    <p id="rating-text" style="color:var(--trw-gold);font-size:0.82rem;margin-top:6px;min-height:20px">
+                    </p>
+                    <input type="hidden" id="rating-value" required>
+                </div>
+                <div class="trw-form-group">
+                    <label data-i18n="reviews.comment">تعليقك (اختياري):</label>
+                    <textarea id="review-comment" rows="2" data-i18n-placeholder="reviews.commentPlaceholder"
+                        placeholder="شارك تجربتك معنا..." style="resize:none"></textarea>
+                </div>
+                <div class="trw-form-group">
+                    <label data-i18n="reviews.image">أضف صورة (اختياري):</label>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <label for="review-image"
+                            style="cursor:pointer;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;font-size:0.82rem;color:var(--trw-text-dim);transition:border-color 0.3s">
+                            📷 <span data-i18n="reviews.chooseImage">اختر صورة</span>
+                        </label>
+                        <input type="file" id="review-image" accept="image/jpeg,image/jpg,image/png,image/webp"
+                            class="hidden" style="display:none">
+                        <span id="image-name" style="color:var(--trw-text-dim);font-size:0.72rem"></span>
+                    </div>
+                    <div id="image-preview" class="hidden" style="display:none;margin-top:8px">
+                        <img id="preview-img"
+                            style="max-width:100%;height:80px;border-radius:8px;border:1px solid rgba(212,168,67,0.2)">
+                        <button type="button" id="remove-image"
+                            style="color:var(--trw-red);font-size:0.72rem;background:none;border:none;cursor:pointer;margin-top:4px">✕
+                            <span data-i18n="reviews.removeImage">إزالة الصورة</span></button>
+                    </div>
+                </div>
+                <button type="submit" class="trw-submit-review" data-i18n="reviews.submit">إرسال التقييم</button>
+            </form>
+        </div>
 
-            <div id="reviews-container"></div>
-            <div id="show-more-container" style="display:none;text-align:center;margin-top:20px">
-                <button id="show-more-btn"
-                    style="background:var(--trw-surface);color:var(--trw-gold);border:1px solid rgba(212,168,67,0.3);padding:10px 28px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:0.85rem;transition:all 0.3s"
-                    data-i18n="reviews.showMore">عرض المزيد</button>
-            </div>
-            <div id="admin-controls" style="display:none;text-align:center;margin-top:16px">
-                <button onclick="toggleAdminMode()"
-                    style="background:rgba(229,62,62,0.1);color:var(--trw-red);border:1px solid rgba(229,62,62,0.3);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:0.78rem;font-family:inherit;margin:0 4px">🗑️
-                    <span data-i18n="reviews.clearAll">حذف جميع التقييمات</span></button>
-                <button onclick="startGiveaway()"
-                    style="background:rgba(212,168,67,0.1);color:var(--trw-gold);border:1px solid rgba(212,168,67,0.3);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:0.78rem;font-family:inherit;margin:0 4px">🎁
-                    <span data-i18n="reviews.giveaway">سحب على 4 فائزين</span></button>
-            </div>
-        </section>
+        <div id="reviews-container"></div>
+        <div id="show-more-container" style="display:none;text-align:center;margin-top:20px">
+            <button id="show-more-btn"
+                style="background:var(--trw-surface);color:var(--trw-gold);border:1px solid rgba(212,168,67,0.3);padding:10px 28px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:0.85rem;transition:all 0.3s"
+                data-i18n="reviews.showMore">عرض المزيد</button>
+        </div>
+        <div id="admin-controls" style="display:none;text-align:center;margin-top:16px">
+            <button onclick="toggleAdminMode()"
+                style="background:rgba(229,62,62,0.1);color:var(--trw-red);border:1px solid rgba(229,62,62,0.3);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:0.78rem;font-family:inherit;margin:0 4px">🗑️
+                <span data-i18n="reviews.clearAll">حذف جميع التقييمات</span></button>
+            <button onclick="startGiveaway()"
+                style="background:rgba(212,168,67,0.1);color:var(--trw-gold);border:1px solid rgba(212,168,67,0.3);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:0.78rem;font-family:inherit;margin:0 4px">🎁
+                <span data-i18n="reviews.giveaway">سحب على 4 فائزين</span></button>
+        </div>
+    </section>
     </div><!-- end trw-content part 1 -->
 
     <!-- CAMPUSES GUIDE -->
@@ -1383,9 +1405,11 @@
     <div class="trw-footer-cta reveal">
         <h2 data-i18n="footer.title">لا تضيع الفرصة</h2>
         <p data-i18n="footer.subtitle">السعر سيرتفع قريباً. انضم للنخبة الآن.</p>
-        <a href="https://wa.me/213782125821"
-            onclick="if(typeof fbq!=='undefined'){const u=location.search.includes('USD'),v=u?18:3750,c=u?'USD':'DZD';fbq('track','Lead',{content_name:'The Real World',value:v,currency:c});fbq('track','InitiateCheckout',{content_name:'The Real World',value:v,currency:c});}"
-            class="trw-cta" data-i18n="footer.cta">🚀 ابدأ رحلتك الآن</a>
+        <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 20px;">
+            <a href="javascript:void(0)"
+                onclick="if(typeof orderProduct === 'function') { orderProduct('trw'); } else { window.location.href='https://wa.me/213782125821'; }"
+                class="trw-cta" data-i18n="footer.cta">🚀 ابدأ رحلتك الآن</a>
+        </div>
     </div>
 
     <footer><span data-i18n="footer.rightsText">© 2026 3Ahub - شريكك الموثوق في الحلول الرقمية</span></footer>
@@ -1398,7 +1422,7 @@
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="baridimob-product-name">The Real World
                         Account - Veteran Plan</span></p>
                 <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
-                        id="baridimob-price-usd">15</span> USDT</p>
+                        id="baridimob-price-dzd">2900</span> DZD</p>
             </div>
             <div class="crypto-wallet-info">
                 <h3 data-i18n="modal.paymentInfo">معلومات الدفع</h3>
@@ -1659,6 +1683,35 @@
             entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+    <script>
+        // Dynamic Scarcity Logic
+        function updateScarcity() {
+            const totalSeats = 15;
+            const now = new Date();
+            // Use date as seed for daily consistency
+            const seed = now.getDate() + (now.getMonth() * 31);
+
+            // Base remaining seats for the day (fluctuates around 4-7)
+            let remaining = 4 + (seed % 4);
+
+            // Decrease slightly in the evening to simulate sales
+            const hour = now.getHours();
+            if (hour > 15 && remaining > 2) remaining--;
+            if (hour > 20 && remaining > 1) remaining--;
+
+            const remainingEl = document.getElementById('trw-seats-remaining');
+            const progressEl = document.getElementById('trw-seats-progress');
+
+            if (remainingEl && progressEl) {
+                remainingEl.textContent = remaining;
+                const gone = totalSeats - remaining;
+                const progressPercent = (gone / totalSeats) * 100;
+                progressEl.style.width = progressPercent + '%';
+            }
+        }
+        updateScarcity();
     </script>
 
     <script src="currency-manager.js"></script>

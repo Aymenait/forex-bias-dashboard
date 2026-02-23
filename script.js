@@ -915,7 +915,7 @@ function displayReviews() {
 
     if (reviews.length === 0) {
         container.innerHTML = `
-            <div class="col-span-full text-center text-gray-400 py-8">
+            <div style="text-align:center;color:#9ca3af;padding:32px 0;grid-column:1/-1">
                 <p data-i18n="reviews.noReviews">كن أول من يضيف تقييم! ⭐</p>
             </div>
         `;
@@ -928,9 +928,12 @@ function displayReviews() {
 
     reviewsToShow.forEach(review => {
         const reviewCard = document.createElement('div');
-        reviewCard.className = 'bg-[#111]/80 rounded-lg border border-matrix-green/30 p-3 hover:border-matrix-green transition-all relative';
+        reviewCard.style.cssText = 'background:rgba(16,16,24,0.85);border-radius:12px;border:1px solid rgba(255,255,255,0.08);padding:14px;position:relative;transition:all 0.3s;';
+        reviewCard.onmouseenter = () => reviewCard.style.borderColor = 'rgba(212,168,67,0.4)';
+        reviewCard.onmouseleave = () => reviewCard.style.borderColor = 'rgba(255,255,255,0.08)';
 
         const starsHTML = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+        const reviewDate = review.date || '';
 
         // Check if admin mode is active
         const isAdminMode = sessionStorage.getItem('adminMode') === 'true';
@@ -938,28 +941,28 @@ function displayReviews() {
         reviewCard.innerHTML = `
             ${isAdminMode ? `
                 <button onclick="deleteReview(${review.id})" 
-                        class="delete-btn absolute top-2 left-2 text-red-400 hover:text-red-300 transition-colors bg-black/50 rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                        style="position:absolute;top:8px;left:8px;color:#f87171;background:rgba(0,0,0,0.5);border:none;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer"
                         title="حذف التقييم">
                     ✕
                 </button>
             ` : ''}
-            <div class="flex items-start justify-between mb-1.5 ${isAdminMode ? 'pr-6' : ''}">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;${isAdminMode ? 'padding-right:28px' : ''}">
                 <div>
-                    <h4 class="text-white font-bold text-sm">${escapeHtml(review.name)}</h4>
-                    <p class="text-gray-400 text-xs">${review.date}</p>
+                    <h4 style="color:#fff;font-weight:700;font-size:0.88rem;margin:0">${escapeHtml(review.name)}</h4>
+                    ${reviewDate ? `<p style="color:#6b7280;font-size:0.72rem;margin:2px 0 0">${reviewDate}</p>` : ''}
                 </div>
-                <span class="text-xs px-2 py-0.5 bg-matrix-green/20 text-matrix-green rounded-full">${review.platform}</span>
+                <span style="font-size:0.7rem;padding:2px 10px;background:rgba(212,168,67,0.15);color:#d4a843;border-radius:20px">${review.platform}</span>
             </div>
-            <div class="flex gap-0.5 mb-1.5">
+            <div style="display:flex;gap:2px;margin-bottom:8px">
                 ${starsHTML.split('').map(star =>
-            `<span class="${star === '★' ? 'text-yellow-400' : 'text-gray-600'} text-base">${star}</span>`
+            `<span style="color:${star === '★' ? '#facc15' : '#374151'};font-size:1rem">${star}</span>`
         ).join('')}
             </div>
-            ${review.comment ? `<p class="text-gray-300 text-xs leading-relaxed mb-2">"${escapeHtml(review.comment)}"</p>` : ''}
+            ${review.comment ? `<p style="color:#d1d5db;font-size:0.78rem;line-height:1.6;margin-bottom:8px">"${escapeHtml(review.comment)}"</p>` : ''}
             ${review.image ? `
-                <div class="mt-2">
+                <div style="margin-top:8px">
                     <img src="${review.image}" 
-                         class="w-full h-32 object-cover rounded-lg border border-matrix-green/30 cursor-pointer hover:border-matrix-green transition-all"
+                         style="width:100%;height:128px;object-fit:cover;border-radius:8px;border:1px solid rgba(212,168,67,0.2);cursor:pointer;transition:all 0.3s"
                          onclick="openImageModal('${review.image}')"
                          alt="Review Image">
                 </div>
@@ -5289,9 +5292,18 @@ function orderProduct(productName) {
 
     // First attempt: Try to find in PRODUCTS config
     if (typeof PRODUCTS !== 'undefined') {
-        const product = Object.values(PRODUCTS).find(p => p.name === productName);
+        // Try to find by ID/Key first
+        let product = PRODUCTS[productName];
+
+        // If not found by ID, try to find by Name
+        if (!product) {
+            product = Object.values(PRODUCTS).find(p => p.name === productName);
+        }
+
         if (product) {
             price = currency === 'USD' ? product.price_usd : product.price_dzd;
+            // If we found a product with a better label, use it
+            if (product.name) productName = product.name;
         }
     }
 

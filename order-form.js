@@ -357,9 +357,17 @@
             productName = arg1;
 
             if (typeof PRODUCTS !== 'undefined') {
-                const product = Object.values(PRODUCTS).find(p => p.name === productName);
+                // Try by ID first
+                let product = PRODUCTS[productName];
+
+                // Then by name
+                if (!product) {
+                    product = Object.values(PRODUCTS).find(p => p.name === productName);
+                }
+
                 if (product) {
                     price = currency === 'USD' ? product.price_usd : product.price_dzd;
+                    if (product.name) productName = product.name;
                 }
             }
 
