@@ -7,22 +7,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
 
 :root {
-    /* Use main site colors */
-    --bg-dark: #0b0d17;
-    --bg-light: #121525;
+    /* Base Styles - الخطوط والألوان الأساسية */
     --accent: #ffd56f;
-    --accent-strong: #ffb347;
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.75);
-    --card-bg: rgba(20, 24, 42, 0.75);
-    --border-color: rgba(255, 255, 255, 0.08);
+    --accent-hover: #ffb347;
+    --bg-dark: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
     --shadow: 0 24px 60px rgba(15, 17, 35, 0.45);
+    /* Kept from original */
 
     /* Admin specific colors */
-    --success: #10a37f;
-    --danger: #e50914;
+    --success: #22c55e;
+    --danger: #ef4444;
     --warning: #ffb347;
     --info: #2962FF;
+}
+
+/* Navigation Tabs Scrollbar Hide */
+nav .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+}
+
+nav .overflow-x-auto {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1543,6 +1553,58 @@ button[onclick="exportAccountingReport()"]:active::after {
         padding-bottom: env(safe-area-inset-bottom);
     }
 }
+
+/* Resellers Specific Mobile Styles */
+@media (max-width: 768px) {
+
+    /* Hide specific table columns to save space */
+    .hide-on-mobile {
+        display: none !important;
+    }
+
+    /* Stats cards in resellers sub-tabs */
+    #tab-resellers .grid.grid-cols-1.md-grid-cols-4,
+    #reseller-history-modal .grid.grid-cols-2.md-grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    #tab-resellers .stat-card,
+    #reseller-history-modal .bg-green-600\/10 {
+        padding: 12px !important;
+    }
+
+    /* Sub-tabs buttons should be a bit more compact */
+    .reseller-subtab-btn,
+    .history-subtab-btn {
+        padding: 8px 12px !important;
+        font-size: 0.8rem !important;
+    }
+
+    /* Tables action buttons stack */
+    .action-btns-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        align-items: center;
+    }
+
+    /* Filters in wholesale log */
+    #wholesale-reseller-filter,
+    #wholesale-date-filter {
+        width: 100% !important;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* One column for stats on very small screens if needed */
+    #tab-resellers .grid.grid-cols-1.md-grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+}
+
 
 /* Bottom sheet modal animation */
 @keyframes slideFromBottom {

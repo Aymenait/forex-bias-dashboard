@@ -1298,8 +1298,9 @@
                                 <thead>
                                     <tr class="text-gray-400 text-sm" style="background: rgba(255,255,255,0.03);">
                                         <th class="text-right p-4" data-i18n="th_name">اسم الموزع</th>
-                                        <th class="text-right p-4" data-i18n="th_email">البريد الإلكتروني</th>
-                                        <th class="text-right p-4" data-i18n="th_phone">رقم الهاتف</th>
+                                        <th class="text-right p-4 hide-on-mobile" data-i18n="th_email">البريد الإلكتروني
+                                        </th>
+                                        <th class="text-right p-4 hide-on-mobile" data-i18n="th_phone">رقم الهاتف</th>
                                         <th class="text-right p-4" data-i18n="th_balance">رصيد المحفظة</th>
                                         <th class="text-right p-4" data-i18n="th_sales">إجمالي المبيعات</th>
                                         <th class="text-center p-4" data-i18n="th_actions">إجراءات</th>
@@ -1382,9 +1383,9 @@
                                         <th class="text-right p-3">التاريخ</th>
                                         <th class="text-right p-3">الموزع</th>
                                         <th class="text-right p-3">المنتج</th>
-                                        <th class="text-right p-3">التكلفة</th>
+                                        <th class="text-right p-3 hide-on-mobile">التكلفة</th>
                                         <th class="text-right p-3">سعر البيع</th>
-                                        <th class="text-right p-3 text-green-400">الربح</th>
+                                        <th class="text-right p-3 text-green-400 hide-on-mobile">الربح</th>
                                         <th class="text-center p-3 text-red-400">إجراءات</th>
                                     </tr>
                                 </thead>
@@ -1843,7 +1844,7 @@
     <!-- Product Modal - Enhanced Version -->
     <div id="product-modal"
         class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="rounded-2xl p-6 max-w-4xl w-full"
+        <div class="rounded-2xl p-8 max-w-2xl w-full"
             style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); max-height: 90vh; overflow-y: auto;">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold" id="product-modal-title">✏️ تعديل المنتج</h3>
@@ -2949,9 +2950,9 @@
                         <thead>
                             <tr class="text-gray-400" style="background: rgba(255,255,255,0.03);">
                                 <th class="text-right p-3">التاريخ</th>
-                                <th class="text-right p-3">النوع</th>
+                                <th class="text-right p-3 hide-on-mobile">النوع</th>
                                 <th class="text-right p-3">المبلغ</th>
-                                <th class="text-right p-3">الملاحظات</th>
+                                <th class="text-right p-3 hide-on-mobile">الملاحظات</th>
                             </tr>
                         </thead>
                         <tbody id="history-wallet-table-body">
@@ -2973,8 +2974,8 @@
                                 <th class="text-right p-3">التاريخ</th>
                                 <th class="text-right p-3">المنتج</th>
                                 <th class="text-right p-3">سعر البيع</th>
-                                <th class="text-right p-3">التكلفة</th>
-                                <th class="text-right p-3 text-green-400">الربح</th>
+                                <th class="text-right p-3 hide-on-mobile">التكلفة</th>
+                                <th class="text-right p-3 text-green-400 hide-on-mobile">الربح</th>
                                 <th class="text-center p-3 text-red-400">إجراءات</th>
                             </tr>
                         </thead>
