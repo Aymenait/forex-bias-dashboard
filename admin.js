@@ -8761,10 +8761,14 @@ window.showHistorySubTab = showHistorySubTab;
 /**
  * تحميل بيانات الزبائن من Firebase
  */
+
+/**
+ * تحميل بيانات الزبائن من Firebase
+ */
 async function loadLeads() {
     if (!window.db || !window.firebaseModules) return;
     const tableBody = document.getElementById('leads-table-body');
-    if (tableBody) tableBody.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-slate-500">جاري التحميل...</td></tr>';
+    if (tableBody) tableBody.innerHTML = '<tr><td colspan="7" class="p-10 text-center text-slate-500">جاري التحميل...</td></tr>';
 
     try {
         const { collection, getDocs, query, orderBy } = window.firebaseModules;
@@ -8773,6 +8777,8 @@ async function loadLeads() {
 
         allLeads = [];
         let todayCount = 0;
+        let purchasedCount = 0;
+        let abandonedCount = 0;
         const todayStr = new Date().toLocaleDateString();
         const productCounts = {};
 
@@ -8780,6 +8786,9 @@ async function loadLeads() {
             const data = doc.data();
             const leadDate = data.timestamp ? data.timestamp.toDate() : new Date();
             if (leadDate.toLocaleDateString() === todayStr) todayCount++;
+
+            if (data.status === 'purchased') purchasedCount++;
+            if (data.status === 'abandoned') abandonedCount++;
 
             allLeads.push({
                 id: doc.id,
@@ -8792,22 +8801,32 @@ async function loadLeads() {
             }
         });
 
-        // تحديث الإحصائيات في التبويب
-        const totalEl = document.getElementById('stat-total-leads');
-        const todayEl = document.getElementById('stat-today-leads');
-        const topEl = document.getElementById('stat-top-lead-product');
-
-        if (totalEl) totalEl.innerText = allLeads.length;
-        if (todayEl) todayEl.innerText = todayCount;
-        if (topEl) {
-            const topProd = Object.keys(productCounts).sort((a, b) => productCounts[b] - productCounts[a])[0];
-            topEl.innerText = topProd || '--';
-        }
-
-        renderLeadsTable(allLeads);
+        updateLeadStats(allLeads.length, todayCount, purchasedCount, abandonedCount, productCounts);
+        applyLeadFilters();
     } catch (error) {
         console.error("Error loading leads:", error);
         showToast('❌ خطأ في تحميل بيانات الزبائن', 'error');
+    }
+}
+
+/**
+ * تحديث إحصائيات الزبائن
+ */
+function updateLeadStats(total, today, purchased, abandoned, productCounts) {
+    const totalEl = document.getElementById('stat-total-leads');
+    const todayEl = document.getElementById('stat-today-leads');
+    const purchasedEl = document.getElementById('stat-purchased-leads');
+    const abandonedEl = document.getElementById('stat-abandoned-leads');
+    const topEl = document.getElementById('stat-top-lead-product');
+
+    if (totalEl) totalEl.innerText = total;
+    if (todayEl) todayEl.innerText = today;
+    if (purchasedEl) purchasedEl.innerText = purchased;
+    if (abandonedEl) abandonedEl.innerText = abandoned;
+
+    if (topEl) {
+        const topProd = Object.keys(productCounts).sort((a, b) => productCounts[b] - productCounts[a])[0];
+        topEl.innerText = topProd || '--';
     }
 }
 
@@ -8819,11 +8838,27 @@ function renderLeadsTable(leads) {
     if (!tableBody) return;
 
     if (leads.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-slate-500">لا يوجد زبائن حالياً.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="7" class="p-10 text-center text-slate-500">لا يوجد زبائن حالياً.</td></tr>';
         return;
     }
 
-    tableBody.innerHTML = leads.map(lead => `
+    const statusLabels = {
+        'new': '🔵 جديد',
+        'contacted': '🟠 جاري التواصل',
+        'purchased': '🟢 تم الشراء',
+        'abandoned': '🔴 لم يشترِ'
+    };
+
+    const statusClasses = {
+        'new': 's-new',
+        'contacted': 's-contacted',
+        'purchased': 's-purchased',
+        'abandoned': 's-abandoned'
+    };
+
+    tableBody.innerHTML = leads.map(lead => {
+        const status = lead.status || 'new';
+        return `
         <tr class="hover:bg-gray-700/30 transition border-b border-gray-700">
             <td class="p-4 text-xs text-gray-400">${lead.formattedDate}</td>
             <td class="p-4 font-bold text-gray-200">${lead.name || '---'}</td>
@@ -8833,7 +8868,13 @@ function renderLeadsTable(leads) {
                     ${lead.product || 'غير محدد'}
                 </span>
             </td>
-            <td class="p-4 text-xs text-gray-500 truncate max-w-[150px]" title="${lead.source || '/'}">${lead.source || '/'}</td>
+            <td class="p-4 text-xs text-gray-500 truncate max-w-[120px]" title="${lead.source || '/'}">${lead.source || '/'}</td>
+            <td class="p-4 text-center">
+                <span onclick="cycleLeadStatus('${lead.id}', '${status}')" 
+                    class="status-badge ${statusClasses[status] || 's-new'}">
+                    ${statusLabels[status] || statusLabels['new']}
+                </span>
+            </td>
             <td class="p-4 text-center flex items-center justify-center gap-2">
                 <button onclick="contactLead('${lead.name}', '${lead.contact}', '${lead.product ? lead.product.replace(/'/g, "\\'") : ""}')" 
                     class="bg-green-600 hover:bg-green-700 text-white px-2 py-1.5 rounded-lg text-[10px] font-bold transition shadow-lg shadow-green-900/10">
@@ -8841,11 +8882,80 @@ function renderLeadsTable(leads) {
                 </button>
                 <button onclick="deleteLead('${lead.id}', '${lead.name ? lead.name.replace(/'/g, "\\'") : ""}')" 
                     class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-2 py-1.5 rounded-lg text-[10px] font-bold transition border border-red-500/20">
-                    حذف 🗑️
+                    🗑️
                 </button>
             </td>
         </tr>
-    `).join('');
+    `}).join('');
+}
+
+/**
+ * تغيير حالة الزبون
+ */
+async function cycleLeadStatus(id, currentStatus) {
+    const statuses = ['new', 'contacted', 'purchased', 'abandoned'];
+    const currentIndex = statuses.indexOf(currentStatus);
+    const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+
+    try {
+        const { doc, updateDoc } = window.firebaseModules;
+        await updateDoc(doc(window.db, "leads", id), { status: nextStatus });
+
+        showToast(`✅ تم تغيير الحالة إلى: ${nextStatus}`);
+
+        // تحديث البيانات محلياً
+        const lead = allLeads.find(l => l.id === id);
+        if (lead) lead.status = nextStatus;
+
+        // إعادة حساب الإحصائيات
+        recalculateLeadStats();
+
+        // تحديث الجدول
+        applyLeadFilters();
+
+    } catch (error) {
+        console.error("Error updating lead status:", error);
+        showToast('❌ خطأ في تغيير الحالة', 'error');
+    }
+}
+
+/**
+ * إعادة حساب الإحصائيات من البيانات المحلية
+ */
+function recalculateLeadStats() {
+    let todayCount = 0;
+    let purchasedCount = 0;
+    let abandonedCount = 0;
+    const todayStr = new Date().toLocaleDateString();
+    const productCounts = {};
+
+    allLeads.forEach(lead => {
+        const leadDate = lead.timestamp ? lead.timestamp.toDate() : new Date();
+        if (leadDate.toLocaleDateString() === todayStr) todayCount++;
+
+        if (lead.status === 'purchased') purchasedCount++;
+        if (lead.status === 'abandoned') abandonedCount++;
+
+        if (lead.product) {
+            productCounts[lead.product] = (productCounts[lead.product] || 0) + 1;
+        }
+    });
+
+    updateLeadStats(allLeads.length, todayCount, purchasedCount, abandonedCount, productCounts);
+}
+
+/**
+ * تصفية جدول الزبائن
+ */
+function applyLeadFilters() {
+    const statusFilter = document.getElementById('filter-lead-status')?.value || 'all';
+
+    let filtered = allLeads;
+    if (statusFilter !== 'all') {
+        filtered = allLeads.filter(l => (l.status || 'new') === statusFilter);
+    }
+
+    renderLeadsTable(filtered);
 }
 
 /**
@@ -8937,3 +9047,5 @@ window.loadLeads = loadLeads;
 window.exportLeadsToCSV = exportLeadsToCSV;
 window.contactLead = contactLead;
 window.deleteLead = deleteLead;
+window.cycleLeadStatus = cycleLeadStatus;
+window.applyLeadFilters = applyLeadFilters;

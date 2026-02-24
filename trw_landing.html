@@ -342,20 +342,23 @@
             cursor: pointer;
             text-decoration: none;
             transition: all 0.3s;
-            padding: 12px;
+            padding: 0 !important;
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
         }
 
         .trw-pay-icon {
-            width: 64px;
-            height: 64px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s;
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-size: 0.9rem;
+            font-weight: 900;
         }
 
         .trw-pay-btn:hover .trw-pay-icon {
@@ -372,19 +375,24 @@
             color: var(--trw-gold-light);
         }
 
+        .trw-pay-redot,
+        .trw-pay-usdt,
+        .trw-pay-baridi {
+            color: #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            font-weight: 800;
+        }
+
         .trw-pay-redot {
             background: linear-gradient(135deg, #dc2626, #991b1b);
-            color: #fff;
         }
 
         .trw-pay-usdt {
             background: linear-gradient(135deg, #059669, #047857);
-            color: #fff;
         }
 
         .trw-pay-baridi {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #fff;
         }
 
         /* ── SCARCITY ── */
@@ -922,29 +930,40 @@
                     فوري</span></div>
             <img src="https://i.imgur.com/QzlT4Ch.gif" alt="The Real World" class="trw-hero-img">
             <h1 style="margin-bottom: 8px;">THE REAL WORLD ACCOUNT<br>VETERAN PLAN — ALL COURSES</h1>
-            <p class="trw-hero-price" style="margin-bottom: 32px; font-size: 1.4rem;">
-                <strong style="color: var(--trw-gold-light);">2900 DZD</strong> / Month
-                <span style="font-size: 1rem; color: var(--trw-text-dim); margin: 0 8px;">|</span>
-                <strong style="color: var(--trw-gold-light);">12 USDT</strong>
-            </p>
+            <div class="trw-hero-pricing"
+                style="margin-bottom: 32px; display: flex; flex-direction: column; align-items: center;">
+                <div dir="ltr"
+                    style="font-size: 2.22rem; font-weight: 900; color: var(--trw-gold-light); margin-bottom: 8px; text-shadow: 0 0 20px rgba(212, 168, 67, 0.2);">
+                    2900 DZD <span style="font-size: 1.1rem; color: var(--trw-text-dim); font-weight: 400;">/
+                        Month</span>
+                </div>
+                <div
+                    style="font-size: 1.3rem; color: var(--trw-text-dim); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    <span style="opacity: 0.6;">أو</span>
+                    <span dir="ltr"
+                        style="color: var(--trw-gold-light); font-weight: 800; border-bottom: 1px dashed rgba(212,168,67,0.3);">12
+                        USDT</span>
+                </div>
+            </div>
 
             <!-- Payment Methods -->
-            <div class="trw-payments">
-                <a href="javascript:void(0)" class="trw-pay-btn redotpay-btn payment-method-btn"
-                    data-product="The Real World Account - Veteran Plan" data-price="2900" data-price-usd="12">
-                    <div class="trw-pay-icon trw-pay-redot">Redot</div>
-                    <span>RedotPay</span>
-                </a>
-                <a href="javascript:void(0)" class="trw-pay-btn crypto-pay-btn payment-method-btn"
-                    data-product="The Real World Account - Veteran Plan" data-price="2900" data-price-usd="12">
-                    <div class="trw-pay-icon trw-pay-usdt">USDT</div>
-                    <span>USDT</span>
-                </a>
-                <a href="javascript:void(0)" class="trw-pay-btn baridimob-btn payment-method-btn"
-                    data-product="The Real World Account - Veteran Plan" data-price="2900" data-price-usd="12">
+            <!-- Payment Methods -->
+            <div class="trw-payments" style="display: flex; gap: 30px; justify-content: center; margin: 30px 0;">
+                <div class="trw-pay-btn baridimob-btn" onclick="openPaymentModal('baridimob', 'trw', 2900, 12)"
+                    data-product="The Real World Account" data-price="2900" data-price-usd="12">
                     <div class="trw-pay-icon trw-pay-baridi">Baridi</div>
                     <span>BaridiMob</span>
-                </a>
+                </div>
+                <div class="trw-pay-btn crypto-pay-btn" onclick="openPaymentModal('crypto', 'trw', 2900, 12)"
+                    data-product="The Real World Account" data-price="2900" data-price-usd="12">
+                    <div class="trw-pay-icon trw-pay-usdt">USDT</div>
+                    <span>USDT</span>
+                </div>
+                <div class="trw-pay-btn redotpay-btn" onclick="openPaymentModal('redotpay', 'trw', 2900, 12)"
+                    data-product="The Real World Account" data-price="2900" data-price-usd="12">
+                    <div class="trw-pay-icon trw-pay-redot">Redot</div>
+                    <span>RedotPay</span>
+                </div>
             </div>
 
             <!-- Scarcity -->
@@ -954,7 +973,7 @@
                     الدعم، نقبل فقط <strong style="color:var(--trw-red)">10-15 عميل شهرياً</strong></p>
                 <div class="trw-scarcity-nums">
                     <div>
-                        <div class="trw-scarcity-big" id="seats-remaining">12</div>
+                        <div class="trw-scarcity-big" id="trw-seats-remaining">5</div>
                         <p style="font-size:0.72rem;color:var(--trw-text-dim)" data-i18n="scarcity.remaining">مقعد متبقي
                         </p>
                     </div>
@@ -964,16 +983,21 @@
                         <p style="font-size:0.72rem;color:var(--trw-text-dim)" data-i18n="scarcity.total">إجمالي</p>
                     </div>
                 </div>
-                <div class="trw-progress">
-                    <div class="trw-progress-fill" style="width:20%" id="seats-progress"></div>
+                <div class="trw-progress"
+                    style="width: 100%; height: 12px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); position: relative;">
+                    <div class="trw-progress-fill"
+                        style="width: 80%; height: 100%; background: linear-gradient(90deg, #ff4d4d, #f59e0b); box-shadow: 0 0 15px rgba(255, 77, 77, 0.6); transition: width 1s ease-in-out;"
+                        id="trw-seats-progress"></div>
                 </div>
-                <p style="color:var(--trw-amber);font-size:0.78rem;font-weight:600" data-i18n="scarcity.warning">⏰ احجز
-                    مقعدك الآن قبل نفاد الكمية!</p>
+                <p style="color:var(--trw-amber);font-size:0.78rem;font-weight:600;margin-top:10px"
+                    data-i18n="scarcity.warning">⏰ احجز مقعدك الآن قبل نفاد الكمية!</p>
             </div>
 
-            <a href="https://wa.me/213782125821"
-                onclick="if(typeof fbq!=='undefined'){const u=location.search.includes('USD'),v=u?12:2900,c=u?'USD':'DZD';fbq('track','Lead',{content_name:'The Real World',value:v,currency:c});fbq('track','InitiateCheckout',{content_name:'The Real World',value:v,currency:c});}"
-                class="trw-cta" data-i18n="hero.cta">انضم الآن</a>
+            <div style="width: 100%; display: flex; justify-content: center; margin-top: 30px;">
+                <a href="javascript:void(0)"
+                    onclick="if(typeof orderProduct === 'function') { orderProduct('trw'); } else { window.location.href='https://wa.me/213782125821'; }"
+                    class="trw-cta" data-i18n="hero.cta">انضم الآن</a>
+            </div>
         </section>
 
         <!-- REVIEWS -->
@@ -1396,9 +1420,11 @@
             <h2 data-i18n="modal.baridimob.title">الدفع عبر BaridiMob</h2>
             <div class="crypto-product-info">
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="baridimob-product-name">The Real World
-                        Account - Veteran Plan</span></p>
-                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
-                        id="baridimob-price-usd">15</span> USDT</p>
+                        Account</span></p>
+                <div style="display: flex; gap: 15px;">
+                    <p><strong data-i18n="modal.price">السعر:</strong> <span id="baridimob-price-dzd">2900</span> DA</p>
+                    <p style="display: none;"><span id="baridimob-price-usd">12</span> USD</p>
+                </div>
             </div>
             <div class="crypto-wallet-info">
                 <h3 data-i18n="modal.paymentInfo">معلومات الدفع</h3>
@@ -1440,9 +1466,11 @@
             <h2 data-i18n="modal.crypto.title">الدفع بالعملات الرقمية</h2>
             <div class="crypto-product-info">
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="crypto-product-name">The Real World
-                        Account - Veteran Plan</span></p>
-                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
-                        id="crypto-price-usd">12</span> USDT</p>
+                        Account</span></p>
+                <div style="display: flex; gap: 15px;">
+                    <p><strong data-i18n="modal.price">السعر:</strong> <span id="crypto-price-usd">12</span> USDT</p>
+                    <p style="display: none;"><span id="crypto-price-dzd">2900</span> DA</p>
+                </div>
             </div>
             <div class="network-selector">
                 <h3 data-i18n="modal.crypto.selectNetwork">اختر الشبكة:</h3>
@@ -1494,9 +1522,11 @@
             <h2 data-i18n="modal.redotpay.title">الدفع عبر RedotPay</h2>
             <div class="crypto-product-info">
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="redotpay-product-name">The Real World
-                        Account - Veteran Plan</span></p>
-                <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
-                        id="redotpay-price-usd">12</span> USD</p>
+                        Account</span></p>
+                <div style="display: flex; gap: 15px;">
+                    <p><strong data-i18n="modal.price">السعر:</strong> <span id="redotpay-price-usd">12</span> USD</p>
+                    <p style="display: none;"><span id="redotpay-price-dzd">2900</span> DA</p>
+                </div>
             </div>
             <div class="crypto-wallet-info">
                 <h3 data-i18n="modal.paymentInfo">معلومات الدفع</h3>
@@ -1659,6 +1689,59 @@
             entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+    <script>
+        // Global wrapper for payment buttons
+        window.openPaymentModal = function (methodId, productKey, priceDZD, priceUSD) {
+            if (window.paymentManager) {
+                const product = {
+                    name: "The Real World Account",
+                    id: productKey,
+                    price_dzd: priceDZD,
+                    price_usd: priceUSD
+                };
+                const currency = window.currencyManager ? window.currencyManager.currentCurrency : 'DZD';
+                window.paymentManager.openPaymentModal(methodId, product, currency);
+            } else {
+                console.warn('Payment Manager not ready, trying fallback logic...');
+                // Direct modal opening if manager is missing (for redundancy)
+                const modal = document.getElementById(methodId + '-modal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.classList.add('show');
+                } else {
+                    // Only redirect if everything fails
+                    window.location.href = 'https://wa.me/213782125821';
+                }
+            }
+        };
+
+        // Dynamic Scarcity Logic for TRW
+        function updateTRWScarcity() {
+            const totalSeats = 15;
+            const now = new Date();
+            const seed = now.getDate() + (now.getMonth() * 31);
+
+            // Fluctuates around 4-7
+            let remaining = 4 + (seed % 4);
+
+            const hour = now.getHours();
+            if (hour > 15 && remaining > 2) remaining--;
+            if (hour > 20 && remaining > 1) remaining--;
+
+            const remainingEl = document.getElementById('trw-seats-remaining');
+            const progressEl = document.getElementById('trw-seats-progress');
+
+            if (remainingEl && progressEl) {
+                remainingEl.textContent = remaining;
+                const gone = totalSeats - remaining;
+                const progressPercent = (gone / totalSeats) * 100;
+                progressEl.style.width = progressPercent + '%';
+            }
+        }
+        updateTRWScarcity();
+        setInterval(updateTRWScarcity, 5000);
     </script>
 
     <script src="currency-manager.js"></script>
