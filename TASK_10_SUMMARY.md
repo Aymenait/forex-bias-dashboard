@@ -142,6 +142,12 @@ This task requires testing across multiple browsers and devices:
   - [ ] Test with localStorage disabled
   - [ ] Verify system works without persistence
 
+- [x] Implementation
+    - [x] Optimize Images (Added lazy loading)
+    - [x] Minify/Optimize CSS and JS loading (Removed redundant fonts, added defer)
+    - [ ] Reduce HTML size (clean up inline assets if any)
+    - [x] Implement lazy loading for images and videos
+
 **How to Test**:
 1. Open the website in each browser/device
 2. Test currency selector functionality
