@@ -173,8 +173,12 @@
             background: linear-gradient(90deg, var(--green), transparent)
         }
 
-        .stat-card.c-week::before {
-            background: linear-gradient(90deg, var(--accent), transparent)
+        .stat-card.c-purchased::before {
+            background: linear-gradient(90deg, var(--green), transparent)
+        }
+
+        .stat-card.c-abandoned::before {
+            background: linear-gradient(90deg, var(--red), transparent)
         }
 
         .stat-card.c-pending::before {
@@ -203,8 +207,12 @@
             color: var(--green)
         }
 
-        .c-week .stat-value {
-            color: var(--accent)
+        .c-purchased .stat-value {
+            color: var(--green)
+        }
+
+        .c-abandoned .stat-value {
+            color: var(--red)
         }
 
         .c-pending .stat-value {
@@ -359,10 +367,16 @@
             color: var(--orange)
         }
 
-        .s-closed {
+        .s-purchased {
             background: rgba(74, 222, 128, 0.1);
             border: 1px solid rgba(74, 222, 128, 0.2);
             color: var(--green)
+        }
+
+        .s-abandoned {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            color: var(--red)
         }
 
         .status-badge:hover {
@@ -531,13 +545,17 @@
                     <div class="stat-label">Today</div>
                     <div class="stat-value" id="stat-today">—</div>
                 </div>
-                <div class="stat-card c-week">
-                    <div class="stat-label">This Week</div>
-                    <div class="stat-value" id="stat-week">—</div>
-                </div>
                 <div class="stat-card c-pending">
                     <div class="stat-label">Pending</div>
                     <div class="stat-value" id="stat-pending">—</div>
+                </div>
+                <div class="stat-card c-purchased">
+                    <div class="stat-label">Purchased</div>
+                    <div class="stat-value" id="stat-purchased">—</div>
+                </div>
+                <div class="stat-card c-abandoned">
+                    <div class="stat-label">Abandoned</div>
+                    <div class="stat-value" id="stat-abandoned">—</div>
                 </div>
             </div>
 
@@ -548,7 +566,8 @@
                     <option value="">All Statuses</option>
                     <option value="new">🔵 New</option>
                     <option value="contacted">🟠 Contacted</option>
-                    <option value="closed">🟢 Closed</option>
+                    <option value="purchased">🟢 Purchased</option>
+                    <option value="abandoned">🔴 Abandoned</option>
                 </select>
                 <select class="filter-select" id="filter-product" onchange="applyFilters()"></select>
                 <select class="filter-select" id="filter-date" onchange="applyFilters()">
@@ -630,16 +649,20 @@
         function updateStats() {
             const now = Date.now() / 1000;
             const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000;
-            const weekStart = todayStart - 6 * 86400;
-            let today = 0, week = 0, pending = 0;
+            let today = 0, pending = 0, purchased = 0, abandoned = 0;
             allLeads.forEach(l => {
                 const ts = l.timestamp?.seconds || 0;
                 if (ts >= todayStart) today++;
-                if (ts >= weekStart) week++;
-                if (!l.status || l.status === 'new') pending++;
+                const s = l.status || 'new';
+                if (s === 'new') pending++;
+                else if (s === 'purchased' || s === 'closed') purchased++;
+                else if (s === 'abandoned') abandoned++;
             });
             anim('stat-total', allLeads.length);
-            anim('stat-today', today); anim('stat-week', week); anim('stat-pending', pending);
+            anim('stat-today', today);
+            anim('stat-pending', pending);
+            anim('stat-purchased', purchased);
+            anim('stat-abandoned', abandoned);
         }
 
         function anim(id, end) {
@@ -687,8 +710,8 @@
                 tbody.innerHTML = `<tr><td colspan="7"><div class="table-empty"><div class="emoji">📭</div><div>No leads found</div></div></td></tr>`;
                 return;
             }
-            const statusL = { new: '🔵 New', contacted: '🟠 Contacted', closed: '🟢 Closed' };
-            const statusC = { new: 's-new', contacted: 's-contacted', closed: 's-closed' };
+            const statusL = { new: '🔵 New', contacted: '🟠 Contacted', purchased: '🟢 Purchased', closed: '🟢 Purchased', abandoned: '🔴 Abandoned' };
+            const statusC = { new: 's-new', contacted: 's-contacted', purchased: 's-purchased', closed: 's-purchased', abandoned: 's-abandoned' };
             tbody.innerHTML = leads.map((l, i) => {
                 const name = l.name || '—', contact = l.contact || '—', prod = l.product || l.productName || '—';
                 const price = l.price ? `${l.price} ${l.currency || 'DA'}` : '—';
@@ -716,7 +739,7 @@
 
         // ── Cycle Status ──
         window.cycleStatus = async (id, cur) => {
-            const next = { new: 'contacted', contacted: 'closed', closed: 'new' };
+            const next = { new: 'contacted', contacted: 'purchased', purchased: 'abandoned', abandoned: 'new', closed: 'purchased' };
             const ns = next[cur] || 'new';
             try {
                 await updateDoc(doc(db, 'leads', id), { status: ns });
