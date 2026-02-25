@@ -850,7 +850,7 @@
             // Fires once per session — notifies admin on phone immediately
             async function notifyTelegram() {
                 const sessionKey = `tg_notified_${product}_${contact}`;
-                if (sessionStorage.getItem(sessionKey)) return; // prevent duplicates on refresh
+                if (sessionStorage.getItem(sessionKey)) return;
                 sessionStorage.setItem(sessionKey, '1');
 
                 const TG_TOKEN = '8435398259:AAHRrvwcXtnEHtIK-pkwZ9WmRNLO3wJNHrk';
@@ -859,14 +859,13 @@
                 const now = new Date();
                 const timeStr = now.toLocaleString('fr-DZ', { hour12: false });
 
-                // Build WhatsApp quick-reply URL for the admin
                 let phone = contact.replace(/\D/g, '');
                 if (phone.startsWith('0')) phone = '213' + phone.slice(1);
                 if (!phone.startsWith('213') && phone.length >= 9) phone = '213' + phone;
                 const waReply = `https://wa.me/${phone}?text=${encodeURIComponent(`مرحباً ${name}! ✅ طلبك جاهز.`)}`;
 
                 const msg = `
-🛒 <b>طلب جديد — 3Ahub!</b>
+🛒 <b>طلب من الفورم — 3Ahub!</b>
 
 👤 <b>الاسم:</b> ${name || '—'}
 📞 <b>التواصل:</b> ${contact || '—'}
@@ -885,7 +884,15 @@
                             chat_id: TG_CHAT_ID,
                             text: msg,
                             parse_mode: 'HTML',
-                            disable_web_page_preview: true
+                            disable_web_page_preview: true,
+                            reply_markup: {
+                                inline_keyboard: [
+                                    [
+                                        { text: "✅ اشترى (Pixel 🔥)", callback_data: `payform_${phone}_${price}_${product}` },
+                                        { text: "❌ لم يشترِ", callback_data: `cancel_${phone}` }
+                                    ]
+                                ]
+                            }
                         })
                     });
                     console.log('🔔 Telegram notification sent!');
