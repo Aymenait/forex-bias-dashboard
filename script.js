@@ -4400,77 +4400,6 @@ function orderHma() {
     redirectToWhatsApp(name, price, currency);
 }
 
-// SciSpace Selection Functions
-function selectScispaceDuration(duration) {
-    document.querySelectorAll('.scispace-duration-btn').forEach(btn => btn.classList.remove('active'));
-    const selectedBtn = document.querySelector(`.scispace-duration-btn[data-duration="${duration}"]`);
-    if (selectedBtn) selectedBtn.classList.add('active');
-
-    const config = PRODUCTS['scispace'];
-    const priceObj = config.durations[duration];
-    const name = duration === '1month' ? 'SciSpace Premium - 1 Month' : 'SciSpace Premium - 3 Months';
-
-    // Show/hide prices
-    document.querySelectorAll('.scispace-prices').forEach(price => price.style.display = 'none');
-    const priceEl = document.getElementById(`scispace-prices-${duration}`);
-    if (priceEl) priceEl.style.display = 'block';
-
-    // Update order button
-    const orderBtn = document.getElementById('scispace-order-btn');
-    if (orderBtn) orderBtn.setAttribute('data-product', name);
-
-    // Update payment buttons
-    const paymentButtons = ['scispace-usdt-btn', 'scispace-redotpay-btn', 'scispace-baridimob-btn'];
-    paymentButtons.forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn && priceObj) {
-            btn.setAttribute('data-product', name);
-            btn.setAttribute('data-price', priceObj.dzd);
-            btn.setAttribute('data-price-usd', priceObj.usd);
-        }
-    });
-
-    // Sync prices text content
-    if (window.currencyManager) {
-        window.currencyManager.updateAllPrices();
-    }
-
-    // Track CustomizeProduct
-    if (typeof fbq !== 'undefined') {
-        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-        fbq('track', 'CustomizeProduct', {
-            content_name: 'SciSpace Premium',
-            variant: duration,
-            currency: currency
-        });
-    }
-}
-
-function orderScispace() {
-    const activeBtn = document.querySelector('.scispace-duration-btn.active');
-    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
-    const name = duration === '1month' ? 'SciSpace Premium - 1 Month' : 'SciSpace Premium - 3 Months';
-
-    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-    const config = PRODUCTS['scispace'];
-    const priceObj = config.durations[duration];
-    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
-
-    if (typeof fbq !== 'undefined') {
-        fbq('track', 'AddToCart', {
-            content_name: name,
-            value: parseFloat(price),
-            currency: currency
-        });
-        fbq('track', 'InitiateCheckout', {
-            content_name: name,
-            value: parseFloat(price),
-            currency: currency
-        });
-    }
-
-    redirectToWhatsApp(name, price, currency);
-}
 
 // Order Duolingo
 function orderDuolingo() {
@@ -4552,128 +4481,12 @@ function orderAdobe() {
 }
 
 // Gamma Selection Functions
-function switchGammaTabMain(tab) {
-    const tabShared = document.getElementById('index-tab-shared');
-    const tabPrivate = document.getElementById('index-tab-private');
-    const optsShared = document.getElementById('index-shared-options');
-    const optsPrivate = document.getElementById('index-private-options');
-
-    // Reset styles
-    [tabShared, tabPrivate].forEach(t => {
-        if (!t) return;
-        t.style.background = 'transparent';
-        t.style.color = 'rgba(255,255,255,0.6)';
-        t.classList.remove('active');
-        t.classList.remove('gamma-tab-active');
-    });
-
-    // Activate selected
-    const activeTab = tab === 'shared' ? tabShared : tabPrivate;
-    if (activeTab) {
-        // Use the CSS class for better enforcement + inline as backup
-        activeTab.classList.add('active');
-        activeTab.classList.add('gamma-tab-active');
-        activeTab.style.background = '#ffd56f';
-        activeTab.style.color = 'black';
-    }
-
-    // Toggle visibility
-    if (tab === 'shared') {
-        if (optsShared) optsShared.style.display = 'block';
-        if (optsPrivate) optsPrivate.style.display = 'none';
-        selectGammaDuration('1month');
-    } else {
-        if (optsShared) optsShared.style.display = 'none';
-        if (optsPrivate) optsPrivate.style.display = 'flex';
-        // Select default private option if coming from shared
-        const currentBtn = document.querySelector('.gamma-duration-btn.active');
-        if (currentBtn && (currentBtn.dataset.duration === '1month' || !currentBtn.dataset.duration.includes('private'))) {
-            selectGammaDuration('private_1month');
-        }
-    }
-}
-
-function selectGammaDuration(duration) {
-    const buttons = document.querySelectorAll('.gamma-duration-btn');
-    buttons.forEach(btn => {
-        btn.classList.remove('active');
-        btn.classList.remove('gamma-btn-active');
-        // Reset inline styles
-        btn.style.border = '2px solid rgba(255, 255, 255, 0.1)';
-        btn.style.background = 'rgba(255, 255, 255, 0.05)';
-        btn.style.color = 'rgba(255, 255, 255, 0.6)';
-    });
-
-    const selectedBtn = document.querySelector(`.gamma-duration-btn[data-duration="${duration}"]`);
-    if (selectedBtn) {
-        selectedBtn.classList.add('active');
-        selectedBtn.classList.add('gamma-btn-active');
-        // Apply Gold Theme
-        selectedBtn.style.border = '2px solid #ffd56f';
-        selectedBtn.style.background = 'rgba(255, 213, 111, 0.2)';
-        selectedBtn.style.color = '#ffd56f';
-    }
-
-    const config = PRODUCTS['gamma'];
-    if (!config || !config.durations) return;
-
-    const priceObj = config.durations[duration];
-    const productNames = {
-        '1month': 'Gamma.AI - 1 Month (Pro Shared)',
-        'private_1month': 'Gamma.AI - 1 Month (Plus Private)',
-        'private_pro_1month': 'Gamma.AI - 1 Month (Pro Private)'
-    };
-    const name = productNames[duration] || 'Gamma.AI';
-
-    // Show/hide prices
-    document.querySelectorAll('.gamma-prices').forEach(price => price.style.display = 'none');
-    const priceEl = document.getElementById(`gamma-prices-${duration}`);
-    if (priceEl) priceEl.style.display = 'block';
-
-    // Update order button
-    const orderBtn = document.getElementById('gamma-order-btn');
-    if (orderBtn) orderBtn.setAttribute('data-product', name);
-
-    // Update payment buttons
-    const paymentButtons = ['gamma-usdt-btn', 'gamma-redotpay-btn', 'gamma-baridimob-btn'];
-    paymentButtons.forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn && priceObj) {
-            btn.setAttribute('data-product', name);
-            btn.setAttribute('data-price', priceObj.dzd);
-            btn.setAttribute('data-price-usd', priceObj.usd);
-        }
-    });
-
-    // Sync prices text content
-    if (window.currencyManager) {
-        window.currencyManager.updateAllPrices();
-    }
-
-    // Track CustomizeProduct
-    if (typeof fbq !== 'undefined') {
-        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-        fbq('track', 'CustomizeProduct', {
-            content_name: 'Gamma.AI',
-            variant: duration,
-            currency: currency
-        });
-    }
-}
-
 function orderGamma() {
-    const activeBtn = document.querySelector('.gamma-duration-btn.active');
-    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
-    const productNames = {
-        '1month': 'Gamma.AI - 1 Month (Pro Shared)',
-        'private_1month': 'Gamma.AI - 1 Month (Plus Private)',
-        'private_pro_1month': 'Gamma.AI - 1 Month (Pro Private)'
-    };
-    const name = productNames[duration] || 'Gamma.AI';
+    const name = 'Gama AI Pro - 1 Month';
 
     const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
     const config = PRODUCTS['gamma'];
-    const priceObj = (config && config.durations && config.durations[duration]) ? config.durations[duration] : { dzd: 0, usd: 0 };
+    const priceObj = (config && config.durations && config.durations['1month']) ? config.durations['1month'] : { dzd: 1200, usd: 4.5 };
     const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
 
     if (typeof fbq !== 'undefined') {
@@ -4701,9 +4514,7 @@ function selectChatGPTDuration(duration) {
 
     // Force correct prices
     const prices = {
-        '1month': { dzd: 900, usd: 3.6, name: 'ChatGPT Premium - 1 Month' },
-        '3months': { dzd: 2200, usd: 8.8, name: 'ChatGPT Premium - 3 Months' },
-        '6months': { dzd: 4000, usd: 16.0, name: 'ChatGPT Premium - 6 Months' }
+        '1month': { dzd: 900, usd: 3.6, name: 'ChatGPT Premium - 1 Month' }
     };
 
     const priceInfo = prices[duration] || prices['1month'];
@@ -4764,9 +4575,7 @@ function orderChatGPT() {
     const activeBtn = document.querySelector('.chatgpt-duration-btn.active');
     const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
     const names = {
-        '1month': 'ChatGPT Premium - 1 Month',
-        '3months': 'ChatGPT Premium - 3 Months',
-        '6months': 'ChatGPT Premium - 6 Months'
+        '1month': 'ChatGPT Premium - 1 Month'
     };
     const name = names[duration];
 
@@ -4774,9 +4583,7 @@ function orderChatGPT() {
 
     // Force correct prices
     const prices = {
-        '1month': { dzd: 900, usd: 3.6 },
-        '3months': { dzd: 2200, usd: 8.8 },
-        '6months': { dzd: 4000, usd: 16.0 }
+        '1month': { dzd: 900, usd: 3.6 }
     };
 
     const priceObj = prices[duration] || prices['1month'];
@@ -5002,8 +4809,7 @@ function selectNetflixType(type) {
     const priceObj = config.durations[type];
     const names = {
         '1month': 'Netflix Premium - 1 Month',
-        '3months': 'Netflix Premium - 3 Months',
-        '12months': 'Netflix Premium - 1 Year'
+        '3months': 'Netflix Premium - 3 Months'
     };
     const name = names[type];
 
@@ -5048,8 +4854,7 @@ function orderNetflix() {
     const type = activeBtn ? activeBtn.getAttribute('data-type') : '1month';
     const names = {
         '1month': 'Netflix Premium - 1 Month',
-        '3months': 'Netflix Premium - 3 Months',
-        '12months': 'Netflix Premium - 1 Year'
+        '3months': 'Netflix Premium - 3 Months'
     };
     const name = names[type];
 
