@@ -33,9 +33,7 @@ export const PRODUCTS_DATA = {
             price_usd: 4.5,
             description: "اشتراك Adobe Creative Cloud كامل شامل لأكثر من 20 تطبيقاً احترافياً. حساب خاص (Private Account) يدعم جهازين وتخزين سحابي.",
             durations: [
-                { key: "1month", price_dzd: 1200, price_usd: 4.5 },
-                { key: "2months", price_dzd: 2200, price_usd: 8.5 },
-                { key: "3months", price_dzd: 2900, price_usd: 11.6 }
+                { key: "1month", price_dzd: 1200, price_usd: 4.5 }
             ]
         },
         {
@@ -56,23 +54,24 @@ export const PRODUCTS_DATA = {
             category: "AI Search & Research",
             keywords: ["search engine", "research", "citations", "academic"],
             delivery_type: "email_password",
-            price_dzd: 1200,
-            price_usd: 4.5,
-            description: "حساب Perplexity AI Pro للبحث الذكي والتحليل الأكاديمي. (حالياً غير متوفر - Sold Out)",
-            available: false,
-            durations: []
+            price_dzd: 2200,
+            price_usd: 8.8,
+            description: "حساب Perplexity AI Pro للبحث الذكي والتحليل الأكاديمي.",
+            durations: [
+                { key: "1month", price_dzd: 2200, price_usd: 8.8 }
+            ]
         },
         {
             name: "Canva Pro",
             category: "Design & Creative",
             keywords: ["design", "social media", "templates", "easy design"],
             delivery_type: "invite_link",
+            duration: "1 Year",
             price_dzd: 600,
             price_usd: 2.5,
             description: "اشتراك Canva Pro (يرسل الزبون إيميله الشخصي لاستقبال دعوة التفعيل)",
             durations: [
-                { key: "1year", price_dzd: 600, price_usd: 2.5 },
-                { key: "reseller", price_dzd: 3900, price_usd: 16, delivery_type: "full_access", description: "حساب ريسيلر كامل (3 سنوات) مع إيميل التحكم لتغيير المعلومات، يتيح لك إضافة 500 عضو (500 People)" }
+                { key: "standard", price_dzd: 600, price_usd: 2.5 }
             ]
         },
         {
@@ -104,17 +103,7 @@ export const PRODUCTS_DATA = {
                 { key: "12months", price_dzd: 2000, price_usd: 8 }
             ]
         },
-        {
-            name: "TradingView Premium",
-            category: "Trading & Finance",
-            keywords: ["trading", "charts", "crypto", "forex", "stocks"],
-            delivery_type: "email_password",
-            price_dzd: 1500,
-            price_usd: 6,
-            description: "حساب TradingView Premium للتحليل المالي المتقدم. (حالياً غير متوفر - Sold Out)",
-            available: false,
-            durations: []
-        },
+
         {
             name: "Cursor AI",
             category: "AI Coding & Programming",
@@ -133,13 +122,11 @@ export const PRODUCTS_DATA = {
             category: "Vibe Coding & App Building",
             keywords: ["vibe coding", "app builder", "no code", "web app", "ai dev", "full stack"],
             delivery_type: "email_password",
-            price_dzd: 1300,
-            price_usd: 5.2,
+            price_dzd: 1500,
+            price_usd: 6,
             description: "أداة بناء تطبيقات الويب (إيميل وكلمة سر)",
             durations: [
-                { key: "1month", price_dzd: 1300, price_usd: 5.2 },
-                { key: "2months", price_dzd: 2200, price_usd: 8.8 },
-                { key: "3months", price_dzd: 3000, price_usd: 12 }
+                { key: "1month", price_dzd: 1500, price_usd: 6 }
             ]
         },
         {
