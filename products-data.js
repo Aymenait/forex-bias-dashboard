@@ -13,15 +13,16 @@ export const PRODUCTS_DATA = {
             ]
         },
         {
-            name: "ChatGPT Plus",
+            name: "ChatGPT Premium",
             category: "AI Chat & Assistant",
             keywords: ["gpt-4", "gpt4", "openai", "writing", "analysis", "ai assistance"],
             delivery_type: "email_password",
-            price_dzd: 1000,
-            price_usd: 4,
-            description: "حساب ChatGPT Plus شخصي خاص بك (إيميل وكلمة سر)",
+            price_dzd: 900,
+            price_usd: 3.6,
+            description: "حساب ChatGPT Plus شخصي خاص بك (إيميل وكلمة سر) أو تفعيل مباشر في حسابك",
             durations: [
-                { key: "plus", price_dzd: 1000, price_usd: 4 }
+                { key: "1month", price_dzd: 900, price_usd: 3.6 },
+                { key: "1month-upgrade", price_dzd: 1800, price_usd: 7.2 }
             ]
         },
         {

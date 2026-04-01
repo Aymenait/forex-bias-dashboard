@@ -1378,6 +1378,23 @@ const translations = {
         'nav.products': 'منتجاتنا المختارة',
         'nav.reviews': '⭐ آراء النخبة',
         'nav.resellers': '🤝 موزعين',
+        'nav.games': '🕹️ ألعاب',
+        'nav.gamesHero': '🕹️ ألعاب Steam (قريباً)',
+        'badge.coming_soon': 'قريباً',
+        'filter.all': 'الكل',
+        'filter.ai': 'ذكاء اصطناعي',
+        'filter.design': 'تصميم ومونتاج',
+        'filter.courses': 'حسابات وكورسات',
+        'filter.entertainment': 'ترفيه',
+        'filter.games': 'ألعاب🕹️',
+        'badge.sold_out': 'نفدت الكمية',
+        'product.grok.title': 'SUPER GROK',
+        'product.grok.desc': 'نموذج الذكاء الاصطناعي الأقوى والأسرع من xAI للمبرمجين والمبدعين.',
+        'product.grok.selectType': 'اختر العرض:',
+        'product.grok.feature1': 'حساب خاص بك وغير مشترك',
+        'product.grok.feature2': 'أحدث نماذج Grok',
+        'product.grok.feature3': 'إجابات حية من منصة X',
+        'duration.9days': '9 أيام',
         'nav.contact': 'واتساب',
         'nav.telegram': 'تيليجرام',
         'hero.title': 'منصتك المتكاملة لكل ما تحتاجه من',
@@ -2108,6 +2125,23 @@ const translations = {
         'nav.products': 'Our Products',
         'nav.reviews': '⭐ Customer Reviews',
         'nav.resellers': '🤝 Resellers',
+        'nav.games': '🕹️ Games',
+        'nav.gamesHero': '🕹️ Steam Games (Soon)',
+        'badge.coming_soon': 'Coming Soon',
+        'filter.all': 'All',
+        'filter.ai': 'AI Tools',
+        'filter.design': 'Design & Video',
+        'filter.courses': 'Accounts & Courses',
+        'filter.entertainment': 'Entertainment',
+        'filter.games': 'Games🕹️',
+        'badge.sold_out': 'Sold Out',
+        'product.grok.title': 'SUPER GROK',
+        'product.grok.desc': 'The most powerful and fastest AI model from xAI for programmers and creators.',
+        'product.grok.selectType': 'Select Offer:',
+        'product.grok.feature1': 'Private Account (Not Shared)',
+        'product.grok.feature2': 'Latest Grok Models',
+        'product.grok.feature3': 'Real-time answers from X platform',
+        'duration.9days': '9 Days',
         'nav.contact': 'WhatsApp',
         'nav.telegram': 'Telegram',
         'hero.title': 'Your Platform for Everything You Need',
@@ -2881,6 +2915,23 @@ const translations = {
         'nav.products': 'Nos Produits',
         'nav.reviews': '⭐ Avis Clients',
         'nav.resellers': '🤝 Revendeurs',
+        'nav.games': '🕹️ Jeux',
+        'nav.gamesHero': '🕹️ Jeux Steam (Bientôt)',
+        'badge.coming_soon': 'Bientôt',
+        'filter.all': 'Tout',
+        'filter.ai': 'Outils IA',
+        'filter.design': 'Design & Vidéo',
+        'filter.courses': 'Comptes & Cours',
+        'filter.entertainment': 'Divertissement',
+        'filter.games': 'Jeux🕹️',
+        'badge.sold_out': 'Épuisé',
+        'product.grok.title': 'SUPER GROK',
+        'product.grok.desc': 'Le modèle IA le plus puissant et rapide de xAI pour développeurs et créateurs.',
+        'product.grok.selectType': 'Sélectionnez l\'offre:',
+        'product.grok.feature1': 'Compte privé (non partagé)',
+        'product.grok.feature2': 'Derniers modèles Grok',
+        'product.grok.feature3': 'Réponses en direct de la plateforme X',
+        'duration.9days': '9 Jours',
         'nav.contact': 'WhatsApp',
         'nav.telegram': 'Telegram',
         'hero.title': 'Votre Plateforme pour Tout ce Dont Vous Avez Besoin',
@@ -4508,13 +4559,24 @@ function orderGamma() {
 
 // ChatGPT Selection Functions
 function selectChatGPTDuration(duration) {
-    document.querySelectorAll('.chatgpt-duration-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.chatgpt-duration-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'rgba(100, 100, 100, 0.1)';
+        btn.style.border = '2px solid var(--border-color)';
+        btn.style.color = 'var(--text-secondary)';
+    });
     const selectedBtn = document.querySelector(`.chatgpt-duration-btn[data-duration="${duration}"]`);
-    if (selectedBtn) selectedBtn.classList.add('active');
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+        selectedBtn.style.background = 'rgba(16, 163, 127, 0.15)';
+        selectedBtn.style.border = '2px solid #10a37f';
+        selectedBtn.style.color = 'var(--text-primary)';
+    }
 
     // Force correct prices
     const prices = {
-        '1month': { dzd: 900, usd: 3.6, name: 'ChatGPT Premium - 1 Month' }
+        '1month': { dzd: 900, usd: 3.6, name: 'ChatGPT Premium - 1 Month' },
+        '1month-upgrade': { dzd: 1800, usd: 7.2, name: 'ChatGPT Premium - 1 Month (تفعيل في حسابك)' }
     };
 
     const priceInfo = prices[duration] || prices['1month'];
@@ -4575,7 +4637,8 @@ function orderChatGPT() {
     const activeBtn = document.querySelector('.chatgpt-duration-btn.active');
     const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
     const names = {
-        '1month': 'ChatGPT Premium - 1 Month'
+        '1month': 'ChatGPT Premium - 1 Month',
+        '1month-upgrade': 'ChatGPT Premium - 1 Month (تفعيل في حسابك)'
     };
     const name = names[duration];
 
@@ -4583,7 +4646,8 @@ function orderChatGPT() {
 
     // Force correct prices
     const prices = {
-        '1month': { dzd: 900, usd: 3.6 }
+        '1month': { dzd: 900, usd: 3.6 },
+        '1month-upgrade': { dzd: 1800, usd: 7.2 }
     };
 
     const priceObj = prices[duration] || prices['1month'];
@@ -4600,6 +4664,78 @@ function orderChatGPT() {
             value: parseFloat(price),
             currency: currency
         });
+    }
+
+    redirectToWhatsApp(name, price, currency);
+}
+
+// Grok Selection Functions
+function selectGrokDuration(duration) {
+    document.querySelectorAll('.grok-duration-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'rgba(100, 100, 100, 0.1)';
+        btn.style.border = '2px solid var(--border-color)';
+        btn.style.color = 'var(--text-secondary)';
+    });
+    const selectedBtn = document.querySelector(`.grok-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+        selectedBtn.style.background = 'rgba(16, 163, 127, 0.15)';
+        selectedBtn.style.border = '2px solid #10a37f';
+        selectedBtn.style.color = 'var(--text-primary)';
+    }
+
+    const prices = {
+        '9days': { dzd: 800, usd: 3.2, name: 'SUPER GROK - 9 Days' },
+        '1month': { dzd: 1600, usd: 6.4, name: 'SUPER GROK - 1 Month' }
+    };
+
+    const priceInfo = prices[duration] || prices['9days'];
+    const name = priceInfo.name;
+
+    document.querySelectorAll('.grok-prices').forEach(price => price.style.display = 'none');
+    const priceEl = document.getElementById(`grok-prices-${duration}`);
+    if (priceEl) {
+        priceEl.style.display = 'block';
+        const tag = priceEl.querySelector('.price-tag');
+        if (tag) {
+            tag.setAttribute('data-price-dzd', priceInfo.dzd);
+            tag.setAttribute('data-price-usd', priceInfo.usd);
+            if (window.currencyManager && window.currencyManager.currentCurrency === 'USD') {
+                tag.textContent = '$' + priceInfo.usd;
+            } else {
+                tag.textContent = priceInfo.dzd + ' د.ج';
+            }
+        }
+    }
+
+    const orderBtn = document.getElementById('grok-order-btn');
+    if (orderBtn) {
+        orderBtn.setAttribute('data-product', name);
+    }
+}
+
+function orderGrok() {
+    const activeBtn = document.querySelector('.grok-duration-btn.active');
+    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '9days';
+    const names = {
+        '9days': 'SUPER GROK - 9 Days',
+        '1month': 'SUPER GROK - 1 Month'
+    };
+    const name = names[duration];
+
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const prices = {
+        '9days': { dzd: 800, usd: 3.2 },
+        '1month': { dzd: 1600, usd: 6.4 }
+    };
+
+    const priceObj = prices[duration] || prices['9days'];
+    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', { content_name: name, value: parseFloat(price), currency: currency });
+        fbq('track', 'InitiateCheckout', { content_name: name, value: parseFloat(price), currency: currency });
     }
 
     redirectToWhatsApp(name, price, currency);

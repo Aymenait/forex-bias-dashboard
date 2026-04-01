@@ -258,20 +258,15 @@
                     <button onclick="selectDuration('1month')"
                         class="duration-tab active flex-1 md:flex-none px-4 md:px-6 py-3 rounded-xl text-sm font-bold"
                         data-duration="1month">
-                        <span data-i18n="duration.1month">شهر واحد</span>
-                        <div class="text-xs opacity-70 mt-1" data-price-key="1month">800 DA</div>
+                        <span data-i18n="duration.1month">شهر واحد (حساب جديد)</span>
+                        <div class="text-xs opacity-70 mt-1" data-price-key="1month">900 DA</div>
                     </button>
-                    <button onclick="selectDuration('3months')"
-                        class="duration-tab flex-1 md:flex-none px-4 md:px-6 py-3 rounded-xl text-sm font-bold"
-                        data-duration="3months">
-                        <span data-i18n="duration.3months">3 أشهر</span>
-                        <div class="text-xs opacity-70 mt-1" data-price-key="3months">2200 DA</div>
-                    </button>
-                    <button onclick="selectDuration('6months')"
-                        class="duration-tab flex-1 md:flex-none px-4 md:px-6 py-3 rounded-xl text-sm font-bold text-yellow-400"
-                        data-duration="6months">
-                        <span data-i18n="duration.6months">6 أشهر</span>
-                        <div class="text-xs opacity-70 mt-1" data-price-key="6months">4000 DA</div>
+                    <button onclick="selectDuration('1month-upgrade')"
+                        class="duration-tab flex-1 md:flex-none px-4 md:px-6 py-3 rounded-xl text-sm font-bold text-[#10a37f]"
+                        data-duration="1month-upgrade">
+                        <span data-i18n="duration.1month-upgrade">شهر واحد (تفعيل في حسابك)</span>
+                        <div class="text-xs opacity-70 mt-1" data-price-key="1month-upgrade">1800 DA</div>
+                        <a href="https://www.youtube.com/watch?v=m_D3yt6eSDs" target="_blank" onclick="event.stopPropagation();" class="text-[10px] underline block mt-1 hover:text-white" data-i18n="duration.upgrade_video">طريقة التفعيل</a>
                     </button>
                 </div>
 
@@ -568,9 +563,9 @@
                 'hero.badge': 'الإصدار الأقوى GPT-4o',
                 'hero.subtitle': 'مساحة عملك الخاصة والآمنة',
                 'hero.desc': 'احصل على قوة الذكاء الاصطناعي الكاملة بدون قيود. حساب خاص (Private Workspace)، دقة 100%، وتفعيل فوري على بريدك الشخصي.',
-                'duration.1month': 'شهر واحد',
-                'duration.3months': '3 أشهر',
-                'duration.6months': '6 أشهر',
+                'duration.1month': 'شهر واحد (حساب جديد)',
+                'duration.1month-upgrade': 'شهر واحد (تفعيل في حسابك)',
+                'duration.upgrade_video': 'شاهد طريقة التفعيل',
                 'price.per_month': '/ للشهر',
                 'payment.title': 'اختر طريقة الدفع المناسبة',
                 'payment.baridimob.desc': 'الدفع عبر تطبيق بريدي موب بالدينار الجزائري',
@@ -603,9 +598,9 @@
                 'hero.badge': 'Most Powerful GPT-4o',
                 'hero.subtitle': 'Your Secure Private Workspace',
                 'hero.desc': 'Unlock the full power of AI without limits. Private Workspace, 100% accuracy, and instant activation on your personal email.',
-                'duration.1month': '1 Month',
-                'duration.3months': '3 Months',
-                'duration.6months': '6 Months',
+                'duration.1month': '1 Month (New Account)',
+                'duration.1month-upgrade': '1 Month (Upgrade existing account)',
+                'duration.upgrade_video': 'Watch how to activate',
                 'price.per_month': '/ Month',
                 'payment.title': 'Choose Payment Method',
                 'payment.baridimob.desc': 'Pay via BaridiMob app in DZD',
@@ -638,9 +633,9 @@
                 'hero.badge': 'Puissant GPT-4o',
                 'hero.subtitle': 'Votre Espace de Travail Privé et Sécurisé',
                 'hero.desc': 'Débloquez toute la puissance de l\'IA sans limites. Espace de travail privé, précision 100% et activation instantanée sur votre email personnel.',
-                'duration.1month': '1 Mois',
-                'duration.3months': '3 Mois',
-                'duration.6months': '6 Mois',
+                'duration.1month': '1 Mois (Nouveau Compte)',
+                'duration.1month-upgrade': '1 Mois (Activer sur votre compte)',
+                'duration.upgrade_video': 'Voir comment l\'activer',
                 'price.per_month': '/ Mois',
                 'payment.title': 'Choisir la méthode de paiement',
                 'payment.baridimob.desc': 'Payer via l\'application BaridiMob en DZD',
@@ -690,9 +685,8 @@
 
         // Data & State
         const prices = {
-            '1month': { dzd: 800, usd: 3.2, label: '800 DA' },
-            '3months': { dzd: 2200, usd: 8.8, label: '2200 DA' },
-            '6months': { dzd: 4000, usd: 16, label: '4000 DA' },
+            '1month': { dzd: 900, usd: 3.6, label: '900 DA' },
+            '1month-upgrade': { dzd: 1800, usd: 7.2, label: '1800 DA' }
         };
         let currentDuration = '1month';
         let currentLang = localStorage.getItem('lang') || 'ar'; // Default language

@@ -314,8 +314,8 @@
                 <div class="nav-buttons-row">
                     <a href="#products" class="btn ghost" data-i18n="nav.products">منتجاتنا</a>
                     <a href="reviews" class="btn ghost" data-i18n="nav.reviews">⭐ آراء العملاء</a>
-                    <a href="resellers.html" class="btn ghost" data-i18n="nav.resellers" style="color: #10b981;">🤝
-                        موزعين</a>
+                    <a href="resellers.html" class="btn ghost" data-i18n="nav.resellers" style="color: #10b981;">🤝 موزعين</a>
+                    <a href="games_landing.html" class="btn ghost" style="color: #66c0f4; font-weight: bold;"><span data-i18n="nav.games">🕹️ ألعاب</span> <span style="font-size: 0.7em; background: rgba(102, 192, 244, 0.2); padding: 2px 6px; border-radius: 4px; margin-right: 4px;" data-i18n="badge.coming_soon">قريباً</span></a>
                 </div>
             </div>
         </nav>
@@ -328,11 +328,10 @@
                         ومشاريعك بأفضل الأسعار وخدمة عملاء احترافية.</p>
                     <div class="hero-buttons">
                         <a href="#products" class="btn primary" data-i18n="hero.explore"
-                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Hero - Explore Products', content_category: 'Navigation' }); }">استكشف
-                            المنتجات</a>
+                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Hero - Explore Products', content_category: 'Navigation' }); }">استكشف المنتجات</a>
                         <a href="#contact" class="btn secondary" data-i18n="hero.learn"
-                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Hero - Learn Services', content_category: 'Navigation' }); }">تعرف
-                            على خدماتنا</a>
+                            onclick="if(typeof fbq !== 'undefined') { fbq('track', 'ViewContent', { content_name: 'Hero - Learn Services', content_category: 'Navigation' }); }">تعرف على خدماتنا</a>
+                        <a href="games_landing.html" class="btn" style="background: rgba(102,192,244,0.1); border: 1px solid rgba(102,192,244,0.3); color: #66c0f4;" data-i18n="nav.gamesHero">🕹️ ألعاب Steam (قريباً)</a>
                     </div>
                     <div class="trust-badges">
                         <div class="badge">
@@ -434,11 +433,11 @@
                 <!-- Category Pills (Foxy Store Style) -->
                 <div class="category-pills-container">
                     <div class="category-pills">
-                        <button class="category-pill active" data-filter="all">الكل</button>
-                        <button class="category-pill" data-filter="ai">ذكاء اصطناعي</button>
-                        <button class="category-pill" data-filter="design">تصميم ومونتاج</button>
-                        <button class="category-pill" data-filter="courses">حسابات وكورسات</button>
-                        <button class="category-pill" data-filter="entertainment">ترفيه</button>
+                        <button class="category-pill active" data-filter="all" data-i18n="filter.all">الكل</button>
+                        <button class="category-pill" data-filter="ai" data-i18n="filter.ai">ذكاء اصطناعي</button>
+                        <button class="category-pill" data-filter="design" data-i18n="filter.design">تصميم ومونتاج</button>
+                        <button class="category-pill" data-filter="courses" data-i18n="filter.courses">حسابات وكورسات</button>
+                        <button class="category-pill" data-filter="entertainment" data-i18n="filter.entertainment">ترفيه</button>
                     </div>
                 </div>
                 <div class="product-grid">
@@ -571,10 +570,41 @@
                             <p class="description" data-i18n="product.chatgpt.desc">أحدث نماذج الذكاء الاصطناعي GPT-4o
                                 متوفرة الآن بأفضل العروض.</p>
 
+                            <!-- Duration Selection -->
+                            <div class="chatgpt-durations" style="margin: 16px 0;">
+                                <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                    <span data-i18n="product.cursor.selectType">اختر العرض:</span>
+                                </p>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="chatgpt-duration-btn active" data-duration="1month"
+                                        onclick="selectChatGPTDuration('1month')"
+                                        style="flex: 1; padding: 8px; border: 2px solid #10a37f; background: rgba(16, 163, 127, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                        حساب جديد
+                                    </button>
+                                    <button class="chatgpt-duration-btn" data-duration="1month-upgrade"
+                                        onclick="selectChatGPTDuration('1month-upgrade')"
+                                        style="flex: 1; padding: 8px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                        تفعيل في حسابك
+                                    </button>
+                                </div>
+                            </div>
+
                             <div id="chatgpt-prices-1month" class="chatgpt-prices" style="margin: 16px 0;">
                                 <div class="price-tag" data-price-dzd="900" data-price-usd="3.6">900 د.ج</div>
                                 <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
                                         data-i18n="perMonth">للشهر</span></span>
+                            </div>
+
+                            <div id="chatgpt-prices-1month-upgrade" class="chatgpt-prices" style="margin: 16px 0; display: none;">
+                                <div class="price-tag" data-price-dzd="1800" data-price-usd="7.2">1800 د.ج</div>
+                                <span style="color: #9ca3af; font-size: 0.9rem;">/ <span
+                                        data-i18n="perMonth">للشهر</span></span>
+                                <div style="margin-top: 8px;">
+                                    <a href="https://www.youtube.com/watch?v=m_D3yt6eSDs" target="_blank" style="color: #10a37f; font-size: 0.85rem; text-decoration: underline; display: flex; align-items: center; gap: 4px;">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg> 
+                                        شاهد طريقة التفعيل
+                                    </a>
+                                </div>
                             </div>
 
                             <div class="payment-methods-row">
@@ -623,6 +653,60 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- SUPER GROK -->
+                    <div class="product-card fade-in" id="grok-card" data-category="ai">
+                        <div class="product-image" style="background-image: url('https://i.pinimg.com/1200x/33/d7/e6/33d7e60098a9677bee53218fbe775b53.jpg'); background-size: cover; background-position: center;" role="img" aria-label="SUPER GROK"></div>
+                        <h3 data-i18n="product.grok.title">SUPER GROK</h3>
+                        <p class="description" data-i18n="product.grok.desc">نموذج الذكاء الاصطناعي الأقوى والأسرع من xAI للمبرمجين والمبدعين.</p>
+
+                        <!-- Duration Selection -->
+                        <div class="grok-durations" style="margin: 16px 0;">
+                            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                <span data-i18n="product.grok.selectType">اختر العرض:</span>
+                            </p>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="grok-duration-btn active" data-duration="9days"
+                                    onclick="selectGrokDuration('9days')"
+                                    style="flex: 1; padding: 8px; border: 2px solid #10a37f; background: rgba(16, 163, 127, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;" data-i18n="duration.9days">
+                                    9 أيام
+                                </button>
+                                <button class="grok-duration-btn" data-duration="1month"
+                                    onclick="selectGrokDuration('1month')"
+                                    style="flex: 1; padding: 8px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;" data-i18n="perMonth">
+                                    للشهر
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="grok-prices-9days" class="grok-prices" style="margin: 16px 0;">
+                            <div class="price-tag" data-price-dzd="800" data-price-usd="3.2">800 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="duration.9days">9 أيام</span></span>
+                        </div>
+
+                        <div id="grok-prices-1month" class="grok-prices" style="margin: 16px 0; display: none;">
+                            <div class="price-tag" data-price-dzd="1600" data-price-usd="6.4">1600 د.ج</div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="perMonth">للشهر</span></span>
+                        </div>
+
+                        <ul class="product-features mt-4">
+                            <li data-i18n="product.grok.feature1">حساب خاص بك وغير مشترك</li>
+                            <li data-i18n="product.grok.feature2">أحدث نماذج Grok</li>
+                            <li data-i18n="product.grok.feature3">إجابات حية من منصة X</li>
+                        </ul>
+
+                        <div style="display: flex; gap: 10px; margin-top: auto;">
+                            <!-- No discover more page exists, linking straight to order -->
+                            <button class="order-btn" id="grok-order-btn" data-product="SUPER GROK - 9 Days"
+                                onclick="orderGrok()" style="width: 100%;">
+                                <span data-i18n="product.orderNow">اطلب الآن</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Gama AI Pro -->
                     <div class="product-card fade-in" id="gamma-card">
                         <div class="product-image"
@@ -678,8 +762,12 @@
                     <!-- Netflix Premium -->
                     <div class="product-card fade-in">
                         <div class="product-image"
-                            style="background-image: url('https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif'); background-size: cover; background-position: center;"
+                            style="background-image: url('https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif'); background-size: cover; background-position: center; position: relative;"
                             role="img" aria-label="Netflix Premium">
+                            <!-- Sold Out Badge Overlay -->
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 5;">
+                                <div style="background: #E50914; color: white; padding: 10px 25px; font-weight: 800; border-radius: 50px; font-size: 1.2rem; transform: rotate(-10deg); box-shadow: 0 0 20px rgba(229, 9, 20, 0.4); border: 2px solid white;" data-i18n="badge.sold_out">نفدت الكمية</div>
+                            </div>
                         </div>
                         <h3 data-i18n="product.netflix.title">Netflix Premium</h3>
                         <p class="description" data-i18n="product.netflix.desc">استمتع بأفضل الأفلام والمسلسلات
@@ -694,13 +782,11 @@
                             </p>
                             <div style="display: flex; gap: 8px;">
                                 <button class="netflix-type-btn active" data-type="1month"
-                                    onclick="selectNetflixType('1month')"
-                                    style="flex: 1; padding: 8px; border: 2px solid #E50914; background: rgba(229, 9, 20, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                    style="flex: 1; padding: 8px; border: 2px solid #555; background: rgba(80, 80, 80, 0.15); color: #888; border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: all 0.3s; font-size: 0.9rem;" disabled>
                                     <span data-i18n="product.adobe.oneMonth">شهر واحد</span>
                                 </button>
                                 <button class="netflix-type-btn" data-type="3months"
-                                    onclick="selectNetflixType('3months')"
-                                    style="flex: 1; padding: 8px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                    style="flex: 1; padding: 8px; border: 2px solid #555; background: rgba(80, 80, 80, 0.1); color: #888; border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: all 0.3s; font-size: 0.9rem;" disabled>
                                     <span data-i18n="product.adobe.threeMonths">3 أشهر</span>
                                 </button>
                             </div>
@@ -719,7 +805,7 @@
                                     أشهر</span></span>
                         </div>
 
-                        <div style="margin-top: 15px; margin-bottom: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
+                        <div style="margin-top: 15px; margin-bottom: 10px; display: none; gap: 5px; flex-wrap: wrap;">
                             <button class="payment-btn-compact crypto-btn" data-product="Netflix Premium"
                                 data-price="600" data-price-usd="2.5" id="netflix-usdt-btn">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -751,8 +837,9 @@
                             <li data-i18n="product.netflix.feature2">مشاهدة بدون إعلانات</li>
                             <li data-i18n="product.netflix.feature3">تنزيل المحتوى للمشاهدة بدون إنترنت</li>
                         </ul>
-                        <button class="order-btn" data-product="Netflix Premium - 1 Month" id="netflix-order-btn"
-                            data-i18n="product.orderNow" onclick="orderNetflix()">اطلب الآن</button>
+                        <button class="order-btn" id="netflix-order-btn"
+                            style="background: #333; cursor: not-allowed; border: none;" disabled
+                            data-i18n="badge.sold_out">نفدت الكمية</button>
                     </div>
 
                     <!-- Prime Video -->

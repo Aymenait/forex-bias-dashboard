@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Offline Games - قريباً</title>
+    <meta name="description"
+        content="نعمل حالياً على توفير أقوى ألعاب Steam بنظام Offline بأفضل الأسعار الممكنة. قريباً جداً في 3Ahub.">
+    <meta name="keywords"
+        content="Steam, Offline Games, Cheap Games, PC Gaming, ألعاب كمبيوتر, ستيم أوفلاين">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://marketalgeria.store/games_landing.html">
+    <meta name="google" content="notranslate">
+
+    <script>
+        // Early language detection
+        (function () {
+            const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
+            document.documentElement.lang = savedLang;
+            document.documentElement.dir = (savedLang === 'ar') ? 'rtl' : 'ltr';
+
+            const style = document.createElement('style');
+            style.innerHTML = '[data-i18n] { opacity: 0 !important; } .i18n-ready [data-i18n] { opacity: 1 !important; transition: opacity 0.2s ease-in; }';
+            document.head.appendChild(style);
+        })();
+    </script>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://marketalgeria.store/games_landing.html">
+    <meta property="og:title" content="Steam Offline Games - قريباً">
+    <meta property="og:description"
+        content="نعمل حالياً على توفير أقوى ألعاب Steam بنظام Offline بأفضل الأسعار. سجل ليصلك التحديث.">
+    <meta property="og:image" content="https://i.imgur.com/hyjvY4Z.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <style>
+        :root {
+            --steam-blue: #1b2838;
+            --steam-light-blue: #66c0f4;
+            --steam-dark: #171a21;
+            --bg-dark: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--steam-dark);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(102, 192, 244, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(27, 40, 56, 0.5) 0px, transparent 50%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        /* Hero */
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, white, var(--steam-light-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(102, 192, 244, 0.2), rgba(255, 255, 255, 0.1));
+            border: 2px solid var(--steam-light-blue);
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 800;
+            color: var(--steam-light-blue);
+            margin: 24px 0;
+            box-shadow: 0 0 20px rgba(102, 192, 244, 0.3);
+            animation: pulse 2s infinite;
+            letter-spacing: 2px;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(102, 192, 244, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(102, 192, 244, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(102, 192, 244, 0); }
+        }
+
+        /* Nav */
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .floating-icon {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+
+<body class="i18n-ready">
+    <div id="particles-js"></div>
+
+    <nav class="nav-container">
+        <a href="index.html" class="back-btn" data-i18n="nav.home">← الرئيسية</a>
+
+        <!-- Language Switcher -->
+        <div class="flex gap-2" style="direction: ltr;">
+            <button onclick="changeLanguage('fr')"
+                class="lang-btn text-white px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-all text-sm font-bold"
+                data-lang="fr">FR</button>
+            <button onclick="changeLanguage('en')"
+                class="lang-btn text-white px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-all text-sm font-bold"
+                data-lang="en">EN</button>
+            <button onclick="changeLanguage('ar')"
+                class="lang-btn text-white px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-all text-sm font-bold"
+                data-lang="ar">AR</button>
+        </div>
+    </nav>
+
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10 text-center">
+
+        <div class="mb-12 floating-icon">
+            <svg viewBox="0 0 24 24" fill="none" class="w-24 h-24 mx-auto text-white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                <path d="M6 12h4"></path>
+                <path d="M8 10v4"></path>
+                <circle cx="15" cy="13" r="1" fill="currentColor"></circle>
+                <circle cx="18" cy="11" r="1" fill="currentColor"></circle>
+            </svg>
+        </div>
+
+        <h1 class="hero-title" data-i18n="games.title">Steam Offline Games</h1>
+        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto" data-i18n="games.subtitle">
+            نعمل حالياً على تجهيز أكبر مكتبة لألعاب الكمبيوتر الأصلية (Steam Offline) وبأسعار خيالية تناسب الجميع.
+        </p>
+
+        <div class="coming-soon-badge" data-i18n="games.coming_soon">
+            قــريــبــاً جــداً
+        </div>
+
+        <div class="glass-card p-6 md:p-8 mt-12 max-w-xl mx-auto align-center border border-[#66c0f4]/30">
+            <h3 class="text-xl font-bold mb-4 text-[#66c0f4]" data-i18n="games.features_title">ماذا نجهز لكم؟</h3>
+            <ul class="space-y-4 text-start inline-block mx-auto text-gray-200">
+                <li class="flex items-center gap-3">
+                    <span class="text-[#66c0f4] text-xl">🚀</span>
+                    <span data-i18n="games.feature1">أحدث ألعاب AAA فور صدورها.</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="text-[#66c0f4] text-xl">🔒</span>
+                    <span data-i18n="games.feature2">حسابات ستيم آمنة 100%.</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="text-[#66c0f4] text-xl">💰</span>
+                    <span data-i18n="games.feature3">أسعار تبدأ من 500 دج فقط للعبة.</span>
+                </li>
+            </ul>
+        </div>
+        
+        <p class="text-gray-400 mt-12 text-sm" data-i18n="games.footer_note">
+            ابقوا بالقرب... نحن نضع اللمسات الأخيرة 🎮
+        </p>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const translations = {
+            ar: {
+                'nav.home': '← الرئيسية',
+                'games.title': 'Steam Offline Games',
+                'games.subtitle': 'نعمل حالياً على تجهيز أكبر مكتبة لألعاب الكمبيوتر الأصلية (Steam Offline) وبأسعار خيالية تناسب الجميع.',
+                'games.coming_soon': 'قــريــبــاً جــداً',
+                'games.features_title': 'ماذا نجهز لكم؟',
+                'games.feature1': 'أحدث ألعاب AAA فور صدورها.',
+                'games.feature2': 'حسابات ستيم آمنة 100%.',
+                'games.feature3': 'أسعار تبدأ من 500 دج فقط للعبة.',
+                'games.footer_note': 'ابقوا بالقرب... نحن نضع اللمسات الأخيرة 🎮'
+            },
+            en: {
+                'nav.home': '← Home',
+                'games.title': 'Steam Offline Games',
+                'games.subtitle': 'We are currently preparing the largest library of original PC games (Steam Offline) at incredible prices for everyone.',
+                'games.coming_soon': 'C O M I N G   S O O N',
+                'games.features_title': 'What are we preparing?',
+                'games.feature1': 'Latest AAA games upon release.',
+                'games.feature2': '100% Secure Steam Accounts.',
+                'games.feature3': 'Prices starting from 500 DZD per game.',
+                'games.footer_note': 'Stay tuned... We are putting the final touches 🎮'
+            },
+            fr: {
+                'nav.home': '← Accueil',
+                'games.title': 'Jeux Steam Offline',
+                'games.subtitle': 'Nous préparons actuellement la plus grande bibliothèque de jeux PC originaux (Steam Offline) à des prix incroyables pour tout le monde.',
+                'games.coming_soon': 'B I E N T Ô T  D I S P O N I B L E',
+                'games.features_title': 'Que préparons-nous ?',
+                'games.feature1': 'Les derniers jeux AAA dès leur sortie.',
+                'games.feature2': 'Comptes Steam 100% sécurisés.',
+                'games.feature3': 'Prix à partir de 500 DZD par jeu.',
+                'games.footer_note': 'Restez à l\'écoute... Nous apportons la touche finale 🎮'
+            }
+        };
+
+        function changeLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            document.documentElement.lang = lang;
+            document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Update Active Tab
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('bg-[#66c0f4]');
+                    btn.classList.remove('bg-white/10');
+                } else {
+                    btn.classList.remove('bg-[#66c0f4]');
+                    btn.classList.add('bg-white/10');
+                }
+            });
+        }
+
+        // Initialize language
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentLang = localStorage.getItem('preferredLanguage') || 'ar';
+            changeLanguage(currentLang);
+        });
+
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 40 },
+                "size": { "value": 3 },
+                "color": { "value": "#66c0f4" },
+                "line_linked": { "enable": true, "color": "#66c0f4", "opacity": 0.2 },
+                "move": { "speed": 1.5 }
+            }
+        });
+    </script>
+</body>
+
+</html>
