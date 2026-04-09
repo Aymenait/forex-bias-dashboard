@@ -55,11 +55,11 @@ export const PRODUCTS_DATA = {
             category: "AI Search & Research",
             keywords: ["search engine", "research", "citations", "academic"],
             delivery_type: "email_password",
-            price_dzd: 2200,
-            price_usd: 8.8,
+            price_dzd: 1800,
+            price_usd: 8,
             description: "حساب Perplexity AI Pro للبحث الذكي والتحليل الأكاديمي.",
             durations: [
-                { key: "1month", price_dzd: 2200, price_usd: 8.8 }
+                { key: "1month", price_dzd: 1800, price_usd: 8 }
             ]
         },
         {
@@ -193,15 +193,17 @@ export const PRODUCTS_DATA = {
             ]
         },
         {
-            name: "Google AI Premium",
+            name: "Google Gemini Pro",
             category: "AI Chat & Gemini",
-            keywords: ["google ai", "gemini ultra", "gemini pro", "google assistant", "ai productivity"],
+            keywords: ["google ai", "gemini ultra", "gemini pro", "google assistant", "ai productivity", "veo 3"],
             delivery_type: "email_password",
-            price_dzd: 1800,
-            price_usd: 8,
-            description: "اشتراك Gemini Ultra و Veo 3 مع أدوات إنتاجية متقدمة. (حالياً غير متوفر - Sold Out)",
-            available: false,
-            durations: []
+            price_dzd: 1400,
+            price_usd: 6,
+            description: "اشتراك Gemini Pro و Veo 3 مع أدوات إنتاجية متقدمة.",
+            available: true,
+            durations: [
+                { key: "1month", price_dzd: 1400, price_usd: 6 }
+            ]
         }
     ],
     payment_methods: [
