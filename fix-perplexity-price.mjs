@@ -1,5 +1,5 @@
-// Fix Perplexity price in BOTH Firebase collections
-// ROOT CAUSE: `products` collection has price_dzd=1200 while `products_v2` has 800!
+// Fix Perplexity & Gemini price in BOTH Firebase collections
+// ROOT CAUSE: Firebase data overwriting static HTML prices.
 
 const PROJECT_ID = 'the-real-world-review';
 const API_KEY = 'AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw';
@@ -30,7 +30,17 @@ async function updatePrice(collection, docId, priceDZD, priceUSD) {
     }
 }
 
-// Update BOTH collections!
-await updatePrice('products', 'perplexity', 800, 3);
-await updatePrice('products_v2', 'perplexity', 800, 3);
-console.log('🎉 Done!');
+// Update BOTH collections for Perplexity and Gemini
+console.log('🔄 Updating Perplexity to 1800...');
+await updatePrice('products', 'perplexity', 1800, 8);
+await updatePrice('products_v2', 'perplexity', 1800, 8);
+
+console.log('🔄 Updating Gemini to 1400...');
+await updatePrice('products', 'google-ai', 1400, 6);
+await updatePrice('products_v2', 'google-ai', 1400, 6);
+
+console.log('🔄 Updating ChatGPT to 1000...');
+await updatePrice('products', 'chatgpt', 1000, 4);
+await updatePrice('products_v2', 'chatgpt', 1000, 4);
+
+console.log('🎉 All updates completed!');

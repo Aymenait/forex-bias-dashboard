@@ -165,10 +165,10 @@ const PRODUCTS = {
   'perplexity': {
     id: 'perplexity',
     name: 'Perplexity AI Pro',
-    price_dzd: 800,
-    price_usd: 3.2,
+    price_dzd: 1800,
+    price_usd: 8,
     durations: {
-      '1month': { dzd: 800, usd: 3.2 }
+      '1month': { dzd: 1800, usd: 8 }
     },
     description: {
       ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
@@ -330,12 +330,12 @@ const PRODUCTS = {
   },
   'google-ai': {
     id: 'google-ai',
-    name: 'Google AI Ultra & Veo 3',
-    available: false,
-    price_dzd: 1800,
-    price_usd: 8,
+    name: 'Google Gemini Pro & Veo 3',
+    available: true,
+    price_dzd: 1400,
+    price_usd: 6,
     durations: {
-      '1month': { dzd: 1800, usd: 8 },
+      '1month': { dzd: 1400, usd: 6 },
       '1year': { dzd: 0, usd: 0 }
     },
     description: {
