@@ -1,0 +1,8 @@
+{
+  "fields": {
+    "price_dzd": { "integerValue": "1800" },
+    "price_usd": { "doubleValue": 8 },
+    "priceDZD": { "doubleValue": 1800 },
+    "priceUSD": { "doubleValue": 8 }
+  }
+}

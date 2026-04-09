@@ -73,29 +73,60 @@ async function loadProductsFromFirebase(db, firebaseModules) {
 function createProductCardHTML(product, lang = 'ar') {
     const name = product.name?.[lang] || product.name?.ar || 'منتج';
     const description = product.description?.[lang] || product.description?.ar || '';
-    // Hotfix: Force correct retail prices for ChatGPT
-    if (product.id === 'chatgpt') {
-        product.priceDZD = 900;
-        product.priceUSD = 3.6;
-    }
-    // Hotfix: Force correct retail prices for Perplexity
-    // Use the resolved 'name' variable which is definitely a string
-    if (product.id === 'perplexity' || (name && name.toLowerCase().includes('perplexity'))) {
-        product.priceDZD = 800;
-        product.priceUSD = 3;
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Hotfixes & Fallbacks - Force correct prices and media
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    // Force Prices
+    if (product.id === 'chatgpt' || (name && name.toLowerCase().includes('chatgpt'))) {
+        product.priceDZD = 1000;
+        product.priceUSD = 4;
+    } else if (product.id === 'perplexity' || (name && name.toLowerCase().includes('perplexity'))) {
+        product.priceDZD = 1800;
+        product.priceUSD = 8;
         product.availability = 'available';
-        product.description = {
-            ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
-            en: 'Perplexity AI Pro account for smart search (1 Month)',
-            fr: 'Compte Perplexity AI Pro pour recherche intelligente (1 Mois)'
-        };
-        // Also force ID to match our config if it differs
         product.id = 'perplexity';
+    } else if (product.id === 'google-ai' || (name && name.toLowerCase().includes('gemini'))) {
+        product.priceDZD = 1400;
+        product.priceUSD = 6;
+        product.availability = 'available';
+        product.id = 'google-ai';
+    }
+
+    // Comprehensive Media Fallbacks (Mapping from index.html)
+    const mediaMap = {
+        'chatgpt': { url: 'https://i.imgur.com/hEiJhso.gif', type: 'image' },
+        'trw': { url: 'https://i.pinimg.com/originals/94/29/77/94297745778a635848f1ea7154238e83.gif', type: 'image' },
+        'adobe': { url: 'https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg', type: 'image' },
+        'gamma': { url: 'https://i.imgur.com/FDZBdd9.gif', type: 'image' },
+        'super-grok': { url: 'https://i.pinimg.com/1200x/33/d7/e6/33d7e60098a9677bee53218fbe775b53.jpg', type: 'image' },
+        'netflix': { url: 'https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif', type: 'image' },
+        'canva': { url: 'https://i.pinimg.com/736x/71/8b/41/718b41945aab84bd2276c762266931d0.jpg', type: 'image' },
+        'capcut': { url: 'https://i.pinimg.com/1200x/38/e3/08/38e308732b87069ed50893423f09ca4b.jpg', type: 'image' },
+        'tradingview': { url: 'https://i.pinimg.com/736x/8c/63/a5/8c63a5c7d9d6e826b281b01dea6bd5da.jpg', type: 'image' },
+        'cursor': { url: 'https://i.pinimg.com/736x/29/f9/48/29f9488bd27d42debcfbddb33c1c79d7.jpg', type: 'image' },
+        'scispace': { url: 'https://i.pinimg.com/736x/06/b7/27/06b727adf3807349c0bf07bf2fd404a4.jpg', type: 'image' },
+        'duolingo': { url: 'https://i.pinimg.com/originals/98/59/12/98591272861e66a02eecf5dae0450c73.gif', type: 'image' },
+        'lovable': { url: 'https://i.pinimg.com/1200x/cd/d4/69/cdd469e94eb529ae307f9b5d56e8da96.jpg', type: 'image' },
+        'google-ai': { url: 'https://i.pinimg.com/736x/c2/5b/dd/c25bdda8e7d4eb27bcb2f4d411441d92.jpg', type: 'image' },
+        'alight-motion': { url: 'https://i.pinimg.com/originals/ad/8b/2c/ad8b2cf5e7b44514ab71b9fd9666ec16.jpg', type: 'image' },
+        'perplexity': { url: 'https://i.imgur.com/mEy5oXF.mp4', type: 'video' }
+    };
+
+    // Apply media fallback if missing in product data
+    if (!product.mediaUrl || product.mediaUrl === '' || product.mediaUrl === 'null') {
+        const fallback = mediaMap[product.id] || 
+                         Object.entries(mediaMap).find(([key]) => name.toLowerCase().includes(key))?.[1];
+        
+        if (fallback) {
+            product.mediaUrl = fallback.url;
+            product.mediaType = fallback.type;
+        }
     }
 
     const priceDZD = product.priceDZD || 0;
     const priceUSD = product.priceUSD || 0;
-    const mediaUrl = product.mediaUrl || '';
+    const mediaUrl = product.mediaUrl || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(name);
     const mediaType = product.mediaType || 'image';
     const availability = product.availability || 'available';
     const features = product.features || [];
@@ -226,16 +257,33 @@ function renderProducts(products, lang = 'ar') {
         return;
     }
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ترتيب المنتجات (وضع ميزات الذكاء الاصطناعي في المقدمة)
+    // ═══════════════════════════════════════════════════════════════════════════
+    const AI_PRODUCT_IDS = ['chatgpt', 'perplexity', 'google-ai', 'cursor', 'scispace', 'lovable', 'gamma', 'super-grok'];
+    
+    const sortedProducts = [...products].sort((a, b) => {
+        const aName = (a.name?.ar || a.id || '').toLowerCase();
+        const bName = (b.name?.ar || b.id || '').toLowerCase();
+        
+        const isAI_A = AI_PRODUCT_IDS.includes(a.id) || aName.includes('ai') || aName.includes('gemini') || aName.includes('gpt');
+        const isAI_B = AI_PRODUCT_IDS.includes(b.id) || bName.includes('ai') || bName.includes('gemini') || bName.includes('gpt');
+        
+        if (isAI_A && !isAI_B) return -1;
+        if (!isAI_A && isAI_B) return 1;
+        return 0;
+    });
+
     // مسح المحتوى الحالي
     productGrid.innerHTML = '';
 
     // إنشاء بطاقات المنتجات
-    products.forEach(product => {
+    sortedProducts.forEach(product => {
         const cardHTML = createProductCardHTML(product, lang);
         productGrid.insertAdjacentHTML('beforeend', cardHTML);
     });
 
-    console.log('✅ تم عرض', products.length, 'منتج في الصفحة');
+    console.log('✅ تم عرض', sortedProducts.length, 'منتج في الصفحة');
 
     // إعادة تهيئة الأحداث
     reinitializeEventListeners();
