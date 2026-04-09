@@ -33,7 +33,7 @@
         "@type": "Offer",
         "url": "https://marketalgeria.store/trw_landing.html",
         "priceCurrency": "DZD",
-        "price": "2900",
+        "price": "3500",
         "priceValidUntil": "2026-12-31",
         "availability": "https://schema.org/InStock",
         "shippingDetails": {
@@ -62,7 +62,7 @@
         fbq('init', '2046893892791206');
         fbq('track', 'PageView');
         const isUSD = location.search.includes('USD');
-        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['trw'] : { price_dzd: 2900, price_usd: 12 };
+        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['trw'] : { price_dzd: 3500, price_usd: 15 };
         fbq('track', 'ViewContent', { content_name: productData.name || 'The Real World Account', content_category: 'Courses', value: isUSD ? productData.price_usd : productData.price_dzd, currency: isUSD ? 'USD' : 'DZD' });
         setTimeout(function () { fbq('trackCustom', 'InterestedLead', { content_name: productData.name || 'The Real World Account', time_on_page: '10s', value: isUSD ? productData.price_usd : productData.price_dzd, currency: isUSD ? 'USD' : 'DZD' }); }, 10000);
     </script>
@@ -1408,7 +1408,7 @@
         <h2 data-i18n="footer.title">لا تضيع الفرصة</h2>
         <p data-i18n="footer.subtitle">السعر سيرتفع قريباً. انضم للنخبة الآن.</p>
         <a href="https://wa.me/213782125821"
-            onclick="if(typeof fbq!=='undefined'){const u=location.search.includes('USD'),v=u?18:3750,c=u?'USD':'DZD';fbq('track','Lead',{content_name:'The Real World',value:v,currency:c});fbq('track','InitiateCheckout',{content_name:'The Real World',value:v,currency:c});}"
+            onclick="if(typeof fbq!=='undefined'){const u=location.search.includes('USD'),v=u?15:3500,c=u?'USD':'DZD';fbq('track','Lead',{content_name:'The Real World',value:v,currency:c});fbq('track','InitiateCheckout',{content_name:'The Real World',value:v,currency:c});}"
             class="trw-cta" data-i18n="footer.cta">🚀 ابدأ رحلتك الآن</a>
     </div>
 
@@ -1422,8 +1422,8 @@
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="baridimob-product-name">The Real World
                         Account</span></p>
                 <div style="display: flex; gap: 15px;">
-                    <p><strong data-i18n="modal.price">السعر:</strong> <span id="baridimob-price-dzd">2900</span> DA</p>
-                    <p style="display: none;"><span id="baridimob-price-usd">12</span> USD</p>
+                    <p><strong data-i18n="modal.price">السعر:</strong> <span id="baridimob-price-dzd">3500</span> DA</p>
+                    <p style="display: none;"><span id="baridimob-price-usd">15</span> USD</p>
                 </div>
             </div>
             <div class="crypto-wallet-info">
@@ -1468,8 +1468,8 @@
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="crypto-product-name">The Real World
                         Account</span></p>
                 <div style="display: flex; gap: 15px;">
-                    <p><strong data-i18n="modal.price">السعر:</strong> <span id="crypto-price-usd">12</span> USDT</p>
-                    <p style="display: none;"><span id="crypto-price-dzd">2900</span> DA</p>
+                    <p><strong data-i18n="modal.price">السعر:</strong> <span id="crypto-price-usd">15</span> USDT</p>
+                    <p style="display: none;"><span id="crypto-price-dzd">3500</span> DA</p>
                 </div>
             </div>
             <div class="network-selector">
@@ -1524,8 +1524,8 @@
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="redotpay-product-name">The Real World
                         Account</span></p>
                 <div style="display: flex; gap: 15px;">
-                    <p><strong data-i18n="modal.price">السعر:</strong> <span id="redotpay-price-usd">12</span> USD</p>
-                    <p style="display: none;"><span id="redotpay-price-dzd">2900</span> DA</p>
+                    <p><strong data-i18n="modal.price">السعر:</strong> <span id="redotpay-price-usd">15</span> USD</p>
+                    <p style="display: none;"><span id="redotpay-price-dzd">3500</span> DA</p>
                 </div>
             </div>
             <div class="crypto-wallet-info">

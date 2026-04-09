@@ -5,11 +5,11 @@ export const PRODUCTS_DATA = {
             category: "Education & Business",
             keywords: ["andrew tate", "trw", "business", "e-commerce", "trading", "money making", "real time platform"],
             delivery_type: "email_password",
-            price_dzd: 2900,
-            price_usd: 12,
+            price_dzd: 3500,
+            price_usd: 15,
             description: "دخول رسمي لمنصة The Real World (خطة Veteran Plan) المفعلة منذ ديسمبر 2024. تشمل كل الكورسات والدردشات الحية (ليست فيديوهات مسجلة فقط).",
             durations: [
-                { key: "1month", price_dzd: 2900, price_usd: 12 }
+                { key: "1month", price_dzd: 3500, price_usd: 15 }
             ]
         },
         {
@@ -17,11 +17,11 @@ export const PRODUCTS_DATA = {
             category: "AI Chat & Assistant",
             keywords: ["gpt-4", "gpt4", "openai", "writing", "analysis", "ai assistance"],
             delivery_type: "email_password",
-            price_dzd: 900,
-            price_usd: 3.6,
+            price_dzd: 1000,
+            price_usd: 4,
             description: "حساب ChatGPT Plus شخصي خاص بك (إيميل وكلمة سر) أو تفعيل مباشر في حسابك",
             durations: [
-                { key: "1month", price_dzd: 900, price_usd: 3.6 },
+                { key: "1month", price_dzd: 1000, price_usd: 4 },
                 { key: "1month-upgrade", price_dzd: 1800, price_usd: 7.2 }
             ]
         },

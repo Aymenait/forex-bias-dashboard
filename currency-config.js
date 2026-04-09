@@ -87,8 +87,8 @@ const PRODUCTS = {
   'trw': {
     id: 'trw',
     name: 'The Real World Account',
-    price_dzd: 2900,
-    price_usd: 12,
+    price_dzd: 3500,
+    price_usd: 15,
     description: {
       ar: 'حساب مشترك للكورسات ومنصة The Real World',
       en: 'Shared account for courses and The Real World platform',
@@ -102,14 +102,14 @@ const PRODUCTS = {
   'chatgpt': {
     id: 'chatgpt',
     name: 'ChatGPT Plus (GPT-4o)',
-    price_dzd: 900,
-    price_usd: 3.6,
+    price_dzd: 1000,
+    price_usd: 4,
     durations: {
-      '1month': { dzd: 900, usd: 3.6 },
+      '1month': { dzd: 1000, usd: 4 },
       '3months': { dzd: 2200, usd: 8.8 },
       '6months': { dzd: 4000, usd: 16.0 },
-      'business': { dzd: 900, usd: 3.6 },
-      'plus': { dzd: 900, usd: 3.6 }
+      'business': { dzd: 1000, usd: 4 },
+      'plus': { dzd: 1000, usd: 4 }
     },
     description: {
       ar: 'اشتراك ChatGPT Plus مع GPT-4o وميزات متقدمة',
