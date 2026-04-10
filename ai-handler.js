@@ -69,7 +69,7 @@ ${productsContext}
 ملاحظات بيعية حاسمة (Sales Key Points):
 - Adobe, CapCut, Alight Pro, Cursor, Lovable: حسابات خاصة بالكامل (Private Accounts).
 - Netflix Premium: حساب مشترك ببروفايل محمي. يوجد عرض (12 شهر) بـ 2000 DA فقط.
-- The Real World: مدة الاشتراك (1 Month) شهر واحد والسعر (2900 DA).
+- The Real World: مدة الاشتراك (1 Month) شهر واحد والسعر (3500 DA).
 - Prime Video: مدة الاشتراك (3 Months) 3 أشهر كاملة.
 - SciSpace & Crunchyroll: حسابات مشتركة (Shared Accounts).
 - HMA VPN: يدعم تشغيل أجهزة متعددة في نفس الوقت.

@@ -709,6 +709,22 @@ function updateAvailabilityUI(card, product, lang) {
 function updatePricesUI(card, product) {
     if (!card || !product) return;
 
+    // ═══════════════════════════════════════════════════════════════
+    // Single Source of Truth: always prefer window.PRODUCTS prices
+    // over whatever Firebase stored (which may be outdated/stale).
+    // ═══════════════════════════════════════════════════════════════
+    if (typeof window !== 'undefined' && window.PRODUCTS) {
+        const officialProduct = window.PRODUCTS[product.id] ||
+            Object.values(window.PRODUCTS).find(function(p) {
+                var fbName = ((product.name && (product.name.ar || product.name)) || '').toLowerCase();
+                return fbName.includes(p.id) || (p.id && product.id && product.id.includes(p.id));
+            });
+        if (officialProduct) {
+            product.priceDZD = officialProduct.price_dzd;
+            product.priceUSD = officialProduct.price_usd;
+        }
+    }
+
     const currentCurrency = (typeof window !== 'undefined' && window.currentCurrency) || 'DZD';
 
     // تحديث عناصر السعر

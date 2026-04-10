@@ -33,7 +33,7 @@
         "@type": "Offer",
         "url": "https://marketalgeria.store/trw_landing.html",
         "priceCurrency": "DZD",
-        "price": "2900",
+        "price": "3500",
         "priceValidUntil": "2026-12-31",
         "availability": "https://schema.org/InStock",
         "shippingDetails": {
@@ -62,7 +62,7 @@
         fbq('init', '2046893892791206');
         fbq('track', 'PageView');
         const isUSD = location.search.includes('USD');
-        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['trw'] : { price_dzd: 2900, price_usd: 12 };
+        const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['trw'] : { price_dzd: 3500, price_usd: 15 };
         fbq('track', 'ViewContent', { content_name: productData.name || 'The Real World Account', content_category: 'Courses', value: isUSD ? productData.price_usd : productData.price_dzd, currency: isUSD ? 'USD' : 'DZD' });
         setTimeout(function () { fbq('trackCustom', 'InterestedLead', { content_name: productData.name || 'The Real World Account', time_on_page: '10s', value: isUSD ? productData.price_usd : productData.price_dzd, currency: isUSD ? 'USD' : 'DZD' }); }, 10000);
     </script>
@@ -926,7 +926,7 @@
                 style="margin-bottom: 32px; display: flex; flex-direction: column; align-items: center;">
                 <div dir="ltr"
                     style="font-size: 2.22rem; font-weight: 900; color: var(--trw-gold-light); margin-bottom: 8px; text-shadow: 0 0 20px rgba(212, 168, 67, 0.2);">
-                    2900 DZD <span style="font-size: 1.1rem; color: var(--trw-text-dim); font-weight: 400;">/
+                    3500 DZD <span style="font-size: 1.1rem; color: var(--trw-text-dim); font-weight: 400;">/
                         Month</span>
                 </div>
                 <div
@@ -940,21 +940,21 @@
 
             <!-- Payment Methods -->
             <div class="trw-payments" style="display: flex; gap: 25px; justify-content: center; margin: 30px 0;">
-                <div class="trw-pay-btn" onclick="openPaymentModal('baridimob', 'trw', 2900, 12)"
+                <div class="trw-pay-btn" onclick="openPaymentModal('baridimob', 'trw', 3500, 15)"
                     style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
                     <div class="trw-pay-icon trw-pay-baridi"
                         style="width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-weight: 900; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); border: 2px solid rgba(255,255,255,0.1);">
                         Baridi</div>
                     <span style="font-size: 0.8rem; color: var(--trw-text-dim); font-weight: 700;">BaridiMob</span>
                 </div>
-                <div class="trw-pay-btn" onclick="openPaymentModal('crypto', 'trw', 2900, 12)"
+                <div class="trw-pay-btn" onclick="openPaymentModal('crypto', 'trw', 3500, 15)"
                     style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
                     <div class="trw-pay-icon trw-pay-usdt"
                         style="width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #059669, #047857); color: #fff; font-weight: 900; box-shadow: 0 10px 20px rgba(5, 150, 105, 0.3); border: 2px solid rgba(255,255,255,0.1);">
                         USDT</div>
                     <span style="font-size: 0.8rem; color: var(--trw-text-dim); font-weight: 700;">USDT</span>
                 </div>
-                <div class="trw-pay-btn" onclick="openPaymentModal('redotpay', 'trw', 2900, 12)"
+                <div class="trw-pay-btn" onclick="openPaymentModal('redotpay', 'trw', 3500, 15)"
                     style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
                     <div class="trw-pay-icon trw-pay-redot"
                         style="width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; font-weight: 900; box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3); border: 2px solid rgba(255,255,255,0.1);">
@@ -1422,7 +1422,7 @@
                 <p><strong data-i18n="modal.product">المنتج:</strong> <span id="baridimob-product-name">The Real World
                         Account - Veteran Plan</span></p>
                 <p class="crypto-price-usd"><strong data-i18n="modal.price">السعر:</strong> <span
-                        id="baridimob-price-dzd">2900</span> DZD</p>
+                        id="baridimob-price-dzd">3500</span> DZD</p>
             </div>
             <div class="crypto-wallet-info">
                 <h3 data-i18n="modal.paymentInfo">معلومات الدفع</h3>

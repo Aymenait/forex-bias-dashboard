@@ -26,38 +26,31 @@ async function loadLivePrices() {
           const productId = doc.id;
 
           if (PRODUCTS[productId]) {
-            // Update local product with remote data
-            // Safeguard: Don't overwrite Adobe with old prices if local is already updated
-            const isAdobe = productId === 'adobe';
-
+            // ═══════════════════════════════════════════════════════════════
+            // Single Source of Truth: currency-config.js is the floor.
+            // Never let Firebase overwrite a price with a LOWER value.
+            // This prevents stale Firestore data from reverting updated prices.
+            // ═══════════════════════════════════════════════════════════════
             if (remoteProduct.price_dzd) {
-              const isOldAdobePrice = isAdobe && remoteProduct.price_dzd < 1500;
-              if (!isOldAdobePrice) PRODUCTS[productId].price_dzd = remoteProduct.price_dzd;
+              const localPrice = PRODUCTS[productId].price_dzd || 0;
+              if (remoteProduct.price_dzd >= localPrice) {
+                PRODUCTS[productId].price_dzd = remoteProduct.price_dzd;
+              } else {
+                console.warn(`⚠️ Firebase price for ${productId} (${remoteProduct.price_dzd} DZD) is lower than local config (${localPrice} DZD). Keeping local price.`);
+              }
             }
             if (remoteProduct.price_usd) {
-              const isOldAdobePriceUSD = isAdobe && remoteProduct.price_usd < 5.5;
-              if (!isOldAdobePriceUSD) PRODUCTS[productId].price_usd = remoteProduct.price_usd;
+              const localPriceUSD = PRODUCTS[productId].price_usd || 0;
+              if (remoteProduct.price_usd >= localPriceUSD) {
+                PRODUCTS[productId].price_usd = remoteProduct.price_usd;
+              }
             }
 
             if (remoteProduct.durations) {
-              // Merge durations with safeguard for Adobe
-              if (isAdobe) {
-                const mergedDurations = { ...PRODUCTS[productId].durations };
-                const minPrices = { '1month': 1500, '2months': 2500, '3months': 3200 };
-
-                Object.entries(remoteProduct.durations).forEach(([key, val]) => {
-                  const minPrice = minPrices[key];
-                  // Only update if remote price is NOT an old/lower price
-                  if (minPrice && val.dzd < minPrice) return;
-                  mergedDurations[key] = val;
-                });
-                PRODUCTS[productId].durations = mergedDurations;
-              } else {
-                PRODUCTS[productId].durations = {
-                  ...PRODUCTS[productId].durations,
-                  ...remoteProduct.durations
-                };
-              }
+              PRODUCTS[productId].durations = {
+                ...PRODUCTS[productId].durations,
+                ...remoteProduct.durations
+              };
             }
             if (remoteProduct.active !== undefined) PRODUCTS[productId].active = remoteProduct.active;
 
@@ -112,13 +105,19 @@ async function initInternationalExpansion() {
     // Step 4: Initialize Currency Selector UI
     initializeCurrencySelector(activeCurrency, currencyManager, paymentManager);
 
-    // Step 5: Load Live Prices from Firebase (Requirement: Live Updates)
-    await loadLivePrices();
-    console.log('☁️ Loaded live prices from Firebase');
+    // Step 5: Live price refresh from Firebase DISABLED.
+    // Prices are managed exclusively via currency-config.js (single source of truth).
+    // Enabling this causes a visible price "flash" when Firebase data differs from local config.
+    // To update prices, edit currency-config.js directly.
+    // await loadLivePrices();
 
     // Step 6: Sync DOM with PRODUCTS config (Ensure all cards have correct prices from config)
     syncDOMWithConfig();
     console.log('🔄 Synced DOM with PRODUCTS config');
+
+
+
+
 
     // Step 7: Update all prices on the page with initial currency
     currencyManager.updateAllPrices(activeCurrency);

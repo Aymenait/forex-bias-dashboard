@@ -156,6 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const priceDZD = button.getAttribute('data-price');
                 const priceUSD = button.getAttribute('data-price-usd') || Math.ceil(priceDZD / 250); // استخدام السعر الصحيح من data-price-usd
 
+                // Save product info directly on the modal element as a reliable fallback
+                cryptoModal.setAttribute('data-product', currentCryptoProduct || '');
+                cryptoModal.setAttribute('data-price-dzd', priceDZD || '');
+                cryptoModal.setAttribute('data-price-usd', priceUSD || '');
+
                 document.getElementById('crypto-product-name').textContent = currentCryptoProduct;
                 document.getElementById('crypto-price-dzd').textContent = priceDZD;
                 document.getElementById('crypto-price-usd').textContent = priceUSD;
@@ -235,6 +240,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     const priceDZD = button.getAttribute('data-price');
                     const priceUSD = button.getAttribute('data-price-usd') || Math.ceil(priceDZD / 250); // استخدام السعر الصحيح من data-price-usd
 
+                    // Save product info directly on the modal element as a reliable fallback
+                    redotpayModal.setAttribute('data-product', productName || '');
+                    redotpayModal.setAttribute('data-price-dzd', priceDZD || '');
+                    redotpayModal.setAttribute('data-price-usd', priceUSD || '');
+
                     document.getElementById('redotpay-product-name').textContent = productName;
                     document.getElementById('redotpay-price-dzd').textContent = priceDZD;
                     document.getElementById('redotpay-price-usd').textContent = priceUSD;
@@ -292,6 +302,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const productName = button.getAttribute('data-product');
                 const priceDZD = button.getAttribute('data-price');
+
+                // Save product info directly on the modal element as a reliable fallback
+                baridimobModal.setAttribute('data-product', productName || '');
+                baridimobModal.setAttribute('data-price', priceDZD || '');
 
                 document.getElementById('baridimob-product-name').textContent = productName;
                 document.getElementById('baridimob-price-dzd').textContent = priceDZD;
@@ -513,9 +527,16 @@ function copyWalletAddress() {
 
 // Confirm payment and redirect to WhatsApp
 function confirmCryptoPayment() {
-    const productName = document.getElementById('crypto-product-name').textContent;
-    const priceUSD = document.getElementById('crypto-price-usd').textContent;
-    const network = document.getElementById('selected-network').textContent;
+    const modal = document.getElementById('crypto-modal');
+    // Try multiple sources for product name - most reliable first
+    const productName = (modal && modal.getAttribute('data-product')) ||
+        document.getElementById('crypto-product-name')?.textContent?.trim() ||
+        window.currentProductName ||
+        'Produit Market Algeria';
+    const priceUSD = (modal && modal.getAttribute('data-price-usd')) ||
+        document.getElementById('crypto-price-usd')?.textContent?.trim() ||
+        '';
+    const network = document.getElementById('selected-network')?.textContent?.trim() || 'USDT';
 
     // Track Lead event with Meta Pixel (USD for Crypto payments)
     if (typeof fbq !== 'undefined') {
@@ -591,8 +612,15 @@ function copyRedotPayID() {
 
 // Confirm RedotPay payment
 function confirmRedotPayPayment() {
-    const productName = document.getElementById('redotpay-product-name').textContent;
-    const priceUSD = document.getElementById('redotpay-price-usd').textContent;
+    const modal = document.getElementById('redotpay-modal');
+    // Try multiple sources for product name - most reliable first
+    const productName = (modal && modal.getAttribute('data-product')) ||
+        document.getElementById('redotpay-product-name')?.textContent?.trim() ||
+        window.currentProductName ||
+        'Produit Market Algeria';
+    const priceUSD = (modal && modal.getAttribute('data-price-usd')) ||
+        document.getElementById('redotpay-price-usd')?.textContent?.trim() ||
+        '';
 
     // Track Lead event with Meta Pixel (USD for RedotPay payments)
     if (typeof fbq !== 'undefined') {
@@ -669,8 +697,15 @@ function copyBaridiMobRIP() {
 
 // Confirm BaridiMob payment
 function confirmBaridiMobPayment() {
-    const productName = document.getElementById('baridimob-product-name').textContent;
-    const priceDZD = document.getElementById('baridimob-price-dzd').textContent;
+    const modal = document.getElementById('baridimob-modal');
+    // Try multiple sources for product name - most reliable first
+    const productName = (modal && modal.getAttribute('data-product')) ||
+        document.getElementById('baridimob-product-name')?.textContent?.trim() ||
+        window.currentProductName ||
+        'Produit Market Algeria';
+    const priceDZD = (modal && modal.getAttribute('data-price')) ||
+        document.getElementById('baridimob-price-dzd')?.textContent?.trim() ||
+        '';
 
     // Track Lead event with Meta Pixel (DZD for BaridiMob/CCP payments)
     if (typeof fbq !== 'undefined') {
@@ -1427,10 +1462,10 @@ const translations = {
         'product.adobe.sixMonths': '6 أشهر',
         'product.adobe.oneYear': 'عام كامل',
         'product.adobe.selectDuration': 'اختر المدة:',
-        'product.adobe.shared.price1': 'شهر واحد: <strong>1500 د.ج</strong>',
-        'product.adobe.shared.price2': '3 أشهر: <strong>3000 د.ج</strong>',
-        'product.adobe.personal.price1': 'شهر واحد: <strong>3000 د.ج</strong>',
-        'product.adobe.personal.price2': '3 أشهر: <strong>4500 د.ج</strong>',
+        'product.adobe.shared.price1': 'شهر واحد: <strong>1200 د.ج</strong>',
+        'product.adobe.shared.price2': '3 أشهر: <strong>3900 د.ج</strong>',
+        'product.adobe.personal.price1': 'شهر واحد: <strong>2900 د.ج</strong>',
+        'product.adobe.personal.price2': '3 أشهر: <strong>8500 د.ج</strong>',
         'product.gamma.selectType': 'اختر نوع الحساب:',
         'product.gamma.shared': 'حساب مشترك',
         'product.gamma.personal': 'حساب شخصي',
@@ -2119,6 +2154,11 @@ const translations = {
         'product.perplexity.feature1': 'بحث ذكي بالذكاء الاصطناعي',
         'product.perplexity.feature2': 'إجابات مع مصادر موثوقة',
         'product.perplexity.feature3': 'استخدام غير محدود للنماذج المتقدمة',
+        'product.microsoft-office.title': 'Microsoft Office 365',
+        'product.microsoft-office.desc': 'تفعيل رسمي لمايكروسوفت أوفيس لمدة سنة كاملة على حسابك الخاص.',
+        'product.microsoft-office.feature1': 'تفعيل رسمي لمدة 12 شهر',
+        'product.microsoft-office.feature2': 'يشمل Word, Excel, PowerPoint, Outlook',
+        'product.microsoft-office.feature3': 'مساحة تخزين OneDrive سعة 1TB',
     },
     en: {
         'brand.tagline': 'Digital Solutions That Boost Your Presence',
@@ -2175,7 +2215,7 @@ const translations = {
         'product.adobe.oneYear': '1 Year',
         'product.adobe.selectDuration': 'Select Duration:',
         'product.adobe.shared.price1': '1 Month',
-        'product.adobe.shared.price2': '3 Months',
+        'product.adobe.shared.price2': '3 Months - 3900 DA',
         'product.adobe.personal.price1': '1 Month (Keys)',
         'product.adobe.personal.price2': '3 Months (Keys)',
         'product.gamma.selectType': 'Select Account Type:',
@@ -2908,6 +2948,11 @@ const translations = {
         'product.perplexity.feature1': 'Smart AI Search',
         'product.perplexity.feature2': 'Answers with Reliable Sources',
         'product.perplexity.feature3': 'Unlimited Use of Advanced Models',
+        'product.microsoft-office.title': 'Microsoft Office 365',
+        'product.microsoft-office.desc': 'Official Microsoft Office activation for one full year on your personal account.',
+        'product.microsoft-office.feature1': 'Official 12-month activation',
+        'product.microsoft-office.feature2': 'Includes Word, Excel, PowerPoint, Outlook',
+        'product.microsoft-office.feature3': '1TB OneDrive cloud storage',
     },
     fr: {
         'brand.tagline': 'Solutions Numériques Qui Renforcent Votre Présence',
@@ -2998,6 +3043,12 @@ const translations = {
         'product.chatgpt.feature3': 'Intégration avec vos outils préférés',
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'Plateforme IA avancée pour créer des présentations, documents et sites web professionnels.',
+        'product.microsoft-office.title': 'Microsoft Office 365',
+        'product.microsoft-office.desc': 'Activation officielle de Microsoft Office pour une année entière sur votre compte personnel.',
+        'product.microsoft-office.feature1': 'Activation officielle de 12 mois',
+        'product.microsoft-office.feature2': 'Inclut Word, Excel, PowerPoint, Outlook',
+        'product.microsoft-office.feature3': 'Stockage cloud OneDrive de 1 To',
+
         'product.gamma.price': 'Prix Bientôt Disponible',
         'product.gamma.oneMonth': '1 Mois (Pro Shared)',
         'product.gamma.privateOneMonth': '1 Mois (Plus Private)',
@@ -4575,7 +4626,7 @@ function selectChatGPTDuration(duration) {
 
     // Force correct prices
     const prices = {
-        '1month': { dzd: 900, usd: 3.6, name: 'ChatGPT Premium - 1 Month' },
+        '1month': { dzd: 1000, usd: 4, name: 'ChatGPT Premium - 1 Month' },
         '1month-upgrade': { dzd: 1800, usd: 7.2, name: 'ChatGPT Premium - 1 Month (تفعيل في حسابك)' }
     };
 
@@ -4646,7 +4697,7 @@ function orderChatGPT() {
 
     // Force correct prices
     const prices = {
-        '1month': { dzd: 900, usd: 3.6 },
+        '1month': { dzd: 1000, usd: 4 },
         '1month-upgrade': { dzd: 1800, usd: 7.2 }
     };
 

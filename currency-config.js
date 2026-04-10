@@ -281,10 +281,10 @@ const PRODUCTS = {
   'lovable': {
     id: 'lovable',
     name: 'Lovable AI',
-    price_dzd: 1300,
-    price_usd: 5.2,
+    price_dzd: 1500,
+    price_usd: 6,
     durations: {
-      '1month': { dzd: 1300, usd: 5.2 },
+      '1month': { dzd: 1500, usd: 6 },
       '2months': { dzd: 2200, usd: 8.8 },
       '3months': { dzd: 3000, usd: 12 }
     },
@@ -417,6 +417,24 @@ const PRODUCTS = {
       ar: 'انضم إلى عائلة Duolingo Super واستمتع بتعلم لغات غير محدود.',
       en: 'Join Duolingo Super Family and enjoy unlimited language learning.',
       fr: 'Rejoignez la famille Duolingo Super et profitez d\'un apprentissage illimité.'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'microsoft-office': {
+    id: 'microsoft-office',
+    name: 'Microsoft Office 365',
+    price_dzd: 1500,
+    price_usd: 6,
+    durations: {
+      '1year': { dzd: 1500, usd: 6 }
+    },
+    description: {
+      ar: 'تفعيل رسمي لمايكروسوفت أوفيس لمدة سنة كاملة على حسابك الخاص.',
+      en: 'Official Microsoft Office activation for one full year on your personal account.',
+      fr: 'Activation officielle de Microsoft Office pour une année entière sur votre compte personnel.'
     },
     paymentMethods: {
       dzd: ['baridimob', 'crypto'],

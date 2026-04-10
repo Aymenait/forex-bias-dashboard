@@ -204,6 +204,18 @@ export const PRODUCTS_DATA = {
             durations: [
                 { key: "1month", price_dzd: 1400, price_usd: 6 }
             ]
+        },
+        {
+            name: "Microsoft Office",
+            category: "Productivity & Software",
+            keywords: ["office", "word", "excel", "powerpoint", "microsoft", "productivity", "activation key"],
+            delivery_type: "activation_key",
+            price_dzd: 1500,
+            price_usd: 6,
+            description: "تفعيل رسمي لمايكروسوفت أوفيس لمدة سنة كاملة. يشمل Word, Excel, PowerPoint والمزيد.",
+            durations: [
+                { key: "1year", price_dzd: 1500, price_usd: 6 }
+            ]
         }
     ],
     payment_methods: [

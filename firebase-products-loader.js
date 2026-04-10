@@ -74,23 +74,28 @@ function createProductCardHTML(product, lang = 'ar') {
     const name = product.name?.[lang] || product.name?.ar || 'منتج';
     const description = product.description?.[lang] || product.description?.ar || '';
     // ═══════════════════════════════════════════════════════════════════════════
-    // Hotfixes & Fallbacks - Force correct prices and media
+    // Single Source of Truth - Sync with currency-config.js
     // ═══════════════════════════════════════════════════════════════════════════
+    
+    // Check for ID match or name match in official PRODUCTS
+    let officialProduct = null;
+    if (typeof window !== 'undefined' && window.PRODUCTS) {
+        if (window.PRODUCTS[product.id]) {
+            officialProduct = window.PRODUCTS[product.id];
+        } else {
+            // Try matching by name (lowercase)
+            const entries = Object.entries(window.PRODUCTS);
+            const match = entries.find(([key, val]) => 
+                (name && name.toLowerCase().includes(key)) || (product.id && product.id.includes(key))
+            );
+            if (match) officialProduct = match[1];
+        }
+    }
 
-    // Force Prices
-    if (product.id === 'chatgpt' || (name && name.toLowerCase().includes('chatgpt'))) {
-        product.priceDZD = 1000;
-        product.priceUSD = 4;
-    } else if (product.id === 'perplexity' || (name && name.toLowerCase().includes('perplexity'))) {
-        product.priceDZD = 1800;
-        product.priceUSD = 8;
-        product.availability = 'available';
-        product.id = 'perplexity';
-    } else if (product.id === 'google-ai' || (name && name.toLowerCase().includes('gemini'))) {
-        product.priceDZD = 1400;
-        product.priceUSD = 6;
-        product.availability = 'available';
-        product.id = 'google-ai';
+    if (officialProduct) {
+        product.priceDZD = officialProduct.price_dzd;
+        product.priceUSD = officialProduct.price_usd;
+        if (officialProduct.id) product.id = officialProduct.id;
     }
 
     // Comprehensive Media Fallbacks (Mapping from index.html)
@@ -110,7 +115,8 @@ function createProductCardHTML(product, lang = 'ar') {
         'lovable': { url: 'https://i.pinimg.com/1200x/cd/d4/69/cdd469e94eb529ae307f9b5d56e8da96.jpg', type: 'image' },
         'google-ai': { url: 'https://i.pinimg.com/736x/c2/5b/dd/c25bdda8e7d4eb27bcb2f4d411441d92.jpg', type: 'image' },
         'alight-motion': { url: 'https://i.pinimg.com/originals/ad/8b/2c/ad8b2cf5e7b44514ab71b9fd9666ec16.jpg', type: 'image' },
-        'perplexity': { url: 'https://i.imgur.com/mEy5oXF.mp4', type: 'video' }
+        'perplexity': { url: 'https://i.imgur.com/mEy5oXF.mp4', type: 'video' },
+        'microsoft-office': { url: 'https://i.pinimg.com/736x/3c/0d/b2/3c0db24fec715f86cc3e167892f88e2f.jpg', type: 'image' }
     };
 
     // Apply media fallback if missing in product data
