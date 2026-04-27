@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3Ahub - Mobile Hero Concepts</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #05070d;
+            color: #f7fafc;
+            font-family: "Tajawal", "Segoe UI", Arial, sans-serif;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 18px 14px 36px;
+            background:
+                radial-gradient(circle at 80% 12%, rgba(102, 192, 244, 0.18), transparent 30%),
+                radial-gradient(circle at 14% 42%, rgba(255, 213, 111, 0.13), transparent 32%),
+                linear-gradient(180deg, #080b13 0%, #05070d 100%);
+        }
+
+        .intro {
+            max-width: 430px;
+            margin: 0 auto 18px;
+            text-align: center;
+        }
+
+        .intro h1 {
+            margin: 0 0 8px;
+            font-size: 1.35rem;
+            letter-spacing: 0;
+        }
+
+        .intro p {
+            margin: 0;
+            color: #aab6c8;
+            line-height: 1.7;
+            font-size: 0.92rem;
+        }
+
+        .concepts {
+            display: grid;
+            gap: 22px;
+            max-width: 430px;
+            margin: 0 auto;
+        }
+
+        .phone {
+            overflow: hidden;
+            min-height: 760px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 28px;
+            background: #070b13;
+            box-shadow: 0 28px 90px rgba(0, 0, 0, 0.45);
+        }
+
+        .label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.055);
+            color: #ffd56f;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .label span:last-child {
+            color: #aab6c8;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 700px;
+            padding: 18px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(255, 213, 111, 0.22);
+        }
+
+        .brand strong {
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .brand small {
+            color: #aab6c8;
+            font-size: 0.72rem;
+        }
+
+        .menu {
+            width: 42px;
+            height: 42px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            font-size: 1.3rem;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 34px;
+            padding: 7px 11px;
+            border-radius: 8px;
+            background: rgba(255, 213, 111, 0.12);
+            color: #ffe49d;
+            font-weight: 800;
+            font-size: 0.82rem;
+        }
+
+        h2 {
+            margin: 16px 0 12px;
+            font-size: 2.05rem;
+            line-height: 1.12;
+            letter-spacing: 0;
+        }
+
+        p {
+            margin: 0;
+            color: #b8c3d4;
+            line-height: 1.72;
+            font-size: 0.98rem;
+        }
+
+        .actions {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            border: 0;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 900;
+            color: #150f06;
+            background: linear-gradient(135deg, #ffd56f, #ff9f1c);
+            box-shadow: 0 16px 38px rgba(255, 159, 28, 0.28);
+        }
+
+        .btn.alt {
+            color: #eef6ff;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            background: rgba(255, 255, 255, 0.075);
+            box-shadow: none;
+        }
+
+        .proof {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .proof div {
+            padding: 10px 6px;
+            border: 1px solid rgba(255, 255, 255, 0.11);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            text-align: center;
+        }
+
+        .proof strong {
+            display: block;
+            color: #ffd56f;
+            font-size: 1.02rem;
+        }
+
+        .proof span {
+            display: block;
+            margin-top: 4px;
+            color: #aab6c8;
+            font-size: 0.68rem;
+        }
+
+        .popular {
+            margin-top: 20px;
+        }
+
+        .popular-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #edf3fb;
+            font-weight: 900;
+        }
+
+        .chips,
+        .mini-products {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .chips::-webkit-scrollbar,
+        .mini-products::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chip {
+            flex: 0 0 auto;
+            padding: 9px 12px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #dce7f5;
+            font-weight: 700;
+            font-size: 0.82rem;
+        }
+
+        .mini-card {
+            flex: 0 0 138px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.11);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .mini-card img {
+            width: 100%;
+            height: 90px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .mini-card div {
+            padding: 10px;
+        }
+
+        .mini-card strong {
+            display: block;
+            font-size: 0.82rem;
+        }
+
+        .mini-card span {
+            color: #ffd56f;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .concept-1 .hero {
+            background:
+                linear-gradient(180deg, rgba(5, 7, 13, 0.1), #070b13 78%),
+                url("https://i.imgur.com/FDZBdd9.gif") center 64% / cover no-repeat;
+        }
+
+        .concept-1 .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(5, 7, 13, 0.78), rgba(5, 7, 13, 0.45) 42%, #070b13 86%),
+                radial-gradient(circle at 20% 20%, rgba(255, 213, 111, 0.22), transparent 36%);
+        }
+
+        .concept-1 .hero > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .concept-2 .hero {
+            background:
+                radial-gradient(circle at 78% 20%, rgba(102, 192, 244, 0.24), transparent 30%),
+                radial-gradient(circle at 20% 54%, rgba(124, 58, 237, 0.24), transparent 36%),
+                #060914;
+        }
+
+        .ai-orb {
+            position: relative;
+            width: 238px;
+            height: 238px;
+            margin: 18px auto 10px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 35% 30%, #fff, transparent 11%),
+                radial-gradient(circle at 42% 42%, #66c0f4, #7c3aed 42%, #111827 70%);
+            box-shadow: 0 0 70px rgba(102, 192, 244, 0.45);
+        }
+
+        .ai-orb::before,
+        .ai-orb::after {
+            content: "";
+            position: absolute;
+            inset: -16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 50%;
+        }
+
+        .ai-orb::after {
+            inset: 28px -30px;
+            transform: rotate(-20deg);
+            border-color: rgba(255, 213, 111, 0.35);
+        }
+
+        .concept-3 .hero {
+            background:
+                radial-gradient(circle at 80% 6%, rgba(255, 213, 111, 0.18), transparent 28%),
+                linear-gradient(180deg, #0c111d, #05070d);
+        }
+
+        .deal-card {
+            margin-top: 20px;
+            padding: 14px;
+            border: 1px solid rgba(255, 213, 111, 0.3);
+            border-radius: 16px;
+            background:
+                linear-gradient(135deg, rgba(255, 213, 111, 0.14), rgba(255, 255, 255, 0.055)),
+                rgba(255, 255, 255, 0.055);
+        }
+
+        .deal-head {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .deal-head img {
+            width: 76px;
+            height: 76px;
+            border-radius: 14px;
+            object-fit: cover;
+        }
+
+        .deal-head strong {
+            display: block;
+            font-size: 1.02rem;
+        }
+
+        .deal-head span {
+            color: #ffd56f;
+            font-weight: 900;
+        }
+
+        .store-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .store-strip div {
+            min-height: 72px;
+            padding: 9px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.76rem;
+        }
+
+        .store-strip span {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.35rem;
+        }
+
+        @media (min-width: 980px) {
+            .concepts {
+                grid-template-columns: repeat(3, minmax(300px, 390px));
+                max-width: 1240px;
+                align-items: start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="intro">
+            <h1>أمثلة أول شاشة للهاتف</h1>
+            <p>هذه مجرد أفكار بصرية مستقلة. اختر الاتجاه الذي يعجبك، وبعدها نطبقه على الموقع الحقيقي.</p>
+        </section>
+
+        <section class="concepts">
+            <article class="phone concept-1">
+                <div class="label"><span>01 - فخم ومباشر للبيع</span><span>Premium Sales</span></div>
+                <div class="hero">
+                    <div class="topbar">
+                        <div class="brand">
+                            <img class="logo" src="https://i.imgur.com/hyjvY4Z.png" alt="3Ahub">
+                            <div><strong>3Ahub</strong><small>متجر الاشتراكات الرقمية</small></div>
+                        </div>
+                        <button class="menu">☰</button>
+                    </div>
+                    <span class="eyebrow">تسليم سريع داخل الجزائر</span>
+                    <h2>اشتراكات رقمية أصلية في دقائق</h2>
+                    <p>ChatGPT، Canva، Netflix، Adobe والمزيد بأسعار مناسبة، دعم واتساب، وطرق دفع محلية.</p>
+                    <div class="actions">
+                        <a class="btn" href="#products">شاهد العروض الآن</a>
+                        <a class="btn alt" href="#contact">تواصل عبر واتساب</a>
+                    </div>
+                    <div class="proof">
+                        <div><strong>+1500</strong><span>عميل</span></div>
+                        <div><strong>24/7</strong><span>دعم</span></div>
+                        <div><strong>دفع</strong><span>محلي</span></div>
+                    </div>
+                    <div class="popular">
+                        <div class="popular-title"><span>الأكثر طلباً</span><span>اسحب</span></div>
+                        <div class="mini-products">
+                            <div class="mini-card"><img src="https://i.imgur.com/FDZBdd9.gif" alt=""><div><strong>ChatGPT</strong><span>1000 دج</span></div></div>
+                            <div class="mini-card"><img src="https://i.pinimg.com/736x/c2/5b/dd/c25bdda8e7d4eb27bcb2f4d411441d92.jpg" alt=""><div><strong>Gemini</strong><span>1400 دج</span></div></div>
+                            <div class="mini-card"><img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt=""><div><strong>Adobe</strong><span>1500 دج</span></div></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="phone concept-2">
+                <div class="label"><span>02 - تقني و AI</span><span>AI Focus</span></div>
+                <div class="hero">
+                    <div class="topbar">
+                        <div class="brand">
+                            <img class="logo" src="https://i.imgur.com/hyjvY4Z.png" alt="3Ahub">
+                            <div><strong>3Ahub</strong><small>AI • Design • Streaming</small></div>
+                        </div>
+                        <button class="menu">☰</button>
+                    </div>
+                    <div class="ai-orb"></div>
+                    <span class="eyebrow">أدوات AI جاهزة للعمل</span>
+                    <h2>ابدأ بأقوى أدوات الذكاء الاصطناعي</h2>
+                    <p>اختر حسابك، ادفع بالطريقة المناسبة، واستلم التفاصيل بسرعة مع دعم مباشر.</p>
+                    <div class="chips">
+                        <span class="chip">ChatGPT</span>
+                        <span class="chip">Gemini</span>
+                        <span class="chip">Perplexity</span>
+                        <span class="chip">Grok</span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn" href="#products">استكشف أدوات AI</a>
+                        <a class="btn alt" href="#contact">اسأل عن أفضل خيار</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="phone concept-3">
+                <div class="label"><span>03 - متجر سريع</span><span>Shop First</span></div>
+                <div class="hero">
+                    <div class="topbar">
+                        <div class="brand">
+                            <img class="logo" src="https://i.imgur.com/hyjvY4Z.png" alt="3Ahub">
+                            <div><strong>3Ahub</strong><small>كل اشتراكاتك في مكان واحد</small></div>
+                        </div>
+                        <button class="menu">☰</button>
+                    </div>
+                    <span class="eyebrow">عرض اليوم</span>
+                    <h2>اختصر الطريق واطلب اشتراكك الآن</h2>
+                    <p>واجهة مباشرة للشراء: عروض واضحة، منتجات مشهورة، وزر طلب بارز من أول شاشة.</p>
+                    <div class="deal-card">
+                        <div class="deal-head">
+                            <img src="https://i.imgur.com/hEiJhso.gif" alt="">
+                            <div>
+                                <strong>The Real World</strong>
+                                <span>3500 دج / شهر</span>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <a class="btn" href="#products">اطلب العرض</a>
+                        </div>
+                    </div>
+                    <div class="store-strip">
+                        <div><span>🤖</span>AI Tools</div>
+                        <div><span>🎬</span>Streaming</div>
+                        <div><span>🎨</span>Design</div>
+                    </div>
+                    <div class="proof">
+                        <div><strong>USDT</strong><span>متاح</span></div>
+                        <div><strong>Baridi</strong><span>متاح</span></div>
+                        <div><strong>Redot</strong><span>متاح</span></div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

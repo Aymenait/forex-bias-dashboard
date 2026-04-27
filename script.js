@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const animatedText = document.querySelector('.animated-text');
     if (animatedText) {
         const animatedTexts = {
-            ar: ['أدوات رقمية بلا حدود', 'حسابات بريميوم فورية', 'ذكاء اصطناعي متقدم', 'عروض لا تُفوَّت', 'تسليم فوري ⚡', 'ضمان وجودة 💯'],
-            en: ['Unlimited Digital Tools', 'Instant Premium Accounts', 'Advanced AI Solutions', 'Unbeatable Deals', 'Instant Delivery ⚡', 'Guaranteed Quality 💯'],
-            fr: ['Outils Numériques Illimités', 'Comptes Premium Instantanés', 'Solutions IA Avancées', 'Offres Imbattables', 'Livraison Instantanée ⚡', 'Qualité Garantie 💯']
+            ar: ['في دقائق', 'بتفعيل مضمون', 'بدعم واتساب', 'وبدفع محلي'],
+            en: ['in minutes', 'with guaranteed activation', 'with WhatsApp support', 'and local payment'],
+            fr: ['en quelques minutes', 'avec activation garantie', 'avec support WhatsApp', 'et paiement local']
         };
 
         let textIndex = 0;
@@ -1439,6 +1439,17 @@ const translations = {
         'badge.clients': 'عميل سعيد',
         'badge.support': 'دعم فني',
         'badge.experience': 'سنوات خبرة',
+        // Premium Sales hero overrides start
+        'hero.premiumLabel': 'Premium Sales',
+        'hero.offerNumber': '01 - قدم ومباشر للبيع',
+        'hero.eyebrow': 'تسليم سريع داخل الجزائر',
+        'hero.title': 'اشتراكات رقمية أصلية',
+        'hero.highlight': 'في دقائق',
+        'hero.description': 'ChatGPT، Canva، Netflix، Adobe والمزيد بأسعار مناسبة، دعم واتساب، وطرق دفع محلية.',
+        'hero.trustLine': 'دفع محلي • دعم واتساب • ضمان التفعيل',
+        'hero.explore': 'شاهد العروض الآن',
+        'hero.learn': 'تواصل عبر واتساب',
+        // Premium Sales hero overrides end
         'card1.title': 'حلول تعليمية متكاملة',
         'card1.desc': 'وصول فوري لأفضل الكورسات والمنصات العالمية مع ضمان التفعيل.',
         'card2.title': 'دعم مخصص لكل مشروع',
@@ -2191,6 +2202,17 @@ const translations = {
         'badge.clients': 'Happy Clients',
         'badge.support': 'Support',
         'badge.experience': 'Years Experience',
+        // Premium Sales hero overrides start
+        'hero.premiumLabel': 'Premium Sales',
+        'hero.offerNumber': '01 - direct sales offer',
+        'hero.eyebrow': 'Fast delivery in Algeria',
+        'hero.title': 'Original digital subscriptions',
+        'hero.highlight': 'in minutes',
+        'hero.description': 'ChatGPT, Canva, Netflix, Adobe and more at fair prices, with WhatsApp support and local payment methods.',
+        'hero.trustLine': 'Local payment • WhatsApp support • Activation guarantee',
+        'hero.explore': 'View Offers Now',
+        'hero.learn': 'Contact on WhatsApp',
+        // Premium Sales hero overrides end
         'card1.title': 'Complete Educational Solutions',
         'card1.desc': 'Instant access to the best courses and global platforms with activation guarantee.',
         'card2.title': 'Dedicated Support for Every Project',
@@ -2986,6 +3008,17 @@ const translations = {
         'badge.clients': 'Clients Satisfaits',
         'badge.support': 'Support',
         'badge.experience': 'Ans d\'Expérience',
+        // Premium Sales hero overrides start
+        'hero.premiumLabel': 'Premium Sales',
+        'hero.offerNumber': '01 - offre directe à vendre',
+        'hero.eyebrow': 'Livraison rapide en Algérie',
+        'hero.title': 'Abonnements numériques originaux',
+        'hero.highlight': 'en quelques minutes',
+        'hero.description': 'ChatGPT, Canva, Netflix, Adobe et plus encore à des prix adaptés, avec support WhatsApp et moyens de paiement locaux.',
+        'hero.trustLine': 'Paiement local • Support WhatsApp • Garantie d\'activation',
+        'hero.explore': 'Voir les offres',
+        'hero.learn': 'Contacter sur WhatsApp',
+        // Premium Sales hero overrides end
         'card1.title': 'Solutions Éducatives Complètes',
         'card1.desc': 'Accès instantané aux meilleurs cours et plateformes mondiales avec garantie d\'activation.',
         'card2.title': 'Support Dédié pour Chaque Projet',

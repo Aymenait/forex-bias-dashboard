@@ -45,6 +45,10 @@
     background: transparent;
 }
 
+.homepage-redesign .mobile-hero-sale-bar {
+    display: none;
+}
+
 .homepage-redesign .nav-bar {
     position: sticky;
     top: 12px;
@@ -99,6 +103,20 @@
     max-width: none;
 }
 
+.homepage-redesign .hero-mobile-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-bottom: 14px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 197, 90, 0.38);
+    border-radius: 8px;
+    background: rgba(255, 197, 90, 0.11);
+    color: var(--preview-gold);
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
 .homepage-redesign .hero-text h1 {
     max-width: 840px;
     margin-bottom: 18px;
@@ -118,6 +136,18 @@
     max-width: 720px;
     font-size: 1.12rem;
     line-height: 1.9;
+}
+
+.homepage-redesign .hero-trust-line {
+    width: fit-content;
+    margin-top: 14px;
+    padding: 9px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.055);
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.92rem;
+    font-weight: 700;
 }
 
 .homepage-redesign .hero-buttons {
@@ -378,7 +408,6 @@
     display: none !important;
 }
 
-.homepage-redesign .back-to-top,
 .homepage-redesign .social-float,
 .homepage-redesign .whatsapp-float {
     display: flex !important;
@@ -386,15 +415,6 @@
     justify-content: center !important;
     border-radius: 50% !important;
     padding: 0 !important;
-}
-
-.homepage-redesign .back-to-top {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    max-width: 44px !important;
-    max-height: 44px !important;
 }
 
 .homepage-redesign .social-float,
@@ -407,12 +427,8 @@
     max-height: 50px !important;
 }
 
-.homepage-redesign .back-to-top svg {
-    width: 18px !important;
-    height: 18px !important;
-    max-width: 18px !important;
-    max-height: 18px !important;
-    flex: 0 0 18px;
+.homepage-redesign .back-to-top {
+    display: none !important;
 }
 
 .homepage-redesign .social-float svg,
@@ -422,6 +438,10 @@
     max-width: 24px !important;
     max-height: 24px !important;
     flex: 0 0 24px;
+}
+
+.homepage-redesign .mobile-bottom-nav {
+    display: none !important;
 }
 
 @media (max-width: 980px) {
@@ -444,19 +464,59 @@
         max-width: 100vw;
     }
 
+    .homepage-redesign .site-header {
+        width: min(100% - 14px, 390px);
+        min-height: auto;
+        margin: 8px auto 0;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 16px 16px 0 0;
+        background:
+            linear-gradient(160deg, rgba(7, 12, 24, 0.98), rgba(10, 13, 25, 0.94)),
+            radial-gradient(circle at 70% 42%, rgba(42, 112, 255, 0.18), transparent 36%);
+        box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    .homepage-redesign .mobile-hero-sale-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 38px;
+        padding: 0 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.045);
+        color: #dfe7ff;
+        font-size: 0.75rem;
+    }
+
+    .homepage-redesign .mobile-hero-sale-bar strong {
+        color: var(--preview-gold);
+        font-size: 0.78rem;
+    }
+
     .homepage-redesign .nav-bar {
-        top: 8px;
-        margin-top: 8px;
-        padding: 9px;
+        position: relative;
+        top: auto;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 16px 18px 8px;
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        direction: rtl;
         gap: 8px;
-        max-width: calc(100vw - 18px);
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
     }
 
     .homepage-redesign .brand {
-        justify-content: center;
+        justify-content: flex-start;
         gap: 8px;
+        direction: ltr;
     }
 
     .homepage-redesign .brand .logo {
@@ -473,46 +533,72 @@
     }
 
     .homepage-redesign .mobile-reviews-btn {
-        width: min(100%, 230px);
-        margin: 0 auto !important;
-        min-height: 36px;
-        font-size: 0.88rem;
+        display: none !important;
     }
 
     .homepage-redesign .hamburger-btn {
-        justify-self: center;
+        justify-self: end;
         width: 44px;
         height: 44px;
         border-radius: 8px;
     }
 
     .homepage-redesign .hero {
-        padding: 22px 0 14px;
+        position: relative;
+        padding: 8px 0 16px;
+        overflow: hidden;
+        background: transparent;
+    }
+
+    .homepage-redesign .hero::after {
+        content: "";
+        position: absolute;
+        inset: 122px 16px 70px;
+        z-index: 0;
+        background: url("https://i.imgur.com/hyjvY4Z.png") center / contain no-repeat;
+        opacity: 0.23;
+        filter: saturate(0.9);
     }
 
     .homepage-redesign .hero-content {
+        position: relative;
+        z-index: 1;
         gap: 12px;
+    }
+
+    .homepage-redesign .hero-mobile-eyebrow {
+        margin-bottom: 10px;
+        padding: 7px 10px;
+        font-size: 0.78rem;
     }
 
     .homepage-redesign .hero-text h1 {
         max-width: 100%;
-        font-size: 1.5rem;
-        line-height: 1.22;
-        margin-bottom: 12px;
+        font-size: 1.86rem;
+        line-height: 1.12;
+        margin-bottom: 10px;
         overflow-wrap: anywhere;
         text-wrap: balance;
     }
 
     .homepage-redesign .hero-text p {
         max-width: 100%;
-        font-size: 0.9rem;
-        line-height: 1.65;
+        font-size: 0.98rem;
+        line-height: 1.62;
         margin-bottom: 0;
+    }
+
+    .homepage-redesign .hero-trust-line {
+        width: 100%;
+        margin-top: 10px;
+        padding: 8px 10px;
+        font-size: 0.76rem;
+        text-align: center;
     }
 
     .homepage-redesign .hero-buttons {
         gap: 8px;
-        margin-top: 14px;
+        margin-top: 12px;
     }
 
     .homepage-redesign .hero-buttons .btn {
@@ -522,6 +608,10 @@
         font-size: 0.92rem;
     }
 
+    .homepage-redesign .hero-buttons a[href="games_landing.html"] {
+        display: none !important;
+    }
+
     .homepage-redesign .trust-badges,
     .homepage-redesign .hero-card {
         grid-template-columns: 1fr;
@@ -529,13 +619,13 @@
 
     .homepage-redesign .trust-badges {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 7px;
-        margin: 14px 0 8px;
+        gap: 8px;
+        margin: 12px 0 10px;
         max-width: 100%;
     }
 
     .homepage-redesign .trust-badges .badge {
-        min-height: 66px;
+        min-height: 62px;
         padding: 9px 6px;
     }
 
@@ -550,7 +640,70 @@
     }
 
     .homepage-redesign .hero-slider {
-        display: none;
+        display: block !important;
+        margin-top: 4px;
+        border: 0;
+        background: transparent;
+        overflow: visible;
+    }
+
+    .homepage-redesign .slider-container {
+        display: block !important;
+        height: auto !important;
+        overflow: visible;
+    }
+
+    .homepage-redesign .slider-track {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        transform: none !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .homepage-redesign .slide {
+        display: block !important;
+        min-width: 0 !important;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .homepage-redesign .slide:nth-child(n+4),
+    .homepage-redesign .slider-btn,
+    .homepage-redesign .slider-dots {
+        display: none !important;
+    }
+
+    .homepage-redesign .slide img,
+    .homepage-redesign .slide video {
+        width: 100% !important;
+        height: 78px !important;
+        border-radius: 8px 8px 0 0 !important;
+        object-fit: cover;
+    }
+
+    .homepage-redesign .slide-info {
+        position: static;
+        padding: 8px 6px;
+        background: rgba(8, 12, 20, 0.95);
+        text-align: center;
+    }
+
+    .homepage-redesign .slide-info h4 {
+        margin: 0 0 3px;
+        color: #fff;
+        font-size: 0.78rem;
+        line-height: 1.2;
+    }
+
+    .homepage-redesign .slide-info p {
+        margin: 0;
+        color: var(--preview-gold) !important;
+        font-size: 0.8rem;
+        font-weight: 800;
     }
 
     .homepage-redesign .hero-card {
@@ -685,32 +838,6 @@
         flex: 0 0 24px;
     }
 
-    .homepage-redesign .back-to-top {
-        right: auto !important;
-        left: 84px !important;
-        bottom: 88px !important;
-        width: 44px !important;
-        height: 44px !important;
-        min-width: 44px !important;
-        min-height: 44px !important;
-        max-width: 44px !important;
-        max-height: 44px !important;
-        padding: 0 !important;
-        border-radius: 50% !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 8900 !important;
-    }
-
-    .homepage-redesign .back-to-top svg {
-        width: 18px !important;
-        height: 18px !important;
-        max-width: 18px !important;
-        max-height: 18px !important;
-        flex: 0 0 18px;
-    }
-
     .homepage-redesign .chat-widget,
     .homepage-redesign #chat-widget,
     .homepage-redesign .chat-toggle,
@@ -752,14 +879,7 @@
     }
 
     .homepage-redesign .mobile-bottom-nav svg {
-        width: 20px !important;
-        height: 20px !important;
-        max-width: 20px !important;
-        max-height: 20px !important;
-        flex: 0 0 20px;
-        display: block;
-        color: currentColor !important;
-        stroke: currentColor !important;
+        display: none !important;
     }
 
     .homepage-redesign .mobile-bottom-nav span {
