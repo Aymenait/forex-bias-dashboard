@@ -81,9 +81,13 @@ function filterOrdersByDate(orders, dateFilter) {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
     const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const yearAgo = new Date(today);
+    yearAgo.setFullYear(yearAgo.getFullYear() - 1);
 
     return orders.filter(order => {
-        const orderDate = order.createdAt?.toDate ? order.createdAt.toDate() : new Date(order.saleDate || order.createdAt);
+        const rawDate = order.timestamp || order.saleDate || order.createdAt;
+        const orderDate = rawDate?.toDate ? rawDate.toDate() : new Date(rawDate);
+        if (Number.isNaN(orderDate.getTime())) return false;
 
         switch (dateFilter) {
             case 'today':
@@ -92,6 +96,18 @@ function filterOrdersByDate(orders, dateFilter) {
                 return orderDate >= weekAgo;
             case 'month':
                 return orderDate >= monthAgo;
+            case 'year':
+                return orderDate >= yearAgo;
+            case 'custom':
+                const fromDate = document.getElementById('accounting-date-from')?.value;
+                const toDate = document.getElementById('accounting-date-to')?.value;
+                if (fromDate && toDate) {
+                    const from = new Date(fromDate);
+                    const to = new Date(toDate);
+                    to.setHours(23, 59, 59);
+                    return orderDate >= from && orderDate <= to;
+                }
+                return true;
             default:
                 return true;
         }
@@ -101,7 +117,7 @@ function filterOrdersByDate(orders, dateFilter) {
 /**
  * تحميل المعاملات (سجل المحفظة)
  */
-async function loadTransactions() {
+async function loadTransactionsInitial() {
     if (!window.db || !window.firebaseModules) return;
 
     try {
@@ -4674,7 +4690,7 @@ async function loadPurchases() {
 /**
  * فلترة الطلبات حسب التاريخ
  */
-function filterOrdersByDate(orders, filter) {
+function filterOrdersByTimestampDate(orders, filter) {
     if (filter === 'all') return orders;
 
     const now = new Date();

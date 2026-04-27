@@ -4013,14 +4013,6 @@ function updateStars(containerId, rating) {
         }
     });
 }
-
-// Escape HTML to prevent XSS
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
 // Open add review modal
 function openAddReviewModal() {
     const modal = document.getElementById('add-review-modal');
@@ -4504,7 +4496,7 @@ function orderHma() {
 
 
 // Order Duolingo
-function orderDuolingo() {
+function orderDuolingoYear() {
     const name = 'Duolingo Family Super - 12 Months';
     const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
     const duoConfig = PRODUCTS['duolingo'];
@@ -4583,6 +4575,12 @@ function orderAdobe() {
 }
 
 // Gamma Selection Functions
+function selectGammaDuration(duration) {
+    document.querySelectorAll('.gamma-duration-btn').forEach(btn => btn.classList.remove('active'));
+    const selectedBtn = document.querySelector(`.gamma-duration-btn[data-duration="${duration}"]`);
+    if (selectedBtn) selectedBtn.classList.add('active');
+}
+
 function orderGamma() {
     const name = 'Gama AI Pro - 1 Month';
 
@@ -5356,7 +5354,8 @@ window.selectAdobeDuration = selectAdobeDuration;
 window.orderAdobe = orderAdobe;
 window.selectGammaDuration = selectGammaDuration;
 window.orderGamma = orderGamma;
-window.selectChatGPTType = selectChatGPTType;
+window.selectChatGPTType = selectChatGPTDuration;
+window.selectChatGPTDuration = selectChatGPTDuration;
 window.orderChatGPT = orderChatGPT;
 window.selectCapcutDuration = selectCapcutDuration;
 window.orderCapcut = orderCapcut;
@@ -5372,8 +5371,8 @@ window.selectHmaDuration = selectHmaDuration;
 window.orderHma = orderHma;
 window.selectCursorType = selectCursorType;
 window.orderCursor = orderCursor;
-window.selectScispaceDuration = selectScispaceDuration;
-window.orderScispace = orderScispace;
+window.selectScispaceDuration = typeof selectScispaceDuration !== 'undefined' ? selectScispaceDuration : function () {};
+window.orderScispace = typeof orderScispace !== 'undefined' ? orderScispace : function () {};
 window.orderYouTube = orderYouTube;
 window.orderDuolingo = orderDuolingo;
 window.contactVia = contactVia;
