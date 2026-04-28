@@ -504,6 +504,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setInterval(nextSlide, 5000);
     }
+
+    // Rotating hero backgrounds for the first impression area
+    const heroBgMedia = document.querySelectorAll('.hero-bg-media');
+    const heroBgTabs = document.querySelectorAll('.hero-bg-tab');
+    const heroBgSlides = document.querySelectorAll('.hero-slider .slide[data-hero-bg-index]');
+    let currentHeroBg = 0;
+    let heroBgTimer;
+
+    function setHeroBg(index) {
+        if (!heroBgMedia.length) return;
+
+        const total = heroBgMedia.length;
+        currentHeroBg = (index + total) % total;
+
+        heroBgMedia.forEach((item, itemIndex) => {
+            item.classList.toggle('is-active', itemIndex === currentHeroBg);
+        });
+
+        heroBgTabs.forEach((tab) => {
+            const isActive = Number(tab.dataset.heroBgIndex) === currentHeroBg;
+            tab.classList.toggle('is-active', isActive);
+            tab.setAttribute('aria-pressed', String(isActive));
+        });
+
+        heroBgSlides.forEach((slide) => {
+            slide.classList.toggle('is-hero-active', Number(slide.dataset.heroBgIndex) === currentHeroBg);
+        });
+    }
+
+    function restartHeroBgTimer() {
+        clearInterval(heroBgTimer);
+        heroBgTimer = setInterval(() => {
+            setHeroBg(currentHeroBg + 1);
+        }, 3200);
+    }
+
+    if (heroBgMedia.length && heroBgTabs.length) {
+        heroBgTabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                setHeroBg(Number(tab.dataset.heroBgIndex));
+                restartHeroBgTimer();
+            });
+        });
+
+        heroBgSlides.forEach((slide) => {
+            slide.addEventListener('click', () => {
+                setHeroBg(Number(slide.dataset.heroBgIndex));
+                restartHeroBgTimer();
+            });
+        });
+
+        setHeroBg(0);
+        restartHeroBgTimer();
+    }
 });
 
 // Copy wallet address function

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3Ahub - معاينات النظرة الأولى</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #07090f;
+            --panel: rgba(255, 255, 255, 0.08);
+            --panel-strong: rgba(255, 255, 255, 0.13);
+            --line: rgba(255, 255, 255, 0.14);
+            --text: #f8fafc;
+            --muted: #aeb8c7;
+            --gold: #ffd166;
+            --orange: #ff9f1c;
+            --green: #2dd4bf;
+            --blue: #60a5fa;
+            --rose: #fb7185;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Tajawal", "Segoe UI", Arial, sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .preview-shell {
+            background:
+                linear-gradient(180deg, rgba(255, 209, 102, 0.08), transparent 18%),
+                linear-gradient(135deg, #090b12 0%, #05070d 52%, #0f0a12 100%);
+        }
+
+        .preview-note {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 10px 14px;
+            background: rgba(6, 8, 14, 0.88);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(18px);
+            font-size: 0.86rem;
+            color: var(--muted);
+        }
+
+        .preview-note strong {
+            color: var(--gold);
+        }
+
+        .preview-note a {
+            padding: 7px 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #f8fafc;
+            font-weight: 800;
+        }
+
+        .concept {
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            padding: 18px 16px 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .concept-inner {
+            position: relative;
+            z-index: 1;
+            width: min(1180px, 100%);
+            min-height: calc(100vh - 74px);
+            margin: 0 auto;
+            display: grid;
+            align-content: start;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-height: 52px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .brand img {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .brand strong {
+            display: block;
+            line-height: 1;
+            font-size: 1.1rem;
+        }
+
+        .brand span {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 0.72rem;
+            white-space: nowrap;
+        }
+
+        .menu-button {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            color: white;
+        }
+
+        .menu-button span {
+            width: 20px;
+            height: 2px;
+            background: currentColor;
+            box-shadow: 0 -7px currentColor, 0 7px currentColor;
+        }
+
+        .concept-label {
+            width: fit-content;
+            margin: 22px 0 10px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 209, 102, 0.35);
+            background: rgba(255, 209, 102, 0.11);
+            color: #ffe8a3;
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .hero-title {
+            margin: 0;
+            max-width: 760px;
+            font-size: clamp(2.15rem, 6vw, 4.9rem);
+            line-height: 1.06;
+            letter-spacing: 0;
+        }
+
+        .hero-title mark {
+            color: var(--gold);
+            background: none;
+        }
+
+        .hero-copy {
+            max-width: 610px;
+            margin: 14px 0 0;
+            color: #d6deea;
+            font-size: clamp(1rem, 2vw, 1.18rem);
+            line-height: 1.8;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 18px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            color: #161006;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            box-shadow: 0 18px 42px rgba(255, 159, 28, 0.25);
+        }
+
+        .btn-soft {
+            color: #eef6ff;
+            border-color: var(--line);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .proof-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 18px;
+            max-width: 560px;
+        }
+
+        .proof-row div {
+            min-height: 70px;
+            padding: 11px 8px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            text-align: center;
+        }
+
+        .proof-row strong {
+            display: block;
+            color: var(--gold);
+            font-size: 1.02rem;
+        }
+
+        .proof-row span {
+            display: block;
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 0.74rem;
+        }
+
+        .product-strip {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: 138px;
+            gap: 10px;
+            overflow-x: auto;
+            max-width: 100%;
+            margin-top: 22px;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .product-strip::-webkit-scrollbar {
+            display: none;
+        }
+
+        .mini-product {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .mini-product img,
+        .mini-product video {
+            width: 100%;
+            height: 92px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .mini-product div {
+            padding: 10px;
+        }
+
+        .mini-product strong,
+        .mini-product span {
+            display: block;
+        }
+
+        .mini-product strong {
+            font-size: 0.82rem;
+            line-height: 1.25;
+        }
+
+        .mini-product span {
+            margin-top: 6px;
+            color: var(--gold);
+            font-weight: 900;
+        }
+
+        .mini-product.is-active {
+            border-color: rgba(255, 209, 102, 0.8);
+            box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.22), 0 16px 42px rgba(255, 159, 28, 0.18);
+        }
+
+        .concept-shop {
+            background: #05070d;
+        }
+
+        .rotating-backdrops {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .hero-bg-media {
+            position: absolute;
+            inset: -6%;
+            width: 112%;
+            height: 112%;
+            object-fit: cover;
+            opacity: 0;
+            transform: scale(1);
+            filter: saturate(1.12) contrast(1.05);
+            transition: opacity 900ms ease, transform 4600ms ease;
+        }
+
+        .hero-bg-media.is-active {
+            opacity: 1;
+            transform: scale(1.045);
+        }
+
+        .rotating-backdrops::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(4, 6, 12, 0.74), rgba(4, 6, 12, 0.58) 38%, rgba(4, 6, 12, 0.97) 100%),
+                linear-gradient(90deg, rgba(4, 6, 12, 0.93), rgba(4, 6, 12, 0.5) 54%, rgba(4, 6, 12, 0.84)),
+                radial-gradient(circle at 18% 28%, rgba(255, 209, 102, 0.2), transparent 36%);
+        }
+
+        .hero-rotation-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            max-width: 680px;
+            margin-top: 14px;
+            padding-bottom: 6px;
+            scrollbar-width: none;
+        }
+
+        .hero-rotation-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hero-rotation-tabs button {
+            flex: 0 0 auto;
+            min-height: 36px;
+            padding: 0 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #eef6ff;
+            font: inherit;
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .hero-rotation-tabs button.is-active {
+            border-color: rgba(255, 209, 102, 0.8);
+            background: rgba(255, 209, 102, 0.16);
+            color: #ffe8a3;
+        }
+
+        .quick-finder {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            max-width: 680px;
+            margin-top: 18px;
+            padding-bottom: 6px;
+            scrollbar-width: none;
+        }
+
+        .quick-finder::-webkit-scrollbar {
+            display: none;
+        }
+
+        .quick-finder span {
+            flex: 0 0 auto;
+            padding: 8px 11px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #eef6ff;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .concept-deal {
+            background:
+                linear-gradient(180deg, rgba(7, 9, 15, 0.58), rgba(7, 9, 15, 0.95)),
+                url("https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg") center / cover no-repeat;
+        }
+
+        .deal-panel {
+            width: min(560px, 100%);
+            margin-top: 22px;
+            padding: 12px;
+            border: 1px solid rgba(255, 209, 102, 0.38);
+            border-radius: 8px;
+            background: rgba(8, 11, 18, 0.82);
+            backdrop-filter: blur(14px);
+        }
+
+        .deal-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .deal-head img {
+            width: 76px;
+            height: 76px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .deal-head strong {
+            display: block;
+            font-size: 1.05rem;
+        }
+
+        .deal-head span {
+            display: block;
+            margin-top: 6px;
+            color: var(--gold);
+            font-weight: 900;
+        }
+
+        .deal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .deal-grid div {
+            padding: 9px 7px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            text-align: center;
+            color: #dce6f4;
+            font-size: 0.76rem;
+            font-weight: 800;
+        }
+
+        .concept-trust {
+            background:
+                linear-gradient(90deg, rgba(5, 7, 13, 0.92), rgba(5, 7, 13, 0.64)),
+                url("screenshots/photo_26_2026-02-13_12-34-28.jpg") center / cover no-repeat;
+        }
+
+        .trust-wall {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            width: min(660px, 100%);
+            margin-top: 22px;
+        }
+
+        .trust-wall img {
+            width: 100%;
+            height: 132px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            object-fit: cover;
+            background: #111827;
+        }
+
+        .trust-wall img:nth-child(2) {
+            transform: translateY(18px);
+        }
+
+        .trust-wall img:nth-child(4) {
+            transform: translateY(10px);
+        }
+
+        @media (min-width: 860px) {
+            .concept {
+                padding: 24px 28px 34px;
+            }
+
+            .concept-inner {
+                min-height: calc(100vh - 88px);
+            }
+
+            .desktop-split {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) 420px;
+                gap: 42px;
+                align-items: center;
+                min-height: calc(100vh - 160px);
+            }
+
+            .desktop-split .product-strip {
+                grid-auto-flow: row;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-auto-columns: auto;
+                overflow: visible;
+                margin-top: 0;
+            }
+
+            .desktop-split .mini-product img {
+                height: 130px;
+            }
+
+            .deal-panel {
+                margin-top: 30px;
+            }
+
+            .trust-wall img {
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .preview-note {
+                justify-content: flex-start;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+
+            .concept {
+                min-height: 820px;
+            }
+
+            .concept-inner {
+                min-height: 760px;
+            }
+
+            .hero-title {
+                max-width: 350px;
+            }
+
+            .actions {
+                display: grid;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .proof-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .trust-wall {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .trust-wall img {
+                height: 118px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="preview-shell">
+        <div class="preview-note">
+            <strong>معاينة فقط</strong>
+            <span>هذه الصفحة لا تغيّر الصفحة الرئيسية.</span>
+            <a href="#concept-1">متجر مباشر</a>
+            <a href="#concept-2">عرض اليوم</a>
+            <a href="#concept-3">ثقة العملاء</a>
+        </div>
+
+        <section class="concept concept-shop" id="concept-1">
+            <div class="rotating-backdrops" aria-hidden="true">
+                <img class="hero-bg-media is-active" src="https://i.imgur.com/FDZBdd9.gif" alt="">
+                <img class="hero-bg-media" src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="">
+                <video class="hero-bg-media" autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/DvPmjNv.mp4" type="video/mp4">
+                </video>
+                <img class="hero-bg-media" src="https://i.imgur.com/hEiJhso.gif" alt="">
+            </div>
+            <div class="concept-inner desktop-split">
+                <div>
+                    <div class="topbar">
+                        <div class="brand">
+                            <img src="logo.png" alt="3Ahub">
+                            <div>
+                                <strong>3Ahub</strong>
+                                <span>متجر الاشتراكات الرقمية</span>
+                            </div>
+                        </div>
+                        <button class="menu-button" aria-label="القائمة"><span></span></button>
+                    </div>
+                    <div class="concept-label">اتجاه 1 - متجر مباشر وواضح</div>
+                    <h1 class="hero-title">اشتراكات أصلية <mark>جاهزة في دقائق</mark></h1>
+                    <p class="hero-copy">ChatGPT وCanva وNetflix وAdobe بأسعار واضحة، دفع محلي، وتسليم سريع عبر واتساب.</p>
+                    <div class="quick-finder" aria-label="تصنيفات سريعة">
+                        <span>ذكاء اصطناعي</span>
+                        <span>تصميم ومونتاج</span>
+                        <span>ترفيه</span>
+                        <span>كورسات</span>
+                    </div>
+                    <div class="hero-rotation-tabs" aria-label="خلفيات المنتجات">
+                        <button class="is-active" type="button" data-hero-index="0" aria-pressed="true">ChatGPT</button>
+                        <button type="button" data-hero-index="1" aria-pressed="false">Adobe</button>
+                        <button type="button" data-hero-index="2" aria-pressed="false">Canva</button>
+                        <button type="button" data-hero-index="3" aria-pressed="false">The Real World</button>
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-primary" href="#products">شاهد العروض</a>
+                        <a class="btn btn-soft" href="#contact">تواصل عبر واتساب</a>
+                    </div>
+                    <div class="proof-row">
+                        <div><strong>+1500</strong><span>عميل سعيد</span></div>
+                        <div><strong>24/7</strong><span>دعم مباشر</span></div>
+                        <div><strong>محلي</strong><span>طرق دفع</span></div>
+                    </div>
+                </div>
+                <div class="product-strip" aria-label="منتجات بارزة">
+                    <article class="mini-product is-active" data-hero-index="0">
+                        <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
+                        <div><strong>ChatGPT Premium</strong><span>1000 دج</span></div>
+                    </article>
+                    <article class="mini-product" data-hero-index="1">
+                        <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe">
+                        <div><strong>Adobe Creative Cloud</strong><span>1500 دج</span></div>
+                    </article>
+                    <article class="mini-product" data-hero-index="2">
+                        <video autoplay loop muted playsinline aria-label="Canva">
+                            <source src="https://i.imgur.com/DvPmjNv.mp4" type="video/mp4">
+                        </video>
+                        <div><strong>Canva Pro</strong><span>600 دج</span></div>
+                    </article>
+                    <article class="mini-product" data-hero-index="3">
+                        <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World">
+                        <div><strong>The Real World</strong><span>3500 دج</span></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="concept concept-deal" id="concept-2">
+            <div class="concept-inner">
+                <div class="topbar">
+                    <div class="brand">
+                        <img src="logo.png" alt="3Ahub">
+                        <div>
+                            <strong>3Ahub</strong>
+                            <span>كل اشتراكاتك في مكان واحد</span>
+                        </div>
+                    </div>
+                    <button class="menu-button" aria-label="القائمة"><span></span></button>
+                </div>
+                <div class="concept-label">اتجاه 2 - عرض اليوم أولاً</div>
+                <h1 class="hero-title">ابدأ من <mark>العرض الأقوى</mark> ثم اختر باقي المنتجات</h1>
+                <p class="hero-copy">واجهة مناسبة لو حبيت تدفع الزبون مباشرة نحو أفضل عرض أو المنتج الأكثر طلباً في اليوم.</p>
+                <div class="deal-panel">
+                    <div class="deal-head">
+                        <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe">
+                        <div>
+                            <strong>Adobe Creative Cloud</strong>
+                            <span>من 1500 دج فقط</span>
+                        </div>
+                    </div>
+                    <div class="deal-grid">
+                        <div>تفعيل سريع</div>
+                        <div>ضمان الخدمة</div>
+                        <div>دعم واتساب</div>
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-primary" href="#products">اطلب العرض</a>
+                        <a class="btn btn-soft" href="#products">باقي المنتجات</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="concept concept-trust" id="concept-3">
+            <div class="concept-inner">
+                <div class="topbar">
+                    <div class="brand">
+                        <img src="logo.png" alt="3Ahub">
+                        <div>
+                            <strong>3Ahub</strong>
+                            <span>ثقة، سرعة، ودعم بعد الطلب</span>
+                        </div>
+                    </div>
+                    <button class="menu-button" aria-label="القائمة"><span></span></button>
+                </div>
+                <div class="concept-label">اتجاه 3 - الثقة قبل البيع</div>
+                <h1 class="hero-title">آراء العملاء تظهر <mark>من أول نظرة</mark></h1>
+                <p class="hero-copy">هذا الاتجاه مناسب لو تريد الزبون يحس بالأمان مباشرة قبل أن يشاهد كل المنتجات.</p>
+                <div class="actions">
+                    <a class="btn btn-primary" href="#products">تصفح المنتجات</a>
+                    <a class="btn btn-soft" href="reviews.html">شاهد التقييمات</a>
+                </div>
+                <div class="proof-row">
+                    <div><strong>+1500</strong><span>طلب مكتمل</span></div>
+                    <div><strong>واتساب</strong><span>متابعة مباشرة</span></div>
+                    <div><strong>ضمان</strong><span>بعد التفعيل</span></div>
+                </div>
+                <div class="trust-wall" aria-label="رسائل عملاء">
+                    <img src="screenshots/photo_1_2026-02-13_12-34-28.jpg" alt="رسالة عميل">
+                    <img src="screenshots/photo_12_2026-02-13_12-34-28.jpg" alt="رسالة عميل">
+                    <img src="screenshots/photo_24_2026-02-13_12-34-28.jpg" alt="رسالة عميل">
+                    <img src="screenshots/photo_35_2026-02-13_12-34-28.jpg" alt="رسالة عميل">
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        (() => {
+            const shopHero = document.querySelector("#concept-1");
+            if (!shopHero) return;
+
+            const media = Array.from(shopHero.querySelectorAll(".hero-bg-media"));
+            const tabs = Array.from(shopHero.querySelectorAll(".hero-rotation-tabs button"));
+            const cards = Array.from(shopHero.querySelectorAll(".mini-product[data-hero-index]"));
+            const total = media.length;
+            let activeIndex = 0;
+            let timerId;
+
+            const setActive = (nextIndex) => {
+                activeIndex = (nextIndex + total) % total;
+                media.forEach((item, index) => item.classList.toggle("is-active", index === activeIndex));
+                tabs.forEach((tab, index) => {
+                    const isActive = index === activeIndex;
+                    tab.classList.toggle("is-active", isActive);
+                    tab.setAttribute("aria-pressed", String(isActive));
+                });
+                cards.forEach((card) => {
+                    card.classList.toggle("is-active", Number(card.dataset.heroIndex) === activeIndex);
+                });
+            };
+
+            const startTimer = () => {
+                window.clearInterval(timerId);
+                timerId = window.setInterval(() => setActive(activeIndex + 1), 3200);
+            };
+
+            tabs.forEach((tab) => {
+                tab.addEventListener("click", () => {
+                    setActive(Number(tab.dataset.heroIndex));
+                    startTimer();
+                });
+            });
+
+            cards.forEach((card) => {
+                card.addEventListener("click", () => {
+                    setActive(Number(card.dataset.heroIndex));
+                    startTimer();
+                });
+            });
+
+            setActive(0);
+            startTimer();
+        })();
+    </script>
+</body>
+</html>
