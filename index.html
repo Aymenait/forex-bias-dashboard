@@ -257,7 +257,7 @@
             color: #ffd56f !important;
         }
     </style>
-    <link rel="stylesheet" href="homepage-redesign.css?v=13">
+    <link rel="stylesheet" href="homepage-redesign.css?v=14">
     <link rel="stylesheet" href="order-form.css">
 </head>
 
@@ -1463,8 +1463,11 @@
                     <!-- Cursor AI -->
                     <div class="product-card fade-in" data-category="ai">
                         <div class="product-image"
-                            style="background-image: url('https://i.pinimg.com/736x/29/f9/48/29f9488bd27d42debcfbddb33c1c79d7.jpg'); background-size: cover; background-position: center;"
+                            style="background-image: url('https://i.pinimg.com/736x/29/f9/48/29f9488bd27d42debcfbddb33c1c79d7.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;"
                             role="img" aria-label="Cursor">
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 5;">
+                                <div style="background: #E50914; color: white; padding: 10px 25px; font-weight: 800; border-radius: 50px; font-size: 1.2rem; transform: rotate(-10deg); box-shadow: 0 0 20px rgba(229, 9, 20, 0.4); border: 2px solid white;" data-i18n="product.unavailableBtn">غير متوفر</div>
+                            </div>
                         </div>
                         <h3 data-i18n="product.cursor.title">Cursor AI</h3>
                         <p class="description" data-i18n="product.cursor.desc">محرر أكواد ذكي مدعوم بالذكاء
@@ -1475,9 +1478,9 @@
                         <div class="cursor-account-type" style="margin: 16px 0;">
                             <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;">اختر النوع:</p>
                             <div style="display: flex; gap: 10px;">
-                                <button class="cursor-type-btn active" data-type="7days"
+                                <button class="cursor-type-btn active" data-type="7days" disabled
                                     onclick="selectCursorType('7days')"
-                                    style="flex: 1; padding: 10px; border: 2px solid var(--accent); background: rgba(255, 213, 111, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    style="flex: 1; padding: 10px; border: 2px solid #555; background: rgba(80, 80, 80, 0.15); color: #888; border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: all 0.3s; opacity: 0.6;">
                                     <span data-i18n="product.cursor.7days">7 DAYS TRIAL</span>
                                 </button>
                                 <button class="cursor-type-btn" data-type="30days" disabled
@@ -1533,8 +1536,9 @@
                             <li data-i18n="product.cursor.feature3">تصحيح وتحسين الكود بالذكاء الاصطناعي</li>
                         </ul>
                         <button class="order-btn" id="cursor-order-btn" data-product="Cursor AI - 7 Days"
-                            data-i18n="product.orderNow" onclick="orderCursor()">
-                            <span data-i18n="product.orderNow">اطلب الآن</span>
+                            data-status="unavailable" style="background: #333; cursor: not-allowed; border: none; opacity: 0.5;" disabled
+                            data-i18n="product.unavailableBtn" onclick="event.preventDefault(); return false;">
+                            غير متوفر
                         </button>
                     </div>
 
@@ -3088,7 +3092,7 @@
     <script src="currency-manager.js?v=5"></script>
     <script src="payment-manager.js?v=5"></script>
     <script src="international-expansion-init.js?v=5"></script>
-    <script src="script.js?v=final11" defer></script>
+    <script src="script.js?v=final12" defer></script>
     <script src="order-form.js" defer></script>
 
     <!-- Firebase SDK for Reviews -->
@@ -3227,8 +3231,8 @@
                     // تحديد حالة المنتج (دعم النظام الجديد والقديم)
                     let productStatus = product.status || (product.available === false ? 'unavailable' : 'available');
 
-                    // FORCE GOOGLE AI SOLD OUT (Hardcoded Override)
-                    if (productId === 'google-ai' || (product.name && (product.name.includes('Google AI') || product.name.includes('Gemini')))) {
+                    // FORCE SELECT PRODUCTS SOLD OUT (Hardcoded Override)
+                    if (productId === 'google-ai' || productId === 'cursor' || (product.name && (product.name.includes('Google AI') || product.name.includes('Gemini') || product.name.includes('Cursor')))) {
                         productStatus = 'unavailable';
                     }
 

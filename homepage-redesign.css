@@ -1125,6 +1125,10 @@
         display: none !important;
     }
 
+    .homepage-redesign .scroll-hint {
+        display: none !important;
+    }
+
     .homepage-redesign .site-footer {
         padding-bottom: 128px !important;
     }

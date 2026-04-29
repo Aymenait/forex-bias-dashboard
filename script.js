@@ -4855,6 +4855,11 @@ function selectAdobeDuration(duration) {
 
 // Cursor AI Duration Selection
 function selectCursorType(type) {
+    const cursorOrderButton = document.getElementById('cursor-order-btn');
+    if (cursorOrderButton?.disabled || cursorOrderButton?.getAttribute('data-status') === 'unavailable') {
+        return;
+    }
+
     const buttons = document.querySelectorAll('.cursor-type-btn');
     buttons.forEach(btn => {
         if (btn.getAttribute('data-type') === type) {
