@@ -406,6 +406,11 @@ function setupLanguageChangeListener() {
 function onLanguageChange(newLang) {
     currentLanguage = newLang;
     updateAllProductTranslations(currentLanguage);
+
+    // Update currency symbols
+    if (typeof window.updateCurrencySymbols === 'function') {
+        window.updateCurrencySymbols(newLang);
+    }
 }
 
 /**

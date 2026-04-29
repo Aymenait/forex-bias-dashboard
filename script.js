@@ -60,6 +60,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // --- Animated Text Logic End ---
 
+    // Currency Symbol Translation Function
+    window.updateCurrencySymbols = function(lang) {
+        const currencyElements = document.querySelectorAll('[data-i18n="currency"]');
+        const symbol = lang === 'ar' ? 'د.ج' : 'DA';
+        currencyElements.forEach(el => {
+            el.textContent = symbol;
+        });
+    };
+
+    // Initialize currency symbols on page load
+    const initialLang = window.currentLang || localStorage.getItem('preferredLanguage') || 'ar';
+    window.updateCurrencySymbols(initialLang);
+
     // 2. Async Initialization (Separate)
     (async () => {
         try {
@@ -611,6 +624,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return String(value || '').replace(/["\\]/g, '\\$&');
     }
 
+    function getMobileLanguage() {
+        return window.currentLang || document.documentElement.lang || localStorage.getItem('preferredLanguage') || 'ar';
+    }
+
+    function getMobileUiText(key) {
+        const lang = getMobileLanguage();
+        const texts = {
+            requestPrice: {
+                ar: '\u0627\u0637\u0644\u0628 \u0627\u0644\u0633\u0639\u0631',
+                en: 'Ask for price',
+                fr: 'Prix sur demande'
+            },
+            details: {
+                ar: '\u062a\u0641\u0627\u0635\u064a\u0644 \u0627\u0644\u0645\u0646\u062a\u062c',
+                en: 'Product details',
+                fr: 'Details du produit'
+            },
+            orderNow: {
+                ar: '\u0627\u0637\u0644\u0628 \u0627\u0644\u0622\u0646',
+                en: 'Order Now',
+                fr: 'Commander'
+            },
+            from: {
+                ar: '\u0645\u0646',
+                en: 'From',
+                fr: 'A partir de'
+            }
+        };
+
+        return texts[key]?.[lang] || texts[key]?.ar || '';
+    }
+
     function getMobileOptionKey(wrapper) {
         const id = wrapper?.id || '';
         if (id.includes('-prices-')) return id.split('-prices-').pop();
@@ -664,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getMobilePrimaryPrice(card, offers) {
         const activeOffer = offers.find((offer) => !offer.hidden) || offers[0];
-        if (offers.length > 1 && activeOffer?.price) return `&#1605;&#1606; ${escapeMobileHtml(activeOffer.price)}`;
+        if (offers.length > 1 && activeOffer?.price) return `${escapeMobileHtml(getMobileUiText('from'))} ${escapeMobileHtml(activeOffer.price)}`;
         return activeOffer?.price || card.querySelector('.price-tag')?.textContent?.trim() || '';
     }
 
@@ -760,7 +805,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (actionButton) {
             actionButton.disabled = isDisabled;
-            actionButton.textContent = isDisabled ? statusText : '\u0627\u0637\u0644\u0628 \u0627\u0644\u0622\u0646';
+            actionButton.textContent = isDisabled ? statusText : getMobileUiText('orderNow');
         }
 
         if (priceLabel) {
@@ -809,14 +854,14 @@ document.addEventListener('DOMContentLoaded', () => {
             article.innerHTML = `
                 <button class="mobile-expand-toggle" type="button" aria-expanded="${index === 0 ? 'true' : 'false'}">
                     ${buildMobileMedia(media, title)}
-                    <span><strong>${title}</strong><em>${price || 'اطلب السعر'}</em></span>
+                    <span><strong>${title}</strong><em>${price || escapeMobileHtml(getMobileUiText('requestPrice'))}</em></span>
                 </button>
                 <div class="mobile-expand-details">
                     <p>${description}</p>
                     ${features.length ? `<ul>${features.map((feature) => `<li>${feature}</li>`).join('')}</ul>` : ''}
                     <div class="mobile-expand-actions">
-                        <a href="${discoverLink}">تفاصيل المنتج</a>
-                        <button type="button" data-mobile-source-index="${index}">اطلب الآن</button>
+                        <a href="${discoverLink}">${escapeMobileHtml(getMobileUiText('details'))}</a>
+                        <button type="button" data-mobile-source-index="${index}">${escapeMobileHtml(getMobileUiText('orderNow'))}</button>
                     </div>
                 </div>
             `;
@@ -824,7 +869,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mobilePrice = article.querySelector('.mobile-expand-toggle em');
             const mobileDescription = article.querySelector('.mobile-expand-details p');
             if (mobileTitle) mobileTitle.textContent = title;
-            if (mobilePrice) mobilePrice.innerHTML = price || '&#1575;&#1591;&#1604;&#1576; &#1575;&#1604;&#1587;&#1593;&#1585;';
+            if (mobilePrice) mobilePrice.innerHTML = price || escapeMobileHtml(getMobileUiText('requestPrice'));
             if (mobileDescription) {
                 mobileDescription.textContent = description;
                 if (offers.length > 1) {
@@ -894,32 +939,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelectorAll('[data-mobile-offer-key]').forEach((button) => {
-        button.addEventListener('click', () => {
-            const sourceCard = sourceProductCards[Number(button.dataset.mobileSourceIndex)];
-            const offerKey = button.dataset.mobileOfferKey || '';
-            if (sourceCard && offerKey) {
-                const selectorKey = escapeMobileSelector(offerKey);
-                sourceCard.querySelector(
-                    `[data-duration="${selectorKey}"], [data-type="${selectorKey}"], [data-plan="${selectorKey}"], [data-offer="${selectorKey}"]`
-                )?.click();
-            }
+    function handleMobileOfferOptionClick(button) {
+        const sourceCard = sourceProductCards[Number(button.dataset.mobileSourceIndex)];
+        const offerKey = button.dataset.mobileOfferKey || '';
+        if (sourceCard && offerKey) {
+            const selectorKey = escapeMobileSelector(offerKey);
+            sourceCard.querySelector(
+                `[data-duration="${selectorKey}"], [data-type="${selectorKey}"], [data-plan="${selectorKey}"], [data-offer="${selectorKey}"]`
+            )?.click();
+        }
 
-            const mobileCard = button.closest('.mobile-expand-card');
-            mobileCard?.querySelectorAll('.mobile-offer-option').forEach((option) => {
-                const isSelected = option === button;
-                option.classList.toggle('is-selected', isSelected);
-                option.setAttribute('aria-pressed', String(isSelected));
-            });
-
-            const selectedPrice = button.querySelector('strong')?.textContent?.trim();
-            const mobilePrice = mobileCard?.querySelector('.mobile-expand-toggle em');
-            if (selectedPrice && mobilePrice) {
-                mobilePrice.dataset.availablePrice = selectedPrice;
-                mobilePrice.textContent = selectedPrice;
-            }
+        const mobileCard = button.closest('.mobile-expand-card');
+        mobileCard?.querySelectorAll('.mobile-offer-option').forEach((option) => {
+            const isSelected = option === button;
+            option.classList.toggle('is-selected', isSelected);
+            option.setAttribute('aria-pressed', String(isSelected));
         });
-    });
+
+        const selectedPrice = button.querySelector('strong')?.textContent?.trim();
+        const mobilePrice = mobileCard?.querySelector('.mobile-expand-toggle em');
+        if (selectedPrice && mobilePrice) {
+            mobilePrice.dataset.availablePrice = selectedPrice;
+            mobilePrice.textContent = selectedPrice;
+        }
+    }
+
+    function bindMobileOfferOptionButtons(root = document) {
+        root.querySelectorAll('[data-mobile-offer-key]').forEach((button) => {
+            if (button.dataset.mobileOfferBound === 'true') return;
+            button.dataset.mobileOfferBound = 'true';
+            button.addEventListener('click', () => handleMobileOfferOptionClick(button));
+        });
+    }
+
+    bindMobileOfferOptionButtons();
 
     document.querySelectorAll('.mobile-expand-actions [data-mobile-source-index]').forEach((button) => {
         button.addEventListener('click', () => {
@@ -940,6 +993,64 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    function refreshMobileOfferCardsText() {
+        document.querySelectorAll('.mobile-expand-card[data-mobile-source-index]').forEach((mobileCard) => {
+            const sourceCard = sourceProductCards[Number(mobileCard.dataset.mobileSourceIndex)];
+            if (!sourceCard) return;
+
+            const title = getMobileProductTitle(sourceCard);
+            const description = sourceCard.querySelector('.description')?.textContent?.trim() || '';
+            const offers = getMobileProductOffers(sourceCard);
+            const price = getMobilePrimaryPrice(sourceCard, offers);
+            const features = Array.from(sourceCard.querySelectorAll('.product-features li'))
+                .slice(0, 2)
+                .map((li) => li.textContent.trim())
+                .filter(Boolean);
+
+            const titleEl = mobileCard.querySelector('.mobile-expand-toggle strong');
+            const priceEl = mobileCard.querySelector('.mobile-expand-toggle em');
+            const descriptionEl = mobileCard.querySelector('.mobile-expand-details p');
+            const detailsEl = mobileCard.querySelector('.mobile-expand-details');
+            const featuresEl = detailsEl?.querySelector(':scope > ul');
+            const detailsLinkEl = mobileCard.querySelector('.mobile-expand-actions a');
+            const actionButtonEl = mobileCard.querySelector('.mobile-expand-actions button');
+
+            if (titleEl) titleEl.textContent = title;
+            if (descriptionEl) descriptionEl.textContent = description;
+            if (detailsLinkEl) detailsLinkEl.textContent = getMobileUiText('details');
+            if (actionButtonEl && !actionButtonEl.disabled) actionButtonEl.textContent = getMobileUiText('orderNow');
+
+            if (priceEl && mobileCard.dataset.mobileStatus === 'available') {
+                priceEl.dataset.availablePrice = price || priceEl.dataset.availablePrice || '';
+                priceEl.innerHTML = price || priceEl.dataset.availablePrice || escapeMobileHtml(getMobileUiText('requestPrice'));
+            }
+
+            const optionButtons = mobileCard.querySelectorAll('.mobile-offer-option');
+            if (offers.length > 1 && optionButtons.length === offers.length) {
+                optionButtons.forEach((button, offerIndex) => {
+                    const offer = offers[offerIndex];
+                    button.dataset.mobileOfferKey = offer.key;
+                    button.querySelector('span').textContent = offer.label;
+                    button.querySelector('strong').textContent = offer.price;
+                });
+            } else if (offers.length > 1 && descriptionEl) {
+                mobileCard.querySelector('.mobile-offer-options')?.remove();
+                descriptionEl.insertAdjacentHTML('afterend', buildMobileOfferOptions(offers, Number(mobileCard.dataset.mobileSourceIndex)));
+                bindMobileOfferOptionButtons(mobileCard);
+            } else {
+                mobileCard.querySelector('.mobile-offer-options')?.remove();
+            }
+
+            if (featuresEl) {
+                featuresEl.innerHTML = features.map((feature) => `<li>${escapeMobileHtml(feature)}</li>`).join('');
+            }
+
+            syncMobileAvailability(mobileCard, sourceCard);
+        });
+    }
+
+    window.refreshMobileOfferCardsText = refreshMobileOfferCardsText;
+
     function syncAllMobileAvailability() {
         document.querySelectorAll('.mobile-expand-card[data-mobile-source-index]').forEach((mobileCard) => {
             const sourceCard = sourceProductCards[Number(mobileCard.dataset.mobileSourceIndex)];
@@ -948,6 +1059,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (mobileExpandContainer && sourceProductCards.length) {
+        refreshMobileOfferCardsText();
         syncAllMobileAvailability();
         applyMobileCategoryFilter(document.querySelector('.category-pill.active')?.getAttribute('data-filter') || 'all');
         window.addEventListener('firebaseReady', () => window.setTimeout(syncAllMobileAvailability, 800), { once: true });
@@ -1006,8 +1118,33 @@ document.addEventListener('DOMContentLoaded', () => {
             node.classList.toggle('is-active', node.dataset.mobilePopularMedia === item.key);
         });
         mobilePopularTitle.textContent = item.title;
-        mobilePopularDesc.textContent = item.desc;
-        mobilePopularPrice.textContent = item.price;
+        const lang = window.currentLang || localStorage.getItem('preferredLanguage') || 'ar';
+        const localizedPopularCopy = {
+            chatgpt: {
+                ar: '\u062a\u0641\u0639\u064a\u0644 \u0633\u0631\u064a\u0639 \u0648\u062f\u0639\u0645 \u0648\u0627\u062a\u0633\u0627\u0628 \u0628\u0639\u062f \u0627\u0644\u0637\u0644\u0628.',
+                en: 'Fast activation with WhatsApp support after ordering.',
+                fr: 'Activation rapide avec assistance WhatsApp apres la commande.'
+            },
+            adobe: {
+                ar: '\u0627\u062e\u062a\u064a\u0627\u0631 \u0642\u0648\u064a \u0644\u0644\u062a\u0635\u0645\u064a\u0645 \u0648\u0627\u0644\u0645\u0648\u0646\u062a\u0627\u062c.',
+                en: 'A strong choice for design and video editing.',
+                fr: 'Un excellent choix pour le design et le montage video.'
+            },
+            trw: {
+                ar: '\u062d\u0633\u0627\u0628 \u0643\u0648\u0631\u0633\u0627\u062a \u0648\u0645\u0646\u0635\u0629 \u062a\u0639\u0644\u064a\u0645\u064a\u0629.',
+                en: 'Courses account and learning platform access.',
+                fr: 'Acces a un compte de cours et a une plateforme educative.'
+            },
+            capcut: {
+                ar: '\u0645\u0632\u0627\u064a\u0627 \u0627\u062d\u062a\u0631\u0627\u0641\u064a\u0629 \u0644\u0635\u0646\u0627\u0639\u0629 \u0627\u0644\u0641\u064a\u062f\u064a\u0648\u0647\u0627\u062a.',
+                en: 'Pro features for creating and editing videos.',
+                fr: 'Fonctionnalites Pro pour creer et monter des videos.'
+            }
+        };
+        const localizedPopularPrices = { chatgpt: 1000, adobe: 1500, trw: 3500, capcut: 800 };
+        const symbol = lang === 'ar' ? '\u062f\u062c' : 'DA';
+        mobilePopularDesc.textContent = localizedPopularCopy[item.key]?.[lang] || localizedPopularCopy[item.key]?.ar || item.desc;
+        mobilePopularPrice.textContent = `${localizedPopularPrices[item.key] || ''} ${symbol}`.trim();
         mobilePopularIndex++;
     }
 
@@ -4061,6 +4198,10 @@ function changeLanguage(lang) {
     // Update price displays with correct currency symbol
     updatePriceDisplays(lang);
 
+    if (typeof window.refreshMobileOfferCardsText === 'function') {
+        window.refreshMobileOfferCardsText();
+    }
+
     // Update product translations from Firebase (Requirements: 4.5)
     if (window.ProductTranslationsUI) {
         window.ProductTranslationsUI.onLanguageChange(lang);
@@ -4069,6 +4210,11 @@ function changeLanguage(lang) {
     // Update availability texts for the new language
     if (window.AvailabilityUI) {
         window.AvailabilityUI.updateAvailabilityTextsForLanguage(lang);
+    }
+
+    if (typeof window.refreshMobileOfferCardsText === 'function') {
+        window.setTimeout(window.refreshMobileOfferCardsText, 0);
+        window.setTimeout(window.refreshMobileOfferCardsText, 600);
     }
 
     // Save preference
@@ -5193,7 +5339,8 @@ function selectChatGPTDuration(duration) {
             if (window.currencyManager && window.currencyManager.currentCurrency === 'USD') {
                 tag.textContent = '$' + priceInfo.usd;
             } else {
-                tag.textContent = priceInfo.dzd + ' د.ج';
+                const dzdSymbol = (window.currentLang || document.documentElement.lang) === 'ar' ? 'د.ج' : 'DA';
+                tag.textContent = priceInfo.dzd + ' ' + dzdSymbol;
             }
         }
     }
@@ -5302,7 +5449,8 @@ function selectGrokDuration(duration) {
             if (window.currencyManager && window.currencyManager.currentCurrency === 'USD') {
                 tag.textContent = '$' + priceInfo.usd;
             } else {
-                tag.textContent = priceInfo.dzd + ' د.ج';
+                const dzdSymbol = (window.currentLang || document.documentElement.lang) === 'ar' ? 'د.ج' : 'DA';
+                tag.textContent = priceInfo.dzd + ' ' + dzdSymbol;
             }
         }
     }

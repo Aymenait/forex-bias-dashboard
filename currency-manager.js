@@ -241,7 +241,7 @@ class CurrencyManager {
    */
   getCurrencySymbol() {
     if (this.currentCurrency === 'DZD') {
-      return 'د.ج';
+      return (window.currentLang || document.documentElement.lang) === 'ar' ? 'د.ج' : 'DA';
     } else {
       return '$';
     }
@@ -264,7 +264,8 @@ class CurrencyManager {
 
     // Add currency symbol
     if (currency === 'DZD') {
-      return `${formattedNumber} د.ج`;
+      const dzdSymbol = (window.currentLang || document.documentElement.lang) === 'ar' ? 'د.ج' : 'DA';
+      return `${formattedNumber} ${dzdSymbol}`;
     } else if (currency === 'USD') {
       return `$${formattedNumber}`;
     } else {
