@@ -805,6 +805,7 @@ document.addEventListener('DOMContentLoaded', () => {
             article.className = `mobile-expand-card${index === 0 ? ' is-open' : ''}`;
             article.dataset.mobileExpandProduct = productKey;
             article.dataset.mobileSourceIndex = String(index);
+            article.dataset.category = card.getAttribute('data-category') || 'all';
             article.innerHTML = `
                 <button class="mobile-expand-toggle" type="button" aria-expanded="${index === 0 ? 'true' : 'false'}">
                     ${buildMobileMedia(media, title)}
@@ -840,6 +841,34 @@ document.addEventListener('DOMContentLoaded', () => {
     buildMobileOfferCards();
 
     let mobileExpandCards = document.querySelectorAll('[data-mobile-expand-product]');
+
+    function applyMobileCategoryFilter(filter = 'all') {
+        const currentMobileCards = Array.from(document.querySelectorAll('.mobile-expand-card'));
+        let firstVisibleCard = null;
+        let hasOpenVisibleCard = false;
+
+        currentMobileCards.forEach((card) => {
+            const category = card.getAttribute('data-category') || 'all';
+            const isVisible = filter === 'all' || category === filter || category === 'all';
+            card.style.display = isVisible ? '' : 'none';
+            card.style.opacity = isVisible ? '1' : '0';
+            card.hidden = !isVisible;
+
+            if (isVisible && !firstVisibleCard) firstVisibleCard = card;
+            if (isVisible && card.classList.contains('is-open')) hasOpenVisibleCard = true;
+            if (!isVisible) {
+                card.classList.remove('is-open', 'is-closing');
+                card.querySelector('.mobile-expand-toggle')?.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        if (!hasOpenVisibleCard && firstVisibleCard) {
+            firstVisibleCard.classList.add('is-open');
+            firstVisibleCard.querySelector('.mobile-expand-toggle')?.setAttribute('aria-expanded', 'true');
+        }
+    }
+
+    window.applyMobileCategoryFilter = applyMobileCategoryFilter;
 
     function setMobileExpandedOffer(product, options = {}) {
         const allowClose = options.allowClose === true;
@@ -920,6 +949,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (mobileExpandContainer && sourceProductCards.length) {
         syncAllMobileAvailability();
+        applyMobileCategoryFilter(document.querySelector('.category-pill.active')?.getAttribute('data-filter') || 'all');
         window.addEventListener('firebaseReady', () => window.setTimeout(syncAllMobileAvailability, 800), { once: true });
         window.setTimeout(syncAllMobileAvailability, 1500);
         window.setTimeout(syncAllMobileAvailability, 3200);
@@ -6098,6 +6128,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.style.display = 'none';
                 }
             });
+
+            if (typeof window.applyMobileCategoryFilter === 'function') {
+                window.applyMobileCategoryFilter(filter);
+            }
 
             // Track filter usage
             if (typeof fbq !== 'undefined') {
