@@ -257,7 +257,7 @@
             color: #ffd56f !important;
         }
     </style>
-    <link rel="stylesheet" href="homepage-redesign.css?v=7">
+    <link rel="stylesheet" href="homepage-redesign.css?v=10">
     <link rel="stylesheet" href="order-form.css">
 </head>
 
@@ -458,6 +458,100 @@
                         <button class="category-pill" data-filter="entertainment" data-i18n="filter.entertainment">ترفيه</button>
                     </div>
                 </div>
+                <section class="mobile-featured-offers" aria-label="العروض الأكثر طلبا">
+                    <article class="mobile-popular-offer">
+                        <div class="mobile-popular-media" aria-hidden="true">
+                            <img class="is-active" data-mobile-popular-media="chatgpt" src="https://i.imgur.com/FDZBdd9.gif" alt="">
+                            <img data-mobile-popular-media="adobe" src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="">
+                            <img data-mobile-popular-media="trw" src="https://i.imgur.com/hEiJhso.gif" alt="">
+                            <video data-mobile-popular-media="capcut" autoplay loop muted playsinline preload="metadata">
+                                <source src="https://i.imgur.com/ZpMzFGa.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div>
+                            <span class="mobile-popular-label">الأكثر طلبا</span>
+                            <h3 id="mobile-popular-title">ChatGPT Premium</h3>
+                            <p id="mobile-popular-desc">تفعيل سريع ودعم واتساب بعد الطلب.</p>
+                            <strong id="mobile-popular-price">1000 دج</strong>
+                        </div>
+                    </article>
+
+                    <div class="mobile-expand-offers">
+                        <article class="mobile-expand-card is-open" data-mobile-expand-product="chatgpt">
+                            <button class="mobile-expand-toggle" type="button" aria-expanded="true">
+                                <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
+                                <span><strong>ChatGPT Premium</strong><em>1000 دج</em></span>
+                            </button>
+                            <div class="mobile-expand-details">
+                                <p>اشتراك مناسب للطلاب وصناع المحتوى وأصحاب المشاريع، مع دعم بعد التفعيل.</p>
+                                <ul>
+                                    <li>تسليم سريع عبر واتساب</li>
+                                    <li>دفع محلي أو USDT</li>
+                                </ul>
+                                <div class="mobile-expand-actions">
+                                    <a href="chatgpt_landing.html">تفاصيل المنتج</a>
+                                    <button type="button" onclick="orderChatGPT()">اطلب الآن</button>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="mobile-expand-card" data-mobile-expand-product="adobe">
+                            <button class="mobile-expand-toggle" type="button" aria-expanded="false">
+                                <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe Creative Cloud">
+                                <span><strong>Adobe Creative Cloud</strong><em>1500 دج</em></span>
+                            </button>
+                            <div class="mobile-expand-details">
+                                <p>باقة مناسبة للتصميم والمونتاج، مع تفعيل واضح ومتابعة الطلب.</p>
+                                <ul>
+                                    <li>تطبيقات Adobe الاحترافية</li>
+                                    <li>دعم واتساب بعد الطلب</li>
+                                </ul>
+                                <div class="mobile-expand-actions">
+                                    <a href="adobe_landing.html">تفاصيل المنتج</a>
+                                    <button type="button" onclick="orderAdobe()">اطلب الآن</button>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="mobile-expand-card" data-mobile-expand-product="trw">
+                            <button class="mobile-expand-toggle" type="button" aria-expanded="false">
+                                <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World">
+                                <span><strong>The Real World</strong><em>3500 دج</em></span>
+                            </button>
+                            <div class="mobile-expand-details">
+                                <p>حساب كورسات ومنصة تعليمية مع متابعة الطلب وخدمة ما بعد البيع.</p>
+                                <ul>
+                                    <li>وصول للكورسات والمنصة</li>
+                                    <li>شرح طريقة الاستخدام</li>
+                                </ul>
+                                <div class="mobile-expand-actions">
+                                    <a href="trw_landing.html">تفاصيل المنتج</a>
+                                    <button type="button" onclick="orderProduct('trw')">اطلب الآن</button>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="mobile-expand-card" data-mobile-expand-product="capcut">
+                            <button class="mobile-expand-toggle" type="button" aria-expanded="false">
+                                <video autoplay loop muted playsinline aria-label="CapCut Pro">
+                                    <source src="https://i.imgur.com/ZpMzFGa.mp4" type="video/mp4">
+                                </video>
+                                <span><strong>CapCut Pro</strong><em>800 دج</em></span>
+                            </button>
+                            <div class="mobile-expand-details">
+                                <p>مناسب للمونتاج وصناعة الفيديوهات القصيرة مع مزايا Pro.</p>
+                                <ul>
+                                    <li>مزايا احترافية للمونتاج</li>
+                                    <li>تفعيل سريع ومتابعة</li>
+                                </ul>
+                                <div class="mobile-expand-actions">
+                                    <a href="capcut_landing.html">تفاصيل المنتج</a>
+                                    <button type="button" onclick="orderCapcut()">اطلب الآن</button>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
                 <div class="product-grid">
                     <div class="product-card fade-in">
                         <div class="product-image" style="background-image: url('https://i.imgur.com/hEiJhso.gif');"
@@ -2957,7 +3051,7 @@
     <script src="currency-manager.js?v=5"></script>
     <script src="payment-manager.js?v=5"></script>
     <script src="international-expansion-init.js?v=5"></script>
-    <script src="script.js?v=final3" defer></script>
+    <script src="script.js?v=final7" defer></script>
     <script src="order-form.js" defer></script>
 
     <!-- Firebase SDK for Reviews -->

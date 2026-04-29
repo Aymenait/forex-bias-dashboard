@@ -334,6 +334,10 @@
     padding-top: 54px !important;
 }
 
+.homepage-redesign .mobile-featured-offers {
+    display: none;
+}
+
 .homepage-redesign .section-header {
     max-width: 760px;
     margin: 0 auto 24px;
@@ -810,6 +814,212 @@
         padding: 8px;
     }
 
+    .homepage-redesign .mobile-featured-offers {
+        display: grid;
+        gap: 12px;
+        margin: 0 0 18px;
+    }
+
+    .homepage-redesign .mobile-popular-offer {
+        display: grid;
+        grid-template-columns: 128px minmax(0, 1fr);
+        gap: 10px;
+        padding: 10px;
+        border: 1px solid rgba(255, 213, 111, 0.38);
+        border-radius: 8px;
+        background: rgba(255, 213, 111, 0.09);
+    }
+
+    .homepage-redesign .mobile-popular-media > * {
+        display: none;
+    }
+
+    .homepage-redesign .mobile-popular-media > .is-active {
+        display: block;
+    }
+
+    .homepage-redesign .mobile-popular-media img,
+    .homepage-redesign .mobile-popular-media video {
+        width: 100%;
+        height: 128px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .homepage-redesign .mobile-popular-label {
+        display: inline-flex;
+        min-height: 26px;
+        align-items: center;
+        padding: 0 8px;
+        border-radius: 8px;
+        background: rgba(255, 213, 111, 0.16);
+        color: var(--preview-gold);
+        font-size: 0.72rem;
+        font-weight: 900;
+    }
+
+    .homepage-redesign .mobile-popular-offer h3 {
+        margin: 8px 0 5px;
+        color: #fff;
+        font-size: 1rem;
+        line-height: 1.25;
+    }
+
+    .homepage-redesign .mobile-popular-offer p {
+        margin: 0 0 7px;
+        color: var(--preview-muted);
+        font-size: 0.78rem;
+        line-height: 1.45;
+    }
+
+    .homepage-redesign .mobile-popular-offer strong {
+        color: var(--preview-gold);
+        font-size: 0.95rem;
+    }
+
+    .homepage-redesign .mobile-expand-offers {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .homepage-redesign .mobile-expand-card {
+        overflow: hidden;
+        grid-column: span 1;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.075);
+        transition: border-color 240ms ease, box-shadow 240ms ease, transform 240ms ease, background 240ms ease;
+    }
+
+    .homepage-redesign .mobile-expand-card.is-open {
+        grid-column: 1 / -1;
+        border-color: rgba(255, 213, 111, 0.78);
+        box-shadow: 0 0 0 1px rgba(255, 213, 111, 0.16);
+        background: rgba(255, 255, 255, 0.09);
+    }
+
+    .homepage-redesign .mobile-expand-toggle {
+        width: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        text-align: inherit;
+        cursor: pointer;
+    }
+
+    .homepage-redesign .mobile-expand-toggle:active {
+        transform: scale(0.99);
+    }
+
+    .homepage-redesign .mobile-expand-toggle img,
+    .homepage-redesign .mobile-expand-toggle video {
+        width: 100%;
+        height: 104px;
+        display: block;
+        object-fit: cover;
+    }
+
+    .homepage-redesign .mobile-expand-toggle span {
+        display: block;
+        padding: 9px;
+    }
+
+    .homepage-redesign .mobile-expand-toggle strong,
+    .homepage-redesign .mobile-expand-toggle em {
+        display: block;
+        font-style: normal;
+    }
+
+    .homepage-redesign .mobile-expand-toggle strong {
+        color: #fff;
+        font-size: 0.82rem;
+        line-height: 1.24;
+    }
+
+    .homepage-redesign .mobile-expand-toggle em {
+        margin-top: 6px;
+        color: var(--preview-gold);
+        font-size: 0.9rem;
+        font-weight: 900;
+    }
+
+    .homepage-redesign .mobile-expand-details {
+        display: block;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        padding: 0 10px 10px;
+        transform: translateY(-6px);
+        transition: max-height 360ms ease, opacity 240ms ease, transform 280ms ease;
+    }
+
+    .homepage-redesign .mobile-expand-card.is-open .mobile-expand-details {
+        max-height: 420px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .homepage-redesign .mobile-expand-card.is-closing .mobile-expand-details {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    .homepage-redesign .mobile-expand-details p {
+        margin: 0;
+        color: var(--preview-muted);
+        font-size: 0.82rem;
+        line-height: 1.58;
+    }
+
+    .homepage-redesign .mobile-expand-details ul {
+        display: grid;
+        gap: 6px;
+        margin: 9px 0 0;
+        padding: 0;
+        list-style: none;
+        color: #dfe7f5;
+        font-size: 0.78rem;
+    }
+
+    .homepage-redesign .mobile-expand-details li {
+        padding: 7px 9px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.07);
+    }
+
+    .homepage-redesign .mobile-expand-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .homepage-redesign .mobile-expand-actions a,
+    .homepage-redesign .mobile-expand-actions button {
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        font: inherit;
+        font-size: 0.8rem;
+        font-weight: 900;
+    }
+
+    .homepage-redesign .mobile-expand-actions a {
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--preview-text);
+    }
+
+    .homepage-redesign .mobile-expand-actions button {
+        border: 0;
+        background: linear-gradient(135deg, var(--preview-gold), #ff9f1c);
+        color: #171008;
+    }
+
     .homepage-redesign #products.section {
         padding-top: 26px !important;
     }
@@ -829,71 +1039,7 @@
     }
 
     .homepage-redesign .product-grid {
-        display: flex !important;
-        grid-template-columns: none !important;
-        gap: 12px;
-        overflow-x: auto !important;
-        overflow-y: visible !important;
-        padding: 0 0 12px !important;
-        scroll-snap-type: x mandatory !important;
-        scroll-padding-inline: 14px;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-
-    .homepage-redesign .product-grid::-webkit-scrollbar {
-        display: none;
-    }
-
-    .homepage-redesign .product-grid::before,
-    .homepage-redesign .product-grid::after {
         display: none !important;
-    }
-
-    .homepage-redesign .product-card {
-        flex: 0 0 82vw !important;
-        width: 82vw !important;
-        min-width: 82vw !important;
-        max-width: 340px !important;
-        padding: 13px !important;
-        scroll-snap-align: start !important;
-    }
-
-    .homepage-redesign .product-image {
-        aspect-ratio: 16 / 9;
-        min-height: 158px !important;
-        background-color: rgba(15, 21, 33, 0.92) !important;
-    }
-
-    .homepage-redesign .product-card h3 {
-        font-size: 1.08rem;
-        margin-top: 12px;
-    }
-
-    .homepage-redesign .product-card .description {
-        min-height: auto;
-        font-size: 0.9rem;
-        line-height: 1.55;
-    }
-
-    .homepage-redesign .payment-methods-row {
-        display: grid !important;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 7px !important;
-    }
-
-    .homepage-redesign .payment-btn-compact {
-        width: 100% !important;
-        min-height: 42px;
-        padding: 6px 4px !important;
-        font-size: 0.72rem !important;
-    }
-
-    .homepage-redesign .order-btn,
-    .homepage-redesign .discover-btn {
-        width: 100%;
-        min-height: 44px;
-        margin-top: 10px;
     }
 
     .homepage-redesign .site-footer {

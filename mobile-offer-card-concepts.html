@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3Ahub - أمثلة بطاقات العروض للهاتف</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #06080f;
+            --surface: #101522;
+            --surface-soft: rgba(255, 255, 255, 0.07);
+            --line: rgba(255, 255, 255, 0.13);
+            --text: #f8fafc;
+            --muted: #aeb8c7;
+            --gold: #ffd166;
+            --orange: #ff9f1c;
+            --green: #22c55e;
+            --blue: #38bdf8;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Tajawal", "Segoe UI", Arial, sans-serif;
+        }
+
+        img,
+        video {
+            display: block;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        button,
+        a {
+            font: inherit;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .preview {
+            min-height: 100vh;
+            background:
+                linear-gradient(180deg, rgba(255, 209, 102, 0.08), transparent 22%),
+                linear-gradient(135deg, #080b14, #05070d 62%, #0d1018);
+        }
+
+        .preview-top {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            overflow-x: auto;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(6, 8, 15, 0.9);
+            backdrop-filter: blur(16px);
+            scrollbar-width: none;
+        }
+
+        .preview-top::-webkit-scrollbar {
+            display: none;
+        }
+
+        .preview-top strong {
+            flex: 0 0 auto;
+            color: var(--gold);
+            font-size: 0.82rem;
+        }
+
+        .preview-top a {
+            flex: 0 0 auto;
+            min-height: 34px;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #eef6ff;
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .screen {
+            width: min(100%, 430px);
+            margin: 0 auto;
+            padding: 18px 14px 34px;
+        }
+
+        .concept {
+            padding: 20px 0 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .label {
+            display: inline-flex;
+            min-height: 32px;
+            align-items: center;
+            padding: 0 10px;
+            border: 1px solid rgba(255, 209, 102, 0.38);
+            border-radius: 8px;
+            background: rgba(255, 209, 102, 0.12);
+            color: #ffe8a3;
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .concept h1,
+        .concept h2 {
+            margin: 12px 0 8px;
+            letter-spacing: 0;
+            line-height: 1.18;
+        }
+
+        .concept h1 {
+            font-size: 1.55rem;
+        }
+
+        .concept h2 {
+            font-size: 1.3rem;
+        }
+
+        .concept > p {
+            margin: 0 0 16px;
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 0.9rem;
+        }
+
+        .product-card {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(16, 21, 34, 0.92);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+        }
+
+        .media {
+            position: relative;
+            height: 170px;
+            background: #111827;
+        }
+
+        .tag {
+            position: absolute;
+            top: 10px;
+            inset-inline-start: 10px;
+            min-height: 28px;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 9px;
+            border-radius: 8px;
+            background: rgba(255, 209, 102, 0.92);
+            color: #1b1205;
+            font-size: 0.74rem;
+            font-weight: 900;
+        }
+
+        .content {
+            padding: 13px;
+        }
+
+        .card-head {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .title {
+            margin: 0;
+            color: #fff;
+            font-size: 1.03rem;
+            line-height: 1.28;
+        }
+
+        .rating {
+            margin-top: 6px;
+            color: var(--gold);
+            font-size: 0.8rem;
+            font-weight: 900;
+        }
+
+        .price {
+            flex: 0 0 auto;
+            min-width: 88px;
+            padding: 8px;
+            border: 1px solid rgba(255, 209, 102, 0.45);
+            border-radius: 8px;
+            background: rgba(255, 209, 102, 0.1);
+            color: var(--gold);
+            text-align: center;
+            font-size: 1.02rem;
+            font-weight: 900;
+        }
+
+        .desc {
+            margin: 10px 0 0;
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: 0.86rem;
+        }
+
+        .payment-row,
+        .action-row {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .payment-row {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .pay {
+            min-height: 38px;
+            border: 0;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.72rem;
+            font-weight: 900;
+        }
+
+        .pay.usdt {
+            background: #f59e0b;
+        }
+
+        .pay.redot {
+            background: #22c55e;
+        }
+
+        .pay.baridi {
+            background: #0ea5e9;
+        }
+
+        .primary-action {
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: #191006;
+            font-weight: 900;
+        }
+
+        .list-stack {
+            display: grid;
+            gap: 10px;
+        }
+
+        .list-card {
+            display: grid;
+            grid-template-columns: 112px minmax(0, 1fr);
+            gap: 10px;
+            min-height: 132px;
+            padding: 9px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .list-card img,
+        .list-card video {
+            height: 114px;
+            border-radius: 8px;
+        }
+
+        .list-info {
+            min-width: 0;
+            display: grid;
+            align-content: space-between;
+            gap: 8px;
+        }
+
+        .list-info h3 {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.25;
+        }
+
+        .list-info p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.45;
+        }
+
+        .list-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .list-price {
+            color: var(--gold);
+            font-weight: 900;
+        }
+
+        .mini-order {
+            min-height: 34px;
+            padding: 0 11px;
+            border-radius: 8px;
+            background: var(--gold);
+            color: #191006;
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .compact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .compact-card {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.075);
+        }
+
+        .compact-card img,
+        .compact-card video {
+            height: 108px;
+        }
+
+        .compact-content {
+            padding: 10px;
+        }
+
+        .compact-content h3 {
+            min-height: 38px;
+            margin: 0;
+            font-size: 0.86rem;
+            line-height: 1.24;
+        }
+
+        .compact-content strong {
+            display: block;
+            margin: 8px 0;
+            color: var(--gold);
+            font-size: 0.98rem;
+        }
+
+        .compact-content a {
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: #191006;
+            font-size: 0.8rem;
+            font-weight: 900;
+        }
+
+        .swipe-row {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: 74%;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 2px 2px 12px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .swipe-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .swipe-card {
+            overflow: hidden;
+            scroll-snap-align: start;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.075);
+        }
+
+        .swipe-card img {
+            height: 128px;
+        }
+
+        .swipe-card .compact-content h3 {
+            min-height: auto;
+        }
+
+        .featured-mix {
+            display: grid;
+            gap: 10px;
+        }
+
+        .hero-offer {
+            display: grid;
+            grid-template-columns: 132px minmax(0, 1fr);
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid rgba(255, 209, 102, 0.36);
+            border-radius: 8px;
+            background: rgba(255, 209, 102, 0.09);
+        }
+
+        .hero-offer img {
+            height: 128px;
+            border-radius: 8px;
+        }
+
+        .hero-offer h3 {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.25;
+        }
+
+        .hero-offer p {
+            margin: 7px 0;
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.45;
+        }
+
+        .mini-offer-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .mini-offer {
+            min-height: 88px;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            display: grid;
+            align-content: space-between;
+            gap: 8px;
+        }
+
+        .mini-offer strong,
+        .mini-offer span {
+            display: block;
+        }
+
+        .mini-offer strong {
+            color: #fff;
+            font-size: 0.74rem;
+            line-height: 1.25;
+        }
+
+        .mini-offer span {
+            color: var(--gold);
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .mini-offer-card {
+            overflow: hidden;
+            padding: 0;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            color: inherit;
+            text-align: inherit;
+            cursor: pointer;
+        }
+
+        .mini-offer-card img,
+        .mini-offer-card video {
+            height: 76px;
+        }
+
+        .mini-offer-card div {
+            padding: 8px;
+        }
+
+        .mini-offer-card strong,
+        .mini-offer-card span {
+            display: block;
+        }
+
+        .mini-offer-card strong {
+            color: #fff;
+            font-size: 0.72rem;
+            line-height: 1.22;
+        }
+
+        .mini-offer-card span {
+            margin-top: 5px;
+            color: var(--gold);
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .mini-offer-card.is-active {
+            border-color: rgba(255, 209, 102, 0.78);
+            box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.16);
+        }
+
+        .featured-detail {
+            display: none;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.065);
+        }
+
+        .featured-detail.is-active {
+            display: block;
+        }
+
+        .featured-detail h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .featured-detail p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.6;
+        }
+
+        .feature-points {
+            display: grid;
+            gap: 6px;
+            margin: 10px 0 0;
+            padding: 0;
+            list-style: none;
+            color: #dfe7f5;
+            font-size: 0.78rem;
+        }
+
+        .feature-points li {
+            padding: 7px 9px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .featured-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .featured-actions a {
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 900;
+        }
+
+        .featured-actions a:first-child {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .featured-actions a:last-child {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: #191006;
+        }
+
+        .featured-rotator-card {
+            display: grid;
+            grid-template-columns: 132px minmax(0, 1fr);
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid rgba(255, 209, 102, 0.42);
+            border-radius: 8px;
+            background: rgba(255, 209, 102, 0.09);
+        }
+
+        .featured-rotator-card img,
+        .featured-rotator-card video {
+            height: 132px;
+            border-radius: 8px;
+        }
+
+        .featured-rotator-card h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1rem;
+            line-height: 1.25;
+        }
+
+        .featured-rotator-card p {
+            margin: 7px 0;
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.45;
+        }
+
+        .featured-rotator-media > * {
+            display: none;
+        }
+
+        .featured-rotator-media > .is-active {
+            display: block;
+        }
+
+        .expand-product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+        }
+
+        .expand-product-card {
+            overflow: hidden;
+            grid-column: span 1;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .expand-product-card.is-open {
+            grid-column: 1 / -1;
+            border-color: rgba(255, 209, 102, 0.78);
+            box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.16);
+        }
+
+        .expand-product-toggle {
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            text-align: inherit;
+            cursor: pointer;
+        }
+
+        .expand-product-card img,
+        .expand-product-card video {
+            height: 104px;
+        }
+
+        .expand-product-summary {
+            padding: 9px;
+        }
+
+        .expand-product-summary strong,
+        .expand-product-summary span {
+            display: block;
+        }
+
+        .expand-product-summary strong {
+            color: #fff;
+            font-size: 0.82rem;
+            line-height: 1.24;
+        }
+
+        .expand-product-summary span {
+            margin-top: 6px;
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: 900;
+        }
+
+        .expand-product-details {
+            display: none;
+            padding: 0 10px 10px;
+        }
+
+        .expand-product-card.is-open .expand-product-details {
+            display: block;
+        }
+
+        .expand-product-details p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.58;
+        }
+
+        .expand-product-details .feature-points {
+            margin-top: 9px;
+        }
+
+        .expand-stack {
+            display: grid;
+            gap: 9px;
+        }
+
+        .expand-card {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.075);
+        }
+
+        .expand-card summary {
+            min-height: 74px;
+            display: grid;
+            grid-template-columns: 66px minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+            padding: 8px 10px;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .expand-card summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .expand-card img {
+            width: 66px;
+            height: 56px;
+            border-radius: 8px;
+        }
+
+        .expand-card h3 {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.25;
+        }
+
+        .expand-card .list-price {
+            white-space: nowrap;
+        }
+
+        .expand-body {
+            padding: 0 10px 10px;
+            color: var(--muted);
+            font-size: 0.8rem;
+            line-height: 1.55;
+        }
+
+        .expand-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .expand-actions a {
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .expand-actions a:first-child {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--line);
+        }
+
+        .expand-actions a:last-child {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: #191006;
+        }
+    </style>
+</head>
+<body>
+    <main class="preview">
+        <nav class="preview-top" aria-label="أقسام المعاينة">
+            <strong>معاينة فقط</strong>
+            <a href="#premium-card">بطاقة قوية</a>
+            <a href="#list-card">قائمة سريعة</a>
+            <a href="#compact-grid">شبكة مختصرة</a>
+            <a href="#swipe-shelf">رف بالسحب</a>
+            <a href="#featured-mix">مميز + مختصر</a>
+            <a href="#expandable-list">فتح التفاصيل</a>
+        </nav>
+
+        <div class="screen">
+            <section class="concept" id="premium-card">
+                <span class="label">01 - بطاقة قوية للبيع</span>
+                <h1>أفضل لو تريد إبراز منتج واحد بقوة</h1>
+                <p>شكل قريب من الحالي، لكن أكثر ترتيبًا: السعر واضح، أزرار الدفع مختصرة، وزر الطلب يأخذ القرار.</p>
+
+                <article class="product-card">
+                    <div class="media">
+                        <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT Premium">
+                        <span class="tag">الأكثر طلبًا</span>
+                    </div>
+                    <div class="content">
+                        <div class="card-head">
+                            <div>
+                                <h3 class="title">ChatGPT Premium</h3>
+                                <div class="rating">★★★★★ <span>(44)</span></div>
+                            </div>
+                            <div class="price">1000 دج</div>
+                        </div>
+                        <p class="desc">اشتراك جاهز بسرعة مع دعم واتساب وضمان التفعيل بعد الطلب.</p>
+                        <div class="payment-row">
+                            <button class="pay usdt">USDT</button>
+                            <button class="pay redot">RedotPay</button>
+                            <button class="pay baridi">BaridiMob</button>
+                        </div>
+                        <div class="action-row">
+                            <a class="primary-action" href="#">اطلب الآن</a>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="concept" id="list-card">
+                <span class="label">02 - قائمة سريعة</span>
+                <h2>أفضل لو تريد الزبون يقارن بسرعة</h2>
+                <p>كل منتج يأخذ مساحة أقل، فيشاهد الزبون عروضًا أكثر قبل التمرير الطويل.</p>
+
+                <div class="list-stack">
+                    <article class="list-card">
+                        <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe">
+                        <div class="list-info">
+                            <div>
+                                <h3>Adobe Creative Cloud</h3>
+                                <p>تصميم، مونتاج، وتطبيقات احترافية.</p>
+                            </div>
+                            <div class="list-bottom">
+                                <span class="list-price">1500 دج</span>
+                                <a class="mini-order" href="#">اطلب</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="list-card">
+                        <video autoplay loop muted playsinline aria-label="Canva Pro">
+                            <source src="https://i.imgur.com/DvPmjNv.mp4" type="video/mp4">
+                        </video>
+                        <div class="list-info">
+                            <div>
+                                <h3>Canva Pro</h3>
+                                <p>قوالب وتصاميم جاهزة للمحتوى.</p>
+                            </div>
+                            <div class="list-bottom">
+                                <span class="list-price">600 دج</span>
+                                <a class="mini-order" href="#">اطلب</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="list-card">
+                        <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World">
+                        <div class="list-info">
+                            <div>
+                                <h3>The Real World</h3>
+                                <p>حساب كورسات ومنصة تعليمية.</p>
+                            </div>
+                            <div class="list-bottom">
+                                <span class="list-price">3500 دج</span>
+                                <a class="mini-order" href="#">اطلب</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="concept" id="compact-grid">
+                <span class="label">03 - شبكة مختصرة</span>
+                <h2>أفضل لو تريد عرض 4 منتجات دفعة واحدة</h2>
+                <p>هذا أسرع في التصفح، لكنه يعطي تفاصيل أقل داخل كل بطاقة.</p>
+
+                <div class="compact-grid">
+                    <article class="compact-card">
+                        <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
+                        <div class="compact-content">
+                            <h3>ChatGPT Premium</h3>
+                            <strong>1000 دج</strong>
+                            <a href="#">اطلب</a>
+                        </div>
+                    </article>
+                    <article class="compact-card">
+                        <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe">
+                        <div class="compact-content">
+                            <h3>Adobe Creative Cloud</h3>
+                            <strong>1500 دج</strong>
+                            <a href="#">اطلب</a>
+                        </div>
+                    </article>
+                    <article class="compact-card">
+                        <video autoplay loop muted playsinline aria-label="Canva">
+                            <source src="https://i.imgur.com/DvPmjNv.mp4" type="video/mp4">
+                        </video>
+                        <div class="compact-content">
+                            <h3>Canva Pro</h3>
+                            <strong>600 دج</strong>
+                            <a href="#">اطلب</a>
+                        </div>
+                    </article>
+                    <article class="compact-card">
+                        <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World">
+                        <div class="compact-content">
+                            <h3>The Real World</h3>
+                            <strong>3500 دج</strong>
+                            <a href="#">اطلب</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="concept" id="swipe-shelf">
+                <span class="label">04 - رف أفقي بالسحب</span>
+                <h2>حل ممتاز لتقليل الطول</h2>
+                <p>بدل أن تكون المنتجات فوق بعضها، تظهر كبطاقات أفقية. الزبون يسحب يمين/يسار، والصفحة تبقى قصيرة.</p>
+
+                <div class="swipe-row" aria-label="عروض بالسحب">
+                    <article class="swipe-card">
+                        <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
+                        <div class="compact-content">
+                            <h3>ChatGPT Premium</h3>
+                            <strong>1000 دج</strong>
+                            <a href="#">اطلب الآن</a>
+                        </div>
+                    </article>
+                    <article class="swipe-card">
+                        <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe">
+                        <div class="compact-content">
+                            <h3>Adobe Creative Cloud</h3>
+                            <strong>1500 دج</strong>
+                            <a href="#">اطلب الآن</a>
+                        </div>
+                    </article>
+                    <article class="swipe-card">
+                        <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World">
+                        <div class="compact-content">
+                            <h3>The Real World</h3>
+                            <strong>3500 دج</strong>
+                            <a href="#">اطلب الآن</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="concept" id="featured-mix-old" hidden>
+                <span class="label">05 - منتج مميز + مختصر</span>
+                <h2>توازن بين البيع السريع وعدم إطالة الصفحة</h2>
+                <p>على الهاتف فقط: صور المنتجات تبقى ظاهرة، والضغط على أي منتج يفتح التفاصيل المهمة مع زر صفحة المنتج الخاصة.</p>
+
+                <div class="featured-mix">
+                    <article class="hero-offer">
+                        <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
+                        <div>
+                            <h3>ChatGPT Premium</h3>
+                            <p>الأكثر طلبًا هذا الأسبوع، تفعيل سريع ودعم واتساب.</p>
+                            <span class="list-price">1000 دج</span>
+                            <a class="mini-order" href="#">اطلب</a>
+                        </div>
+                    </article>
+
+                    <div class="mini-offer-row">
+                        <button class="mini-offer-card is-active" type="button" data-featured-product="chatgpt">
+                            <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
+                            <div><strong>ChatGPT</strong><span>1000 دج</span></div>
+                        </button>
+                        <button class="mini-offer-card" type="button" data-featured-product="adobe">
+                            <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe">
+                            <div><strong>Adobe</strong><span>1500 دج</span></div>
+                        </button>
+                        <button class="mini-offer-card" type="button" data-featured-product="canva">
+                            <video autoplay loop muted playsinline aria-label="Canva">
+                                <source src="https://i.imgur.com/DvPmjNv.mp4" type="video/mp4">
+                            </video>
+                            <div><strong>Canva</strong><span>600 دج</span></div>
+                        </button>
+                    </div>
+
+                    <div class="featured-detail is-active" data-featured-detail="chatgpt">
+                        <h3>ChatGPT Premium</h3>
+                        <p>اشتراك مناسب للطلاب، صناع المحتوى، وأصحاب المشاريع. يظهر هنا أهم ما يحتاجه الزبون قبل الطلب.</p>
+                        <ul class="feature-points">
+                            <li>تسليم سريع عبر واتساب</li>
+                            <li>دعم بعد التفعيل</li>
+                            <li>دفع محلي أو USDT</li>
+                        </ul>
+                        <div class="featured-actions">
+                            <a href="chatgpt_landing.html">تفاصيل المنتج</a>
+                            <a href="#">اطلب الآن</a>
+                        </div>
+                    </div>
+
+                    <div class="featured-detail" data-featured-detail="adobe">
+                        <h3>Adobe Creative Cloud</h3>
+                        <p>تفاصيل مختصرة عن الباقة، السعر، وطريقة التفعيل. زر التفاصيل يأخذ الزبون إلى صفحة Adobe الخاصة.</p>
+                        <ul class="feature-points">
+                            <li>مناسب للتصميم والمونتاج</li>
+                            <li>تفعيل واضح ومتابعة الطلب</li>
+                            <li>سعر يبدأ من 1500 دج</li>
+                        </ul>
+                        <div class="featured-actions">
+                            <a href="adobe_landing.html">تفاصيل المنتج</a>
+                            <a href="#">اطلب الآن</a>
+                        </div>
+                    </div>
+
+                    <div class="featured-detail" data-featured-detail="canva">
+                        <h3>Canva Pro</h3>
+                        <p>يعرض أهم مزايا Canva بدون إطالة البطاقة، مع زر يفتح صفحة المنتج إذا أراد الزبون معلومات أكثر.</p>
+                        <ul class="feature-points">
+                            <li>قوالب ومزايا Pro</li>
+                            <li>مناسب للمنشورات والمتاجر</li>
+                            <li>سعر يبدأ من 600 دج</li>
+                        </ul>
+                        <div class="featured-actions">
+                            <a href="canva_landing.html">تفاصيل المنتج</a>
+                            <a href="#">اطلب الآن</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="concept" id="featured-mix">
+                <span class="label">05 - منتج مميز + بطاقات تكبر</span>
+                <h2>البطاقة نفسها تكبر وتعرض التفاصيل</h2>
+                <p>هذه النسخة للهاتف فقط: الصور تبقى ظاهرة، والضغط على البطاقة يوسعها. زر التفاصيل يفتح صفحة الـ landing page الخاصة بالمنتج.</p>
+
+                <div class="featured-mix">
+                    <article class="featured-rotator-card">
+                        <div class="featured-rotator-media" aria-hidden="true">
+                            <img class="is-active" data-rotator-media="chatgpt" src="https://i.imgur.com/FDZBdd9.gif" alt="">
+                            <img data-rotator-media="adobe" src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="">
+                            <img data-rotator-media="trw" src="https://i.imgur.com/hEiJhso.gif" alt="">
+                            <video data-rotator-media="capcut" autoplay loop muted playsinline>
+                                <source src="https://i.imgur.com/ZpMzFGa.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div>
+                            <h3 id="featured-rotator-title">ChatGPT Premium</h3>
+                            <p id="featured-rotator-desc">الأكثر طلبًا الآن، تفعيل سريع ودعم واتساب.</p>
+                            <span class="list-price" id="featured-rotator-price">1000 دج</span>
+                        </div>
+                    </article>
+
+                    <div class="expand-product-grid">
+                        <article class="expand-product-card is-open" data-expand-product="chatgpt">
+                            <button class="expand-product-toggle" type="button" aria-expanded="true">
+                                <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
+                                <div class="expand-product-summary">
+                                    <strong>ChatGPT Premium</strong>
+                                    <span>1000 دج</span>
+                                </div>
+                            </button>
+                            <div class="expand-product-details">
+                                <p>اشتراك مناسب للطلاب وصناع المحتوى وأصحاب المشاريع، مع دعم بعد التفعيل.</p>
+                                <ul class="feature-points">
+                                    <li>تسليم سريع عبر واتساب</li>
+                                    <li>دفع محلي أو USDT</li>
+                                </ul>
+                                <div class="featured-actions">
+                                    <a href="chatgpt_landing.html">تفاصيل المنتج</a>
+                                    <a href="#">اطلب الآن</a>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="expand-product-card" data-expand-product="adobe">
+                            <button class="expand-product-toggle" type="button" aria-expanded="false">
+                                <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe">
+                                <div class="expand-product-summary">
+                                    <strong>Adobe Creative Cloud</strong>
+                                    <span>1500 دج</span>
+                                </div>
+                            </button>
+                            <div class="expand-product-details">
+                                <p>باقة مناسبة للتصميم والمونتاج، مع تفعيل واضح ومتابعة الطلب.</p>
+                                <ul class="feature-points">
+                                    <li>تطبيقات Adobe الاحترافية</li>
+                                    <li>دعم واتساب بعد الطلب</li>
+                                </ul>
+                                <div class="featured-actions">
+                                    <a href="adobe_landing.html">تفاصيل المنتج</a>
+                                    <a href="#">اطلب الآن</a>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="expand-product-card" data-expand-product="trw">
+                            <button class="expand-product-toggle" type="button" aria-expanded="false">
+                                <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World">
+                                <div class="expand-product-summary">
+                                    <strong>The Real World</strong>
+                                    <span>3500 دج</span>
+                                </div>
+                            </button>
+                            <div class="expand-product-details">
+                                <p>حساب كورسات ومنصة تعليمية مع متابعة الطلب وخدمة ما بعد البيع.</p>
+                                <ul class="feature-points">
+                                    <li>وصول للكورسات والمنصة</li>
+                                    <li>شرح طريقة الاستخدام</li>
+                                </ul>
+                                <div class="featured-actions">
+                                    <a href="trw_landing.html">تفاصيل المنتج</a>
+                                    <a href="#">اطلب الآن</a>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="expand-product-card" data-expand-product="capcut">
+                            <button class="expand-product-toggle" type="button" aria-expanded="false">
+                                <video autoplay loop muted playsinline aria-label="CapCut Pro">
+                                    <source src="https://i.imgur.com/ZpMzFGa.mp4" type="video/mp4">
+                                </video>
+                                <div class="expand-product-summary">
+                                    <strong>CapCut Pro</strong>
+                                    <span>800 دج</span>
+                                </div>
+                            </button>
+                            <div class="expand-product-details">
+                                <p>مناسب للمونتاج وصناعة الفيديوهات القصيرة مع مزايا Pro.</p>
+                                <ul class="feature-points">
+                                    <li>مزايا احترافية للمونتاج</li>
+                                    <li>تفعيل سريع ومتابعة</li>
+                                </ul>
+                                <div class="featured-actions">
+                                    <a href="capcut_landing.html">تفاصيل المنتج</a>
+                                    <a href="#">اطلب الآن</a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="concept" id="expandable-list">
+                <span class="label">06 - قائمة تفتح التفاصيل</span>
+                <h2>أقصر شكل بدون فقدان التفاصيل</h2>
+                <p>الزبون يرى المنتجات كسطور قصيرة، وإذا اهتم بمنتج يفتحه ليظهر الوصف والأزرار.</p>
+
+                <div class="expand-stack">
+                    <details class="expand-card" open>
+                        <summary>
+                            <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
+                            <h3>ChatGPT Premium</h3>
+                            <span class="list-price">1000 دج</span>
+                        </summary>
+                        <div class="expand-body">
+                            اشتراك سريع مع دعم واتساب وضمان التفعيل.
+                            <div class="expand-actions">
+                                <a href="#">تفاصيل</a>
+                                <a href="#">اطلب</a>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="expand-card">
+                        <summary>
+                            <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe">
+                            <h3>Adobe Creative Cloud</h3>
+                            <span class="list-price">1500 دج</span>
+                        </summary>
+                        <div class="expand-body">
+                            تطبيقات التصميم والمونتاج مع تفعيل واضح.
+                            <div class="expand-actions">
+                                <a href="#">تفاصيل</a>
+                                <a href="#">اطلب</a>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="expand-card">
+                        <summary>
+                            <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World">
+                            <h3>The Real World</h3>
+                            <span class="list-price">3500 دج</span>
+                        </summary>
+                        <div class="expand-body">
+                            حساب كورسات ومنصة تعليمية مع متابعة الطلب.
+                            <div class="expand-actions">
+                                <a href="#">تفاصيل</a>
+                                <a href="#">اطلب</a>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script>
+        (() => {
+            const cards = Array.from(document.querySelectorAll("[data-featured-product]"));
+            const details = Array.from(document.querySelectorAll("[data-featured-detail]"));
+
+            const setFeaturedProduct = (product) => {
+                cards.forEach((card) => {
+                    card.classList.toggle("is-active", card.dataset.featuredProduct === product);
+                });
+                details.forEach((detail) => {
+                    detail.classList.toggle("is-active", detail.dataset.featuredDetail === product);
+                });
+            };
+
+            cards.forEach((card) => {
+                card.addEventListener("click", () => setFeaturedProduct(card.dataset.featuredProduct));
+            });
+        })();
+
+        (() => {
+            const productCards = Array.from(document.querySelectorAll("[data-expand-product]"));
+
+            const setOpenCard = (product) => {
+                productCards.forEach((card) => {
+                    const isOpen = card.dataset.expandProduct === product;
+                    card.classList.toggle("is-open", isOpen);
+                    card.querySelector(".expand-product-toggle")?.setAttribute("aria-expanded", String(isOpen));
+                });
+            };
+
+            productCards.forEach((card) => {
+                card.querySelector(".expand-product-toggle")?.addEventListener("click", () => {
+                    setOpenCard(card.dataset.expandProduct);
+                });
+            });
+
+            const rotatorItems = [
+                {
+                    key: "chatgpt",
+                    title: "ChatGPT Premium",
+                    desc: "الأكثر طلبًا الآن، تفعيل سريع ودعم واتساب.",
+                    price: "1000 دج"
+                },
+                {
+                    key: "adobe",
+                    title: "Adobe Creative Cloud",
+                    desc: "اختيار قوي للمصممين والمونتاج.",
+                    price: "1500 دج"
+                },
+                {
+                    key: "trw",
+                    title: "The Real World",
+                    desc: "حساب كورسات ومنصة تعليمية.",
+                    price: "3500 دج"
+                },
+                {
+                    key: "capcut",
+                    title: "CapCut Pro",
+                    desc: "مزايا احترافية لصناعة الفيديوهات.",
+                    price: "800 دج"
+                }
+            ];
+            const media = Array.from(document.querySelectorAll("[data-rotator-media]"));
+            const title = document.getElementById("featured-rotator-title");
+            const desc = document.getElementById("featured-rotator-desc");
+            const price = document.getElementById("featured-rotator-price");
+            let index = 0;
+
+            const rotateFeatured = () => {
+                const item = rotatorItems[index % rotatorItems.length];
+                media.forEach((node) => node.classList.toggle("is-active", node.dataset.rotatorMedia === item.key));
+                if (title) title.textContent = item.title;
+                if (desc) desc.textContent = item.desc;
+                if (price) price.textContent = item.price;
+                index += 1;
+            };
+
+            if (media.length && title && desc && price) {
+                rotateFeatured();
+                window.setInterval(rotateFeatured, 2000);
+            }
+        })();
+    </script>
+</body>
+</html>

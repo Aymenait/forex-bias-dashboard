@@ -558,6 +558,168 @@ document.addEventListener('DOMContentLoaded', () => {
         setHeroBg(0);
         restartHeroBgTimer();
     }
+
+    // Mobile-only featured offers: expanding cards and rotating popular product
+    const mobileExpandContainer = document.querySelector('.mobile-expand-offers');
+    const sourceProductCards = Array.from(document.querySelectorAll('.product-grid > .product-card'));
+
+    function getMobileProductTitle(card) {
+        return card.querySelector('.product-title')?.textContent?.trim() ||
+            card.querySelector('h3')?.textContent?.trim() ||
+            'Produit 3Ahub';
+    }
+
+    function getMobileProductMedia(card) {
+        const productImage = card.querySelector('.product-image');
+        const video = productImage?.querySelector('video source') || productImage?.querySelector('video');
+        if (video) {
+            return {
+                type: 'video',
+                src: video.getAttribute('src') || video.querySelector('source')?.getAttribute('src') || ''
+            };
+        }
+
+        const image = productImage?.querySelector('img');
+        if (image?.src) {
+            return { type: 'image', src: image.src };
+        }
+
+        const bg = productImage?.style?.backgroundImage || '';
+        const match = bg.match(/url\(["']?(.*?)["']?\)/);
+        return { type: 'image', src: match?.[1] || 'https://i.imgur.com/hyjvY4Z.png' };
+    }
+
+    function buildMobileMedia(media, alt) {
+        if (media.type === 'video' && media.src) {
+            return `<video autoplay loop muted playsinline aria-label="${alt}"><source src="${media.src}" type="video/mp4"></video>`;
+        }
+
+        return `<img src="${media.src}" alt="${alt}">`;
+    }
+
+    function buildMobileOfferCards() {
+        if (!mobileExpandContainer || !sourceProductCards.length || mobileExpandContainer.dataset.generated === 'true') return;
+
+        mobileExpandContainer.innerHTML = '';
+        sourceProductCards.forEach((card, index) => {
+            const title = getMobileProductTitle(card);
+            const description = card.querySelector('.description')?.textContent?.trim() || '';
+            const price = card.querySelector('.price-tag')?.textContent?.trim() || '';
+            const discoverLink = card.querySelector('.discover-btn')?.getAttribute('href') || '#products';
+            const features = Array.from(card.querySelectorAll('.product-features li'))
+                .slice(0, 2)
+                .map((li) => li.textContent.trim())
+                .filter(Boolean);
+            const media = getMobileProductMedia(card);
+            const productKey = `product-${index}`;
+            const article = document.createElement('article');
+            article.className = `mobile-expand-card${index === 0 ? ' is-open' : ''}`;
+            article.dataset.mobileExpandProduct = productKey;
+            article.innerHTML = `
+                <button class="mobile-expand-toggle" type="button" aria-expanded="${index === 0 ? 'true' : 'false'}">
+                    ${buildMobileMedia(media, title)}
+                    <span><strong>${title}</strong><em>${price || 'اطلب السعر'}</em></span>
+                </button>
+                <div class="mobile-expand-details">
+                    <p>${description}</p>
+                    ${features.length ? `<ul>${features.map((feature) => `<li>${feature}</li>`).join('')}</ul>` : ''}
+                    <div class="mobile-expand-actions">
+                        <a href="${discoverLink}">تفاصيل المنتج</a>
+                        <button type="button" data-mobile-source-index="${index}">اطلب الآن</button>
+                    </div>
+                </div>
+            `;
+            mobileExpandContainer.appendChild(article);
+        });
+
+        mobileExpandContainer.dataset.generated = 'true';
+    }
+
+    buildMobileOfferCards();
+
+    let mobileExpandCards = document.querySelectorAll('[data-mobile-expand-product]');
+
+    function setMobileExpandedOffer(product, options = {}) {
+        const allowClose = options.allowClose === true;
+        const clickedCard = Array.from(mobileExpandCards).find((card) => card.dataset.mobileExpandProduct === product);
+        const shouldCloseClicked = allowClose && clickedCard?.classList.contains('is-open');
+
+        mobileExpandCards.forEach((card) => {
+            const wasOpen = card.classList.contains('is-open');
+            const isOpen = !shouldCloseClicked && card.dataset.mobileExpandProduct === product;
+            card.classList.toggle('is-closing', wasOpen && !isOpen);
+            card.classList.toggle('is-open', isOpen);
+            card.querySelector('.mobile-expand-toggle')?.setAttribute('aria-expanded', String(isOpen));
+
+            if (wasOpen && !isOpen) {
+                window.setTimeout(() => card.classList.remove('is-closing'), 380);
+            }
+        });
+    }
+
+    mobileExpandCards.forEach((card) => {
+        card.querySelector('.mobile-expand-toggle')?.addEventListener('click', () => {
+            setMobileExpandedOffer(card.dataset.mobileExpandProduct, { allowClose: true });
+        });
+    });
+
+    document.querySelectorAll('[data-mobile-source-index]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const sourceCard = sourceProductCards[Number(button.dataset.mobileSourceIndex)];
+            const sourceButton = sourceCard?.querySelector('.order-btn');
+            sourceButton?.click();
+        });
+    });
+
+    const mobilePopularItems = [
+        {
+            key: 'chatgpt',
+            title: 'ChatGPT Premium',
+            desc: 'تفعيل سريع ودعم واتساب بعد الطلب.',
+            price: '1000 دج'
+        },
+        {
+            key: 'adobe',
+            title: 'Adobe Creative Cloud',
+            desc: 'اختيار قوي للتصميم والمونتاج.',
+            price: '1500 دج'
+        },
+        {
+            key: 'trw',
+            title: 'The Real World',
+            desc: 'حساب كورسات ومنصة تعليمية.',
+            price: '3500 دج'
+        },
+        {
+            key: 'capcut',
+            title: 'CapCut Pro',
+            desc: 'مزايا احترافية لصناعة الفيديوهات.',
+            price: '800 دج'
+        }
+    ];
+    const mobilePopularMedia = document.querySelectorAll('[data-mobile-popular-media]');
+    const mobilePopularTitle = document.getElementById('mobile-popular-title');
+    const mobilePopularDesc = document.getElementById('mobile-popular-desc');
+    const mobilePopularPrice = document.getElementById('mobile-popular-price');
+    let mobilePopularIndex = 0;
+
+    function rotateMobilePopularOffer() {
+        if (!mobilePopularMedia.length || !mobilePopularTitle || !mobilePopularDesc || !mobilePopularPrice) return;
+
+        const item = mobilePopularItems[mobilePopularIndex % mobilePopularItems.length];
+        mobilePopularMedia.forEach((node) => {
+            node.classList.toggle('is-active', node.dataset.mobilePopularMedia === item.key);
+        });
+        mobilePopularTitle.textContent = item.title;
+        mobilePopularDesc.textContent = item.desc;
+        mobilePopularPrice.textContent = item.price;
+        mobilePopularIndex++;
+    }
+
+    if (mobilePopularMedia.length) {
+        rotateMobilePopularOffer();
+        setInterval(rotateMobilePopularOffer, 2000);
+    }
 });
 
 // Copy wallet address function
