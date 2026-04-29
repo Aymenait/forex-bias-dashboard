@@ -257,7 +257,7 @@
             color: #ffd56f !important;
         }
     </style>
-    <link rel="stylesheet" href="homepage-redesign.css?v=10">
+    <link rel="stylesheet" href="homepage-redesign.css?v=13">
     <link rel="stylesheet" href="order-form.css">
 </head>
 
@@ -457,7 +457,7 @@
                         <button class="category-pill" data-filter="entertainment" data-i18n="filter.entertainment">ترفيه</button>
                     </div>
                 </div>
-                <section class="mobile-featured-offers" aria-label="العروض الأكثر طلبا">
+                <section class="mobile-featured-offers" aria-label="Most Popular Offers">
                     <article class="mobile-popular-offer">
                         <div class="mobile-popular-media" aria-hidden="true">
                             <img class="is-active" data-mobile-popular-media="chatgpt" src="https://i.imgur.com/FDZBdd9.gif" alt="">
@@ -468,64 +468,99 @@
                             </video>
                         </div>
                         <div>
-                            <span class="mobile-popular-label">الأكثر طلبا</span>
+                            <span class="mobile-popular-label" data-i18n="mobile.mostPopular">Most Popular</span>
                             <h3 id="mobile-popular-title">ChatGPT Premium</h3>
-                            <p id="mobile-popular-desc">تفعيل سريع ودعم واتساب بعد الطلب.</p>
-                            <strong id="mobile-popular-price">1000 دج</strong>
+                            <p id="mobile-popular-desc" data-i18n="mobile.fastActivation">Fast activation and WhatsApp support after order.</p>
+                            <strong id="mobile-popular-price">1000 DZD</strong>
                         </div>
                     </article>
 
                     <div class="mobile-expand-offers">
-                        <article class="mobile-expand-card is-open" data-mobile-expand-product="chatgpt">
+                        <article class="mobile-expand-card is-open" data-mobile-expand-product="chatgpt" data-category="ai">
                             <button class="mobile-expand-toggle" type="button" aria-expanded="true">
                                 <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
-                                <span><strong>ChatGPT Premium</strong><em>1000 دج</em></span>
+                                <span><strong>ChatGPT Premium</strong><em id="mobile-chatgpt-price">1000 DZD</em></span>
                             </button>
                             <div class="mobile-expand-details">
-                                <p>اشتراك مناسب للطلاب وصناع المحتوى وأصحاب المشاريع، مع دعم بعد التفعيل.</p>
+                                <p data-i18n="mobile.chatgpt.desc">Suitable subscription for students, content creators and business owners, with support after activation.</p>
+
+                                <!-- Duration Selection -->
+                                <div class="chatgpt-durations" style="margin: 16px 0;">
+                                    <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem;">
+                                        <span data-i18n="product.cursor.selectType">Choose offer:</span>
+                                    </p>
+                                    <div style="display: flex; gap: 8px;">
+                                        <button class="chatgpt-duration-btn active" data-duration="1month"
+                                            onclick="selectMobileChatGPTDuration('1month')"
+                                            style="flex: 1; padding: 8px; border: 2px solid #10a37f; background: rgba(16, 163, 127, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                            <span data-i18n="product.chatgpt.newAccount">New Account</span>
+                                        </button>
+                                        <button class="chatgpt-duration-btn" data-duration="1month-upgrade"
+                                            onclick="selectMobileChatGPTDuration('1month-upgrade')"
+                                            style="flex: 1; padding: 8px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                            <span data-i18n="product.chatgpt.upgradeAccount">Activate in your account</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="mobile-chatgpt-prices-1month" class="chatgpt-prices">
+                                    <strong style="color: var(--accent); font-size: 1.2rem;">1000 DZD</strong>
+                                    <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="perMonth">per month</span></span>
+                                </div>
+
+                                <div id="mobile-chatgpt-prices-1month-upgrade" class="chatgpt-prices" style="display: none;">
+                                    <strong style="color: var(--accent); font-size: 1.2rem;">1800 DZD</strong>
+                                    <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="perMonth">per month</span></span>
+                                    <div style="margin-top: 8px;">
+                                        <a href="https://www.youtube.com/watch?v=m_D3yt6eSDs" target="_blank" style="color: #10a37f; font-size: 0.85rem; text-decoration: underline;">
+                                            <span data-i18n="product.chatgpt.watchVideo">Watch activation guide</span>
+                                        </a>
+                                    </div>
+                                </div>
+
                                 <ul>
-                                    <li>تسليم سريع عبر واتساب</li>
-                                    <li>دفع محلي أو USDT</li>
+                                    <li data-i18n="mobile.chatgpt.feature1">Fast delivery via WhatsApp</li>
+                                    <li data-i18n="mobile.chatgpt.feature2">Local payment or USDT</li>
                                 </ul>
                                 <div class="mobile-expand-actions">
-                                    <a href="chatgpt_landing.html">تفاصيل المنتج</a>
-                                    <button type="button" onclick="orderChatGPT()">اطلب الآن</button>
+                                    <a href="chatgpt_landing.html" data-i18n="mobile.productDetails">Product Details</a>
+                                    <button type="button" id="mobile-chatgpt-order-btn" onclick="orderChatGPT()" data-i18n="mobile.orderNow">Order Now</button>
                                 </div>
                             </div>
                         </article>
 
-                        <article class="mobile-expand-card" data-mobile-expand-product="adobe">
+                        <article class="mobile-expand-card" data-mobile-expand-product="adobe" data-category="design">
                             <button class="mobile-expand-toggle" type="button" aria-expanded="false">
                                 <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe Creative Cloud">
-                                <span><strong>Adobe Creative Cloud</strong><em>1500 دج</em></span>
+                                <span><strong>Adobe Creative Cloud</strong><em>1500 DZD</em></span>
                             </button>
                             <div class="mobile-expand-details">
-                                <p>باقة مناسبة للتصميم والمونتاج، مع تفعيل واضح ومتابعة الطلب.</p>
+                                <p data-i18n="mobile.adobe.desc">Suitable package for design and video editing, with clear activation and order tracking.</p>
                                 <ul>
-                                    <li>تطبيقات Adobe الاحترافية</li>
-                                    <li>دعم واتساب بعد الطلب</li>
+                                    <li data-i18n="mobile.adobe.feature1">Professional Adobe applications</li>
+                                    <li data-i18n="mobile.adobe.feature2">WhatsApp support after order</li>
                                 </ul>
                                 <div class="mobile-expand-actions">
-                                    <a href="adobe_landing.html">تفاصيل المنتج</a>
-                                    <button type="button" onclick="orderAdobe()">اطلب الآن</button>
+                                    <a href="adobe_landing.html" data-i18n="mobile.productDetails">Product Details</a>
+                                    <button type="button" onclick="orderAdobe()" data-i18n="mobile.orderNow">Order Now</button>
                                 </div>
                             </div>
                         </article>
 
-                        <article class="mobile-expand-card" data-mobile-expand-product="trw">
+                        <article class="mobile-expand-card" data-mobile-expand-product="trw" data-category="courses">
                             <button class="mobile-expand-toggle" type="button" aria-expanded="false">
                                 <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World">
-                                <span><strong>The Real World</strong><em>3500 دج</em></span>
+                                <span><strong>The Real World</strong><em>3500 DZD</em></span>
                             </button>
                             <div class="mobile-expand-details">
-                                <p>حساب كورسات ومنصة تعليمية مع متابعة الطلب وخدمة ما بعد البيع.</p>
+                                <p data-i18n="mobile.trw.desc">Courses account and educational platform with order tracking and after-sales service.</p>
                                 <ul>
-                                    <li>وصول للكورسات والمنصة</li>
-                                    <li>شرح طريقة الاستخدام</li>
+                                    <li data-i18n="mobile.trw.feature1">Access to courses and platform</li>
+                                    <li data-i18n="mobile.trw.feature2">Usage instructions included</li>
                                 </ul>
                                 <div class="mobile-expand-actions">
-                                    <a href="trw_landing.html">تفاصيل المنتج</a>
-                                    <button type="button" onclick="orderProduct('trw')">اطلب الآن</button>
+                                    <a href="trw_landing.html" data-i18n="mobile.productDetails">Product Details</a>
+                                    <button type="button" onclick="orderProduct('trw')" data-i18n="mobile.orderNow">Order Now</button>
                                 </div>
                             </div>
                         </article>
@@ -552,7 +587,7 @@
                     </div>
                 </section>
                 <div class="product-grid">
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="courses">
                         <div class="product-image" style="background-image: url('https://i.imgur.com/hEiJhso.gif');"
                             role="img" aria-label="The Real World Account"></div>
                         <h3 data-i18n="product.trw.title">The Real World Account</h3>
@@ -612,7 +647,7 @@
                         <button class="order-btn" data-product="trw" data-i18n="product.orderNow"
                             onclick="orderProduct('trw')">اطلب الآن</button>
                     </div>
-                    <div class="product-card fade-in" id="adobe-card">
+                    <div class="product-card fade-in" id="adobe-card" data-category="design">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="Adobe Creative Cloud"></div>
@@ -819,7 +854,7 @@
                     </div>
 
                     <!-- Gama AI Pro -->
-                    <div class="product-card fade-in" id="gamma-card">
+                    <div class="product-card fade-in" id="gamma-card" data-category="ai">
                         <div class="product-image"
                             style="background-color: #f5f5f5; position: relative; overflow: hidden;" role="img"
                             aria-label="Gama AI Pro">
@@ -871,7 +906,7 @@
 
 
                     <!-- Netflix Premium -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="entertainment">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif'); background-size: cover; background-position: center; position: relative;"
                             role="img" aria-label="Netflix Premium">
@@ -954,7 +989,7 @@
                     </div>
 
                     <!-- Prime Video -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="entertainment">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/736x/71/8b/41/718b41945aab84bd2276c762266931d0.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="Prime Video">
@@ -1004,7 +1039,7 @@
                     </div>
 
                     <!-- Crunchyroll -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="entertainment">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/1200x/38/e3/08/38e308732b87069ed50893423f09ca4b.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="Crunchyroll">
@@ -1182,7 +1217,7 @@
 
 
                     <!-- Perplexity AI Pro -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="ai">
                         <div class="product-image" style="background: #000; position: relative; overflow: hidden;"
                             role="img" aria-label="Perplexity AI Pro">
                             <video autoplay loop muted playsinline
@@ -1238,7 +1273,7 @@
                     </div>
 
                     <!-- Canva Pro -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="design">
                         <div class="product-image" style="position: relative; overflow: hidden; background: #000;"
                             role="img" aria-label="Canva Pro">
                             <video autoplay loop muted playsinline
@@ -1311,7 +1346,7 @@
                     </div>
 
                     <!-- CapCut Pro -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="design">
                         <div class="product-image" style="background: #000; position: relative; overflow: hidden;"
                             role="img" aria-label="CapCut Pro">
                             <video autoplay loop muted playsinline
@@ -1426,7 +1461,7 @@
                     </div>
 
                     <!-- Cursor AI -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="ai">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/736x/29/f9/48/29f9488bd27d42debcfbddb33c1c79d7.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="Cursor">
@@ -1504,7 +1539,7 @@
                     </div>
 
                     <!-- YouTube Premium -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="entertainment">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/736x/06/b7/27/06b727adf3807349c0bf07bf2fd404a4.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="YouTube Premium">
@@ -1558,7 +1593,7 @@
                     </div>
 
                     <!-- Duolingo Super -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="courses">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/originals/98/59/12/98591272861e66a02eecf5dae0450c73.gif'); background-size: cover; background-position: center;"
                             role="img" aria-label="Duolingo Super">
@@ -1619,7 +1654,7 @@
                     </div>
 
                     <!-- Lovable AI -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="ai">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/1200x/cd/d4/69/cdd469e94eb529ae307f9b5d56e8da96.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="Lovable AI">
@@ -1675,7 +1710,7 @@
 
 
                     <!-- Google Gemini Pro & Veo 3 -->
-                    <div class="product-card fade-in">
+                    <div class="product-card fade-in" data-category="ai">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/736x/c2/5b/dd/c25bdda8e7d4eb27bcb2f4d411441d92.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative;"
                             role="img" aria-label="Google Gemini Pro & Veo 3">
@@ -1700,7 +1735,7 @@
                     </div>
 
                     <!-- Alight Motion -->
-                    <div class="product-card fade-in" data-product-id="alight-motion">
+                    <div class="product-card fade-in" data-product-id="alight-motion" data-category="design">
                         <div class="product-image"
                             style="background-image: url('https://i.pinimg.com/originals/ad/8b/2c/ad8b2cf5e7b44514ab71b9fd9666ec16.jpg'); background-size: cover; background-position: center;"
                             role="img" aria-label="Alight Motion">
@@ -3045,12 +3080,15 @@
     <!-- Vanilla Tilt Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
+    <!-- Availability UI System -->
+    <script src="availability-ui.js" type="module"></script>
+
     <!-- International Expansion System -->
     <script src="currency-config.js?v=5"></script>
     <script src="currency-manager.js?v=5"></script>
     <script src="payment-manager.js?v=5"></script>
     <script src="international-expansion-init.js?v=5"></script>
-    <script src="script.js?v=final7" defer></script>
+    <script src="script.js?v=final11" defer></script>
     <script src="order-form.js" defer></script>
 
     <!-- Firebase SDK for Reviews -->
@@ -3561,64 +3599,8 @@
         });
     </script>
     <script>
-        // Category Filtering Logic
+        // Bottom Nav Active State logic
         document.addEventListener('DOMContentLoaded', () => {
-            const pills = document.querySelectorAll('.category-pill');
-            const cards = document.querySelectorAll('.product-card');
-
-            // Categorize by keywords in product title
-            const categoryMap = {
-                'ai': ['chatgpt', 'gamma', 'cursor', 'perplexity', 'claude', 'gemini', 'google'],
-                'design': ['adobe', 'canva', 'capcut', 'lovable'],
-                'courses': ['مدرسة', 'coursera', 'real world', 'trw', 'duolingo'],
-                'entertainment': ['netflix', 'spotify', 'crunchyroll', 'prime']
-            };
-
-            pills.forEach(pill => {
-                pill.addEventListener('click', () => {
-                    // Update active state
-                    pills.forEach(p => p.classList.remove('active'));
-                    pill.classList.add('active');
-
-                    const filter = pill.getAttribute('data-filter');
-
-                    cards.forEach(card => {
-                        card.style.transition = 'opacity 0.3s ease';
-
-                        if (filter === 'all') {
-                            card.style.display = 'flex';
-                            setTimeout(() => card.style.opacity = '1', 50);
-                            return;
-                        }
-
-                        // Check explicit data-category
-                        const cat = card.getAttribute('data-category');
-                        if (cat === filter) {
-                            card.style.display = 'flex';
-                            setTimeout(() => card.style.opacity = '1', 50);
-                            return;
-                        }
-
-                        // Check keywords in title
-                        const titleEl = card.querySelector('h3');
-                        const title = titleEl ? titleEl.textContent.toLowerCase() : '';
-                        let matched = false;
-                        if (categoryMap[filter]) {
-                            matched = categoryMap[filter].some(kw => title.includes(kw));
-                        }
-
-                        if (matched) {
-                            card.style.display = 'flex';
-                            setTimeout(() => card.style.opacity = '1', 50);
-                        } else {
-                            card.style.opacity = '0';
-                            setTimeout(() => card.style.display = 'none', 300);
-                        }
-                    });
-                });
-            });
-
-            // Bottom Nav Active State logic
             const navItems = document.querySelectorAll('.mobile-bottom-nav .nav-item');
             navItems.forEach(item => {
                 item.addEventListener('click', function () {
@@ -3663,6 +3645,138 @@
 
     <script src="chat-widget.js" defer></script>
     <script src="order-form.js" defer></script>
+
+    <!-- Category Filter System -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Product category mapping - comprehensive list
+            const productCategories = {
+                'The Real World Account': 'courses',
+                'Adobe Creative Cloud': 'design',
+                'ChatGPT Premium': 'ai',
+                'SUPER GROK': 'ai',
+                'Gama AI Pro': 'ai',
+                'Netflix Premium': 'entertainment',
+                'Prime Video': 'entertainment',
+                'Crunchyroll': 'entertainment',
+                'HMA VPN': 'tools',
+                'Microsoft Office 365': 'courses',
+                'Perplexity AI Pro': 'ai',
+                'Canva Pro': 'design',
+                'CapCut Pro': 'design',
+                'Cursor AI': 'ai',
+                'YouTube Premium': 'entertainment',
+                'Duolingo Super': 'courses',
+                'Lovable AI': 'ai',
+                'Google Gemini Pro': 'ai',
+                'Gemini': 'ai',
+                'Alight Motion PRO': 'design',
+                'Alight Motion': 'design'
+            };
+
+            // Add data-category to all product cards that don't have it
+            const cards = document.querySelectorAll('.product-card');
+            console.log('Found', cards.length, 'product cards');
+
+            cards.forEach(card => {
+                if (!card.hasAttribute('data-category')) {
+                    const title = card.querySelector('h3');
+                    if (title) {
+                        const productName = title.textContent.trim();
+                        const category = productCategories[productName];
+                        if (category) {
+                            card.setAttribute('data-category', category);
+                            console.log('Added category', category, 'to', productName);
+                        } else {
+                            console.warn('No category found for:', productName);
+                        }
+                    }
+                }
+            });
+
+            // Add data-category to mobile-expand-cards if missing
+            const mobileCards = document.querySelectorAll('.mobile-expand-card');
+            console.log('Found', mobileCards.length, 'mobile cards');
+
+            // Category filter functionality
+            const pills = document.querySelectorAll('.category-pill');
+
+            pills.forEach(pill => {
+                pill.addEventListener('click', function() {
+                    console.log('Filter clicked:', this.getAttribute('data-filter'));
+
+                    // Update active state
+                    pills.forEach(p => p.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Filter product-grid cards
+                    cards.forEach(card => {
+                        const category = card.getAttribute('data-category');
+                        console.log('Card category:', category, 'Filter:', filter);
+
+                        if (filter === 'all') {
+                            card.style.display = 'flex';
+                            card.style.opacity = '1';
+                        } else if (category === filter) {
+                            card.style.display = 'flex';
+                            card.style.opacity = '1';
+                        } else {
+                            card.style.opacity = '0';
+                            setTimeout(() => card.style.display = 'none', 300);
+                        }
+                    });
+
+                    // Also filter mobile-expand-cards
+                    mobileCards.forEach(card => {
+                        const category = card.getAttribute('data-category');
+
+                        if (filter === 'all') {
+                            card.style.display = 'block';
+                            card.style.opacity = '1';
+                        } else if (category === filter) {
+                            card.style.display = 'block';
+                            card.style.opacity = '1';
+                        } else {
+                            card.style.opacity = '0';
+                            setTimeout(() => card.style.display = 'none', 300);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+    <!-- Mobile ChatGPT Duration Selection -->
+    <script>
+        function selectMobileChatGPTDuration(duration) {
+            const buttons = document.querySelectorAll('.mobile-expand-card[data-mobile-expand-product="chatgpt"] .chatgpt-duration-btn');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-duration') === duration) {
+                    btn.classList.add('active');
+                    btn.style.border = '2px solid #10a37f';
+                    btn.style.background = 'rgba(16, 163, 127, 0.15)';
+                    btn.style.color = 'var(--text-primary)';
+                } else {
+                    btn.classList.remove('active');
+                    btn.style.border = '2px solid var(--border-color)';
+                    btn.style.background = 'rgba(100, 100, 100, 0.1)';
+                    btn.style.color = 'var(--text-secondary)';
+                }
+            });
+
+            if (duration === '1month') {
+                document.getElementById('mobile-chatgpt-prices-1month').style.display = 'block';
+                document.getElementById('mobile-chatgpt-prices-1month-upgrade').style.display = 'none';
+                document.getElementById('mobile-chatgpt-price').textContent = '1000 DZD';
+            } else if (duration === '1month-upgrade') {
+                document.getElementById('mobile-chatgpt-prices-1month').style.display = 'none';
+                document.getElementById('mobile-chatgpt-prices-1month-upgrade').style.display = 'block';
+                document.getElementById('mobile-chatgpt-price').textContent = '1800 DZD';
+            }
+        }
+    </script>
 </body>
 
 </html>

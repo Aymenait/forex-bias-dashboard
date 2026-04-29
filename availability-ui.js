@@ -316,6 +316,15 @@ if (typeof window !== 'undefined') {
         updateAvailabilityTextsForLanguage,
         getExpectedUIState
     };
+
+    // Diagnostic logs
+    console.log('✅ AvailabilityUI loaded successfully');
+    console.log('📦 Product cards found:', document.querySelectorAll('.product-card').length);
+    console.log('🔍 Device info:', {
+        userAgent: navigator.userAgent,
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
 }
 
 // ES Module exports للاستخدام في Node.js (للاختبارات)

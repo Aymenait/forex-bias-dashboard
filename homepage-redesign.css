@@ -45,10 +45,6 @@
     background: transparent;
 }
 
-.homepage-redesign .mobile-hero-sale-bar {
-    display: none;
-}
-
 .homepage-redesign .nav-bar {
     position: sticky;
     top: 12px;
@@ -900,6 +896,7 @@
     }
 
     .homepage-redesign .mobile-expand-toggle {
+        position: relative;
         width: 100%;
         padding: 0;
         border: 0;
@@ -919,6 +916,33 @@
         height: 104px;
         display: block;
         object-fit: cover;
+    }
+
+    .homepage-redesign .mobile-expand-card.is-unavailable .mobile-expand-toggle img,
+    .homepage-redesign .mobile-expand-card.is-unavailable .mobile-expand-toggle video {
+        filter: grayscale(0.75) brightness(0.58);
+    }
+
+    .homepage-redesign .mobile-expand-toggle .mobile-status-badge {
+        position: absolute !important;
+        top: 38px;
+        left: 50%;
+        z-index: 2;
+        transform: translateX(-50%) rotate(-8deg);
+        padding: 7px 14px !important;
+        border: 2px solid rgba(255, 255, 255, 0.88);
+        border-radius: 999px;
+        background: linear-gradient(135deg, #e50914, #9d0710);
+        color: #fff;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.78rem;
+        font-weight: 900;
+        line-height: 1;
+        white-space: nowrap;
+        box-shadow: 0 10px 24px rgba(229, 9, 20, 0.32);
+        pointer-events: none;
     }
 
     .homepage-redesign .mobile-expand-toggle span {
@@ -956,7 +980,7 @@
     }
 
     .homepage-redesign .mobile-expand-card.is-open .mobile-expand-details {
-        max-height: 420px;
+        max-height: 760px;
         opacity: 1;
         transform: translateY(0);
     }
@@ -989,6 +1013,59 @@
         background: rgba(255, 255, 255, 0.07);
     }
 
+    .homepage-redesign .mobile-offer-options {
+        display: grid;
+        gap: 7px;
+        margin: 10px 0 0;
+    }
+
+    .homepage-redesign .mobile-offer-option {
+        width: 100%;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 8px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.065);
+        color: var(--preview-text);
+        font: inherit;
+        text-align: inherit;
+        transition: border-color 200ms ease, background 200ms ease, transform 180ms ease;
+    }
+
+    .homepage-redesign .mobile-offer-option:active {
+        transform: scale(0.99);
+    }
+
+    .homepage-redesign .mobile-offer-option.is-selected {
+        border-color: rgba(255, 213, 111, 0.72);
+        background: rgba(255, 213, 111, 0.13);
+    }
+
+    .homepage-redesign .mobile-offer-option:disabled {
+        opacity: 0.48;
+        cursor: not-allowed;
+    }
+
+    .homepage-redesign .mobile-offer-option span {
+        min-width: 0;
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 800;
+        line-height: 1.25;
+    }
+
+    .homepage-redesign .mobile-offer-option strong {
+        flex: 0 0 auto;
+        color: var(--preview-gold);
+        font-size: 0.82rem;
+        font-weight: 900;
+        white-space: nowrap;
+    }
+
     .homepage-redesign .mobile-expand-actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1018,6 +1095,12 @@
         border: 0;
         background: linear-gradient(135deg, var(--preview-gold), #ff9f1c);
         color: #171008;
+    }
+
+    .homepage-redesign .mobile-expand-actions button:disabled {
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.58);
+        cursor: not-allowed;
     }
 
     .homepage-redesign #products.section {
@@ -1130,4 +1213,3 @@
         white-space: nowrap;
     }
 }
-

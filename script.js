@@ -597,6 +597,194 @@ document.addEventListener('DOMContentLoaded', () => {
         return `<img src="${media.src}" alt="${alt}">`;
     }
 
+    function escapeMobileHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function escapeMobileSelector(value) {
+        if (window.CSS?.escape) return window.CSS.escape(value);
+        return String(value || '').replace(/["\\]/g, '\\$&');
+    }
+
+    function getMobileOptionKey(wrapper) {
+        const id = wrapper?.id || '';
+        if (id.includes('-prices-')) return id.split('-prices-').pop();
+        if (id.includes('prices-')) return id.split('prices-').pop();
+        return '';
+    }
+
+    function isMobileInlineHidden(node, boundary) {
+        let current = node;
+        while (current && current !== boundary) {
+            if (current.style?.display === 'none') return true;
+            current = current.parentElement;
+        }
+        return false;
+    }
+
+    function getMobileOfferLabel(card, key, wrapper, priceText) {
+        if (key) {
+            const selectorKey = escapeMobileSelector(key);
+            const optionButton = card.querySelector(
+                `[data-duration="${selectorKey}"], [data-type="${selectorKey}"], [data-plan="${selectorKey}"], [data-offer="${selectorKey}"]`
+            );
+            const optionLabel = optionButton?.textContent?.trim().replace(/\s+/g, ' ');
+            if (optionLabel) return optionLabel;
+        }
+
+        const periodLabel = wrapper?.querySelector('span')?.textContent?.trim().replace(/\s+/g, ' ');
+        if (periodLabel) return periodLabel.replace(/^\/\s*/, '');
+
+        return priceText ? 'Offer' : 'Default';
+    }
+
+    function getMobileProductOffers(card) {
+        const seen = new Set();
+        return Array.from(card.querySelectorAll('.price-tag'))
+            .map((priceTag) => {
+                const wrapper = priceTag.closest('[id*="prices"], .chatgpt-prices, .capcut-prices, .adobe-prices, .gamma-prices, .cursor-prices, .netflix-prices, .gemini-prices, .hma-prices') || priceTag.parentElement;
+                const price = priceTag.textContent.trim().replace(/\s+/g, ' ');
+                const key = getMobileOptionKey(wrapper);
+                const label = getMobileOfferLabel(card, key, wrapper, price);
+                const hidden = isMobileInlineHidden(priceTag, card);
+                return { key, label, price, hidden };
+            })
+            .filter((offer) => {
+                const signature = `${offer.key}|${offer.label}|${offer.price}`;
+                if (!offer.price || seen.has(signature)) return false;
+                seen.add(signature);
+                return true;
+            });
+    }
+
+    function getMobilePrimaryPrice(card, offers) {
+        const activeOffer = offers.find((offer) => !offer.hidden) || offers[0];
+        if (offers.length > 1 && activeOffer?.price) return `&#1605;&#1606; ${escapeMobileHtml(activeOffer.price)}`;
+        return activeOffer?.price || card.querySelector('.price-tag')?.textContent?.trim() || '';
+    }
+
+    function buildMobileOfferOptions(offers, sourceIndex) {
+        if (offers.length <= 1) return '';
+
+        const activeIndex = Math.max(0, offers.findIndex((offer) => !offer.hidden));
+        return `
+            <div class="mobile-offer-options" aria-label="Available offers">
+                ${offers.map((offer, offerIndex) => `
+                    <button class="mobile-offer-option${offerIndex === activeIndex ? ' is-selected' : ''}" type="button"
+                        data-mobile-source-index="${sourceIndex}"
+                        data-mobile-offer-key="${escapeMobileHtml(offer.key)}"
+                        aria-pressed="${offerIndex === activeIndex ? 'true' : 'false'}">
+                        <span>${escapeMobileHtml(offer.label)}</span>
+                        <strong>${escapeMobileHtml(offer.price)}</strong>
+                    </button>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    function getMobileAvailabilityText(status) {
+        const lang = window.currentLang || localStorage.getItem('preferredLanguage') || 'ar';
+        const texts = {
+            unavailable: {
+                ar: '\u063a\u064a\u0631 \u0645\u062a\u0648\u0641\u0631',
+                en: 'Unavailable',
+                fr: 'Indisponible'
+            },
+            coming_soon: {
+                ar: '\u0642\u0631\u064a\u0628\u0627\u064b',
+                en: 'Coming Soon',
+                fr: 'Bientot'
+            }
+        };
+
+        return texts[status]?.[lang] || texts[status]?.ar || '';
+    }
+
+    function detectMobileProductStatus(card) {
+        const orderButton = card.querySelector('.order-btn');
+        const badge = card.querySelector('.status-badge, .unavailable-badge, .coming-soon-badge');
+        const status = orderButton?.getAttribute('data-status') || badge?.getAttribute('data-status');
+        if (status === 'unavailable' || status === 'coming_soon') return status;
+
+        const statusText = [
+            orderButton?.textContent,
+            badge?.textContent,
+            card.querySelector('[data-i18n="badge.sold_out"]')?.textContent
+        ].join(' ').toLowerCase();
+
+        if (
+            orderButton?.disabled ||
+            statusText.includes('\u0646\u0641\u062f\u062a') ||
+            statusText.includes('\u063a\u064a\u0631 \u0645\u062a\u0648\u0641\u0631') ||
+            statusText.includes('sold out') ||
+            statusText.includes('out of stock') ||
+            statusText.includes('\u00e9puis\u00e9') ||
+            statusText.includes('epuise') ||
+            statusText.includes('unavailable') ||
+            statusText.includes('indisponible')
+        ) {
+            return 'unavailable';
+        }
+
+        if (
+            statusText.includes('\u0642\u0631\u064a\u0628') ||
+            statusText.includes('coming soon') ||
+            statusText.includes('bientot') ||
+            statusText.includes('bient\u00f4t')
+        ) {
+            return 'coming_soon';
+        }
+
+        return 'available';
+    }
+
+    function syncMobileAvailability(mobileCard, sourceCard) {
+        if (!mobileCard || !sourceCard) return;
+        const status = detectMobileProductStatus(sourceCard);
+        const isDisabled = status !== 'available';
+        const statusText = getMobileAvailabilityText(status);
+        const actionButton = mobileCard.querySelector('.mobile-expand-actions button');
+        const toggle = mobileCard.querySelector('.mobile-expand-toggle');
+        const priceLabel = mobileCard.querySelector('.mobile-expand-toggle em');
+        const mediaBox = mobileCard.querySelector('.mobile-expand-toggle');
+        let badge = mobileCard.querySelector('.mobile-status-badge');
+
+        mobileCard.classList.toggle('is-unavailable', isDisabled);
+        mobileCard.dataset.mobileStatus = status;
+        if (toggle) toggle.setAttribute('aria-disabled', String(isDisabled));
+
+        if (actionButton) {
+            actionButton.disabled = isDisabled;
+            actionButton.textContent = isDisabled ? statusText : '\u0627\u0637\u0644\u0628 \u0627\u0644\u0622\u0646';
+        }
+
+        if (priceLabel) {
+            if (!priceLabel.dataset.availablePrice) priceLabel.dataset.availablePrice = priceLabel.textContent.trim();
+            priceLabel.textContent = isDisabled ? statusText : priceLabel.dataset.availablePrice;
+        }
+
+        mobileCard.querySelectorAll('.mobile-offer-option').forEach((option) => {
+            option.disabled = isDisabled;
+            option.setAttribute('aria-disabled', String(isDisabled));
+        });
+
+        if (isDisabled) {
+            if (!badge && mediaBox) {
+                badge = document.createElement('span');
+                badge.className = 'mobile-status-badge';
+                mediaBox.appendChild(badge);
+            }
+            if (badge) badge.textContent = statusText;
+        } else if (badge) {
+            badge.remove();
+        }
+    }
+
     function buildMobileOfferCards() {
         if (!mobileExpandContainer || !sourceProductCards.length || mobileExpandContainer.dataset.generated === 'true') return;
 
@@ -604,7 +792,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sourceProductCards.forEach((card, index) => {
             const title = getMobileProductTitle(card);
             const description = card.querySelector('.description')?.textContent?.trim() || '';
-            const price = card.querySelector('.price-tag')?.textContent?.trim() || '';
+            const offers = getMobileProductOffers(card);
+            const price = getMobilePrimaryPrice(card, offers);
             const discoverLink = card.querySelector('.discover-btn')?.getAttribute('href') || '#products';
             const features = Array.from(card.querySelectorAll('.product-features li'))
                 .slice(0, 2)
@@ -615,6 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const article = document.createElement('article');
             article.className = `mobile-expand-card${index === 0 ? ' is-open' : ''}`;
             article.dataset.mobileExpandProduct = productKey;
+            article.dataset.mobileSourceIndex = String(index);
             article.innerHTML = `
                 <button class="mobile-expand-toggle" type="button" aria-expanded="${index === 0 ? 'true' : 'false'}">
                     ${buildMobileMedia(media, title)}
@@ -629,6 +819,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
+            const mobileTitle = article.querySelector('.mobile-expand-toggle strong');
+            const mobilePrice = article.querySelector('.mobile-expand-toggle em');
+            const mobileDescription = article.querySelector('.mobile-expand-details p');
+            if (mobileTitle) mobileTitle.textContent = title;
+            if (mobilePrice) mobilePrice.innerHTML = price || '&#1575;&#1591;&#1604;&#1576; &#1575;&#1604;&#1587;&#1593;&#1585;';
+            if (mobileDescription) {
+                mobileDescription.textContent = description;
+                if (offers.length > 1) {
+                    mobileDescription.insertAdjacentHTML('afterend', buildMobileOfferOptions(offers, index));
+                }
+            }
+            syncMobileAvailability(article, card);
             mobileExpandContainer.appendChild(article);
         });
 
@@ -663,13 +865,76 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelectorAll('[data-mobile-source-index]').forEach((button) => {
+    document.querySelectorAll('[data-mobile-offer-key]').forEach((button) => {
         button.addEventListener('click', () => {
             const sourceCard = sourceProductCards[Number(button.dataset.mobileSourceIndex)];
+            const offerKey = button.dataset.mobileOfferKey || '';
+            if (sourceCard && offerKey) {
+                const selectorKey = escapeMobileSelector(offerKey);
+                sourceCard.querySelector(
+                    `[data-duration="${selectorKey}"], [data-type="${selectorKey}"], [data-plan="${selectorKey}"], [data-offer="${selectorKey}"]`
+                )?.click();
+            }
+
+            const mobileCard = button.closest('.mobile-expand-card');
+            mobileCard?.querySelectorAll('.mobile-offer-option').forEach((option) => {
+                const isSelected = option === button;
+                option.classList.toggle('is-selected', isSelected);
+                option.setAttribute('aria-pressed', String(isSelected));
+            });
+
+            const selectedPrice = button.querySelector('strong')?.textContent?.trim();
+            const mobilePrice = mobileCard?.querySelector('.mobile-expand-toggle em');
+            if (selectedPrice && mobilePrice) {
+                mobilePrice.dataset.availablePrice = selectedPrice;
+                mobilePrice.textContent = selectedPrice;
+            }
+        });
+    });
+
+    document.querySelectorAll('.mobile-expand-actions [data-mobile-source-index]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const sourceCard = sourceProductCards[Number(button.dataset.mobileSourceIndex)];
+            const mobileCard = button.closest('.mobile-expand-card');
+            syncMobileAvailability(mobileCard, sourceCard);
+            if (button.disabled || detectMobileProductStatus(sourceCard) !== 'available') return;
+            const selectedOffer = button.closest('.mobile-expand-card')?.querySelector('.mobile-offer-option.is-selected');
+            const offerKey = selectedOffer?.dataset.mobileOfferKey || '';
+            if (sourceCard && offerKey) {
+                const selectorKey = escapeMobileSelector(offerKey);
+                sourceCard.querySelector(
+                    `[data-duration="${selectorKey}"], [data-type="${selectorKey}"], [data-plan="${selectorKey}"], [data-offer="${selectorKey}"]`
+                )?.click();
+            }
             const sourceButton = sourceCard?.querySelector('.order-btn');
             sourceButton?.click();
         });
     });
+
+    function syncAllMobileAvailability() {
+        document.querySelectorAll('.mobile-expand-card[data-mobile-source-index]').forEach((mobileCard) => {
+            const sourceCard = sourceProductCards[Number(mobileCard.dataset.mobileSourceIndex)];
+            if (sourceCard) syncMobileAvailability(mobileCard, sourceCard);
+        });
+    }
+
+    if (mobileExpandContainer && sourceProductCards.length) {
+        syncAllMobileAvailability();
+        window.addEventListener('firebaseReady', () => window.setTimeout(syncAllMobileAvailability, 800), { once: true });
+        window.setTimeout(syncAllMobileAvailability, 1500);
+        window.setTimeout(syncAllMobileAvailability, 3200);
+
+        const mobileAvailabilityObserver = new MutationObserver(syncAllMobileAvailability);
+        sourceProductCards.forEach((card) => {
+            mobileAvailabilityObserver.observe(card, {
+                attributes: true,
+                childList: true,
+                characterData: true,
+                subtree: true,
+                attributeFilter: ['disabled', 'data-status', 'style', 'class']
+            });
+        });
+    }
 
     const mobilePopularItems = [
         {
@@ -5769,5 +6034,72 @@ document.addEventListener('DOMContentLoaded', function () {
                 page: pageName
             });
         }
+    });
+});
+
+// Category Filter Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryPills = document.querySelectorAll('.category-pill');
+    const productCards = document.querySelectorAll('.product-card');
+
+    if (categoryPills.length === 0 || productCards.length === 0) return;
+
+    // Add data-category to products based on their content
+    productCards.forEach(card => {
+        const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+        const cardId = card.id || '';
+
+        // Categorize products
+        if (title.includes('chatgpt') || title.includes('gamma') || title.includes('perplexity') ||
+            title.includes('cursor') || cardId.includes('chatgpt') || cardId.includes('gamma')) {
+            card.setAttribute('data-category', 'ai');
+        } else if (title.includes('adobe') || title.includes('canva') || title.includes('capcut') ||
+                   cardId.includes('adobe') || cardId.includes('canva') || cardId.includes('capcut')) {
+            card.setAttribute('data-category', 'design');
+        } else if (title.includes('trw') || title.includes('real world') || title.includes('duolingo') ||
+                   cardId.includes('trw') || title.includes('coursera')) {
+            card.setAttribute('data-category', 'courses');
+        } else if (title.includes('netflix') || title.includes('youtube') || title.includes('spotify')) {
+            card.setAttribute('data-category', 'entertainment');
+        } else {
+            card.setAttribute('data-category', 'all');
+        }
+    });
+
+    // Filter functionality
+    categoryPills.forEach(pill => {
+        pill.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Remove active class from all pills
+            categoryPills.forEach(p => p.classList.remove('active'));
+
+            // Add active class to clicked pill
+            this.classList.add('active');
+
+            const filter = this.getAttribute('data-filter');
+
+            // Filter products
+            productCards.forEach(card => {
+                const category = card.getAttribute('data-category');
+
+                if (filter === 'all' || category === filter || category === 'all') {
+                    card.style.display = '';
+                    // Re-trigger fade-in animation
+                    card.classList.remove('visible');
+                    setTimeout(() => card.classList.add('visible'), 10);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Track filter usage
+            if (typeof fbq !== 'undefined') {
+                fbq('trackCustom', 'CategoryFilter', {
+                    category: filter
+                });
+            }
+        });
     });
 });
