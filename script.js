@@ -2070,6 +2070,7 @@ const translations = {
         'filter.courses': 'حسابات وكورسات',
         'filter.entertainment': 'ترفيه',
         'filter.games': 'ألعاب🕹️',
+        'search.placeholder': 'ابحث عن منتج...',
         'badge.sold_out': 'نفدت الكمية',
         'product.grok.title': 'SUPER GROK',
         'product.grok.desc': 'نموذج الذكاء الاصطناعي الأقوى والأسرع من xAI للمبرمجين والمبدعين.',
@@ -2843,6 +2844,7 @@ const translations = {
         'filter.courses': 'Accounts & Courses',
         'filter.entertainment': 'Entertainment',
         'filter.games': 'Games🕹️',
+        'search.placeholder': 'Search for a product...',
         'badge.sold_out': 'Sold Out',
         'product.grok.title': 'SUPER GROK',
         'product.grok.desc': 'The most powerful and fastest AI model from xAI for programmers and creators.',
@@ -3659,6 +3661,7 @@ const translations = {
         'filter.courses': 'Comptes & Cours',
         'filter.entertainment': 'Divertissement',
         'filter.games': 'Jeux🕹️',
+        'search.placeholder': 'Rechercher un produit...',
         'badge.sold_out': 'Épuisé',
         'product.grok.title': 'SUPER GROK',
         'product.grok.desc': 'Le modèle IA le plus puissant et rapide de xAI pour développeurs et créateurs.',
@@ -6302,21 +6305,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Category Filter Functionality
+// Category Filter + Search Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const categoryPills = document.querySelectorAll('.category-pill');
-    const productCards = document.querySelectorAll('.product-card');
+    const productCards = Array.from(document.querySelectorAll('.product-card'));
+    const searchInput = document.getElementById('product-search');
 
     if (categoryPills.length === 0 || productCards.length === 0) return;
+
+    let activeFilter = 'all';
 
     // Add data-category to products based on their content
     productCards.forEach(card => {
         const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
         const cardId = card.id || '';
 
-        // Categorize products
         if (title.includes('chatgpt') || title.includes('gamma') || title.includes('perplexity') ||
-            title.includes('cursor') || cardId.includes('chatgpt') || cardId.includes('gamma')) {
+            title.includes('cursor') || cardId.includes('chatgpt') || cardId.includes('gamma') ||
+            title.includes('claude') || title.includes('grok') || cardId.includes('claude') || cardId.includes('grok')) {
             card.setAttribute('data-category', 'ai');
         } else if (title.includes('adobe') || title.includes('canva') || title.includes('capcut') ||
                    cardId.includes('adobe') || cardId.includes('canva') || cardId.includes('capcut')) {
@@ -6331,44 +6337,52 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Filter functionality
+    function applyFilters() {
+        const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+        productCards.forEach(card => {
+            const category = card.getAttribute('data-category');
+            const categoryMatch = activeFilter === 'all' || category === activeFilter || category === 'all';
+
+            const titleEl = card.querySelector('h3');
+            const descEl = card.querySelector('p');
+            const cardText = ((titleEl?.textContent || '') + ' ' + (descEl?.textContent || '')).toLowerCase();
+            const searchMatch = !searchTerm || cardText.includes(searchTerm);
+
+            if (categoryMatch && searchMatch) {
+                card.style.display = '';
+                card.classList.remove('visible');
+                setTimeout(() => card.classList.add('visible'), 10);
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Category pill clicks
     categoryPills.forEach(pill => {
         pill.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
-            // Remove active class from all pills
             categoryPills.forEach(p => p.classList.remove('active'));
-
-            // Add active class to clicked pill
             this.classList.add('active');
+            activeFilter = this.getAttribute('data-filter');
 
-            const filter = this.getAttribute('data-filter');
-
-            // Filter products
-            productCards.forEach(card => {
-                const category = card.getAttribute('data-category');
-
-                if (filter === 'all' || category === filter || category === 'all') {
-                    card.style.display = '';
-                    // Re-trigger fade-in animation
-                    card.classList.remove('visible');
-                    setTimeout(() => card.classList.add('visible'), 10);
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            applyFilters();
 
             if (typeof window.applyMobileCategoryFilter === 'function') {
-                window.applyMobileCategoryFilter(filter);
+                window.applyMobileCategoryFilter(activeFilter);
             }
 
-            // Track filter usage
             if (typeof fbq !== 'undefined') {
-                fbq('trackCustom', 'CategoryFilter', {
-                    category: filter
-                });
+                fbq('trackCustom', 'CategoryFilter', { category: activeFilter });
             }
         });
     });
+
+    // Search input
+    if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+    }
 });
