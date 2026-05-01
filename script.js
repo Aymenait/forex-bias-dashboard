@@ -2153,6 +2153,16 @@ const translations = {
         'product.chatgpt.feature1': 'وصول لأحدث نماذج GPT',
         'product.chatgpt.feature2': 'مساحة عمل خاصة وآمنة',
         'product.chatgpt.feature3': 'تكامل مع أدواتك المفضلة',
+        'product.claude.title': 'Claude AI',
+        'product.claude.desc': 'اشتراك Claude AI من Anthropic - اختر بين Claude Pro أو Claude Code API',
+        'product.claude.pro.subtitle': 'تفعيل في حسابك',
+        'product.claude.api.subtitle': '45 مليون Token',
+        'product.claude.pro.name': 'Claude Pro - تفعيل في حسابك',
+        'product.claude.api.name': 'Claude Code API - 45M Token',
+        'product.claude.feature1': 'Claude Pro: تفعيل في حسابك الشخصي',
+        'product.claude.feature2': 'Claude Code API: 45 مليون Token',
+        'product.claude.feature3': 'نماذج Claude Sonnet و Opus الأحدث',
+        'product.claude.feature4': 'أقوى نموذج AI للبرمجة والكتابة',
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'منصة ذكاء اصطناعي متقدمة لإنشاء العروض التقديمية والمستندات والمواقع بشكل احترافي.',
         'product.gamma.price': 'السعر قريباً',
@@ -2916,6 +2926,16 @@ const translations = {
         'product.chatgpt.feature1': 'Access to latest GPT',
         'product.chatgpt.feature2': 'Private and secure workspace',
         'product.chatgpt.feature3': 'Integration with your favorite tools',
+        'product.claude.title': 'Claude AI',
+        'product.claude.desc': 'Authentic Claude AI subscription from Anthropic — Claude Pro or Claude Code API',
+        'product.claude.pro.subtitle': 'Activate on your account',
+        'product.claude.api.subtitle': '45 million Tokens',
+        'product.claude.pro.name': 'Claude Pro - Account Activation',
+        'product.claude.api.name': 'Claude Code API - 45M Tokens',
+        'product.claude.feature1': 'Claude Pro: Direct activation on your personal account',
+        'product.claude.feature2': 'Claude Code API: 45 million Tokens',
+        'product.claude.feature3': 'Latest Claude Sonnet & Opus models',
+        'product.claude.feature4': 'Most powerful AI model for coding & writing',
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'Advanced AI platform for creating professional presentations, documents and websites.',
         'product.gamma.price': 'Price Coming Soon',
@@ -3722,6 +3742,16 @@ const translations = {
         'product.chatgpt.feature1': 'Accès au dernier GPT',
         'product.chatgpt.feature2': 'Espace de travail privé et sécurisé',
         'product.chatgpt.feature3': 'Intégration avec vos outils préférés',
+        'product.claude.title': 'Claude AI',
+        'product.claude.desc': "Abonnement Claude AI authentique d'Anthropic — Claude Pro ou Claude Code API",
+        'product.claude.pro.subtitle': 'Activation sur votre compte',
+        'product.claude.api.subtitle': '45 millions de Tokens',
+        'product.claude.pro.name': 'Claude Pro - Activation sur votre compte',
+        'product.claude.api.name': 'Claude Code API - 45M Tokens',
+        'product.claude.feature1': 'Claude Pro : activation sur votre compte personnel',
+        'product.claude.feature2': 'Claude Code API : 45 millions de Tokens',
+        'product.claude.feature3': 'Derniers modèles Claude Sonnet & Opus',
+        'product.claude.feature4': "Le modèle IA le plus puissant pour le code et l'écriture",
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'Plateforme IA avancée pour créer des présentations, documents et sites web professionnels.',
         'product.microsoft-office.title': 'Microsoft Office 365',
@@ -6054,6 +6084,58 @@ window.orderGamma = orderGamma;
 window.selectChatGPTType = selectChatGPTDuration;
 window.selectChatGPTDuration = selectChatGPTDuration;
 window.orderChatGPT = orderChatGPT;
+
+// Claude AI Selection Functions
+function selectClaudeDuration(type) {
+    document.querySelectorAll('.claude-duration-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'rgba(100, 100, 100, 0.1)';
+        btn.style.border = '2px solid var(--border-color)';
+        btn.style.color = 'var(--text-secondary)';
+    });
+    const selectedBtn = document.querySelector(`.claude-duration-btn[data-duration="${type}"]`);
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+        selectedBtn.style.background = 'rgba(210, 133, 68, 0.15)';
+        selectedBtn.style.border = '2px solid rgba(210, 133, 68, 0.5)';
+        selectedBtn.style.color = '#d28544';
+    }
+    const prices = { 'claude-pro': { dzd: 4800, usd: 19.2 }, 'claude-code-api': { dzd: 3200, usd: 12.8 } };
+    const lang = window.currentLanguage || 'ar';
+    const t = translations[lang] || translations.ar;
+    const productNames = {
+        'claude-pro': t['product.claude.pro.name'] || 'Claude Pro - تفعيل في حسابك',
+        'claude-code-api': t['product.claude.api.name'] || 'Claude Code API - 45M Token'
+    };
+    document.querySelectorAll('.claude-prices').forEach(el => el.style.display = 'none');
+    const priceEl = document.getElementById(`claude-prices-${type}`);
+    if (priceEl) priceEl.style.display = 'flex';
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const price = currency === 'USD' ? prices[type].usd : prices[type].dzd;
+    const name = productNames[type];
+    ['claude-crypto-btn', 'claude-redotpay-btn', 'claude-baridimob-btn', 'claude-order-btn'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.setAttribute('data-product', name); el.setAttribute('data-price', price); }
+    });
+}
+function orderClaude() {
+    const activeBtn = document.querySelector('.claude-duration-btn.active');
+    const type = activeBtn ? activeBtn.getAttribute('data-duration') : 'claude-pro';
+    const lang = window.currentLanguage || 'ar';
+    const t = translations[lang] || translations.ar;
+    const names = {
+        'claude-pro': t['product.claude.pro.name'] || 'Claude Pro - تفعيل في حسابك',
+        'claude-code-api': t['product.claude.api.name'] || 'Claude Code API - 45M Token'
+    };
+    const name = names[type];
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const prices = { 'claude-pro': { DZD: 4800, USD: 19.2 }, 'claude-code-api': { DZD: 3200, USD: 12.8 } };
+    const price = prices[type][currency] || prices[type].DZD;
+    redirectToWhatsApp(name, price, currency);
+}
+window.selectClaudeDuration = selectClaudeDuration;
+window.orderClaude = orderClaude;
+
 window.selectCapcutDuration = selectCapcutDuration;
 window.orderCapcut = orderCapcut;
 window.selectLovableType = selectLovableType;

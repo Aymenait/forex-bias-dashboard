@@ -129,7 +129,6 @@
 
     <link rel="stylesheet" href="style.css?v=final2">
     <link rel="stylesheet" href="style-mobile-enhanced.css">
-    <link rel="stylesheet" href="chat-widget.css">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-TC92T0WQ45"></script>
@@ -798,6 +797,77 @@
                                 </svg>
                             </button>
                         </div>
+                    </div>
+
+                    <!-- CLAUDE AI -->
+                    <div class="product-card fade-in" data-category="ai" id="claude-card">
+                        <div class="product-image" style="background-image: url('https://i.pinimg.com/1200x/c7/a7/d7/c7a7d75e773bf13a2cd52bcad9edd5c9.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" role="img" aria-label="Claude AI"></div>
+
+                        <h3>Claude AI</h3>
+                        <p class="description" data-i18n="product.claude.desc">اشتراك Claude AI من Anthropic - اختر بين Claude Pro أو Claude Code API</p>
+
+                        <div class="claude-durations" style="margin: 16px 0; display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button class="claude-duration-btn active" data-duration="claude-pro"
+                                onclick="selectClaudeDuration('claude-pro')"
+                                style="flex: 1; padding: 10px 8px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; background: rgba(210, 133, 68, 0.15); border: 2px solid rgba(210, 133, 68, 0.5); color: #d28544;">
+                                Claude Pro<br><small data-i18n="product.claude.pro.subtitle">تفعيل في حسابك</small>
+                            </button>
+                            <button class="claude-duration-btn" data-duration="claude-code-api"
+                                onclick="selectClaudeDuration('claude-code-api')"
+                                style="flex: 1; padding: 10px 8px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; background: rgba(100, 100, 100, 0.1); border: 2px solid var(--border-color); color: var(--text-secondary);">
+                                Claude Code API<br><small data-i18n="product.claude.api.subtitle">45 مليون Token</small>
+                            </button>
+                        </div>
+
+                        <div id="claude-prices-claude-pro" class="claude-prices" style="margin: 16px 0; display: flex; align-items: center; gap: 8px;">
+                            <div class="price-tag" data-price-dzd="4800" data-price-usd="19.2">4800 <span data-i18n="currency">د.ج</span></div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="perMonth">للشهر</span></span>
+                        </div>
+
+                        <div id="claude-prices-claude-code-api" class="claude-prices" style="margin: 16px 0; display: none; align-items: center; gap: 8px;">
+                            <div class="price-tag" data-price-dzd="3200" data-price-usd="12.8">3200 <span data-i18n="currency">د.ج</span></div>
+                            <span style="color: #9ca3af; font-size: 0.9rem;">45M Token</span>
+                        </div>
+
+                        <div class="payment-methods-row">
+                            <button class="payment-btn-compact crypto-pay-btn" id="claude-crypto-btn"
+                                data-product="Claude Pro - تفعيل في حسابك" data-price="4800" data-price-usd="19.2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
+                                </svg>
+                                <span>USDT</span>
+                            </button>
+                            <button class="payment-btn-compact redotpay-btn" id="claude-redotpay-btn"
+                                data-product="Claude Pro - تفعيل في حسابك" data-price="4800" data-price-usd="19.2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                </svg>
+                                <span>RedotPay</span>
+                            </button>
+                            <button class="payment-btn-compact baridimob-btn" id="claude-baridimob-btn"
+                                data-product="Claude Pro - تفعيل في حسابك" data-price="4800" data-price-usd="19.2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                </svg>
+                                <span>BaridiMob</span>
+                            </button>
+                        </div>
+
+                        <ul class="product-features">
+                            <li data-i18n="product.claude.feature1">Claude Pro: تفعيل في حسابك الشخصي</li>
+                            <li data-i18n="product.claude.feature2">Claude Code API: 45 مليون Token</li>
+                            <li data-i18n="product.claude.feature3">نماذج Claude Sonnet و Opus الأحدث</li>
+                            <li data-i18n="product.claude.feature4">أقوى نموذج AI للبرمجة والكتابة</li>
+                        </ul>
+
+                        <a href="claude_landing.html" class="discover-btn" data-i18n="product.discoverMore">اكتشف المزيد</a>
+                        <button class="order-btn" id="claude-order-btn" data-product="Claude Pro - تفعيل في حسابك"
+                            onclick="orderClaude()">
+                            <span data-i18n="product.orderNow">اطلب الآن</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </button>
                     </div>
 
                     <!-- SUPER GROK -->
@@ -3647,7 +3717,6 @@
         </a>
     </nav>
 
-    <script src="chat-widget.js" defer></script>
     <script src="order-form.js" defer></script>
 
     <!-- Category Filter System -->
