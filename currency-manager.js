@@ -307,7 +307,7 @@ class CurrencyManager {
 
       priceElements.forEach(element => {
         // Skip elements that are part of the ChatGPT pricing block or marked as no-update
-        if (element.closest('.chatgpt-prices') || element.id.includes('chatgpt') || element.closest('.no-currency-update')) {
+        if (element.closest('.no-currency-update')) {
           return;
         }
 

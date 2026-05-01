@@ -6100,7 +6100,7 @@ function selectClaudeDuration(type) {
         selectedBtn.style.border = '2px solid rgba(210, 133, 68, 0.5)';
         selectedBtn.style.color = '#d28544';
     }
-    const prices = { 'claude-pro': { dzd: 4800, usd: 19.2 }, 'claude-code-api': { dzd: 3200, usd: 12.8 } };
+    const prices = { 'claude-pro': { dzd: 4800, usd: 18 }, 'claude-code-api': { dzd: 3200, usd: 12.8 } };
     const lang = window.currentLanguage || 'ar';
     const t = translations[lang] || translations.ar;
     const productNames = {
@@ -6129,7 +6129,7 @@ function orderClaude() {
     };
     const name = names[type];
     const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-    const prices = { 'claude-pro': { DZD: 4800, USD: 19.2 }, 'claude-code-api': { DZD: 3200, USD: 12.8 } };
+    const prices = { 'claude-pro': { DZD: 4800, USD: 18 }, 'claude-code-api': { DZD: 3200, USD: 12.8 } };
     const price = prices[type][currency] || prices[type].DZD;
     redirectToWhatsApp(name, price, currency);
 }

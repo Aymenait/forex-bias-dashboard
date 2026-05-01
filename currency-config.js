@@ -121,6 +121,25 @@ const PRODUCTS = {
       usd: ['binance', 'redotpay', 'crypto']
     }
   },
+  'claude': {
+    id: 'claude',
+    name: 'Claude AI',
+    price_dzd: 3200,
+    price_usd: 12.8,
+    durations: {
+      'claude-pro': { dzd: 4800, usd: 18 },
+      'claude-code-api': { dzd: 3200, usd: 12.8 }
+    },
+    description: {
+      ar: 'اشتراك Claude AI من Anthropic - Claude Pro أو Claude Code API',
+      en: 'Claude AI subscription by Anthropic - Claude Pro or Claude Code API',
+      fr: 'Abonnement Claude AI par Anthropic - Claude Pro ou Claude Code API'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
   'adobe': {
     id: 'adobe',
     name: 'Adobe Creative Cloud',
