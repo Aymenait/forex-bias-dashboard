@@ -1,4 +1,17 @@
 User-agent: *
 Allow: /
 
+# Block test/dev pages from being indexed
+Disallow: /test-
+Disallow: /firebase-test.html
+Disallow: /index-mobile-test.html
+Disallow: /index-preview.html
+Disallow: /manual-testing-checklist.html
+Disallow: /first-impression-concepts.html
+Disallow: /mobile-hero-concepts.html
+Disallow: /mobile-offer-card-concepts.html
+Disallow: /admin.html
+Disallow: /admin_dashboard.html
+Disallow: /leads.html
+
 Sitemap: https://marketalgeria.store/sitemap.xml

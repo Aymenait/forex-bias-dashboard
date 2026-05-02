@@ -3404,7 +3404,7 @@ img {
         top: 0;
         right: -100%;
         width: 85%;
-        max-width: 320px;
+        max-width: min(320px, 85vw);
         height: 100vh;
         background: #1b1d32;
         background-color: #1b1d32;
@@ -3768,7 +3768,7 @@ img {
     }
 
     .product-features li {
-        font-size: 0.62rem !important;
+        font-size: 0.75rem !important;
     }
 
     /* أزرار الدفع - مصغرة للشاشات الصغيرة جداً */
@@ -3777,18 +3777,18 @@ img {
     }
 
     .payment-btn-compact {
-        padding: 4px 5px !important;
-        min-width: 42px !important;
-        max-width: 58px !important;
+        padding: 8px 10px !important;
+        min-width: 48px !important;
+        max-width: 64px !important;
     }
 
     .payment-btn-compact svg {
-        width: 12px !important;
-        height: 12px !important;
+        width: 14px !important;
+        height: 14px !important;
     }
 
     .payment-btn-compact span {
-        font-size: 0.5rem !important;
+        font-size: 0.75rem !important;
     }
 
     .discover-btn {

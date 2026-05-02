@@ -101,7 +101,7 @@
     border: 1px solid rgba(255, 213, 111, 0.15);
     border-radius: 20px;
     padding: 28px 30px;
-    width: min(420px, 88%);
+    width: min(420px, 92%);
     max-height: 90vh;
     overflow-y: auto;
     position: relative;

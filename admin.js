@@ -1363,11 +1363,11 @@ function displayExpensesList() {
                     <div class="flex justify-between items-center p-2 rounded-lg bg-gray-800/50 text-sm">
                         <div class="flex items-center gap-2">
                             <span>${cat.icon}</span>
-                            <span class="text-gray-300">${e.description || cat.label}</span>
+                            <span class="text-gray-300">${escapeHtml(e.description || cat.label)}</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-orange-400 font-bold">${e.amount?.toLocaleString()} ${e.currency}</span>
-                            <button onclick="deleteExpense('${e.id}')" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+                            <span class="text-orange-400 font-bold">${e.amount?.toLocaleString()} ${escapeHtml(e.currency || '')}</span>
+                            <button onclick="deleteExpense('${escapeHtml(e.id)}')" class="text-red-400 hover:text-red-300 text-xs">✕</button>
                         </div>
                     </div>
                 `;
@@ -1386,11 +1386,11 @@ function displayExpensesList() {
                     <div class="flex justify-between items-center p-2 rounded-lg bg-gray-800/50 text-sm">
                         <div class="flex items-center gap-2">
                             <span>${cat.icon}</span>
-                            <span class="text-gray-300">${e.description || cat.label}</span>
+                            <span class="text-gray-300">${escapeHtml(e.description || cat.label)}</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-purple-400 font-bold">${e.amount?.toLocaleString()} ${e.currency}</span>
-                            <button onclick="deleteExpense('${e.id}')" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+                            <span class="text-purple-400 font-bold">${e.amount?.toLocaleString()} ${escapeHtml(e.currency || '')}</span>
+                            <button onclick="deleteExpense('${escapeHtml(e.id)}')" class="text-red-400 hover:text-red-300 text-xs">✕</button>
                         </div>
                     </div>
                 `;
@@ -1600,7 +1600,7 @@ async function generateMonthlyReport() {
     } else {
         salesBreakdown.innerHTML = Object.entries(salesByProduct).map(([name, data]) => `
             <div class="flex justify-between text-sm py-1 border-b border-gray-700/50">
-                <span class="text-gray-300">${name} (×${data.count})</span>
+                <span class="text-gray-300">${escapeHtml(name)} (×${data.count})</span>
                 <span class="text-green-400">${data.revenue.toLocaleString()} د.ج</span>
             </div>
         `).join('');
@@ -1626,7 +1626,7 @@ async function generateMonthlyReport() {
     } else {
         expensesBreakdown.innerHTML = Object.entries(expensesByCategory).map(([cat, amount]) => `
             <div class="flex justify-between text-sm py-1 border-b border-gray-700/50">
-                <span class="text-gray-300">${cat}</span>
+                <span class="text-gray-300">${escapeHtml(cat)}</span>
                 <span class="text-red-400">${amount.toLocaleString()} د.ج</span>
             </div>
         `).join('');
@@ -1752,14 +1752,14 @@ function displayPurchasesLog() {
             <div class="flex justify-between items-center p-2 rounded-lg bg-gray-800/50 text-sm">
                 <div class="flex-1">
                     <div class="flex items-center gap-2">
-                        <span class="text-blue-300 font-bold">${p.productName || 'منتج'}</span>
+                        <span class="text-blue-300 font-bold">${escapeHtml(p.productName || 'منتج')}</span>
                         <span class="text-gray-500 text-xs">×${p.quantity || 1}</span>
                     </div>
-                    <div class="text-gray-500 text-xs">${p.supplier || ''} • ${dateStr}</div>
+                    <div class="text-gray-500 text-xs">${escapeHtml(p.supplier || '')} • ${dateStr}</div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-red-400 font-bold">${(p.totalPrice || 0).toLocaleString()} ${p.currency || 'DZD'}</span>
-                    <button onclick="deletePurchase('${p.id}')" 
+                    <span class="text-red-400 font-bold">${(p.totalPrice || 0).toLocaleString()} ${escapeHtml(p.currency || 'DZD')}</span>
+                    <button onclick="deletePurchase('${escapeHtml(p.id)}')"
                         class="text-red-400 hover:text-white hover:bg-red-600 text-xs px-2 py-1 bg-red-600/30 rounded transition-all"
                         title="حذف">🗑️</button>
                 </div>
@@ -1798,14 +1798,14 @@ function displaySalesLog() {
             <div class="flex justify-between items-center p-2 rounded-lg bg-gray-800/50 text-sm">
                 <div class="flex-1">
                     <div class="flex items-center gap-2">
-                        <span class="text-green-300 font-bold">${o.productName || 'منتج'}</span>
+                        <span class="text-green-300 font-bold">${escapeHtml(o.productName || 'منتج')}</span>
                         ${o.source === 'manual' ? '<span class="text-xs text-yellow-400">يدوي</span>' : ''}
                     </div>
-                    <div class="text-gray-500 text-xs">${o.customerName || 'عميل'} • ${dateStr}</div>
+                    <div class="text-gray-500 text-xs">${escapeHtml(o.customerName || 'عميل')} • ${dateStr}</div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-green-400 font-bold">${(parseFloat(o.amount) || 0).toLocaleString()} ${o.currency || 'DZD'}</span>
-                    <button onclick="deleteSale('${o.id}')" 
+                    <span class="text-green-400 font-bold">${(parseFloat(o.amount) || 0).toLocaleString()} ${escapeHtml(o.currency || 'DZD')}</span>
+                    <button onclick="deleteSale('${escapeHtml(o.id)}')"
                         class="text-red-400 hover:text-white hover:bg-red-600 text-xs px-2 py-1 bg-red-600/30 rounded transition-all"
                         title="حذف">🗑️</button>
                 </div>
@@ -2062,7 +2062,6 @@ async function saveAdminPasswordToFirebase(newPassword) {
         }, { merge: true });
 
         console.log('✅ تم حفظ كلمة المرور في Firebase بنجاح!');
-        console.log('🔑 كلمة المرور الجديدة:', newPassword);
         return true;
 
     } catch (error) {
