@@ -187,16 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cryptoModal.classList.remove('hidden');
                 cryptoModal.classList.add('show');
 
-                // Track AddPaymentInfo when modal opens
-                // Prevent double tracking if PaymentManager is also tracking this
-                if (typeof fbq !== 'undefined' && !window.paymentManager) {
-                    fbq('track', 'AddPaymentInfo', {
-                        content_name: currentCryptoProduct,
-                        value: parseFloat(priceDZD),
-                        currency: 'DZD',
-                        content_category: 'Crypto'
-                    });
-                }
+                // AddPaymentInfo is now tracked centrally by PaymentManager (payment-manager.js)
             });
         });
 
@@ -267,16 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     redotpayModal.classList.remove('hidden');
                     redotpayModal.classList.add('show');
 
-                    // Track AddPaymentInfo when modal opens
-                    // Prevent double tracking if PaymentManager is also tracking this
-                    if (typeof fbq !== 'undefined' && !window.paymentManager) {
-                        fbq('track', 'AddPaymentInfo', {
-                            content_name: productName,
-                            value: parseFloat(priceDZD),
-                            currency: 'DZD',
-                            content_category: 'RedotPay'
-                        });
-                    }
+                    // AddPaymentInfo is now tracked centrally by PaymentManager (payment-manager.js)
                 });
             });
 
@@ -328,16 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 baridimobModal.classList.remove('hidden');
                 baridimobModal.classList.add('show');
 
-                // Track AddPaymentInfo when modal opens
-                // Prevent double tracking if PaymentManager is also tracking this
-                if (typeof fbq !== 'undefined' && !window.paymentManager) {
-                    fbq('track', 'AddPaymentInfo', {
-                        content_name: productName,
-                        value: parseFloat(priceDZD),
-                        currency: 'DZD',
-                        content_category: 'BaridiMob'
-                    });
-                }
+                // AddPaymentInfo is now tracked centrally by PaymentManager (payment-manager.js)
             });
         });
 
@@ -2070,7 +2043,6 @@ const translations = {
         'filter.courses': 'حسابات وكورسات',
         'filter.entertainment': 'ترفيه',
         'filter.games': 'ألعاب🕹️',
-        'search.placeholder': 'ابحث عن منتج...',
         'badge.sold_out': 'نفدت الكمية',
         'product.grok.title': 'SUPER GROK',
         'product.grok.desc': 'نموذج الذكاء الاصطناعي الأقوى والأسرع من xAI للمبرمجين والمبدعين.',
@@ -2154,16 +2126,6 @@ const translations = {
         'product.chatgpt.feature1': 'وصول لأحدث نماذج GPT',
         'product.chatgpt.feature2': 'مساحة عمل خاصة وآمنة',
         'product.chatgpt.feature3': 'تكامل مع أدواتك المفضلة',
-        'product.claude.title': 'Claude AI',
-        'product.claude.desc': 'اشتراك Claude AI من Anthropic - اختر بين Claude Pro أو Claude Code API',
-        'product.claude.pro.subtitle': 'تفعيل في حسابك',
-        'product.claude.api.subtitle': '45 مليون Token',
-        'product.claude.pro.name': 'Claude Pro - تفعيل في حسابك',
-        'product.claude.api.name': 'Claude Code API - 45M Token',
-        'product.claude.feature1': 'Claude Pro: تفعيل في حسابك الشخصي',
-        'product.claude.feature2': 'Claude Code API: 45 مليون Token',
-        'product.claude.feature3': 'نماذج Claude Sonnet و Opus الأحدث',
-        'product.claude.feature4': 'أقوى نموذج AI للبرمجة والكتابة',
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'منصة ذكاء اصطناعي متقدمة لإنشاء العروض التقديمية والمستندات والمواقع بشكل احترافي.',
         'product.gamma.price': 'السعر قريباً',
@@ -2329,10 +2291,6 @@ const translations = {
         'footer.rights': 'جميع الحقوق محفوظة',
         'footer.instagram': 'إنستغرام',
         'footer.whatsapp': 'واتساب',
-        'bottomNav.home': 'الرئيسية',
-        'bottomNav.products': 'المنتجات',
-        'bottomNav.reviews': 'التقييمات',
-        'bottomNav.contact': 'تواصل معنا',
         'contact.whatsapp': 'تواصل عبر واتساب',
         'contact.instagram': 'تابعنا على إنستغرام',
         'modal.chooseContact': 'اختر وسيلة التواصل',
@@ -2848,7 +2806,6 @@ const translations = {
         'filter.courses': 'Accounts & Courses',
         'filter.entertainment': 'Entertainment',
         'filter.games': 'Games🕹️',
-        'search.placeholder': 'Search for a product...',
         'badge.sold_out': 'Sold Out',
         'product.grok.title': 'SUPER GROK',
         'product.grok.desc': 'The most powerful and fastest AI model from xAI for programmers and creators.',
@@ -2932,16 +2889,6 @@ const translations = {
         'product.chatgpt.feature1': 'Access to latest GPT',
         'product.chatgpt.feature2': 'Private and secure workspace',
         'product.chatgpt.feature3': 'Integration with your favorite tools',
-        'product.claude.title': 'Claude AI',
-        'product.claude.desc': 'Authentic Claude AI subscription from Anthropic — Claude Pro or Claude Code API',
-        'product.claude.pro.subtitle': 'Activate on your account',
-        'product.claude.api.subtitle': '45 million Tokens',
-        'product.claude.pro.name': 'Claude Pro - Account Activation',
-        'product.claude.api.name': 'Claude Code API - 45M Tokens',
-        'product.claude.feature1': 'Claude Pro: Direct activation on your personal account',
-        'product.claude.feature2': 'Claude Code API: 45 million Tokens',
-        'product.claude.feature3': 'Latest Claude Sonnet & Opus models',
-        'product.claude.feature4': 'Most powerful AI model for coding & writing',
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'Advanced AI platform for creating professional presentations, documents and websites.',
         'product.gamma.price': 'Price Coming Soon',
@@ -3246,10 +3193,6 @@ const translations = {
         'contact.telegram': 'Contact via Telegram',
         'footer.instagram': 'Instagram',
         'footer.whatsapp': 'WhatsApp',
-        'bottomNav.home': 'Home',
-        'bottomNav.products': 'Products',
-        'bottomNav.reviews': 'Reviews',
-        'bottomNav.contact': 'Contact us',
         'contact.whatsapp': 'Contact via WhatsApp',
         'contact.instagram': 'Follow us on Instagram',
         'modal.chooseContact': 'Choose Contact Method',
@@ -3669,7 +3612,6 @@ const translations = {
         'filter.courses': 'Comptes & Cours',
         'filter.entertainment': 'Divertissement',
         'filter.games': 'Jeux🕹️',
-        'search.placeholder': 'Rechercher un produit...',
         'badge.sold_out': 'Épuisé',
         'product.grok.title': 'SUPER GROK',
         'product.grok.desc': 'Le modèle IA le plus puissant et rapide de xAI pour développeurs et créateurs.',
@@ -3753,16 +3695,6 @@ const translations = {
         'product.chatgpt.feature1': 'Accès au dernier GPT',
         'product.chatgpt.feature2': 'Espace de travail privé et sécurisé',
         'product.chatgpt.feature3': 'Intégration avec vos outils préférés',
-        'product.claude.title': 'Claude AI',
-        'product.claude.desc': "Abonnement Claude AI authentique d'Anthropic — Claude Pro ou Claude Code API",
-        'product.claude.pro.subtitle': 'Activation sur votre compte',
-        'product.claude.api.subtitle': '45 millions de Tokens',
-        'product.claude.pro.name': 'Claude Pro - Activation sur votre compte',
-        'product.claude.api.name': 'Claude Code API - 45M Tokens',
-        'product.claude.feature1': 'Claude Pro : activation sur votre compte personnel',
-        'product.claude.feature2': 'Claude Code API : 45 millions de Tokens',
-        'product.claude.feature3': 'Derniers modèles Claude Sonnet & Opus',
-        'product.claude.feature4': "Le modèle IA le plus puissant pour le code et l'écriture",
         'product.gamma.title': 'Gamma.AI',
         'product.gamma.desc': 'Plateforme IA avancée pour créer des présentations, documents et sites web professionnels.',
         'product.microsoft-office.title': 'Microsoft Office 365',
@@ -3964,10 +3896,6 @@ const translations = {
         'contact.telegram': 'Contact via Telegram',
         'footer.instagram': 'Instagram',
         'footer.whatsapp': 'WhatsApp',
-        'bottomNav.home': 'Accueil',
-        'bottomNav.products': 'Produits',
-        'bottomNav.reviews': 'Avis',
-        'bottomNav.contact': 'Contactez-nous',
         'contact.whatsapp': 'Contactez via WhatsApp',
         'contact.instagram': 'Suivez-nous sur Instagram',
         'modal.chooseContact': 'Choisissez le Moyen de Contact',
@@ -6099,58 +6027,6 @@ window.orderGamma = orderGamma;
 window.selectChatGPTType = selectChatGPTDuration;
 window.selectChatGPTDuration = selectChatGPTDuration;
 window.orderChatGPT = orderChatGPT;
-
-// Claude AI Selection Functions
-function selectClaudeDuration(type) {
-    document.querySelectorAll('.claude-duration-btn').forEach(btn => {
-        btn.classList.remove('active');
-        btn.style.background = 'rgba(100, 100, 100, 0.1)';
-        btn.style.border = '2px solid var(--border-color)';
-        btn.style.color = 'var(--text-secondary)';
-    });
-    const selectedBtn = document.querySelector(`.claude-duration-btn[data-duration="${type}"]`);
-    if (selectedBtn) {
-        selectedBtn.classList.add('active');
-        selectedBtn.style.background = 'rgba(210, 133, 68, 0.15)';
-        selectedBtn.style.border = '2px solid rgba(210, 133, 68, 0.5)';
-        selectedBtn.style.color = '#d28544';
-    }
-    const prices = { 'claude-pro': { dzd: 4800, usd: 18 }, 'claude-code-api': { dzd: 3200, usd: 12.8 } };
-    const lang = window.currentLanguage || 'ar';
-    const t = translations[lang] || translations.ar;
-    const productNames = {
-        'claude-pro': t['product.claude.pro.name'] || 'Claude Pro - تفعيل في حسابك',
-        'claude-code-api': t['product.claude.api.name'] || 'Claude Code API - 45M Token'
-    };
-    document.querySelectorAll('.claude-prices').forEach(el => el.style.display = 'none');
-    const priceEl = document.getElementById(`claude-prices-${type}`);
-    if (priceEl) priceEl.style.display = 'flex';
-    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-    const price = currency === 'USD' ? prices[type].usd : prices[type].dzd;
-    const name = productNames[type];
-    ['claude-crypto-btn', 'claude-redotpay-btn', 'claude-baridimob-btn', 'claude-order-btn'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) { el.setAttribute('data-product', name); el.setAttribute('data-price', price); }
-    });
-}
-function orderClaude() {
-    const activeBtn = document.querySelector('.claude-duration-btn.active');
-    const type = activeBtn ? activeBtn.getAttribute('data-duration') : 'claude-pro';
-    const lang = window.currentLanguage || 'ar';
-    const t = translations[lang] || translations.ar;
-    const names = {
-        'claude-pro': t['product.claude.pro.name'] || 'Claude Pro - تفعيل في حسابك',
-        'claude-code-api': t['product.claude.api.name'] || 'Claude Code API - 45M Token'
-    };
-    const name = names[type];
-    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-    const prices = { 'claude-pro': { DZD: 4800, USD: 18 }, 'claude-code-api': { DZD: 3200, USD: 12.8 } };
-    const price = prices[type][currency] || prices[type].DZD;
-    redirectToWhatsApp(name, price, currency);
-}
-window.selectClaudeDuration = selectClaudeDuration;
-window.orderClaude = orderClaude;
-
 window.selectCapcutDuration = selectCapcutDuration;
 window.orderCapcut = orderCapcut;
 window.selectLovableType = selectLovableType;
@@ -6317,24 +6193,21 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Category Filter + Search Functionality
+// Category Filter Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const categoryPills = document.querySelectorAll('.category-pill');
-    const productCards = Array.from(document.querySelectorAll('.product-card'));
-    const searchInput = document.getElementById('product-search');
+    const productCards = document.querySelectorAll('.product-card');
 
     if (categoryPills.length === 0 || productCards.length === 0) return;
-
-    let activeFilter = 'all';
 
     // Add data-category to products based on their content
     productCards.forEach(card => {
         const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
         const cardId = card.id || '';
 
+        // Categorize products
         if (title.includes('chatgpt') || title.includes('gamma') || title.includes('perplexity') ||
-            title.includes('cursor') || cardId.includes('chatgpt') || cardId.includes('gamma') ||
-            title.includes('claude') || title.includes('grok') || cardId.includes('claude') || cardId.includes('grok')) {
+            title.includes('cursor') || cardId.includes('chatgpt') || cardId.includes('gamma')) {
             card.setAttribute('data-category', 'ai');
         } else if (title.includes('adobe') || title.includes('canva') || title.includes('capcut') ||
                    cardId.includes('adobe') || cardId.includes('canva') || cardId.includes('capcut')) {
@@ -6349,52 +6222,44 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function applyFilters() {
-        const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
-
-        productCards.forEach(card => {
-            const category = card.getAttribute('data-category');
-            const categoryMatch = activeFilter === 'all' || category === activeFilter || category === 'all';
-
-            const titleEl = card.querySelector('h3');
-            const descEl = card.querySelector('p');
-            const cardText = ((titleEl?.textContent || '') + ' ' + (descEl?.textContent || '')).toLowerCase();
-            const searchMatch = !searchTerm || cardText.includes(searchTerm);
-
-            if (categoryMatch && searchMatch) {
-                card.style.display = '';
-                card.classList.remove('visible');
-                setTimeout(() => card.classList.add('visible'), 10);
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    }
-
-    // Category pill clicks
+    // Filter functionality
     categoryPills.forEach(pill => {
         pill.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
+            // Remove active class from all pills
             categoryPills.forEach(p => p.classList.remove('active'));
-            this.classList.add('active');
-            activeFilter = this.getAttribute('data-filter');
 
-            applyFilters();
+            // Add active class to clicked pill
+            this.classList.add('active');
+
+            const filter = this.getAttribute('data-filter');
+
+            // Filter products
+            productCards.forEach(card => {
+                const category = card.getAttribute('data-category');
+
+                if (filter === 'all' || category === filter || category === 'all') {
+                    card.style.display = '';
+                    // Re-trigger fade-in animation
+                    card.classList.remove('visible');
+                    setTimeout(() => card.classList.add('visible'), 10);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
 
             if (typeof window.applyMobileCategoryFilter === 'function') {
-                window.applyMobileCategoryFilter(activeFilter);
+                window.applyMobileCategoryFilter(filter);
             }
 
+            // Track filter usage
             if (typeof fbq !== 'undefined') {
-                fbq('trackCustom', 'CategoryFilter', { category: activeFilter });
+                fbq('trackCustom', 'CategoryFilter', {
+                    category: filter
+                });
             }
         });
     });
-
-    // Search input
-    if (searchInput) {
-        searchInput.addEventListener('input', applyFilters);
-    }
 });

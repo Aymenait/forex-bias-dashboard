@@ -387,10 +387,10 @@
             }
         }
 
-        // 1. Track InitiateCheckout (always in USD)
-        if (typeof fbq !== 'undefined' && canTrack()) {
+        // 1. Track InitiateCheckout (always in USD) — Pixel + CAPI
+        if (window.metaPixel && canTrack()) {
             const usdValue = toPixelUSD(price, currency);
-            fbq('track', 'InitiateCheckout', {
+            window.metaPixel.trackEvent('InitiateCheckout', {
                 content_name: productName,
                 value: usdValue,
                 currency: 'USD'
@@ -454,8 +454,8 @@
                         document.getElementById('order-product-price').value = price;
                         document.getElementById('order-product-currency').value = currency;
 
-                        if (typeof fbq !== 'undefined' && canTrack()) {
-                            fbq('track', 'InitiateCheckout', { content_name: name, value: parseFloat(price) || 0, currency: currency });
+                        if (window.metaPixel && canTrack()) {
+                            window.metaPixel.trackEvent('InitiateCheckout', { content_name: name, value: parseFloat(price) || 0, currency: currency });
                             console.log('🎯 Meta Pixel tracked: InitiateCheckout (Special)');
                         }
                         translateForm();
@@ -533,37 +533,30 @@
         localStorage.setItem('3ahub_contact', contactRaw);
         localStorage.setItem('3ahub_code', countryCode);
 
-        // 1. Send Lead Event to Meta Pixel with Advanced Matching
-        if (typeof fbq !== 'undefined') {
-            const isEmail = contact.includes('@');
-            const userData = {};
+        // 1. Send Lead Event — Pixel + CAPI with hashed Advanced Matching
+        if (window.metaPixel) {
+            const isEmail = contactRaw.includes('@');
+            const userData = await window.metaPixel.buildUserData({
+                email: isEmail ? contactRaw : '',
+                phone: isEmail ? '' : contactRaw,
+                countryCode: countryCode,
+                firstName: name.split(' ')[0],
+                lastName: name.split(' ').slice(1).join(' '),
+                externalId: fbclid
+            });
 
-            // Format data for Meta Pixel Advanced Matching
-            if (isEmail) {
-                userData.em = contact.toLowerCase().trim();
-            } else {
-                let cleanPh = contact.replace(/\D/g, '');
-                if (cleanPh.startsWith('0')) cleanPh = '213' + cleanPh.slice(1);
-                else if (!cleanPh.startsWith('213')) cleanPh = '213' + cleanPh;
-                userData.ph = cleanPh;
+            // Re-init pixel with hashed advanced matching for the rest of the session
+            if (typeof fbq !== 'undefined') {
+                fbq('init', window.metaPixel.PIXEL_ID, userData);
             }
 
-            userData.fn = name.split(' ')[0].toLowerCase().trim();
-            userData.external_id = fbclid;
-
-            // Set user data BEFORE tracking the lead
-            fbq('set', 'user_data', userData);
-
             const usdValueLead = toPixelUSD(price, currency);
-            fbq('track', 'Lead', {
+            window.metaPixel.trackEvent('Lead', {
                 content_name: productName,
                 value: usdValueLead,
                 currency: 'USD',
-                content_category: 'Prospect',
-                page_location: window.location.href
-            }, {
-                eventID: 'lead_' + Date.now()
-            });
+                content_category: 'Prospect'
+            }, userData);
             console.log(`🎯 Meta Pixel Lead: $${usdValueLead} USD (from ${price} ${currency})`);
         }
 

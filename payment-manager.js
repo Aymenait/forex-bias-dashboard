@@ -178,10 +178,10 @@ class PaymentManager {
     // Update modal content based on payment method
     this.updateModalContent(modal, method, product, currency);
 
-    // Track AddPaymentInfo event
-    if (typeof fbq !== 'undefined') {
+    // Track AddPaymentInfo event — Pixel + CAPI (single source of truth)
+    if (window.metaPixel) {
       const price = currency === 'USD' ? product.price_usd : product.price_dzd;
-      fbq('track', 'AddPaymentInfo', {
+      window.metaPixel.trackEvent('AddPaymentInfo', {
         content_name: product.name || product.id,
         value: parseFloat(price) || 0,
         currency: currency,

@@ -13,11 +13,8 @@
         rel="stylesheet">
 
     <!-- Meta Pixel -->
-    <script>
-        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1409818833091509');
-        fbq('track', 'PageView');
-    </script>
+    <script src="/meta-pixel.js"></script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
 
     <style>
         /* ── Reset & Base ── */
@@ -835,15 +832,27 @@
                 if (--totalSec < 0) clearInterval(interval);
             }, 1000);
 
-            // ── 8. Meta Pixel — Purchase Event ────────────────────
-            if (typeof fbq !== 'undefined' && product) {
+            // ── 8. Meta Pixel — Purchase Event (Pixel + CAPI, hashed Advanced Matching) ──
+            if (window.metaPixel && product) {
                 const usdVal = currency === 'USD' ? parseFloat(price) : parseFloat(price) / 250;
-                fbq('track', 'Purchase', {
-                    content_name: product,
-                    value: parseFloat(usdVal.toFixed(2)) || 0,
-                    currency: 'USD'
-                });
-                console.log(`🎯 Meta Pixel Purchase: $${usdVal.toFixed(2)} USD`);
+                const isEmail = (contact || '').includes('@');
+                const countryCode = localStorage.getItem('3ahub_code') || '';
+                (async () => {
+                    const userData = await window.metaPixel.buildUserData({
+                        email: isEmail ? contact : '',
+                        phone: isEmail ? '' : contact,
+                        countryCode: countryCode,
+                        firstName: (name || '').split(' ')[0],
+                        lastName: (name || '').split(' ').slice(1).join(' '),
+                        externalId: localStorage.getItem('fbclid') || ''
+                    });
+                    window.metaPixel.trackEvent('Purchase', {
+                        content_name: product,
+                        value: parseFloat(usdVal.toFixed(2)) || 0,
+                        currency: 'USD'
+                    }, userData);
+                    console.log(`🎯 Meta Pixel Purchase: $${usdVal.toFixed(2)} USD`);
+                })();
             }
 
             // ── 9. Telegram Notification 🔔 ───────────────────────

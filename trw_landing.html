@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -56,11 +56,10 @@
         });
     </script>
 
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel -->
+
+    <script src="/meta-pixel.js"></script>
     <script>
-        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '2046893892791206');
-        fbq('track', 'PageView');
         const isUSD = location.search.includes('USD');
         const productData = (typeof PRODUCTS !== 'undefined') ? PRODUCTS['trw'] : { price_dzd: 3500, price_usd: 15 };
         fbq('track', 'ViewContent', { content_name: productData.name || 'The Real World Account', content_category: 'Courses', value: isUSD ? productData.price_usd : productData.price_dzd, currency: isUSD ? 'USD' : 'DZD' });
