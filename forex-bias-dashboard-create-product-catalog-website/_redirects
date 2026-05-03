@@ -1,0 +1,5 @@
+# Redirect the old netlify subdomain to the new custom domain
+https://marketalgeriaa.netlify.app/*  https://marketalgeria.store/:splat  301!
+
+# Ensure extensionless URLs work (Cloudflare handles this by default, but good to have)
+# /page -> /page.html

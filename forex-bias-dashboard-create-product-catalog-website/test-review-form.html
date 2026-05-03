@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار نموذج التعليقات</title>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2046893892791206');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .star-rating {
+            display: flex;
+            gap: 5px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .star-input {
+            color: #666;
+            transition: color 0.2s;
+        }
+        .star-input:hover {
+            color: #ffd56f;
+        }
+        button {
+            background: linear-gradient(135deg, #ffd56f, #ffb347);
+            color: #1b1d32;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            transform: scale(1.02);
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-form">
+        <h2>اختبار نموذج التعليقات</h2>
+        <form id="add-review-form">
+            <div class="form-group">
+                <label>الاسم:</label>
+                <input type="text" id="review-name" required>
+            </div>
+
+            <div class="form-group">
+                <label>المنتج:</label>
+                <select id="review-product" required>
+                    <option value="The Real World">The Real World</option>
+                    <option value="ChatGPT Business">ChatGPT Business</option>
+                    <option value="Adobe Creative Cloud">Adobe Creative Cloud</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>من أين عرفت عنا؟</label>
+                <select id="review-source" required>
+                    <option value="">اختر المصدر</option>
+                    <option value="Instagram">📸 Instagram</option>
+                    <option value="Facebook">👥 Facebook</option>
+                    <option value="Google">🔍 Google</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>التقييم:</label>
+                <div id="star-rating" class="star-rating">
+                    <span class="star-input" data-rating="1">☆</span>
+                    <span class="star-input" data-rating="2">☆</span>
+                    <span class="star-input" data-rating="3">☆</span>
+                    <span class="star-input" data-rating="4">☆</span>
+                    <span class="star-input" data-rating="5">☆</span>
+                </div>
+                <input type="hidden" id="review-rating" required>
+            </div>
+
+            <div class="form-group">
+                <label>التعليق:</label>
+                <textarea id="review-comment" required rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>أضف صورة (اختياري):</label>
+                <input type="file" id="review-image" accept="image/*">
+                <small style="color: #666; display: block; margin-top: 5px;">
+                    ملاحظة: رفع الصور قد لا يعمل بسبب إعدادات CORS. التقييم سيُرسل بدون صورة.
+                </small>
+            </div>
+
+            <button type="submit" id="submit-btn">إرسال التقييم</button>
+        </form>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw",
+            authDomain: "the-real-world-review.firebaseapp.com",
+            projectId: "the-real-world-review",
+            storageBucket: "the-real-world-review.firebasestorage.app",
+            messagingSenderId: "324349726142",
+            appId: "1:324349726142:web:eff2cde07b569ed0a3bdef",
+            measurementId: "G-5FPYPJDSF4"
+        };
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+
+            window.db = db;
+            window.firebaseModules = { collection, addDoc, serverTimestamp };
+            window.firebaseReady = true;
+            window.dispatchEvent(new Event('firebaseReady'));
+            console.log('✅ Firebase initialized successfully');
+        } catch (error) {
+            console.error('❌ Firebase initialization error:', error);
+            window.firebaseReady = false;
+        }
+    </script>
+
+    <script>
+        // Star rating functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const starInputs = document.querySelectorAll('.star-input');
+            
+            starInputs.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.getAttribute('data-rating'));
+                    document.getElementById('review-rating').value = rating;
+                    
+                    starInputs.forEach((s, index) => {
+                        if (index < rating) {
+                            s.textContent = '★';
+                            s.style.color = '#ffd56f';
+                        } else {
+                            s.textContent = '☆';
+                            s.style.color = '#666';
+                        }
+                    });
+                });
+            });
+
+            // Form submission
+            const form = document.getElementById('add-review-form');
+            const statusDiv = document.getElementById('status');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                console.log('📝 Form submitted');
+                
+                const name = document.getElementById('review-name').value;
+                const product = document.getElementById('review-product').value;
+                const source = document.getElementById('review-source').value;
+                const rating = parseInt(document.getElementById('review-rating').value);
+                const comment = document.getElementById('review-comment').value;
+                
+                console.log('Form data:', { name, product, source, rating, comment });
+                
+                if (!rating) {
+                    showStatus('الرجاء اختيار التقييم', 'error');
+                    return;
+                }
+                
+                if (!source) {
+                    showStatus('الرجاء اختيار من أين عرفت عنا', 'error');
+                    return;
+                }
+                
+                showStatus('⏳ جاري الإرسال...', 'success');
+                
+                try {
+                    console.log('Firebase ready?', window.firebaseReady);
+                    console.log('window.db:', window.db);
+                    console.log('window.firebaseModules:', window.firebaseModules);
+                    
+                    if (!window.firebaseReady || !window.db || !window.firebaseModules) {
+                        throw new Error('Firebase غير جاهز. الرجاء إعادة تحميل الصفحة.');
+                    }
+                    
+                    const { collection, addDoc, serverTimestamp } = window.firebaseModules;
+                    
+                    const reviewData = {
+                        name: name,
+                        platform: source,
+                        product: product,
+                        rating: rating,
+                        comment: comment,
+                        source: source,
+                        timestamp: serverTimestamp(),
+                        approved: false
+                    };
+                    
+                    console.log('Sending to Firebase:', reviewData);
+                    
+                    const docRef = await addDoc(collection(window.db, 'reviews'), reviewData);
+                    
+                    console.log('✅ Document written with ID:', docRef.id);
+                    
+                    showStatus('✅ تم إرسال تقييمك بنجاح!', 'success');
+                    form.reset();
+                    
+                    // Reset stars
+                    document.querySelectorAll('.star-input').forEach(star => {
+                        star.textContent = '☆';
+                        star.style.color = '#666';
+                    });
+                } catch (error) {
+                    console.error('❌ Error details:', error);
+                    console.error('Error code:', error.code);
+                    console.error('Error message:', error.message);
+                    
+                    let errorMessage = 'حدث خطأ: ';
+                    
+                    if (error.code === 'permission-denied') {
+                        errorMessage += 'لا توجد صلاحيات للكتابة في قاعدة البيانات. يرجى التحقق من إعدادات Firebase.';
+                    } else if (error.message.includes('CORS')) {
+                        errorMessage += 'مشكلة في الاتصال. حاول إعادة تحميل الصفحة.';
+                    } else {
+                        errorMessage += error.message;
+                    }
+                    
+                    showStatus('❌ ' + errorMessage, 'error');
+                }
+            });
+
+            function showStatus(message, type) {
+                statusDiv.textContent = message;
+                statusDiv.className = 'status ' + type;
+                statusDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

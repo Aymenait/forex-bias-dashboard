@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adobe Creative Cloud - 3Ahub</title>
+    <meta name="description"
+        content="احصل على اشتراك Adobe Creative Cloud كامل (Photoshop, Illustrator, Premiere...) بأفضل الأسعار في الجزائر. تفعيل فوري وضمان كامل.">
+    <meta name="keywords"
+        content="Adobe Creative Cloud Algeria, أدوبي الجزائر, اشتراك فوتوشوب رخيص, Adobe Premiere Algeria, تصميم جرافيك, مونتاج فيديو, Adobe Apps, Creative Cloud Subscription, Adobe Discount, Photoshop, Illustrator, After Effects">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://marketalgeria.store/adobe_landing">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://marketalgeria.store/adobe_landing.html">
+    <meta property="og:title" content="Adobe Creative Cloud - 3Ahub">
+    <meta property="og:description" content="أكثر من 20 تطبيق إبداعي (Photoshop, Illustrator, Premiere...) بين يديك.">
+    <meta property="og:image"
+        content="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Old_Adobe_Inc._Logo.svg/1200px-Old_Adobe_Inc._Logo.svg.png">
+
+    <script src="currency-config.js"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "Adobe Creative Cloud",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Old_Adobe_Inc._Logo.svg/1200px-Old_Adobe_Inc._Logo.svg.png",
+      "description": "اشتراك Adobe Creative Cloud كامل يشمل أكثر من 20 تطبيق.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Adobe"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "DZD",
+        "lowPrice": "1500",
+        "highPrice": "12000",
+        "offerCount": "4"
+      }
+    }
+    </script>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/hyjvY4Z.png">
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2046893892791206');
+        fbq('track', 'PageView');
+
+        // Track ViewContent
+        // Track ViewContent
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLocalUSD = localStorage.getItem('currency') === 'USD';
+            const isUrlUSD = location.search.includes('USD');
+            const isUSD = isLocalUSD || isUrlUSD;
+
+            const price = isUSD ? 6 : 1500;
+            const currency = isUSD ? 'USD' : 'DZD';
+
+            fbq('track', 'ViewContent', {
+                content_name: 'Adobe Creative Cloud',
+                content_category: 'Software',
+                value: price,
+                currency: currency
+            });
+        });
+
+        // Helper to track custom interactions
+        window.trackPixelEvent = function (eventName, data) {
+            if (typeof fbq !== 'undefined') {
+                fbq('trackCustom', eventName, data);
+            }
+        };
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            background: #0f0f0f;
+            /* Adobe Gradient Background */
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(255, 0, 0, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(20, 0, 255, 0.05) 0%, transparent 50%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(40, 40, 40, 0.7);
+            border-color: rgba(255, 0, 0, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 0, 0, 0.15);
+        }
+
+        /* Hero Section */
+        .hero-container {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 60px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .product-logo-container {
+            margin-bottom: 32px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 30%, #ffaaaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Duration Selector */
+        .duration-selector {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 100px;
+            padding: 6px;
+            display: inline-flex;
+            gap: 4px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .duration-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .duration-btn.active {
+            background: #FF0000;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+        }
+
+        .duration-btn:hover:not(.active) {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .price-display {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        /* Payment Methods */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        .payment-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .payment-card:active {
+            transform: scale(0.95);
+        }
+
+        .payment-card:hover {
+            border-color: #FF0000;
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+            padding: 18px 40px;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 0, 0, 0.6);
+        }
+
+        /* App Grid - Centered */
+        .apps-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            /* Center horizontally */
+            gap: 24px;
+            margin: 40px auto;
+            max-width: 800px;
+            padding: 0 20px;
+            opacity: 0.9;
+        }
+
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .app-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #FF0000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.4rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: #FF0000;
+            border-radius: 2px;
+        }
+
+        /* Feature Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 0, 0, 0.2);
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .hero-container {
+                padding: 100px 15px 40px;
+                min-height: auto;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .price-display {
+                font-size: 2.5rem;
+            }
+
+            .payment-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .payment-card {
+                padding: 12px 6px;
+            }
+
+            .payment-card span {
+                font-size: 0.8rem;
+            }
+
+            .payment-card div {
+                font-size: 1.5rem;
+            }
+
+            .duration-selector {
+                width: 100%;
+                justify-content: space-between;
+                padding: 4px;
+            }
+
+            .duration-btn {
+                padding: 10px 14px;
+                font-size: 0.8rem;
+                flex: 1;
+            }
+
+            .apps-grid {
+                gap: 16px;
+            }
+
+            .app-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1rem;
+            }
+
+            .app-item span {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="order-form.css">
+</head>
+
+<body>
+    <div id="particles-js"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <!-- ... existing nav content ... -->
+        <a href="/" class="back-btn">
+            <span id="back-arrow">←</span> <span data-i18n="nav_home">الرئيسية</span>
+        </a>
+        <div class="flex gap-2">
+            <button class="px-3 py-1 rounded bg-white/10 hover:bg-white/20 transition text-sm font-bold ml-2"
+                onclick="toggleCurrency()">💲</button>
+            <button class="px-3 py-1 rounded bg-white/10 hover:bg-white/20 transition text-sm font-bold"
+                onclick="setLang('ar')">AR</button>
+            <button class="px-3 py-1 rounded bg-white/10 hover:bg-white/20 transition text-sm font-bold"
+                onclick="setLang('en')">EN</button>
+            <button class="px-3 py-1 rounded bg-white/10 hover:bg-white/20 transition text-sm font-bold"
+                onclick="setLang('fr')">FR</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-container">
+        <div class="hero-content">
+            <div class="product-logo-container">
+                <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg"
+                    alt="Adobe Creative Cloud"
+                    style="width: 100%; max-width: 300px; height: auto; object-fit: cover; border-radius: 24px; box-shadow: 0 10px 40px rgba(255, 0, 0, 0.2); margin: 0 auto; display: block;">
+            </div>
+
+            <h1 class="hero-title">Adobe Creative Cloud</h1>
+            <p class="hero-subtitle" data-i18n="hero_subtitle">
+                افتح آفاق إبداعك مع أكثر من 20 تطبيقًا وتحديثات مستمرة. الحل الأمثل للمصممين والمبدعين.
+            </p>
+
+            <!-- Duration Selection -->
+            <!-- Labels set by JS on load -->
+            <div class="duration-selector" id="duration-selector">
+                <button class="duration-btn active" data-duration="1month" onclick="selectDuration('1month')"
+                    data-i18n="duration_1month">شهر واحد</button>
+                <button class="duration-btn" data-duration="2months" onclick="selectDuration('2months')"
+                    data-i18n="duration_2months">شهرين</button>
+                <button class="duration-btn" data-duration="3months" onclick="selectDuration('3months')"
+                    data-i18n="duration_3months">3 أشهر</button>
+                <button class="duration-btn" data-duration="1year" onclick="selectDuration('1year')"
+                    data-i18n="duration_1year">سنة كاملة</button>
+            </div>
+
+            <!-- Price Display -->
+            <div class="price-container">
+                <div class="price-display" id="main-price">1500 د.ج</div>
+            </div>
+
+            <!-- Apps Grid (Visual Candy) -->
+            <!-- Use flex center in CSS -->
+            <div class="apps-grid">
+                <div class="app-item">
+                    <div class="app-icon" style="color:#31a8ff; border-color:#31a8ff;">Ps</div><span>Photoshop</span>
+                </div>
+                <div class="app-item">
+                    <div class="app-icon" style="color:#ff9a00; border-color:#ff9a00;">Ai</div><span>Illustrator</span>
+                </div>
+                <div class="app-item">
+                    <div class="app-icon" style="color:#9999ff; border-color:#9999ff;">Pr</div><span>Premiere</span>
+                </div>
+                <div class="app-item">
+                    <div class="app-icon" style="color:#d299ff; border-color:#d299ff;">Ae</div><span>After
+                        Effects</span>
+                </div>
+                <div class="app-item">
+                    <div class="app-icon" style="color:#ff61f6; border-color:#ff61f6;">Id</div><span>InDesign</span>
+                </div>
+                <div class="app-item">
+                    <div class="app-icon" style="color:#00ff99; border-color:#00ff99;">Lr</div><span>Lightroom</span>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-grid">
+                <div class="payment-card" onclick="orderProduct('usdt')">
+                    <div class="text-2xl mb-2">₮</div>
+                    <span class="font-bold">USDT</span>
+                </div>
+                <div class="payment-card" onclick="orderProduct('redotpay')">
+                    <div class="text-2xl mb-2">💳</div>
+                    <span class="font-bold">RedotPay</span>
+                </div>
+                <div class="payment-card" onclick="orderProduct('baridimob')">
+                    <div class="text-2xl mb-2">📮</div>
+                    <span class="font-bold">BaridiMob</span>
+                </div>
+            </div>
+
+            <a href="#" id="order-btn-main" class="cta-button" onclick="orderProduct('general')" data-i18n="cta_order">
+                🚀 اطلب الآن عبر الواتساب
+            </a>
+
+            <!-- Wholesale Option (Glassy, Animated, Red-Blue) -->
+            <div onclick="orderWholesale()" class="w-full max-w-md mx-auto cursor-pointer mt-8 py-3 px-6 rounded-2xl text-sm font-bold 
+                        bg-gradient-to-r from-red-500/10 via-white/5 to-blue-500/10 
+                        backdrop-blur-xl border border-white/10 hover:border-white/30 
+                        shadow-[0_0_15px_rgba(255,255,255,0.05)]
+                        hover:scale-[1.02] transition-all duration-300 animate-[pulse_3s_infinite]">
+                <div class="flex items-center justify-center gap-2">
+                    <span class="text-xl filter drop-shadow no-underline" style="text-decoration:none">🏢</span>
+                    <span
+                        class="bg-gradient-to-r from-red-200 via-white to-blue-200 bg-clip-text text-transparent drop-shadow-sm"
+                        data-i18n="wholesale_text">
+                        متوفر بيع بالجملة للشركات والتجار بأسعار خاصة!
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section">
+        <h2 class="text-3xl font-bold text-center mb-12 relative w-full inline-block" data-i18n="features_title">
+            لماذا تختار اشتراكنا؟
+            <span class="block w-24 h-1 bg-red-600 rounded-full mx-auto mt-4"></span>
+        </h2>
+        <div class="feature-grid">
+            <div class="feature-card glass-card">
+                <div class="text-4xl mb-4">🎨</div>
+                <h3 class="text-xl font-bold mb-2 text-red-500" data-i18n="fe_apps_title">كل تطبيقات أدوبي</h3>
+                <p class="text-gray-400" data-i18n="fe_apps_desc">وصول شامل لـ Photoshop, Illustrator, Premiere Pro,
+                    After Effects وغيرها.</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="text-4xl mb-4">✨</div>
+                <h3 class="text-xl font-bold mb-2 text-red-500" data-i18n="fe_ai_title">4000 رصيد ذكاء اصطناعي</h3>
+                <p class="text-gray-400" data-i18n="fe_ai_desc">استخدم Generative Fill و Adobe Firefly بحرية مع 4000
+                    رصيد شهري.</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="text-4xl mb-4">🔐</div>
+                <h3 class="text-xl font-bold mb-2 text-red-500" data-i18n="fe_privacy_title">حساب خاص بك</h3>
+                <p class="text-gray-400" data-i18n="fe_privacy_desc">حساب جديد بالكامل. يمكنك تغيير الإيميل وكلمة المرور
+                    والمعلومات الشخصية بحرية.</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="text-4xl mb-4">🛡️</div>
+                <h3 class="text-xl font-bold mb-2 text-red-500" data-i18n="fe_guarantee_title">ضمان 30 يوم</h3>
+                <p class="text-gray-400" data-i18n="fe_guarantee_desc">اشتراك رسمي ومضمون لمدة 30 يوم مع دعم فني كامل
+                    واستبدال فوري في حال حدوث أي مشكلة.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Particles Config
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 40 },
+                "color": { "value": "#ff0000" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.2, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ff0000", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 1 }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": false }, "onclick": { "enable": false } }
+            }
+        });
+
+        // Translations Data
+        const TRANSLATIONS = {
+            ar: {
+                nav_home: "الرئيسية",
+
+                // Monthly / Default Texts
+                hero_subtitle_monthly: "استمتع باشتراك أدوبي الرسمي مع 4000 رصيد للذكاء الاصطناعي وصلاحية 33 يوم. تسليم فوري.",
+                fe_ai_desc_monthly: "استخدم Generative Fill و Adobe Firefly بحرية مع 4000 رصيد.",
+                fe_guarantee_title_monthly: "ضمان 30 يوم",
+                fe_guarantee_desc_monthly: "اشتراك رسمي صالح لمدة 33 يوم (ضمان 30 يوم) مع دعم فني كامل واستبدال فوري.",
+
+                // Yearly Texts
+                hero_subtitle_yearly: "اشتراك أدوبي السنوي الرسمي (365 يوم) مع تجديد تلقائي للرصيد شهرياً. الحل الأوفر والمضمون.",
+                fe_ai_desc_yearly: "4000 رصيد ذكاء اصطناعي تتجدد شهرياً طوال فترة الاشتراك.",
+                fe_guarantee_title_yearly: "ضمان 365 يوم",
+                fe_guarantee_desc_yearly: "ضمان كامل لمدة سنة. يتجدد الحساب تلقائياً كل 40 يوم حتى اكتمال 365 يوم بدون انقطاع.",
+
+                duration_1month: "شهر واحد",
+                duration_2months: "شهرين",
+                duration_3months: "3 أشهر",
+                duration_1year: "سنة كاملة",
+                cta_order: "🚀 اطلب الآن عبر الواتساب",
+                features_title: "لماذا تختار اشتراكنا؟",
+                fe_apps_title: "دخول رسمي 100%",
+                fe_apps_desc: "سجل دخولك مباشرة عبر موقع Adobe.com الرسمي. لا كراكات ولا برامج مشبوهة.",
+                fe_ai_title: "4000 رصيد ذكاء اصطناعي",
+                fe_privacy_title: "إيميل Outlook خاص",
+                fe_privacy_desc: "تستلم حساب جديد مع إيميل Outlook رسمي. لك الحرية الكاملة في تغيير كلمة المرور والبيانات.",
+                wholesale_text: "متوفر بيع بالجملة للشركات والتجار بأسعار خاصة!"
+            },
+            fr: {
+                nav_home: "Accueil",
+
+                // Monthly / Default Texts
+                hero_subtitle_monthly: "Profitez de l'abonnement Adobe officiel avec 4000 crédits IA et validité de 33 jours. Livraison immédiate.",
+                fe_ai_desc_monthly: "Utilisez Generative Fill et Adobe Firefly librement avec 4000 crédits inclus.",
+                fe_guarantee_title_monthly: "Garantie 30 Jours",
+                fe_guarantee_desc_monthly: "Abonnement officiel valide 33 jours (garanti 30 jours) avec support complet et remplacement immédiat.",
+
+                // Yearly Texts
+                hero_subtitle_yearly: "Abonnement annuel Adobe officiel (365 jours) avec renouvellement mensuel des crédits. L'option la plus économique.",
+                fe_ai_desc_yearly: "4000 crédits IA renouvelés chaque mois pendant toute la durée de l'abonnement.",
+                fe_guarantee_title_yearly: "Garantie 365 Jours",
+                fe_guarantee_desc_yearly: "Garantie complète 1 an. Le compte se renouvelle automatiquement tous les 40 jours jusqu'à 365 jours.",
+
+                duration_1month: "1 Mois",
+                duration_2months: "2 Mois",
+                duration_3months: "3 Mois",
+                duration_1year: "1 An",
+                cta_order: "🚀 Commander via WhatsApp",
+                features_title: "Pourquoi choisir notre abonnement ?",
+                fe_apps_title: "Connexion Officielle",
+                fe_apps_desc: "Connectez-vous directement sur Adobe.com. Pas de cracks ni de logiciels suspects.",
+                fe_ai_title: "4000 Crédits IA",
+                fe_privacy_title: "Email Outlook Privé",
+                fe_privacy_desc: "Recevez un nouveau compte avec email Outlook officiel. Contrôle total sur le mot de passe et les données.",
+                wholesale_text: "Vente en gros pour revendeurs et entreprises !"
+            },
+            en: {
+                nav_home: "Home",
+
+                // Monthly / Default Texts
+                hero_subtitle_monthly: "Enjoy official Adobe subscription with 4000 AI credits and 33 days validity. Instant delivery.",
+                fe_ai_desc_monthly: "Use Generative Fill and Adobe Firefly freely with 4000 monthly credits included.",
+                fe_guarantee_title_monthly: "30 Days Guarantee",
+                fe_guarantee_desc_monthly: "Official subscription valid for 33 days (guaranteed 30 days) with full support and replacement.",
+
+                // Yearly Texts
+                hero_subtitle_yearly: "Official Adobe 365-Day Subscription with monthly credit renewal. The best value secure option.",
+                fe_ai_desc_yearly: "4000 AI credits renewed monthly throughout the subscription period.",
+                fe_guarantee_title_yearly: "365 Days Guarantee",
+                fe_guarantee_desc_yearly: "Full 1-year guarantee. Account auto-renews every 40 days until 365 days are completed.",
+
+                duration_1month: "1 Month",
+                duration_2months: "2 Months",
+                duration_3months: "3 Months",
+                duration_1year: "1 Year",
+                cta_order: "🚀 Order via WhatsApp",
+                features_title: "Why choose our subscription?",
+                fe_apps_title: "Official Login",
+                fe_apps_desc: "Log in directly via Adobe.com. No cracks, no suspicious software.",
+                fe_ai_title: "4000 AI Credits",
+                fe_privacy_title: "Private Outlook Email",
+                fe_privacy_desc: "Receive a new account with official Outlook email. Full control to change password and details.",
+                wholesale_text: "Wholesale deals available for companies & resellers!"
+            }
+        };
+
+        // Product Configuration
+        // ... (existing code)
+
+        // ... (existing functions)
+
+        function orderWholesale() {
+            const phone = "213782125821";
+            let message = "";
+
+            if (currentLang === 'ar') {
+                message = "مرحبا، أنا تاجر/شركة وأريد الاستفسار عن أسعار الجملة لـ Adobe Creative Cloud.";
+            } else if (currentLang === 'fr') {
+                message = "Bonjour, je suis un revendeur/entreprise et je souhaite connaître les prix de gros pour Adobe Creative Cloud.";
+            } else {
+                message = "Hello, I am a reseller/company and I want to inquire about wholesale prices for Adobe Creative Cloud.";
+            }
+
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // Product Configuration
+        const PRODUCT_CONFIG = {
+            '1month': { dzd: 1500, usd: 6 },
+            '2months': { dzd: 2500, usd: 10 },
+            '3months': { dzd: 3900, usd: 15.6 },
+            '1year': { dzd: 12000, usd: 48 }
+        };
+
+        let currentDuration = '1month';
+        let currentLang = localStorage.getItem('preferredLanguage') || 'ar';
+        let isUSD = localStorage.getItem('currency') === 'USD'; // Check local storage too
+
+        // Initial Setup
+        initializePage();
+
+        function initializePage() {
+            // Set language from URL if present (legacy support) or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('lang')) {
+                const langParam = urlParams.get('lang');
+                if (['ar', 'fr', 'en'].includes(langParam)) {
+                    currentLang = langParam;
+                    localStorage.setItem('preferredLanguage', currentLang);
+                }
+            }
+
+            // Allow currency override from URL
+            if (window.location.search.includes('USD')) {
+                isUSD = true;
+                localStorage.setItem('currency', 'USD');
+            }
+
+            // Apply direction and language
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+            // Adjust back arrow for LTR
+            const arrow = document.getElementById('back-arrow');
+            if (currentLang !== 'ar' && arrow) {
+                arrow.textContent = '←';
+            }
+
+            // Apply Translations
+            applyTranslations(currentLang);
+
+            // Update UI (Price, etc)
+            updateUI();
+        }
+
+        function applyTranslations(lang) {
+            const t = TRANSLATIONS[lang] || TRANSLATIONS['ar'];
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+
+                // For features_title, we want to preserve the span (underline)
+                if (key === 'features_title') {
+                    if (t[key]) {
+                        // Keep the text but preserve the span
+                        const span = element.querySelector('span'); // The underline span
+                        element.textContent = t[key];
+                        if (span) element.appendChild(span);
+                        else {
+                            // Re-add span if lost (fallback)
+                            const newSpan = document.createElement('span');
+                            newSpan.className = "block w-24 h-1 bg-red-600 rounded-full mx-auto mt-4";
+                            element.appendChild(newSpan);
+                        }
+                    }
+                } else if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+        }
+
+        function toggleCurrency() {
+            isUSD = !isUSD;
+            localStorage.setItem('currency', isUSD ? 'USD' : 'DZD');
+            updateUI();
+        }
+
+        function selectDuration(duration) {
+            currentDuration = duration;
+
+            // Update Buttons State
+            document.querySelectorAll('.duration-btn').forEach(btn => {
+                if (btn.dataset.duration === duration) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            updateUI();
+
+            // Track customization
+            if (typeof trackPixelEvent === 'function') {
+                const config = PRODUCT_CONFIG[duration];
+                trackPixelEvent('CustomizeProduct', {
+                    content_name: `Adobe Creative Cloud (${duration})`,
+                    value: isUSD ? config.usd : config.dzd,
+                    currency: isUSD ? 'USD' : 'DZD'
+                });
+            }
+        }
+
+        function updateUI() {
+            const config = PRODUCT_CONFIG[currentDuration];
+
+            // Show price based on current currency toggle
+            const priceText = isUSD ? `$${config.usd}` : `${config.dzd} د.ج`;
+            const secondaryPrice = isUSD ? `${config.dzd} د.ج` : `$${config.usd}`;
+
+            // DYNAMIC CONTENT UPDATE BASED ON DURATION
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS['ar'];
+            let suffix = '_monthly';
+
+            if (currentDuration === '1year') {
+                suffix = '_yearly';
+            } else if (currentDuration === '3months') {
+                suffix = '_3months';
+            } else if (currentDuration === '2months') {
+                suffix = '_2months';
+            }
+
+            // Fallback to monthly if specific key doesn't exist
+            // Actually, we need to add these keys to TRANSLATIONS or make the monthly one dynamic
+            // Let's adding keys is safer for full control.
+            // But for now, let's use a dynamic replacement approach for the subtitle to avoid huge translation obj
+
+            // Strategy: Use the base monthly text but replace "33 days" with the correct duration if needed
+            // OR better: Just define the text for each duration. It's cleaner.
+
+            // Let's update TRANSLATIONS object first (I will do this in a separate edit to be safe, but wait, I must do it here or it breaks)
+            // Actually, the user issue is that "33 days" is static.
+
+            // Let's map duration to label
+            const durationLabels = {
+                '1month': { ar: '33 يوم', fr: '33 jours', en: '33 days' },
+                '2months': { ar: '60 يوم', fr: '60 jours', en: '60 days' },
+                '3months': { ar: '90 يوم', fr: '90 jours', en: '90 days' },
+                '1year': { ar: 'سنة كاملة', fr: 'un an', en: '1 year' }
+            };
+
+            // Update Subtitle dynamically
+            const subtitleEl = document.querySelector('[data-i18n="hero_subtitle"]');
+            if (subtitleEl) {
+                if (currentDuration === '1year') {
+                    subtitleEl.textContent = t['hero_subtitle_yearly'];
+                } else {
+                    // Replace "33 days" with actual duration in the monthly string
+                    let text = t['hero_subtitle_monthly'];
+                    const daysLabel = durationLabels[currentDuration][currentLang];
+                    // Flexible replacement: look for 33 days/jours/يوم and replace
+                    text = text.replace(/33 (days|jours|يوم)/gi, daysLabel);
+                    subtitleEl.textContent = text;
+                }
+            }
+
+            // Update Guarantee Desc dynamically
+            const guarDescEl = document.querySelector('[data-i18n="fe_guarantee_desc"]');
+            if (guarDescEl) {
+                if (currentDuration === '1year') {
+                    guarDescEl.textContent = t['fe_guarantee_desc_yearly'];
+                } else {
+                    let text = t['fe_guarantee_desc_monthly'];
+                    const daysLabel = durationLabels[currentDuration][currentLang];
+                    const guaranteeDays = currentDuration === '1month' ? '30' : (currentDuration === '2months' ? '60' : '90');
+
+                    // Improve replacement logic: The text has "33 days (guarantee 30 days)"
+                    // We need to update both numbers.
+
+                    // Let's just create a constructed string, it's safer.
+                    if (currentLang === 'ar') {
+                        guarDescEl.textContent = `اشتراك رسمي صالح لمدة ${daysLabel} (ضمان كامل) مع دعم فني كامل واستبدال فوري.`;
+                    } else if (currentLang === 'fr') {
+                        guarDescEl.textContent = `Abonnement officiel valide ${daysLabel} (garantie complète) avec support complet et remplacement immédiat.`;
+                    } else {
+                        guarDescEl.textContent = `Official subscription valid for ${daysLabel} (full guarantee) with full support and replacement.`;
+                    }
+                }
+            }
+
+            // Update AI Desc
+            const aiDescEl = document.querySelector('[data-i18n="fe_ai_desc"]');
+            if (aiDescEl && t[`fe_ai_desc${currentDuration === '1year' ? '_yearly' : '_monthly'}`]) {
+                aiDescEl.textContent = t[`fe_ai_desc${currentDuration === '1year' ? '_yearly' : '_monthly'}`];
+            }
+
+            // Update Guarantee Title
+            const guarTitleEl = document.querySelector('[data-i18n="fe_guarantee_title"]');
+            if (guarTitleEl) {
+                if (currentDuration === '1year') {
+                    guarTitleEl.textContent = t['fe_guarantee_title_yearly'];
+                } else {
+                    // Update title to match duration approx
+                    if (currentLang === 'ar') guarTitleEl.textContent = `ضمان ${durationLabels[currentDuration]['ar']}`;
+                    else if (currentLang === 'fr') guarTitleEl.textContent = `Garantie ${durationLabels[currentDuration]['fr']}`;
+                    else guarTitleEl.textContent = `${durationLabels[currentDuration]['en']} Guarantee`;
+                }
+            }
+
+            // Animate Price Change
+            const priceEl = document.getElementById('main-price');
+            priceEl.style.opacity = '0';
+            setTimeout(() => {
+                // Determine primary and secondary prices based on toggle
+                let primaryText = isUSD ? `$${config.usd}` : `${config.dzd} د.ج`;
+                let secondaryText = isUSD ? `${config.dzd} د.ج` : `$${config.usd}`;
+
+                // Clear formatting: Primary Price <small>(Secondary Price)</small>
+                // We force direction on the prices to avoid mixed-content issues
+
+                if (currentLang === 'ar') {
+                    // For Arabic, ensure the DZD part is handled correctly
+                    // If Primary is DZD: "1500 د.ج ($6)"
+                    // If Primary is USD: "$6 (1500 د.ج)"
+
+                    if (!isUSD) { // DZD is primary
+                        priceEl.innerHTML = `${config.dzd} <span style="font-size:0.5em; vertical-align: middle;">د.ج</span> <span dir="ltr" style="font-size:0.6em; opacity:0.7; margin-right: 8px;">($${config.usd})</span>`;
+                    } else { // USD is primary
+                        priceEl.innerHTML = `$${config.usd} <span style="font-size:0.6em; opacity:0.7; margin-right: 8px;">(${config.dzd} د.ج)</span>`;
+                    }
+
+                } else {
+                    // English/French
+                    if (!isUSD) { // DZD is primary
+                        // 1500 DZD ($6)
+                        priceEl.innerHTML = `${config.dzd} <small style="font-size:0.5em;">DZD</small> <span style="font-size:0.6em; opacity:0.7; margin-left: 8px;">($${config.usd})</span>`;
+                    } else { // USD is primary
+                        // $6 (1500 DZD)
+                        priceEl.innerHTML = `$${config.usd} <span style="font-size:0.6em; opacity:0.7; margin-left: 8px;">(${config.dzd} DZD)</span>`;
+                    }
+                }
+
+                priceEl.style.opacity = '1';
+            }, 200);
+
+            // Update Toggle Button Text if we add one (we will add one in next step)
+        }
+
+        function setLang(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            location.reload();
+        }
+
+        function orderProduct(method) {
+            const config = PRODUCT_CONFIG[currentDuration];
+            const price = isUSD ? config.usd : config.dzd;
+            const currency = isUSD ? 'USD' : 'DZD';
+            const productName = `Adobe Creative Cloud (${currentDuration})`;
+
+            // WhatsApp Link Construction
+            const phone = "213782125821";
+            let message = "";
+
+            if (currentLang === 'ar') {
+                message = `مرحبا، أريد اشتراك ${productName}.\nالسعر: ${price} ${currency}\nالدفع عبر: ${method.toUpperCase()}`;
+            } else if (currentLang === 'fr') {
+                message = `Bonjour, je suis intéressé par ${productName}.\nPrix: ${price} ${currency}\nPaiement: ${method.toUpperCase()}`;
+            } else {
+                message = `Hello, I am interested in ${productName}.\nPrice: ${price} ${currency}\nPayment: ${method.toUpperCase()}`;
+            }
+
+            // Pixel Tracking
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'InitiateCheckout', {
+                    content_name: productName,
+                    value: price,
+                    currency: currency,
+                    payment_method: method
+                });
+            }
+
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+    <script src="order-form.js" defer></script>
+</body>
+
+</html>

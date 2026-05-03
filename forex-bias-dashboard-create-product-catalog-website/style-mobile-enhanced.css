@@ -1,0 +1,459 @@
+/* Mobile Enhanced Version - v2 Performance + Comfort */
+/* تحسينات السرعة وراحة الاستخدام على الهاتف */
+
+@media (max-width: 768px) {
+
+    /* ═══════ Global Mobile Performance ═══════ */
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Eliminate 300ms tap delay on all interactive elements */
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    [onclick],
+    .btn,
+    .order-btn,
+    .payment-btn-compact,
+    .discover-btn,
+    .segmented-btn,
+    .lang-btn,
+    .currency-btn,
+    .slider-btn,
+    .dot {
+        touch-action: manipulation;
+    }
+
+    /* Smooth overscroll across the page */
+    html,
+    body {
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Hide particles canvas on mobile */
+    #particles-js {
+        display: none !important;
+    }
+
+    /* ═══════ 1. Compact Header / Nav ═══════ */
+    .logo {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .brand-name {
+        font-size: 1.2rem !important;
+    }
+
+    .brand-tagline {
+        font-size: 0.75rem !important;
+    }
+
+    .nav-bar {
+        padding: 12px 0 !important;
+        gap: 8px !important;
+    }
+
+    .mobile-reviews-btn {
+        font-size: 0.85rem !important;
+        padding: 6px 12px !important;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* ═══════ 2. Hero Section - Compact ═══════ */
+    .hero-slider {
+        display: none !important;
+    }
+
+    .floating-card,
+    .hero-card {
+        display: none !important;
+    }
+
+    .hero {
+        padding: 15px 0 10px !important;
+    }
+
+    .site-header {
+        padding-bottom: 15px !important;
+    }
+
+    .hero-text {
+        margin-bottom: 15px;
+    }
+
+    .hero-text h1 {
+        margin-bottom: 10px !important;
+        font-size: 1.8rem !important;
+    }
+
+    .hero-text p {
+        font-size: 0.9rem !important;
+        margin-bottom: 12px !important;
+    }
+
+    .hero-buttons {
+        gap: 10px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .hero-buttons .btn {
+        min-height: 48px;
+    }
+
+    /* ═══════ 3. Trust Badges - Compact ═══════ */
+    .badge {
+        flex: 1 1 30% !important;
+        padding: 8px 10px !important;
+        font-size: 0.75rem !important;
+    }
+
+    .badge strong {
+        font-size: 1rem !important;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    .badge span {
+        font-size: 0.7rem !important;
+    }
+
+    .trust-badges {
+        gap: 8px !important;
+        margin-top: 12px !important;
+    }
+
+    /* ═══════ 4. Buttons - 44px Touch Targets (Apple HIG) ═══════ */
+    .btn {
+        min-height: 44px !important;
+        padding: 10px 16px !important;
+    }
+
+    .nav-actions .btn {
+        min-height: 44px !important;
+        padding: 10px 12px !important;
+    }
+
+    /* ═══════ 5. Product Section - Smoother ═══════ */
+    .section {
+        padding: 25px 0 !important;
+    }
+
+    /* Product grid: softer snap + better scroll feel */
+    .product-grid {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 14px;
+        padding: 10px 20px 24px;
+        overflow-x: auto;
+        /* proximity = softer snap, doesn't fight the finger */
+        scroll-snap-type: x proximity;
+        scroll-padding: 0 20px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        margin: 0 -20px;
+        /* Smooth momentum */
+        overscroll-behavior-x: contain;
+        will-change: scroll-position;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        backface-visibility: hidden;
+    }
+
+    .product-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Product card - compact and comfortable */
+    .product-card {
+        flex: 0 0 265px !important;
+        min-width: 265px !important;
+        max-width: 265px !important;
+        scroll-snap-align: center;
+        padding: 0;
+        border-radius: 16px;
+        background: #000000;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        gap: 0;
+        transition: none;
+        position: relative;
+        z-index: 1;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        backface-visibility: hidden;
+    }
+
+    .product-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--accent);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* Disable hover on mobile, add comfortable active state */
+    .product-card:hover {
+        transform: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .product-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+
+    /* ═══════ 6. Product Card Content ═══════ */
+    .product-image {
+        height: 130px !important;
+        min-height: 130px !important;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        position: relative;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+
+    .product-image::after {
+        display: none;
+    }
+
+    .product-card h3 {
+        font-size: 1rem !important;
+        margin: 0;
+        padding: 12px 12px 0;
+        line-height: 1.3;
+        font-weight: 700;
+        color: #fff;
+        white-space: normal;
+        text-align: center;
+        letter-spacing: 0.3px;
+    }
+
+    .product-card .description {
+        font-size: 0.78rem !important;
+        line-height: 1.4;
+        color: rgba(255, 255, 255, 0.65);
+        padding: 6px 12px 0;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .product-card [id*="-rating-container"] {
+        padding: 0 12px;
+        margin: 6px 0 !important;
+    }
+
+    .price-tag {
+        padding: 8px 12px !important;
+        font-size: 0.95rem !important;
+        font-weight: 800;
+        border-radius: 8px;
+        margin: 8px 12px;
+        background: rgba(255, 213, 111, 0.15);
+        border: 1px solid rgba(255, 213, 111, 0.35);
+        text-align: center;
+        display: block;
+        color: var(--accent);
+    }
+
+    .product-features {
+        display: block;
+        padding: 0 12px;
+        margin: 8px 0;
+    }
+
+    .product-features li {
+        font-size: 0.72rem;
+        padding: 4px 0;
+        line-height: 1.3;
+    }
+
+    /* ═══════ 7. Social / Scroll Buttons ═══════ */
+    .floating-social {
+        gap: 6px !important;
+        bottom: 80px !important;
+        right: 15px !important;
+    }
+
+    .social-float {
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    #scrollToTopBtn {
+        bottom: 80px !important;
+        left: 15px !important;
+    }
+
+    /* ═══════ 8. Container ═══════ */
+    .container {
+        width: 96% !important;
+        padding: 0 6px !important;
+    }
+
+    /* ═══════ 9. Segmented Selector - Grid Layout ═══════ */
+    .segmented-selector {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+        justify-content: space-between !important;
+        padding: 4px !important;
+        gap: 8px !important;
+    }
+
+    .segmented-selector::-webkit-scrollbar {
+        display: none;
+    }
+
+    .segmented-btn {
+        flex: 1 1 45% !important;
+        min-width: auto !important;
+        min-height: 44px !important;
+        padding: 10px 4px !important;
+        text-align: center !important;
+        white-space: normal !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px !important;
+        margin: 0 !important;
+        font-size: 0.75rem !important;
+        line-height: 1.2 !important;
+        touch-action: manipulation;
+    }
+
+    /* ═══════ 10. Modal Comfort on Mobile ═══════ */
+    .modal-content {
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 16px 16px 0 0 !important;
+        margin-top: auto !important;
+    }
+
+    .modal {
+        align-items: flex-end !important;
+    }
+
+    /* ═══════ 11. Scroll indicator hint for products ═══════ */
+    .product-grid::after {
+        content: '';
+        flex: 0 0 20px;
+        /* Adds padding at the end of the scroll */
+    }
+
+    /* ═══════ 12. Contact Section - Compact Mobile ═══════ */
+    #contact {
+        padding: 30px 0 !important;
+    }
+
+    .contact-card {
+        padding: 20px 16px !important;
+        gap: 18px !important;
+        border-radius: 18px !important;
+        grid-template-columns: 1fr !important;
+    }
+
+    .contact-text h2 {
+        font-size: 1.3rem !important;
+        line-height: 1.4;
+        margin-bottom: 8px;
+    }
+
+    .contact-text p {
+        font-size: 0.85rem !important;
+        margin: 8px 0 12px !important;
+        line-height: 1.5;
+    }
+
+    /* International banner - more compact */
+    .contact-text>div[style*="border-left"] {
+        margin: 12px 0 !important;
+        padding: 10px 12px !important;
+        border-radius: 10px !important;
+    }
+
+    .contact-text>div[style*="border-left"] p {
+        font-size: 0.82rem !important;
+        margin: 0 0 4px !important;
+    }
+
+    .contact-text>div[style*="border-left"] p:last-child {
+        margin-bottom: 0 !important;
+    }
+
+    /* Contact buttons - compact and elegant */
+    .contact-actions {
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100%;
+    }
+
+    .contact-actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 12px 16px !important;
+        font-size: 0.9rem !important;
+        border-radius: 12px !important;
+        min-height: 48px !important;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    /* Contact info items - compact */
+    .contact-info {
+        gap: 10px !important;
+    }
+
+    .info-item {
+        padding: 12px 14px !important;
+        border-radius: 12px !important;
+    }
+
+    .info-label {
+        font-size: 0.8rem !important;
+        margin-bottom: 3px !important;
+    }
+
+    .info-item a,
+    .info-item span:not(.info-label) {
+        font-size: 0.85rem !important;
+    }
+
+    /* Footer - compact */
+    .site-footer {
+        padding: 18px 0 !important;
+    }
+
+    .footer-content {
+        flex-direction: column !important;
+        text-align: center;
+        gap: 8px !important;
+        font-size: 0.8rem;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .social-links a {
+        font-size: 0.85rem;
+    }
+}

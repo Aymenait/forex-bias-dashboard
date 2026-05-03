@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار تبديل العملة</title>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2046893892791206');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        h1 {
+            text-align: center;
+            color: #ffd56f;
+        }
+        .currency-selector {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .currency-btn {
+            padding: 15px 30px;
+            margin: 0 10px;
+            border: 2px solid #ffd56f;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .currency-btn.active {
+            background: #ffd56f;
+            color: #1a1a2e;
+        }
+        .test-prices {
+            margin: 40px 0;
+        }
+        .price-item {
+            background: #2a2a3e;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4ecca3;
+        }
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffd56f;
+            margin-bottom: 10px;
+        }
+        .price-tag {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4ecca3;
+            margin: 10px 0;
+        }
+        .status {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .success {
+            background: #4ecca3;
+            color: #1a1a2e;
+        }
+        .info {
+            background: #ffd56f;
+            color: #1a1a2e;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 اختبار تبديل العملة</h1>
+    
+    <div class="status info">
+        انقر على أزرار العملة أدناه لاختبار التبديل
+    </div>
+
+    <div class="currency-selector">
+        <button class="currency-btn active" data-currency="DZD" onclick="switchCurrency('DZD')">
+            🇩🇿 دينار جزائري (DZD)
+        </button>
+        <button class="currency-btn" data-currency="USD" onclick="switchCurrency('USD')">
+            🇺🇸 دولار أمريكي (USD)
+        </button>
+    </div>
+
+    <div id="current-currency" class="status success">
+        العملة الحالية: DZD
+    </div>
+
+    <div class="test-prices">
+        <div class="price-item">
+            <div class="product-name">The Real World Account</div>
+            <div class="price-tag" data-price-dzd="3750" data-price-usd="15">3750 د.ج</div>
+        </div>
+
+        <div class="price-item">
+            <div class="product-name">ChatGPT Business</div>
+            <div class="price-tag" data-price-dzd="1200" data-price-usd="5">1200 د.ج / للشهر</div>
+        </div>
+
+        <div class="price-item">
+            <div class="product-name">Gamma.AI</div>
+            <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج</div>
+        </div>
+
+        <div class="price-item">
+            <div class="product-name">Perplexity AI Pro</div>
+            <div class="price-tag" data-price-dzd="1200" data-price-usd="6">1200 د.ج / للسنة</div>
+        </div>
+
+        <div class="price-item">
+            <div class="product-name">Adobe Creative Cloud - Shared (1 Month)</div>
+            <div class="price-tag" data-price-dzd="1500" data-price-usd="6">1500 د.ج</div>
+        </div>
+
+        <div class="price-item">
+            <div class="product-name">Adobe Creative Cloud - Shared (3 Months)</div>
+            <div class="price-tag" data-price-dzd="3000" data-price-usd="12">3000 د.ج</div>
+        </div>
+
+        <div class="price-item">
+            <div class="product-name">Adobe Creative Cloud - Personal (1 Month)</div>
+            <div class="price-tag" data-price-dzd="3000" data-price-usd="12">3000 د.ج</div>
+        </div>
+
+        <div class="price-item">
+            <div class="product-name">Adobe Creative Cloud - Personal (3 Months)</div>
+            <div class="price-tag" data-price-dzd="4500" data-price-usd="18">4500 د.ج</div>
+        </div>
+    </div>
+
+    <script src="currency-config.js"></script>
+    <script src="currency-manager.js"></script>
+    
+    <script>
+        const currencyManager = new CurrencyManager();
+        currencyManager.currentCurrency = 'DZD';
+
+        function switchCurrency(currency) {
+            console.log('Switching to:', currency);
+            
+            // Update currency manager
+            currencyManager.setCurrency(currency);
+            
+            // Update button states
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                if (btn.getAttribute('data-currency') === currency) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Update status
+            document.getElementById('current-currency').textContent = `العملة الحالية: ${currency}`;
+            
+            // Update all prices
+            currencyManager.updateAllPrices(currency);
+            
+            console.log('Currency switched to:', currency);
+            console.log('Prices updated');
+        }
+
+        // Test on load
+        console.log('Currency Manager initialized');
+        console.log('Current currency:', currencyManager.currentCurrency);
+        
+        // Test formatPrice function
+        console.log('Test formatPrice(10, "USD"):', currencyManager.formatPrice(10, 'USD'));
+        console.log('Test formatPrice(1200, "DZD"):', currencyManager.formatPrice(1200, 'DZD'));
+    </script>
+</body>
+</html>

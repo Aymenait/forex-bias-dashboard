@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار تصحيح الأسعار</title>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2046893892791206');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            direction: rtl;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #16213e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #00d4ff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .product-test {
+            background: #0f3460;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-right: 4px solid #00d4ff;
+        }
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        .price-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        .label {
+            color: #aaa;
+        }
+        .value {
+            font-weight: bold;
+            color: #fff;
+        }
+        .correct {
+            color: #00ff88;
+        }
+        .incorrect {
+            color: #ff4444;
+        }
+        button {
+            background: #00d4ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #00b8d4;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0,212,255,0.1);
+            border-radius: 5px;
+            border-right: 3px solid #00d4ff;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .status.pass {
+            background: #00ff88;
+            color: #000;
+        }
+        .status.fail {
+            background: #ff4444;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 اختبار تصحيح الأسعار</h1>
+        
+        <div class="product-test">
+            <div class="product-name">The Real World Account</div>
+            <div class="price-info">
+                <span class="label">السعر بالدينار:</span>
+                <span class="value">3750 د.ج</span>
+            </div>
+            <div class="price-info">
+                <span class="label">السعر المتوقع بالدولار:</span>
+                <span class="value correct">15 USD</span>
+            </div>
+            <button class="crypto-pay-btn" data-product="The Real World Account" data-price="3750" data-price-usd="15">
+                اختبار USDT
+            </button>
+            <button class="redotpay-btn" data-product="The Real World Account" data-price="3750" data-price-usd="15">
+                اختبار RedotPay
+            </button>
+            <div class="result" id="trw-result" style="display: none;"></div>
+        </div>
+
+        <div class="product-test">
+            <div class="product-name">ChatGPT Business</div>
+            <div class="price-info">
+                <span class="label">السعر بالدينار:</span>
+                <span class="value">1200 د.ج</span>
+            </div>
+            <div class="price-info">
+                <span class="label">السعر المتوقع بالدولار:</span>
+                <span class="value correct">5 USD</span>
+            </div>
+            <button class="crypto-pay-btn" data-product="ChatGPT Business" data-price="1200" data-price-usd="5">
+                اختبار USDT
+            </button>
+            <button class="redotpay-btn" data-product="ChatGPT Business" data-price="1200" data-price-usd="5">
+                اختبار RedotPay
+            </button>
+            <div class="result" id="chatgpt-result" style="display: none;"></div>
+        </div>
+
+        <div class="product-test">
+            <div class="product-name">Adobe Creative Cloud (Shared - 1 Month)</div>
+            <div class="price-info">
+                <span class="label">السعر بالدينار:</span>
+                <span class="value">1500 د.ج</span>
+            </div>
+            <div class="price-info">
+                <span class="label">السعر المتوقع بالدولار:</span>
+                <span class="value correct">6 USD</span>
+            </div>
+            <button class="crypto-pay-btn" data-product="Adobe Creative Cloud" data-price="1500" data-price-usd="6">
+                اختبار USDT
+            </button>
+            <button class="redotpay-btn" data-product="Adobe Creative Cloud" data-price="1500" data-price-usd="6">
+                اختبار RedotPay
+            </button>
+            <div class="result" id="adobe-result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // محاكاة الكود المصحح
+        function testPriceCalculation(button, resultId) {
+            const priceDZD = button.getAttribute('data-price');
+            const expectedUSD = button.getAttribute('data-price-usd');
+            
+            // الطريقة القديمة (خاطئة)
+            const oldPriceUSD = Math.ceil(priceDZD / 230);
+            
+            // الطريقة الجديدة (صحيحة)
+            const newPriceUSD = button.getAttribute('data-price-usd') || Math.ceil(priceDZD / 230);
+            
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.style.display = 'block';
+            
+            const isCorrect = newPriceUSD == expectedUSD;
+            const statusClass = isCorrect ? 'pass' : 'fail';
+            const statusText = isCorrect ? '✅ نجح' : '❌ فشل';
+            
+            resultDiv.innerHTML = `
+                <div><span class="status ${statusClass}">${statusText}</span> ${button.textContent}</div>
+                <div style="margin-top: 10px;">
+                    <strong>السعر القديم (خاطئ):</strong> ${oldPriceUSD} USD<br>
+                    <strong>السعر الجديد (صحيح):</strong> <span class="${isCorrect ? 'correct' : 'incorrect'}">${newPriceUSD} USD</span><br>
+                    <strong>السعر المتوقع:</strong> ${expectedUSD} USD
+                </div>
+            `;
+        }
+
+        // ربط الأزرار
+        document.querySelectorAll('.crypto-pay-btn, .redotpay-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const productName = this.getAttribute('data-product');
+                let resultId;
+                if (productName.includes('Real World')) resultId = 'trw-result';
+                else if (productName.includes('ChatGPT')) resultId = 'chatgpt-result';
+                else if (productName.includes('Adobe')) resultId = 'adobe-result';
+                
+                testPriceCalculation(this, resultId);
+            });
+        });
+    </script>
+</body>
+</html>

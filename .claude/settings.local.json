@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-Process | Where-Object { $_.ProcessName -match 'node|python|http' } | Select-Object ProcessName, Id, Path)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue)",
+      "PowerShell(Start-Process \"C:\\\\Users\\\\Aymen\\\\Desktop\\\\forex-bias-dashboard-create-product-catalog-website\\\\index.html\")",
+      "PowerShell(claude code skill install https://github.com/gsd-build/get-shit-done.git)",
+      "PowerShell(& \"C:\\\\Users\\\\Aymen\\\\AppData\\\\Roaming\\\\npm\\\\claude.cmd\" skill install https://github.com/gsd-build/get-shit-done.git)",
+      "Bash(/c/Users/admin/bin/rtk.exe gain *)"
+    ]
+  }
+}

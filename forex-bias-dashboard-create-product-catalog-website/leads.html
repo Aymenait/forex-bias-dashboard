@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>📋 Leads — 3Ahub Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #07090f;
+            --surface: #0e1123;
+            --card: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.07);
+            --text: rgba(255, 255, 255, 0.9);
+            --muted: rgba(255, 255, 255, 0.45);
+            --accent: #ffd56f;
+            --green: #4ade80;
+            --red: #f87171;
+            --blue: #60a5fa;
+            --orange: #fb923c;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh
+        }
+
+        .sidebar {
+            width: 220px;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0
+        }
+
+        .sidebar-logo {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 20px;
+            padding: 0 8px
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text)
+        }
+
+        .nav-link.active {
+            background: rgba(255, 213, 111, 0.08);
+            color: var(--accent)
+        }
+
+        .main {
+            flex: 1;
+            padding: 32px 28px;
+            overflow-x: auto
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 800
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-family: inherit;
+            text-decoration: none
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), #ffb547);
+            color: #1b1d32
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 181, 71, 0.25)
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text)
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05)
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px
+        }
+
+        .stat-card.c-total::before {
+            background: linear-gradient(90deg, var(--blue), transparent)
+        }
+
+        .stat-card.c-today::before {
+            background: linear-gradient(90deg, var(--green), transparent)
+        }
+
+        .stat-card.c-purchased::before {
+            background: linear-gradient(90deg, var(--green), transparent)
+        }
+
+        .stat-card.c-abandoned::before {
+            background: linear-gradient(90deg, var(--red), transparent)
+        }
+
+        .stat-card.c-pending::before {
+            background: linear-gradient(90deg, var(--orange), transparent)
+        }
+
+        .stat-label {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1
+        }
+
+        .c-total .stat-value {
+            color: var(--blue)
+        }
+
+        .c-today .stat-value {
+            color: var(--green)
+        }
+
+        .c-purchased .stat-value {
+            color: var(--green)
+        }
+
+        .c-abandoned .stat-value {
+            color: var(--red)
+        }
+
+        .c-pending .stat-value {
+            color: var(--orange)
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .filter-select,
+        .filter-input {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-family: inherit;
+            outline: none
+        }
+
+        .filter-select:focus,
+        .filter-input:focus {
+            border-color: rgba(255, 213, 111, 0.3)
+        }
+
+        .filter-input {
+            min-width: 220px
+        }
+
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .table-title {
+            font-size: 0.9rem;
+            font-weight: 700
+        }
+
+        .lead-count-badge {
+            font-size: 0.75rem;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3px 10px;
+            border-radius: 20px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px
+        }
+
+        thead tr {
+            background: rgba(255, 255, 255, 0.02)
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: right;
+            font-size: 0.72rem;
+            color: var(--muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            white-space: nowrap
+        }
+
+        td {
+            padding: 13px 16px;
+            font-size: 0.82rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            vertical-align: middle
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02)
+        }
+
+        .product-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 213, 111, 0.06);
+            border: 1px solid rgba(255, 213, 111, 0.12);
+            color: var(--accent);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        .price-tag {
+            color: var(--accent);
+            font-weight: 700
+        }
+
+        .contact-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px
+        }
+
+        .contact-name {
+            font-weight: 600
+        }
+
+        .contact-info {
+            font-size: 0.75rem;
+            color: var(--muted)
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            transition: all 0.2s
+        }
+
+        .s-new {
+            background: rgba(96, 165, 250, 0.1);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            color: var(--blue)
+        }
+
+        .s-contacted {
+            background: rgba(251, 146, 60, 0.1);
+            border: 1px solid rgba(251, 146, 60, 0.2);
+            color: var(--orange)
+        }
+
+        .s-purchased {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            color: var(--green)
+        }
+
+        .s-abandoned {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            color: var(--red)
+        }
+
+        .status-badge:hover {
+            transform: scale(1.05)
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px
+        }
+
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+            text-decoration: none
+        }
+
+        .icon-btn.wa {
+            background: rgba(37, 211, 102, 0.1);
+            color: #25d366
+        }
+
+        .icon-btn.wa:hover {
+            background: rgba(37, 211, 102, 0.2);
+            transform: scale(1.1)
+        }
+
+        .icon-btn.del {
+            background: rgba(248, 113, 113, 0.08);
+            color: var(--red)
+        }
+
+        .icon-btn.del:hover {
+            background: rgba(248, 113, 113, 0.18);
+            transform: scale(1.1)
+        }
+
+        .table-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted)
+        }
+
+        .table-empty .emoji {
+            font-size: 3rem;
+            margin-bottom: 12px
+        }
+
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding: 40px
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: dot-bounce 1.2s ease-in-out infinite
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s
+        }
+
+        @keyframes dot-bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.7);
+                opacity: 0.5
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1d35;
+            border: 1px solid rgba(255, 213, 111, 0.2);
+            color: var(--text);
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            z-index: 9999;
+            animation: toast-in 0.3s ease;
+            pointer-events: none
+        }
+
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0)
+            }
+        }
+
+        @media(max-width:768px) {
+            .sidebar {
+                display: none
+            }
+
+            .main {
+                padding: 16px
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-logo">3Ahub ✦</div>
+            <a href="admin.html" class="nav-link">⚙️ Products</a>
+            <a href="leads.html" class="nav-link active">📋 Leads</a>
+            <a href="admin_dashboard.html" class="nav-link">📊 Analytics</a>
+            <a href="reviews.html" class="nav-link">⭐ Reviews</a>
+            <a href="index.html" class="nav-link">🌐 Website</a>
+        </aside>
+
+        <main class="main">
+            <div class="page-header">
+                <h1 class="page-title">📋 Leads Management</h1>
+                <div style="display:flex;gap:10px">
+                    <button class="btn btn-outline" onclick="loadLeads()">🔄 Refresh</button>
+                    <button class="btn btn-accent" onclick="exportCSV()">📥 Export CSV</button>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card c-total">
+                    <div class="stat-label">Total Leads</div>
+                    <div class="stat-value" id="stat-total">—</div>
+                </div>
+                <div class="stat-card c-today">
+                    <div class="stat-label">Today</div>
+                    <div class="stat-value" id="stat-today">—</div>
+                </div>
+                <div class="stat-card c-pending">
+                    <div class="stat-label">Pending</div>
+                    <div class="stat-value" id="stat-pending">—</div>
+                </div>
+                <div class="stat-card c-purchased">
+                    <div class="stat-label">Purchased</div>
+                    <div class="stat-value" id="stat-purchased">—</div>
+                </div>
+                <div class="stat-card c-abandoned">
+                    <div class="stat-label">Abandoned</div>
+                    <div class="stat-value" id="stat-abandoned">—</div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <input type="text" class="filter-input" id="search-input"
+                    placeholder="🔍 Search name, phone, product..." oninput="applyFilters()">
+                <select class="filter-select" id="filter-status" onchange="applyFilters()">
+                    <option value="">All Statuses</option>
+                    <option value="new">🔵 New</option>
+                    <option value="contacted">🟠 Contacted</option>
+                    <option value="purchased">🟢 Purchased</option>
+                    <option value="abandoned">🔴 Abandoned</option>
+                </select>
+                <select class="filter-select" id="filter-product" onchange="applyFilters()"></select>
+                <select class="filter-select" id="filter-date" onchange="applyFilters()">
+                    <option value="">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                </select>
+            </div>
+
+            <div class="table-wrap">
+                <div class="table-header">
+                    <span class="table-title">All Leads</span>
+                    <span class="lead-count-badge" id="lead-count-badge">Loading...</span>
+                </div>
+                <div style="overflow-x:auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leads-tbody">
+                            <tr>
+                                <td colspan="7">
+                                    <div class="loading-dots"><span></span><span></span><span></span></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy }
+            from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const app = initializeApp({
+            apiKey: "AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw",
+            authDomain: "the-real-world-review.firebaseapp.com",
+            projectId: "the-real-world-review",
+            storageBucket: "the-real-world-review.firebasestorage.app",
+            messagingSenderId: "324349726142",
+            appId: "1:324349726142:web:eff2cde07b569ed0a3bdef"
+        });
+        const db = getFirestore(app);
+        let allLeads = [];
+
+        // ── Load ──
+        window.loadLeads = async () => {
+            setLoading(true);
+            try {
+                const q = query(collection(db, 'leads'), orderBy('timestamp', 'desc'));
+                const snap = await getDocs(q);
+                allLeads = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            } catch {
+                const snap = await getDocs(collection(db, 'leads'));
+                allLeads = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+                    .sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+            }
+            updateStats(); populateProductFilter(); applyFilters();
+        };
+
+        function setLoading(v) {
+            if (v) document.getElementById('leads-tbody').innerHTML =
+                `<tr><td colspan="7"><div class="loading-dots"><span></span><span></span><span></span></div></td></tr>`;
+        }
+
+        // ── Stats ──
+        function updateStats() {
+            const now = Date.now() / 1000;
+            const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000;
+            let today = 0, pending = 0, purchased = 0, abandoned = 0;
+            allLeads.forEach(l => {
+                const ts = l.timestamp?.seconds || 0;
+                if (ts >= todayStart) today++;
+                const s = l.status || 'new';
+                if (s === 'new') pending++;
+                else if (s === 'purchased' || s === 'closed') purchased++;
+                else if (s === 'abandoned') abandoned++;
+            });
+            anim('stat-total', allLeads.length);
+            anim('stat-today', today);
+            anim('stat-pending', pending);
+            anim('stat-purchased', purchased);
+            anim('stat-abandoned', abandoned);
+        }
+
+        function anim(id, end) {
+            const el = document.getElementById(id); let n = 0;
+            const iv = setInterval(() => { n = Math.min(n + Math.max(1, Math.ceil(end / 25)), end); el.textContent = n; if (n >= end) clearInterval(iv); }, 30);
+        }
+
+        // ── Product Filter ──
+        function populateProductFilter() {
+            const prods = [...new Set(allLeads.map(l => l.product || l.productName || '').filter(Boolean))];
+            const sel = document.getElementById('filter-product');
+            sel.innerHTML = '<option value="">All Products</option>';
+            prods.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; sel.appendChild(o); });
+        }
+
+        // ── Filter ──
+        window.applyFilters = () => {
+            const s = document.getElementById('search-input').value.toLowerCase();
+            const st = document.getElementById('filter-status').value;
+            const pr = document.getElementById('filter-product').value;
+            const df = document.getElementById('filter-date').value;
+            const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000;
+            const weekStart = todayStart - 6 * 86400;
+            const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime() / 1000;
+
+            const f = allLeads.filter(l => {
+                const name = (l.name || '').toLowerCase(), contact = (l.contact || '').toLowerCase(), prod = (l.product || l.productName || '').toLowerCase();
+                const ts = l.timestamp?.seconds || 0;
+                if (s && !name.includes(s) && !contact.includes(s) && !prod.includes(s)) return false;
+                if (st && (l.status || 'new') !== st) return false;
+                if (pr && prod !== pr.toLowerCase()) return false;
+                if (df === 'today' && ts < todayStart) return false;
+                if (df === 'week' && ts < weekStart) return false;
+                if (df === 'month' && ts < monthStart) return false;
+                return true;
+            });
+            renderTable(f);
+        };
+
+        // ── Render ──
+        function renderTable(leads) {
+            document.getElementById('lead-count-badge').textContent = `${leads.length} leads`;
+            const tbody = document.getElementById('leads-tbody');
+            if (!leads.length) {
+                tbody.innerHTML = `<tr><td colspan="7"><div class="table-empty"><div class="emoji">📭</div><div>No leads found</div></div></td></tr>`;
+                return;
+            }
+            const statusL = { new: '🔵 New', contacted: '🟠 Contacted', purchased: '🟢 Purchased', closed: '🟢 Purchased', abandoned: '🔴 Abandoned' };
+            const statusC = { new: 's-new', contacted: 's-contacted', purchased: 's-purchased', closed: 's-purchased', abandoned: 's-abandoned' };
+            tbody.innerHTML = leads.map((l, i) => {
+                const name = l.name || '—', contact = l.contact || '—', prod = l.product || l.productName || '—';
+                const price = l.price ? `${l.price} ${l.currency || 'DA'}` : '—';
+                const status = l.status || 'new';
+                const ts = l.timestamp?.seconds ? new Date(l.timestamp.seconds * 1000) : null;
+                const date = ts ? ts.toLocaleDateString() + ' ' + ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—';
+                let phone = contact.replace(/\D/g, '');
+                if (phone.startsWith('0')) phone = '213' + phone.slice(1);
+                if (!phone.startsWith('213') && phone.length >= 9) phone = '213' + phone;
+                const waMsg = encodeURIComponent(`مرحباً ${name}! أنا من فريق 3Ahub بخصوص طلبك على ${prod}.`);
+                return `<tr>
+      <td style="color:var(--muted);font-size:0.75rem">${i + 1}</td>
+      <td><div class="contact-cell"><span class="contact-name">${name}</span><span class="contact-info">${contact}</span></div></td>
+      <td><span class="product-badge">${prod}</span></td>
+      <td><span class="price-tag">${price}</span></td>
+      <td style="font-size:0.75rem;color:var(--muted);white-space:nowrap">${date}</td>
+      <td><button class="status-badge ${statusC[status]}" onclick="cycleStatus('${l.id}','${status}')">${statusL[status] || status}</button></td>
+      <td><div class="action-btns">
+        <a href="https://wa.me/${phone}?text=${waMsg}" target="_blank" class="icon-btn wa" title="WhatsApp">💬</a>
+        <button class="icon-btn del" onclick="deleteLead('${l.id}')" title="Delete">🗑️</button>
+      </div></td>
+    </tr>`;
+            }).join('');
+        }
+
+        // ── Cycle Status ──
+        window.cycleStatus = async (id, cur) => {
+            const next = { new: 'contacted', contacted: 'purchased', purchased: 'abandoned', abandoned: 'new', closed: 'purchased' };
+            const ns = next[cur] || 'new';
+            try {
+                await updateDoc(doc(db, 'leads', id), { status: ns });
+                const l = allLeads.find(x => x.id === id); if (l) l.status = ns;
+                applyFilters(); updateStats(); showToast(`Status → ${ns} ✅`);
+            } catch (e) { showToast('Error: ' + e.message); }
+        };
+
+        // ── Delete ──
+        window.deleteLead = async (id) => {
+            if (!confirm('Delete this lead?')) return;
+            try {
+                await deleteDoc(doc(db, 'leads', id));
+                allLeads = allLeads.filter(l => l.id !== id);
+                applyFilters(); updateStats(); showToast('Deleted 🗑️');
+            } catch (e) { showToast('Error: ' + e.message); }
+        };
+
+        // ── Export CSV ──
+        window.exportCSV = () => {
+            const s = document.getElementById('search-input').value.toLowerCase();
+            const st = document.getElementById('filter-status').value;
+            const pr = document.getElementById('filter-product').value;
+            const filtered = allLeads.filter(l => {
+                const name = (l.name || '').toLowerCase(), contact = (l.contact || '').toLowerCase(), prod = (l.product || l.productName || '').toLowerCase();
+                if (s && !name.includes(s) && !contact.includes(s) && !prod.includes(s)) return false;
+                if (st && (l.status || 'new') !== st) return false;
+                if (pr && prod !== pr.toLowerCase()) return false;
+                return true;
+            });
+            const rows = [['#', 'Name', 'Contact', 'Product', 'Price', 'Currency', 'Date', 'Status']];
+            filtered.forEach((l, i) => {
+                const ts = l.timestamp?.seconds ? new Date(l.timestamp.seconds * 1000).toLocaleString() : '';
+                rows.push([i + 1, l.name || '', l.contact || '', l.product || l.productName || '', l.price || '', l.currency || 'DZD', ts, l.status || 'new']);
+            });
+            const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = `leads_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+            showToast('CSV exported 📥');
+        };
+
+        // ── Toast ──
+        window.showToast = (msg) => {
+            const el = document.createElement('div'); el.className = 'toast'; el.textContent = msg;
+            document.body.appendChild(el); setTimeout(() => el.remove(), 2500);
+        };
+
+        loadLeads();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار أسعار USD</title>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2046893892791206');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        h1 {
+            text-align: center;
+            color: #ffd56f;
+        }
+        .currency-selector {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .currency-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: 2px solid #ffd56f;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .currency-btn.active {
+            background: #ffd56f;
+            color: #1a1a2e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background: #2a2a3e;
+            color: #ffd56f;
+        }
+        tr:hover {
+            background: #2a2a3e;
+        }
+        .price {
+            font-weight: bold;
+            color: #4ecca3;
+        }
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background: #4ecca3;
+            color: #1a1a2e;
+        }
+        .error {
+            background: #ff6b6b;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 اختبار أسعار USD المحدثة</h1>
+    
+    <div class="currency-selector">
+        <button class="currency-btn active" data-currency="DZD" onclick="switchCurrency('DZD')">
+            🇩🇿 دينار جزائري (DZD)
+        </button>
+        <button class="currency-btn" data-currency="USD" onclick="switchCurrency('USD')">
+            🇺🇸 دولار أمريكي (USD)
+        </button>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>المنتج</th>
+                <th>السعر بالدينار</th>
+                <th>السعر بالدولار</th>
+                <th>السعر المعروض</th>
+            </tr>
+        </thead>
+        <tbody id="products-table">
+        </tbody>
+    </table>
+
+    <script src="currency-config.js"></script>
+    <script src="currency-manager.js"></script>
+    
+    <script>
+        let currentCurrency = 'DZD';
+        const currencyManager = new CurrencyManager();
+        currencyManager.currentCurrency = 'DZD';
+
+        function switchCurrency(currency) {
+            currentCurrency = currency;
+            currencyManager.setCurrency(currency);
+            
+            // Update button states
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                if (btn.getAttribute('data-currency') === currency) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            displayProducts();
+        }
+
+        function displayProducts() {
+            const tbody = document.getElementById('products-table');
+            tbody.innerHTML = '';
+            
+            let allCorrect = true;
+            
+            Object.keys(PRODUCTS).forEach(key => {
+                const product = PRODUCTS[key];
+                const row = document.createElement('tr');
+                
+                const displayedPrice = currencyManager.displayPrice(product, currentCurrency);
+                
+                // Check if price is correct
+                const expectedPrice = currentCurrency === 'DZD' 
+                    ? `${product.price_dzd.toLocaleString('en-US')} د.ج`
+                    : `$${product.price_usd}`;
+                
+                const isCorrect = displayedPrice === expectedPrice;
+                if (!isCorrect) allCorrect = false;
+                
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.price_dzd} د.ج</td>
+                    <td>$${product.price_usd}</td>
+                    <td class="price" style="color: ${isCorrect ? '#4ecca3' : '#ff6b6b'}">
+                        ${displayedPrice} ${isCorrect ? '✓' : '✗'}
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Update status
+            const statusDiv = document.getElementById('status');
+            if (allCorrect) {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = `✅ جميع الأسعار تعرض بشكل صحيح بعملة ${currentCurrency}`;
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `❌ هناك أخطاء في عرض الأسعار`;
+            }
+        }
+
+        // Initial display
+        displayProducts();
+    </script>
+</body>
+</html>

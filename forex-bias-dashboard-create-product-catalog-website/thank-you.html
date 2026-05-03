@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>شكراً لطلبك — 3Ahub</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Meta Pixel -->
+    <script>
+        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1409818833091509');
+        fbq('track', 'PageView');
+    </script>
+
+    <style>
+        /* ── Reset & Base ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --accent: #ffd56f;
+            --accent-strong: #ffb547;
+            --bg: #07090f;
+            --card: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.07);
+            --text: rgba(255, 255, 255, 0.85);
+            --muted: rgba(255, 255, 255, 0.45);
+            --green: #4ade80;
+            --red: #f87171;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Cosmic Background ── */
+        .cosmic-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse 60% 40% at 20% 20%, rgba(80, 40, 160, 0.15), transparent),
+                radial-gradient(ellipse 50% 60% at 80% 80%, rgba(255, 181, 71, 0.05), transparent),
+                radial-gradient(ellipse 80% 50% at 50% 50%, rgba(10, 12, 25, 0.95), transparent),
+                #07090f;
+        }
+
+        /* Stars */
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            animation: twinkle var(--dur, 4s) ease-in-out infinite alternate;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0.8;
+                transform: scale(1.5);
+            }
+        }
+
+        /* ── Main Content ── */
+        .page {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 80px;
+        }
+
+        /* ── Logo ── */
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+            margin-bottom: 40px;
+            text-decoration: none;
+        }
+
+        /* ── Hero Card ── */
+        .hero-card {
+            background: rgba(14, 17, 35, 0.7);
+            border: 1px solid rgba(255, 213, 111, 0.12);
+            border-radius: 24px;
+            padding: 48px 40px;
+            width: min(520px, 100%);
+            text-align: center;
+            position: relative;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 213, 111, 0.04);
+            animation: card-in 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        @keyframes card-in {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* animated top glow line */
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            border-radius: 50%;
+        }
+
+        /* ── Check Animation ── */
+        .check-wrap {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(74, 222, 128, 0.08);
+            border: 2px solid rgba(74, 222, 128, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: pop 0.6s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .check-svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .check-circle {
+            stroke-dasharray: 80;
+            stroke-dashoffset: 80;
+            animation: draw 0.6s 0.7s ease forwards;
+        }
+
+        .check-tick {
+            stroke-dasharray: 30;
+            stroke-dashoffset: 30;
+            animation: draw 0.5s 1.0s ease forwards;
+        }
+
+        @keyframes draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* ── Titles ── */
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--green);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-sub {
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        /* ── Order Summary Box ── */
+        .order-summary {
+            background: rgba(255, 213, 111, 0.04);
+            border: 1px solid rgba(255, 213, 111, 0.1);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 28px;
+            text-align: left;
+        }
+
+        .order-summary .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            font-size: 0.88rem;
+        }
+
+        .order-summary .row:not(:last-child) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+        }
+
+        .order-summary .label {
+            color: var(--muted);
+        }
+
+        .order-summary .value {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .order-summary .value.gold {
+            color: var(--accent);
+        }
+
+        /* ── Buttons ── */
+        .btn-wa {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #25d366, #1ebe5d);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            animation: wa-pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes wa-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 8px 24px rgba(37, 211, 102, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 8px 36px rgba(37, 211, 102, 0.45);
+            }
+        }
+
+        .btn-wa:hover {
+            transform: translateY(-2px);
+            animation: none;
+            box-shadow: 0 12px 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 13px 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            font-family: inherit;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* ── Share Section ── */
+        .share-section {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+
+        .share-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 18px;
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid rgba(37, 211, 102, 0.2);
+            color: #25d366;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .share-btn:hover {
+            background: rgba(37, 211, 102, 0.18);
+            transform: scale(1.03);
+        }
+
+        /* ── Upsell Products ── */
+        .upsell-section {
+            width: min(860px, 100%);
+            margin-top: 40px;
+            animation: card-in 0.8s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        .upsell-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .upsell-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .upsell-card {
+            background: rgba(14, 17, 35, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upsell-card:hover {
+            border-color: rgba(255, 213, 111, 0.2);
+            background: rgba(255, 213, 111, 0.03);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .upsell-emoji {
+            font-size: 2rem;
+        }
+
+        .upsell-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .upsell-price {
+            font-size: 0.78rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ── Trust Footer ── */
+        .trust-footer {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        /* ── Timer ── */
+        .timer-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 107, 107, 0.08);
+            border: 1px solid rgba(255, 107, 107, 0.15);
+            color: #ff7b7b;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* ── Responsive — Mobile First ── */
+        @media (max-width: 600px) {
+            .page {
+                padding: 20px 12px 60px;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+            }
+
+            .hero-card {
+                padding: 22px 16px 20px;
+                border-radius: 18px;
+            }
+
+            .check-svg {
+                width: 44px;
+                height: 44px;
+            }
+
+            .check-wrap {
+                margin-bottom: 12px;
+            }
+
+            .timer-pill {
+                font-size: 0.68rem;
+                padding: 4px 10px;
+                margin-bottom: 12px;
+            }
+
+            .hero-title {
+                font-size: 1.3rem;
+                margin-bottom: 8px;
+            }
+
+            .hero-sub {
+                font-size: 0.8rem;
+                line-height: 1.5;
+                margin-bottom: 14px;
+            }
+
+            .order-summary {
+                padding: 10px 12px;
+                margin-bottom: 14px;
+                gap: 8px;
+            }
+
+            .order-summary .row {
+                font-size: 0.78rem;
+            }
+
+            .btn-wa {
+                padding: 13px 14px;
+                font-size: 0.85rem;
+                border-radius: 10px;
+            }
+
+            .btn-secondary {
+                padding: 10px 14px;
+                font-size: 0.78rem;
+                margin-top: 8px;
+            }
+
+            .share-section {
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+
+            .share-label {
+                font-size: 0.72rem;
+            }
+
+            .share-btn {
+                padding: 6px 14px;
+                font-size: 0.72rem;
+            }
+
+            .upsell-section {
+                margin-top: 24px;
+            }
+
+            .upsell-title {
+                font-size: 0.95rem;
+                margin-bottom: 12px;
+            }
+
+            .upsell-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .upsell-card {
+                padding: 12px 8px;
+                border-radius: 12px;
+            }
+
+            .upsell-emoji {
+                font-size: 1.6rem;
+                margin-bottom: 6px;
+            }
+
+            .upsell-name {
+                font-size: 0.75rem;
+            }
+
+            .upsell-price {
+                font-size: 0.7rem;
+            }
+
+            .trust-footer {
+                gap: 12px;
+                margin-top: 20px;
+            }
+
+            .trust-item {
+                font-size: 0.68rem;
+            }
+        }
+
+        /* Extra small (iPhone SE, 375px) */
+        @media (max-width: 390px) {
+            .hero-title {
+                font-size: 1.15rem;
+            }
+
+            .btn-wa {
+                font-size: clamp(0.75rem, 4vw, 0.85rem);
+                white-space: nowrap;
+            }
+
+            .hero-card {
+                padding: 18px 12px 16px;
+            }
+
+            .upsell-grid {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cosmic-bg"></div>
+    <div class="stars" id="stars"></div>
+
+    <div class="page">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">3Ahub ✦</a>
+
+        <!-- Hero Confirmation Card -->
+        <div class="hero-card">
+
+            <!-- Animated Checkmark -->
+            <div class="check-wrap">
+                <svg class="check-svg" viewBox="0 0 50 50" fill="none">
+                    <circle class="check-circle" cx="25" cy="25" r="22" stroke="#4ade80" stroke-width="2.5"
+                        stroke-linecap="round" />
+                    <path class="check-tick" d="M14 26l8 8 14-14" stroke="#4ade80" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+
+            <!-- Timer Pill -->
+            <div class="timer-pill">
+                ⚡ <span id="timer-text">Preparing your order...</span>
+            </div>
+
+            <h1 class="hero-title" id="ty-title">✅ Order Confirmed!</h1>
+            <p class="hero-sub" id="ty-sub">
+                Thank you! Our team will contact you on WhatsApp within <strong style="color:var(--accent)">15
+                    minutes</strong>. Please keep your phone nearby.
+            </p>
+
+            <!-- Order Summary -->
+            <div class="order-summary" id="order-summary" style="display:none">
+                <div class="row">
+                    <span class="label">📦 Product</span>
+                    <span class="value" id="ty-product">—</span>
+                </div>
+                <div class="row">
+                    <span class="label">💰 Price</span>
+                    <span class="value gold" id="ty-price">—</span>
+                </div>
+                <div class="row">
+                    <span class="label">👤 Name</span>
+                    <span class="value" id="ty-name">—</span>
+                </div>
+                <div class="row">
+                    <span class="label">📞 Contact</span>
+                    <span class="value" id="ty-contact">—</span>
+                </div>
+            </div>
+
+            <!-- ⭐ Primary: Open WhatsApp -->
+            <a href="#" class="btn-wa" id="wa-btn" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+                <span id="wa-label">Open WhatsApp Conversation</span>
+            </a>
+
+            <!-- Secondary: Back to Home -->
+            <a href="index.html" class="btn-secondary" id="back-btn">
+                🛍️ <span id="back-label">Browse More Products</span>
+            </a>
+
+            <!-- Share Section -->
+            <div class="share-section">
+                <p class="share-label" id="share-label">Share 3Ahub with your friends 🤝</p>
+                <a href="#" class="share-btn" id="share-wa" target="_blank">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    <span id="share-wa-label">Share on WhatsApp</span>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Upsell Products -->
+        <div class="upsell-section">
+            <h2 class="upsell-title" id="upsell-title">🚀 You Might Also Like</h2>
+            <div class="upsell-grid" id="upsell-grid">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+
+        <!-- Trust Footer -->
+        <div class="trust-footer">
+            <div class="trust-item">🛡️ <span>100% Guarantee</span></div>
+            <div class="trust-item">⚡ <span>Instant Delivery</span></div>
+            <div class="trust-item">💬 <span>24/7 Support</span></div>
+            <div class="trust-item">🔒 <span>Secure & Private</span></div>
+        </div>
+
+    </div>
+
+    <script>
+        (function () {
+            // ── 1. Generate Stars ──────────────────────────────────
+            const starsEl = document.getElementById('stars');
+            for (let i = 0; i < 60; i++) {
+                const s = document.createElement('div');
+                s.className = 'star';
+                const size = Math.random() * 2 + 0.5;
+                s.style.cssText = `
+            width: ${size}px; height: ${size}px;
+            top: ${Math.random() * 100}%;
+            left: ${Math.random() * 100}%;
+            --dur: ${3 + Math.random() * 4}s;
+            --delay: ${Math.random() * 4}s;
+            opacity: ${0.2 + Math.random() * 0.5};
+        `;
+                starsEl.appendChild(s);
+            }
+
+            // ── 2. Read Order Data from URL Params ────────────────
+            const params = new URLSearchParams(window.location.search);
+            const product = params.get('product') || localStorage.getItem('3ahub_last_product') || '';
+            const price = params.get('price') || localStorage.getItem('3ahub_last_price') || '';
+            const currency = params.get('currency') || localStorage.getItem('3ahub_last_currency') || 'DZD';
+            const name = params.get('name') || localStorage.getItem('3ahub_name') || '';
+            const contact = params.get('contact') || localStorage.getItem('3ahub_contact') || '';
+
+            const currSym = currency === 'USD' ? '$' : 'DA';
+            const waNumber = '213782125821';
+
+            // ── 3. Populate Order Summary ─────────────────────────
+            if (product || name) {
+                document.getElementById('order-summary').style.display = '';
+                if (product) document.getElementById('ty-product').textContent = product;
+                if (price) document.getElementById('ty-price').textContent = price + ' ' + currSym;
+                if (name) document.getElementById('ty-name').textContent = name;
+                if (contact) document.getElementById('ty-contact').textContent = contact;
+            }
+
+            // ── 4. WhatsApp buttons ────────────────────────────────
+            // Use msg from URL if available (pre-built by order form), else build fallback
+            const msgParam = params.get('msg');
+            const waMsg = msgParam
+                ? encodeURIComponent(msgParam)
+                : encodeURIComponent(`مرحباً! لقد أكملت طلبي على موقع 3Ahub.\n\n📦 المنتج: ${product}\n💰 السعر: ${price} ${currSym}\n\nأريد المتابعة.`);
+            document.getElementById('wa-btn').href = `https://wa.me/${waNumber}?text=${waMsg}`;
+
+            const shareMsg = encodeURIComponent('🔥 اكتشفت متجر 3Ahub! اشتراكات Netflix، Adobe، ChatGPT وأدوات AI بأفضل الأسعار في الجزائر 🇩🇿\n👉 https://marketalgeria.store');
+            document.getElementById('share-wa').href = `https://wa.me/?text=${shareMsg}`;
+
+            // ── 5. Language / i18n ─────────────────────────────────
+            const lang = localStorage.getItem('preferredLanguage') || 'ar';
+
+            const t = {
+                ar: {
+                    title: '✅ تم تأكيد طلبك!',
+                    sub: 'شكراً لك! سيتواصل معك فريقنا على الواتساب خلال <strong style="color:var(--accent)">15 دقيقة</strong>. يرجى إبقاء هاتفك قريباً.',
+                    back: '🛍️ تصفح المزيد من المنتجات',
+                    wa: '💬 فتح محادثة الواتساب',
+                    share: 'شارك 3Ahub مع أصدقائك 🤝',
+                    shareWa: 'مشاركة على واتساب',
+                    upsell: '🚀 قد يعجبك أيضاً',
+                    timer: 'جاري تجهيز طلبك...'
+                },
+                en: {
+                    title: '✅ Order Confirmed!',
+                    sub: 'Thank you! Our team will contact you on WhatsApp within <strong style="color:var(--accent)">15 minutes</strong>. Please keep your phone nearby.',
+                    back: '🛍️ Browse More Products',
+                    wa: '💬 Open WhatsApp Conversation',
+                    share: 'Share 3Ahub with your friends 🤝',
+                    shareWa: 'Share on WhatsApp',
+                    upsell: '🚀 You Might Also Like',
+                    timer: 'Preparing your order...'
+                },
+                fr: {
+                    title: '✅ Commande Confirmée !',
+                    sub: 'Merci ! Notre équipe vous contactera sur WhatsApp dans <strong style="color:var(--accent)">15 minutes</strong>. Gardez votre téléphone près de vous.',
+                    back: '🛍️ Voir Plus de Produits',
+                    wa: '💬 Ouvrir la Conversation WhatsApp',
+                    share: 'Partagez 3Ahub avec vos amis 🤝',
+                    shareWa: 'Partager sur WhatsApp',
+                    upsell: '🚀 Vous Aimerez Aussi',
+                    timer: 'Préparation de votre commande...'
+                }
+            };
+
+            const tr = t[lang] || t.en;
+
+            document.getElementById('ty-title').textContent = tr.title;
+            document.getElementById('ty-sub').innerHTML = tr.sub;
+            document.getElementById('back-label').textContent = tr.back;
+            document.getElementById('wa-label').textContent = tr.wa;
+            document.getElementById('share-label').textContent = tr.share;
+            document.getElementById('share-wa-label').textContent = tr.shareWa;
+            document.getElementById('upsell-title').textContent = tr.upsell;
+            document.getElementById('timer-text').textContent = tr.timer;
+
+            if (lang === 'ar') {
+                document.documentElement.dir = 'rtl';
+                document.documentElement.lang = 'ar';
+            } else {
+                document.documentElement.dir = 'ltr';
+            }
+
+            // ── 6. Upsell Products ─────────────────────────────────
+            const orderedProduct = product.toLowerCase();
+            const allProducts = [
+                { name: 'ChatGPT Plus', emoji: '🤖', price: '900 DA', page: 'chatgpt_landing.html' },
+                { name: 'Adobe Creative Cloud', emoji: '🎨', price: '1500 DA', page: 'adobe_landing.html' },
+                { name: 'Canva Pro', emoji: '✏️', price: '600 DA', page: 'canva_landing.html' },
+                { name: 'Netflix Premium', emoji: '🎬', price: '600 DA', page: 'netflix_landing.html' },
+                { name: 'CapCut Pro', emoji: '🎥', price: '800 DA', page: 'capcut_landing.html' },
+                { name: 'Gamma AI', emoji: '🌐', price: '1200 DA', page: 'gamma_landing.html' },
+                { name: 'Perplexity AI', emoji: '🔍', price: '800 DA', page: 'perplexity_landing.html' },
+                { name: 'TradingView', emoji: '📈', price: '1500 DA', page: 'tradingview_landing.html' },
+            ];
+
+            // Filter out the already-ordered product
+            const suggestions = allProducts
+                .filter(p => !orderedProduct.includes(p.name.toLowerCase().split(' ')[0]))
+                .slice(0, 4);
+
+            const grid = document.getElementById('upsell-grid');
+            suggestions.forEach(p => {
+                const card = document.createElement('a');
+                card.href = p.page;
+                card.className = 'upsell-card';
+                card.innerHTML = `
+            <div class="upsell-emoji">${p.emoji}</div>
+            <div class="upsell-name">${p.name}</div>
+            <div class="upsell-price">From ${p.price}</div>
+        `;
+                grid.appendChild(card);
+            });
+
+            // ── 7. Countdown to WhatsApp contact ──────────────────
+            let totalSec = 15 * 60; // 15 minutes
+            const timerEl = document.getElementById('timer-text');
+
+            const timerLabels = {
+                ar: (m, s) => `سيتواصل معك الفريق خلال ${m}:${String(s).padStart(2, '0')}`,
+                en: (m, s) => `Team will contact you in ${m}:${String(s).padStart(2, '0')}`,
+                fr: (m, s) => `L'équipe vous contactera dans ${m}:${String(s).padStart(2, '0')}`
+            };
+            const timerLabel = timerLabels[lang] || timerLabels.en;
+
+            const interval = setInterval(() => {
+                const m = Math.floor(totalSec / 60);
+                const s = totalSec % 60;
+                timerEl.textContent = timerLabel(m, s);
+                if (--totalSec < 0) clearInterval(interval);
+            }, 1000);
+
+            // ── 8. Meta Pixel — Purchase Event ────────────────────
+            if (typeof fbq !== 'undefined' && product) {
+                const usdVal = currency === 'USD' ? parseFloat(price) : parseFloat(price) / 250;
+                fbq('track', 'Purchase', {
+                    content_name: product,
+                    value: parseFloat(usdVal.toFixed(2)) || 0,
+                    currency: 'USD'
+                });
+                console.log(`🎯 Meta Pixel Purchase: $${usdVal.toFixed(2)} USD`);
+            }
+
+            // ── 9. Telegram Notification 🔔 ───────────────────────
+            // Fires once per session — notifies admin on phone immediately
+            async function notifyTelegram() {
+                const sessionKey = `tg_notified_${product}_${contact}`;
+                if (sessionStorage.getItem(sessionKey)) return;
+                sessionStorage.setItem(sessionKey, '1');
+
+                const TG_TOKEN = '8435398259:AAHRrvwcXtnEHtIK-pkwZ9WmRNLO3wJNHrk';
+                const TG_CHAT_ID = '1964665040';
+
+                const now = new Date();
+                const timeStr = now.toLocaleString('fr-DZ', { hour12: false });
+
+                let phone = contact.replace(/\D/g, '');
+                if (phone.startsWith('0')) phone = '213' + phone.slice(1);
+                if (!phone.startsWith('213') && phone.length >= 9) phone = '213' + phone;
+                const waReply = `https://wa.me/${phone}?text=${encodeURIComponent(`مرحباً ${name}! ✅ طلبك جاهز.`)}`;
+
+                const msg = `
+🛒 <b>طلب من الفورم — 3Ahub!</b>
+
+👤 <b>الاسم:</b> ${name || '—'}
+📞 <b>التواصل:</b> ${contact || '—'}
+📦 <b>المنتج:</b> ${product || '—'}
+💰 <b>السعر:</b> ${price} ${currSym}
+🕐 <b>الوقت:</b> ${timeStr}
+
+<a href="${waReply}">💬 رد على واتساب مباشرة</a>
+`.trim();
+
+                try {
+                    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: TG_CHAT_ID,
+                            text: msg,
+                            parse_mode: 'HTML',
+                            disable_web_page_preview: true,
+                            reply_markup: {
+                                inline_keyboard: [
+                                    [
+                                        { text: "✅ اشترى (Pixel 🔥)", callback_data: `payform_${phone}_${price}_${product}` },
+                                        { text: "❌ لم يشترِ", callback_data: `cancel_${phone}` }
+                                    ]
+                                ]
+                            }
+                        })
+                    });
+                    console.log('🔔 Telegram notification sent!');
+                } catch (e) {
+                    console.warn('Telegram notify failed:', e.message);
+                }
+            }
+
+            notifyTelegram();
+
+        })();
+    </script>
+
+</body>
+
+</html>

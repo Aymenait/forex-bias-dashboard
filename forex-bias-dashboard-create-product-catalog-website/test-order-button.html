@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Order Button</title>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2046893892791206');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div style="padding: 50px; text-align: center;">
+        <h1>اختبار زر "اطلب الآن"</h1>
+        
+        <div style="margin: 30px 0;">
+            <button class="order-btn" onclick="orderProduct('Test Product')">
+                اطلب الآن - Test Product
+            </button>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <button class="order-btn" onclick="orderAdobe()">
+                اطلب الآن - Adobe
+            </button>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <button class="order-btn" onclick="orderGamma()">
+                اطلب الآن - Gamma
+            </button>
+        </div>
+        
+        <div id="status" style="margin-top: 30px; padding: 20px; background: #f0f0f0; border-radius: 8px;">
+            <h3>الحالة:</h3>
+            <p id="status-text">انتظار...</p>
+        </div>
+    </div>
+
+    <!-- Contact Choice Modal -->
+    <div id="contact-choice-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px; text-align: center;">
+            <span class="close-btn contact-choice-close">&times;</span>
+            <h2 style="margin-bottom: 10px;">اختر وسيلة التواصل</h2>
+            <p style="color: #666; margin-bottom: 30px; font-size: 0.95rem;">
+                اختر الطريقة المفضلة لديك لإتمام الطلب
+            </p>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- WhatsApp Button -->
+                <button onclick="contactVia('whatsapp')" class="contact-choice-btn whatsapp-choice"
+                    style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 18px; background: #25D366; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer;">
+                    واتساب
+                </button>
+
+                <!-- Telegram Button -->
+                <button onclick="contactVia('telegram')" class="contact-choice-btn telegram-choice"
+                    style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 18px; background: linear-gradient(135deg, #0088cc, #229ED9); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer;">
+                    تيليجرام
+                </button>
+
+                <!-- Instagram Button -->
+                <button onclick="contactVia('instagram')" class="contact-choice-btn instagram-choice"
+                    style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 18px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer;">
+                    إنستغرام
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentProductName = '';
+        let currentLang = 'ar';
+
+        // Order functions
+        function orderProduct(productName) {
+            console.log('orderProduct called with:', productName);
+            document.getElementById('status-text').textContent = 'تم استدعاء orderProduct: ' + productName;
+            
+            currentProductName = productName;
+            const modal = document.getElementById('contact-choice-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.getElementById('status-text').textContent = 'Modal opened for: ' + productName;
+            } else {
+                document.getElementById('status-text').textContent = 'ERROR: Modal not found!';
+            }
+        }
+
+        function orderAdobe() {
+            console.log('orderAdobe called');
+            document.getElementById('status-text').textContent = 'تم استدعاء orderAdobe';
+            
+            const productName = 'Adobe Creative Cloud - Shared';
+            currentProductName = productName;
+            const modal = document.getElementById('contact-choice-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.getElementById('status-text').textContent = 'Modal opened for: ' + productName;
+            } else {
+                document.getElementById('status-text').textContent = 'ERROR: Modal not found!';
+            }
+        }
+
+        function orderGamma() {
+            console.log('orderGamma called');
+            document.getElementById('status-text').textContent = 'تم استدعاء orderGamma';
+            
+            const productName = 'Gamma.AI - Shared';
+            currentProductName = productName;
+            const modal = document.getElementById('contact-choice-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.getElementById('status-text').textContent = 'Modal opened for: ' + productName;
+            } else {
+                document.getElementById('status-text').textContent = 'ERROR: Modal not found!';
+            }
+        }
+
+        function contactVia(platform) {
+            console.log('contactVia called with:', platform);
+            document.getElementById('status-text').textContent = 'تم اختيار: ' + platform + ' للمنتج: ' + currentProductName;
+            
+            const messages = {
+                ar: `مرحباً 👋\nأريد طلب: ${currentProductName}\n\nشكراً 🙏`
+            };
+            
+            const message = messages[currentLang] || messages.ar;
+            
+            if (platform === 'whatsapp') {
+                alert('سيتم فتح WhatsApp مع الرسالة:\n' + message);
+                // window.open(`https://wa.me/213782125821?text=${encodeURIComponent(message)}`, '_blank');
+            } else if (platform === 'telegram') {
+                alert('سيتم فتح Telegram مع الرسالة:\n' + message);
+                // window.open(`https://t.me/+213656165400?text=${encodeURIComponent(message)}`, '_blank');
+            } else if (platform === 'instagram') {
+                alert('سيتم فتح Instagram');
+                // window.open('https://www.instagram.com/market_algeriaa', '_blank');
+            }
+            
+            const modal = document.getElementById('contact-choice-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Close modal
+        document.querySelector('.contact-choice-close').addEventListener('click', () => {
+            document.getElementById('contact-choice-modal').style.display = 'none';
+            document.getElementById('status-text').textContent = 'Modal closed';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('contact-choice-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                document.getElementById('status-text').textContent = 'Modal closed (clicked outside)';
+            }
+        });
+
+        console.log('Test page loaded successfully');
+        document.getElementById('status-text').textContent = 'جاهز للاختبار!';
+    </script>
+</body>
+</html>
