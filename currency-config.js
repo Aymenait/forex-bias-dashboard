@@ -202,13 +202,13 @@ const PRODUCTS = {
   'capcut': {
     id: 'capcut',
     name: 'CapCut Pro',
-    price_dzd: 800,
+    price_dzd: 900,
     price_usd: 3,
     durations: {
-      '1month': { dzd: 800, usd: 3 },
-      '3months': { dzd: 1200, usd: 4.5 },
-      '6months': { dzd: 2000, usd: 8 },
-      '1year': { dzd: 3500, usd: 14 }
+      '1month': { dzd: 900, usd: 3 },
+      '3months': { dzd: 1800, usd: 4.5 },
+      '6months': { dzd: 3200, usd: 8 },
+      '1year': { dzd: 5500, usd: 14 }
     },
     original_price: 1500,
     features: ['all-platforms', 'no-watermark', 'cloud-storage'],
