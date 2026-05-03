@@ -1074,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
             key: 'capcut',
             title: 'CapCut Pro',
             desc: 'مزايا احترافية لصناعة الفيديوهات.',
-            price: '800 دج'
+            price: '900 دج'
         }
     ];
     const mobilePopularMedia = document.querySelectorAll('[data-mobile-popular-media]');
@@ -1114,7 +1114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 fr: 'Fonctionnalites Pro pour creer et monter des videos.'
             }
         };
-        const localizedPopularPrices = { chatgpt: 1000, adobe: 1500, trw: 3500, capcut: 800 };
+        const localizedPopularPrices = { chatgpt: 1000, adobe: 1500, trw: 3500, capcut: 900 };
         const symbol = lang === 'ar' ? '\u062f\u062c' : 'DA';
         mobilePopularDesc.textContent = localizedPopularCopy[item.key]?.[lang] || localizedPopularCopy[item.key]?.ar || item.desc;
         mobilePopularPrice.textContent = `${localizedPopularPrices[item.key] || ''} ${symbol}`.trim();
