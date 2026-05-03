@@ -80,14 +80,14 @@ export const PRODUCTS_DATA = {
             category: "Video Editing",
             keywords: ["video editor", "tiktok", "reels", "ai video"],
             delivery_type: "email_password",
-            price_dzd: 800,
+            price_dzd: 900,
             price_usd: 3,
             description: "محرر فيديو احترافي - حساب خاص بالكامل (Private Account) يدعم جهازين.",
             durations: [
-                { key: "1month", price_dzd: 800, price_usd: 3 },
-                { key: "3months", price_dzd: 1200, price_usd: 4.5 },
-                { key: "6months", price_dzd: 2000, price_usd: 8 },
-                { key: "1year", price_dzd: 3500, price_usd: 14 }
+                { key: "1month", price_dzd: 900, price_usd: 3 },
+                { key: "3months", price_dzd: 1800, price_usd: 4.5 },
+                { key: "6months", price_dzd: 3200, price_usd: 8 },
+                { key: "1year", price_dzd: 5500, price_usd: 14 }
             ]
         },
         {
