@@ -74,28 +74,29 @@ function createProductCardHTML(product, lang = 'ar') {
     const name = product.name?.[lang] || product.name?.ar || 'منتج';
     const description = product.description?.[lang] || product.description?.ar || '';
     // ═══════════════════════════════════════════════════════════════════════════
-    // Single Source of Truth - Sync with currency-config.js
+    // Firebase is the Single Source of Truth for prices
+    // Admin panel changes in Firebase will now reflect directly on the homepage
+    // currency-config.js PRODUCTS are only used as fallback if Firebase data is missing
     // ═══════════════════════════════════════════════════════════════════════════
     
-    // Check for ID match or name match in official PRODUCTS
-    let officialProduct = null;
+    // Only use currency-config.js as fallback for missing data (NOT for overriding)
     if (typeof window !== 'undefined' && window.PRODUCTS) {
+        let officialProduct = null;
         if (window.PRODUCTS[product.id]) {
             officialProduct = window.PRODUCTS[product.id];
         } else {
-            // Try matching by name (lowercase)
             const entries = Object.entries(window.PRODUCTS);
             const match = entries.find(([key, val]) => 
                 (name && name.toLowerCase().includes(key)) || (product.id && product.id.includes(key))
             );
             if (match) officialProduct = match[1];
         }
-    }
 
-    if (officialProduct) {
-        product.priceDZD = officialProduct.price_dzd;
-        product.priceUSD = officialProduct.price_usd;
-        if (officialProduct.id) product.id = officialProduct.id;
+        // Only use fallback prices if Firebase has NO price data
+        if (officialProduct && (!product.priceDZD || product.priceDZD === 0)) {
+            product.priceDZD = officialProduct.price_dzd;
+            product.priceUSD = officialProduct.price_usd;
+        }
     }
 
     // Comprehensive Media Fallbacks (Mapping from index.html)

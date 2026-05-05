@@ -4148,3 +4148,87 @@ img {
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   8. Accessibility — Reduced Motion Support
+   ═══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.15s !important;
+        scroll-behavior: auto !important;
+    }
+
+    .hero-bg-media {
+        transition: opacity 0.15s ease !important;
+    }
+
+    .gallery-track {
+        animation: none !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   9. Animation Cleanup — Remove excessive infinite animations
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Logo: keep glow, remove float bounce — glow alone is enough */
+.logo {
+    animation: logoGlow 3s ease-in-out infinite;
+}
+
+/* Badges: remove constant pulsing — they're static trust indicators */
+.badge {
+    animation: none;
+}
+
+/* Floating cards: reduce motion — subtle hover is enough */
+.floating-card {
+    animation: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   10. Touch Target Improvements — Meet 44px minimum
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Slider dots — expand hit area to 44px with padding */
+.dot {
+    position: relative;
+    padding: 17px;
+    margin: -17px;
+    background-clip: content-box;
+}
+
+.dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+}
+
+/* Hero background tabs — ensure minimum touch target */
+.hero-bg-tab {
+    min-height: 44px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   11. Disabled State Improvements — Better contrast & semantics
+   ═══════════════════════════════════════════════════════════════ */
+.order-btn:disabled,
+.order-btn[disabled],
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.order-btn:disabled::before,
+.order-btn:disabled::after {
+    display: none;
+}

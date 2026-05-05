@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -18,6 +18,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-redesign.css">
+    <!-- Lucide Icons (SVG icon library - replaces emoji icons) -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 
 <body class="font-cairo bg-gray-900 text-white min-h-screen">
@@ -25,38 +28,43 @@
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <!-- صفحة تسجيل الدخول - Login Page -->
     <!-- ═══════════════════════════════════════════════════════════════ -->
-    <div id="login-page" class="min-h-screen flex items-center justify-center p-4" style="background: var(--bg-dark);">
+    <div id="login-page" class="min-h-screen flex items-center justify-center p-4" style="background: var(--admin-bg);">
         <div class="rounded-2xl p-8 w-full max-w-md shadow-2xl"
-            style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+            style="background: var(--admin-surface); border: 1px solid var(--admin-border); backdrop-filter: blur(16px);">
             <!-- Logo -->
             <div class="text-center mb-8">
                 <img src="logo.png" alt="3Ahub"
-                    style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 12px; display: block; object-fit: cover;">
-                <h1 class="text-2xl font-bold">لوحة التحكم</h1>
-                <p class="text-gray-400 mt-2">3Ahub Admin</p>
+                    style="width: 72px; height: 72px; border-radius: 16px; margin: 0 auto 16px; display: block; object-fit: cover; border: 2px solid var(--admin-border);">
+                <h1 style="font-size:1.5rem;font-weight:800;color:var(--admin-text);margin:0;">لوحة التحكم</h1>
+                <p style="color:var(--admin-text-muted);margin-top:6px;font-size:0.85rem;">3Ahub Admin Panel</p>
             </div>
 
             <!-- Login Form -->
             <form id="login-form" class="space-y-6">
                 <div>
-                    <label class="block text-gray-300 mb-2">كلمة المرور</label>
-                    <input type="password" id="admin-password"
-                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none text-white"
-                        placeholder="أدخل كلمة المرور">
+                    <label class="form-label">كلمة المرور</label>
+                    <input type="password" id="admin-password" class="form-input"
+                        placeholder="أدخل كلمة المرور" style="padding:14px 16px;">
                 </div>
 
-                <button type="submit"
-                    class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 rounded-lg hover:opacity-90 transition-all">
-                    دخول 🚀
+                <button type="submit" class="btn-primary" style="width:100%;padding:14px;font-size:1rem;border-radius:var(--admin-radius);justify-content:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    دخول
                 </button>
 
-                <p id="login-error" class="text-red-400 text-center hidden">كلمة المرور غير صحيحة</p>
+                <p id="login-error" class="text-red-400 text-center hidden" style="color:var(--admin-danger);font-size:0.85rem;">كلمة المرور غير صحيحة</p>
             </form>
 
             <!-- Help -->
-            <div class="mt-6 text-center text-gray-500 text-sm">
-                <p>🔐 كلمة المرور محفوظة في السحابة</p>
-                <p class="mt-2">يمكنك تغييرها من الإعدادات ⚙️</p>
+            <div class="mt-6 text-center text-sm" style="color:var(--admin-text-muted);">
+                <p style="display:flex;align-items:center;justify-content:center;gap:6px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    كلمة المرور محفوظة في السحابة
+                </p>
+                <p class="mt-2" style="display:flex;align-items:center;justify-content:center;gap:6px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg>
+                    يمكنك تغييرها من الإعدادات
+                </p>
             </div>
         </div>
     </div>
@@ -67,130 +75,116 @@
     <div id="dashboard-page" class="hidden">
 
         <!-- Header -->
-        <header class="bg-gray-800 border-b border-gray-700 px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <img src="logo.png" alt="3Ahub"
-                        style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+        <header class="admin-header">
+            <div class="flex items-center gap-4" style="display:flex;align-items:center;gap:12px;">
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-btn" onclick="toggleAdminSidebar()" aria-label="فتح القائمة">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div class="flex items-center gap-3" style="display:flex;align-items:center;gap:10px;">
+                    <img src="logo.png" alt="3Ahub" style="width:36px;height:36px;border-radius:10px;object-fit:cover;">
                     <div>
-                        <h1 class="text-xl font-bold">3Ahub</h1>
-                        <p class="text-gray-400 text-sm">لوحة التحكم</p>
+                        <h1 class="admin-header-title" style="margin:0;">3Ahub</h1>
+                        <p style="font-size:0.7rem;color:var(--admin-text-muted);margin:0;">لوحة التحكم</p>
                     </div>
                 </div>
+            </div>
 
+            <div class="admin-header-actions">
                 <!-- Language Switcher -->
-                <select id="language-switcher" onchange="changeLanguage(this.value)"
-                    class="bg-gray-700 text-white border border-gray-600 rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-purple-500">
-                    <option value="ar">🇩🇿 العربية</option>
-                    <option value="en">🇺🇸 English</option>
-                    <option value="fr">🇫🇷 Français</option>
+                <select id="language-switcher" onchange="changeLanguage(this.value)" class="form-select" style="width:auto;padding:6px 10px;font-size:0.8rem;">
+                    <option value="ar">العربية</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
                 </select>
 
-                <a href="index.html" target="_blank" class="text-gray-400 hover:text-white transition-colors"
-                    data-i18n="view_site">
-                    👁️ عرض الموقع
+                <a href="index.html" target="_blank" class="header-btn" data-i18n="view_site">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    <span class="hide-mobile">عرض الموقع</span>
                 </a>
-                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors"
-                    data-i18n="logout">
-                    خروج 🚪
+                <button onclick="logout()" class="btn-danger btn-sm" data-i18n="logout" style="min-height:36px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <span class="hide-mobile">خروج</span>
                 </button>
             </div>
         </header>
 
         <!-- Navigation Tabs -->
-        <nav class="px-6 overflow-x-auto"
-            style="background: var(--card-bg); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+        <nav class="px-6 overflow-x-auto" style="background: var(--admin-surface); border-bottom: 1px solid var(--admin-border);">
             <div class="flex gap-1 min-w-max">
-                <button onclick="showTab('overview')"
-                    class="tab-btn active px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="overview" data-i18n="nav_overview">
-                    📊 نظرة عامة
+                <button onclick="showTab('overview')" class="tab-btn active px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="overview" data-i18n="nav_overview">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    نظرة عامة
                 </button>
-                <button onclick="showTab('products')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="products" data-i18n="nav_products">
-                    📦 المنتجات
+                <button onclick="showTab('products')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="products" data-i18n="nav_products">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                    المنتجات
                 </button>
-                <button onclick="showTab('orders')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="orders" data-i18n="nav_orders">
-                    🛒 الطلبات
+                <button onclick="showTab('orders')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="orders" data-i18n="nav_orders">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    الطلبات
                 </button>
-                <button onclick="showTab('reviews')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="reviews" data-i18n="nav_reviews">
-                    ⭐ التقييمات
+                <button onclick="showTab('reviews')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="reviews" data-i18n="nav_reviews">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    التقييمات
                 </button>
-                <button onclick="showTab('customers')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="customers" data-i18n="nav_customers">
-                    👥 العملاء
+                <button onclick="showTab('customers')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="customers" data-i18n="nav_customers">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    العملاء
                 </button>
-                <button onclick="showTab('analytics')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="analytics" data-i18n="nav_analytics">
-                    📈 التحليلات
+                <button onclick="showTab('analytics')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="analytics" data-i18n="nav_analytics">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    التحليلات
                 </button>
-                <button onclick="showTab('content')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="content" data-i18n="nav_content">
-                    📝 المحتوى
+                <button onclick="showTab('content')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="content" data-i18n="nav_content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    المحتوى
                 </button>
-                <button onclick="showTab('integrations')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="integrations" data-i18n="nav_integrations">
-                    🔗 التكاملات
+                <button onclick="showTab('integrations')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="integrations" data-i18n="nav_integrations">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    التكاملات
                 </button>
-                <button onclick="showTab('tools')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="tools" data-i18n="nav_tools">
-                    🛠️ الأدوات
+                <button onclick="showTab('tools')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="tools" data-i18n="nav_tools">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    الأدوات
                 </button>
-                <button onclick="showTab('accounting')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="accounting" data-i18n="nav_accounting">
-                    💰 المحاسبة
+                <button onclick="showTab('accounting')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="accounting" data-i18n="nav_accounting">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    المحاسبة
                 </button>
-                <button onclick="showTab('resellers')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="resellers" data-i18n="nav_resellers">
-                    🤝 الموزعين
+                <button onclick="showTab('resellers')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="resellers" data-i18n="nav_resellers">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>
+                    الموزعين
                 </button>
-                <button onclick="showTab('debtors')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="debtors" data-i18n="nav_debtors">
-                    💳 المديونين
+                <button onclick="showTab('debtors')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="debtors" data-i18n="nav_debtors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    المديونين
                 </button>
-                <button onclick="showTab('giveaway')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="giveaway" data-i18n="nav_giveaway">
-                    🎁 المسابقات
+                <button onclick="showTab('giveaway')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="giveaway" data-i18n="nav_giveaway">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                    المسابقات
                 </button>
-                <button onclick="showTab('suppliers')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="suppliers" data-i18n="nav_suppliers">
-                    📦 الموردين
+                <button onclick="showTab('suppliers')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="suppliers" data-i18n="nav_suppliers">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    الموردين
                 </button>
-                <button onclick="showTab('leads')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="leads" data-i18n="nav_leads">
-                    🚀 الزبائن (Leads)
+                <button onclick="showTab('leads')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="leads" data-i18n="nav_leads">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    الزبائن
                 </button>
-                <button onclick="showTab('security')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="security" data-i18n="nav_security">
-                    🔒 الأمان
+                <button onclick="showTab('security')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="security" data-i18n="nav_security">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    الأمان
                 </button>
-                <button onclick="showTab('settings')"
-                    class="tab-btn px-4 py-4 border-b-2 border-transparent hover:bg-gray-700 transition-colors whitespace-nowrap"
-                    data-tab="settings">
-                    ⚙️ الإعدادات
+                <button onclick="showTab('settings')" class="tab-btn px-4 py-4 border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="settings">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-left:4px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    الإعدادات
                 </button>
             </div>
         </nav>
 
         <!-- Main Content -->
-        <main class="p-6">
+        <main class="admin-content">
 
             <!-- ═══════════ Overview Tab ═══════════ -->
             <div id="tab-overview" class="tab-content">
@@ -3374,6 +3368,24 @@
         // تفعيل زر الحذف عند تأكيد المستخدم
         document.getElementById('confirm-reset-checkbox')?.addEventListener('change', function () {
             document.getElementById('reset-confirm-btn').disabled = !this.checked;
+        });
+
+        // ─── Mobile Sidebar Toggle ───
+        function toggleAdminSidebar() {
+            const nav = document.querySelector('nav');
+            if (nav) {
+                nav.classList.toggle('sidebar-open');
+            }
+        }
+
+        // Close sidebar on overlay click (mobile)
+        document.addEventListener('click', function(e) {
+            const nav = document.querySelector('nav');
+            if (nav && nav.classList.contains('sidebar-open')) {
+                if (!nav.contains(e.target) && !e.target.closest('.mobile-menu-btn')) {
+                    nav.classList.remove('sidebar-open');
+                }
+            }
         });
     </script>
 </body>

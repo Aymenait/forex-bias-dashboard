@@ -102,14 +102,14 @@ const PRODUCTS = {
   'chatgpt': {
     id: 'chatgpt',
     name: 'ChatGPT Plus (GPT-4o)',
-    price_dzd: 1000,
-    price_usd: 4,
+    price_dzd: 2500,
+    price_usd: 10,
     durations: {
-      '1month': { dzd: 1000, usd: 4 },
+      '1month': { dzd: 2500, usd: 10 },
       '3months': { dzd: 2200, usd: 8.8 },
       '6months': { dzd: 4000, usd: 16.0 },
-      'business': { dzd: 1000, usd: 4 },
-      'plus': { dzd: 1000, usd: 4 }
+      'business': { dzd: 2500, usd: 10 },
+      'plus': { dzd: 2500, usd: 10 }
     },
     description: {
       ar: 'اشتراك ChatGPT Plus مع GPT-4o وميزات متقدمة',
@@ -202,13 +202,13 @@ const PRODUCTS = {
   'capcut': {
     id: 'capcut',
     name: 'CapCut Pro',
-    price_dzd: 900,
+    price_dzd: 800,
     price_usd: 3,
     durations: {
-      '1month': { dzd: 900, usd: 3 },
-      '3months': { dzd: 1800, usd: 4.5 },
-      '6months': { dzd: 3200, usd: 8 },
-      '1year': { dzd: 5500, usd: 14 }
+      '1month': { dzd: 800, usd: 3 },
+      '3months': { dzd: 1200, usd: 4.5 },
+      '6months': { dzd: 2000, usd: 8 },
+      '1year': { dzd: 3500, usd: 14 }
     },
     original_price: 1500,
     features: ['all-platforms', 'no-watermark', 'cloud-storage'],
@@ -336,6 +336,7 @@ const PRODUCTS = {
     price_usd: 6,
     durations: {
       '1month': { dzd: 1400, usd: 6 },
+      '12months': { dzd: 2800, usd: 11.2, note: '6 months warranty' },
       '1year': { dzd: 0, usd: 0 }
     },
     description: {

@@ -1074,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
             key: 'capcut',
             title: 'CapCut Pro',
             desc: 'مزايا احترافية لصناعة الفيديوهات.',
-            price: '900 دج'
+            price: '800 دج'
         }
     ];
     const mobilePopularMedia = document.querySelectorAll('[data-mobile-popular-media]');
@@ -1114,7 +1114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 fr: 'Fonctionnalites Pro pour creer et monter des videos.'
             }
         };
-        const localizedPopularPrices = { chatgpt: 1000, adobe: 1500, trw: 3500, capcut: 900 };
+        const localizedPopularPrices = { chatgpt: 1000, adobe: 1500, trw: 3500, capcut: 800 };
         const symbol = lang === 'ar' ? '\u062f\u062c' : 'DA';
         mobilePopularDesc.textContent = localizedPopularCopy[item.key]?.[lang] || localizedPopularCopy[item.key]?.ar || item.desc;
         mobilePopularPrice.textContent = `${localizedPopularPrices[item.key] || ''} ${symbol}`.trim();
@@ -2032,8 +2032,8 @@ const translations = {
     ar: {
         'brand.tagline': 'التميز الرقمي.. بين يديك',
         'nav.products': 'منتجاتنا المختارة',
-        'nav.reviews': '⭐ آراء النخبة',
-        'nav.resellers': '🤝 موزعين',
+        'nav.reviews': '<svg width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>آراء النخبة',
+        'nav.resellers': '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M16.5 3C14.76 3 13.09 3.81 12 5.08 10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3z"/></svg>موزعين',
         'nav.games': '🕹️ ألعاب',
         'nav.gamesHero': '🕹️ ألعاب Steam (قريباً)',
         'badge.coming_soon': 'قريباً',
@@ -2760,7 +2760,7 @@ const translations = {
         'reseller.products.title': 'قائمة الأسعار والخدمات',
         'reseller.products.subtitle': 'جميع هذه الخدمات متوفرة حالياً للتفعيل الفوري وتدعم أنظمة الموزعين المختلفة.',
         'scroll.hint': 'اسحب للمزيد',
-        'gallery.badge': '💬 رسائل عملائنا',
+        'gallery.badge': '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>رسائل عملائنا',
         'gallery.title': 'ماذا يقول عملاؤنا الحقيقيون؟',
         'gallery.subtitle': 'أكثر من 1500 عميل سعيد — شاهد رسائلهم الحقيقية',
         'reviews.gallery.title': 'شاهد رسائل عملائنا الحقيقية',
@@ -2795,8 +2795,8 @@ const translations = {
     en: {
         'brand.tagline': 'Digital Solutions That Boost Your Presence',
         'nav.products': 'Our Products',
-        'nav.reviews': '⭐ Customer Reviews',
-        'nav.resellers': '🤝 Resellers',
+        'nav.reviews': '<svg width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Customer Reviews',
+        'nav.resellers': '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M16.5 3C14.76 3 13.09 3.81 12 5.08 10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3z"/></svg>Resellers',
         'nav.games': '🕹️ Games',
         'nav.gamesHero': '🕹️ Steam Games (Soon)',
         'badge.coming_soon': 'Coming Soon',
@@ -3565,7 +3565,7 @@ const translations = {
         'reseller.products.title': 'Price List & Services',
         'reseller.products.subtitle': 'All these services are currently available for instant activation and support various reseller systems.',
         'scroll.hint': 'Swipe for more',
-        'gallery.badge': '💬 Customer Messages',
+        'gallery.badge': '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>Customer Messages',
         'gallery.title': 'What Our Real Customers Say?',
         'gallery.subtitle': 'Over 1500 happy customers — see their real messages',
         'reviews.gallery.title': 'See Our Real Customer Messages',
@@ -3601,8 +3601,8 @@ const translations = {
         'brand.tagline': 'Solutions Numériques Qui Renforcent Votre Présence',
         'nav.home': 'Accueil',
         'nav.products': 'Nos Produits',
-        'nav.reviews': '⭐ Avis Clients',
-        'nav.resellers': '🤝 Revendeurs',
+        'nav.reviews': '<svg width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Avis Clients',
+        'nav.resellers': '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M16.5 3C14.76 3 13.09 3.81 12 5.08 10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3z"/></svg>Revendeurs',
         'nav.games': '🕹️ Jeux',
         'nav.gamesHero': '🕹️ Jeux Steam (Bientôt)',
         'badge.coming_soon': 'Bientôt',
@@ -4042,7 +4042,7 @@ const translations = {
         'reseller.products.title': 'Liste des Prix et Services',
         'reseller.products.subtitle': 'Tous ces services sont actuellement disponibles pour une activation instantanée et prennent en charge différents systèmes de revendeurs.',
         'scroll.hint': 'Glissez pour plus',
-        'gallery.badge': '💬 Messages de nos Clients',
+        'gallery.badge': '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>Messages de nos Clients',
         'gallery.title': 'Que Disent Nos Vrais Clients ?',
         'gallery.subtitle': 'Plus de 1500 clients satisfaits — voyez leurs vrais messages',
         'reviews.gallery.title': 'Découvrez les Vrais Messages de Nos Clients',
@@ -5292,7 +5292,7 @@ function selectChatGPTDuration(duration) {
 
     // Force correct prices
     const prices = {
-        '1month': { dzd: 1000, usd: 4, name: 'ChatGPT Premium - 1 Month' },
+        '1month': { dzd: 2500, usd: 10, name: 'ChatGPT Premium - 1 Month' },
         '1month-upgrade': { dzd: 1800, usd: 7.2, name: 'ChatGPT Premium - 1 Month (تفعيل في حسابك)' }
     };
 
@@ -5389,68 +5389,13 @@ function orderChatGPT() {
 
 // Grok Selection Functions
 function selectGrokDuration(duration) {
-    document.querySelectorAll('.grok-duration-btn').forEach(btn => {
-        btn.classList.remove('active');
-        btn.style.background = 'rgba(100, 100, 100, 0.1)';
-        btn.style.border = '2px solid var(--border-color)';
-        btn.style.color = 'var(--text-secondary)';
-    });
-    const selectedBtn = document.querySelector(`.grok-duration-btn[data-duration="${duration}"]`);
-    if (selectedBtn) {
-        selectedBtn.classList.add('active');
-        selectedBtn.style.background = 'rgba(16, 163, 127, 0.15)';
-        selectedBtn.style.border = '2px solid #10a37f';
-        selectedBtn.style.color = 'var(--text-primary)';
-    }
-
-    const prices = {
-        '9days': { dzd: 800, usd: 3.2, name: 'SUPER GROK - 9 Days' },
-        '1month': { dzd: 1600, usd: 6.4, name: 'SUPER GROK - 1 Month' }
-    };
-
-    const priceInfo = prices[duration] || prices['9days'];
-    const name = priceInfo.name;
-
-    document.querySelectorAll('.grok-prices').forEach(price => price.style.display = 'none');
-    const priceEl = document.getElementById(`grok-prices-${duration}`);
-    if (priceEl) {
-        priceEl.style.display = 'block';
-        const tag = priceEl.querySelector('.price-tag');
-        if (tag) {
-            tag.setAttribute('data-price-dzd', priceInfo.dzd);
-            tag.setAttribute('data-price-usd', priceInfo.usd);
-            if (window.currencyManager && window.currencyManager.currentCurrency === 'USD') {
-                tag.textContent = '$' + priceInfo.usd;
-            } else {
-                const dzdSymbol = (window.currentLang || document.documentElement.lang) === 'ar' ? 'د.ج' : 'DA';
-                tag.textContent = priceInfo.dzd + ' ' + dzdSymbol;
-            }
-        }
-    }
-
-    const orderBtn = document.getElementById('grok-order-btn');
-    if (orderBtn) {
-        orderBtn.setAttribute('data-product', name);
-    }
+    // Deprecated: Only 1 month is available
 }
 
 function orderGrok() {
-    const activeBtn = document.querySelector('.grok-duration-btn.active');
-    const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '9days';
-    const names = {
-        '9days': 'SUPER GROK - 9 Days',
-        '1month': 'SUPER GROK - 1 Month'
-    };
-    const name = names[duration];
-
+    const name = 'SUPER GROK - 1 Month';
     const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-    const prices = {
-        '9days': { dzd: 800, usd: 3.2 },
-        '1month': { dzd: 1600, usd: 6.4 }
-    };
-
-    const priceObj = prices[duration] || prices['9days'];
-    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
+    const price = currency === 'USD' ? 8.8 : 2200;
 
     if (typeof fbq !== 'undefined') {
         fbq('track', 'AddToCart', { content_name: name, value: parseFloat(price), currency: currency });
@@ -5815,13 +5760,23 @@ window.orderGamma = orderGamma;
 
 // Gemini Selection Functions
 function selectGeminiDuration(duration) {
-    document.querySelectorAll('.gemini-duration-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.gemini-duration-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'rgba(100, 100, 100, 0.1)';
+        btn.style.border = '2px solid var(--border-color)';
+        btn.style.color = 'var(--text-secondary)';
+    });
     const selectedBtn = document.querySelector(`.gemini-duration-btn[data-duration="${duration}"]`);
-    if (selectedBtn) selectedBtn.classList.add('active');
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+        selectedBtn.style.background = 'rgba(16, 163, 127, 0.15)';
+        selectedBtn.style.border = '2px solid #10a37f';
+        selectedBtn.style.color = 'var(--text-primary)';
+    }
 
     const config = PRODUCTS['google-ai'];
     const priceObj = config.durations[duration];
-    const name = duration === '1month' ? 'Gemini Pro - 1 Month' : 'Gemini Pro - 1 Year';
+    const name = duration === '1month' ? 'Google Gemini Pro & Veo 3 - 1 Month' : 'Google Gemini Pro & Veo 3 - 12 Months';
 
     // Show/hide prices
     document.querySelectorAll('.gemini-prices').forEach(price => price.style.display = 'none');
@@ -5829,7 +5784,7 @@ function selectGeminiDuration(duration) {
     if (priceEl) priceEl.style.display = 'block';
 
     // Update order button
-    const orderBtn = document.getElementById('gemini-order-btn');
+    const orderBtn = document.getElementById('veo-order-btn');
     if (orderBtn) orderBtn.setAttribute('data-product', name);
 
     // Track CustomizeProduct
@@ -5846,7 +5801,7 @@ function selectGeminiDuration(duration) {
 function orderGemini() {
     const activeBtn = document.querySelector('.gemini-duration-btn.active');
     const duration = activeBtn ? activeBtn.getAttribute('data-duration') : '1month';
-    const name = duration === '1month' ? 'Gemini Pro - 1 Month' : 'Gemini Pro - 1 Year';
+    const name = duration === '1month' ? 'Google Gemini Pro & Veo 3 - 1 Month' : 'Google Gemini Pro & Veo 3 - 12 Months';
 
     const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
     const config = PRODUCTS['google-ai'];

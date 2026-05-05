@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -481,16 +481,78 @@
                     الحساب الأول المتكامل لمصممي الجرافيك، المبرمجين، والباحثين.
                 </p>
 
-                <div class="flex flex-col sm:flex-row gap-4 justify-start">
-                    <div class="glass p-6 border-white/10 flex flex-col items-start gap-1 min-w-[200px]">
-                        <span class="text-3xl font-black text-google price-tag" data-price-dzd="1400"
-                            data-price-usd="6">1400 د.ج</span>
-                        <span class="text-sm text-white/50" data-i18n="veo.period.monthly">شهر كامل</span>
+                <div class="flex flex-col gap-4 justify-start w-full max-w-sm ml-auto">
+                    <!-- Custom Duration Selector -->
+                    <div class="flex bg-white/5 p-1 rounded-xl glass border-white/10 w-full mb-2">
+                        <button onclick="selectVeoDuration('1month')"
+                            class="veo-duration-tab flex-1 py-3 px-4 rounded-lg text-sm font-bold active bg-[#3b82f6]/20 text-white border border-[#3b82f6]/50 transition-all">
+                            <span>شهر واحد</span>
+                        </button>
+                        <button onclick="selectVeoDuration('12months')"
+                            class="veo-duration-tab flex-1 py-3 px-4 rounded-lg text-sm font-bold text-white/60 hover:text-white transition-all">
+                            <span>سنة كاملة</span>
+                        </button>
+                    </div>
+
+                    <div class="glass p-6 border-white/10 flex flex-col items-center gap-2 text-center" id="veo-price-display-container">
+                        <span class="text-4xl font-black text-google" id="veo-main-price">1400 د.ج</span>
+                        <span class="text-sm font-bold text-[#10a37f] hidden" id="veo-warranty-badge">✅ ضمان 6 أشهر</span>
                     </div>
                 </div>
 
-                <a href="https://wa.me/213782125821?text=????? ???? ?????"
-                    class="mt-8 inline-flex items-center justify-center btn-premium px-10 py-5 rounded-2xl text-lg font-bold text-white w-full sm:w-auto"
+                <script>
+                    function selectVeoDuration(duration) {
+                        // Update buttons
+                        document.querySelectorAll('.veo-duration-tab').forEach(btn => {
+                            btn.classList.remove('active', 'bg-[#3b82f6]/20', 'text-white', 'border', 'border-[#3b82f6]/50');
+                            btn.classList.add('text-white/60');
+                        });
+                        const targetBtn = event.currentTarget || document.querySelector(`.veo-duration-tab[onclick*="${duration}"]`);
+                        if(targetBtn) {
+                            targetBtn.classList.add('active', 'bg-[#3b82f6]/20', 'text-white', 'border', 'border-[#3b82f6]/50');
+                            targetBtn.classList.remove('text-white/60');
+                        }
+
+                        // Update price and warranty
+                        const isUSD = window.currencyManager ? window.currencyManager.getCurrentCurrency() === 'USD' : false;
+                        const prices = {
+                            '1month': { dzd: '1400 د.ج', usd: '6 USD', warranty: false },
+                            '12months': { dzd: '2800 د.ج', usd: '11.2 USD', warranty: true }
+                        };
+                        const info = prices[duration];
+                        
+                        document.getElementById('veo-main-price').textContent = isUSD ? info.usd : info.dzd;
+                        document.getElementById('veo-bottom-price').textContent = isUSD ? info.usd : info.dzd;
+                        
+                        if(info.warranty) {
+                            document.getElementById('veo-warranty-badge').classList.remove('hidden');
+                            document.getElementById('veo-bottom-warranty').classList.remove('hidden');
+                        } else {
+                            document.getElementById('veo-warranty-badge').classList.add('hidden');
+                            document.getElementById('veo-bottom-warranty').classList.add('hidden');
+                        }
+
+                        // Update whatsapp text
+                        const btn = document.getElementById('pixel-order-btn');
+                        const topBtn = document.getElementById('top-order-btn');
+                        const msg = duration === '1month' ? 'أريد شراء اشتراك Google Gemini Pro و Veo 3 لمدة شهر' : 'أريد شراء اشتراك Google Gemini Pro و Veo 3 لمدة سنة مع ضمان 6 أشهر';
+                        const url = 'https://wa.me/213782125821?text=' + encodeURIComponent(msg);
+                        if(btn) btn.href = url;
+                        if(topBtn) topBtn.href = url;
+                    }
+                    
+                    // Listen to currency changes
+                    document.addEventListener('currencyChanged', function() {
+                        const activeBtn = document.querySelector('.veo-duration-tab.active');
+                        if (activeBtn) {
+                            const duration = activeBtn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                            selectVeoDuration(duration);
+                        }
+                    });
+                </script>
+
+                <a id="top-order-btn" href="https://wa.me/213782125821?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B4%D8%B1%D8%A7%D8%A1%20%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20Google%20Gemini%20Pro%20%D9%88%20Veo%203%20%D9%84%D9%85%D8%AF%D8%A9%20%D8%B4%D9%87%D8%B1"
+                    class="mt-6 inline-flex items-center justify-center btn-premium px-10 py-5 rounded-2xl text-lg font-bold text-white w-full sm:w-auto"
                     data-i18n="veo.cta">
                     ابدأ تجربتك الفائقة الآن
                 </a>
@@ -627,11 +689,11 @@
                     <div class="bg-white/5 rounded-3xl p-8 border border-white/10 text-center">
                         <p class="text-white/40 uppercase font-black text-xs mb-4" data-i18n="veo.delivery.limited">عرض
                             محدود لفترة وجيزة</p>
-                        <div class="flex items-center justify-center gap-2 mb-6">
-                            <span class="text-5xl font-black price-tag" data-price-dzd="1400" data-price-usd="6">1400
-                                د.ج</span>
+                        <div class="flex flex-col items-center justify-center gap-2 mb-6">
+                            <span class="text-5xl font-black" id="veo-bottom-price">1400 د.ج</span>
+                            <span class="text-sm font-bold text-[#10a37f] hidden" id="veo-bottom-warranty">✅ ضمان 6 أشهر</span>
                         </div>
-                        <a id="pixel-order-btn" href="https://wa.me/213782125821?text=????? ???? ?????"
+                        <a id="pixel-order-btn" href="https://wa.me/213782125821?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B4%D8%B1%D8%A7%D8%A1%20%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20Google%20Gemini%20Pro%20%D9%88%20Veo%203%20%D9%84%D9%85%D8%AF%D8%A9%20%D8%B4%D9%87%D8%B1"
                             class="w-full block py-5 rounded-2xl btn-premium text-lg font-bold"
                             data-i18n="veo.delivery.wa">
                             اطلب عبر واتساب الآن
