@@ -1,4 +1,4 @@
-﻿/* Homepage redesign overrides. */
+/* Homepage redesign overrides. */
 
 .homepage-redesign {
     --preview-bg: #05070d;
@@ -804,8 +804,9 @@
     }
 
     .homepage-redesign .category-pills-container {
-        position: relative;
-        top: auto;
+        position: sticky;
+        top: 10px;
+        z-index: 40;
         margin-bottom: 16px;
         padding: 8px;
     }
