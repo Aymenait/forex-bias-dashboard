@@ -498,7 +498,7 @@
                                         <button disabled class="chatgpt-duration-btn" data-duration="1month-upgrade"
                                             style="flex: 1; padding: 8px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: all 0.3s; font-size: 0.9rem; opacity: 0.5;">
                                             <span data-i18n="product.chatgpt.upgradeAccount">Activate in your account</span>
-                                            <span style="display:block; font-size: 0.75rem; color: #ef4444; margin-top: 4px;">غير متوفر الان</span>
+                                            <span style="display:block; font-size: 0.75rem; color: #ef4444; margin-top: 4px;" data-i18n="product.chatgpt.notAvailable">غير متوفر الآن</span>
                                         </button>
                                     </div>
                                 </div>
@@ -730,7 +730,7 @@
                                     <button disabled class="chatgpt-duration-btn" data-duration="1month-upgrade"
                                         style="flex: 1; padding: 8px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: all 0.3s; font-size: 0.9rem; opacity: 0.5;">
                                         تفعيل في حسابك
-                                        <span style="display:block; font-size: 0.75rem; color: #ef4444; margin-top: 4px;">غير متوفر الان</span>
+                                        <span style="display:block; font-size: 0.75rem; color: #ef4444; margin-top: 4px;" data-i18n="product.chatgpt.notAvailable">غير متوفر الآن</span>
                                     </button>
                                 </div>
                             </div>
@@ -791,6 +791,91 @@
                                 المزيد</a>
                             <button class="order-btn" id="chatgpt-order-btn" data-product="ChatGPT Premium - 1 Month"
                                 onclick="orderChatGPT()">
+                                <span data-i18n="product.orderNow">اطلب الآن</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Claude AI -->
+                    <div class="product-card fade-in" id="product-claude" data-category="ai">
+                        <div class="product-image" style="background-image: url('https://i.pinimg.com/1200x/e9/cc/43/e9cc4340e938f878b3b178fbf8ec9cce.jpg'); background-size: cover; background-position: center;" role="img" aria-label="Claude AI"></div>
+                        <div class="product-badge" data-i18n="products.badge">عروض مميزة</div>
+                        <div class="product-content">
+                            <div class="product-header">
+                                <div class="product-icon" style="background: rgba(217, 119, 87, 0.1); color: #d97757;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                                    </svg>
+                                </div>
+                                <h3 class="product-title" data-i18n="product.claude.title">Claude AI</h3>
+                            </div>
+                            <p class="description" data-i18n="product.claude.desc">استمتع بقوة Claude 4.6 Sonnet و Opus 4.7 مع اشتراك برو أو API مخصص للمبرمجين.</p>
+
+                            <!-- Offer Selection -->
+                            <div class="claude-durations" style="margin: 16px 0;">
+                                <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                    <span data-i18n="product.cursor.selectType">اختر العرض:</span>
+                                </p>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="claude-duration-btn active" data-duration="pro"
+                                        onclick="selectClaudeDuration('pro')"
+                                        style="flex: 1; padding: 8px; border: 2px solid #d97757; background: rgba(217, 119, 87, 0.15); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                        Claude Pro
+                                    </button>
+                                    <button class="claude-duration-btn" data-duration="api"
+                                        onclick="selectClaudeDuration('api')"
+                                        style="flex: 1; padding: 8px; border: 2px solid var(--border-color); background: rgba(100, 100, 100, 0.1); color: var(--text-secondary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;">
+                                        Claude Code API
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="claude-prices-pro" class="claude-prices" style="margin: 16px 0;">
+                                <div class="price-tag" data-price-dzd="4800" data-price-usd="19.2">4800 <span data-i18n="currency">د.ج</span></div>
+                                <span style="color: #9ca3af; font-size: 0.9rem;">/ <span data-i18n="perMonth">للشهر</span></span>
+                            </div>
+
+                            <div id="claude-prices-api" class="claude-prices" style="margin: 16px 0; display: none;">
+                                <div class="price-tag" data-price-dzd="3500" data-price-usd="14">3500 <span data-i18n="currency">د.ج</span></div>
+                                <span style="color: #9ca3af; font-size: 0.9rem;">/ 45M Tokens</span>
+                            </div>
+
+                            <div class="payment-methods-row">
+                                <button class="payment-btn-compact crypto-pay-btn" id="claude-crypto-btn"
+                                    data-product="Claude Pro Account" data-price="4800" data-price-usd="19.2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z" />
+                                    </svg>
+                                    <span>USDT</span>
+                                </button>
+                                <button class="payment-btn-compact redotpay-btn" id="claude-redotpay-btn"
+                                    data-product="Claude Pro Account" data-price="4800" data-price-usd="19.2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                    </svg>
+                                    <span>RedotPay</span>
+                                </button>
+                                <button class="payment-btn-compact baridimob-btn" id="claude-baridimob-btn"
+                                    data-product="Claude Pro Account" data-price="4800" data-price-usd="19.2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
+                                    </svg>
+                                    <span>BaridiMob</span>
+                                </button>
+                            </div>
+
+                            <ul class="product-features">
+                                <li data-i18n="product.claude.feature1">وصول كامل لـ Sonnet 4.6 و Opus 4.7</li>
+                                <li data-i18n="product.claude.feature2">أداء فائق في البرمجة والتحليل</li>
+                                <li data-i18n="product.claude.feature3">حدود استخدام أعلى من الخطة المجانية</li>
+                            </ul>
+
+                            <button class="order-btn" id="claude-order-btn" data-product="Claude Pro Account"
+                                onclick="orderClaude()">
                                 <span data-i18n="product.orderNow">اطلب الآن</span>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
@@ -3658,6 +3743,7 @@
                 'The Real World Account': 'courses',
                 'Adobe Creative Cloud': 'design',
                 'ChatGPT Premium': 'ai',
+                'Claude AI': 'ai',
                 'SUPER GROK': 'ai',
                 'Gama AI Pro': 'ai',
                 'Netflix Premium': 'entertainment',
