@@ -86,8 +86,8 @@ export const PRODUCTS_DATA = {
             durations: [
                 { key: "1month", price_dzd: 900, price_usd: 3 },
                 { key: "3months", price_dzd: 1800, price_usd: 4.5 },
-                { key: "6months", price_dzd: 3200, price_usd: 8 },
-                { key: "1year", price_dzd: 5500, price_usd: 14 }
+                { key: "6months", price_dzd: 3200, price_usd: 12.8 },
+                { key: "1year", price_dzd: 5500, price_usd: 22 }
             ]
         },
         {

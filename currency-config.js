@@ -207,8 +207,8 @@ const PRODUCTS = {
     durations: {
       '1month': { dzd: 800, usd: 3 },
       '3months': { dzd: 1200, usd: 4.5 },
-      '6months': { dzd: 2000, usd: 8 },
-      '1year': { dzd: 3500, usd: 14 }
+      '6months': { dzd: 3200, usd: 12.8 },
+      '1year': { dzd: 5500, usd: 22 }
     },
     original_price: 1500,
     features: ['all-platforms', 'no-watermark', 'cloud-storage'],
