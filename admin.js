@@ -2696,6 +2696,64 @@ async function loadIntegrationSettings() {
 // allProducts معرّف مسبقاً في المتغيرات العامة
 let editingProductId = null;
 let charts = {};
+const ADMIN_PRODUCTS_COLLECTION = 'products_v2';
+const LEGACY_PRODUCTS_COLLECTION = 'products';
+
+function getProductDisplayName(product) {
+    if (!product) return '';
+    if (typeof product.name === 'string') return product.name;
+    return product.name?.ar || product.name?.en || product.name_translations?.ar || product.id || '';
+}
+
+function getProductPriceDZD(product) {
+    return Number(product?.priceDZD ?? product?.price_dzd ?? 0) || 0;
+}
+
+function getProductPriceUSD(product) {
+    return Number(product?.priceUSD ?? product?.price_usd ?? 0) || 0;
+}
+
+function getProductImage(product) {
+    return product?.mediaUrl || product?.image || '';
+}
+
+function getProductOrder(product) {
+    return Number(product?.displayOrder ?? product?.order ?? 0) || 0;
+}
+
+function normalizeAdminProductForV2(productData, existingProduct = null) {
+    const nameTranslations = productData.name_translations ||
+        (typeof productData.name === 'object' ? productData.name : { ar: productData.name || '', en: '', fr: '' });
+    const description = typeof productData.description === 'object'
+        ? productData.description
+        : { ar: productData.description || '', en: '', fr: '' };
+    const availability = productData.availability || productData.status ||
+        (productData.available === false ? 'unavailable' : 'available');
+
+    return {
+        ...productData,
+        id: productData.id,
+        name: {
+            ar: nameTranslations.ar || getProductDisplayName(existingProduct) || productData.id,
+            en: nameTranslations.en || '',
+            fr: nameTranslations.fr || ''
+        },
+        description,
+        mediaUrl: productData.mediaUrl || productData.image || '',
+        mediaType: productData.mediaType || 'image',
+        priceDZD: getProductPriceDZD(productData),
+        priceUSD: getProductPriceUSD(productData),
+        availability,
+        available: availability === 'available',
+        status: availability,
+        displayOrder: getProductOrder(productData),
+        order: getProductOrder(productData),
+        isArchived: Boolean(productData.isArchived),
+        active: productData.active !== false,
+        updatedAt: new Date(),
+        createdAt: existingProduct?.createdAt || productData.createdAt || new Date()
+    };
+}
 
 /**
  * تحميل المنتجات من Firebase أو currency-config.js
@@ -2705,12 +2763,13 @@ async function loadProducts() {
     try {
         const productMap = new Map();
         let productsFromFirebase = false;
+        const missingLocalProducts = [];
 
         // 1. التحميل من Firebase
         if (window.db && window.firebaseModules) {
             try {
                 const { collection, getDocs } = window.firebaseModules;
-                const querySnapshot = await getDocs(collection(window.db, 'products'));
+                const querySnapshot = await getDocs(collection(window.db, ADMIN_PRODUCTS_COLLECTION));
 
                 querySnapshot.forEach((docItem) => {
                     const data = docItem.data();
@@ -2734,13 +2793,15 @@ async function loadProducts() {
         if (typeof PRODUCTS !== 'undefined' && PRODUCTS) {
             Object.keys(PRODUCTS).forEach(key => {
                 if (!productMap.has(key)) {
-                    productMap.set(key, {
+                    const localProduct = {
                         id: key,
                         ...PRODUCTS[key],
                         active: PRODUCTS[key].active !== false,
                         source: 'local'
-                    });
-                    console.log(`ℹ️ إضافة منتج محلي: ${key}`);
+                    };
+                    productMap.set(key, localProduct);
+                    missingLocalProducts.push(localProduct);
+                    console.log('New local product detected:', key);
                 }
             });
         }
@@ -2749,7 +2810,7 @@ async function loadProducts() {
         allProducts = Array.from(productMap.values());
 
         // 3. ترتيب المنتجات
-        allProducts.sort((a, b) => (a.order || 0) - (b.order || 0));
+        allProducts.sort((a, b) => getProductOrder(a) - getProductOrder(b));
 
         console.log(`📊 إجمالي المنتجات الجاهزة: ${allProducts.length}`);
 
@@ -2759,8 +2820,8 @@ async function loadProducts() {
         }
 
         // مزامنة المنتجات المحلية إلى Firebase إذا كانت مفقودة هناك
-        if (window.db && window.firebaseModules && !productsFromFirebase && allProducts.length > 0) {
-            syncProductsToFirebase();
+        if (window.db && window.firebaseModules && missingLocalProducts.length > 0) {
+            syncProductsToFirebase(missingLocalProducts);
         }
 
     } catch (error) {
@@ -2772,18 +2833,33 @@ async function loadProducts() {
 /**
  * دالة مساعدة لمزامنة المنتجات إلى Firebase
  */
-async function syncProductsToFirebase() {
+async function syncProductsToFirebase(productsToSync = allProducts) {
     if (!window.db || !window.firebaseModules) return;
 
     console.log('📤 جاري مزامنة المنتجات مع السحابة...');
     try {
         const { setDoc, doc } = window.firebaseModules;
-        for (const product of allProducts) {
-            await setDoc(doc(window.db, 'products', product.id), {
+        for (const product of productsToSync) {
+            const productForV2 = normalizeAdminProductForV2({
+                ...product,
                 id: product.id,
-                name: product.name,
-                price_dzd: product.price_dzd,
-                price_usd: product.price_usd,
+                priceDZD: getProductPriceDZD(product),
+                priceUSD: getProductPriceUSD(product),
+                displayOrder: getProductOrder(product),
+                availability: getProductStatus(product)
+            }, product);
+
+            await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, product.id), productForV2, { merge: true });
+            await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, product.id), {
+                id: product.id,
+                name: getProductDisplayName(productForV2),
+                price_dzd: productForV2.priceDZD,
+                price_usd: productForV2.priceUSD,
+                priceDZD: productForV2.priceDZD,
+                priceUSD: productForV2.priceUSD,
+                availability: productForV2.availability,
+                status: productForV2.availability,
+                available: productForV2.availability === 'available',
                 durations: product.durations || {},
                 description: product.description || {},
                 paymentMethods: product.paymentMethods || {},
@@ -2816,21 +2892,24 @@ function displayProductsTable(products = allProducts) {
     updateProductStats();
 
     // ترتيب المنتجات حسب order إذا موجود
-    const sortedProducts = [...products].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const sortedProducts = [...products].sort((a, b) => getProductOrder(a) - getProductOrder(b));
 
     console.log('عرض المنتجات:', sortedProducts.length);
     tbody.innerHTML = sortedProducts.map((product, index) => {
         const categoryLabels = {
-            subscriptions: 'اشتراكات',
-            accounts: 'حسابات',
-            tools: 'أدوات',
-            courses: 'كورسات',
-            other: 'أخرى'
+            subscriptions: 'Subscriptions',
+            accounts: 'Accounts',
+            tools: 'Tools',
+            courses: 'Courses',
+            other: 'Other'
         };
+        const productName = getProductDisplayName(product);
+        const productImage = getProductImage(product);
+        const priceDZD = getProductPriceDZD(product);
+        const priceUSD = getProductPriceUSD(product);
 
-        // حساب عدد المبيعات لهذا المنتج
         const salesCount = allOrders.filter(o =>
-            o.productName === product.name &&
+            o.productName === productName &&
             (o.status === 'delivered' || o.status === 'confirmed')
         ).length;
 
@@ -2838,7 +2917,7 @@ function displayProductsTable(products = allProducts) {
         <tr class="border-t border-gray-700 hover:bg-gray-700/50 transition-colors product-row" 
             draggable="true" 
             data-product-id="${product.id}"
-            data-order="${product.order || index}">
+            data-order="${getProductOrder(product) || index}">
             <!-- Drag Handle -->
             <td class="px-2 py-4 cursor-move text-gray-500 drag-handle">
                 <span class="text-lg">⬍</span>
@@ -2846,15 +2925,15 @@ function displayProductsTable(products = allProducts) {
             <!-- Image -->
             <td class="px-4 py-4">
                 <div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-700 flex items-center justify-center">
-                    ${product.image ?
-                `<img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='📦'">` :
+                    ${productImage ?
+                `<img src="${escapeHtml(productImage)}" alt="${escapeHtml(productName)}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='📦'">` :
                 '<span class="text-2xl">📦</span>'
             }
                 </div>
             </td>
             <!-- Product Info -->
             <td class="px-4 py-4">
-                <div class="font-bold">${escapeHtml(product.name || product.id)}</div>
+                <div class="font-bold">${escapeHtml(productName || product.id)}</div>
                 <div class="text-gray-400 text-xs">${escapeHtml(product.id)}</div>
                 ${product.featured ? '<span class="text-yellow-400 text-xs">⭐ مميز</span>' : ''}
             </td>
@@ -2868,8 +2947,8 @@ function displayProductsTable(products = allProducts) {
             <td class="px-4 py-4">
                 <div class="space-y-1">
                     ${product.old_price_dzd ? `<span class="text-gray-500 line-through text-sm">${product.old_price_dzd} د.ج</span>` : ''}
-                    <div class="font-bold" style="color: var(--accent);">${product.price_dzd || 0} د.ج</div>
-                    <div class="text-gray-400 text-xs">$${product.price_usd || 0}</div>
+                    <input type="number" min="0" step="1" value="${priceDZD}" onchange="updateProductPrice('${product.id}', 'DZD', this.value)" class="w-24 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-sm font-bold" style="color: var(--accent);">
+                    <input type="number" min="0" step="0.01" value="${priceUSD}" onchange="updateProductPrice('${product.id}', 'USD', this.value)" class="w-20 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-xs text-gray-300">
                 </div>
             </td>
             <!-- Stock -->
@@ -2950,6 +3029,43 @@ function updateProductStats() {
     if (statSales) statSales.textContent = totalSales;
 }
 
+async function updateProductPrice(productId, currency, rawValue) {
+    const product = allProducts.find(p => p.id === productId);
+    if (!product) return;
+
+    const value = Number(rawValue);
+    if (!Number.isFinite(value) || value < 0) {
+        showToast('السعر غير صالح', 'error');
+        displayProductsTable();
+        return;
+    }
+
+    if (currency === 'DZD') {
+        product.priceDZD = value;
+        product.price_dzd = value;
+    } else {
+        product.priceUSD = value;
+        product.price_usd = value;
+    }
+
+    try {
+        const { updateDoc, doc } = window.firebaseModules;
+        const updatePayload = {
+            priceDZD: getProductPriceDZD(product),
+            priceUSD: getProductPriceUSD(product),
+            price_dzd: getProductPriceDZD(product),
+            price_usd: getProductPriceUSD(product),
+            updatedAt: new Date()
+        };
+        await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), updatePayload);
+        await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), updatePayload);
+        showToast('تم تحديث السعر بنجاح ✅');
+    } catch (error) {
+        console.error('خطأ في تحديث السعر:', error);
+        showToast('خطأ في تحديث السعر', 'error');
+    }
+}
+
 /**
  * تبديل حالة التوفر بين ثلاث حالات: متوفر، غير متوفر، قريباً
  */
@@ -2959,7 +3075,7 @@ async function toggleAvailability(productId) {
 
     // التنقل بين الحالات الثلاث: available -> unavailable -> coming_soon -> available
     let newStatus;
-    const currentStatus = product.status || (product.available === false ? 'unavailable' : 'available');
+    const currentStatus = getProductStatus(product);
 
     if (currentStatus === 'available') {
         newStatus = 'unavailable';
@@ -2977,16 +3093,25 @@ async function toggleAvailability(productId) {
 
     try {
         const { updateDoc, doc } = window.firebaseModules;
-        await updateDoc(doc(window.db, 'products', productId), {
+        await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), {
+            availability: newStatus,
             status: newStatus,
-            available: newStatus === 'available' // للتوافق مع الكود القديم
+            available: newStatus === 'available',
+            updatedAt: new Date()
+        });
+        await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), {
+            availability: newStatus,
+            status: newStatus,
+            available: newStatus === 'available',
+            updatedAt: new Date()
         });
 
+        product.availability = newStatus;
         product.status = newStatus;
         product.available = newStatus === 'available';
         displayProductsTable();
         showToast(statusMessages[newStatus]);
-        logActivity('product', 'status_changed', `${product.name}: ${newStatus}`);
+        logActivity('product', 'status_changed', `${getProductDisplayName(product)}: ${newStatus}`);
     } catch (error) {
         console.error('خطأ في تغيير حالة التوفر:', error);
         showToast('خطأ في تغيير حالة التوفر', 'error');
@@ -2997,6 +3122,7 @@ async function toggleAvailability(productId) {
  * الحصول على حالة المنتج (للتوافق مع الكود القديم والجديد)
  */
 function getProductStatus(product) {
+    if (product.availability) return product.availability;
     if (product.status) return product.status;
     return product.available === false ? 'unavailable' : 'available';
 }
@@ -3012,14 +3138,20 @@ async function toggleActive(productId) {
 
     try {
         const { updateDoc, doc } = window.firebaseModules;
-        await updateDoc(doc(window.db, 'products', productId), {
-            active: newActive
+        await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), {
+            active: newActive,
+            isArchived: !newActive,
+            updatedAt: new Date()
+        });
+        await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), {
+            active: newActive,
+            updatedAt: new Date()
         });
 
         product.active = newActive;
         displayProductsTable();
         showToast(newActive ? '👁️ المنتج الآن مرئي' : '🙈 المنتج الآن مخفي');
-        logActivity('product', 'active_changed', `${product.name}: ${newActive ? 'نشط' : 'غير نشط'}`);
+        logActivity('product', 'active_changed', `${getProductDisplayName(product)}: ${newActive ? 'نشط' : 'غير نشط'}`);
     } catch (error) {
         console.error('خطأ في تغيير حالة النشاط:', error);
         showToast('خطأ في تغيير حالة النشاط', 'error');
@@ -3076,26 +3208,32 @@ function previewProduct(productId) {
     const modal = document.getElementById('product-preview-modal');
     const content = document.getElementById('product-preview-content');
 
-    const features = product.features ? product.features.split('\n').filter(f => f.trim()) : [];
+    const productName = getProductDisplayName(product);
+    const productImage = getProductImage(product);
+    const priceDZD = getProductPriceDZD(product);
+    const priceUSD = getProductPriceUSD(product);
+    const features = Array.isArray(product.features)
+        ? product.features.map(f => f.text?.ar || f.text || f).filter(Boolean)
+        : (product.features ? String(product.features).split('\n').filter(f => f.trim()) : []);
 
     content.innerHTML = `
         <div class="text-center mb-4">
-            ${product.image ?
-            `<img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="w-32 h-32 object-cover rounded-xl mx-auto" onerror="this.src='https://via.placeholder.com/128?text=📦'">` :
+            ${productImage ?
+            `<img src="${escapeHtml(productImage)}" alt="${escapeHtml(productName)}" class="w-32 h-32 object-cover rounded-xl mx-auto" onerror="this.src='https://via.placeholder.com/128?text=📦'">` :
             '<div class="w-32 h-32 bg-gray-700 rounded-xl mx-auto flex items-center justify-center text-5xl">📦</div>'
         }
         </div>
-        <h4 class="text-xl font-bold text-center">${escapeHtml(product.name)}</h4>
+        <h4 class="text-xl font-bold text-center">${escapeHtml(productName)}</h4>
         ${product.featured ? '<div class="text-center text-yellow-400">⭐ منتج مميز</div>' : ''}
         
         <div class="flex justify-center gap-4 my-4">
             <div class="text-center">
                 ${product.old_price_dzd ? `<div class="text-gray-500 line-through text-sm">${product.old_price_dzd} د.ج</div>` : ''}
-                <div class="text-2xl font-bold" style="color: var(--accent);">${product.price_dzd || 0} د.ج</div>
+                <div class="text-2xl font-bold" style="color: var(--accent);">${priceDZD} د.ج</div>
             </div>
             <div class="text-center">
                 ${product.old_price_usd ? `<div class="text-gray-500 line-through text-sm">$${product.old_price_usd}</div>` : ''}
-                <div class="text-2xl font-bold text-green-400">$${product.price_usd || 0}</div>
+                <div class="text-2xl font-bold text-green-400">$${priceUSD}</div>
             </div>
         </div>
         
@@ -3157,7 +3295,7 @@ function searchProducts() {
     // فلترة حسب البحث
     if (searchTerm) {
         filtered = filtered.filter(p =>
-            (p.name && p.name.toLowerCase().includes(searchTerm)) ||
+            (getProductDisplayName(p).toLowerCase().includes(searchTerm)) ||
             (p.id && p.id.toLowerCase().includes(searchTerm))
         );
     }
@@ -3270,7 +3408,9 @@ async function saveProductOrder() {
             const product = allProducts.find(p => p.id === productId);
             if (product) {
                 product.order = i;
-                await updateDoc(doc(window.db, 'products', productId), { order: i });
+                product.displayOrder = i;
+                await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), { order: i, displayOrder: i, updatedAt: new Date() });
+                await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), { order: i, displayOrder: i, updatedAt: new Date() });
             }
         }
 
@@ -3545,32 +3685,39 @@ async function saveProduct(event) {
 
     // الحفاظ على الترتيب الحالي
     const existingProduct = allProducts.find(p => p.id === productData.id);
+    const productForV2 = normalizeAdminProductForV2(productData, existingProduct);
     if (existingProduct) {
-        productData.order = existingProduct.order;
-        productData.displayOrder = existingProduct.displayOrder || existingProduct.order;
-        productData.createdAt = existingProduct.createdAt;
+        productForV2.order = getProductOrder(existingProduct);
+        productForV2.displayOrder = getProductOrder(existingProduct);
+        productForV2.createdAt = existingProduct.createdAt;
     } else {
-        productData.order = allProducts.length;
-        productData.displayOrder = allProducts.length;
-        productData.createdAt = new Date();
+        productForV2.order = allProducts.length;
+        productForV2.displayOrder = allProducts.length;
+        productForV2.createdAt = new Date();
     }
 
     try {
         const { setDoc, doc } = window.firebaseModules;
-        await setDoc(doc(window.db, 'products', productData.id), productData);
+        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productForV2.id), productForV2, { merge: true });
+        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productForV2.id), {
+            ...productForV2,
+            name: getProductDisplayName(productForV2),
+            price_dzd: productForV2.priceDZD,
+            price_usd: productForV2.priceUSD
+        }, { merge: true });
 
         // تحديث القائمة المحلية
-        const index = allProducts.findIndex(p => p.id === productData.id);
+        const index = allProducts.findIndex(p => p.id === productForV2.id);
         if (index >= 0) {
-            allProducts[index] = productData;
+            allProducts[index] = productForV2;
         } else {
-            allProducts.push(productData);
+            allProducts.push(productForV2);
         }
 
         displayProductsTable();
         closeProductModal();
         showToast('تم حفظ المنتج بنجاح ✅');
-        logActivity('product', editingProductId ? 'updated' : 'created', productData.name);
+        logActivity('product', editingProductId ? 'updated' : 'created', getProductDisplayName(productForV2));
     } catch (error) {
         console.error('خطأ في حفظ المنتج:', error);
         showToast('خطأ في حفظ المنتج', 'error');
@@ -4455,7 +4602,8 @@ async function confirmDelete() {
         const { deleteDoc, doc } = window.firebaseModules;
 
         if (deleteType === 'product') {
-            await deleteDoc(doc(window.db, 'products', reviewToDelete));
+            await deleteDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, reviewToDelete));
+            await deleteDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, reviewToDelete));
             allProducts = allProducts.filter(p => p.id !== reviewToDelete);
             displayProductsTable();
             showToast('تم حذف المنتج بنجاح 🗑️');
@@ -7604,20 +7752,26 @@ async function saveAllLivePrices() {
 
             const updateData = {
                 price_dzd: parseFloat(mainDzd),
-                price_usd: parseFloat(mainUsd)
+                price_usd: parseFloat(mainUsd),
+                priceDZD: parseFloat(mainDzd),
+                priceUSD: parseFloat(mainUsd),
+                updatedAt: new Date()
             };
 
             if (Object.keys(durations).length > 0) {
                 updateData.durations = durations;
             }
 
-            await updateDoc(doc(window.db, 'products', productId), updateData);
+            await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), updateData);
+            await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), updateData);
 
             // Update local memory
             const prod = allProducts.find(p => p.id === productId);
             if (prod) {
                 prod.price_dzd = updateData.price_dzd;
                 prod.price_usd = updateData.price_usd;
+                prod.priceDZD = updateData.priceDZD;
+                prod.priceUSD = updateData.priceUSD;
                 if (updateData.durations) prod.durations = updateData.durations;
             }
 

@@ -3286,7 +3286,10 @@
             try {
                 const { collection, getDocs } = window.firebaseModules;
                 console.log('🔍 جاري البحث عن المنتجات في Firebase...');
-                const querySnapshot = await getDocs(collection(window.db, 'products'));
+                let querySnapshot = await getDocs(collection(window.db, 'products_v2'));
+                if (querySnapshot.empty) {
+                    querySnapshot = await getDocs(collection(window.db, 'products'));
+                }
                 console.log(`📦 تم العثور على ${querySnapshot.size} منتج`);
 
                 // خريطة أسماء المنتجات مع معرفاتها (تشمل كل التنويعات)
@@ -3316,7 +3319,12 @@
                     const productId = doc.id;
 
                     // تحديد حالة المنتج (دعم النظام الجديد والقديم)
-                    let productStatus = product.status || (product.available === false ? 'unavailable' : 'available');
+                    let productStatus = product.availability || product.status || (product.available === false ? 'unavailable' : 'available');
+                    const productName = typeof product.name === 'object'
+                        ? (product.name.ar || product.name.en || product.id || '')
+                        : (product.name || '');
+                    const productPriceDZD = Number(product.priceDZD ?? product.price_dzd ?? 0) || 0;
+                    const productPriceUSD = Number(product.priceUSD ?? product.price_usd ?? 0) || 0;
 
                     // Availability is now fully controlled by the admin panel
                     // No hardcoded overrides - Firebase/admin is the single source of truth
@@ -3328,8 +3336,6 @@
                     productCards.forEach(card => {
                         // الحصول على عنوان المنتج من البطاقة
                         const cardTitle = card.querySelector('h3')?.textContent?.trim() || '';
-                        const productName = product.name || '';
-
                         // مطابقة بسيطة باستخدام العنوان
                         const matchFound = cardTitle.toLowerCase().includes(productName.toLowerCase()) ||
                             productName.toLowerCase().includes(cardTitle.toLowerCase()) ||
@@ -3337,6 +3343,22 @@
 
                         if (matchFound) {
                             console.log(`✅ تحديث "${cardTitle}" إلى "${productStatus}"`);
+
+                            if (productPriceDZD > 0) {
+                                const priceTag = card.querySelector('.price-tag');
+                                const priceSpan = priceTag?.querySelector('[data-price-dzd]');
+                                const priceElement = priceSpan || priceTag;
+                                if (priceElement) {
+                                    priceElement.setAttribute('data-price-dzd', productPriceDZD);
+                                    priceElement.setAttribute('data-price-usd', productPriceUSD);
+                                    priceElement.textContent = `${productPriceDZD} \u062f.\u062c`;
+                                }
+
+                                card.querySelectorAll('.payment-btn-compact').forEach(btn => {
+                                    btn.setAttribute('data-price', productPriceDZD);
+                                    btn.setAttribute('data-price-usd', productPriceUSD);
+                                });
+                            }
 
                             // الحصول على الترجمات حسب اللغة الحالية
                             const lang = window.currentLang || localStorage.getItem('preferredLanguage') || 'ar';
