@@ -14,6 +14,167 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const PRODUCTS_COLLECTION = 'products_v2';
+let productsUnsubscribe = null;
+const DEFAULT_PRODUCT_ORDER = [
+    'trw',
+    'adobe',
+    'chatgpt',
+    'capcut',
+    'claude',
+    'super-grok',
+    'gamma',
+    'google-ai',
+    'lovable',
+    'perplexity',
+    'cursor',
+    'scispace',
+    'canva',
+    'netflix',
+    'duolingo',
+    'tradingview',
+    'microsoft-office',
+    'hma-vpn',
+    'primevideo',
+    'crunchyroll',
+    'alight-motion'
+];
+
+function getLocalizedText(value, lang = 'ar', fallback = '') {
+    if (!value) return fallback;
+    if (typeof value === 'string') return value;
+    return value[lang] || value.ar || value.en || value.fr || fallback;
+}
+
+function getNumericValue(source, keys, fallback = 0) {
+    for (const key of keys) {
+        const value = Number(source?.[key]);
+        if (Number.isFinite(value) && value > 0) return value;
+    }
+    return fallback;
+}
+
+function getUiText(key, lang = 'ar') {
+    const texts = {
+        orderNow: { ar: 'اطلب الآن', en: 'Order Now', fr: 'Commander' },
+        productDetails: { ar: 'تفاصيل المنتج', en: 'Product Details', fr: 'Details du produit' },
+        discoverMore: { ar: 'اكتشف المزيد', en: 'Discover More', fr: 'Decouvrir plus' },
+        unavailable: { ar: 'غير متوفر', en: 'Unavailable', fr: 'Indisponible' },
+        unavailableIcon: { ar: '❌ غير متوفر', en: '❌ Unavailable', fr: '❌ Indisponible' },
+        comingSoon: { ar: 'قريباً', en: 'Coming Soon', fr: 'Bientot' },
+        selectDuration: { ar: 'اختر المدة:', en: 'Choose duration:', fr: 'Choisir la duree :' },
+        month: { ar: 'شهر', en: 'month', fr: 'mois' },
+        currencyDzd: { ar: 'د.ج', en: 'DA', fr: 'DA' }
+    };
+
+    return texts[key]?.[lang] || texts[key]?.ar || '';
+}
+
+function formatDzd(amount, lang = 'ar') {
+    const locale = lang === 'ar' ? 'ar-DZ' : lang === 'fr' ? 'fr-DZ' : 'en-DZ';
+    return `${Number(amount || 0).toLocaleString(locale)} ${getUiText('currencyDzd', lang)}`;
+}
+
+function normalizeFeatures(features) {
+    if (Array.isArray(features)) return features;
+    if (typeof features === 'string') {
+        return features
+            .split(/\r?\n|,/)
+            .map(text => text.trim())
+            .filter(Boolean)
+            .map(text => ({ text: { ar: text, en: '', fr: '' } }));
+    }
+    return [];
+}
+
+function cleanFeatureText(text) {
+    return String(text || '').replace(/^[^\p{L}\p{N}]+/u, '').trim();
+}
+
+function normalizeSearchText(value) {
+    return String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+
+function normalizeProductCategory(product) {
+    const rawCategory = normalizeSearchText(product?.category);
+    const id = normalizeSearchText(product?.id);
+    const name = normalizeSearchText([
+        getLocalizedText(product?.name, 'en', ''),
+        getLocalizedText(product?.name, 'fr', ''),
+        getLocalizedText(product?.name, 'ar', '')
+    ].join(' '));
+
+    const directCategoryMap = {
+        ai: 'ai',
+        'ai tools': 'ai',
+        aitools: 'ai',
+        artificial: 'ai',
+        intelligence: 'ai',
+        'artificial intelligence': 'ai',
+        design: 'design',
+        creative: 'design',
+        video: 'design',
+        montage: 'design',
+        editing: 'design',
+        courses: 'courses',
+        course: 'courses',
+        education: 'courses',
+        accounts: 'courses',
+        account: 'courses',
+        learning: 'courses',
+        entertainment: 'entertainment',
+        streaming: 'entertainment',
+        stream: 'entertainment',
+        movies: 'entertainment',
+        subscriptions: ''
+    };
+
+    if (directCategoryMap[rawCategory]) return directCategoryMap[rawCategory];
+
+    const haystack = `${id} ${name}`;
+    const aiIds = ['chatgpt', 'gpt', 'claude', 'grok', 'super grok', 'google ai', 'google gemini', 'gemini', 'veo', 'gamma', 'gama', 'perplexity', 'cursor', 'scispace', 'sci space', 'lovable'];
+    const designIds = ['adobe', 'creative cloud', 'canva', 'capcut', 'cap cut', 'alight', 'motion'];
+    const courseIds = ['trw', 'real world', 'duolingo', 'microsoft', 'office', 'hma', 'vpn', 'tradingview', 'trading view'];
+    const entertainmentIds = ['netflix', 'primevideo', 'prime video', 'crunchyroll', 'youtube', 'spotify'];
+
+    if (aiIds.some(key => haystack.includes(key))) return 'ai';
+    if (designIds.some(key => haystack.includes(key))) return 'design';
+    if (courseIds.some(key => haystack.includes(key))) return 'courses';
+    if (entertainmentIds.some(key => haystack.includes(key))) return 'entertainment';
+
+    if (['other', 'subscriptions', 'tools', 'tool', ''].includes(rawCategory)) return 'courses';
+    return rawCategory || 'courses';
+}
+
+function getProductOrderValue(product) {
+    const explicitOrder = Number(product?.displayOrder ?? product?.order);
+    return Number.isFinite(explicitOrder) && explicitOrder >= 0 ? explicitOrder : 9999;
+}
+
+function getDefaultProductOrder(product) {
+    const id = String(product?.id || '').toLowerCase().trim();
+    const name = getLocalizedText(product?.name, 'en', '').toLowerCase();
+    const index = DEFAULT_PRODUCT_ORDER.findIndex(key => id.includes(key) || name.includes(key));
+    return index === -1 ? 9999 : index;
+}
+
+function normalizeProducts(products) {
+    return products
+        .filter(product => product && product.isArchived !== true && product.active !== false)
+        .sort((a, b) => {
+            const explicitOrderDiff = getProductOrderValue(a) - getProductOrderValue(b);
+            if (explicitOrderDiff !== 0) return explicitOrderDiff;
+
+            const defaultOrderDiff = getDefaultProductOrder(a) - getDefaultProductOrder(b);
+            if (defaultOrderDiff !== 0) return defaultOrderDiff;
+
+            return String(a.id || '').localeCompare(String(b.id || ''));
+        });
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // تحميل المنتجات من Firebase
@@ -32,16 +193,8 @@ async function loadProductsFromFirebase(db, firebaseModules) {
     }
 
     try {
-        const { collection, getDocs, query, where, orderBy } = firebaseModules;
-
-        // تحميل المنتجات غير المؤرشفة مرتبة حسب displayOrder
-        const q = query(
-            collection(db, PRODUCTS_COLLECTION),
-            where('isArchived', '==', false),
-            orderBy('displayOrder', 'asc')
-        );
-
-        const querySnapshot = await getDocs(q);
+        const { collection, getDocs } = firebaseModules;
+        const querySnapshot = await getDocs(collection(db, PRODUCTS_COLLECTION));
         const products = [];
 
         querySnapshot.forEach((docItem) => {
@@ -51,8 +204,9 @@ async function loadProductsFromFirebase(db, firebaseModules) {
             });
         });
 
-        console.log('✅ تم تحميل', products.length, 'منتج من Firebase');
-        return products;
+        const visibleProducts = normalizeProducts(products);
+        console.log('✅ تم تحميل', visibleProducts.length, 'منتج من Firebase');
+        return visibleProducts;
 
     } catch (error) {
         console.error('❌ خطأ في تحميل المنتجات:', error);
@@ -71,8 +225,8 @@ async function loadProductsFromFirebase(db, firebaseModules) {
  * @returns {string} HTML بطاقة المنتج
  */
 function createProductCardHTML(product, lang = 'ar') {
-    const name = product.name?.[lang] || product.name?.ar || 'منتج';
-    const description = product.description?.[lang] || product.description?.ar || '';
+    const name = getLocalizedText(product.name, lang, product.id || 'منتج');
+    const description = getLocalizedText(product.description, lang, '');
     // ═══════════════════════════════════════════════════════════════════════════
     // Firebase is the Single Source of Truth for prices
     // Admin panel changes in Firebase will now reflect directly on the homepage
@@ -131,36 +285,87 @@ function createProductCardHTML(product, lang = 'ar') {
         }
     }
 
-    const priceDZD = product.priceDZD || 0;
-    const priceUSD = product.priceUSD || 0;
+    const priceDZD = getNumericValue(product, ['priceDZD', 'price_dzd'], 0);
+    const priceUSD = getNumericValue(product, ['priceUSD', 'price_usd'], 0);
     const mediaUrl = product.mediaUrl || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(name);
     const mediaType = product.mediaType || 'image';
     const availability = product.availability || 'available';
-    const features = product.features || [];
+    const features = normalizeFeatures(product.features);
     const paymentMethods = product.paymentMethods || { usdt: true, redotpay: true, baridimob: true };
     const landingPage = product.landingPage || '';
+    const category = normalizeProductCategory(product);
+
+    // بناء أزرار العروض الفرعية (المدد المختلفة)
+    const subOffers = Array.isArray(product.subOffers) && product.subOffers.length > 0
+        ? product.subOffers : null;
+
+    let activePriceDZD = priceDZD;
+    let activePriceUSD = priceUSD;
+    let durationSelectorHTML = '';
+
+    const firstAvailableSubOffer = subOffers?.find(s => (s.availability || 'available') === 'available');
+    const firstSubOffer = subOffers?.[0];
+    const effectiveAvailability = availability !== 'available'
+        ? availability
+        : (subOffers && !firstAvailableSubOffer ? (firstSubOffer?.availability || 'unavailable') : 'available');
+    const isUnavailableState = effectiveAvailability !== 'available';
+
+    if (subOffers) {
+        const firstAvail = firstAvailableSubOffer || firstSubOffer;
+        activePriceDZD = getNumericValue(firstAvail, ['priceDZD', 'price_dzd'], priceDZD);
+        activePriceUSD = getNumericValue(firstAvail, ['priceUSD', 'price_usd'], priceUSD);
+
+        const btns = subOffers.map(offer => {
+            const label = getLocalizedText(offer.name, lang, offer.id || '');
+            const isActive = offer.id === firstAvail.id;
+            const isDisabled = offer.availability !== 'available';
+            const offerPriceDZD = getNumericValue(offer, ['priceDZD', 'price_dzd'], 0);
+            const offerPriceUSD = getNumericValue(offer, ['priceUSD', 'price_usd'], 0);
+            const subLabel = isDisabled
+                ? `<span style="display:block;font-size:0.7rem;color:#ef4444;">${offer.availability === 'coming_soon' ? getUiText('comingSoon', lang) : getUiText('unavailable', lang)}</span>`
+                : '';
+            return `<button ${isDisabled ? 'disabled' : ''}
+                class="product-duration-btn${isActive ? ' active' : ''}"
+                data-product-id="${product.id}"
+                data-duration="${offer.id}"
+                data-price-dzd="${offerPriceDZD}"
+                data-price-usd="${offerPriceUSD}"
+                onclick="selectProductDuration(this,'${product.id}')">${label}${subLabel}</button>`;
+        }).join('');
+
+        durationSelectorHTML = `
+            <div class="product-duration-selector" style="margin:12px 0 6px;">
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;">${getUiText('selectDuration', lang)}</p>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">${btns}</div>
+            </div>`;
+    }
 
     // إنشاء شارة الحالة
     let statusBadge = '';
     let buttonDisabled = '';
     let cardOpacity = '';
 
-    if (availability === 'unavailable') {
+    if (effectiveAvailability === 'unavailable') {
         statusBadge = `
             <div class="status-badge unavailable-badge" data-status="unavailable"
                 style="position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, #e50914, #b20710); color: white; padding: 10px 20px; border-radius: 25px; font-weight: 700; font-size: 0.9rem; z-index: 10; box-shadow: 0 4px 15px rgba(229, 9, 20, 0.5);">
-                <span data-i18n="product.unavailable">❌ غير متوفر</span>
+                <span data-i18n="product.unavailable">${getUiText('unavailableIcon', lang)}</span>
             </div>`;
         buttonDisabled = 'disabled style="opacity: 0.5; cursor: not-allowed;"';
-    } else if (availability === 'coming_soon') {
+    } else if (effectiveAvailability === 'coming_soon') {
         statusBadge = `
             <div class="coming-soon-badge" data-status="coming_soon"
                 style="position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, #ff6b6b, #ff8e53); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; z-index: 10; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5); animation: pulse 2s infinite;">
-                <span data-i18n="product.comingSoon">قريباً</span>
+                <span data-i18n="product.comingSoon">${getUiText('comingSoon', lang)}</span>
             </div>`;
         buttonDisabled = 'disabled style="opacity: 0.5; cursor: not-allowed;"';
         cardOpacity = 'style="position: relative; opacity: 0.9;"';
     }
+
+    const orderButtonText = effectiveAvailability === 'available'
+        ? getUiText('orderNow', lang)
+        : (effectiveAvailability === 'coming_soon' ? getUiText('comingSoon', lang) : getUiText('unavailable', lang));
+    const orderButtonStatusAttr = effectiveAvailability === 'available' ? '' : `data-status="${effectiveAvailability}"`;
 
     // إنشاء عنصر الوسائط
     let mediaElement = '';
@@ -180,7 +385,7 @@ function createProductCardHTML(product, lang = 'ar') {
     let paymentButtons = '';
     if (paymentMethods.usdt) {
         paymentButtons += `
-            <button class="payment-btn-compact crypto-pay-btn" data-product="${name}" data-price="${priceDZD}" data-price-usd="${priceUSD}" ${buttonDisabled}>
+            <button class="payment-btn-compact crypto-pay-btn" data-product="${name}" data-price="${activePriceDZD}" data-price-usd="${activePriceUSD}" ${buttonDisabled}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm1-11h3v2h-3v3h-2v-3H8v-2h3V8h2v3z"/>
                 </svg>
@@ -189,7 +394,7 @@ function createProductCardHTML(product, lang = 'ar') {
     }
     if (paymentMethods.redotpay) {
         paymentButtons += `
-            <button class="payment-btn-compact redotpay-btn" data-product="${name}" data-price="${priceDZD}" data-price-usd="${priceUSD}" ${buttonDisabled}>
+            <button class="payment-btn-compact redotpay-btn" data-product="${name}" data-price="${activePriceDZD}" data-price-usd="${activePriceUSD}" ${buttonDisabled}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
                 </svg>
@@ -198,7 +403,7 @@ function createProductCardHTML(product, lang = 'ar') {
     }
     if (paymentMethods.baridimob) {
         paymentButtons += `
-            <button class="payment-btn-compact baridimob-btn" data-product="${name}" data-price="${priceDZD}" data-price-usd="${priceUSD}" ${buttonDisabled}>
+            <button class="payment-btn-compact baridimob-btn" data-product="${name}" data-price="${activePriceDZD}" data-price-usd="${activePriceUSD}" ${buttonDisabled}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
                 </svg>
@@ -209,7 +414,7 @@ function createProductCardHTML(product, lang = 'ar') {
     // إنشاء قائمة المميزات
     let featuresHTML = '';
     features.forEach((feature, index) => {
-        const featureText = feature.text?.[lang] || feature.text?.ar || '';
+        const featureText = cleanFeatureText(getLocalizedText(feature.text || feature, lang, ''));
         if (featureText) {
             featuresHTML += `<li data-i18n="product.${product.id}.feature${index + 1}">${featureText}</li>`;
         }
@@ -218,32 +423,33 @@ function createProductCardHTML(product, lang = 'ar') {
     // زر اكتشف المزيد
     let discoverBtn = '';
     if (landingPage) {
-        discoverBtn = `<a href="${landingPage}" class="discover-btn" data-i18n="product.discoverMore">اكتشف المزيد</a>`;
+        discoverBtn = `<a href="${landingPage}" class="discover-btn" data-i18n="product.discoverMore">${getUiText('discoverMore', lang)}</a>`;
     }
 
     // إنشاء البطاقة الكاملة
     return `
-        <div class="product-card fade-in" data-product-id="${product.id}" ${cardOpacity}>
+        <div class="product-card fade-in" data-product-id="${product.id}" data-category="${category}" ${cardOpacity}>
             ${statusBadge}
             ${mediaElement}
             <h3>${name}</h3>
             <p class="description" data-i18n="product.${product.id}.desc">${description}</p>
-            ${product.id === 'perplexity' ?
+            ${!isUnavailableState && product.id === 'perplexity' ?
             `<div class="price-tag no-currency-update">
-                <span data-price-dzd="${priceDZD}" data-price-usd="${priceUSD}">${priceDZD} د.ج</span>
-                <span style="font-size: 0.8em; font-weight: normal;">/ <span data-i18n="perMonth">شهر</span></span>
+                <span data-price-dzd="${activePriceDZD}" data-price-usd="${activePriceUSD}">${formatDzd(activePriceDZD, lang)}</span>
+                <span style="font-size: 0.8em; font-weight: normal;">/ <span data-i18n="perMonth">${getUiText('month', lang)}</span></span>
             </div>` :
-            `<div class="price-tag" data-price-dzd="${priceDZD}" data-price-usd="${priceUSD}">${priceDZD} د.ج</div>`}
+            (!isUnavailableState ? `<div class="price-tag" data-price-dzd="${activePriceDZD}" data-price-usd="${activePriceUSD}">${formatDzd(activePriceDZD, lang)}</div>` : '')}
+            ${!isUnavailableState ? durationSelectorHTML : ''}
             
-            <div class="payment-methods-row">
+            ${!isUnavailableState ? `<div class="payment-methods-row">
                 ${paymentButtons}
-            </div>
+            </div>` : ''}
             
             <ul class="product-features">
                 ${featuresHTML}
             </ul>
             ${discoverBtn}
-            <button class="order-btn" data-product="${name}" data-i18n="product.orderNow" onclick="${product.id === 'perplexity' ? 'orderPerplexity()' : `orderProduct('${name}')`}" ${buttonDisabled}>اطلب الآن</button>
+            <button class="order-btn" data-product="${name}" data-price="${activePriceDZD}" data-price-usd="${activePriceUSD}" ${orderButtonStatusAttr} onclick="${product.id === 'perplexity' ? 'orderPerplexity()' : 'orderProduct(this.dataset.product)'}" ${buttonDisabled}>${orderButtonText}</button>
         </div>
     `;
 }
@@ -264,22 +470,15 @@ function renderProducts(products, lang = 'ar') {
         return;
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // ترتيب المنتجات (وضع ميزات الذكاء الاصطناعي في المقدمة)
-    // ═══════════════════════════════════════════════════════════════════════════
-    const AI_PRODUCT_IDS = ['chatgpt', 'perplexity', 'google-ai', 'cursor', 'scispace', 'lovable', 'gamma', 'super-grok'];
-    
-    const sortedProducts = [...products].sort((a, b) => {
-        const aName = (a.name?.ar || a.id || '').toLowerCase();
-        const bName = (b.name?.ar || b.id || '').toLowerCase();
-        
-        const isAI_A = AI_PRODUCT_IDS.includes(a.id) || aName.includes('ai') || aName.includes('gemini') || aName.includes('gpt');
-        const isAI_B = AI_PRODUCT_IDS.includes(b.id) || bName.includes('ai') || bName.includes('gemini') || bName.includes('gpt');
-        
-        if (isAI_A && !isAI_B) return -1;
-        if (!isAI_A && isAI_B) return 1;
-        return 0;
-    });
+    if (!Array.isArray(products) || products.length === 0) {
+        console.warn('No Firebase products to render; keeping the existing static product cards visible.');
+        productGrid.querySelectorAll('.product-card.fade-in').forEach(card => card.classList.add('visible'));
+        return;
+    }
+
+    const sortedProducts = normalizeProducts(products);
+
+    window.__firebaseRenderedProducts = sortedProducts;
 
     // مسح المحتوى الحالي
     productGrid.innerHTML = '';
@@ -290,10 +489,135 @@ function renderProducts(products, lang = 'ar') {
         productGrid.insertAdjacentHTML('beforeend', cardHTML);
     });
 
+    productGrid.querySelectorAll('.product-card.fade-in').forEach(card => card.classList.add('visible'));
+
     console.log('✅ تم عرض', sortedProducts.length, 'منتج في الصفحة');
 
     // إعادة تهيئة الأحداث
     reinitializeEventListeners();
+    renderMobileProducts(sortedProducts, lang);
+    if (typeof window.applyProductCategoryFilter === 'function') {
+        const activeFilter = document.querySelector('.category-pill.active')?.getAttribute('data-filter') || 'all';
+        window.applyProductCategoryFilter(activeFilter);
+    }
+    window.dispatchEvent(new CustomEvent('firebaseProductsRendered', { detail: { products: sortedProducts } }));
+}
+
+function renderMobileProducts(products, lang = 'ar') {
+    const mobileGrid = document.querySelector('.mobile-expand-offers');
+    if (!mobileGrid) return;
+
+    mobileGrid.dataset.generated = 'true';
+    mobileGrid.innerHTML = products.map((product, index) => {
+        const name = getLocalizedText(product.name, lang, product.id || 'Product');
+        const description = getLocalizedText(product.description, lang, '');
+        const priceDZD = getNumericValue(product, ['priceDZD', 'price_dzd'], 0);
+        const priceUSD = getNumericValue(product, ['priceUSD', 'price_usd'], 0);
+        const mediaUrl = product.mediaUrl || product.image || '';
+        const mediaType = product.mediaType || (String(mediaUrl).includes('.mp4') ? 'video' : 'image');
+        const category = normalizeProductCategory(product);
+        const availability = product.availability || product.status || (product.available === false ? 'unavailable' : 'available');
+        const subOffers = Array.isArray(product.subOffers) ? product.subOffers : [];
+        const firstAvailableOffer = subOffers.find(offer => (offer.availability || 'available') === 'available');
+        const activeOffer = firstAvailableOffer || subOffers[0];
+        const effectiveAvailability = availability !== 'available'
+            ? availability
+            : (subOffers.length > 0 && !firstAvailableOffer ? (activeOffer?.availability || 'unavailable') : 'available');
+        const disabled = effectiveAvailability !== 'available';
+        const activePriceDZD = activeOffer ? getNumericValue(activeOffer, ['priceDZD', 'price_dzd'], priceDZD) : priceDZD;
+        const activePriceUSD = activeOffer ? getNumericValue(activeOffer, ['priceUSD', 'price_usd'], priceUSD) : priceUSD;
+        const features = normalizeFeatures(product.features)
+            .slice(0, 2)
+            .map(feature => `<li>${getLocalizedText(feature.text || feature, lang, '')}</li>`)
+            .join('');
+        const offerButtons = !disabled && subOffers.length > 1 ? `
+            <div class="mobile-offer-options">
+                ${subOffers.map((offer, offerIndex) => {
+                    const offerDisabled = offer.availability !== 'available';
+                    const offerPriceDZD = getNumericValue(offer, ['priceDZD', 'price_dzd'], 0);
+                    const offerPriceUSD = getNumericValue(offer, ['priceUSD', 'price_usd'], 0);
+                    return `<button type="button"
+                        class="mobile-offer-option${offerIndex === 0 ? ' is-selected' : ''}"
+                        data-price-dzd="${offerPriceDZD}"
+                        data-price-usd="${offerPriceUSD}"
+                        ${offerDisabled ? 'disabled aria-disabled="true"' : ''}>
+                        <span>${getLocalizedText(offer.name, lang, offer.id || '')}</span>
+                        <strong>${formatDzd(offerPriceDZD, lang)}</strong>
+                    </button>`;
+                }).join('')}
+            </div>` : '';
+        const media = mediaType === 'video'
+            ? `<video autoplay loop muted playsinline aria-label="${name}"><source src="${mediaUrl}" type="video/mp4"></video>`
+            : `<img src="${mediaUrl}" alt="${name}">`;
+        const statusLabel = effectiveAvailability === 'coming_soon' ? getUiText('comingSoon', lang) : getUiText('unavailable', lang);
+
+        return `
+            <article class="mobile-expand-card${index === 0 ? ' is-open' : ''}${disabled ? ' is-unavailable' : ''}"
+                data-mobile-expand-product="${product.id}"
+                data-category="${category}"
+                data-mobile-status="${effectiveAvailability}">
+                <button class="mobile-expand-toggle" type="button" aria-expanded="${index === 0 ? 'true' : 'false'}" ${disabled ? 'aria-disabled="true"' : ''}>
+                    ${media}
+                    ${disabled ? `<span class="mobile-status-badge">${statusLabel}</span>` : ''}
+                    <span><strong>${name}</strong><em data-available-price="${formatDzd(activePriceDZD, lang)}">${disabled ? statusLabel : formatDzd(activePriceDZD, lang)}</em></span>
+                </button>
+                <div class="mobile-expand-details">
+                    <p>${description}</p>
+                    ${offerButtons}
+                    ${features ? `<ul>${features}</ul>` : ''}
+                    <div class="mobile-expand-actions">
+                        <a href="${product.landingPage || '#products'}">${getUiText('productDetails', lang)}</a>
+                        <button type="button" data-product="${name}" data-price="${activePriceDZD}" data-price-usd="${activePriceUSD}" ${disabled ? 'disabled' : ''}>${disabled ? statusLabel : getUiText('orderNow', lang)}</button>
+                    </div>
+                </div>
+            </article>`;
+    }).join('');
+
+    mobileGrid.querySelectorAll('.mobile-expand-toggle').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const card = toggle.closest('.mobile-expand-card');
+            const isOpen = card.classList.contains('is-open');
+            mobileGrid.querySelectorAll('.mobile-expand-card').forEach(item => {
+                item.classList.remove('is-open');
+                item.querySelector('.mobile-expand-toggle')?.setAttribute('aria-expanded', 'false');
+            });
+            if (!isOpen) {
+                card.classList.add('is-open');
+                toggle.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
+    mobileGrid.querySelectorAll('.mobile-offer-option').forEach(button => {
+        button.addEventListener('click', () => {
+            if (button.disabled) return;
+            const card = button.closest('.mobile-expand-card');
+            card.querySelectorAll('.mobile-offer-option').forEach(option => option.classList.remove('is-selected'));
+            button.classList.add('is-selected');
+            const dzd = Number(button.dataset.priceDzd) || 0;
+            const usd = Number(button.dataset.priceUsd) || 0;
+            const label = formatDzd(dzd, lang);
+            const priceLabel = card.querySelector('.mobile-expand-toggle em');
+            const orderButton = card.querySelector('.mobile-expand-actions button');
+            if (priceLabel) {
+                priceLabel.textContent = label;
+                priceLabel.dataset.availablePrice = label;
+            }
+            if (orderButton) {
+                orderButton.dataset.price = dzd;
+                orderButton.dataset.priceUsd = usd;
+            }
+        });
+    });
+
+    mobileGrid.querySelectorAll('.mobile-expand-actions button').forEach(button => {
+        button.addEventListener('click', () => {
+            if (button.disabled) return;
+            if (typeof orderProduct === 'function') {
+                orderProduct(button.dataset.product);
+            }
+        });
+    });
 }
 
 /**
@@ -328,12 +652,15 @@ function reinitializeEventListeners() {
 async function initFirebaseProducts() {
     // التحقق من توفر Firebase
     if (typeof window === 'undefined') return;
+    if (window.__firebaseProductsInitStarted) return;
+    window.__firebaseProductsInitStarted = true;
 
     const db = window.db;
     const firebaseModules = window.firebaseModules;
 
     if (!db || !firebaseModules) {
         console.log('Firebase غير متاح، سيتم استخدام HTML الثابت');
+        window.__firebaseProductsInitStarted = false;
         return;
     }
 
@@ -347,14 +674,16 @@ async function initFirebaseProducts() {
             renderProducts(products, currentLang);
 
             // حفظ في التخزين المؤقت
-            if (window.SyncManager) {
+            if (window.SyncManager?.cacheProducts) {
                 window.SyncManager.cacheProducts(products);
             }
 
             // تهيئة المزامنة الفورية
-            if (window.SyncManager) {
+            if (window.SyncManager?.initializeListeners) {
                 window.SyncManager.initializeListeners(db, firebaseModules);
             }
+
+            subscribeToProductChanges(db, firebaseModules);
         } else {
             console.log('لا توجد منتجات في Firebase، سيتم استخدام HTML الثابت');
         }
@@ -364,18 +693,69 @@ async function initFirebaseProducts() {
     }
 }
 
+function subscribeToProductChanges(db, firebaseModules) {
+    if (!firebaseModules?.onSnapshot || productsUnsubscribe) return;
+    const { collection, onSnapshot } = firebaseModules;
+
+    productsUnsubscribe = onSnapshot(collection(db, PRODUCTS_COLLECTION), (snapshot) => {
+        const products = [];
+        snapshot.forEach(docItem => {
+            products.push({
+                id: docItem.id,
+                ...docItem.data()
+            });
+        });
+
+        const currentLang = window.currentLang || 'ar';
+        renderProducts(products, currentLang);
+    }, (error) => {
+        console.warn('Realtime product sync unavailable:', error);
+    });
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // تصدير الوحدات - Exports
 // ═══════════════════════════════════════════════════════════════════════════
 
+/**
+ * تبديل السعر عند الضغط على زر مدة العرض الفرعي
+ */
+function selectProductDuration(btn, productId) {
+    const container = btn.closest('.product-duration-selector');
+    if (container) {
+        container.querySelectorAll('.product-duration-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+    const newDZD = parseInt(btn.dataset.priceDzd) || 0;
+    const newUSD = parseFloat(btn.dataset.priceUsd) || 0;
+    const card = btn.closest('.product-card');
+    if (!card) return;
+
+    const priceTag = card.querySelector('.price-tag');
+    if (priceTag) {
+        priceTag.dataset.priceDzd = newDZD;
+        priceTag.dataset.priceUsd = newUSD;
+        const isUSD = window.currentCurrency === 'USD';
+        const lang = window.currentLang || document.documentElement.lang || localStorage.getItem('preferredLanguage') || 'ar';
+        priceTag.textContent = isUSD ? `$${newUSD}` : formatDzd(newDZD, lang);
+    }
+    card.querySelectorAll('[data-price]').forEach(b => {
+        b.dataset.price = newDZD;
+        b.dataset.priceUsd = newUSD;
+    });
+}
+
 // للاستخدام في المتصفح
 if (typeof window !== 'undefined') {
+    window.selectProductDuration = selectProductDuration;
     window.FirebaseProductsLoader = {
         loadProductsFromFirebase,
         createProductCardHTML,
         renderProducts,
+        renderMobileProducts,
         reinitializeEventListeners,
-        initFirebaseProducts
+        initFirebaseProducts,
+        selectProductDuration
     };
 
     // تهيئة تلقائية عند تحميل الصفحة (اختياري - يمكن تفعيله لاحقاً)
@@ -383,11 +763,20 @@ if (typeof window !== 'undefined') {
 }
 
 // CommonJS exports للاستخدام في Node.js (للاختبارات)
+if (typeof window !== 'undefined') {
+    if (window.firebaseReady) {
+        initFirebaseProducts();
+    } else {
+        window.addEventListener('firebaseReady', initFirebaseProducts, { once: true });
+    }
+}
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         loadProductsFromFirebase,
         createProductCardHTML,
         renderProducts,
+        renderMobileProducts,
         reinitializeEventListeners,
         initFirebaseProducts
     };

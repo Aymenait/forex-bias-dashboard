@@ -723,7 +723,7 @@
             const msgParam = params.get('msg');
             const waMsg = msgParam
                 ? encodeURIComponent(msgParam)
-                : encodeURIComponent(`مرحباً! لقد أكملت طلبي على موقع 3Ahub.\n\n📦 المنتج: ${product}\n💰 السعر: ${price} ${currSym}\n\nأريد المتابعة.`);
+                : encodeURIComponent(`مرحباً! لقد أكملت طلبي على موقع 3Ahub.\n\n👤 الاسم: ${name || '—'}\n📞 التواصل: ${contact || '—'}\n📦 المنتج: ${product}\n💰 السعر: ${price} ${currSym}\n\nأريد المتابعة.`);
             document.getElementById('wa-btn').href = `https://wa.me/${waNumber}?text=${waMsg}`;
 
             const shareMsg = encodeURIComponent('🔥 اكتشفت متجر 3Ahub! اشتراكات Netflix، Adobe، ChatGPT وأدوات AI بأفضل الأسعار في الجزائر 🇩🇿\n👉 https://marketalgeria.store');
@@ -832,12 +832,15 @@
                 if (--totalSec < 0) clearInterval(interval);
             }, 1000);
 
-            // ── 8. Meta Pixel — Purchase Event (Pixel + CAPI, hashed Advanced Matching) ──
+            // ── 8. Meta Pixel — order submitted, not a paid purchase ──
             if (window.metaPixel && product) {
                 const usdVal = currency === 'USD' ? parseFloat(price) : parseFloat(price) / 250;
                 const isEmail = (contact || '').includes('@');
                 const countryCode = localStorage.getItem('3ahub_code') || '';
+                const submittedKey = `pixel_order_submitted_${product}_${contact}`;
                 (async () => {
+                    if (sessionStorage.getItem(submittedKey)) return;
+                    sessionStorage.setItem(submittedKey, '1');
                     const userData = await window.metaPixel.buildUserData({
                         email: isEmail ? contact : '',
                         phone: isEmail ? '' : contact,
@@ -846,12 +849,15 @@
                         lastName: (name || '').split(' ').slice(1).join(' '),
                         externalId: localStorage.getItem('fbclid') || ''
                     });
-                    window.metaPixel.trackEvent('Purchase', {
+                    window.metaPixel.trackEvent('OrderSubmitted', {
                         content_name: product,
+                        content_ids: [String(product).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')],
+                        content_type: 'product',
                         value: parseFloat(usdVal.toFixed(2)) || 0,
-                        currency: 'USD'
+                        currency: 'USD',
+                        order_status: 'pending_whatsapp_payment'
                     }, userData);
-                    console.log(`🎯 Meta Pixel Purchase: $${usdVal.toFixed(2)} USD`);
+                    console.log(`🎯 Meta Pixel OrderSubmitted: $${usdVal.toFixed(2)} USD`);
                 })();
             }
 

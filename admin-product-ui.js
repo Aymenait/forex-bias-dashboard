@@ -18,6 +18,38 @@ let currentProductFeatures = [];
 let currentProductSubOffers = [];
 let editingSubOfferIndex = null;
 
+function getDurationSubOfferLabel(id) {
+    const labels = {
+        pro: { ar: 'Claude Pro', en: 'Claude Pro', fr: 'Claude Pro' },
+        api: { ar: 'Claude Code API', en: 'Claude Code API', fr: 'Claude Code API' },
+        '7days': { ar: '7 أيام', en: '7 Days', fr: '7 jours' },
+        '30days': { ar: '30 يوم', en: '30 Days', fr: '30 jours' },
+        '1month': { ar: 'شهر واحد', en: '1 Month', fr: '1 mois' },
+        '1month-upgrade': { ar: 'ترقية حساب', en: 'Account Upgrade', fr: 'Mise à niveau' },
+        '3months': { ar: '3 أشهر', en: '3 Months', fr: '3 mois' },
+        '6months': { ar: '6 أشهر', en: '6 Months', fr: '6 mois' },
+        '12months': { ar: '12 شهر', en: '12 Months', fr: '12 mois' },
+        '1year': { ar: 'سنة كاملة', en: '1 Year', fr: '1 an' },
+        '2years': { ar: 'سنتان', en: '2 Years', fr: '2 ans' },
+        standard: { ar: 'عرض قياسي', en: 'Standard', fr: 'Standard' },
+        reseller: { ar: 'عرض موزعين', en: 'Reseller', fr: 'Revendeur' }
+    };
+
+    return labels[id] || { ar: id, en: id, fr: id };
+}
+
+function convertDurationsToSubOffers(durations = {}) {
+    if (!durations || typeof durations !== 'object') return [];
+
+    return Object.entries(durations).map(([id, prices]) => ({
+        id,
+        name: getDurationSubOfferLabel(id),
+        priceDZD: Number(prices?.dzd ?? prices?.priceDZD ?? 0) || 0,
+        priceUSD: Number(prices?.usd ?? prices?.priceUSD ?? 0) || 0,
+        availability: prices?.available === false ? 'unavailable' : 'available'
+    }));
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // دوال نافذة المنتج - Product Modal Functions
 // Requirements: 1.1, 1.2, 4.1, 6.1
@@ -229,9 +261,11 @@ function loadProductDataToForm(productId) {
     }
     renderFeaturesContainer();
     
-    // Load sub-offers
-    if (Array.isArray(product.subOffers)) {
+    // Load sub-offers. Legacy products may still store them as durations.
+    if (Array.isArray(product.subOffers) && product.subOffers.length > 0) {
         currentProductSubOffers = product.subOffers;
+    } else {
+        currentProductSubOffers = convertDurationsToSubOffers(product.durations);
     }
     renderSubOffersContainer();
 }
@@ -419,6 +453,8 @@ function openSubOfferModal(index = null) {
         
         setFieldValue('sub-offer-id', subOffer.id || '');
         setFieldValue('sub-offer-index', index);
+        const dkSelectEdit = document.getElementById('sub-offer-duration-key');
+        if (dkSelectEdit) dkSelectEdit.value = subOffer.id || '';
         
         // Set names
         if (subOffer.name) {
@@ -440,6 +476,8 @@ function openSubOfferModal(index = null) {
         title.textContent = '➕ إضافة عرض فرعي';
         setFieldValue('sub-offer-id', '');
         setFieldValue('sub-offer-index', '');
+        const dkSelectAdd = document.getElementById('sub-offer-duration-key');
+        if (dkSelectAdd) dkSelectAdd.value = '';
     }
     
     modal.classList.remove('hidden');
@@ -478,7 +516,8 @@ function saveSubOffer(event) {
     }
     
     const subOffer = {
-        id: document.getElementById('sub-offer-id')?.value || `suboffer_${Date.now()}`,
+        id: document.getElementById('sub-offer-duration-key')?.value ||
+            document.getElementById('sub-offer-id')?.value || `suboffer_${Date.now()}`,
         name: { ar: nameAr, en: nameEn, fr: nameFr },
         priceDZD: priceDzd,
         priceUSD: priceUsd,
@@ -1587,6 +1626,52 @@ function previewExistingProduct(productId) {
 }
 
 // Make functions available globally
+function renderSubOffersContainerV2() {
+    const container = document.getElementById('sub-offers-container');
+    if (!container) return;
+
+    if (!currentProductSubOffers.length) {
+        container.innerHTML = `
+            <div class="admin-empty-offers">
+                <strong>لا توجد عروض فرعية بعد</strong>
+                <span>أضف عرض شهر، 3 أشهر، سنة، Pro أو API من الزر بالأسفل.</span>
+            </div>`;
+        return;
+    }
+
+    const labels = {
+        available: { text: 'متوفر', className: 'available' },
+        unavailable: { text: 'غير متوفر', className: 'unavailable' },
+        coming_soon: { text: 'قريباً', className: 'coming-soon' }
+    };
+
+    container.innerHTML = currentProductSubOffers.map((subOffer, index) => {
+        const status = labels[subOffer.availability || 'available'] || labels.available;
+        const name = subOffer.name?.ar || subOffer.name?.en || subOffer.id || 'عرض فرعي';
+        const dzd = Number(subOffer.priceDZD || subOffer.price_dzd || 0).toLocaleString('ar-DZ');
+        const usd = Number(subOffer.priceUSD || subOffer.price_usd || 0);
+
+        return `
+            <div class="admin-suboffer-item">
+                <div>
+                    <div class="admin-suboffer-title">${escapeHtml(name)}</div>
+                    <div class="admin-suboffer-meta">
+                        <span>${escapeHtml(subOffer.id || '')}</span>
+                        <span>${dzd} د.ج</span>
+                        <span>$${usd}</span>
+                    </div>
+                </div>
+                <div class="admin-suboffer-actions">
+                    <span class="admin-suboffer-status ${status.className}">${status.text}</span>
+                    <button type="button" onclick="openSubOfferModal(${index})">تعديل</button>
+                    <button type="button" class="danger" onclick="removeSubOffer(${index})">حذف</button>
+                </div>
+            </div>`;
+    }).join('');
+}
+
+renderSubOffersContainer = renderSubOffersContainerV2;
+
 if (typeof window !== 'undefined') {
     window.openProductModalV2 = openProductModalV2;
     window.closeProductModalV2 = closeProductModalV2;

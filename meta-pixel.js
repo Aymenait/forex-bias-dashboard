@@ -14,6 +14,7 @@
 
     var META_PIXEL_ID = '2046893892791206';
     var CAPI_ENDPOINT = '/capi';
+    var bridgedFbq = null;
 
     // ── Pixel loader (standard FB snippet) ────────────────────────
     function loadFbevents() {
@@ -30,6 +31,7 @@
         t = document.createElement('script');
         t.async = true;
         t.src = 'https://connect.facebook.net/en_US/fbevents.js';
+        t.onload = installLegacyFbqBridge;
         s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(t, s);
     }
@@ -89,6 +91,48 @@
         return getCookie('_fbp');
     }
 
+    function normalizeValue(params) {
+        params = params || {};
+        var normalized = Object.assign({}, params);
+        if (normalized.currency === 'DZD' && normalized.value !== undefined) {
+            var dzd = parseFloat(normalized.value) || 0;
+            normalized.value = parseFloat((dzd / 250).toFixed(2));
+            normalized.currency = 'USD';
+            normalized.original_value = dzd;
+            normalized.original_currency = 'DZD';
+        }
+        if (normalized.content_name && !normalized.content_ids) {
+            normalized.content_ids = [String(normalized.content_name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')];
+        }
+        if (normalized.content_name && !normalized.content_type) {
+            normalized.content_type = 'product';
+        }
+        return normalized;
+    }
+
+    function sendCapi(eventName, params, userData, eventId, eventTime, eventSourceUrl) {
+        var capiUserData = Object.assign({}, userData || {});
+        var fbp = getFbp();
+        var fbc = getFbc();
+        if (fbp) capiUserData.fbp = fbp;
+        if (fbc) capiUserData.fbc = fbc;
+
+        return fetch(CAPI_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            keepalive: true,
+            body: JSON.stringify({
+                event_name: eventName,
+                event_id: eventId,
+                event_time: eventTime,
+                event_source_url: eventSourceUrl,
+                action_source: 'website',
+                user_data: capiUserData,
+                custom_data: params
+            })
+        });
+    }
+
     // ── Init ──────────────────────────────────────────────────────
     function initMetaPixel(advancedMatching) {
         loadFbevents();
@@ -107,11 +151,13 @@
         var eventId = uuid();
         var eventTime = Math.floor(Date.now() / 1000);
         var eventSourceUrl = window.location.href;
+        var normalizedParams = normalizeValue(params);
 
         // 1) Client pixel (init guard)
         try {
             if (typeof window.fbq !== 'undefined') {
-                window.fbq('trackSingle', META_PIXEL_ID, eventName, params, { eventID: eventId });
+                var fbqTarget = bridgedFbq && bridgedFbq.__rawFbq ? bridgedFbq.__rawFbq : window.fbq;
+                fbqTarget('trackSingle', META_PIXEL_ID, eventName, normalizedParams, { eventID: eventId });
             }
         } catch (e) {
             console.warn('[meta-pixel] client track failed', e);
@@ -119,26 +165,7 @@
 
         // 2) Server CAPI (best-effort, never blocks UX)
         try {
-            var capiUserData = Object.assign({}, userData);
-            var fbp = getFbp();
-            var fbc = getFbc();
-            if (fbp) capiUserData.fbp = fbp;
-            if (fbc) capiUserData.fbc = fbc;
-
-            await fetch(CAPI_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                keepalive: true,
-                body: JSON.stringify({
-                    event_name: eventName,
-                    event_id: eventId,
-                    event_time: eventTime,
-                    event_source_url: eventSourceUrl,
-                    action_source: 'website',
-                    user_data: capiUserData,
-                    custom_data: params
-                })
-            });
+            await sendCapi(eventName, normalizedParams, userData, eventId, eventTime, eventSourceUrl);
         } catch (e) {
             console.warn('[meta-pixel] CAPI send failed', e);
         }
@@ -147,6 +174,40 @@
     }
 
     // ── Build hashed user_data from raw form fields ───────────────
+    function installLegacyFbqBridge() {
+        if (!window.fbq || window.fbq.__metaPixelBridge || !window.fbq.callMethod) return;
+        var rawFbq = window.fbq;
+        bridgedFbq = function () {
+            var args = Array.prototype.slice.call(arguments);
+            var command = args[0];
+            var eventName = args[1];
+
+            if ((command === 'track' || command === 'trackCustom') && eventName && eventName !== 'PageView') {
+                var params = normalizeValue(args[2] || {});
+                var eventId = uuid();
+                var eventTime = Math.floor(Date.now() / 1000);
+                args[2] = params;
+                args[3] = Object.assign({}, args[3] || {}, { eventID: eventId });
+                try {
+                    rawFbq.apply(window, args);
+                    sendCapi(eventName, params, {}, eventId, eventTime, window.location.href)
+                        .catch(function (e) { console.warn('[meta-pixel] legacy CAPI send failed', e); });
+                    return;
+                } catch (e) {
+                    console.warn('[meta-pixel] legacy fbq bridge failed', e);
+                }
+            }
+
+            return rawFbq.apply(window, args);
+        };
+        Object.keys(rawFbq).forEach(function (key) {
+            bridgedFbq[key] = rawFbq[key];
+        });
+        bridgedFbq.__rawFbq = rawFbq;
+        bridgedFbq.__metaPixelBridge = true;
+        window.fbq = bridgedFbq;
+    }
+
     async function buildUserData(raw) {
         raw = raw || {};
         var out = {};
@@ -161,12 +222,14 @@
 
     // ── Auto-init on script load (PageView for every page) ────────
     initMetaPixel();
+    setTimeout(installLegacyFbqBridge, 1500);
 
     // ── Public API ────────────────────────────────────────────────
     window.metaPixel = {
         PIXEL_ID: META_PIXEL_ID,
         init: initMetaPixel,
         trackEvent: trackEvent,
+        normalizeValue: normalizeValue,
         buildUserData: buildUserData,
         sha256: sha256,
         normalizeEmail: normalizeEmail,

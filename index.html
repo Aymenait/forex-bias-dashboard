@@ -140,18 +140,17 @@
         gtag('config', 'G-TC92T0WQ45');
     </script>
 
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel + Conversions API -->
+    <script src="/meta-pixel.js"></script>
     <script>
-        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '2046893892791206');
-        fbq('track', 'PageView');
-
-        // Track Interested User (Stays > 30s)
         setTimeout(function () {
-            fbq('trackCustom', 'InterestedLead', {
-                content_name: 'HomePage',
-                time_on_page: '10s'
-            });
+            if (window.metaPixel) {
+                window.metaPixel.trackEvent('InterestedLead', {
+                    content_name: 'HomePage',
+                    content_category: 'Engagement',
+                    time_on_page: '10s'
+                });
+            }
         }, 10000);
     </script>
     <noscript><img height="1" width="1" style="display:none"
@@ -257,7 +256,7 @@
             color: #ffd56f !important;
         }
     </style>
-        <link rel="stylesheet" href="homepage-redesign.css?v=15">
+        <link rel="stylesheet" href="homepage-redesign.css?v=16">
     <link rel="stylesheet" href="order-form.css">
 </head>
 
@@ -3174,20 +3173,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
     <!-- Availability UI System -->
-    <script src="availability-ui.js" type="module"></script>
+    <script src="availability-ui.js?v=2" type="module"></script>
 
     <!-- International Expansion System -->
     <script src="currency-config.js?v=5"></script>
     <script src="currency-manager.js?v=6"></script>
     <script src="payment-manager.js?v=5"></script>
     <script src="international-expansion-init.js?v=5"></script>
-    <script src="script.js?v=final14" defer></script>
+    <script src="script.js?v=final17" defer></script>
+    <script src="firebase-products-loader.js?v=7" defer></script>
     <script src="order-form.js" defer></script>
 
     <!-- Firebase SDK for Reviews -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, getDocs, addDoc, serverTimestamp, query, orderBy, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, getDocs, getDoc, addDoc, serverTimestamp, query, orderBy, where, doc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyCqOSFzxOVrVraBv4QtZMnVMCh1xVqZ8fw",
@@ -3209,16 +3209,138 @@
             window.firebaseModules = {
                 collection,
                 getDocs,
+                getDoc,
                 addDoc,
                 serverTimestamp,
                 query,
                 orderBy,
+                where,
                 doc,
-                deleteDoc
+                deleteDoc,
+                onSnapshot
             };
 
             window.firebaseReady = true;
             window.dispatchEvent(new Event('firebaseReady'));
+            window.FirebaseProductsLoader?.initFirebaseProducts?.();
+
+            async function applyMaintenanceMode() {
+                try {
+                    const maintenanceSnap = await getDoc(doc(db, 'settings', 'maintenance'));
+                    const settings = maintenanceSnap.exists() ? maintenanceSnap.data() : {};
+
+                    if (settings.enabled !== true) {
+                        return;
+                    }
+
+                    const escapeHtml = (value) => String(value)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                    const maintenanceMessage = escapeHtml(settings.message || 'The website is currently under maintenance. Please check back soon.');
+                    const overlay = document.createElement('div');
+                    overlay.id = 'maintenance-overlay';
+                    overlay.setAttribute('role', 'main');
+                    overlay.setAttribute('aria-live', 'polite');
+                    overlay.innerHTML = `
+                        <div class="maintenance-box">
+                            <a href="admin.html" class="maintenance-logo-link" aria-label="Open admin dashboard">
+                                <img src="logo.png" alt="3Ahub" class="maintenance-logo">
+                            </a>
+                            <p class="maintenance-kicker">Maintenance Mode</p>
+                            <h1>We will be back soon</h1>
+                            <p class="maintenance-message">${maintenanceMessage}</p>
+                        </div>
+                    `;
+
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        body.maintenance-active {
+                            overflow: hidden !important;
+                        }
+
+                        #maintenance-overlay {
+                            position: fixed;
+                            inset: 0;
+                            z-index: 2147483647;
+                            display: grid;
+                            place-items: center;
+                            min-height: 100vh;
+                            padding: 24px;
+                            background: #07111f;
+                            color: #f8fafc;
+                            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                            text-align: center;
+                        }
+
+                        #maintenance-overlay .maintenance-box {
+                            width: min(520px, 100%);
+                            padding: 36px 28px;
+                            border: 1px solid rgba(148, 163, 184, 0.24);
+                            border-radius: 8px;
+                            background: rgba(15, 23, 42, 0.92);
+                            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+                        }
+
+                        #maintenance-overlay .maintenance-logo {
+                            width: 72px;
+                            height: 72px;
+                            border-radius: 8px;
+                            object-fit: cover;
+                        }
+
+                        #maintenance-overlay .maintenance-logo-link {
+                            display: inline-flex;
+                            width: 72px;
+                            height: 72px;
+                            margin: 0 auto 22px;
+                            border-radius: 8px;
+                            outline: none;
+                            transition: transform 140ms ease, box-shadow 140ms ease;
+                        }
+
+                        #maintenance-overlay .maintenance-logo-link:hover,
+                        #maintenance-overlay .maintenance-logo-link:focus-visible {
+                            transform: translateY(-1px);
+                            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35);
+                        }
+
+                        #maintenance-overlay .maintenance-kicker {
+                            margin: 0 0 12px;
+                            color: #38bdf8;
+                            font-size: 0.82rem;
+                            font-weight: 800;
+                            letter-spacing: 0;
+                            text-transform: uppercase;
+                        }
+
+                        #maintenance-overlay h1 {
+                            margin: 0;
+                            font-size: clamp(2rem, 6vw, 3.8rem);
+                            line-height: 1.04;
+                            font-weight: 900;
+                        }
+
+                        #maintenance-overlay .maintenance-message {
+                            margin: 18px auto 0;
+                            max-width: 420px;
+                            color: #cbd5e1;
+                            font-size: 1rem;
+                            line-height: 1.7;
+                        }
+                    `;
+
+                    document.head.appendChild(style);
+                    document.body.classList.add('maintenance-active');
+                    document.body.appendChild(overlay);
+                } catch (error) {
+                    console.warn('Unable to load maintenance mode:', error);
+                }
+            }
+
+            applyMaintenanceMode();
             console.log('✅ Firebase initialized (without Storage)');
 
             // ═══════════════════════════════════════════════════════════════
@@ -3297,11 +3419,19 @@
                 // خريطة أسماء المنتجات مع معرفاتها (تشمل كل التنويعات)
                 const productNameToId = {
                     'The Real World Account': 'trw',
+                    'The Real World': 'trw',
                     'Adobe Creative Cloud': 'adobe',
                     'Adobe Creative Cloud - Shared': 'adobe',
                     'Adobe Creative Cloud - Personal': 'adobe',
                     'ChatGPT': 'chatgpt',
+                    'ChatGPT Premium': 'chatgpt',
+                    'Claude AI': 'claude',
+                    'Claude Pro Account': 'claude',
+                    'SUPER GROK': 'super-grok',
                     'Netflix Premium': 'netflix',
+                    'HMA VPN': 'hma-vpn',
+                    'Microsoft Office': 'microsoft-office',
+                    'Microsoft Office 365': 'microsoft-office',
                     'TradingView Premium': 'tradingview',
                     'Cursor AI': 'cursor',
                     'Cursor AI - 7 Days': 'cursor',
@@ -3311,9 +3441,37 @@
                     'Gamma.AI': 'gamma',
                     'Gamma.AI - Shared': 'gamma',
                     'Gamma.AI - Personal': 'gamma',
+                    'Gama AI Pro': 'gamma',
                     'CapCut Pro': 'capcut',
                     'Canva Pro': 'canva',
-                    'Perplexity AI Pro': 'perplexity'
+                    'Perplexity AI Pro': 'perplexity',
+                    'YouTube Premium': 'youtube',
+                    'Duolingo Super': 'duolingo',
+                    'Lovable AI': 'lovable',
+                    'Google Gemini Pro': 'google-ai',
+                    'Google Gemini Pro & Veo 3': 'google-ai',
+                    'Alight Motion': 'alight-motion'
+                };
+
+                const normalizeProductId = (value) => String(value || '')
+                    .toLowerCase()
+                    .trim()
+                    .replace(/^product-/, '')
+                    .replace(/-card$/, '')
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+
+                const getMappedProductId = (value) => {
+                    const text = String(value || '').trim();
+                    if (!text) return '';
+
+                    if (productNameToId[text]) {
+                        return productNameToId[text];
+                    }
+
+                    const lowerText = text.toLowerCase();
+                    const mappedEntry = Object.entries(productNameToId).find(([name]) => name.toLowerCase() === lowerText);
+                    return mappedEntry ? mappedEntry[1] : normalizeProductId(text);
                 };
 
                 querySnapshot.forEach((doc) => {
@@ -3327,9 +3485,14 @@
                         : (product.name || '');
                     const productPriceDZD = Number(product.priceDZD ?? product.price_dzd ?? 0) || 0;
                     const productPriceUSD = Number(product.priceUSD ?? product.price_usd ?? 0) || 0;
+                    const firebaseProductId = getMappedProductId(product.id || productName || productId);
 
                     // Availability is now fully controlled by the admin panel
                     // No hardcoded overrides - Firebase/admin is the single source of truth
+
+                    if (!firebaseProductId) {
+                        return;
+                    }
 
                     console.log(`📦 منتج ${product.name}: حالة = ${productStatus}`);
 
@@ -3338,10 +3501,10 @@
                     productCards.forEach(card => {
                         // الحصول على عنوان المنتج من البطاقة
                         const cardTitle = card.querySelector('h3')?.textContent?.trim() || '';
-                        // مطابقة بسيطة باستخدام العنوان
-                        const matchFound = cardTitle.toLowerCase().includes(productName.toLowerCase()) ||
-                            productName.toLowerCase().includes(cardTitle.toLowerCase()) ||
-                            cardTitle === productName;
+                        const cardProductId = getMappedProductId(card.dataset.productId || card.id || cardTitle);
+                        const cardTitleId = getMappedProductId(cardTitle);
+                        const matchFound = Boolean(cardProductId && cardProductId === firebaseProductId) ||
+                            Boolean(cardTitleId && cardTitleId === firebaseProductId);
 
                         if (matchFound) {
                             console.log(`✅ تحديث "${cardTitle}" إلى "${productStatus}"`);
@@ -3498,11 +3661,14 @@
 
                 const totalReviews = reviews.length;
                 const ratingContainer = document.getElementById('trw-rating-container');
+                const reviewCount = document.getElementById('trw-review-count');
+
+                if (!ratingContainer || !reviewCount) return;
 
                 // Only show rating if there are reviews
                 if (totalReviews > 0) {
                     const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
-                    document.getElementById('trw-review-count').textContent = totalReviews;
+                    reviewCount.textContent = totalReviews;
                     updateStars('trw-stars', avgRating);
                     ratingContainer.style.display = 'flex';
                 } else {
@@ -3757,11 +3923,17 @@
     </nav>
 
     <script src="chat-widget.js" defer></script>
-    <script src="order-form.js" defer></script>
 
     <!-- Category Filter System -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            window.setTimeout(function() {
+                if (typeof window.applyProductCategoryFilter === 'function') {
+                    const activeFilter = document.querySelector('.category-pill.active')?.getAttribute('data-filter') || 'all';
+                    window.applyProductCategoryFilter(activeFilter);
+                }
+            }, 0);
+            return;
             // Product category mapping - comprehensive list
             const productCategories = {
                 'The Real World Account': 'courses',
@@ -3773,7 +3945,7 @@
                 'Netflix Premium': 'entertainment',
                 'Prime Video': 'entertainment',
                 'Crunchyroll': 'entertainment',
-                'HMA VPN': 'tools',
+                'HMA VPN': 'courses',
                 'Microsoft Office 365': 'courses',
                 'Perplexity AI Pro': 'ai',
                 'Canva Pro': 'design',
@@ -3824,9 +3996,11 @@
                     this.classList.add('active');
 
                     const filter = this.getAttribute('data-filter');
+                    const currentCards = document.querySelectorAll('.product-card');
+                    const currentMobileCards = document.querySelectorAll('.mobile-expand-card');
 
                     // Filter product-grid cards
-                    cards.forEach(card => {
+                    currentCards.forEach(card => {
                         const category = card.getAttribute('data-category');
                         console.log('Card category:', category, 'Filter:', filter);
 
@@ -3838,12 +4012,12 @@
                             card.style.opacity = '1';
                         } else {
                             card.style.opacity = '0';
-                            setTimeout(() => card.style.display = 'none', 300);
+                            setTimeout(() => card.style.display = 'none', 150);
                         }
                     });
 
                     // Also filter mobile-expand-cards
-                    mobileCards.forEach(card => {
+                    currentMobileCards.forEach(card => {
                         const category = card.getAttribute('data-category');
 
                         if (filter === 'all') {
@@ -3854,7 +4028,7 @@
                             card.style.opacity = '1';
                         } else {
                             card.style.opacity = '0';
-                            setTimeout(() => card.style.display = 'none', 300);
+                            setTimeout(() => card.style.display = 'none', 150);
                         }
                     });
                 });

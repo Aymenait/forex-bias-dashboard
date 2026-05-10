@@ -181,10 +181,13 @@ class PaymentManager {
     // Track AddPaymentInfo event — Pixel + CAPI (single source of truth)
     if (window.metaPixel) {
       const price = currency === 'USD' ? product.price_usd : product.price_dzd;
+      const pixelValue = currency === 'USD' ? parseFloat(price) || 0 : parseFloat(((parseFloat(price) || 0) / 250).toFixed(2));
       window.metaPixel.trackEvent('AddPaymentInfo', {
         content_name: product.name || product.id,
-        value: parseFloat(price) || 0,
-        currency: currency,
+        content_ids: [product.id || product.name],
+        content_type: 'product',
+        value: pixelValue,
+        currency: 'USD',
         content_category: method.name
       });
     }

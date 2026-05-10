@@ -264,7 +264,7 @@
                         class="duration-tab flex-1 md:flex-none px-4 md:px-6 py-3 rounded-xl text-sm font-bold text-gray-500 opacity-50 cursor-not-allowed"
                         data-duration="1month-upgrade">
                         <span data-i18n="duration.1month-upgrade">شهر واحد (تفعيل في حسابك)</span>
-                        <div class="text-xs mt-1 text-red-400 font-bold">غير متوفر الان</div>
+                        <div class="text-xs mt-1 text-red-400 font-bold" data-i18n="duration.unavailable">غير متوفر الآن</div>
                     </button>
                 </div>
 
@@ -563,6 +563,7 @@
                 'hero.desc': 'احصل على قوة الذكاء الاصطناعي الكاملة بدون قيود. حساب خاص (Private Workspace)، دقة 100%، وتفعيل فوري على بريدك الشخصي.',
                 'duration.1month': 'شهر واحد (حساب جديد)',
                 'duration.1month-upgrade': 'شهر واحد (تفعيل في حسابك)',
+                'duration.unavailable': 'غير متوفر الآن',
                 'duration.upgrade_video': 'شاهد طريقة التفعيل',
                 'price.per_month': '/ للشهر',
                 'payment.title': 'اختر طريقة الدفع المناسبة',
@@ -598,6 +599,7 @@
                 'hero.desc': 'Unlock the full power of AI without limits. Private Workspace, 100% accuracy, and instant activation on your personal email.',
                 'duration.1month': '1 Month (New Account)',
                 'duration.1month-upgrade': '1 Month (Upgrade existing account)',
+                'duration.unavailable': 'Not available right now',
                 'duration.upgrade_video': 'Watch how to activate',
                 'price.per_month': '/ Month',
                 'payment.title': 'Choose Payment Method',
@@ -633,6 +635,7 @@
                 'hero.desc': 'Débloquez toute la puissance de l\'IA sans limites. Espace de travail privé, précision 100% et activation instantanée sur votre email personnel.',
                 'duration.1month': '1 Mois (Nouveau Compte)',
                 'duration.1month-upgrade': '1 Mois (Activer sur votre compte)',
+                'duration.unavailable': 'Non disponible pour le moment',
                 'duration.upgrade_video': 'Voir comment l\'activer',
                 'price.per_month': '/ Mois',
                 'payment.title': 'Choisir la méthode de paiement',
@@ -811,13 +814,14 @@
             const text = `Hello, I sent ${price.dzd} DZD (${price.usd}$) via ${method} for ChatGPT Plus ${currentDuration}.`;
             window.open(`https://wa.me/213782125821?text=${encodeURIComponent(text)}`, '_blank');
 
-            // Track Purchase (or Lead based on workflow)
+            // Track submitted payment proof, not a confirmed purchase.
             if (typeof fbq !== 'undefined') {
-                fbq('track', 'Purchase', {
+                fbq('trackCustom', 'OrderSubmitted', {
                     content_name: 'ChatGPT Plus',
                     value: price.dzd,
                     currency: 'DZD',
-                    payment_method: method
+                    payment_method: method,
+                    order_status: 'pending_payment_confirmation'
                 });
             }
         }

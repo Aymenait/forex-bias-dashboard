@@ -866,9 +866,16 @@ document.addEventListener('DOMContentLoaded', () => {
         let hasOpenVisibleCard = false;
 
         currentMobileCards.forEach((card) => {
-            const category = card.getAttribute('data-category') || 'all';
-            const isVisible = filter === 'all' || category === filter || category === 'all';
-            card.style.display = isVisible ? '' : 'none';
+            const category = typeof window.normalizeProductCardCategory === 'function'
+                ? window.normalizeProductCardCategory(card)
+                : (card.getAttribute('data-category') || 'courses');
+            card.setAttribute('data-category', category);
+            const isVisible = filter === 'all' || category === filter;
+            if (isVisible) {
+                card.style.removeProperty('display');
+            } else {
+                card.style.setProperty('display', 'none', 'important');
+            }
             card.style.opacity = isVisible ? '1' : '0';
             card.hidden = !isVisible;
 
@@ -892,8 +899,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const allowClose = options.allowClose === true;
         const clickedCard = Array.from(mobileExpandCards).find((card) => card.dataset.mobileExpandProduct === product);
         const shouldCloseClicked = allowClose && clickedCard?.classList.contains('is-open');
+        const previouslyOpenCard = document.querySelector('.mobile-expand-card.is-open');
 
-        mobileExpandCards.forEach((card) => {
+        [previouslyOpenCard, clickedCard].filter(Boolean).forEach((card) => {
             const wasOpen = card.classList.contains('is-open');
             const isOpen = !shouldCloseClicked && card.dataset.mobileExpandProduct === product;
             card.classList.toggle('is-closing', wasOpen && !isOpen);
@@ -901,7 +909,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.querySelector('.mobile-expand-toggle')?.setAttribute('aria-expanded', String(isOpen));
 
             if (wasOpen && !isOpen) {
-                window.setTimeout(() => card.classList.remove('is-closing'), 380);
+                window.setTimeout(() => card.classList.remove('is-closing'), 190);
             }
         });
     }
@@ -2576,6 +2584,7 @@ const translations = {
         'payment.redotpay': 'RedotPay',
         'payment.usdt': 'USDT',
         'payment.baridimob': 'BaridiMob',
+        'product.chatgpt.notAvailable': 'غير متوفر الآن',
         'nav.home': 'الرئيسية',
         'whatsapp.tooltip': 'تحدث معنا الآن!',
         'instagram.tooltip': 'تابعنا على Instagram!',
@@ -2791,6 +2800,11 @@ const translations = {
         'product.microsoft-office.feature1': 'تفعيل رسمي لمدة 12 شهر',
         'product.microsoft-office.feature2': 'يشمل Word, Excel, PowerPoint, Outlook',
         'product.microsoft-office.feature3': 'مساحة تخزين OneDrive سعة 1TB',
+        'product.claude.title': 'Claude AI',
+        'product.claude.desc': 'استمتع بقوة Claude 4.6 Sonnet و Opus 4.7 مع اشتراك برو أو API مخصص للمبرمجين.',
+        'product.claude.feature1': 'وصول كامل لـ Sonnet 4.6 و Opus 4.7',
+        'product.claude.feature2': 'أداء فائق في البرمجة والتحليل',
+        'product.claude.feature3': 'حدود استخدام أعلى من الخطة المجانية',
     },
     en: {
         'brand.tagline': 'Digital Solutions That Boost Your Presence',
@@ -3052,24 +3066,7 @@ const translations = {
         'modal.redotpay.step2': 'Choose "Send" or "Transfer"',
         'modal.redotpay.step3': 'Enter the ID: 1117632168',
         'modal.redotpay.step4': 'Enter the required amount in dollars',
-        'modal.redotpay.step5': 'Complete the payment process',
-        'modal.redotpay.step6': 'Keep proof of payment',
-        'modal.redotpay.step7': 'Click "Payment Done" to contact us',
-        'modal.redotpay.warning': '💳 Make sure to enter the ID correctly!',
-        'contact.title': 'Ready to Start Your Next Project',
-        'contact.description': 'Contact us now through available channels for a free consultation and to determine the best package for you.',
-        'contact.whatsapp': 'Contact via WhatsApp',
-        'contact.instagram': 'Follow us on Instagram',
         'contact.email': 'Email',
-        'reviews.title': 'Customer Reviews',
-        'reviews.subtitle': 'What our customers say about our services',
-        'reviews.customer1.name': 'Ahmed M.',
-        'reviews.customer1.text': 'Excellent and fast service! Got my ChatGPT account the same day. Very responsive technical support.',
-        'reviews.customer2.name': 'Sarah B.',
-        'reviews.customer2.text': 'Adobe Creative Cloud at a great price! All applications work perfectly. Thank you 3Ahub.',
-        'reviews.customer3.name': 'Mohamed K.',
-        'reviews.customer3.text': 'The Real World is the best investment! Valuable content and excellent technical support. Highly recommend.',
-        'reviews.viewAll': 'View All Reviews',
         'reviews.title': 'Customer Reviews',
         'reviews.subtitle': 'What our customers say about our services',
         'reviews.customer1.name': 'Ahmed M.',
@@ -3149,10 +3146,7 @@ const translations = {
         'duo.benefit4.desc': 'Apprenez de vos erreurs avec des commentaires personnalisés.',
         'duo.note': '⚠ Important: Après la commande, veuillez envoyer votre Email ou User ID, pas votre Surnom.',
         'duo.cta': 'Rejoindre la Famille 🚀',
-        'reviews.title': 'Customer Reviews',
-        'reviews.subtitle': 'What our customers say about our services',
         'reviews.reviewsCount': 'reviews',
-        'reviews.viewAll': 'View All Reviews',
         'reviews.addReview': 'Add Your Review',
         'reviews.modal.title': 'Add Your Review',
         'reviews.modal.name': 'Name:',
@@ -3193,41 +3187,13 @@ const translations = {
         'contact.telegram': 'Contact via Telegram',
         'footer.instagram': 'Instagram',
         'footer.whatsapp': 'WhatsApp',
-        'contact.whatsapp': 'Contact via WhatsApp',
-        'contact.instagram': 'Follow us on Instagram',
         'modal.chooseContact': 'Choose Contact Method',
         'modal.chooseContactDesc': 'Choose your preferred way to complete the order',
         'modal.whatsapp': 'WhatsApp',
         'modal.instagram': 'Instagram',
-        'modal.product': 'Product:',
-        'modal.price': 'Price:',
-        'modal.amountUSD': 'Amount in USD:',
         'modal.paymentInfo': 'Payment Information',
-        'modal.instructions': 'Payment Instructions:',
-        'modal.copy': 'Copy',
-        'modal.confirmPayment': 'Payment Completed - Contact Us',
-        'modal.crypto.title': 'Cryptocurrency Payment',
-        'modal.crypto.selectNetwork': 'Select Network:',
-        'modal.crypto.walletAddress': 'Wallet Address',
-        'modal.crypto.scanQR': 'Scan code with wallet app',
-        'modal.crypto.step1': 'Choose the appropriate network (TRC20 or BEP20)',
-        'modal.crypto.step2': 'Copy wallet address or scan QR Code',
-        'modal.crypto.step3': 'Open Binance app or any USDT wallet',
-        'modal.crypto.step4': 'Make sure to select the same network',
-        'modal.crypto.step5': 'Send the required amount',
-        'modal.crypto.step6': 'Keep the Transaction ID',
-        'modal.crypto.step7': 'Click "Payment Completed" to contact us',
-        'modal.crypto.warning': '⚠️ Make sure to select the correct network or you will lose your funds!',
-        'modal.redotpay.title': 'RedotPay Payment',
-        'modal.redotpay.step1': 'Open RedotPay app',
-        'modal.redotpay.step2': 'Choose "Send"',
-        'modal.redotpay.step3': 'Enter RedotPay ID:',
-        'modal.redotpay.step4': 'Enter the amount in dollars',
-        'modal.redotpay.step5': 'Complete the sending process',
-        'modal.redotpay.step6': 'Keep proof of transfer',
-        'modal.redotpay.step7': 'Click "Payment Completed" to contact us',
-        'modal.redotpay.warning': '⚠️ Make sure to enter RedotPay ID correctly!',
-        'modal.baridimob.title': 'BaridiMob Payment',
+        'modal.confirmButton': 'Payment Completed - Contact Us',
+        'modal.stepContact': 'Click "Payment Completed" to contact us',
         'modal.baridimob.rip': 'BaridiMob RIP:',
         'modal.baridimob.step1': 'Open BaridiMob app',
         'modal.baridimob.step2': 'Choose "Money Transfer" or "Virement"',
@@ -3240,64 +3206,64 @@ const translations = {
         'modal.baridimob.warning': '⚠️ Make sure to enter the RIP correctly!',
         'campuses.title': 'All Nine Courses Included',
         'campuses.subtitle': 'Full access to every course and skill',
-        'campus1.title': 'E-commerce Course',
-        'campus1.subtitle': 'Dropshipping and Online Stores',
+        'campus1.title': '1. E-Commerce College',
+        'campus1.subtitle': 'E-Commerce Campus',
         'campus1.point1': '• Finding Winning Products',
         'campus1.point2': '• Building Shopify Stores',
         'campus1.point3': '• TikTok and Facebook Ads',
         'campus1.point4': '• No-Inventory Shipping',
         'campus1.point5': '• Building Long-term Brands',
-        'campus2.title': 'Copywriting Course',
-        'campus2.subtitle': 'Persuasive Writing for Profit',
+        'campus2.title': '2. Copywriting College',
+        'campus2.subtitle': 'Copywriting Campus',
         'campus2.point1': '• Psychological Triggers',
         'campus2.point2': '• Email Marketing Campaigns',
         'campus2.point3': '• Client Acquisition and Offers',
         'campus2.point4': '• Social Media Growth (Twitter/X)',
         'campus2.point5': '• Freelancing Basics',
-        'campus3.title': 'Crypto & DeFi Course',
-        'campus3.subtitle': 'Cryptocurrency Trading and Investment',
+        'campus3.title': '3. AI Automation College',
+        'campus3.subtitle': 'AI & Content Creation Campus',
         'campus3.point1': '• Building Long-term Portfolio',
         'campus3.point2': '• Technical Analysis and Charts',
         'campus3.point3': '• DeFi and Liquidity Pools',
         'campus3.point4': '• Risk Management Strategies',
         'campus3.point5': '• Focus on Bitcoin and Ethereum',
-        'campus4.title': 'Content Creation Course',
-        'campus4.subtitle': 'Viral Videos and UGC',
+        'campus4.title': '4. Content Creation College',
+        'campus4.subtitle': 'Content Creation Campus',
         'campus4.point1': '• Video Editing (CapCut, Premiere Pro)',
         'campus4.point2': '• Mastering Algorithms (TikTok, IG, YT)',
         'campus4.point3': '• User Generated Content (UGC)',
         'campus4.point4': '• Building Personal Brand',
         'campus4.point5': '• Influencer Management',
-        'campus5.title': 'AI Automation Course',
-        'campus5.subtitle': 'Using AI to Save Time and Make Money',
+        'campus5.title': '5. Crypto Trading College',
+        'campus5.subtitle': 'Crypto Trading Campus',
         'campus5.point1': '• Prompt Engineering Mastery',
         'campus5.point2': '• Workflow Automation (Zapier)',
         'campus5.point3': '• ChatGPT and Claude Optimization',
         'campus5.point4': '• AI Agency Services',
         'campus5.point5': '• Business Automation Solutions',
-        'campus6.title': 'Stocks Course',
-        'campus6.subtitle': 'Traditional Stock Market Trading',
+        'campus6.title': '6. Crypto Investing College',
+        'campus6.subtitle': 'Crypto Investing Campus',
         'campus6.point1': '• Technical Analysis and Patterns',
         'campus6.point2': '• Options Trading Strategies',
         'campus6.point3': '• Understanding Macroeconomics',
         'campus6.point4': '• News Analysis and Market Events',
         'campus6.point5': '• Capital Leverage Techniques',
-        'campus7.title': 'Business Mastery Course',
-        'campus7.subtitle': 'Scaling and Managing Your Business',
+        'campus7.title': '7. DeFi College',
+        'campus7.subtitle': 'DeFi Campus',
         'campus7.point1': '• Tax Optimization Strategies',
         'campus7.point2': '• Hiring and Team Management',
         'campus7.point3': '• Corporate Structure Setup',
         'campus7.point4': '• LLC and Favorable Jurisdictions',
         'campus7.point5': '• Advanced Business Operations',
-        'campus8.title': 'Fitness Course',
-        'campus8.subtitle': 'Physical Health and Discipline',
+        'campus8.title': '8. Stocks College',
+        'campus8.subtitle': 'Stocks Campus',
         'campus8.point1': '• Daily Training Routines',
         'campus8.point2': '• Nutrition and Meal Plans',
         'campus8.point3': '• Biohacking Techniques',
         'campus8.point4': '• Supplements and Lifestyle',
         'campus8.point5': '• Energy and Testosterone Boosting',
-        'campus9.title': 'Client Acquisition Course',
-        'campus9.subtitle': 'Sales and Recruitment',
+        'campus9.title': '9. Freelancing College',
+        'campus9.subtitle': 'Freelancing Campus',
         'campus9.point1': '• Cold Email Strategies',
         'campus9.point2': '• Cold Calling Techniques',
         'campus9.point3': '• Closing Deals Effectively',
@@ -3323,7 +3289,6 @@ const translations = {
         'scarcity.warning': '⏰ Book your seat now before it\'s too late!',
         'reviews.title': '⭐ Customer Reviews',
         'reviews.reviews': 'reviews',
-        'reviews.addReview': 'Add Your Review',
         'reviews.yourName': 'Your Name:',
         'reviews.rating': 'Rating:',
         'reviews.platform': 'How did you find us?',
@@ -3357,22 +3322,13 @@ const translations = {
         'campus2.desc': 'The art of "selling words". You will learn how to write advertising copy, emails, and landing pages that force the reader to buy. Most importantly, they teach you how to contact companies to hire you for high monthly amounts (High Ticket Closer).',
         'campus2.forWho': 'For beginners who have $0 and want to start immediately. The only condition is that your English is strong.',
         'campus2.tip': 'This is the fastest path to making money from scratch. Don\'t just watch lessons, start reaching out to clients (Outreach) immediately after finishing the first module.',
-        'campus3.title': '3. AI Automation College',
         'campus3.desc': 'How to use AI tools (like ChatGPT and Zapier) to build automation systems for companies. You\'ll learn how to save companies time and build "robots" for customer service, and sell this service as an agency (AAA).',
         'campus3.forWho': 'For tech-savvy people who want to take advantage of the current "trend". Companies pay huge amounts for those who master this skill now.',
         'campus3.tip': 'This field is very new and competition is low. If you learn this skill now, you can monopolize the market in your area easily.',
-        'campus1.title': '1. E-Commerce College',
-        'campus1.subtitle': 'E-Commerce Campus',
-        'campus2.title': '2. Copywriting College',
-        'campus2.subtitle': 'Copywriting Campus',
-        'campus3.subtitle': 'AI & Content Creation Campus',
-        'campus4.title': '4. Content Creation College',
-        'campus4.subtitle': 'Content Creation Campus',
+
         'campus4.desc': 'How to produce and edit short videos (Shorts/Reels) that go viral lightning fast. You\'ll learn editing, design, and how to grab the viewer\'s attention in the first 3 seconds.',
         'campus4.forWho': 'For creators, and those who love working with editing software. This skill is highly demanded whether for your own work or working with social media influencers.',
         'campus4.tip': 'The demand for "Video Editors" is huge. You can combine this skill with AI to produce high-quality videos in record time.',
-        'campus5.title': '5. Crypto Trading College',
-        'campus5.subtitle': 'Crypto Trading Campus',
         'campus5.desc': 'Fast day trading. How to read charts (technical analysis), and how to profit from the rise and fall of cryptocurrencies daily.',
         'campus5.forWho': 'For people with iron nerves and surplus money to risk. This is not a job, but a skill of seizing opportunities.',
         'campus.warning': '⚠️ Warning:',
@@ -3432,6 +3388,7 @@ const translations = {
         'payment.redotpay': 'RedotPay',
         'payment.usdt': 'USDT',
         'payment.baridimob': 'BaridiMob',
+        'product.chatgpt.notAvailable': 'Not available right now',
         'nav.home': 'Home',
         'whatsapp.tooltip': 'Chat with us now!',
         'instagram.tooltip': 'Follow us on Instagram!',
@@ -3596,9 +3553,15 @@ const translations = {
         'product.microsoft-office.feature1': 'Official 12-month activation',
         'product.microsoft-office.feature2': 'Includes Word, Excel, PowerPoint, Outlook',
         'product.microsoft-office.feature3': '1TB OneDrive cloud storage',
+        'product.claude.title': 'Claude AI',
+        'product.claude.desc': 'Experience the power of Claude 4.6 Sonnet and Opus 4.7 with a Pro subscription or custom API for developers.',
+        'product.claude.feature1': 'Full access to Sonnet 4.6 and Opus 4.7',
+        'product.claude.feature2': 'Superior performance in coding and analysis',
+        'product.claude.feature3': 'Higher usage limits than the free plan',
     },
     fr: {
         'brand.tagline': 'Solutions Numériques Qui Renforcent Votre Présence',
+        'product.chatgpt.notAvailable': 'Pas disponible pour le moment',
         'nav.home': 'Accueil',
         'nav.products': 'Nos Produits',
         'nav.reviews': '<svg width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Avis Clients',
@@ -3804,13 +3767,13 @@ const translations = {
         'modal.crypto.lowFees2': 'Frais bas (~0.5 USDT)',
         'modal.crypto.walletAddress': 'Adresse du Portefeuille',
         'modal.crypto.scanQR': 'Scanner le code avec l\'application portefeuille',
-        'modal.crypto.step1': 'Choisissez le réseau approprié (TRC20 ou BEP20)',
-        'modal.crypto.step2': 'Copiez l\'adresse du portefeuille ou scannez le QR Code',
-        'modal.crypto.step3': 'Ouvrez l\'application Binance ou tout portefeuille USDT',
+        'modal.crypto.step1': 'Choisir le réseau approprié (TRC20 ou BEP20)',
+        'modal.crypto.step2': 'Copier l\'adresse du portefeuille ou scanner le code QR',
+        'modal.crypto.step3': 'Ouvrir l\'application Binance ou tout portefeuille USDT',
         'modal.crypto.step4': 'Assurez-vous de sélectionner le même réseau',
-        'modal.crypto.step5': 'Envoyez le montant requis',
-        'modal.crypto.step6': 'Conservez l\'ID de transaction',
-        'modal.crypto.step7': 'Cliquez sur "Paiement Effectué" pour nous contacter',
+        'modal.crypto.step5': 'Envoyer le montant requis',
+        'modal.crypto.step6': 'Garder l\'ID de transaction',
+        'modal.crypto.step7': 'Cliquer sur "Paiement Effectué" pour nous contacter',
         'modal.crypto.warning': '⚠️ Assurez-vous de sélectionner le bon réseau sinon vous perdrez vos fonds!',
         'modal.baridimob.title': 'Paiement via BaridiMob',
         'modal.baridimob.paymentInfo': 'Informations de Paiement',
@@ -4107,10 +4070,152 @@ const translations = {
         'perplexity.final.title': '🚀 Commencez la Recherche Intelligente Aujourd\'hui',
         'perplexity.final.subtitle': 'Obtenez Perplexity AI Pro au meilleur prix en Algérie !',
         'perplexity.final.cta': '🎯 Inscrivez-vous Maintenant',
+        'product.claude.title': 'Claude AI',
+        'product.claude.desc': 'Découvrez la puissance de Claude 4.6 Sonnet et Opus 4.7 avec un abonnement Pro ou une API personnalisée pour les développeurs.',
+        'product.claude.feature1': 'Accès complet à Sonnet 4.6 et Opus 4.7',
+        'product.claude.feature2': 'Performance supérieure en codage et analyse',
+        'product.claude.feature3': 'Limites d\'utilisation plus élevées que le plan gratuit',
     }
 };
 
 let currentLang = localStorage.getItem('preferredLanguage') || 'ar';
+
+Object.assign(translations.ar, {
+    'page.title': '3Ahub | \u0645\u062a\u062c\u0631\u0643 \u0627\u0644\u0631\u0642\u0645\u064a \u0627\u0644\u0623\u0648\u0644 \u0641\u064a \u0627\u0644\u062c\u0632\u0627\u0626\u0631',
+    'aria.featuredBackgrounds': '\u062e\u0644\u0641\u064a\u0627\u062a \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0645\u0645\u064a\u0632\u0629',
+    'aria.previous': '\u0627\u0644\u0633\u0627\u0628\u0642',
+    'aria.next': '\u0627\u0644\u062a\u0627\u0644\u064a',
+    'aria.close': '\u0625\u063a\u0644\u0627\u0642',
+    'aria.backToTop': '\u0627\u0644\u0639\u0648\u062f\u0629 \u0644\u0644\u0623\u0639\u0644\u0649',
+    'aria.whatsappContact': '\u062a\u0648\u0627\u0635\u0644 \u0639\u0628\u0631 \u0648\u0627\u062a\u0633\u0627\u0628',
+    'mobile.featuredOffers': '\u0627\u0644\u0639\u0631\u0648\u0636 \u0627\u0644\u0623\u0643\u062b\u0631 \u0637\u0644\u0628\u0627\u064b',
+    'mobile.mostPopular': '\u0627\u0644\u0623\u0643\u062b\u0631 \u0637\u0644\u0628\u0627\u064b',
+    'mobile.fastActivation': '\u062a\u0641\u0639\u064a\u0644 \u0633\u0631\u064a\u0639 \u0648\u062f\u0639\u0645 \u0639\u0628\u0631 \u0648\u0627\u062a\u0633\u0627\u0628 \u0628\u0639\u062f \u0627\u0644\u0637\u0644\u0628.',
+    'mobile.chatgpt.desc': '\u0627\u0634\u062a\u0631\u0627\u0643 \u0645\u0646\u0627\u0633\u0628 \u0644\u0644\u0637\u0644\u0627\u0628 \u0648\u0635\u0646\u0627\u0639 \u0627\u0644\u0645\u062d\u062a\u0648\u0649 \u0648\u0623\u0635\u062d\u0627\u0628 \u0627\u0644\u0623\u0639\u0645\u0627\u0644\u060c \u0645\u0639 \u062f\u0639\u0645 \u0628\u0639\u062f \u0627\u0644\u062a\u0641\u0639\u064a\u0644.',
+    'mobile.chatgpt.feature1': '\u062a\u0633\u0644\u064a\u0645 \u0633\u0631\u064a\u0639 \u0639\u0628\u0631 \u0648\u0627\u062a\u0633\u0627\u0628',
+    'mobile.chatgpt.feature2': '\u062f\u0641\u0639 \u0645\u062d\u0644\u064a \u0623\u0648 USDT',
+    'mobile.adobe.desc': '\u0628\u0627\u0642\u0629 \u0645\u0646\u0627\u0633\u0628\u0629 \u0644\u0644\u062a\u0635\u0645\u064a\u0645 \u0648\u0627\u0644\u0645\u0648\u0646\u062a\u0627\u062c\u060c \u0645\u0639 \u062a\u0641\u0639\u064a\u0644 \u0648\u0627\u0636\u062d \u0648\u0645\u062a\u0627\u0628\u0639\u0629 \u0644\u0644\u0637\u0644\u0628.',
+    'mobile.adobe.feature1': '\u062a\u0637\u0628\u064a\u0642\u0627\u062a Adobe \u0627\u0644\u0627\u062d\u062a\u0631\u0627\u0641\u064a\u0629',
+    'mobile.adobe.feature2': '\u062f\u0639\u0645 \u0648\u0627\u062a\u0633\u0627\u0628 \u0628\u0639\u062f \u0627\u0644\u0637\u0644\u0628',
+    'mobile.trw.desc': '\u062d\u0633\u0627\u0628 \u0643\u0648\u0631\u0633\u0627\u062a \u0648\u0645\u0646\u0635\u0629 \u062a\u0639\u0644\u064a\u0645\u064a\u0629 \u0645\u0639 \u0645\u062a\u0627\u0628\u0639\u0629 \u0644\u0644\u0637\u0644\u0628 \u0648\u062e\u062f\u0645\u0629 \u0645\u0627 \u0628\u0639\u062f \u0627\u0644\u0628\u064a\u0639.',
+    'mobile.trw.feature1': '\u0648\u0635\u0648\u0644 \u0644\u0644\u0643\u0648\u0631\u0633\u0627\u062a \u0648\u0627\u0644\u0645\u0646\u0635\u0629',
+    'mobile.trw.feature2': '\u062a\u0639\u0644\u064a\u0645\u0627\u062a \u0627\u0644\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0645\u0631\u0641\u0642\u0629',
+    'mobile.capcut.desc': '\u0645\u0646\u0627\u0633\u0628 \u0644\u0644\u0645\u0648\u0646\u062a\u0627\u062c \u0648\u0635\u0646\u0627\u0639\u0629 \u0627\u0644\u0641\u064a\u062f\u064a\u0648\u0647\u0627\u062a \u0627\u0644\u0642\u0635\u064a\u0631\u0629 \u0645\u0639 \u0645\u0632\u0627\u064a\u0627 Pro.',
+    'mobile.capcut.feature1': '\u0645\u0632\u0627\u064a\u0627 \u0627\u062d\u062a\u0631\u0627\u0641\u064a\u0629 \u0644\u0644\u0645\u0648\u0646\u062a\u0627\u062c',
+    'mobile.capcut.feature2': '\u062a\u0641\u0639\u064a\u0644 \u0633\u0631\u064a\u0639 \u0648\u0645\u062a\u0627\u0628\u0639\u0629',
+    'mobile.productDetails': '\u062a\u0641\u0627\u0635\u064a\u0644 \u0627\u0644\u0645\u0646\u062a\u062c',
+    'mobile.orderNow': '\u0627\u0637\u0644\u0628 \u0627\u0644\u0622\u0646',
+    'product.chatgpt.newAccount': '\u062d\u0633\u0627\u0628 \u062c\u062f\u064a\u062f',
+    'product.chatgpt.upgradeAccount': '\u062a\u0641\u0639\u064a\u0644 \u0639\u0644\u0649 \u062d\u0633\u0627\u0628\u0643',
+    'product.chatgpt.watchVideo': '\u0634\u0627\u0647\u062f \u062f\u0644\u064a\u0644 \u0627\u0644\u062a\u0641\u0639\u064a\u0644',
+    'product.adobe.3months': '3 \u0623\u0634\u0647\u0631',
+    'product.cursor.monthSoldOut': '\u0634\u0647\u0631 - \u063a\u064a\u0631 \u0645\u062a\u0648\u0641\u0631',
+    'product.lovable.title': 'Lovable AI',
+    'product.veo.title': 'Google Gemini Pro & Veo 3',
+    'product.veo.oneMonth': '\u0634\u0647\u0631 \u0648\u0627\u062d\u062f',
+    'product.veo.oneYearGuarantee': '\u0633\u0646\u0629 (\u0636\u0645\u0627\u0646 6 \u0623\u0634\u0647\u0631)',
+    'product.veo.guarantee': '\u2713 \u0645\u0639 \u0636\u0645\u0627\u0646 \u0644\u0645\u062f\u0629 6 \u0623\u0634\u0647\u0631',
+    'product.alight.title': 'Alight Motion PRO',
+    'modal.crypto.binanceIdLabel': '\u0645\u0639\u0631\u0641 Binance'
+});
+
+Object.assign(translations.en, {
+    'page.title': '3Ahub | Algeria\'s First Digital Store',
+    'aria.featuredBackgrounds': 'Featured product backgrounds',
+    'aria.previous': 'Previous',
+    'aria.next': 'Next',
+    'aria.close': 'Close',
+    'aria.backToTop': 'Back to top',
+    'aria.whatsappContact': 'Contact via WhatsApp',
+    'mobile.featuredOffers': 'Most Popular Offers',
+    'mobile.mostPopular': 'Most Popular',
+    'mobile.fastActivation': 'Fast activation and WhatsApp support after order.',
+    'mobile.chatgpt.desc': 'Suitable subscription for students, content creators and business owners, with support after activation.',
+    'mobile.chatgpt.feature1': 'Fast delivery via WhatsApp',
+    'mobile.chatgpt.feature2': 'Local payment or USDT',
+    'mobile.adobe.desc': 'Suitable package for design and video editing, with clear activation and order tracking.',
+    'mobile.adobe.feature1': 'Professional Adobe applications',
+    'mobile.adobe.feature2': 'WhatsApp support after order',
+    'mobile.trw.desc': 'Courses account and educational platform with order tracking and after-sales service.',
+    'mobile.trw.feature1': 'Access to courses and platform',
+    'mobile.trw.feature2': 'Usage instructions included',
+    'mobile.capcut.desc': 'Suitable for editing and short-form video creation with Pro features.',
+    'mobile.capcut.feature1': 'Professional editing features',
+    'mobile.capcut.feature2': 'Fast activation and follow-up',
+    'mobile.productDetails': 'Product Details',
+    'mobile.orderNow': 'Order Now',
+    'product.chatgpt.newAccount': 'New Account',
+    'product.chatgpt.upgradeAccount': 'Activate in your account',
+    'product.chatgpt.watchVideo': 'Watch activation guide',
+    'product.adobe.3months': '3 Months',
+    'product.cursor.monthSoldOut': 'Month - Sold Out',
+    'product.lovable.title': 'Lovable AI',
+    'product.veo.title': 'Google Gemini Pro & Veo 3',
+    'product.veo.oneMonth': '1 Month',
+    'product.veo.oneYearGuarantee': '1 Year (6-month guarantee)',
+    'product.veo.guarantee': '\u2713 Includes a 6-month guarantee',
+    'product.alight.title': 'Alight Motion PRO',
+    'contact.title': 'Ready to Start Your Next Project',
+    'contact.description': 'Contact us now through the available channels for a free consultation and to choose the best package for you.',
+    'contact.whatsapp': 'Contact via WhatsApp',
+    'contact.instagram': 'Follow us on Instagram',
+    'modal.redotpay.step7': 'Click "Payment Done" to contact us',
+    'reviews.viewAll': 'View All Reviews'
+});
+
+Object.assign(translations.fr, {
+    'page.title': '3Ahub | Votre boutique num\u00e9rique en Alg\u00e9rie',
+    'aria.featuredBackgrounds': 'Arri\u00e8re-plans des produits en vedette',
+    'aria.previous': 'Pr\u00e9c\u00e9dent',
+    'aria.next': 'Suivant',
+    'aria.close': 'Fermer',
+    'aria.backToTop': 'Retour en haut',
+    'aria.whatsappContact': 'Contacter via WhatsApp',
+    'mobile.featuredOffers': 'Offres les plus populaires',
+    'mobile.mostPopular': 'Le plus populaire',
+    'mobile.fastActivation': 'Activation rapide et support WhatsApp apr\u00e8s la commande.',
+    'mobile.chatgpt.desc': 'Abonnement adapt\u00e9 aux \u00e9tudiants, cr\u00e9ateurs de contenu et entrepreneurs, avec support apr\u00e8s activation.',
+    'mobile.chatgpt.feature1': 'Livraison rapide via WhatsApp',
+    'mobile.chatgpt.feature2': 'Paiement local ou USDT',
+    'mobile.adobe.desc': 'Pack adapt\u00e9 au design et au montage vid\u00e9o, avec activation claire et suivi de commande.',
+    'mobile.adobe.feature1': 'Applications Adobe professionnelles',
+    'mobile.adobe.feature2': 'Support WhatsApp apr\u00e8s la commande',
+    'mobile.trw.desc': 'Compte de cours et plateforme \u00e9ducative avec suivi de commande et service apr\u00e8s-vente.',
+    'mobile.trw.feature1': 'Acc\u00e8s aux cours et \u00e0 la plateforme',
+    'mobile.trw.feature2': 'Instructions d\'utilisation incluses',
+    'mobile.capcut.desc': 'Adapt\u00e9 au montage et aux vid\u00e9os courtes avec les fonctionnalit\u00e9s Pro.',
+    'mobile.capcut.feature1': 'Fonctionnalit\u00e9s de montage professionnelles',
+    'mobile.capcut.feature2': 'Activation rapide et suivi',
+    'mobile.productDetails': 'D\u00e9tails du produit',
+    'mobile.orderNow': 'Commander',
+    'product.chatgpt.newAccount': 'Nouveau compte',
+    'product.chatgpt.upgradeAccount': 'Activer sur votre compte',
+    'product.chatgpt.watchVideo': 'Voir le guide d\'activation',
+    'product.adobe.3months': '3 Mois',
+    'product.cursor.monthSoldOut': 'Mois - \u00c9puis\u00e9',
+    'product.lovable.title': 'Lovable AI',
+    'product.veo.title': 'Google Gemini Pro & Veo 3',
+    'product.veo.oneMonth': '1 Mois',
+    'product.veo.oneYearGuarantee': '1 An (garantie 6 mois)',
+    'product.veo.guarantee': '\u2713 Avec garantie de 6 mois',
+    'product.alight.title': 'Alight Motion PRO',
+    'modal.crypto.binanceIdLabel': 'Identifiant Binance',
+    'product.primevideo.title': 'Amazon Prime Video',
+    'product.crunchyroll.title': 'Crunchyroll Premium',
+    'product.cursor.title': 'Cursor AI',
+    'product.youtube.title': 'YouTube Premium',
+    'product.youtube.desc': 'Profitez de YouTube sans publicit\u00e9 avec lecture en arri\u00e8re-plan et YouTube Music.',
+    'product.youtube.feature1': 'Compte priv\u00e9 pendant 1 mois',
+    'product.youtube.feature2': 'Sans publicit\u00e9 et lecture en arri\u00e8re-plan',
+    'product.youtube.feature3': 'Inclut YouTube Music Premium',
+    'product.youtube.1month': '1 Mois',
+    'product.duolingo.title': 'Duolingo Super',
+    'product.duolingo.desc': 'Plan famille 12 mois (1 an) sur votre propre compte.',
+    'product.duolingo.feature1': 'Vies illimit\u00e9es',
+    'product.duolingo.feature2': 'Sans publicit\u00e9',
+    'product.duolingo.feature3': 'R\u00e9vision des erreurs et exercices personnalis\u00e9s',
+    'product.duolingo.1year': '1 An'
+});
 
 // Make translations and language state globally available
 window.translations = translations;
@@ -4122,12 +4227,22 @@ function changeLanguage(lang) {
     window.currentLang = lang; // Update global state
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.title = translations[lang]['page.title'] || translations.ar['page.title'] || document.title;
 
     // Update all elements with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(element => {
         const key = element.getAttribute('data-i18n');
         if (translations[lang][key]) {
             element.innerHTML = translations[lang][key];
+        }
+    });
+
+    const legacyOrderText = translations[lang]['product.orderNow'] || translations.ar['product.orderNow'];
+    document.querySelectorAll('.order-btn:not([data-i18n])').forEach(element => {
+        const text = element.textContent.trim().toLowerCase();
+        const isOrderButton = ['اطلب الآن', 'اطلب الان', 'order now', 'commander'].some(label => text.includes(label.toLowerCase()));
+        if (isOrderButton) {
+            element.textContent = legacyOrderText;
         }
     });
 
@@ -4173,6 +4288,10 @@ function changeLanguage(lang) {
 
     if (typeof window.refreshMobileOfferCardsText === 'function') {
         window.refreshMobileOfferCardsText();
+    }
+
+    if (Array.isArray(window.__firebaseRenderedProducts) && window.FirebaseProductsLoader?.renderProducts) {
+        window.FirebaseProductsLoader.renderProducts(window.__firebaseRenderedProducts, lang);
     }
 
     // Update product translations from Firebase (Requirements: 4.5)
@@ -4248,7 +4367,7 @@ function updateStatusBadges(lang) {
     }
 
     // Update dynamic status badges (created by Firebase)
-    document.querySelectorAll('.status-badge').forEach(badge => {
+    document.querySelectorAll('.status-badge, .availability-badge, .unavailable-badge, .coming-soon-badge').forEach(badge => {
         let status = badge.getAttribute('data-status');
         if (!status) {
             status = detectStatusFromText(badge.textContent);
@@ -4275,6 +4394,16 @@ function updateStatusBadges(lang) {
                 btn.setAttribute('data-status', status);
             }
         }
+    });
+
+    document.querySelectorAll('.product-card').forEach(card => {
+        const status = card.querySelector('.order-btn')?.getAttribute('data-status') ||
+            card.querySelector('.status-badge, .availability-badge, .unavailable-badge, .coming-soon-badge')?.getAttribute('data-status');
+        const shouldHidePrice = status === 'unavailable' || status === 'coming_soon';
+        card.querySelectorAll('.price-tag, [data-price-dzd]').forEach(priceEl => {
+            priceEl.hidden = shouldHidePrice;
+            priceEl.style.display = shouldHidePrice ? 'none' : '';
+        });
     });
 }
 
@@ -5924,6 +6053,15 @@ function orderProduct(productName) {
 
     // Second attempt: Scrape from DOM if still not found (legacy/dynamic products)
     if (!price) {
+        const activeButton = document.activeElement?.closest?.('[data-product]');
+        if (activeButton && activeButton.dataset.product === productName) {
+            price = currency === 'USD'
+                ? activeButton.dataset.priceUsd
+                : activeButton.dataset.price;
+        }
+    }
+
+    if (!price) {
         // Find the button that was likely clicked to get context
         const buttons = document.querySelectorAll(`[onclick*="orderProduct('${productName}')"]`);
         buttons.forEach(btn => {
@@ -6030,6 +6168,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // ═══════════════════════════════════════════════════════════════
     // مؤشر التمرير الأفقي لبطاقات المنتجات - Product Cards Scroll Indicator
     // ═══════════════════════════════════════════════════════════════
+    function fastScrollToX(element, targetLeft, duration = 220) {
+        const startLeft = element.scrollLeft;
+        const distance = targetLeft - startLeft;
+        const startTime = performance.now();
+
+        function step(now) {
+            const elapsed = Math.min((now - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - elapsed, 3);
+            element.scrollLeft = startLeft + distance * eased;
+            if (elapsed < 1) requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+    }
+
     function initProductScrollIndicator() {
         const productGrid = document.querySelector('.product-grid');
         const scrollDotsContainer = document.getElementById('scroll-dots');
@@ -6050,10 +6203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dot.addEventListener('click', () => {
                 // Scroll to the clicked card
                 const cardWidth = card.offsetWidth + 16; // card width + gap
-                productGrid.scrollTo({
-                    left: cardWidth * index,
-                    behavior: 'smooth'
-                });
+                fastScrollToX(productGrid, cardWidth * index, 220);
             });
             scrollDotsContainer.appendChild(dot);
         });
@@ -6151,12 +6301,60 @@ document.addEventListener('DOMContentLoaded', function () {
 // Category Filter Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const categoryPills = document.querySelectorAll('.category-pill');
-    const productCards = document.querySelectorAll('.product-card');
 
-    if (categoryPills.length === 0 || productCards.length === 0) return;
+    if (categoryPills.length === 0) return;
+
+    function normalizeCardCategory(card) {
+        const normalizeSearchText = (value) => String(value || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, ' ')
+            .trim();
+        const rawCategory = normalizeSearchText(card.getAttribute('data-category'));
+        const id = normalizeSearchText(card.getAttribute('data-product-id') || card.id || card.getAttribute('data-mobile-expand-product') || '');
+        const title = normalizeSearchText([
+            card.querySelector('h3')?.textContent || '',
+            card.querySelector('.mobile-expand-toggle strong')?.textContent || '',
+            card.getAttribute('data-product') || ''
+        ].join(' '));
+        const directCategoryMap = {
+            ai: 'ai',
+            'ai tools': 'ai',
+            aitools: 'ai',
+            artificial: 'ai',
+            intelligence: 'ai',
+            design: 'design',
+            creative: 'design',
+            video: 'design',
+            montage: 'design',
+            editing: 'design',
+            courses: 'courses',
+            course: 'courses',
+            education: 'courses',
+            accounts: 'courses',
+            account: 'courses',
+            learning: 'courses',
+            entertainment: 'entertainment',
+            streaming: 'entertainment',
+            stream: 'entertainment',
+            movies: 'entertainment'
+        };
+
+        if (directCategoryMap[rawCategory]) return directCategoryMap[rawCategory];
+        const haystack = `${id} ${title}`;
+        if (['chatgpt', 'gpt', 'claude', 'grok', 'super grok', 'gemini', 'google ai', 'veo', 'gamma', 'gama', 'perplexity', 'cursor', 'scispace', 'sci space', 'lovable'].some(key => haystack.includes(key))) return 'ai';
+        if (['adobe', 'creative cloud', 'canva', 'capcut', 'cap cut', 'alight', 'motion'].some(key => haystack.includes(key))) return 'design';
+        if (['trw', 'real world', 'duolingo', 'microsoft', 'office', 'hma', 'vpn', 'tradingview', 'trading view'].some(key => haystack.includes(key))) return 'courses';
+        if (['netflix', 'primevideo', 'prime video', 'crunchyroll', 'youtube', 'spotify'].some(key => haystack.includes(key))) return 'entertainment';
+
+        return 'courses';
+    }
+
+    window.normalizeProductCardCategory = normalizeCardCategory;
 
     // Add data-category to products based on their content
-    productCards.forEach(card => {
+    document.querySelectorAll('.product-card').forEach(card => {
         const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
         const cardId = card.id || '';
 
@@ -6172,10 +6370,28 @@ document.addEventListener('DOMContentLoaded', function() {
             card.setAttribute('data-category', 'courses');
         } else if (title.includes('netflix') || title.includes('youtube') || title.includes('spotify')) {
             card.setAttribute('data-category', 'entertainment');
-        } else {
-            card.setAttribute('data-category', 'all');
         }
     });
+
+    window.applyProductCategoryFilter = function(filter = 'all') {
+        document.querySelectorAll('.product-card').forEach(card => {
+            const category = normalizeCardCategory(card);
+            card.setAttribute('data-category', category);
+
+            if (filter === 'all' || category === filter) {
+                card.style.removeProperty('display');
+                card.style.opacity = '1';
+                card.classList.add('visible');
+            } else {
+                card.style.setProperty('display', 'none', 'important');
+                card.style.opacity = '0';
+            }
+        });
+
+        if (typeof window.applyMobileCategoryFilter === 'function') {
+            window.applyMobileCategoryFilter(filter);
+        }
+    };
 
     // Filter functionality
     categoryPills.forEach(pill => {
@@ -6190,24 +6406,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
 
             const filter = this.getAttribute('data-filter');
-
-            // Filter products
-            productCards.forEach(card => {
-                const category = card.getAttribute('data-category');
-
-                if (filter === 'all' || category === filter || category === 'all') {
-                    card.style.display = '';
-                    // Re-trigger fade-in animation
-                    card.classList.remove('visible');
-                    setTimeout(() => card.classList.add('visible'), 10);
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            if (typeof window.applyMobileCategoryFilter === 'function') {
-                window.applyMobileCategoryFilter(filter);
-            }
+            window.applyProductCategoryFilter(filter);
 
             // Track filter usage
             if (typeof fbq !== 'undefined') {
@@ -6218,3 +6417,95 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+// Claude AI Selection
+function selectClaudeDuration(duration) {
+    const card = document.getElementById('product-claude');
+    if (!card) return;
+    
+    const buttons = card.querySelectorAll('.claude-duration-btn');
+    buttons.forEach(btn => {
+        if (btn.getAttribute('data-duration') === duration) {
+            btn.classList.add('active');
+            btn.style.border = '2px solid #d97757';
+            btn.style.background = 'rgba(217, 119, 87, 0.15)';
+            btn.style.color = 'var(--text-primary)';
+        } else {
+            btn.classList.remove('active');
+            btn.style.border = '2px solid var(--border-color)';
+            btn.style.background = 'rgba(100, 100, 100, 0.1)';
+            btn.style.color = 'var(--text-secondary)';
+        }
+    });
+
+    const pricesPro = document.getElementById('claude-prices-pro');
+    const pricesApi = document.getElementById('claude-prices-api');
+    const orderBtn = document.getElementById('claude-order-btn');
+    const cryptoBtn = document.getElementById('claude-crypto-btn');
+    const redotBtn = document.getElementById('claude-redotpay-btn');
+    const baridiBtn = document.getElementById('claude-baridimob-btn');
+
+    if (duration === 'pro') {
+        if (pricesPro) pricesPro.style.display = 'block';
+        if (pricesApi) pricesApi.style.display = 'none';
+        const productName = "Claude Pro Account";
+        const price = "4800";
+        const priceUsd = "19.2";
+        if (orderBtn) orderBtn.setAttribute('data-product', productName);
+        if (cryptoBtn) {
+            cryptoBtn.setAttribute('data-product', productName);
+            cryptoBtn.setAttribute('data-price', price);
+            cryptoBtn.setAttribute('data-price-usd', priceUsd);
+        }
+        if (redotBtn) {
+            redotBtn.setAttribute('data-product', productName);
+            redotBtn.setAttribute('data-price', price);
+            redotBtn.setAttribute('data-price-usd', priceUsd);
+        }
+        if (baridiBtn) {
+            baridiBtn.setAttribute('data-product', productName);
+            baridiBtn.setAttribute('data-price', price);
+            baridiBtn.setAttribute('data-price-usd', priceUsd);
+        }
+    } else {
+        if (pricesPro) pricesPro.style.display = 'none';
+        if (pricesApi) pricesApi.style.display = 'block';
+        const productName = "Claude Code API (45M Tokens)";
+        const price = "3500";
+        const priceUsd = "14";
+        if (orderBtn) orderBtn.setAttribute('data-product', productName);
+        if (cryptoBtn) {
+            cryptoBtn.setAttribute('data-product', productName);
+            cryptoBtn.setAttribute('data-price', price);
+            cryptoBtn.setAttribute('data-price-usd', priceUsd);
+        }
+        if (redotBtn) {
+            redotBtn.setAttribute('data-product', productName);
+            redotBtn.setAttribute('data-price', price);
+            redotBtn.setAttribute('data-price-usd', priceUsd);
+        }
+        if (baridiBtn) {
+            baridiBtn.setAttribute('data-product', productName);
+            baridiBtn.setAttribute('data-price', price);
+            baridiBtn.setAttribute('data-price-usd', priceUsd);
+        }
+    }
+}
+
+function orderClaude() {
+    const btn = document.getElementById('claude-order-btn');
+    if (!btn) return;
+    const product = btn.getAttribute('data-product');
+    const priceTag = document.querySelector('#product-claude .claude-prices:not([style*="display: none"]) .price-tag');
+    const price = priceTag ? priceTag.getAttribute('data-price-dzd') : '4800';
+    
+    if (typeof orderProduct === 'function') {
+        orderProduct(product, price);
+    } else {
+        const message = `مرحباً، أريد طلب اشتراك ${product} بسعر ${price} د.ج`;
+        window.open(`https://wa.me/213661141381?text=${encodeURIComponent(message)}`, '_blank');
+    }
+}
+
+// Expose to window
+window.selectClaudeDuration = selectClaudeDuration;
+window.orderClaude = orderClaude;

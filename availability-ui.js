@@ -115,10 +115,15 @@ function updateProductCardAvailability(productCard, status, lang = 'ar') {
     // الحصول على زر الطلب وأزرار الدفع
     const orderBtn = productCard.querySelector('.order-btn');
     const paymentBtns = productCard.querySelectorAll('.payment-btn-compact');
+    const priceElements = productCard.querySelectorAll('.price-tag, [data-price-dzd]');
     
     if (status === AVAILABILITY_STATUS.AVAILABLE) {
         // المنتج متوفر - تفعيل الأزرار
         enableProductButtons(orderBtn, paymentBtns);
+        priceElements.forEach(element => {
+            element.hidden = false;
+            element.style.display = '';
+        });
     } else {
         // المنتج غير متوفر أو قريباً - إضافة badge وتعطيل الأزرار
         const badge = createAvailabilityBadge(status, lang);
@@ -141,6 +146,10 @@ function updateProductCardAvailability(productCard, status, lang = 'ar') {
         
         // تعطيل الأزرار
         disableProductButtons(orderBtn, paymentBtns, status, lang);
+        priceElements.forEach(element => {
+            element.hidden = true;
+            element.style.display = 'none';
+        });
     }
 }
 

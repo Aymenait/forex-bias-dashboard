@@ -4,6 +4,11 @@
  */
 
 (function () {
+    if (window.__threeAhubOrderFormInitialized) {
+        return;
+    }
+    window.__threeAhubOrderFormInitialized = true;
+
     // 1. Capture FBCLID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const fbclid = urlParams.get('fbclid');
@@ -27,6 +32,10 @@
         const num = parseFloat(value) || 0;
         if (currency === 'USD') return parseFloat(num.toFixed(2));
         return parseFloat((num / DZD_TO_USD_RATE).toFixed(2)); // DZD → USD
+    }
+
+    function pixelProductId(name) {
+        return String(name || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     }
 
     // 2. Initialize Modal HTML
@@ -372,6 +381,15 @@
             }
 
             if (!price) {
+                const activeButton = document.activeElement?.closest?.('[data-product]');
+                if (activeButton && activeButton.dataset.product === productName) {
+                    price = currency === 'USD'
+                        ? activeButton.dataset.priceUsd
+                        : activeButton.dataset.price;
+                }
+            }
+
+            if (!price) {
                 const buttons = document.querySelectorAll(`[onclick*="orderProduct('${productName}')"]`);
                 buttons.forEach(btn => {
                     const card = btn.closest('.product-card');
@@ -392,8 +410,11 @@
             const usdValue = toPixelUSD(price, currency);
             window.metaPixel.trackEvent('InitiateCheckout', {
                 content_name: productName,
+                content_ids: [pixelProductId(productName)],
+                content_type: 'product',
                 value: usdValue,
-                currency: 'USD'
+                currency: 'USD',
+                num_items: 1
             });
             console.log(`🎯 Meta Pixel InitiateCheckout: $${usdValue} USD (from ${price} ${currency})`);
         }
@@ -455,7 +476,15 @@
                         document.getElementById('order-product-currency').value = currency;
 
                         if (window.metaPixel && canTrack()) {
-                            window.metaPixel.trackEvent('InitiateCheckout', { content_name: name, value: parseFloat(price) || 0, currency: currency });
+                            const usdValue = toPixelUSD(price, currency);
+                            window.metaPixel.trackEvent('InitiateCheckout', {
+                                content_name: name,
+                                content_ids: [pixelProductId(name)],
+                                content_type: 'product',
+                                value: usdValue,
+                                currency: 'USD',
+                                num_items: 1
+                            });
                             console.log('🎯 Meta Pixel tracked: InitiateCheckout (Special)');
                         }
                         translateForm();
@@ -469,6 +498,26 @@
             if (++attempts > 20) clearInterval(interval);
         }, 500);
     });
+
+    // One delegated handler keeps Order Now working for static and Firebase-rendered cards.
+    document.addEventListener('click', function (e) {
+        const button = e.target.closest('.order-btn, .mobile-expand-actions button');
+        if (!button || button.disabled) return;
+
+        const href = button.getAttribute('href');
+        if (button.tagName === 'A' && href && href !== '#') return;
+
+        const inlineAction = button.getAttribute('onclick') || '';
+        const shouldHandleDirectly = !inlineAction || inlineAction.includes('orderProduct(');
+        if (!shouldHandleDirectly) return;
+
+        const productName = button.dataset.product;
+        if (!productName || typeof window.orderProduct !== 'function') return;
+
+        e.preventDefault();
+        e.stopPropagation();
+        window.orderProduct(productName);
+    }, true);
 
     // Intercept window.open for WhatsApp links as a final fallback
     const originalOpen = window.open;
@@ -553,9 +602,12 @@
             const usdValueLead = toPixelUSD(price, currency);
             window.metaPixel.trackEvent('Lead', {
                 content_name: productName,
+                content_ids: [pixelProductId(productName)],
+                content_type: 'product',
                 value: usdValueLead,
                 currency: 'USD',
-                content_category: 'Prospect'
+                content_category: 'Prospect',
+                lead_type: 'order_form'
             }, userData);
             console.log(`🎯 Meta Pixel Lead: $${usdValueLead} USD (from ${price} ${currency})`);
         }
@@ -578,12 +630,7 @@
         }
 
         // 3. Build Thank You URL immediately (before showing success screen)
-        const currencySym = currency === 'USD' ? '$' : 'DA';
         const lang = window.currentLang || 'ar';
-        const messageAr = `مرحباً 👋\nلقد قمت بملء طلب في الموقع:\n\n👤 الاسم: ${name}\n📞 التواصل: ${contact}\n📦 الطلب: ${productName}\n💰 السعر: ${price} ${currencySym}\n\nشكراً 🙏`;
-        const messageEn = `Hello 👋\nI just filled an order on the website:\n\n👤 Name: ${name}\n📞 Contact: ${contact}\n📦 Order: ${productName}\n💰 Price: ${price} ${currencySym}\n\nThank you 🙏`;
-        const messageFr = `Bonjour 👋\nJ'ai rempli une commande sur le site :\n\n👤 Nom: ${name}\n📞 Contact: ${contact}\n📦 Commande: ${productName}\n💰 Prix: ${price} ${currencySym}\n\nMerci 🙏`;
-        const finalMessage = lang === 'fr' ? messageFr : lang === 'en' ? messageEn : messageAr;
 
         localStorage.setItem('3ahub_last_product', productName);
         localStorage.setItem('3ahub_last_price', price);
@@ -592,10 +639,7 @@
         const tyParams = new URLSearchParams({
             product: productName,
             price: price,
-            currency: currency,
-            name: name,
-            contact: contactRaw,
-            msg: finalMessage
+            currency: currency
         });
         const tyUrl = `thank-you.html?${tyParams.toString()}`;
 

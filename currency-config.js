@@ -121,6 +121,26 @@ const PRODUCTS = {
       usd: ['binance', 'redotpay', 'crypto']
     }
   },
+  'claude': {
+    id: 'claude',
+    name: 'Claude AI',
+    price_dzd: 4800,
+    price_usd: 19.2,
+    category: 'ai',
+    durations: {
+      'pro': { dzd: 4800, usd: 19.2 },
+      'api': { dzd: 3500, usd: 14 }
+    },
+    description: {
+      ar: 'اشتراك Claude AI مع خيار Claude Pro أو Claude Code API للمبرمجين والتحليل.',
+      en: 'Claude AI subscription with Claude Pro or Claude Code API options.',
+      fr: 'Abonnement Claude AI avec options Claude Pro ou Claude Code API.'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
   'adobe': {
     id: 'adobe',
     name: 'Adobe Creative Cloud',

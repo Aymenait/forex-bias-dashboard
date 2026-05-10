@@ -29,6 +29,16 @@ let startingCapital = 0;       // رأس المال الأساسي
 let reviewToDelete = null;     // التقييم المراد حذفه
 const DEFAULT_PASSWORD = 'admin123';  // كلمة المرور الافتراضية
 
+if (typeof window !== 'undefined') {
+    Object.defineProperty(window, 'allProducts', {
+        get: () => allProducts,
+        set: (value) => {
+            allProducts = Array.isArray(value) ? value : [];
+        },
+        configurable: true
+    });
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // سعر الدولار في السكوار (السوق السوداء) - Square Rate
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1966,6 +1976,10 @@ async function showDashboard() {
                 if (typeof loadSecuritySettings === 'function') loadSecuritySettings();
             } catch (error) { console.warn('خطأ في تحميل إعدادات الأمان:', error); }
 
+            try {
+                if (typeof loadMaintenanceSettings === 'function') loadMaintenanceSettings();
+            } catch (error) { console.warn('Error loading maintenance settings:', error); }
+
             // CRITICAL: Load Resellers & Transactions FIRST for Accounting
             try {
                 // Load Resellers (for Liabilities calculation)
@@ -2694,6 +2708,33 @@ async function loadIntegrationSettings() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 // allProducts معرّف مسبقاً في المتغيرات العامة
+async function loadMaintenanceSettings() {
+    const maintenanceToggle = document.getElementById('maintenance-mode');
+    if (!maintenanceToggle) return;
+
+    try {
+        if (!window.db || !window.firebaseModules || !window.firebaseModules.getDoc) {
+            maintenanceToggle.checked = localStorage.getItem('maintenanceMode') === 'true';
+            return;
+        }
+
+        const { doc, getDoc } = window.firebaseModules;
+        const maintenanceDoc = await getDoc(doc(window.db, 'settings', 'maintenance'));
+
+        if (maintenanceDoc.exists()) {
+            const data = maintenanceDoc.data();
+            maintenanceToggle.checked = data.enabled === true;
+            localStorage.setItem('maintenanceMode', data.enabled === true ? 'true' : 'false');
+        } else {
+            maintenanceToggle.checked = false;
+            localStorage.setItem('maintenanceMode', 'false');
+        }
+    } catch (error) {
+        console.warn('Unable to load maintenance settings:', error);
+        maintenanceToggle.checked = localStorage.getItem('maintenanceMode') === 'true';
+    }
+}
+
 let editingProductId = null;
 let charts = {};
 const ADMIN_PRODUCTS_COLLECTION = 'products_v2';
@@ -2714,11 +2755,212 @@ function getProductPriceUSD(product) {
 }
 
 function getProductImage(product) {
-    return product?.mediaUrl || product?.image || '';
+    const directImage = product?.mediaUrl || product?.image || product?.thumbnail || product?.imageUrl || '';
+    if (directImage) return directImage;
+
+    const fallbackImages = {
+        'trw': 'https://i.imgur.com/hEiJhso.gif',
+        'chatgpt': 'https://i.imgur.com/FDZBdd9.gif',
+        'claude': 'https://i.pinimg.com/1200x/e9/cc/43/e9cc4340e938f878b3b178fbf8ec9cce.jpg',
+        'adobe': 'https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg',
+        'gamma': 'https://i.imgur.com/FDZBdd9.gif',
+        'super-grok': 'https://i.pinimg.com/1200x/33/d7/e6/33d7e60098a9677bee53218fbe775b53.jpg',
+        'netflix': 'https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif',
+        'canva': 'https://i.pinimg.com/736x/71/8b/41/718b41945aab84bd2276c762266931d0.jpg',
+        'capcut': 'https://i.pinimg.com/1200x/38/e3/08/38e308732b87069ed50893423f09ca4b.jpg',
+        'tradingview': 'https://i.pinimg.com/736x/8c/63/a5/8c63a5c7d9d6e826b281b01dea6bd5da.jpg',
+        'cursor': 'https://i.pinimg.com/736x/29/f9/48/29f9488bd27d42debcfbddb33c1c79d7.jpg',
+        'scispace': 'https://i.pinimg.com/736x/06/b7/27/06b727adf3807349c0bf07bf2fd404a4.jpg',
+        'duolingo': 'https://i.pinimg.com/originals/98/59/12/98591272861e66a02eecf5dae0450c73.gif',
+        'lovable': 'https://i.pinimg.com/1200x/cd/d4/69/cdd469e94eb529ae307f9b5d56e8da96.jpg',
+        'google-ai': 'https://i.pinimg.com/736x/c2/5b/dd/c25bdda8e7d4eb27bcb2f4d411441d92.jpg',
+        'hma-vpn': 'https://i.pinimg.com/736x/8d/73/1d/8d731d64d3580276bb1d257080f4f48d.jpg',
+        'alight-motion': 'https://i.pinimg.com/originals/ad/8b/2c/ad8b2cf5e7b44514ab71b9fd9666ec16.jpg',
+        'perplexity': 'https://i.imgur.com/mEy5oXF.mp4',
+        'microsoft-office': 'https://i.pinimg.com/736x/3c/0d/b2/3c0db24fec715f86cc3e167892f88e2f.jpg',
+        'primevideo': 'https://i.pinimg.com/736x/d6/f8/99/d6f899a7367b4a55c6503d6c1e3cb6ea.jpg',
+        'crunchyroll': 'https://i.pinimg.com/736x/45/f5/5e/45f55ec8cbb2cc9d48c1fb8ad62f6758.jpg'
+    };
+
+    return fallbackImages[product?.id] || '';
+}
+
+function isVideoMedia(url = '') {
+    return String(url).toLowerCase().includes('.mp4');
 }
 
 function getProductOrder(product) {
     return Number(product?.displayOrder ?? product?.order ?? 0) || 0;
+}
+
+function getProductSubOffers(product) {
+    if (Array.isArray(product?.subOffers) && product.subOffers.length > 0) {
+        return product.subOffers;
+    }
+    return normalizeDurationsToSubOffers(product?.durations);
+}
+
+function productHasMissingCatalogDetails(product) {
+    return !getProductDisplayName(product) ||
+        getProductPriceDZD(product) <= 0 ||
+        getProductPriceUSD(product) <= 0 ||
+        getProductSubOffers(product).length === 0 ||
+        !getProductImage(product);
+}
+
+function mergeProductCatalogDetails(baseProduct, catalogProduct) {
+    if (!baseProduct) return catalogProduct;
+    if (!catalogProduct) return baseProduct;
+
+    const merged = { ...catalogProduct, ...baseProduct };
+    const baseName = getProductDisplayName(baseProduct);
+    const catalogName = getProductDisplayName(catalogProduct);
+    const baseNameLooksLikeId = baseName &&
+        String(baseName).toLowerCase() === String(baseProduct.id || '').toLowerCase();
+
+    merged.name = (!baseName || baseNameLooksLikeId) ? catalogProduct.name : baseProduct.name;
+    merged.description = baseProduct.description || catalogProduct.description;
+    merged.mediaUrl = baseProduct.mediaUrl || baseProduct.image || catalogProduct.mediaUrl || catalogProduct.image || '';
+    merged.image = baseProduct.image || baseProduct.mediaUrl || catalogProduct.image || catalogProduct.mediaUrl || '';
+    merged.category = baseProduct.category || catalogProduct.category || 'other';
+    merged.priceDZD = getProductPriceDZD(baseProduct) || getProductPriceDZD(catalogProduct);
+    merged.priceUSD = getProductPriceUSD(baseProduct) || getProductPriceUSD(catalogProduct);
+    merged.price_dzd = merged.priceDZD;
+    merged.price_usd = merged.priceUSD;
+    merged.durations = baseProduct.durations || catalogProduct.durations || {};
+    merged.subOffers = getProductSubOffers(baseProduct).length > 0
+        ? getProductSubOffers(baseProduct)
+        : getProductSubOffers(catalogProduct);
+    merged.active = baseProduct.active !== false;
+    merged.source = baseProduct.source || catalogProduct.source || 'merged';
+
+    return merged;
+}
+
+function getHomepageProductId(card, fallbackName = '') {
+    const rawId = card.dataset.productId || card.id || fallbackName;
+    const mapped = {
+        'product-chatgpt': 'chatgpt',
+        'product-claude': 'claude',
+        'grok-card': 'super-grok',
+        'gamma-card': 'gamma',
+        'adobe-card': 'adobe',
+        'hma-vpn': 'hma-vpn',
+        'google-ai': 'google-ai',
+        'veo-order-btn': 'google-ai'
+    };
+
+    if (mapped[rawId]) return mapped[rawId];
+    return String(rawId || fallbackName || '')
+        .toLowerCase()
+        .replace(/^product-/, '')
+        .replace(/-card$/, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function extractBackgroundImageUrl(styleValue = '') {
+    const match = String(styleValue).match(/url\(["']?([^"')]+)["']?\)/i);
+    return match ? match[1] : '';
+}
+
+async function discoverHomepageProducts() {
+    try {
+        const response = await fetch('index.html', { cache: 'no-store' });
+        if (!response.ok) return [];
+
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        return Array.from(doc.querySelectorAll('.product-grid .product-card')).map((card, index) => {
+            const title = card.querySelector('h3')?.textContent?.trim() || '';
+            const id = getHomepageProductId(card, title);
+            if (!id || !title) return null;
+
+            const firstPrice = card.querySelector('.price-tag');
+            const mediaNode = card.querySelector('.product-image');
+            const videoNode = card.querySelector('video source');
+            const mediaUrl = videoNode?.getAttribute('src') ||
+                extractBackgroundImageUrl(mediaNode?.getAttribute('style')) ||
+                '';
+            const durationButtons = Array.from(card.querySelectorAll('[data-duration], [data-type], [data-plan], [data-offer]'));
+            const durations = {};
+
+            durationButtons.forEach((button) => {
+                const durationId = button.dataset.duration || button.dataset.type || button.dataset.plan || button.dataset.offer;
+                if (!durationId) return;
+                const priceDZD = Number(button.dataset.priceDzd || button.dataset.price || 0);
+                const priceUSD = Number(button.dataset.priceUsd || 0);
+                durations[durationId] = {
+                    dzd: priceDZD,
+                    usd: priceUSD,
+                    available: !button.disabled
+                };
+            });
+
+            return {
+                id,
+                name: { ar: title, en: title, fr: title },
+                description: {
+                    ar: card.querySelector('.description')?.textContent?.trim() || '',
+                    en: '',
+                    fr: ''
+                },
+                category: card.dataset.category || 'other',
+                mediaUrl,
+                mediaType: mediaUrl.includes('.mp4') ? 'video' : 'image',
+                priceDZD: Number(firstPrice?.dataset.priceDzd || firstPrice?.textContent?.replace(/[^\d.]/g, '') || 0),
+                priceUSD: Number(firstPrice?.dataset.priceUsd || 0),
+                durations,
+                subOffers: normalizeDurationsToSubOffers(durations),
+                displayOrder: index,
+                order: index,
+                active: true,
+                isArchived: false,
+                source: 'homepage'
+            };
+        }).filter(Boolean);
+    } catch (error) {
+        console.warn('Unable to discover homepage products:', error);
+        return [];
+    }
+}
+
+function generateProductIdFromName(name) {
+    const baseName = typeof name === 'object'
+        ? (name.en || name.ar || name.fr || '')
+        : String(name || '');
+    const slug = baseName
+        .toLowerCase()
+        .trim()
+        .replace(/[^\p{L}\p{N}]+/gu, '-')
+        .replace(/^-+|-+$/g, '');
+
+    return slug || `product-${Date.now()}`;
+}
+
+function normalizeDurationsToSubOffers(durations = {}) {
+    if (!durations || typeof durations !== 'object') return [];
+
+    const durationLabels = {
+        pro: { ar: 'Claude Pro', en: 'Claude Pro', fr: 'Claude Pro' },
+        api: { ar: 'Claude Code API', en: 'Claude Code API', fr: 'Claude Code API' },
+        '7days': { ar: '7 أيام', en: '7 Days', fr: '7 jours' },
+        '1month': { ar: 'شهر واحد', en: '1 Month', fr: '1 mois' },
+        '1month-upgrade': { ar: 'ترقية حساب', en: 'Account Upgrade', fr: 'Mise à niveau' },
+        '3months': { ar: '3 أشهر', en: '3 Months', fr: '3 mois' },
+        '6months': { ar: '6 أشهر', en: '6 Months', fr: '6 mois' },
+        '1year': { ar: 'سنة كاملة', en: '1 Year', fr: '1 an' },
+        '2years': { ar: 'سنتان', en: '2 Years', fr: '2 ans' },
+        standard: { ar: 'عرض قياسي', en: 'Standard', fr: 'Standard' }
+    };
+
+    return Object.entries(durations).map(([id, prices]) => ({
+        id,
+        name: durationLabels[id] || { ar: id, en: id, fr: id },
+        priceDZD: Number(prices?.dzd ?? prices?.priceDZD ?? 0) || 0,
+        priceUSD: Number(prices?.usd ?? prices?.priceUSD ?? 0) || 0,
+        availability: prices?.available === false ? 'unavailable' : 'available'
+    }));
 }
 
 function normalizeAdminProductForV2(productData, existingProduct = null) {
@@ -2732,7 +2974,7 @@ function normalizeAdminProductForV2(productData, existingProduct = null) {
 
     return {
         ...productData,
-        id: productData.id,
+        id: productData.id || existingProduct?.id || generateProductIdFromName(nameTranslations),
         name: {
             ar: nameTranslations.ar || getProductDisplayName(existingProduct) || productData.id,
             en: nameTranslations.en || '',
@@ -2748,6 +2990,9 @@ function normalizeAdminProductForV2(productData, existingProduct = null) {
         status: availability,
         displayOrder: getProductOrder(productData),
         order: getProductOrder(productData),
+        subOffers: Array.isArray(productData.subOffers) && productData.subOffers.length > 0
+            ? productData.subOffers
+            : normalizeDurationsToSubOffers(productData.durations),
         isArchived: Boolean(productData.isArchived),
         active: productData.active !== false,
         updatedAt: new Date(),
@@ -2805,6 +3050,44 @@ async function loadProducts() {
                 }
             });
         }
+
+        if (typeof PRODUCTS !== 'undefined' && PRODUCTS) {
+            Object.keys(PRODUCTS).forEach(key => {
+                if (!productMap.has(key)) return;
+
+                const existingProduct = productMap.get(key);
+                const localProduct = {
+                    id: key,
+                    ...PRODUCTS[key],
+                    active: PRODUCTS[key].active !== false,
+                    source: 'local'
+                };
+                const mergedProduct = mergeProductCatalogDetails(existingProduct, localProduct);
+                productMap.set(key, mergedProduct);
+
+                if (productHasMissingCatalogDetails(existingProduct)) {
+                    missingLocalProducts.push(mergedProduct);
+                    console.log('Enriched Firebase product from local catalog:', key);
+                }
+            });
+        }
+
+        const homepageProducts = await discoverHomepageProducts();
+        homepageProducts.forEach((homepageProduct) => {
+            if (!productMap.has(homepageProduct.id)) {
+                productMap.set(homepageProduct.id, homepageProduct);
+                missingLocalProducts.push(homepageProduct);
+                console.log('New homepage product detected:', homepageProduct.id);
+            } else {
+                const existingProduct = productMap.get(homepageProduct.id);
+                const mergedProduct = mergeProductCatalogDetails(existingProduct, homepageProduct);
+                productMap.set(homepageProduct.id, mergedProduct);
+                if (productHasMissingCatalogDetails(existingProduct)) {
+                    missingLocalProducts.push(mergedProduct);
+                    console.log('Enriched Firebase product from homepage:', homepageProduct.id);
+                }
+            }
+        });
 
         // تحويل الخريطة إلى مصفوفة
         allProducts = Array.from(productMap.values());
@@ -2884,7 +3167,7 @@ function displayProductsTable(products = allProducts) {
     }
 
     if (!products || products.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-gray-400">لا توجد منتجات</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center py-8 text-gray-400">لا توجد منتجات</td></tr>';
         return;
     }
 
@@ -2907,6 +3190,8 @@ function displayProductsTable(products = allProducts) {
         const productImage = getProductImage(product);
         const priceDZD = getProductPriceDZD(product);
         const priceUSD = getProductPriceUSD(product);
+        const subOffers = getProductSubOffers(product);
+        const availableSubOffers = subOffers.filter(offer => (offer.availability || 'available') === 'available').length;
 
         const salesCount = allOrders.filter(o =>
             o.productName === productName &&
@@ -2924,9 +3209,11 @@ function displayProductsTable(products = allProducts) {
             </td>
             <!-- Image -->
             <td class="px-4 py-4">
-                <div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-700 flex items-center justify-center">
+                <div class="admin-product-thumb w-12 h-12 rounded-lg overflow-hidden bg-gray-700 flex items-center justify-center">
                     ${productImage ?
-                `<img src="${escapeHtml(productImage)}" alt="${escapeHtml(productName)}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='📦'">` :
+                (isVideoMedia(productImage) ?
+                    `<video src="${escapeHtml(productImage)}" muted playsinline preload="metadata" class="w-full h-full object-cover"></video>` :
+                    `<img src="${escapeHtml(productImage)}" alt="${escapeHtml(productName)}" class="w-full h-full object-cover" onerror="this.parentElement.classList.add('image-error'); this.parentElement.innerHTML='<span>بدون صورة</span>'">`) :
                 '<span class="text-2xl">📦</span>'
             }
                 </div>
@@ -2950,6 +3237,15 @@ function displayProductsTable(products = allProducts) {
                     <input type="number" min="0" step="1" value="${priceDZD}" onchange="updateProductPrice('${product.id}', 'DZD', this.value)" class="w-24 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-sm font-bold" style="color: var(--accent);">
                     <input type="number" min="0" step="0.01" value="${priceUSD}" onchange="updateProductPrice('${product.id}', 'USD', this.value)" class="w-20 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-xs text-gray-300">
                 </div>
+            </td>
+            <!-- Sub Offers -->
+            <td class="px-4 py-4">
+                <button onclick="manageProductOffers('${product.id}')"
+                    class="admin-offers-chip ${subOffers.length ? 'has-offers' : ''}">
+                    <span class="admin-offers-count">${subOffers.length}</span>
+                    <span>عروض فرعية</span>
+                    ${subOffers.length ? `<small>${availableSubOffers} متوفر</small>` : '<small>أضف الآن</small>'}
+                </button>
             </td>
             <!-- Stock -->
             <td class="px-4 py-4 text-center">
@@ -3006,6 +3302,16 @@ function displayProductsTable(products = allProducts) {
     initProductDragDrop();
 }
 
+function manageProductOffers(productId) {
+    openProductModal(productId);
+    setTimeout(() => {
+        const section = document.getElementById('product-suboffers-section');
+        section?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        section?.classList.add('admin-section-pulse');
+        setTimeout(() => section?.classList.remove('admin-section-pulse'), 1400);
+    }, 150);
+}
+
 /**
  * تحديث إحصائيات المنتجات
  */
@@ -3049,7 +3355,7 @@ async function updateProductPrice(productId, currency, rawValue) {
     }
 
     try {
-        const { updateDoc, doc } = window.firebaseModules;
+        const { setDoc, doc } = window.firebaseModules;
         const updatePayload = {
             priceDZD: getProductPriceDZD(product),
             priceUSD: getProductPriceUSD(product),
@@ -3057,8 +3363,8 @@ async function updateProductPrice(productId, currency, rawValue) {
             price_usd: getProductPriceUSD(product),
             updatedAt: new Date()
         };
-        await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), updatePayload);
-        await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), updatePayload);
+        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), updatePayload, { merge: true });
+        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), updatePayload, { merge: true });
         showToast('تم تحديث السعر بنجاح ✅');
     } catch (error) {
         console.error('خطأ في تحديث السعر:', error);
@@ -3092,19 +3398,19 @@ async function toggleAvailability(productId) {
     };
 
     try {
-        const { updateDoc, doc } = window.firebaseModules;
-        await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), {
+        const { setDoc, doc } = window.firebaseModules;
+        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), {
             availability: newStatus,
             status: newStatus,
             available: newStatus === 'available',
             updatedAt: new Date()
-        });
-        await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), {
+        }, { merge: true });
+        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), {
             availability: newStatus,
             status: newStatus,
             available: newStatus === 'available',
             updatedAt: new Date()
-        });
+        }, { merge: true });
 
         product.availability = newStatus;
         product.status = newStatus;
@@ -3137,16 +3443,16 @@ async function toggleActive(productId) {
     const newActive = product.active === false ? true : false;
 
     try {
-        const { updateDoc, doc } = window.firebaseModules;
-        await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), {
+        const { setDoc, doc } = window.firebaseModules;
+        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), {
             active: newActive,
             isArchived: !newActive,
             updatedAt: new Date()
-        });
-        await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), {
+        }, { merge: true });
+        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), {
             active: newActive,
             updatedAt: new Date()
-        });
+        }, { merge: true });
 
         product.active = newActive;
         displayProductsTable();
@@ -4353,6 +4659,31 @@ function toggleMaintenanceMode() {
 /**
  * فتح نافذة كود الخصم
  */
+async function toggleMaintenanceMode() {
+    const enabled = document.getElementById('maintenance-mode').checked;
+    localStorage.setItem('maintenanceMode', enabled ? 'true' : 'false');
+
+    try {
+        if (!window.db || !window.firebaseModules || !window.firebaseModules.setDoc) {
+            showToast('Firebase غير متاح، تم حفظ وضع الصيانة محلياً فقط', 'error');
+            return;
+        }
+
+        const { doc, setDoc, serverTimestamp } = window.firebaseModules;
+        await setDoc(doc(window.db, 'settings', 'maintenance'), {
+            enabled,
+            message: 'The website is currently under maintenance. Please check back soon.',
+            updatedAt: serverTimestamp()
+        }, { merge: true });
+
+        showToast(enabled ? 'تم تفعيل وضع الصيانة ✅' : 'تم تعطيل وضع الصيانة ✅');
+        logActivity('tools', 'maintenance_mode', enabled ? 'enabled' : 'disabled');
+    } catch (error) {
+        console.error('خطأ في حفظ وضع الصيانة:', error);
+        showToast('خطأ في حفظ وضع الصيانة', 'error');
+    }
+}
+
 function openPromoCodeModal() {
     const modal = document.getElementById('promo-modal');
     modal.classList.remove('hidden');
