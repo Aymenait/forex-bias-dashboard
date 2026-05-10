@@ -135,6 +135,87 @@
             padding: 40px;
             color: var(--text-muted);
         }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 1.55rem;
+                line-height: 1.2;
+                margin-bottom: 22px;
+            }
+
+            .refresh-btn {
+                width: 100%;
+                min-height: 44px;
+                margin-bottom: 20px;
+                border-radius: 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .card,
+            .feedback-section {
+                padding: 18px;
+                border-radius: 12px;
+            }
+
+            .card .value {
+                font-size: 2.4rem;
+            }
+
+            #feedbackTableContainer {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                margin-inline: -4px;
+                padding-bottom: 8px;
+            }
+
+            #feedbackTableContainer::after {
+                content: "Swipe sideways to see all feedback columns";
+                display: block;
+                color: var(--text-muted);
+                font-size: 0.78rem;
+                text-align: center;
+                padding-top: 8px;
+            }
+
+            table {
+                min-width: 620px;
+            }
+
+            th,
+            td {
+                padding: 10px;
+                white-space: nowrap;
+            }
+
+            td:last-child {
+                white-space: normal;
+                min-width: 240px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            body {
+                padding: 12px;
+            }
+
+            .card,
+            .feedback-section {
+                padding: 14px;
+            }
+        }
     </style>
 </head>
 

@@ -2294,3 +2294,353 @@ button[onclick="exportAccountingReport()"]:active::after {
         min-width: 96px;
     }
 }
+
+/* Final mobile pass for the full admin dashboard */
+@media (max-width: 768px) {
+    html,
+    body,
+    #dashboard-page {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    #dashboard-page {
+        min-width: 0;
+    }
+
+    .admin-header {
+        min-height: 58px;
+        height: auto !important;
+        padding: 8px 10px !important;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .admin-header > div:first-child,
+    .admin-header-actions {
+        min-width: 0;
+        flex-shrink: 1;
+    }
+
+    .admin-header-actions {
+        gap: 6px !important;
+        justify-content: flex-end;
+    }
+
+    .admin-header .header-btn,
+    .admin-header .btn-sm,
+    .mobile-menu-btn,
+    #language-switcher {
+        min-width: 42px;
+        min-height: 42px;
+        border-radius: 10px !important;
+    }
+
+    nav.px-6 {
+        padding-inline: 8px !important;
+        position: sticky;
+        top: 58px;
+        z-index: 80;
+        overflow-x: auto !important;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    nav > div,
+    nav .min-w-max {
+        display: flex !important;
+        min-width: max-content !important;
+        gap: 6px !important;
+        padding-block: 8px;
+    }
+
+    nav .tab-btn {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: max-content !important;
+        min-height: 42px;
+        padding: 8px 10px !important;
+        border: 1px solid rgba(148, 163, 184, 0.14) !important;
+        border-radius: 10px;
+        background: rgba(15, 23, 42, 0.72);
+        font-size: 0.76rem !important;
+        line-height: 1.2;
+    }
+
+    nav .tab-btn.active {
+        background: rgba(34, 197, 94, 0.14) !important;
+        border-color: rgba(34, 197, 94, 0.38) !important;
+        color: #86efac !important;
+    }
+
+    main.admin-content,
+    .admin-content,
+    main {
+        width: 100%;
+        max-width: 100%;
+        padding: 12px !important;
+        overflow-x: hidden;
+    }
+
+    .tab-content,
+    .admin-card,
+    .rounded-xl,
+    .bg-gray-800,
+    .bg-gray-800\/50,
+    .bg-gray-900,
+    .bg-slate-900,
+    .bg-slate-800 {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .tab-content > .flex,
+    .tab-content .flex.items-center.justify-between,
+    .tab-content .flex.justify-between,
+    .tab-content .flex.gap-4 {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+
+    .tab-content > .flex > *,
+    .tab-content .flex.items-center.justify-between > *,
+    .tab-content .flex.justify-between > * {
+        min-width: 0;
+    }
+
+    .tab-content .grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    .tab-content .grid.grid-cols-2,
+    .tab-content .grid.grid-cols-2.md\:grid-cols-4,
+    .tab-content .grid.grid-cols-2.md\:grid-cols-5,
+    .tab-content .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .tab-content input,
+    .tab-content select,
+    .tab-content textarea,
+    .tab-content button {
+        max-width: 100%;
+    }
+
+    .tab-content input:not([type="checkbox"]):not([type="radio"]),
+    .tab-content select,
+    .tab-content textarea {
+        width: 100%;
+        min-height: 44px;
+        font-size: 16px !important;
+    }
+
+    .tab-content button,
+    .tab-content .action-btn,
+    .tab-content a[class*="btn"] {
+        min-height: 42px;
+        white-space: normal;
+    }
+
+    .tab-content .overflow-x-auto,
+    .tab-content [class*="overflow-x-auto"],
+    #feedbackTableContainer {
+        width: 100%;
+        max-width: 100%;
+        margin-inline: 0 !important;
+        padding-inline: 0 !important;
+        overflow-x: auto !important;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 12px;
+    }
+
+    .tab-content .overflow-x-auto::after,
+    #feedbackTableContainer::after {
+        content: "Swipe sideways to see all columns";
+        display: block;
+        padding: 8px 4px 0;
+        color: #64748b;
+        font-size: 0.72rem;
+        text-align: center;
+    }
+
+    html[dir="rtl"] .tab-content .overflow-x-auto::after {
+        content: "اسحب يمينا ويسارا لرؤية كل الأعمدة";
+    }
+
+    .tab-content table:not(#products-table),
+    #feedbackTableContainer table {
+        display: table !important;
+        width: 100%;
+        min-width: 720px;
+        border-collapse: collapse;
+        table-layout: auto;
+    }
+
+    .tab-content table:not(#products-table) thead,
+    .tab-content table:not(#products-table) tbody,
+    .tab-content table:not(#products-table) tfoot {
+        display: table-header-group !important;
+    }
+
+    .tab-content table:not(#products-table) tbody {
+        display: table-row-group !important;
+    }
+
+    .tab-content table:not(#products-table) tfoot {
+        display: table-footer-group !important;
+    }
+
+    .tab-content table:not(#products-table) tr {
+        display: table-row !important;
+    }
+
+    .tab-content table:not(#products-table) th,
+    .tab-content table:not(#products-table) td,
+    #feedbackTableContainer th,
+    #feedbackTableContainer td {
+        display: table-cell !important;
+        white-space: nowrap;
+        padding: 10px 8px !important;
+        vertical-align: middle;
+    }
+
+    .tab-content table:not(#products-table) td:last-child,
+    .tab-content table:not(#products-table) th:last-child {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        background: rgba(15, 23, 42, 0.96);
+        box-shadow: 10px 0 20px rgba(2, 6, 23, 0.25);
+    }
+
+    html[dir="ltr"] .tab-content table:not(#products-table) td:last-child,
+    html[dir="ltr"] .tab-content table:not(#products-table) th:last-child {
+        right: 0;
+        left: auto;
+        box-shadow: -10px 0 20px rgba(2, 6, 23, 0.25);
+    }
+
+    #products-table {
+        min-width: 0 !important;
+    }
+
+    #archived-products-table {
+        min-width: 620px;
+    }
+
+    #orders-table-body,
+    #customers-table-body,
+    #reviews-table-body,
+    #suppliers-table-body,
+    #resellers-table-body,
+    #wholesale-log-table-body,
+    #debtors-table-body,
+    #leads-table-body {
+        font-size: 0.84rem;
+    }
+
+    #delete-modal,
+    #product-modal,
+    #review-modal,
+    #sub-offer-modal,
+    #promo-modal,
+    #order-details-modal,
+    #purchase-modal,
+    #sale-modal,
+    #expense-modal,
+    #monthly-report-modal,
+    #supplier-modal,
+    #reseller-modal,
+    #add-funds-modal,
+    #reseller-history-modal,
+    #debtor-modal,
+    #capital-modal,
+    #reset-accounting-modal {
+        align-items: flex-end !important;
+        justify-content: center !important;
+        padding: 0 !important;
+    }
+
+    #delete-modal > div,
+    #product-modal > div,
+    #review-modal > div,
+    #sub-offer-modal > div,
+    #promo-modal > div,
+    #order-details-modal > div,
+    #purchase-modal > div,
+    #sale-modal > div,
+    #expense-modal > div,
+    #monthly-report-modal > div,
+    #supplier-modal > div,
+    #reseller-modal > div,
+    #add-funds-modal > div,
+    #reseller-history-modal > div,
+    #debtor-modal > div,
+    #capital-modal > div,
+    #reset-accounting-modal > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 88vh !important;
+        margin: 0 !important;
+        overflow-y: auto !important;
+        border-radius: 18px 18px 0 0 !important;
+        padding: 16px !important;
+    }
+
+    #product-modal form .grid,
+    #sub-offer-modal form .grid,
+    #purchase-modal form .grid,
+    #sale-modal form .grid,
+    #expense-modal form .grid,
+    #supplier-modal form .grid,
+    #reseller-modal form .grid,
+    #debtor-modal form .grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-header-title {
+        font-size: 0.95rem !important;
+    }
+
+    .admin-header img[alt="3Ahub"] {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .tab-content .grid.grid-cols-2,
+    .tab-content .grid.grid-cols-2.md\:grid-cols-4,
+    .tab-content .grid.grid-cols-2.md\:grid-cols-5,
+    .tab-content .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .tab-content .stat-card,
+    .tab-content .rounded-xl {
+        padding: 12px !important;
+    }
+
+    .tab-content table:not(#products-table),
+    #feedbackTableContainer table {
+        min-width: 640px;
+    }
+
+    .tab-content table:not(#products-table) th,
+    .tab-content table:not(#products-table) td,
+    #feedbackTableContainer th,
+    #feedbackTableContainer td {
+        font-size: 0.72rem !important;
+        padding: 8px 7px !important;
+    }
+
+    #products-table .product-row td:nth-child(5) .space-y-1,
+    #products-table .admin-offers-chip,
+    #products-table .product-row td:nth-child(10) > div {
+        width: 100%;
+    }
+}
