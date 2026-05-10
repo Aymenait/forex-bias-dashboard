@@ -33,6 +33,8 @@ if (typeof window === 'undefined') {
 // ═══════════════════════════════════════════════════════════════════════════
 
 const PRODUCTS_V2_COLLECTION = 'products_v2';
+const LEGACY_PRODUCTS_COLLECTION = 'products';
+const DELETED_PRODUCTS_COLLECTION = 'deleted_products';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // دوال تحميل المنتجات - Load Products Functions
@@ -150,13 +152,17 @@ async function saveProduct(product, db, firebaseModules) {
     }
 
     try {
-        const { doc, setDoc, serverTimestamp } = firebaseModules;
+        const { doc, setDoc, deleteDoc, serverTimestamp } = firebaseModules;
 
         // Generate ID if not provided
         const productId = product.id || generateProductId();
 
         // Prepare product data for Firebase
         const productData = prepareProductForSave(product, serverTimestamp);
+
+        if (deleteDoc) {
+            await deleteDoc(doc(db, DELETED_PRODUCTS_COLLECTION, productId));
+        }
 
         // Save to Firebase
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
@@ -222,11 +228,18 @@ async function deleteProduct(productId, db, firebaseModules) {
     }
 
     try {
-        const { doc, deleteDoc } = firebaseModules;
+        const { doc, deleteDoc, setDoc, serverTimestamp } = firebaseModules;
+
+        await setDoc(doc(db, DELETED_PRODUCTS_COLLECTION, productId), {
+            productId,
+            deletedAt: serverTimestamp ? serverTimestamp() : new Date(),
+            preventAutoRestore: true
+        }, { merge: true });
 
         // Delete the product document
         const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
         await deleteDoc(docRef);
+        await deleteDoc(doc(db, LEGACY_PRODUCTS_COLLECTION, productId));
 
         console.log('تم حذف المنتج:', productId);
         return true;

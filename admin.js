@@ -2739,6 +2739,7 @@ let editingProductId = null;
 let charts = {};
 const ADMIN_PRODUCTS_COLLECTION = 'products_v2';
 const LEGACY_PRODUCTS_COLLECTION = 'products';
+const DELETED_PRODUCTS_COLLECTION = 'deleted_products';
 
 function getProductDisplayName(product) {
     if (!product) return '';
@@ -2787,6 +2788,41 @@ function getProductImage(product) {
 
 function isVideoMedia(url = '') {
     return String(url).toLowerCase().includes('.mp4');
+}
+
+async function loadDeletedProductIds() {
+    if (!window.db || !window.firebaseModules) return new Set();
+
+    try {
+        const { collection, getDocs } = window.firebaseModules;
+        const snapshot = await getDocs(collection(window.db, DELETED_PRODUCTS_COLLECTION));
+        return new Set(snapshot.docs.map(docItem => docItem.id));
+    } catch (error) {
+        console.warn('Unable to load deleted products list:', error);
+        return new Set();
+    }
+}
+
+async function markProductAsDeleted(productId) {
+    if (!productId || !window.db || !window.firebaseModules) return;
+
+    const { doc, setDoc } = window.firebaseModules;
+    await setDoc(doc(window.db, DELETED_PRODUCTS_COLLECTION, productId), {
+        productId,
+        deletedAt: new Date(),
+        preventAutoRestore: true
+    }, { merge: true });
+}
+
+async function clearDeletedProductMarker(productId) {
+    if (!productId || !window.db || !window.firebaseModules) return;
+
+    try {
+        const { doc, deleteDoc } = window.firebaseModules;
+        await deleteDoc(doc(window.db, DELETED_PRODUCTS_COLLECTION, productId));
+    } catch (error) {
+        console.warn('Unable to clear deleted product marker:', error);
+    }
 }
 
 function getProductOrder(product) {
@@ -3009,6 +3045,7 @@ async function loadProducts() {
         const productMap = new Map();
         let productsFromFirebase = false;
         const missingLocalProducts = [];
+        const deletedProductIds = await loadDeletedProductIds();
 
         // 1. التحميل من Firebase
         if (window.db && window.firebaseModules) {
@@ -3017,6 +3054,8 @@ async function loadProducts() {
                 const querySnapshot = await getDocs(collection(window.db, ADMIN_PRODUCTS_COLLECTION));
 
                 querySnapshot.forEach((docItem) => {
+                    if (deletedProductIds.has(docItem.id)) return;
+
                     const data = docItem.data();
                     productMap.set(docItem.id, {
                         id: docItem.id,
@@ -3037,6 +3076,8 @@ async function loadProducts() {
         // 2. الدمج مع المنتجات المحلية (من currency-config.js) لضمان عدم نقص أي منتج
         if (typeof PRODUCTS !== 'undefined' && PRODUCTS) {
             Object.keys(PRODUCTS).forEach(key => {
+                if (deletedProductIds.has(key)) return;
+
                 if (!productMap.has(key)) {
                     const localProduct = {
                         id: key,
@@ -3053,6 +3094,7 @@ async function loadProducts() {
 
         if (typeof PRODUCTS !== 'undefined' && PRODUCTS) {
             Object.keys(PRODUCTS).forEach(key => {
+                if (deletedProductIds.has(key)) return;
                 if (!productMap.has(key)) return;
 
                 const existingProduct = productMap.get(key);
@@ -3074,6 +3116,8 @@ async function loadProducts() {
 
         const homepageProducts = await discoverHomepageProducts();
         homepageProducts.forEach((homepageProduct) => {
+            if (deletedProductIds.has(homepageProduct.id)) return;
+
             if (!productMap.has(homepageProduct.id)) {
                 productMap.set(homepageProduct.id, homepageProduct);
                 missingLocalProducts.push(homepageProduct);
@@ -3122,7 +3166,11 @@ async function syncProductsToFirebase(productsToSync = allProducts) {
     console.log('📤 جاري مزامنة المنتجات مع السحابة...');
     try {
         const { setDoc, doc } = window.firebaseModules;
+        const deletedProductIds = await loadDeletedProductIds();
+
         for (const product of productsToSync) {
+            if (deletedProductIds.has(product.id)) continue;
+
             const productForV2 = normalizeAdminProductForV2({
                 ...product,
                 id: product.id,
@@ -4004,6 +4052,8 @@ async function saveProduct(event) {
 
     try {
         const { setDoc, doc } = window.firebaseModules;
+        await clearDeletedProductMarker(productForV2.id);
+
         await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productForV2.id), productForV2, { merge: true });
         await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productForV2.id), {
             ...productForV2,
@@ -4933,6 +4983,7 @@ async function confirmDelete() {
         const { deleteDoc, doc } = window.firebaseModules;
 
         if (deleteType === 'product') {
+            await markProductAsDeleted(reviewToDelete);
             await deleteDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, reviewToDelete));
             await deleteDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, reviewToDelete));
             allProducts = allProducts.filter(p => p.id !== reviewToDelete);

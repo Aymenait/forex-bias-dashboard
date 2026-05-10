@@ -1479,7 +1479,7 @@ async function confirmAndPublish() {
             return;
         }
         
-        const { setDoc, doc, serverTimestamp } = window.firebaseModules;
+        const { setDoc, doc, deleteDoc, serverTimestamp } = window.firebaseModules;
         
         // Generate ID if new product
         if (!productData.id) {
@@ -1492,8 +1492,12 @@ async function confirmAndPublish() {
             productData.createdAt = serverTimestamp();
         }
         
-        // Save to Firebase
-        await setDoc(doc(window.db, 'products', productData.id), productData);
+        // Save to the main products collection. A deleted marker may exist if this
+        // product was previously removed and is now intentionally recreated.
+        if (deleteDoc) {
+            await deleteDoc(doc(window.db, 'deleted_products', productData.id));
+        }
+        await setDoc(doc(window.db, 'products_v2', productData.id), productData, { merge: true });
         
         // Update local products array
         if (window.allProducts) {
