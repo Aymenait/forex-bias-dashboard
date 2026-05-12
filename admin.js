@@ -2904,29 +2904,12 @@ function isVideoMedia(url = '') {
 }
 
 function normalizeDeletedProductKey(value = '') {
-    const normalized = String(value || '')
+    return String(value || '')
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
-
-    if (!normalized) return '';
-
-    const aliases = [
-        ['duolingo', ['duolingo', 'duo-lingo']],
-        ['trw', ['trw', 'the-real-world', 'real-world']],
-        ['chatgpt', ['chatgpt', 'chat-gpt', 'openai']],
-        ['super-grok', ['super-grok', 'grok']],
-        ['google-ai', ['google-ai', 'google-gemini', 'gemini', 'veo']],
-        ['microsoft-office', ['microsoft-office', 'office-365']],
-        ['hma-vpn', ['hma-vpn', 'hma']],
-        ['primevideo', ['primevideo', 'prime-video']],
-        ['alight-motion', ['alight-motion', 'alight']]
-    ];
-
-    const match = aliases.find(([, keys]) => keys.some(key => normalized.includes(key)));
-    return match ? match[0] : normalized;
 }
 
 function getProductDeleteKeys(productOrId, fallbackName = '') {
@@ -2935,12 +2918,6 @@ function getProductDeleteKeys(productOrId, fallbackName = '') {
     if (typeof productOrId === 'object' && productOrId) {
         values.add(productOrId.id);
         values.add(productOrId.productId);
-        values.add(productOrId.deletedKey);
-        values.add(productOrId.normalizedId);
-        values.add(getProductDisplayName(productOrId));
-        values.add(productOrId.name?.ar);
-        values.add(productOrId.name?.en);
-        values.add(productOrId.name?.fr);
     } else {
         values.add(productOrId);
     }
@@ -2974,13 +2951,8 @@ async function loadDeletedProductIds() {
 
         snapshot.docs.forEach((docItem) => {
             const data = docItem.data ? docItem.data() : {};
-            getProductDeleteKeys({
-                id: docItem.id,
-                productId: data.productId,
-                deletedKey: data.deletedKey,
-                normalizedId: data.normalizedId,
-                name: data.name
-            }).forEach(key => deletedIds.add(key));
+            const deletedProductId = data.productId || docItem.id;
+            getProductDeleteKeys(deletedProductId).forEach(key => deletedIds.add(key));
         });
 
         return deletedIds;
@@ -3003,15 +2975,6 @@ async function markProductAsDeleted(productId) {
         preventAutoRestore: true
     }, { merge: true });
 
-    if (deletedKey && deletedKey !== productId) {
-        await setDoc(doc(window.db, DELETED_PRODUCTS_COLLECTION_NAME, deletedKey), {
-            productId,
-            deletedKey,
-            normalizedId: deletedKey,
-            deletedAt: new Date(),
-            preventAutoRestore: true
-        }, { merge: true });
-    }
 }
 
 async function clearDeletedProductMarker(productId) {
@@ -5190,12 +5153,7 @@ async function confirmDelete() {
             await markProductAsDeleted(reviewToDelete);
             await deleteDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, reviewToDelete));
             await deleteDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, reviewToDelete));
-            const deletedKey = normalizeDeletedProductKey(reviewToDelete);
-            if (deletedKey && deletedKey !== reviewToDelete) {
-                await deleteDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, deletedKey));
-                await deleteDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, deletedKey));
-            }
-            allProducts = allProducts.filter(p => !isProductDeleted(p, new Set([reviewToDelete, deletedKey])));
+            allProducts = allProducts.filter(p => !isProductDeleted(p, new Set(Array.from(getProductDeleteKeys(reviewToDelete)))));
             displayProductsTable();
             showToast('تم حذف المنتج بنجاح 🗑️');
             logActivity('product', 'deleted', reviewToDelete);

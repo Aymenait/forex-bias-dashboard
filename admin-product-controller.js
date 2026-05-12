@@ -37,29 +37,12 @@ const CONTROLLER_LEGACY_PRODUCTS_COLLECTION = 'products';
 const CONTROLLER_DELETED_PRODUCTS_COLLECTION = 'deleted_products';
 
 function normalizeDeletedProductKey(value = '') {
-    const normalized = String(value || '')
+    return String(value || '')
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
-
-    if (!normalized) return '';
-
-    const aliases = [
-        ['duolingo', ['duolingo', 'duo-lingo']],
-        ['trw', ['trw', 'the-real-world', 'real-world']],
-        ['chatgpt', ['chatgpt', 'chat-gpt', 'openai']],
-        ['super-grok', ['super-grok', 'grok']],
-        ['google-ai', ['google-ai', 'google-gemini', 'gemini', 'veo']],
-        ['microsoft-office', ['microsoft-office', 'office-365']],
-        ['hma-vpn', ['hma-vpn', 'hma']],
-        ['primevideo', ['primevideo', 'prime-video']],
-        ['alight-motion', ['alight-motion', 'alight']]
-    ];
-
-    const match = aliases.find(([, keys]) => keys.some(key => normalized.includes(key)));
-    return match ? match[0] : normalized;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -270,24 +253,10 @@ async function deleteProduct(productId, db, firebaseModules) {
             preventAutoRestore: true
         }, { merge: true });
 
-        if (deletedKey && deletedKey !== productId) {
-            await setDoc(doc(db, CONTROLLER_DELETED_PRODUCTS_COLLECTION, deletedKey), {
-                productId,
-                deletedKey,
-                normalizedId: deletedKey,
-                deletedAt,
-                preventAutoRestore: true
-            }, { merge: true });
-        }
-
         // Delete the product document
         const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         await deleteDoc(docRef);
         await deleteDoc(doc(db, CONTROLLER_LEGACY_PRODUCTS_COLLECTION, productId));
-        if (deletedKey && deletedKey !== productId) {
-            await deleteDoc(doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, deletedKey));
-            await deleteDoc(doc(db, CONTROLLER_LEGACY_PRODUCTS_COLLECTION, deletedKey));
-        }
 
         console.log('تم حذف المنتج:', productId);
         return true;

@@ -1502,9 +1502,8 @@ async function confirmAndPublish() {
                 .replace(/[\u0300-\u036f]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-+|-+$/g, '');
-            const canonicalDeletedKey = deletedKey.includes('duolingo') ? 'duolingo' : deletedKey;
-            if (canonicalDeletedKey && canonicalDeletedKey !== productData.id) {
-                await deleteDoc(doc(window.db, 'deleted_products', canonicalDeletedKey));
+            if (deletedKey && deletedKey !== productData.id) {
+                await deleteDoc(doc(window.db, 'deleted_products', deletedKey));
             }
         }
         await setDoc(doc(window.db, 'products_v2', productData.id), productData, { merge: true });
