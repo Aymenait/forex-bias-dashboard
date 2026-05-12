@@ -1496,6 +1496,16 @@ async function confirmAndPublish() {
         // product was previously removed and is now intentionally recreated.
         if (deleteDoc) {
             await deleteDoc(doc(window.db, 'deleted_products', productData.id));
+            const deletedKey = String(productData.id || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            const canonicalDeletedKey = deletedKey.includes('duolingo') ? 'duolingo' : deletedKey;
+            if (canonicalDeletedKey && canonicalDeletedKey !== productData.id) {
+                await deleteDoc(doc(window.db, 'deleted_products', canonicalDeletedKey));
+            }
         }
         await setDoc(doc(window.db, 'products_v2', productData.id), productData, { merge: true });
         

@@ -3226,6 +3226,10 @@
 
             async function applyMaintenanceMode() {
                 try {
+                    if (document.getElementById('maintenance-overlay')) {
+                        return;
+                    }
+
                     const maintenanceSnap = await getDoc(doc(db, 'settings', 'maintenance'));
                     const settings = maintenanceSnap.exists() ? maintenanceSnap.data() : {};
 
@@ -3246,9 +3250,9 @@
                     overlay.setAttribute('aria-live', 'polite');
                     overlay.innerHTML = `
                         <div class="maintenance-box">
-                            <a href="admin.html" class="maintenance-logo-link" aria-label="Open admin dashboard">
+                            <button type="button" class="maintenance-logo-link" aria-label="3Ahub">
                                 <img src="logo.png" alt="3Ahub" class="maintenance-logo">
-                            </a>
+                            </button>
                             <p class="maintenance-kicker">Maintenance Mode</p>
                             <h1>We will be back soon</h1>
                             <p class="maintenance-message">${maintenanceMessage}</p>
@@ -3296,7 +3300,11 @@
                             width: 72px;
                             height: 72px;
                             margin: 0 auto 22px;
+                            padding: 0;
+                            border: 0;
                             border-radius: 8px;
+                            background: transparent;
+                            cursor: pointer;
                             outline: none;
                             transition: transform 140ms ease, box-shadow 140ms ease;
                         }
@@ -3335,6 +3343,22 @@
                     document.head.appendChild(style);
                     document.body.classList.add('maintenance-active');
                     document.body.appendChild(overlay);
+
+                    let maintenanceLogoClicks = 0;
+                    let maintenanceLogoTimer = null;
+                    const maintenanceLogo = overlay.querySelector('.maintenance-logo-link');
+                    maintenanceLogo?.addEventListener('click', () => {
+                        maintenanceLogoClicks += 1;
+                        clearTimeout(maintenanceLogoTimer);
+                        maintenanceLogoTimer = setTimeout(() => {
+                            maintenanceLogoClicks = 0;
+                        }, 2000);
+
+                        if (maintenanceLogoClicks >= 5) {
+                            maintenanceLogoClicks = 0;
+                            window.location.href = 'admin.html';
+                        }
+                    });
                 } catch (error) {
                     console.warn('Unable to load maintenance mode:', error);
                 }

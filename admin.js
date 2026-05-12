@@ -27,6 +27,8 @@ let allTransactions = [];      // سجل التهم (للخزينة)
 let allDebtors = [];           // جميع المديونين
 let startingCapital = 0;       // رأس المال الأساسي
 let reviewToDelete = null;     // التقييم المراد حذفه
+let isAdminLoginInProgress = false;
+let adminPasswordSource = 'firebase';
 const DEFAULT_PASSWORD = 'admin123';  // كلمة المرور الافتراضية
 
 if (typeof window !== 'undefined') {
@@ -2026,6 +2028,7 @@ async function getAdminPasswordFromFirebase() {
 
             if (docSnap.exists()) {
                 const firebasePassword = docSnap.data().password;
+                adminPasswordSource = 'firebase';
                 console.log('✅ تم جلب كلمة المرور من Firebase بنجاح');
                 // تحديث النسخة المحلية
                 localStorage.setItem('adminPassword', firebasePassword);
@@ -2035,16 +2038,19 @@ async function getAdminPasswordFromFirebase() {
                 // إذا لم توجد في Firebase، نحفظ المحلية أو الافتراضية هناك
                 const localPassword = localStorage.getItem('adminPassword') || DEFAULT_PASSWORD;
                 await saveAdminPasswordToFirebase(localPassword);
+                adminPasswordSource = 'local';
                 return localPassword;
             }
         }
 
         // ثانياً: استخدام localStorage كبديل
         console.warn('⚠️ Firebase غير متاح، استخدام كلمة المرور المحلية');
+        adminPasswordSource = 'local';
         return localStorage.getItem('adminPassword') || DEFAULT_PASSWORD;
 
     } catch (error) {
         console.error('❌ خطأ في جلب كلمة المرور من Firebase:', error);
+        adminPasswordSource = 'local_error';
         return localStorage.getItem('adminPassword') || DEFAULT_PASSWORD;
     }
 }
@@ -2089,8 +2095,46 @@ async function saveAdminPasswordToFirebase(newPassword) {
 /**
  * معالجة تسجيل الدخول
  */
+function setLoginError(message = '', type = 'error') {
+    const errorElement = document.getElementById('login-error');
+    if (!errorElement) return;
+
+    if (!message) {
+        errorElement.textContent = '';
+        errorElement.classList.add('hidden');
+        return;
+    }
+
+    errorElement.textContent = message;
+    errorElement.style.color = type === 'warning' ? 'var(--admin-warning)' : 'var(--admin-danger)';
+    errorElement.classList.remove('hidden');
+}
+
+function setLoginLoading(isLoading) {
+    const loginForm = document.getElementById('login-form');
+    const submitButton = loginForm?.querySelector('button[type="submit"]');
+    const passwordInput = document.getElementById('admin-password');
+
+    if (passwordInput) passwordInput.disabled = isLoading;
+    if (!submitButton) return;
+
+    if (!submitButton.dataset.defaultHtml) {
+        submitButton.dataset.defaultHtml = submitButton.innerHTML;
+    }
+
+    submitButton.disabled = isLoading;
+    submitButton.style.opacity = isLoading ? '0.75' : '';
+    submitButton.style.cursor = isLoading ? 'wait' : '';
+    submitButton.innerHTML = isLoading ? 'جاري التحقق...' : submitButton.dataset.defaultHtml;
+}
+
 async function handleLogin(event) {
     event.preventDefault();
+
+    if (isAdminLoginInProgress) return;
+    isAdminLoginInProgress = true;
+    setLoginLoading(true);
+    setLoginError('');
 
     try {
         const passwordInput = document.getElementById('admin-password');
@@ -2100,6 +2144,11 @@ async function handleLogin(event) {
         }
 
         const password = passwordInput.value;
+        if (!password) {
+            setLoginError('أدخل كلمة المرور أولاً.');
+            passwordInput.focus();
+            return;
+        }
 
         // جلب كلمة المرور من Firebase
         const savedPassword = await getAdminPasswordFromFirebase();
@@ -2161,6 +2210,70 @@ async function handleLogin(event) {
 /**
  * تسجيل الخروج
  */
+handleLogin = async function handleLoginWithState(event) {
+    event.preventDefault();
+
+    if (isAdminLoginInProgress) return;
+    isAdminLoginInProgress = true;
+    setLoginLoading(true);
+    setLoginError('');
+
+    try {
+        const passwordInput = document.getElementById('admin-password');
+        if (!passwordInput) {
+            setLoginError('تعذر العثور على حقل كلمة المرور. حدّث الصفحة وحاول مرة أخرى.');
+            return;
+        }
+
+        const password = passwordInput.value;
+        if (!password) {
+            setLoginError('أدخل كلمة المرور أولاً.');
+            passwordInput.focus();
+            return;
+        }
+
+        const savedPassword = await getAdminPasswordFromFirebase();
+        if (password === savedPassword) {
+            sessionStorage.setItem('adminLoggedIn', 'true');
+            localStorage.setItem('isAdmin', 'true');
+            setLoginError('');
+            showDashboard();
+
+            if (adminPasswordSource !== 'firebase') {
+                showToast('تم الدخول باستخدام كلمة المرور المحفوظة محلياً لأن Firebase غير متاح حالياً', 'warning');
+            }
+            showToast('مرحباً بك!');
+
+            try {
+                if (typeof logActivity === 'function') {
+                    logActivity('security', 'login', 'Admin logged in successfully');
+                }
+            } catch (error) {
+                console.warn('Unable to log login activity:', error);
+            }
+            return;
+        }
+
+        setLoginError('كلمة المرور غير صحيحة.');
+        passwordInput.classList.add('border-red-500');
+        setTimeout(() => passwordInput.classList.remove('border-red-500'), 2000);
+
+        try {
+            if (typeof logActivity === 'function') {
+                logActivity('security', 'failed_login', 'Failed login attempt');
+            }
+        } catch (error) {
+            console.warn('Unable to log failed login activity:', error);
+        }
+    } catch (error) {
+        console.error('خطأ في تسجيل الدخول:', error);
+        setLoginError('حدث خطأ أثناء تسجيل الدخول. تحقق من الاتصال أو حدّث الصفحة.');
+    } finally {
+        isAdminLoginInProgress = false;
+        setLoginLoading(false);
+    }
+};
+
 function logout() {
     logActivity('security', 'logout', 'Admin logged out');
     sessionStorage.removeItem('adminLoggedIn');
@@ -2737,9 +2850,9 @@ async function loadMaintenanceSettings() {
 
 let editingProductId = null;
 let charts = {};
-const ADMIN_PRODUCTS_COLLECTION = 'products_v2';
-const LEGACY_PRODUCTS_COLLECTION = 'products';
-const DELETED_PRODUCTS_COLLECTION = 'deleted_products';
+const ADMIN_PRODUCTS_COLLECTION_NAME = 'products_v2';
+const LEGACY_PRODUCTS_COLLECTION_NAME = 'products';
+const DELETED_PRODUCTS_COLLECTION_NAME = 'deleted_products';
 
 function getProductDisplayName(product) {
     if (!product) return '';
@@ -2790,13 +2903,87 @@ function isVideoMedia(url = '') {
     return String(url).toLowerCase().includes('.mp4');
 }
 
+function normalizeDeletedProductKey(value = '') {
+    const normalized = String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+    if (!normalized) return '';
+
+    const aliases = [
+        ['duolingo', ['duolingo', 'duo-lingo']],
+        ['trw', ['trw', 'the-real-world', 'real-world']],
+        ['chatgpt', ['chatgpt', 'chat-gpt', 'openai']],
+        ['super-grok', ['super-grok', 'grok']],
+        ['google-ai', ['google-ai', 'google-gemini', 'gemini', 'veo']],
+        ['microsoft-office', ['microsoft-office', 'office-365']],
+        ['hma-vpn', ['hma-vpn', 'hma']],
+        ['primevideo', ['primevideo', 'prime-video']],
+        ['alight-motion', ['alight-motion', 'alight']]
+    ];
+
+    const match = aliases.find(([, keys]) => keys.some(key => normalized.includes(key)));
+    return match ? match[0] : normalized;
+}
+
+function getProductDeleteKeys(productOrId, fallbackName = '') {
+    const values = new Set();
+
+    if (typeof productOrId === 'object' && productOrId) {
+        values.add(productOrId.id);
+        values.add(productOrId.productId);
+        values.add(productOrId.deletedKey);
+        values.add(productOrId.normalizedId);
+        values.add(getProductDisplayName(productOrId));
+        values.add(productOrId.name?.ar);
+        values.add(productOrId.name?.en);
+        values.add(productOrId.name?.fr);
+    } else {
+        values.add(productOrId);
+    }
+
+    values.add(fallbackName);
+
+    const keys = new Set();
+    values.forEach((value) => {
+        if (!value) return;
+        const raw = String(value).trim();
+        const normalized = normalizeDeletedProductKey(raw);
+        if (raw) keys.add(raw);
+        if (normalized) keys.add(normalized);
+    });
+
+    return keys;
+}
+
+function isProductDeleted(productOrId, deletedProductIds, fallbackName = '') {
+    if (!deletedProductIds || deletedProductIds.size === 0) return false;
+    return Array.from(getProductDeleteKeys(productOrId, fallbackName)).some(key => deletedProductIds.has(key));
+}
+
 async function loadDeletedProductIds() {
     if (!window.db || !window.firebaseModules) return new Set();
 
     try {
         const { collection, getDocs } = window.firebaseModules;
-        const snapshot = await getDocs(collection(window.db, DELETED_PRODUCTS_COLLECTION));
-        return new Set(snapshot.docs.map(docItem => docItem.id));
+        const snapshot = await getDocs(collection(window.db, DELETED_PRODUCTS_COLLECTION_NAME));
+        const deletedIds = new Set();
+
+        snapshot.docs.forEach((docItem) => {
+            const data = docItem.data ? docItem.data() : {};
+            getProductDeleteKeys({
+                id: docItem.id,
+                productId: data.productId,
+                deletedKey: data.deletedKey,
+                normalizedId: data.normalizedId,
+                name: data.name
+            }).forEach(key => deletedIds.add(key));
+        });
+
+        return deletedIds;
     } catch (error) {
         console.warn('Unable to load deleted products list:', error);
         return new Set();
@@ -2807,11 +2994,24 @@ async function markProductAsDeleted(productId) {
     if (!productId || !window.db || !window.firebaseModules) return;
 
     const { doc, setDoc } = window.firebaseModules;
-    await setDoc(doc(window.db, DELETED_PRODUCTS_COLLECTION, productId), {
+    const deletedKey = normalizeDeletedProductKey(productId);
+    await setDoc(doc(window.db, DELETED_PRODUCTS_COLLECTION_NAME, productId), {
         productId,
+        deletedKey,
+        normalizedId: deletedKey,
         deletedAt: new Date(),
         preventAutoRestore: true
     }, { merge: true });
+
+    if (deletedKey && deletedKey !== productId) {
+        await setDoc(doc(window.db, DELETED_PRODUCTS_COLLECTION_NAME, deletedKey), {
+            productId,
+            deletedKey,
+            normalizedId: deletedKey,
+            deletedAt: new Date(),
+            preventAutoRestore: true
+        }, { merge: true });
+    }
 }
 
 async function clearDeletedProductMarker(productId) {
@@ -2819,7 +3019,11 @@ async function clearDeletedProductMarker(productId) {
 
     try {
         const { doc, deleteDoc } = window.firebaseModules;
-        await deleteDoc(doc(window.db, DELETED_PRODUCTS_COLLECTION, productId));
+        await deleteDoc(doc(window.db, DELETED_PRODUCTS_COLLECTION_NAME, productId));
+        const deletedKey = normalizeDeletedProductKey(productId);
+        if (deletedKey && deletedKey !== productId) {
+            await deleteDoc(doc(window.db, DELETED_PRODUCTS_COLLECTION_NAME, deletedKey));
+        }
     } catch (error) {
         console.warn('Unable to clear deleted product marker:', error);
     }
@@ -3051,10 +3255,10 @@ async function loadProducts() {
         if (window.db && window.firebaseModules) {
             try {
                 const { collection, getDocs } = window.firebaseModules;
-                const querySnapshot = await getDocs(collection(window.db, ADMIN_PRODUCTS_COLLECTION));
+                const querySnapshot = await getDocs(collection(window.db, ADMIN_PRODUCTS_COLLECTION_NAME));
 
                 querySnapshot.forEach((docItem) => {
-                    if (deletedProductIds.has(docItem.id)) return;
+                    if (isProductDeleted({ id: docItem.id, ...docItem.data() }, deletedProductIds)) return;
 
                     const data = docItem.data();
                     productMap.set(docItem.id, {
@@ -3076,7 +3280,7 @@ async function loadProducts() {
         // 2. الدمج مع المنتجات المحلية (من currency-config.js) لضمان عدم نقص أي منتج
         if (typeof PRODUCTS !== 'undefined' && PRODUCTS) {
             Object.keys(PRODUCTS).forEach(key => {
-                if (deletedProductIds.has(key)) return;
+                if (isProductDeleted({ id: key, ...PRODUCTS[key] }, deletedProductIds)) return;
 
                 if (!productMap.has(key)) {
                     const localProduct = {
@@ -3094,7 +3298,7 @@ async function loadProducts() {
 
         if (typeof PRODUCTS !== 'undefined' && PRODUCTS) {
             Object.keys(PRODUCTS).forEach(key => {
-                if (deletedProductIds.has(key)) return;
+                if (isProductDeleted({ id: key, ...PRODUCTS[key] }, deletedProductIds)) return;
                 if (!productMap.has(key)) return;
 
                 const existingProduct = productMap.get(key);
@@ -3116,7 +3320,7 @@ async function loadProducts() {
 
         const homepageProducts = await discoverHomepageProducts();
         homepageProducts.forEach((homepageProduct) => {
-            if (deletedProductIds.has(homepageProduct.id)) return;
+            if (isProductDeleted(homepageProduct, deletedProductIds)) return;
 
             if (!productMap.has(homepageProduct.id)) {
                 productMap.set(homepageProduct.id, homepageProduct);
@@ -3148,7 +3352,7 @@ async function loadProducts() {
 
         // مزامنة المنتجات المحلية إلى Firebase إذا كانت مفقودة هناك
         if (window.db && window.firebaseModules && missingLocalProducts.length > 0) {
-            syncProductsToFirebase(missingLocalProducts);
+            await syncProductsToFirebase(missingLocalProducts);
         }
 
     } catch (error) {
@@ -3169,7 +3373,7 @@ async function syncProductsToFirebase(productsToSync = allProducts) {
         const deletedProductIds = await loadDeletedProductIds();
 
         for (const product of productsToSync) {
-            if (deletedProductIds.has(product.id)) continue;
+            if (isProductDeleted(product, deletedProductIds)) continue;
 
             const productForV2 = normalizeAdminProductForV2({
                 ...product,
@@ -3180,8 +3384,8 @@ async function syncProductsToFirebase(productsToSync = allProducts) {
                 availability: getProductStatus(product)
             }, product);
 
-            await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, product.id), productForV2, { merge: true });
-            await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, product.id), {
+            await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, product.id), productForV2, { merge: true });
+            await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, product.id), {
                 id: product.id,
                 name: getProductDisplayName(productForV2),
                 price_dzd: productForV2.priceDZD,
@@ -3411,8 +3615,8 @@ async function updateProductPrice(productId, currency, rawValue) {
             price_usd: getProductPriceUSD(product),
             updatedAt: new Date()
         };
-        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), updatePayload, { merge: true });
-        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), updatePayload, { merge: true });
+        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, productId), updatePayload, { merge: true });
+        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, productId), updatePayload, { merge: true });
         showToast('تم تحديث السعر بنجاح ✅');
     } catch (error) {
         console.error('خطأ في تحديث السعر:', error);
@@ -3447,13 +3651,13 @@ async function toggleAvailability(productId) {
 
     try {
         const { setDoc, doc } = window.firebaseModules;
-        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), {
+        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, productId), {
             availability: newStatus,
             status: newStatus,
             available: newStatus === 'available',
             updatedAt: new Date()
         }, { merge: true });
-        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), {
+        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, productId), {
             availability: newStatus,
             status: newStatus,
             available: newStatus === 'available',
@@ -3492,12 +3696,12 @@ async function toggleActive(productId) {
 
     try {
         const { setDoc, doc } = window.firebaseModules;
-        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), {
+        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, productId), {
             active: newActive,
             isArchived: !newActive,
             updatedAt: new Date()
         }, { merge: true });
-        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), {
+        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, productId), {
             active: newActive,
             updatedAt: new Date()
         }, { merge: true });
@@ -3763,8 +3967,8 @@ async function saveProductOrder() {
             if (product) {
                 product.order = i;
                 product.displayOrder = i;
-                await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), { order: i, displayOrder: i, updatedAt: new Date() });
-                await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), { order: i, displayOrder: i, updatedAt: new Date() });
+                await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, productId), { order: i, displayOrder: i, updatedAt: new Date() });
+                await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, productId), { order: i, displayOrder: i, updatedAt: new Date() });
             }
         }
 
@@ -4054,8 +4258,8 @@ async function saveProduct(event) {
         const { setDoc, doc } = window.firebaseModules;
         await clearDeletedProductMarker(productForV2.id);
 
-        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productForV2.id), productForV2, { merge: true });
-        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productForV2.id), {
+        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, productForV2.id), productForV2, { merge: true });
+        await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, productForV2.id), {
             ...productForV2,
             name: getProductDisplayName(productForV2),
             price_dzd: productForV2.priceDZD,
@@ -4984,9 +5188,14 @@ async function confirmDelete() {
 
         if (deleteType === 'product') {
             await markProductAsDeleted(reviewToDelete);
-            await deleteDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, reviewToDelete));
-            await deleteDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, reviewToDelete));
-            allProducts = allProducts.filter(p => p.id !== reviewToDelete);
+            await deleteDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, reviewToDelete));
+            await deleteDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, reviewToDelete));
+            const deletedKey = normalizeDeletedProductKey(reviewToDelete);
+            if (deletedKey && deletedKey !== reviewToDelete) {
+                await deleteDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, deletedKey));
+                await deleteDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, deletedKey));
+            }
+            allProducts = allProducts.filter(p => !isProductDeleted(p, new Set([reviewToDelete, deletedKey])));
             displayProductsTable();
             showToast('تم حذف المنتج بنجاح 🗑️');
             logActivity('product', 'deleted', reviewToDelete);
@@ -8144,8 +8353,8 @@ async function saveAllLivePrices() {
                 updateData.durations = durations;
             }
 
-            await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION, productId), updateData);
-            await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION, productId), updateData);
+            await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, productId), updateData);
+            await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, productId), updateData);
 
             // Update local memory
             const prod = allProducts.find(p => p.id === productId);

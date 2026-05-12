@@ -32,9 +32,35 @@ if (typeof window === 'undefined') {
 // اسم الـ Collection في Firebase
 // ═══════════════════════════════════════════════════════════════════════════
 
-const PRODUCTS_V2_COLLECTION = 'products_v2';
-const LEGACY_PRODUCTS_COLLECTION = 'products';
-const DELETED_PRODUCTS_COLLECTION = 'deleted_products';
+const CONTROLLER_PRODUCTS_V2_COLLECTION = 'products_v2';
+const CONTROLLER_LEGACY_PRODUCTS_COLLECTION = 'products';
+const CONTROLLER_DELETED_PRODUCTS_COLLECTION = 'deleted_products';
+
+function normalizeDeletedProductKey(value = '') {
+    const normalized = String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+    if (!normalized) return '';
+
+    const aliases = [
+        ['duolingo', ['duolingo', 'duo-lingo']],
+        ['trw', ['trw', 'the-real-world', 'real-world']],
+        ['chatgpt', ['chatgpt', 'chat-gpt', 'openai']],
+        ['super-grok', ['super-grok', 'grok']],
+        ['google-ai', ['google-ai', 'google-gemini', 'gemini', 'veo']],
+        ['microsoft-office', ['microsoft-office', 'office-365']],
+        ['hma-vpn', ['hma-vpn', 'hma']],
+        ['primevideo', ['primevideo', 'prime-video']],
+        ['alight-motion', ['alight-motion', 'alight']]
+    ];
+
+    const match = aliases.find(([, keys]) => keys.some(key => normalized.includes(key)));
+    return match ? match[0] : normalized;
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // دوال تحميل المنتجات - Load Products Functions
@@ -58,7 +84,7 @@ async function loadProductsV2(db, firebaseModules) {
 
         // Query products ordered by displayOrder
         const q = query(
-            collection(db, PRODUCTS_V2_COLLECTION),
+            collection(db, CONTROLLER_PRODUCTS_V2_COLLECTION),
             orderBy('displayOrder', 'asc')
         );
 
@@ -102,7 +128,7 @@ async function loadProductById(productId, db, firebaseModules) {
     try {
         const { doc, getDoc } = firebaseModules;
 
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -159,13 +185,17 @@ async function saveProduct(product, db, firebaseModules) {
 
         // Prepare product data for Firebase
         const productData = prepareProductForSave(product, serverTimestamp);
+        const deletedKey = normalizeDeletedProductKey(productId);
 
         if (deleteDoc) {
-            await deleteDoc(doc(db, DELETED_PRODUCTS_COLLECTION, productId));
+            await deleteDoc(doc(db, CONTROLLER_DELETED_PRODUCTS_COLLECTION, productId));
+            if (deletedKey && deletedKey !== productId) {
+                await deleteDoc(doc(db, CONTROLLER_DELETED_PRODUCTS_COLLECTION, deletedKey));
+            }
         }
 
         // Save to Firebase
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         await setDoc(docRef, productData, { merge: true });
 
         console.log('تم حفظ المنتج:', productId);
@@ -229,17 +259,35 @@ async function deleteProduct(productId, db, firebaseModules) {
 
     try {
         const { doc, deleteDoc, setDoc, serverTimestamp } = firebaseModules;
+        const deletedKey = normalizeDeletedProductKey(productId);
+        const deletedAt = serverTimestamp ? serverTimestamp() : new Date();
 
-        await setDoc(doc(db, DELETED_PRODUCTS_COLLECTION, productId), {
+        await setDoc(doc(db, CONTROLLER_DELETED_PRODUCTS_COLLECTION, productId), {
             productId,
-            deletedAt: serverTimestamp ? serverTimestamp() : new Date(),
+            deletedKey,
+            normalizedId: deletedKey,
+            deletedAt,
             preventAutoRestore: true
         }, { merge: true });
 
+        if (deletedKey && deletedKey !== productId) {
+            await setDoc(doc(db, CONTROLLER_DELETED_PRODUCTS_COLLECTION, deletedKey), {
+                productId,
+                deletedKey,
+                normalizedId: deletedKey,
+                deletedAt,
+                preventAutoRestore: true
+            }, { merge: true });
+        }
+
         // Delete the product document
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         await deleteDoc(docRef);
-        await deleteDoc(doc(db, LEGACY_PRODUCTS_COLLECTION, productId));
+        await deleteDoc(doc(db, CONTROLLER_LEGACY_PRODUCTS_COLLECTION, productId));
+        if (deletedKey && deletedKey !== productId) {
+            await deleteDoc(doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, deletedKey));
+            await deleteDoc(doc(db, CONTROLLER_LEGACY_PRODUCTS_COLLECTION, deletedKey));
+        }
 
         console.log('تم حذف المنتج:', productId);
         return true;
@@ -274,7 +322,7 @@ async function archiveProduct(productId, db, firebaseModules) {
     try {
         const { doc, updateDoc, serverTimestamp } = firebaseModules;
 
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         await updateDoc(docRef, {
             isArchived: true,
             updatedAt: serverTimestamp()
@@ -308,7 +356,7 @@ async function restoreProduct(productId, db, firebaseModules) {
     try {
         const { doc, updateDoc, serverTimestamp } = firebaseModules;
 
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         await updateDoc(docRef, {
             isArchived: false,
             updatedAt: serverTimestamp()
@@ -340,7 +388,7 @@ async function loadArchivedProducts(db, firebaseModules) {
 
         // Query archived products
         const q = query(
-            collection(db, PRODUCTS_V2_COLLECTION),
+            collection(db, CONTROLLER_PRODUCTS_V2_COLLECTION),
             where('isArchived', '==', true),
             orderBy('updatedAt', 'desc')
         );
@@ -386,7 +434,7 @@ async function loadActiveProducts(db, firebaseModules) {
 
         // Query active (non-archived) products
         const q = query(
-            collection(db, PRODUCTS_V2_COLLECTION),
+            collection(db, CONTROLLER_PRODUCTS_V2_COLLECTION),
             where('isArchived', '==', false),
             orderBy('displayOrder', 'asc')
         );
@@ -452,7 +500,7 @@ async function updatePrices(productId, priceDZD, priceUSD, db, firebaseModules) 
     try {
         const { doc, updateDoc, serverTimestamp } = firebaseModules;
 
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         await updateDoc(docRef, {
             priceDZD: Number(priceDZD),
             priceUSD: Number(priceUSD),
@@ -534,7 +582,7 @@ async function updateAvailability(productId, status, db, firebaseModules) {
     try {
         const { doc, updateDoc, serverTimestamp } = firebaseModules;
 
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         await updateDoc(docRef, {
             availability: status,
             updatedAt: serverTimestamp()
@@ -766,7 +814,7 @@ async function addSubOffer(productId, subOffer, db, firebaseModules) {
         };
 
         // Get current product to append sub-offer
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -828,7 +876,7 @@ async function updateSubOffer(productId, subOfferId, subOffer, db, firebaseModul
         const { doc, getDoc, updateDoc, serverTimestamp } = firebaseModules;
 
         // Get current product
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -901,7 +949,7 @@ async function deleteSubOffer(productId, subOfferId, db, firebaseModules) {
         const { doc, getDoc, updateDoc, serverTimestamp } = firebaseModules;
 
         // Get current product
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -949,7 +997,7 @@ async function getSubOffers(productId, db, firebaseModules) {
     try {
         const { doc, getDoc } = firebaseModules;
 
-        const docRef = doc(db, PRODUCTS_V2_COLLECTION, productId);
+        const docRef = doc(db, CONTROLLER_PRODUCTS_V2_COLLECTION, productId);
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -984,7 +1032,7 @@ function generateProductId() {
 // للاستخدام في المتصفح
 if (typeof window !== 'undefined') {
     window.ProductController = {
-        PRODUCTS_V2_COLLECTION,
+        PRODUCTS_V2_COLLECTION: CONTROLLER_PRODUCTS_V2_COLLECTION,
         AVAILABILITY_STATUSES,
         loadProductsV2,
         loadProductById,
@@ -1017,7 +1065,7 @@ if (typeof window !== 'undefined') {
 /*
 // ES Module exports للاستخدام في Node.js (للاختبارات)
 // export {
-//     PRODUCTS_V2_COLLECTION,
+//     CONTROLLER_PRODUCTS_V2_COLLECTION,
 //     AVAILABILITY_STATUSES,
 //     loadProductsV2,
 //     loadProductById,
