@@ -164,8 +164,14 @@ async function loadTransactionsInitial() {
 function openCapitalModal() {
     const modal = document.getElementById('capital-modal');
     const input = document.getElementById('input-starting-capital');
+    const currentValue = document.getElementById('capital-current-value');
+    const confirmCheckbox = document.getElementById('confirm-capital-change');
+    const saveBtn = document.getElementById('capital-save-btn');
     if (modal) {
         if (input) input.value = startingCapital || '';
+        if (currentValue) currentValue.textContent = `${Math.round(startingCapital).toLocaleString()} د.ج`;
+        if (confirmCheckbox) confirmCheckbox.checked = false;
+        if (saveBtn) saveBtn.disabled = true;
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
@@ -188,7 +194,35 @@ function closeCapitalModal() {
 async function saveStartingCapital(event) {
     if (event) event.preventDefault();
     const input = document.getElementById('input-starting-capital');
+    const confirmCheckbox = document.getElementById('confirm-capital-change');
     const amount = parseFloat(input?.value) || 0;
+    const previousAmount = Number(startingCapital) || 0;
+
+    if (!confirmCheckbox?.checked) {
+        showToast('يرجى تأكيد رغبتك في تغيير رأس المال أولاً', 'warning');
+        return;
+    }
+
+    if (amount < 0) {
+        showToast('رأس المال لا يمكن أن يكون سالباً', 'error');
+        return;
+    }
+
+    if (amount === previousAmount) {
+        showToast('لا يوجد تغيير في رأس المال', 'info');
+        closeCapitalModal();
+        return;
+    }
+
+    const confirmed = confirm(
+        `هل أنت متأكد من تغيير رأس المال؟\n\n` +
+        `القيمة الحالية: ${previousAmount.toLocaleString()} د.ج\n` +
+        `القيمة الجديدة: ${amount.toLocaleString()} د.ج\n\n` +
+        `سيتم إعادة حساب الخزينة ورأس المال الصافي بناءً على هذه القيمة.` +
+        `\nلن يتم حذف أو تعديل أمانات الموزعين.`
+    );
+
+    if (!confirmed) return;
 
     try {
         if (window.db && window.firebaseModules) {
@@ -245,12 +279,18 @@ async function loadStartingCapital() {
 function calculateTotalLiabilities() {
     if (!allResellers || !Array.isArray(allResellers)) return 0;
 
-    // نجمع الأرصدة الموجبة فقط (أموال الموزعين لدينا)
-    // إذا كان الرصيد سالب فهذا دين على الموزع وليس التزام علينا
-    // ولكن المستخدم طلب "Sum up the wallet_balance of ALL resellers"
-    // الأفضل جمع الكل ليعكس صافي الالتزام
     return allResellers.reduce((sum, reseller) => {
-        return sum + (parseFloat(reseller.walletBalance) || 0);
+        const balance = parseFloat(reseller.walletBalance) || 0;
+        return balance > 0 ? sum + balance : sum;
+    }, 0);
+}
+
+function calculateTotalResellerDebts() {
+    if (!allResellers || !Array.isArray(allResellers)) return 0;
+
+    return allResellers.reduce((sum, reseller) => {
+        const balance = parseFloat(reseller.walletBalance) || 0;
+        return balance < 0 ? sum + Math.abs(balance) : sum;
     }, 0);
 }
 
@@ -264,31 +304,9 @@ function updateCapitalDisplay() {
     let totalCost = 0;
 
     allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed').forEach(order => {
-        // الإيراد
-        let amount = parseFloat(order.sold_price || order.amount) || 0;
-        if (order.currency === 'USD' && !order.sold_price) {
-            amount *= (order.exchangeRate || USD_TO_DZD_RATE);
-        }
-        totalRevenue += amount;
-
-        // التكلفة - مع fallback ذكي
-        let cost = parseFloat(order.cost_price || order.costPrice) || 0;
-
-        // إذا لم تكن التكلفة مسجلة، نبحث في المنتج
-        if (cost === 0) {
-            const product = allProducts.find(p =>
-                p.id === order.productId ||
-                p.name === order.productName ||
-                (p.name && order.productName && (p.name.includes(order.productName) || order.productName.includes(p.name)))
-            );
-            cost = product?.cost_dzd || product?.costPrice || 0;
-
-        }
-        totalCost += cost;
+        totalRevenue += getOrderRevenueDzd(order);
+        totalCost += getOrderCostDzd(order);
     });
-
-    // تعديل يدوي لتصحيح التكلفة المفقودة من الطلبات القديمة (Legacy Cost Adjustment)
-    totalCost += 2145;
 
     // 2. حساب المصاريف
     let totalExpenses = 0;
@@ -299,7 +317,8 @@ function updateCapitalDisplay() {
     });
 
     // 3. حساب الأمانات (أرصدة الموزعين)
-    const totalLiabilities = allResellers.reduce((sum, r) => sum + (parseFloat(r.walletBalance) || 0), 0);
+    const totalLiabilities = calculateTotalLiabilities();
+    const totalResellerDebts = calculateTotalResellerDebts();
 
     // 4. رأس مالك الصافي = البداية + الربح الصافي
     const netProfit = totalRevenue - totalCost - totalExpenses;
@@ -312,8 +331,16 @@ function updateCapitalDisplay() {
     const balanceEl = document.getElementById('stat-current-balance');
     const startingEl = document.getElementById('stat-starting-capital-display');
     const badgeEl = document.getElementById('capital-performance-badge');
-    const liabilitiesEl = document.getElementById('stat-reseller-liabilities');
-    const netOwnCapitalEl = document.getElementById('stat-net-own-capital');
+    const liabilitiesEls = [
+        document.getElementById('stat-reseller-liabilities'),
+        document.getElementById('stat-reseller-liabilities-card'),
+        document.getElementById('stat-reseller-liabilities-inline')
+    ].filter(Boolean);
+    const netOwnCapitalEls = [
+        document.getElementById('stat-net-own-capital'),
+        document.getElementById('stat-net-own-capital-inline')
+    ].filter(Boolean);
+    const resellerDebtsEl = document.getElementById('stat-reseller-debts-card');
 
     if (balanceEl) {
         balanceEl.textContent = Math.round(currentTreasury).toLocaleString() + " د.ج";
@@ -321,8 +348,13 @@ function updateCapitalDisplay() {
     }
 
     if (startingEl) startingEl.textContent = Math.round(startingCapital).toLocaleString() + " د.ج";
-    if (liabilitiesEl) liabilitiesEl.textContent = Math.round(totalLiabilities).toLocaleString() + " د.ج";
-    if (netOwnCapitalEl) netOwnCapitalEl.textContent = Math.round(netOwnCapital).toLocaleString() + " د.ج";
+    liabilitiesEls.forEach(el => {
+        el.textContent = Math.round(totalLiabilities).toLocaleString() + " د.ج";
+    });
+    netOwnCapitalEls.forEach(el => {
+        el.textContent = Math.round(netOwnCapital).toLocaleString() + " د.ج";
+    });
+    if (resellerDebtsEl) resellerDebtsEl.textContent = Math.round(totalResellerDebts).toLocaleString() + " د.ج";
 
     // إضافة زر الإصلاح إذا كان هناك فرق في الحساب (اختياري)
     const actionContainer = document.querySelector('.khazina-actions') || document.querySelector('.flex.gap-3.mb-6');
@@ -373,19 +405,8 @@ function calculateTotalFinancials() {
     let totalRevenue = 0, totalCogs = 0;
 
     filteredOrders.forEach(order => {
-        let amount = parseFloat(order.sold_price || order.amount) || 0;
-        if (order.currency === 'USD' && !order.sold_price) {
-            amount *= (order.exchangeRate || USD_TO_DZD_RATE);
-        }
-        totalRevenue += amount;
-
-        // التكلفة تُخصم من كل عملية بيع
-        let cost = parseFloat(order.cost_price || order.costPrice) || 0;
-        if (cost === 0) {
-            const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
-            cost = product?.cost_dzd || 0;
-        }
-        totalCogs += cost;
+        totalRevenue += getOrderRevenueDzd(order);
+        totalCogs += getOrderCostDzd(order);
     });
 
     // 2. المصاريف
@@ -402,6 +423,28 @@ function calculateTotalFinancials() {
         totalCogs,
         totalExpenses
     };
+}
+
+function getOrderRevenueDzd(order) {
+    let amount = parseFloat(order?.sold_price ?? order?.amount) || 0;
+    if (!order?.sold_price && order?.currency === 'USD') {
+        amount *= (order.exchangeRate || USD_TO_DZD_RATE);
+    }
+    return amount;
+}
+
+function getOrderCostDzd(order) {
+    let cost = parseFloat(order?.cost_price ?? order?.costPrice) || 0;
+    if (cost > 0) return cost;
+
+    const product = allProducts.find(p => matchesProductRecord(order, p));
+    return getProductCostDZD(product);
+}
+
+function getOrderDate(order) {
+    if (order?.createdAt?.toDate) return order.createdAt.toDate();
+    if (order?.timestamp?.toDate) return order.timestamp.toDate();
+    return new Date(order?.saleDate || order?.createdAt || order?.timestamp || Date.now());
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -562,8 +605,8 @@ function debugFinancials() {
 
         let cost = parseFloat(order.cost_price || order.costPrice) || 0;
         if (cost === 0) {
-            const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
-            cost = product?.cost_dzd || 0;
+            const product = allProducts.find(p => matchesProductRecord(order, p));
+            cost = getProductCostDZD(product);
         }
 
         totalRevenue += amount;
@@ -621,14 +664,8 @@ async function fixOldOrdersCost() {
 
             if (currentCost === 0) {
                 // البحث عن المنتج
-                const product = allProducts.find(p =>
-                    p.id === order.productId ||
-                    p.name === order.productName ||
-                    p.name?.includes(order.productName) ||
-                    order.productName?.includes(p.name)
-                );
-
-                const productCost = product?.cost_dzd || 0;
+                const product = allProducts.find(p => matchesProductRecord(order, p));
+                const productCost = getProductCostDZD(product);
 
                 console.log(`📦 ${order.productName}: تكلفة حالية=${currentCost}, من المنتج=${productCost}`);
 
@@ -730,29 +767,33 @@ async function openSaleModal() {
     // ملء قائمة المنتجات
     productSelect.innerHTML = '<option value="">-- اختر المنتج --</option>';
     allProducts.forEach(product => {
+        const productName = getProductDisplayName(product);
+        const priceDzd = getProductPriceDZD(product);
+        const priceUsd = getProductPriceUSD(product);
+        const costDzd = getProductCostDZD(product);
         if (product.durations && Object.keys(product.durations).length > 0) {
             // إضافة كل مدة كخيار منفصل
             Object.entries(product.durations).forEach(([durationKey, price]) => {
                 const option = document.createElement('option');
                 option.value = `${product.id}_${durationKey}`;
-                option.textContent = `${product.name} - ${durationKey} (${price.dzd} د.ج / $${price.usd})`;
+                option.textContent = `${productName} - ${durationKey} (${price.dzd} د.ج / $${price.usd})`;
                 option.dataset.productId = product.id;
-                option.dataset.productName = `${product.name} - ${durationKey}`;
+                option.dataset.productName = `${productName} - ${durationKey}`;
                 option.dataset.priceDzd = price.dzd;
                 option.dataset.priceUsd = price.usd;
                 // Add cost price (from duration if exists, otherwise from product default)
-                option.dataset.costDzd = price.cost_dzd || product.cost_dzd || 0;
+                option.dataset.costDzd = price.cost_dzd || price.costDZD || costDzd || 0;
                 productSelect.appendChild(option);
             });
         } else {
             const option = document.createElement('option');
             option.value = product.id;
-            option.textContent = `${product.name} (${product.price_dzd} د.ج / $${product.price_usd})`;
+            option.textContent = `${productName} (${priceDzd} د.ج / $${priceUsd})`;
             option.dataset.productId = product.id;
-            option.dataset.productName = product.name;
-            option.dataset.priceDzd = product.price_dzd;
-            option.dataset.priceUsd = product.price_usd;
-            option.dataset.costDzd = product.cost_dzd || 0;
+            option.dataset.productName = productName;
+            option.dataset.priceDzd = priceDzd;
+            option.dataset.priceUsd = priceUsd;
+            option.dataset.costDzd = costDzd || 0;
             productSelect.appendChild(option);
         }
     });
@@ -938,11 +979,12 @@ async function saveSale(event) {
             await addDoc(collection(window.db, 'transactions'), {
                 type: 'wallet_purchase',
                 resellerId: resellerId,
+                resellerName: resellerName,
                 amount: -totalAmountDZD,
                 productName: productName,
                 quantity: quantity,
                 notes: `شراء ${quantity}x ${productName}`,
-                createdAt: new Date().toISOString()
+                createdAt: selectedDate
             });
         }
 
@@ -953,8 +995,8 @@ async function saveSale(event) {
 
             // If no cost entered, try to get from product
             if (costPrice === 0) {
-                const product = allProducts.find(p => p.id === productId || p.name === productName);
-                costPrice = product?.cost_dzd || 0;
+                const product = allProducts.find(p => p.id === productId || matchesProductRecord({ productId, productName }, p));
+                costPrice = getProductCostDZD(product);
                 if (costPrice === 0) {
                     console.warn(`⚠️ No cost price found for product: ${productName}. Using 0.`);
                 }
@@ -1064,8 +1106,9 @@ async function openPurchaseModal() {
     productSelect.innerHTML = '<option value="">-- اختر المنتج --</option>';
     allProducts.forEach(product => {
         const option = document.createElement('option');
+        const productName = getProductDisplayName(product);
         option.value = product.id;
-        option.textContent = product.name;
+        option.textContent = productName;
         productSelect.appendChild(option);
     });
 
@@ -1136,7 +1179,7 @@ async function savePurchase(event) {
         const purchaseData = {
             type: 'purchase',
             productId: product.id,
-            productName: product.name,
+            productName: getProductDisplayName(product),
             quantity: quantity,
             unitPrice: unitPrice,
             totalPrice: quantity * unitPrice,
@@ -1152,8 +1195,8 @@ async function savePurchase(event) {
         await addDoc(collection(window.db, 'purchases'), purchaseData);
 
         closePurchaseModal();
-        showToast(`✅ تم تسجيل شراء ${quantity} × ${product.name}`);
-        logActivity('purchase', 'created', `${product.name} x${quantity} من ${supplier}`);
+        showToast(`✅ تم تسجيل شراء ${quantity} × ${getProductDisplayName(product)}`);
+        logActivity('purchase', 'created', `${getProductDisplayName(product)} x${quantity} من ${supplier}`);
 
         // تحديث بيانات المحاسبة
         loadAccountingData();
@@ -2856,8 +2899,70 @@ const DELETED_PRODUCTS_COLLECTION_NAME = 'deleted_products';
 
 function getProductDisplayName(product) {
     if (!product) return '';
-    if (typeof product.name === 'string') return product.name;
-    return product.name?.ar || product.name?.en || product.name_translations?.ar || product.id || '';
+    return getLocalizedText(product.name) ||
+        getLocalizedText(product.name_translations) ||
+        getLocalizedText(product.title) ||
+        product.id ||
+        '';
+}
+
+function getLocalizedText(value) {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    if (typeof value !== 'object') return String(value);
+    return value.ar || value.en || value.fr || value.name || value.label || '';
+}
+
+function normalizeProductMatchText(value) {
+    return getLocalizedText(value)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function getProductNameCandidates(product) {
+    const candidates = [
+        product?.id,
+        product?.productId,
+        getProductDisplayName(product),
+        product?.name,
+        product?.name_translations,
+        product?.title
+    ];
+
+    if (product?.name && typeof product.name === 'object') {
+        candidates.push(product.name.ar, product.name.en, product.name.fr);
+    }
+    if (product?.name_translations && typeof product.name_translations === 'object') {
+        candidates.push(product.name_translations.ar, product.name_translations.en, product.name_translations.fr);
+    }
+
+    return [...new Set(candidates.map(normalizeProductMatchText).filter(Boolean))];
+}
+
+function matchesProductRecord(record, product) {
+    if (!record || !product) return false;
+    if (record.productId && product.id && String(record.productId) === String(product.id)) return true;
+
+    const recordCandidates = [
+        record.productName,
+        record.product,
+        record.name,
+        record.productTitle
+    ].map(normalizeProductMatchText).filter(Boolean);
+
+    if (recordCandidates.length === 0) return false;
+
+    const productCandidates = getProductNameCandidates(product);
+    return recordCandidates.some(recordName =>
+        productCandidates.some(productName =>
+            recordName === productName ||
+            recordName.includes(productName) ||
+            productName.includes(recordName)
+        )
+    );
 }
 
 function getProductPriceDZD(product) {
@@ -2866,6 +2971,14 @@ function getProductPriceDZD(product) {
 
 function getProductPriceUSD(product) {
     return Number(product?.priceUSD ?? product?.price_usd ?? 0) || 0;
+}
+
+function getProductCostDZD(product) {
+    return Number(product?.costDZD ?? product?.cost_dzd ?? product?.costPrice ?? 0) || 0;
+}
+
+function getProductCostUSD(product) {
+    return Number(product?.costUSD ?? product?.cost_usd ?? 0) || 0;
 }
 
 function getProductImage(product) {
@@ -3692,7 +3805,7 @@ function duplicateProduct(productId) {
     // ملء الحقول بالبيانات المنسوخة
     setTimeout(() => {
         document.getElementById('product-id').value = product.id + '_copy';
-        document.getElementById('product-name').value = product.name + ' (نسخة)';
+        document.getElementById('product-name').value = getProductDisplayName(product) + ' (نسخة)';
         document.getElementById('product-category').value = product.category || 'other';
         document.getElementById('product-price-dzd').value = product.price_dzd || 0;
         document.getElementById('product-price-usd').value = product.price_usd || 0;
@@ -5440,26 +5553,21 @@ function calculateAccountingData() {
     const filteredPurchases = filterOrdersByDate(allPurchases, dateFilter);
 
     return allProducts.map(product => {
+        const productName = getProductDisplayName(product);
+        const priceDzd = getProductPriceDZD(product);
+        const priceUsd = getProductPriceUSD(product);
+        const costDzd = getProductCostDZD(product);
+        const costUsd = getProductCostUSD(product);
         // بيانات المبيعات
-        const productOrders = filteredOrders.filter(o =>
-            o.productName === product.name || o.productId === product.id
-        );
+        const productOrders = filteredOrders.filter(o => matchesProductRecord(o, product));
         const salesCount = productOrders.length;
 
         // بيانات الشراء اليدوي (للرجوع إليها)
-        const productPurchases = filteredPurchases.filter(p =>
-            p.productName === product.name || p.productId === product.id
-        );
+        const productPurchases = filteredPurchases.filter(p => matchesProductRecord(p, product));
         const purchasedQty = productPurchases.reduce((sum, p) => sum + (p.quantity || 0), 0);
 
         // حساب الإيرادات (من المبيعات)
-        const revenueDzd = productOrders.reduce((sum, o) => {
-            let amount = parseFloat(o.sold_price || o.amount) || 0;
-            if (o.currency === 'USD' && !o.sold_price) {
-                amount *= (o.exchangeRate || USD_TO_DZD_RATE);
-            }
-            return sum + amount;
-        }, 0);
+        const revenueDzd = productOrders.reduce((sum, o) => sum + getOrderRevenueDzd(o), 0);
 
         const revenueUsd = productOrders.reduce((sum, o) => {
             const amount = parseFloat(o.amount) || 0;
@@ -5469,23 +5577,21 @@ function calculateAccountingData() {
             return sum + dzdToUsd(amount);
         }, 0);
 
-        const totalRevenueDzd = revenueDzd || (salesCount * (product.price_dzd || 0));
-        const totalRevenueUsd = revenueUsd || (salesCount * (product.price_usd || 0));
+        const totalRevenueDzd = revenueDzd || (salesCount * priceDzd);
+        const totalRevenueUsd = revenueUsd || (salesCount * priceUsd);
 
         // ★★★ التكلفة الفعلية = مجموع cost_price من كل طلب ★★★
-        const totalCostDzd = productOrders.reduce((sum, o) => {
-            let cost = parseFloat(o.cost_price || o.costPrice) || 0;
-            // إذا لم تكن التكلفة مسجلة، نأخذها من المنتج
-            if (cost === 0) {
-                cost = product.cost_dzd || product.costPrice || 0;
-            }
-            return sum + cost;
-        }, 0);
+        const missingCostCount = productOrders.filter(o => {
+            const rawCost = parseFloat(o.cost_price ?? o.costPrice) || 0;
+            return rawCost <= 0;
+        }).length;
+
+        const totalCostDzd = productOrders.reduce((sum, o) => sum + getOrderCostDzd(o), 0);
 
         const totalCostUsd = productOrders.reduce((sum, o) => {
             let cost = parseFloat(o.cost_price || o.costPrice) || 0;
             if (cost === 0) {
-                cost = product.cost_usd || 0;
+                cost = costUsd || 0;
             }
             if (o.currency !== 'USD') {
                 cost = dzdToUsd(cost);
@@ -5498,8 +5604,8 @@ function calculateAccountingData() {
         const remainingQty = purchasedQty - salesCount;
 
         // تكلفة الوحدة (للعرض فقط)
-        const costPerUnitDzd = salesCount > 0 ? (totalCostDzd / salesCount) : (product.cost_dzd || 0);
-        const costPerUnitUsd = salesCount > 0 ? (totalCostUsd / salesCount) : (product.cost_usd || 0);
+        const costPerUnitDzd = salesCount > 0 ? (totalCostDzd / salesCount) : costDzd;
+        const costPerUnitUsd = salesCount > 0 ? (totalCostUsd / salesCount) : costUsd;
 
         // حساب الربح = الإيرادات - التكلفة الفعلية
         const profitDzd = totalRevenueDzd - totalCostDzd;
@@ -5511,18 +5617,20 @@ function calculateAccountingData() {
 
         return {
             id: product.id,
-            name: product.name,
+            name: productName,
             supplier: product.supplier || 'غير محدد',
             // بيانات الشراء
             purchasedQty,
             purchaseCostDzd: totalCostDzd,
             purchaseCostUsd: totalCostUsd,
+            costDzd: costPerUnitDzd,
+            costUsd: costPerUnitUsd,
             costPerUnitDzd,
             costPerUnitUsd,
             // بيانات البيع
             salesCount,
-            priceDzd: product.price_dzd || 0,
-            priceUsd: product.price_usd || 0,
+            priceDzd,
+            priceUsd,
             revenueDzd: totalRevenueDzd,
             revenueUsd: totalRevenueUsd,
             // المخزون
@@ -5534,6 +5642,7 @@ function calculateAccountingData() {
             profitUsd,
             marginDzd,
             marginUsd,
+            missingCostCount,
             // التفاصيل
             orders: productOrders,
             purchases: productPurchases
@@ -5555,13 +5664,29 @@ function displayAccountingTable() {
     const showUsd = currencyFilter !== 'dzd';
 
     if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-8 text-gray-400">لا توجد بيانات</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-gray-400">لا توجد بيانات</td></tr>';
         return;
     }
 
     tbody.innerHTML = data.map(item => {
         const profitClass = item.profitDzd >= 0 ? 'text-green-400' : 'text-red-400';
         const remainingClass = item.remainingQty > 0 ? 'text-yellow-400' : (item.remainingQty < 0 ? 'text-red-400' : 'text-gray-400');
+        const hasMissingCost = item.missingCostCount > 0;
+        const hasWeakMargin = item.salesCount > 0 && item.marginDzd < 15;
+        const hasLoss = item.profitDzd < 0;
+        const statusBadges = [];
+
+        if (hasMissingCost) {
+            statusBadges.push(`<span class="accounting-status-badge danger">تكلفة ناقصة ${item.missingCostCount}</span>`);
+        }
+        if (hasLoss) {
+            statusBadges.push('<span class="accounting-status-badge danger">خسارة</span>');
+        } else if (hasWeakMargin) {
+            statusBadges.push('<span class="accounting-status-badge warning">هامش ضعيف</span>');
+        }
+        if (statusBadges.length === 0) {
+            statusBadges.push('<span class="accounting-status-badge good">سليم</span>');
+        }
 
         // تنسيق الأرقام
         const formatMoney = (dzd, usd) => {
@@ -5572,41 +5697,44 @@ function displayAccountingTable() {
         };
 
         return `
-            <tr class="border-t border-gray-700 hover:bg-gray-700/50 transition-colors">
-                <td class="px-3 py-3">
+            <tr class="accounting-data-row border-t border-gray-700 hover:bg-gray-700/50 transition-colors ${hasMissingCost || hasLoss ? 'needs-attention' : ''}">
+                <td class="px-3 py-3" data-label="المنتج">
                     <div class="font-bold text-sm">${escapeHtml(item.name)}</div>
                     <div class="text-gray-500 text-xs">${escapeHtml(item.supplier)}</div>
                 </td>
-                <td class="px-2 py-3 text-center">
+                <td class="px-2 py-3 text-center" data-label="مشتراة">
                     <span class="bg-blue-600/30 text-blue-300 px-2 py-1 rounded font-bold">
                         ${item.purchasedQty}
                     </span>
                 </td>
-                <td class="px-2 py-3 text-center">
+                <td class="px-2 py-3 text-center" data-label="مباعة">
                     <span class="bg-green-600/30 text-green-300 px-2 py-1 rounded font-bold">
                         ${item.salesCount}
                     </span>
                 </td>
-                <td class="px-2 py-3 text-center">
+                <td class="px-2 py-3 text-center" data-label="متبقي">
                     <span class="${remainingClass} font-bold px-2 py-1 rounded ${item.remainingQty > 0 ? 'bg-yellow-600/20' : ''}">
                         ${item.remainingQty}
                     </span>
                 </td>
-                <td class="px-2 py-3 text-red-300 text-xs">
+                <td class="px-2 py-3 text-red-300 text-xs" data-label="التكلفة">
                     ${formatMoney(item.purchaseCostDzd, item.purchaseCostUsd)}
                 </td>
-                <td class="px-2 py-3 text-green-300 text-xs">
+                <td class="px-2 py-3 text-green-300 text-xs" data-label="الإيرادات">
                     ${formatMoney(item.revenueDzd, item.revenueUsd)}
                 </td>
-                <td class="px-2 py-3">
+                <td class="px-2 py-3" data-label="الربح">
                     <div class="${profitClass} font-bold text-sm">
                         ${showDzd ? `${item.profitDzd.toLocaleString()} د.ج` : `$${item.profitUsd.toFixed(2)}`}
                     </div>
                 </td>
-                <td class="px-2 py-3 text-center">
+                <td class="px-2 py-3 text-center" data-label="الهامش">
                     <span class="px-2 py-1 rounded text-xs ${item.marginDzd >= 20 ? 'bg-green-600/20 text-green-300' : item.marginDzd >= 0 ? 'bg-yellow-600/20 text-yellow-300' : 'bg-red-600/20 text-red-300'}">
                         ${item.marginDzd.toFixed(0)}%
                     </span>
+                </td>
+                <td class="px-2 py-3 text-center" data-label="الحالة">
+                    <div class="accounting-status-stack">${statusBadges.join('')}</div>
                 </td>
             </tr>
         `;
@@ -5630,8 +5758,9 @@ function updateAccountingFooter(data) {
         acc.revenueUsd += item.revenueUsd;
         acc.profitDzd += item.profitDzd;
         acc.profitUsd += item.profitUsd;
+        acc.missingCost += item.missingCostCount || 0;
         return acc;
-    }, { purchased: 0, sold: 0, remaining: 0, costDzd: 0, costUsd: 0, revenueDzd: 0, revenueUsd: 0, profitDzd: 0, profitUsd: 0 });
+    }, { purchased: 0, sold: 0, remaining: 0, costDzd: 0, costUsd: 0, revenueDzd: 0, revenueUsd: 0, profitDzd: 0, profitUsd: 0, missingCost: 0 });
 
     const avgMargin = totals.revenueDzd > 0 ? ((totals.profitDzd / totals.revenueDzd) * 100) : 0;
 
@@ -5642,6 +5771,8 @@ function updateAccountingFooter(data) {
     const footerRevenue = document.getElementById('footer-total-revenue');
     const footerProfit = document.getElementById('footer-total-profit');
     const footerMargin = document.getElementById('footer-avg-margin');
+    const footerQuality = document.getElementById('footer-quality-summary');
+    const tableHealth = document.getElementById('accounting-table-health');
 
     if (footerPurchased) footerPurchased.textContent = totals.purchased;
     if (footerSold) footerSold.textContent = totals.sold;
@@ -5650,6 +5781,15 @@ function updateAccountingFooter(data) {
     if (footerRevenue) footerRevenue.innerHTML = `${totals.revenueDzd.toLocaleString()} د.ج`;
     if (footerProfit) footerProfit.innerHTML = `<span class="${totals.profitDzd >= 0 ? 'text-green-400' : 'text-red-400'}">${totals.profitDzd.toLocaleString()} د.ج</span>`;
     if (footerMargin) footerMargin.innerHTML = `<span class="${avgMargin >= 20 ? 'text-green-400' : avgMargin >= 0 ? 'text-yellow-400' : 'text-red-400'}">${avgMargin.toFixed(0)}%</span>`;
+    if (footerQuality) {
+        footerQuality.innerHTML = totals.missingCost > 0
+            ? `<span class="accounting-status-badge danger">${totals.missingCost} تكلفة ناقصة</span>`
+            : '<span class="accounting-status-badge good">سليم</span>';
+    }
+    if (tableHealth) {
+        tableHealth.textContent = totals.missingCost > 0 ? `${totals.missingCost} طلب يحتاج تكلفة` : 'كل التكاليف مسجلة';
+        tableHealth.className = `accounting-health-pill ${totals.missingCost > 0 ? 'danger' : 'good'}`;
+    }
 }
 
 /**
@@ -5698,6 +5838,34 @@ function updateAccountingStats() {
     const netTotal = netBusinessProfit - personalExpSum;      // المتبقي بعد كل المصاريف
 
     const margin = totals.revenueDzd > 0 ? ((grossProfit / totals.revenueDzd) * 100) : 0;
+    const soldProducts = data.filter(item => item.salesCount > 0);
+    const topProfitProduct = soldProducts.reduce((best, item) => {
+        if (!best || item.profitDzd > best.profitDzd) return item;
+        return best;
+    }, null);
+    const weakestMarginProduct = soldProducts.reduce((weakest, item) => {
+        if (!weakest || item.marginDzd < weakest.marginDzd) return item;
+        return weakest;
+    }, null);
+
+    const filteredOrders = filterOrdersByDate(
+        allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed'),
+        dateFilter
+    );
+    const missingCostOrders = filteredOrders.filter(order => {
+        const rawCost = parseFloat(order.cost_price ?? order.costPrice) || 0;
+        return rawCost <= 0;
+    }).length;
+    const averageOrderProfit = filteredOrders.length > 0 ? grossProfit / filteredOrders.length : 0;
+    const sourceProfits = filteredOrders.reduce((acc, order) => {
+        const profit = getOrderRevenueDzd(order) - getOrderCostDzd(order);
+        if (order.source === 'wholesale') acc.wholesale += profit;
+        else acc.retail += profit;
+        return acc;
+    }, { wholesale: 0, retail: 0 });
+    const positiveSourceProfit = Math.max(sourceProfits.wholesale, 0) + Math.max(sourceProfits.retail, 0);
+    const wholesaleShare = positiveSourceProfit > 0 ? (Math.max(sourceProfits.wholesale, 0) / positiveSourceProfit) * 100 : 0;
+    const retailShare = positiveSourceProfit > 0 ? (Math.max(sourceProfits.retail, 0) / positiveSourceProfit) * 100 : 0;
 
     // تحديث البطاقات - الصف الأول
     const statRevenue = document.getElementById('stat-total-revenue-acc');
@@ -5730,6 +5898,27 @@ function updateAccountingStats() {
         if (netTotal >= 0) statNetProfit.style.color = 'var(--accent)';
     }
     if (statMargin) statMargin.textContent = `${margin.toFixed(1)}%`;
+
+    const topProductEl = document.getElementById('stat-top-profit-product');
+    const topValueEl = document.getElementById('stat-top-profit-value');
+    const weakestProductEl = document.getElementById('stat-weakest-margin-product');
+    const weakestValueEl = document.getElementById('stat-weakest-margin-value');
+    const missingCostEl = document.getElementById('stat-missing-cost-orders');
+    const averageProfitEl = document.getElementById('stat-average-order-profit');
+    const wholesaleShareEl = document.getElementById('stat-wholesale-profit-share');
+    const retailShareEl = document.getElementById('stat-retail-profit-share');
+
+    if (topProductEl) topProductEl.textContent = topProfitProduct ? topProfitProduct.name : '-';
+    if (topValueEl) topValueEl.textContent = topProfitProduct ? `${Math.round(topProfitProduct.profitDzd).toLocaleString()} د.ج` : '0 د.ج';
+    if (weakestProductEl) weakestProductEl.textContent = weakestMarginProduct ? weakestMarginProduct.name : '-';
+    if (weakestValueEl) weakestValueEl.textContent = weakestMarginProduct ? `${weakestMarginProduct.marginDzd.toFixed(1)}%` : '0%';
+    if (missingCostEl) {
+        missingCostEl.textContent = missingCostOrders.toLocaleString();
+        missingCostEl.className = `insight-value ${missingCostOrders > 0 ? 'text-red-400' : 'text-green-400'}`;
+    }
+    if (averageProfitEl) averageProfitEl.textContent = `${Math.round(averageOrderProfit).toLocaleString()} د.ج`;
+    if (wholesaleShareEl) wholesaleShareEl.textContent = `${wholesaleShare.toFixed(0)}%`;
+    if (retailShareEl) retailShareEl.textContent = `التجزئة ${retailShare.toFixed(0)}%`;
 }
 
 /**
@@ -5738,6 +5927,32 @@ function updateAccountingStats() {
 function updateProfitCharts() {
     updateProfitOverTimeChart();
     updateProfitByProductChart();
+}
+
+function getAccountingChartDateInfo(date, filter, pointCount) {
+    const useMonthly = filter === 'all' || filter === 'year' || pointCount > 90;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    if (useMonthly) {
+        return {
+            key: `${year}-${month}`,
+            label: date.toLocaleDateString('fr-DZ', { year: 'numeric', month: 'short' })
+        };
+    }
+
+    return {
+        key: `${year}-${month}-${day}`,
+        label: formatDate(date)
+    };
+}
+
+function getAccountingExpenseDate(expense) {
+    if (expense?.date) return new Date(expense.date);
+    if (expense?.timestamp?.toDate) return expense.timestamp.toDate();
+    if (expense?.createdAt?.toDate) return expense.createdAt.toDate();
+    return new Date(expense?.createdAt || Date.now());
 }
 
 /**
@@ -5753,39 +5968,27 @@ function updateProfitOverTimeChart() {
         dateFilter
     );
 
-    // تجميع الأرباح حسب التاريخ (ISO format YYYY-MM-DD for sorting)
+    const validOrderDates = filteredOrders
+        .map(order => getOrderDate(order))
+        .filter(date => !Number.isNaN(date.getTime()));
+    const useMonthly = dateFilter === 'all' || dateFilter === 'year' || validOrderDates.length > 90;
     const profitByDate = {};
 
     filteredOrders.forEach(order => {
-        if (!order.timestamp) return;
+        const dateObj = getOrderDate(order);
+        if (Number.isNaN(dateObj.getTime())) return;
+        const dateInfo = getAccountingChartDateInfo(dateObj, dateFilter, validOrderDates.length);
 
-        // استخراج التاريخ بتنسيق ISO للترتيب الصحيح
-        let dateObj;
-        if (order.timestamp && order.timestamp.toDate) {
-            dateObj = order.timestamp.toDate();
-        } else {
-            dateObj = new Date(order.timestamp);
-        }
-        const isoDate = dateObj.toISOString().split('T')[0];
-
-        const product = allProducts.find(p => p.name === order.productName || p.id === order.productId);
-
-        if (!profitByDate[isoDate]) {
-            profitByDate[isoDate] = { revenue: 0, cost: 0, profit: 0 };
+        if (!profitByDate[dateInfo.key]) {
+            profitByDate[dateInfo.key] = { label: dateInfo.label, revenue: 0, cost: 0, profit: 0 };
         }
 
-        let amount = parseFloat(order.amount) || (product?.price_dzd || 0);
-        if (order.currency === 'USD') {
-            const rate = order.exchangeRate || USD_TO_DZD_RATE;
-            amount = amount * rate;
-        }
+        const amount = getOrderRevenueDzd(order);
+        const cost = getOrderCostDzd(order);
 
-        // حساب التكلفة (مع التحويل)
-        let cost = product?.cost_dzd || 0;
-
-        profitByDate[isoDate].revenue += amount;
-        profitByDate[isoDate].cost += cost;
-        profitByDate[isoDate].profit += (amount - cost);
+        profitByDate[dateInfo.key].revenue += amount;
+        profitByDate[dateInfo.key].cost += cost;
+        profitByDate[dateInfo.key].profit += (amount - cost);
     });
 
     // خصم المصاريف من الأرباح اليومية
@@ -5797,27 +6000,22 @@ function updateProfitOverTimeChart() {
 
     // إضافة المصاريف للرسم البياني
     validExpenses.forEach(e => {
-        const eDate = e.date ? new Date(e.date) : (e.timestamp?.toDate ? e.timestamp.toDate() : new Date(e.createdAt));
-        const isoDate = eDate.toISOString().split('T')[0];
+        const eDate = getAccountingExpenseDate(e);
+        if (Number.isNaN(eDate.getTime())) return;
+        const dateInfo = getAccountingChartDateInfo(eDate, dateFilter, useMonthly ? 91 : validOrderDates.length);
 
-        // إذا كان هذا التاريخ موجوداً في الرسم البياني (أو يمكن إضافته)
-        if (!profitByDate[isoDate]) {
-            if (dateFilter === 'all') {
-                profitByDate[isoDate] = { revenue: 0, cost: 0, profit: 0 };
-            }
+        if (!profitByDate[dateInfo.key]) {
+            profitByDate[dateInfo.key] = { label: dateInfo.label, revenue: 0, cost: 0, profit: 0 };
         }
 
-        if (profitByDate[isoDate]) {
-            let amount = e.amount || 0;
-            if (e.currency === 'USD') {
-                const rate = e.exchangeRate || USD_TO_DZD_RATE;
-                amount = amount * rate;
-            }
-
-            // إضافة للتكلفة وخصم من الربح
-            profitByDate[isoDate].cost += amount;
-            profitByDate[isoDate].profit -= amount;
+        let amount = e.amount || 0;
+        if (e.currency === 'USD') {
+            const rate = e.exchangeRate || USD_TO_DZD_RATE;
+            amount = amount * rate;
         }
+
+        profitByDate[dateInfo.key].cost += amount;
+        profitByDate[dateInfo.key].profit -= amount;
     });
 
     // ترتيب التواريخ زمنياً
@@ -5831,7 +6029,7 @@ function updateProfitOverTimeChart() {
         type: 'line',
         data: {
             // تحويل التواريخ من ISO إلى التنسيق المقروء باستخدام دالة formatDate الموجودة
-            labels: sortedDates.map(dateISO => formatDate(new Date(dateISO))),
+            labels: sortedDates.map(date => profitByDate[date].label),
             datasets: [
                 {
                     label: 'الإيرادات',
@@ -5861,10 +6059,10 @@ function updateProfitOverTimeChart() {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    labels: { color: '#9ca3af' }
+                    labels: { color: '#9ca3af', boxWidth: 10, font: { size: 10 } }
                 }
             },
             scales: {
@@ -5888,44 +6086,55 @@ function updateProfitByProductChart() {
     const ctx = document.getElementById('profit-by-product-chart');
     if (!ctx) return;
 
-    const data = calculateAccountingData().filter(item => item.profitDzd !== 0);
+    const data = calculateAccountingData()
+        .filter(item => item.profitDzd > 0)
+        .sort((a, b) => b.profitDzd - a.profitDzd)
+        .slice(0, 8);
 
     if (accountingCharts.profitByProduct) {
         accountingCharts.profitByProduct.destroy();
     }
 
-    const colors = [
-        'rgba(255, 213, 111, 0.8)',
-        'rgba(139, 92, 246, 0.8)',
-        'rgba(34, 197, 94, 0.8)',
-        'rgba(59, 130, 246, 0.8)',
-        'rgba(239, 68, 68, 0.8)',
-        'rgba(236, 72, 153, 0.8)',
-        'rgba(14, 165, 233, 0.8)',
-        'rgba(249, 115, 22, 0.8)'
-    ];
-
     accountingCharts.profitByProduct = new Chart(ctx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-            labels: data.map(item => item.name),
+            labels: data.length > 0 ? data.map(item => item.name) : ['لا توجد أرباح موجبة'],
             datasets: [{
-                data: data.map(item => Math.abs(item.profitDzd)),
-                backgroundColor: colors.slice(0, data.length),
-                borderWidth: 0
+                label: 'الربح',
+                data: data.length > 0 ? data.map(item => Math.round(item.profitDzd)) : [0],
+                backgroundColor: data.length > 0 ? 'rgba(34, 197, 94, 0.72)' : 'rgba(148, 163, 184, 0.24)',
+                borderColor: data.length > 0 ? 'rgba(34, 197, 94, 1)' : 'rgba(148, 163, 184, 0.35)',
+                borderWidth: 1,
+                borderRadius: 6,
+                barThickness: data.length > 0 ? 14 : 10
             }]
         },
         options: {
+            indexAxis: 'y',
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom',
-                    labels: {
-                        color: '#9ca3af',
-                        padding: 15,
-                        font: { size: 11 }
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => `${context.raw.toLocaleString()} د.ج`
                     }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#9ca3af',
+                        callback: value => Number(value).toLocaleString()
+                    },
+                    grid: { color: 'rgba(255,255,255,0.05)' }
+                },
+                y: {
+                    ticks: { color: '#cbd5e1', font: { size: 10 } },
+                    grid: { display: false }
                 }
             }
         }
@@ -7397,9 +7606,12 @@ async function openDebtorModal(debtorId) {
         productSelect.innerHTML = '<option value="">-- اختر المنتج --</option>';
         allProducts.forEach(product => {
             const option = document.createElement('option');
+            const productName = getProductDisplayName(product);
+            const priceDzd = getProductPriceDZD(product);
+            const priceUsd = getProductPriceUSD(product);
             option.value = product.id;
-            option.textContent = `${product.name} (${product.price_dzd} د.ج / $${product.price_usd})`;
-            option.dataset.productName = product.name;
+            option.textContent = `${productName} (${priceDzd} د.ج / $${priceUsd})`;
+            option.dataset.productName = productName;
             productSelect.appendChild(option);
         });
     }
@@ -8661,10 +8873,13 @@ async function loadTransactions() {
         allTransactions = [];
         snapshot.forEach(doc => {
             const data = doc.data();
+            const createdAt = data.createdAt?.toDate
+                ? data.createdAt.toDate()
+                : (data.createdAt ? new Date(data.createdAt) : new Date());
             allTransactions.push({
                 id: doc.id,
                 ...data,
-                createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : (data.createdAt || new Date())
+                createdAt
             });
         });
 
@@ -8817,10 +9032,6 @@ window.showTab = function (tabName) {
 
 // New Chart Function
 function updateProfitSourceChart() {
-    const canvas = document.getElementById('profit-source-chart');
-    if (!canvas) return;
-
-    // Calculate Data
     const dateFilter = document.getElementById('accounting-date-filter')?.value || 'all';
     const filteredOrders = filterOrdersByDate(
         allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed'),
@@ -8831,21 +9042,8 @@ function updateProfitSourceChart() {
     let wholesaleProfit = 0;
 
     filteredOrders.forEach(order => {
-        // Revenue
-        let amount = order.sold_price || parseFloat(order.amount) || 0;
-        if (!order.sold_price && order.currency === 'USD') {
-            amount = amount * (order.exchangeRate || USD_TO_DZD_RATE);
-        }
-
-        // Cost (Prioritize cost stored in the order, then fall back to product default)
-        let cost = parseFloat(order.cost_price || order.costPrice) || 0;
-
-        if (!cost) {
-            const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
-            if (product) {
-                cost = product.cost_dzd || 0;
-            }
-        }
+        const amount = getOrderRevenueDzd(order);
+        const cost = getOrderCostDzd(order);
 
         const profit = amount - cost;
 
@@ -8856,27 +9054,32 @@ function updateProfitSourceChart() {
         }
     });
 
-    // Render Chart
-    if (window.profitSourceChart) window.profitSourceChart.destroy();
+    if (window.profitSourceChart) {
+        window.profitSourceChart.destroy();
+        window.profitSourceChart = null;
+    }
 
-    const ctx = canvas.getContext('2d');
-    window.profitSourceChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['أرباح التجزئة', 'أرباح الجملة'],
-            datasets: [{
-                data: [retailProfit, wholesaleProfit],
-                backgroundColor: ['#10b981', '#3b82f6'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'bottom', labels: { color: '#9ca3af' } }
-            }
-        }
-    });
+    const positiveRetail = Math.max(retailProfit, 0);
+    const positiveWholesale = Math.max(wholesaleProfit, 0);
+    const positiveTotal = positiveRetail + positiveWholesale;
+    const retailPercent = positiveTotal > 0 ? (positiveRetail / positiveTotal) * 100 : 0;
+    const wholesalePercent = positiveTotal > 0 ? (positiveWholesale / positiveTotal) * 100 : 0;
+
+    const retailValueEl = document.getElementById('profit-source-retail-value');
+    const wholesaleValueEl = document.getElementById('profit-source-wholesale-value');
+    const retailPercentEl = document.getElementById('profit-source-retail-percent');
+    const wholesalePercentEl = document.getElementById('profit-source-wholesale-percent');
+    const retailBarEl = document.getElementById('profit-source-retail-bar');
+    const wholesaleBarEl = document.getElementById('profit-source-wholesale-bar');
+    const emptyEl = document.getElementById('profit-source-empty');
+
+    if (retailValueEl) retailValueEl.textContent = `${Math.round(retailProfit).toLocaleString()} د.ج`;
+    if (wholesaleValueEl) wholesaleValueEl.textContent = `${Math.round(wholesaleProfit).toLocaleString()} د.ج`;
+    if (retailPercentEl) retailPercentEl.textContent = `${retailPercent.toFixed(0)}%`;
+    if (wholesalePercentEl) wholesalePercentEl.textContent = `${wholesalePercent.toFixed(0)}%`;
+    if (retailBarEl) retailBarEl.style.width = `${positiveTotal > 0 ? retailPercent : 50}%`;
+    if (wholesaleBarEl) wholesaleBarEl.style.width = `${positiveTotal > 0 ? wholesalePercent : 50}%`;
+    if (emptyEl) emptyEl.classList.toggle('hidden', positiveTotal > 0);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -8988,8 +9191,8 @@ function displayWholesaleLogsTable(orders) {
 
     // Sort by date (newest first)
     const sortedOrders = [...orders].sort((a, b) => {
-        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.saleDate || a.createdAt);
-        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.saleDate || b.createdAt);
+        const dateA = getOrderDate(a);
+        const dateB = getOrderDate(b);
         return dateB - dateA;
     });
 
@@ -8998,30 +9201,24 @@ function displayWholesaleLogsTable(orders) {
         const reseller = allResellers.find(r => r.id === order.resellerId);
         const resellerName = reseller?.name || order.customerName || '-';
 
-        // Calculate amounts
-        let soldPrice = order.sold_price || parseFloat(order.amount) || 0;
-        if (!order.sold_price && order.currency === 'USD') {
-            soldPrice = soldPrice * (order.exchangeRate || USD_TO_DZD_RATE);
-        }
-
-        // Get cost from product
-        const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
-        const costPrice = order.cost_price || product?.cost_dzd || 0;
+        // Calculate amounts using the same rules as the accounting tab.
+        const soldPrice = getOrderRevenueDzd(order);
+        const costPrice = getOrderCostDzd(order);
         const profit = soldPrice - costPrice;
 
         // Format date
-        const orderDate = order.createdAt?.toDate ? order.createdAt.toDate() : new Date(order.saleDate || order.createdAt);
+        const orderDate = getOrderDate(order);
         const dateStr = orderDate.toLocaleDateString('fr-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
 
         return `
-            <tr class="border-b border-gray-700/30 hover:bg-gray-800/30">
-                <td class="p-3 text-gray-400">${dateStr}</td>
-                <td class="p-3 text-white font-bold">${resellerName}</td>
-                <td class="p-3">${order.productName || '-'}</td>
-                <td class="p-3 text-red-400">${costPrice.toLocaleString()} د.ج</td>
-                <td class="p-3 text-blue-400">${soldPrice.toLocaleString()} د.ج</td>
-                <td class="p-3 font-bold ${profit >= 0 ? 'text-green-400' : 'text-red-400'}">${profit.toLocaleString()} د.ج</td>
-                <td class="p-3 text-center">
+            <tr class="wholesale-mobile-row border-b border-gray-700/30 hover:bg-gray-800/30">
+                <td class="p-3 text-gray-400" data-label="التاريخ">${dateStr}</td>
+                <td class="p-3 text-white font-bold" data-label="الموزع">${resellerName}</td>
+                <td class="p-3" data-label="المنتج">${order.productName || '-'}</td>
+                <td class="p-3 text-red-400" data-label="التكلفة">${costPrice.toLocaleString()} د.ج</td>
+                <td class="p-3 text-blue-400" data-label="سعر البيع">${soldPrice.toLocaleString()} د.ج</td>
+                <td class="p-3 font-bold ${profit >= 0 ? 'text-green-400' : 'text-red-400'}" data-label="الربح">${profit.toLocaleString()} د.ج</td>
+                <td class="p-3 text-center" data-label="إجراءات">
                     <button onclick="deleteWholesaleOrder('${order.id}', '${order.resellerId}', ${soldPrice}, '${resellerName.replace(/'/g, "\\'")}')" 
                         class="px-2 py-1 bg-red-600/20 text-red-400 rounded hover:bg-red-600 hover:text-white transition" 
                         title="حذف واسترجاع المبلغ">
@@ -9041,13 +9238,8 @@ function updateWholesaleStats(orders) {
     let totalCost = 0;
 
     orders.forEach(order => {
-        let soldPrice = parseFloat(order.amount) || 0;
-        if (order.currency === 'USD') {
-            soldPrice = soldPrice * (order.exchangeRate || USD_TO_DZD_RATE);
-        }
-
-        const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
-        const costPrice = order.cost_price || product?.cost_dzd || 0;
+        const soldPrice = getOrderRevenueDzd(order);
+        const costPrice = getOrderCostDzd(order);
 
         totalRevenue += soldPrice;
         totalCost += costPrice;
@@ -9219,22 +9411,17 @@ function displayPurchaseHistory(orders) {
 
     // Sort by date (newest first)
     const sorted = [...orders].sort((a, b) => {
-        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.saleDate || a.createdAt);
-        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.saleDate || b.createdAt);
+        const dateA = getOrderDate(a);
+        const dateB = getOrderDate(b);
         return dateB - dateA;
     });
 
     tbody.innerHTML = sorted.map(order => {
-        const orderDate = order.createdAt?.toDate ? order.createdAt.toDate() : new Date(order.saleDate || order.createdAt);
+        const orderDate = getOrderDate(order);
         const dateStr = orderDate.toLocaleDateString('fr-DZ', { year: 'numeric', month: 'short', day: 'numeric' });
 
-        let soldPrice = order.sold_price || parseFloat(order.amount) || 0;
-        if (!order.sold_price && order.currency === 'USD') {
-            soldPrice = soldPrice * (order.exchangeRate || USD_TO_DZD_RATE);
-        }
-
-        const product = allProducts.find(p => p.id === order.productId || p.name === order.productName);
-        const costPrice = order.cost_price || product?.cost_dzd || 0;
+        const soldPrice = getOrderRevenueDzd(order);
+        const costPrice = getOrderCostDzd(order);
         const profit = soldPrice - costPrice;
 
         // Get reseller info for delete function
@@ -9276,22 +9463,22 @@ displayResellersTable = function () {
     }
 
     tbody.innerHTML = allResellers.map(reseller => `
-        <tr class="border-b border-gray-700/50 hover:bg-gray-800/30">
-            <td class="p-4">
+        <tr class="reseller-mobile-row border-b border-gray-700/50 hover:bg-gray-800/30">
+            <td class="p-4" data-label="الموزع">
                 <button onclick="openResellerHistoryModal('${reseller.id}')" class="font-bold text-white hover:text-purple-400 transition">
                     ${reseller.name}
                 </button>
             </td>
-            <td class="p-4 text-gray-400">${reseller.email || '-'}</td>
-            <td class="p-4 text-gray-400">${reseller.phone || '-'}</td>
-            <td class="p-4">
+            <td class="p-4 text-gray-400" data-label="البريد">${reseller.email || '-'}</td>
+            <td class="p-4 text-gray-400" data-label="الهاتف">${reseller.phone || '-'}</td>
+            <td class="p-4" data-label="الرصيد">
                 <span class="font-bold ${(reseller.walletBalance || 0) > 0 ? 'text-green-400' : 'text-red-400'}">
                     ${(reseller.walletBalance || 0).toLocaleString()} د.ج
                 </span>
             </td>
-            <td class="p-4 text-center">${reseller.totalSales || 0}</td>
-            <td class="p-4 text-center">
-                <div class="flex gap-2 justify-center flex-wrap">
+            <td class="p-4 text-center" data-label="المبيعات">${reseller.totalSales || 0}</td>
+            <td class="p-4 text-center" data-label="إجراءات">
+                <div class="reseller-mobile-actions flex gap-2 justify-center flex-wrap">
                     <button onclick="openResellerHistoryModal('${reseller.id}')" class="px-3 py-1 bg-purple-600/20 text-purple-400 rounded hover:bg-purple-600 hover:text-white transition" title="سجل العمليات">📋</button>
                     <button onclick="openAddFundsModal('${reseller.id}')" class="px-3 py-1 bg-green-600/20 text-green-400 rounded hover:bg-green-600 hover:text-white transition">${t('btn_fund')}</button>
                     <button onclick="openResellerModal('${reseller.id}')" class="px-3 py-1 bg-blue-600/20 text-blue-400 rounded hover:bg-blue-600 hover:text-white transition">${t('btn_edit')}</button>

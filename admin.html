@@ -938,8 +938,8 @@
             </div>
 
             <!-- ═══════════ Accounting Tab ═══════════ -->
-            <div id="tab-accounting" class="tab-content hidden">
-                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+            <div id="tab-accounting" class="tab-content hidden accounting-dashboard">
+                <div class="accounting-toolbar flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
                     <h2 class="text-2xl font-bold">💰 المحاسبة والأرباح</h2>
                     <div class="flex flex-wrap items-center gap-3">
                         <!-- Date Filter -->
@@ -996,7 +996,7 @@
                 </div>
 
                 <!-- بطاقة رأس المال الرئيسية -->
-                <div class="rounded-xl p-6 mb-6"
+                <div class="accounting-hero-card rounded-xl p-6 mb-6"
                     style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(255, 213, 111, 0.1)); border: 2px solid var(--accent);">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div class="flex items-center gap-4">
@@ -1028,7 +1028,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex flex-wrap items-center gap-3">
+                        <div class="accounting-hero-actions flex flex-wrap items-center gap-3">
                             <button onclick="fixOldOrdersCost()"
                                 class="px-4 py-2 rounded-lg text-sm font-bold bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-600/30 transition-all">
                                 🪄 إصلاح التكاليف
@@ -1046,7 +1046,7 @@
                 </div>
 
                 <!-- Accounting Stats Cards - Row 1: المبيعات -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                <div class="accounting-kpi-grid grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                     <div class="stat-card rounded-xl p-3 text-center">
                         <div class="text-2xl mb-1">💵</div>
                         <div class="text-lg font-bold text-green-400" id="stat-total-revenue-acc">0 د.ج</div>
@@ -1070,7 +1070,7 @@
                 </div>
 
                 <!-- Accounting Stats Cards - Row 1.5: أمانات الموزعين -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                <div class="accounting-liability-grid grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                     <div class="stat-card rounded-xl p-4"
                         style="background: linear-gradient(135deg, rgba(251, 146, 60, 0.15), rgba(251, 146, 60, 0.05)); border: 1px solid rgba(251, 146, 60, 0.3);">
                         <div class="flex items-center gap-4">
@@ -1086,7 +1086,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="stat-card rounded-xl p-4"
+                    <div class="stat-card accounting-debt-card rounded-xl p-4"
+                        style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05)); border: 1px solid rgba(239, 68, 68, 0.3);">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 bg-red-600/30 rounded-full flex items-center justify-center text-2xl">
+                                ⚠️</div>
+                            <div>
+                                <div class="text-sm text-red-300">ديون على الموزعين</div>
+                                <div class="text-2xl font-bold text-red-400" id="stat-reseller-debts-card">0 د.ج</div>
+                                <div class="text-xs text-gray-400 mt-1">أرصدة سالبة يجب تحصيلها من الموزعين</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card accounting-own-capital-card rounded-xl p-4"
                         style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05)); border: 1px solid rgba(34, 197, 94, 0.3);">
                         <div class="flex items-center gap-4">
                             <div
@@ -1095,9 +1108,9 @@
                             <div class="mt-4 pt-4 border-t border-gray-700/50">
                                 <div class="space-y-2">
                                     <p class="text-xs text-orange-400 font-bold">🔶 أمانات الموزعين: <span
-                                            id="stat-reseller-liabilities">0</span> د.ج</p>
+                                            id="stat-reseller-liabilities-inline">0</span> د.ج</p>
                                     <p class="text-xs text-green-400 font-bold">🟢 رأس مالي الصافي: <span
-                                            id="stat-net-own-capital">0</span> د.ج</p>
+                                            id="stat-net-own-capital-inline">0</span> د.ج</p>
                                     <p class="text-[10px] text-gray-500 mt-1">الخزينة - أمانات الموزعين</p>
                                 </div>
                             </div>
@@ -1106,7 +1119,7 @@
                 </div>
 
                 <!-- Accounting Stats Cards - Row 2: الأرباح -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                <div class="accounting-kpi-grid profit-row grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                     <div class="stat-card rounded-xl p-3 text-center"
                         style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));">
                         <div class="text-2xl mb-1">💼</div>
@@ -1132,8 +1145,36 @@
                     </div>
                 </div>
 
+                <div class="accounting-insights-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 mb-6">
+                    <div class="accounting-insight-card">
+                        <div class="insight-label">أعلى منتج ربحاً</div>
+                        <div class="insight-value text-green-400" id="stat-top-profit-product">-</div>
+                        <div class="insight-note" id="stat-top-profit-value">0 د.ج</div>
+                    </div>
+                    <div class="accounting-insight-card">
+                        <div class="insight-label">أضعف هامش</div>
+                        <div class="insight-value text-amber-400" id="stat-weakest-margin-product">-</div>
+                        <div class="insight-note" id="stat-weakest-margin-value">0%</div>
+                    </div>
+                    <div class="accounting-insight-card warning">
+                        <div class="insight-label">تكاليف ناقصة</div>
+                        <div class="insight-value text-red-400" id="stat-missing-cost-orders">0</div>
+                        <div class="insight-note">طلب بدون تكلفة مسجلة</div>
+                    </div>
+                    <div class="accounting-insight-card">
+                        <div class="insight-label">متوسط ربح الطلب</div>
+                        <div class="insight-value text-cyan-400" id="stat-average-order-profit">0 د.ج</div>
+                        <div class="insight-note">من ربح المنتجات</div>
+                    </div>
+                    <div class="accounting-insight-card">
+                        <div class="insight-label">ربح الجملة</div>
+                        <div class="insight-value text-blue-400" id="stat-wholesale-profit-share">0%</div>
+                        <div class="insight-note" id="stat-retail-profit-share">التجزئة 0%</div>
+                    </div>
+                </div>
+
                 <!-- Charts Section -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="accounting-charts-grid grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <div class="rounded-xl p-6"
                         style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-lg font-bold mb-4">📈 الأرباح عبر الزمن</h3>
@@ -1141,19 +1182,46 @@
                     </div>
                     <div class="rounded-xl p-6"
                         style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
-                        <h3 class="text-lg font-bold mb-4">🥧 توزيع الأرباح حسب المنتج</h3>
+                        <h3 class="text-lg font-bold mb-4">🏆 أفضل المنتجات ربحا</h3>
                         <canvas id="profit-by-product-chart"></canvas>
                     </div>
                     <div class="rounded-xl p-6"
                         style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                         <h3 class="text-lg font-bold mb-4">📊 مصادر الأرباح (تجزئة vs جملة)</h3>
-                        <canvas id="profit-source-chart"></canvas>
+                        <div id="profit-source-summary" class="profit-source-summary">
+                            <div class="profit-source-row">
+                                <div>
+                                    <span class="profit-source-label retail">التجزئة</span>
+                                    <strong id="profit-source-retail-value">0 د.ج</strong>
+                                </div>
+                                <span id="profit-source-retail-percent">0%</span>
+                            </div>
+                            <div class="profit-source-track" aria-hidden="true">
+                                <div id="profit-source-retail-bar" class="profit-source-segment retail" style="width: 50%;"></div>
+                                <div id="profit-source-wholesale-bar" class="profit-source-segment wholesale" style="width: 50%;"></div>
+                            </div>
+                            <div class="profit-source-row">
+                                <div>
+                                    <span class="profit-source-label wholesale">الجملة</span>
+                                    <strong id="profit-source-wholesale-value">0 د.ج</strong>
+                                </div>
+                                <span id="profit-source-wholesale-percent">0%</span>
+                            </div>
+                            <p id="profit-source-empty" class="profit-source-empty hidden">لا توجد أرباح موجبة في هذه الفترة.</p>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Accounting Table -->
-                <div class="rounded-xl overflow-hidden"
+                <div class="accounting-table-panel rounded-xl overflow-hidden"
                     style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <div class="accounting-table-header">
+                        <div>
+                            <h3>جدول ربحية المنتجات</h3>
+                            <p>مراقبة المبيعات، التكاليف، الهامش، والتنبيهات.</p>
+                        </div>
+                        <span id="accounting-table-health" class="accounting-health-pill">جاري التحليل</span>
+                    </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm" id="accounting-table">
                             <thead style="background: rgba(255, 255, 255, 0.05);">
@@ -1166,11 +1234,12 @@
                                     <th class="text-right px-2 py-3">إيرادات البيع</th>
                                     <th class="text-right px-2 py-3 text-green-400">💰 الربح</th>
                                     <th class="text-center px-2 py-3">هامش</th>
+                                    <th class="text-center px-2 py-3">الحالة</th>
                                 </tr>
                             </thead>
                             <tbody id="accounting-table-body">
                                 <tr>
-                                    <td colspan="8" class="text-center py-8 text-gray-400">جاري التحميل...</td>
+                                    <td colspan="9" class="text-center py-8 text-gray-400">جاري التحميل...</td>
                                 </tr>
                             </tbody>
                             <tfoot id="accounting-table-footer"
@@ -1184,6 +1253,7 @@
                                     <td class="px-2 py-3 text-right" id="footer-total-revenue">0</td>
                                     <td class="px-2 py-3 text-right" id="footer-total-profit">0</td>
                                     <td class="px-2 py-3 text-center" id="footer-avg-margin">0%</td>
+                                    <td class="px-2 py-3 text-center" id="footer-quality-summary">-</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -3327,6 +3397,10 @@
                 <button onclick="closeCapitalModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
             </div>
             <form onsubmit="saveStartingCapital(event)">
+                <div class="mb-4 rounded-lg border border-purple-500/30 bg-purple-500/10 p-3">
+                    <div class="text-gray-400 text-xs mb-1">رأس المال المسجل حاليا</div>
+                    <div class="text-lg font-bold text-purple-300" id="capital-current-value">0 د.ج</div>
+                </div>
                 <div class="mb-4">
                     <label class="block text-gray-300 text-sm mb-2">رأس المال الأساسي (الخزينة عند
                         البداية)</label>
@@ -3337,10 +3411,20 @@
                         والخسائر
                         بناءً على هذا المبلغ.</p>
                 </div>
+                <div class="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+                    <p class="text-amber-300 text-sm font-bold mb-2">تنبيه مهم</p>
+                    <p class="text-gray-300 text-xs mb-3">تغيير رأس المال سيغير أساس حساب الخزينة ورأس المال الصافي. لا تستعمله إلا إذا كنت تريد تصحيح قيمة البداية.</p>
+                    <p class="text-green-300 text-xs mb-3">لن يتم حذف أو تعديل أمانات وأرصدة الموزعين.</p>
+                    <label class="flex items-center gap-3 cursor-pointer text-sm text-gray-200">
+                        <input type="checkbox" id="confirm-capital-change" class="w-5 h-5 accent-purple-500"
+                            onchange="document.getElementById('capital-save-btn').disabled = !this.checked">
+                        <span>أؤكد أنني أريد تغيير رأس المال</span>
+                    </label>
+                </div>
                 <div class="flex gap-3">
-                    <button type="submit"
-                        class="flex-1 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors">
-                        💾 حفظ
+                    <button type="submit" id="capital-save-btn" disabled
+                        class="flex-1 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        تأكيد تغيير رأس المال
                     </button>
                     <button type="button" onclick="closeCapitalModal()"
                         class="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors">

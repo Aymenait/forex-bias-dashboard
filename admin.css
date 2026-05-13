@@ -1348,7 +1348,10 @@ button:focus {
 /* Charts Container */
 #profit-over-time-chart,
 #profit-by-product-chart {
-    max-height: 300px;
+    display: block !important;
+    width: 100% !important;
+    height: 220px !important;
+    max-height: 220px !important;
 }
 
 /* Export Button */
@@ -1452,6 +1455,413 @@ button[onclick="exportAccountingReport()"]:active::after {
 #stat-total-cost-acc,
 #stat-profit-margin {
     animation: countUp 0.5s ease forwards;
+}
+
+/* Professional accounting dashboard */
+.accounting-dashboard {
+    --dash-border: rgba(148, 163, 184, 0.16);
+    --dash-panel: rgba(15, 23, 42, 0.72);
+    --dash-panel-strong: rgba(17, 24, 39, 0.92);
+}
+
+.accounting-toolbar {
+    padding: 16px;
+    border: 1px solid var(--dash-border);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.72));
+}
+
+.accounting-toolbar h2 {
+    letter-spacing: 0;
+}
+
+.accounting-hero-card,
+.accounting-panel,
+.accounting-table-panel,
+.accounting-insight-card {
+    border-radius: 12px !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.accounting-hero-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.accounting-hero-card::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 213, 111, 0.55), transparent);
+}
+
+.accounting-hero-actions button {
+    min-height: 40px;
+}
+
+.accounting-kpi-grid .stat-card,
+.accounting-liability-grid .stat-card {
+    min-height: 88px;
+    padding: 12px !important;
+    border: 1px solid var(--dash-border);
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.82), rgba(30, 41, 59, 0.58));
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+}
+
+.accounting-kpi-grid .stat-card .text-2xl,
+.accounting-liability-grid .stat-card .text-2xl {
+    font-size: 1.2rem !important;
+    line-height: 1.2;
+}
+
+.accounting-kpi-grid .stat-card .text-lg,
+.accounting-liability-grid .stat-card .text-lg {
+    font-size: 0.98rem !important;
+    line-height: 1.25;
+}
+
+.accounting-liability-grid .stat-card .w-12 {
+    width: 2.4rem !important;
+    height: 2.4rem !important;
+    font-size: 1.2rem !important;
+}
+
+.accounting-kpi-grid .stat-card:hover,
+.accounting-liability-grid .stat-card:hover,
+.accounting-insight-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 213, 111, 0.35);
+}
+
+.accounting-insights-grid {
+    align-items: stretch;
+}
+
+.accounting-dashboard .gap-3 {
+    gap: 0.65rem !important;
+}
+
+.accounting-dashboard .mb-4 {
+    margin-bottom: 0.75rem !important;
+}
+
+.accounting-dashboard .mb-6 {
+    margin-bottom: 1rem !important;
+}
+
+.accounting-insight-card {
+    min-height: 86px;
+    padding: 12px 14px;
+    border: 1px solid var(--dash-border);
+    background: var(--dash-panel);
+    transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.accounting-insight-card.warning {
+    background: linear-gradient(145deg, rgba(127, 29, 29, 0.24), rgba(15, 23, 42, 0.74));
+    border-color: rgba(248, 113, 113, 0.22);
+}
+
+.insight-label {
+    color: #94a3b8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.insight-value {
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.insight-note {
+    margin-top: 4px;
+    color: #64748b;
+    font-size: 0.68rem;
+}
+
+.accounting-charts-grid .accounting-panel,
+.accounting-charts-grid>div {
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    overflow: hidden;
+    border-radius: 14px !important;
+}
+
+.accounting-charts-grid h3 {
+    margin-bottom: 10px !important;
+    font-size: 0.95rem !important;
+}
+
+.profit-source-summary {
+    display: flex;
+    min-height: 220px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+}
+
+.profit-source-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.profit-source-row>div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.profit-source-row strong {
+    color: #f8fafc;
+    font-size: 0.95rem;
+}
+
+.profit-source-label {
+    display: inline-flex;
+    min-width: 70px;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 4px 9px;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.profit-source-label.retail {
+    background: rgba(16, 185, 129, 0.14);
+    color: #6ee7b7;
+}
+
+.profit-source-label.wholesale {
+    background: rgba(59, 130, 246, 0.14);
+    color: #93c5fd;
+}
+
+.profit-source-track {
+    display: flex;
+    width: 100%;
+    height: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.72);
+}
+
+.profit-source-segment {
+    min-width: 0;
+    transition: width 0.25s ease;
+}
+
+.profit-source-segment.retail {
+    background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.profit-source-segment.wholesale {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.profit-source-empty {
+    margin: 0;
+    color: #fca5a5;
+    font-size: 0.78rem;
+    text-align: center;
+}
+
+.accounting-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--dash-border);
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.74));
+}
+
+.accounting-table-header h3 {
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: #f8fafc;
+}
+
+.accounting-table-header p {
+    margin-top: 4px;
+    font-size: 0.72rem;
+    color: #94a3b8;
+}
+
+.accounting-health-pill,
+.accounting-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(148, 163, 184, 0.1);
+    color: #cbd5e1;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.accounting-health-pill {
+    padding: 5px 10px;
+}
+
+.accounting-health-pill.good,
+.accounting-status-badge.good {
+    border-color: rgba(34, 197, 94, 0.28);
+    background: rgba(34, 197, 94, 0.12);
+    color: #86efac;
+}
+
+.accounting-health-pill.danger,
+.accounting-status-badge.danger {
+    border-color: rgba(248, 113, 113, 0.3);
+    background: rgba(239, 68, 68, 0.14);
+    color: #fca5a5;
+}
+
+.accounting-status-badge.warning {
+    border-color: rgba(251, 191, 36, 0.3);
+    background: rgba(245, 158, 11, 0.14);
+    color: #fcd34d;
+}
+
+.accounting-status-badge {
+    padding: 4px 8px;
+}
+
+.accounting-status-stack {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+#accounting-table {
+    min-width: 980px;
+}
+
+#accounting-table th:nth-child(9),
+#accounting-table td:nth-child(9) {
+    display: table-cell !important;
+}
+
+#accounting-table thead th {
+    background: rgba(2, 6, 23, 0.55);
+    color: #cbd5e1;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+}
+
+#accounting-table td {
+    padding-top: 0.58rem !important;
+    padding-bottom: 0.58rem !important;
+}
+
+#accounting-table tbody tr.accounting-data-row {
+    background: rgba(15, 23, 42, 0.34);
+}
+
+#accounting-table tbody tr.accounting-data-row.needs-attention {
+    background: linear-gradient(90deg, rgba(127, 29, 29, 0.18), rgba(15, 23, 42, 0.28));
+}
+
+#accounting-table tbody tr:hover {
+    transform: none;
+}
+
+#accounting-table tfoot td {
+    background: rgba(255, 213, 111, 0.11);
+}
+
+@media (max-width: 1024px) {
+    .accounting-toolbar {
+        align-items: stretch !important;
+    }
+
+    .accounting-toolbar>div {
+        width: 100%;
+    }
+
+    .accounting-kpi-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    .accounting-liability-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    #accounting-table th,
+    #accounting-table td {
+        display: table-cell !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .accounting-dashboard .accounting-toolbar {
+        padding: 14px;
+    }
+
+    .accounting-hero-card {
+        padding: 18px !important;
+    }
+
+    .accounting-hero-card>div {
+        align-items: flex-start !important;
+    }
+
+    .accounting-hero-actions {
+        width: 100%;
+    }
+
+    .accounting-hero-actions button {
+        flex: 1 1 100%;
+    }
+
+    .accounting-kpi-grid,
+    .accounting-insights-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .accounting-table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #accounting-table {
+        min-width: 760px;
+    }
+
+    #accounting-table th,
+    #accounting-table td {
+        display: table-cell !important;
+    }
+
+    #accounting-table th:nth-child(2),
+    #accounting-table td:nth-child(2),
+    #accounting-table th:nth-child(4),
+    #accounting-table td:nth-child(4),
+    #accounting-table th:nth-child(5),
+    #accounting-table td:nth-child(5) {
+        display: none !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .accounting-kpi-grid,
+    .accounting-insights-grid {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 /* Tooltip */
@@ -2642,5 +3052,236 @@ button[onclick="exportAccountingReport()"]:active::after {
     #products-table .admin-offers-chip,
     #products-table .product-row td:nth-child(10) > div {
         width: 100%;
+    }
+}
+
+/* Mobile card layouts for accounting and resellers */
+@media (max-width: 768px) {
+    #tab-accounting .accounting-toolbar {
+        padding: 10px !important;
+    }
+
+    #tab-accounting .accounting-toolbar h2,
+    #tab-resellers h2 {
+        font-size: 1.15rem !important;
+        line-height: 1.25;
+        margin-bottom: 4px !important;
+    }
+
+    #tab-accounting .accounting-toolbar > div,
+    #tab-accounting .accounting-toolbar .flex-wrap {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        gap: 8px !important;
+    }
+
+    #tab-accounting .accounting-toolbar select,
+    #tab-accounting .accounting-toolbar button,
+    #tab-accounting .accounting-toolbar input {
+        min-height: 38px !important;
+        font-size: 0.82rem !important;
+    }
+
+    #tab-accounting #custom-date-range {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+    }
+
+    #tab-accounting #custom-date-range.hidden {
+        display: none !important;
+    }
+
+    .accounting-hero-card {
+        padding: 12px !important;
+    }
+
+    .accounting-hero-card .w-16 {
+        width: 3rem !important;
+        height: 3rem !important;
+        font-size: 1.45rem !important;
+    }
+
+    #stat-current-balance {
+        font-size: 1.45rem !important;
+        line-height: 1.25;
+    }
+
+    .accounting-kpi-grid,
+    .accounting-liability-grid,
+    .accounting-insights-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    .accounting-liability-grid .stat-card,
+    .accounting-kpi-grid .stat-card,
+    .accounting-insight-card {
+        min-height: 0;
+        padding: 10px !important;
+    }
+
+    .accounting-charts-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    .accounting-charts-grid > div {
+        height: 255px !important;
+        min-height: 255px !important;
+        max-height: 255px !important;
+        padding: 12px !important;
+    }
+
+    #profit-over-time-chart,
+    #profit-by-product-chart {
+        height: 188px !important;
+        max-height: 188px !important;
+    }
+
+    .profit-source-summary {
+        min-height: 180px;
+        gap: 12px;
+    }
+
+    #tab-accounting .accounting-table-panel .overflow-x-auto,
+    #tab-resellers .overflow-x-auto {
+        overflow-x: visible !important;
+    }
+
+    #tab-accounting .accounting-table-panel .overflow-x-auto::after,
+    #tab-resellers .overflow-x-auto::after {
+        content: none !important;
+        display: none !important;
+    }
+
+    #accounting-table,
+    #accounting-table thead,
+    #accounting-table tbody,
+    #accounting-table tfoot,
+    #accounting-table tr,
+    #accounting-table th,
+    #accounting-table td,
+    #tab-resellers table,
+    #tab-resellers thead,
+    #tab-resellers tbody,
+    #tab-resellers tr,
+    #tab-resellers th,
+    #tab-resellers td {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        white-space: normal !important;
+    }
+
+    #accounting-table thead,
+    #accounting-table tfoot,
+    #tab-resellers thead {
+        display: none !important;
+    }
+
+    #accounting-table tbody,
+    #resellers-table-body,
+    #wholesale-log-table-body {
+        display: grid !important;
+        gap: 10px;
+        font-size: 0.88rem !important;
+    }
+
+    #accounting-table tr.accounting-data-row,
+    #resellers-table-body tr,
+    #wholesale-log-table-body tr {
+        display: grid !important;
+        gap: 7px;
+        padding: 12px !important;
+        border: 1px solid rgba(148, 163, 184, 0.16) !important;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.82) !important;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+    }
+
+    #accounting-table tr.accounting-data-row.needs-attention {
+        border-color: rgba(248, 113, 113, 0.3) !important;
+        background: linear-gradient(145deg, rgba(127, 29, 29, 0.2), rgba(15, 23, 42, 0.86)) !important;
+    }
+
+    #accounting-table td,
+    #resellers-table-body td,
+    #wholesale-log-table-body td {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        position: static !important;
+        text-align: left !important;
+    }
+
+    #accounting-table td::before,
+    #resellers-table-body td::before,
+    #wholesale-log-table-body td::before {
+        content: attr(data-label);
+        flex: 0 0 auto;
+        color: #94a3b8;
+        font-size: 0.72rem;
+        font-weight: 800;
+    }
+
+    #accounting-table td:first-child,
+    #resellers-table-body td:first-child,
+    #wholesale-log-table-body td:nth-child(2),
+    #wholesale-log-table-body td:nth-child(3) {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #accounting-table td:first-child::before,
+    #resellers-table-body td:first-child::before {
+        display: none;
+    }
+
+    #accounting-table .accounting-status-stack,
+    #resellers-table-body .reseller-mobile-actions {
+        justify-content: flex-end;
+    }
+
+    #resellers-table-body .reseller-mobile-actions,
+    #wholesale-log-table-body td:last-child {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        gap: 6px !important;
+    }
+
+    #resellers-table-body .reseller-mobile-actions button,
+    #wholesale-log-table-body td:last-child button {
+        min-height: 36px;
+        padding: 6px 8px !important;
+        width: 100%;
+    }
+
+    #reseller-subtab-content-wholesale-log .grid.grid-cols-1.md\:grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+}
+
+@media (max-width: 430px) {
+    #tab-accounting .accounting-toolbar > div,
+    #tab-accounting .accounting-toolbar .flex-wrap,
+    .accounting-kpi-grid,
+    .accounting-liability-grid,
+    .accounting-insights-grid,
+    #reseller-subtab-content-wholesale-log .grid.grid-cols-1.md\:grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+
+    #resellers-table-body .reseller-mobile-actions {
+        grid-template-columns: 1fr !important;
     }
 }
