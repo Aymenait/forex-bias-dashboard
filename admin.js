@@ -9798,6 +9798,77 @@ function renderLeadsTable(leads) {
 /**
  * تغيير حالة الزبون
  */
+function leadPriceToUsd(price, currency) {
+    const value = parseFloat(price) || 0;
+    if ((currency || 'DZD').toUpperCase() === 'USD') return parseFloat(value.toFixed(2));
+    return parseFloat((value / 250).toFixed(2));
+}
+
+function leadProductPixelId(productName) {
+    return String(productName || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+async function buildLeadPurchaseUserData(lead) {
+    if (!window.metaPixel) return {};
+    const contact = lead.contact || '';
+    const isEmail = contact.includes('@');
+    const nameParts = String(lead.name || '').trim().split(/\s+/).filter(Boolean);
+    const userData = await window.metaPixel.buildUserData({
+        email: isEmail ? contact : '',
+        phone: isEmail ? '' : contact,
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' '),
+        externalId: lead.fbclid || ''
+    });
+
+    if (lead.fbclid && window.metaPixel.fbcFromFbclid) {
+        userData.fbc = window.metaPixel.fbcFromFbclid(lead.fbclid);
+    }
+
+    return userData;
+}
+
+async function sendPurchasePixelForLead(lead) {
+    if (!lead || lead.purchasePixelSentAt || lead.purchasePixelEventId) return null;
+    if (!window.metaPixel || typeof window.metaPixel.trackServerEvent !== 'function') {
+        console.warn('[admin] Meta Pixel bridge is not available; Purchase event skipped.');
+        return null;
+    }
+
+    const { doc, updateDoc, serverTimestamp } = window.firebaseModules;
+    const productName = lead.product || '3Ahub Product';
+    const currency = lead.currency || 'DZD';
+    const usdValue = leadPriceToUsd(lead.price, currency);
+    const eventId = `purchase_lead_${lead.id}`;
+    const userData = await buildLeadPurchaseUserData(lead);
+
+    await window.metaPixel.trackServerEvent('Purchase', {
+        content_name: productName,
+        content_ids: [leadProductPixelId(productName)],
+        content_type: 'product',
+        value: usdValue,
+        currency: 'USD',
+        order_id: lead.id,
+        original_value: parseFloat(lead.price) || 0,
+        original_currency: currency,
+        source: 'admin_confirmed_purchase'
+    }, userData, {
+        eventId,
+        eventSourceUrl: lead.source || window.location.href,
+        actionSource: 'website',
+        requireCapiSuccess: true
+    });
+
+    const marker = {
+        purchasePixelSentAt: serverTimestamp(),
+        purchasePixelEventId: eventId
+    };
+    await updateDoc(doc(window.db, "leads", lead.id), marker);
+    lead.purchasePixelSentAt = new Date().toISOString();
+    lead.purchasePixelEventId = eventId;
+    return eventId;
+}
+
 async function cycleLeadStatus(id, currentStatus) {
     const statuses = ['new', 'contacted', 'purchased', 'abandoned'];
     const currentIndex = statuses.indexOf(currentStatus);
@@ -9812,6 +9883,18 @@ async function cycleLeadStatus(id, currentStatus) {
         // تحديث البيانات محلياً
         const lead = allLeads.find(l => l.id === id);
         if (lead) lead.status = nextStatus;
+
+        if (lead && nextStatus === 'purchased') {
+            try {
+                const purchaseEventId = await sendPurchasePixelForLead(lead);
+                if (purchaseEventId) {
+                    showToast('🎯 تم إرسال Purchase إلى Meta Pixel');
+                }
+            } catch (pixelError) {
+                console.error('Error sending Purchase to Meta Pixel:', pixelError);
+                showToast('⚠️ تم تحديث الحالة، لكن فشل إرسال Purchase إلى Meta Pixel', 'warning');
+            }
+        }
 
         // إعادة حساب الإحصائيات
         recalculateLeadStats();
