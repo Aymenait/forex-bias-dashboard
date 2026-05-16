@@ -515,7 +515,7 @@
 
                         // Update price and warranty
                         const isUSD = window.currencyManager ? window.currencyManager.getCurrentCurrency() === 'USD' : false;
-                        const prices = {
+                        const prices = window.__googleAiPrices || {
                             '1month': { dzd: '1400 د.ج', usd: '6 USD', warranty: false },
                             '12months': { dzd: '2800 د.ج', usd: '11.2 USD', warranty: true }
                         };
@@ -841,6 +841,25 @@
             },
             "retina_detect": true
         });
+    </script>
+    <script type="module" src="landing-page-products.js"></script>
+    <script type="module">
+        const product = await window.LandingProductSync.loadProduct('google-ai');
+        if (product) {
+            const offers = Object.fromEntries(product.subOffers.map(offer => [offer.id, {
+                dzd: `${offer.dzd} د.ج`,
+                usd: `${offer.usd} USD`,
+                warranty: offer.id === '12months'
+            }]));
+            window.__googleAiPrices = {
+                '1month': offers['1month'] || { dzd: `${product.priceDZD} د.ج`, usd: `${product.priceUSD} USD`, warranty: false },
+                '12months': offers['12months'] || offers['1year'] || undefined
+            };
+            window.LandingProductSync.syncSimplePagePrice(product, {
+                mainPriceSelector: '#veo-main-price, #veo-bottom-price',
+                mainPriceText: (dzd) => `${dzd} د.ج`
+            });
+        }
     </script>
     <script src="order-form.js" defer></script>
 </body>

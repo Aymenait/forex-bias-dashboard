@@ -1612,6 +1612,17 @@
             switchLanguage(currentLang);
         });
     </script>
+    <script type="module" src="landing-page-products.js"></script>
+    <script type="module">
+        const product = await window.LandingProductSync.loadProduct('capcut');
+        window.LandingProductSync.syncSimplePagePrice(product, {
+            heroText: (dzd, usd) => `فقط ${dzd} د.ج / $${usd}`,
+            replaceAmounts: [
+                { from: '800', to: (dzd) => dzd },
+                { from: '3', to: (_, usd) => usd }
+            ]
+        });
+    </script>
     <script src="order-form.js" defer></script>
 </body>
 

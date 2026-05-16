@@ -1159,7 +1159,7 @@
 
             function updatePricesInUI() {
                 const isUSD = location.search.includes('USD');
-                const prices = {
+                const prices = window.__gammaPrices || {
                     '1month': { dzd: 1200, usd: 6, label: { ar: 'شهر (Pro Shared)', en: 'Month (Shared)', fr: 'Mois (Shared)' } },
                     'private_1month': { dzd: 2500, usd: 10, label: { ar: 'شهر (Plus Private)', en: 'Month (Plus)', fr: 'Mois (Plus)' } },
                     'private_pro_1month': { dzd: 3500, usd: 14, label: { ar: 'شهر (Pro Private)', en: 'Month (Pro Priv)', fr: 'Mois (Pro Priv)' } }
@@ -1200,7 +1200,7 @@
             // Order Logic
             function orderGamma() {
                 const isUSD = location.search.includes('USD');
-                const prices = {
+                const prices = window.__gammaPrices || {
                     '1month': { dzd: 1200, usd: 6 },
                     'private_1month': { dzd: 2500, usd: 10 },
                     'private_pro_1month': { dzd: 3500, usd: 14 }
@@ -1287,6 +1287,22 @@
                     card.style.transition = 'all 0.5s ease';
                     card.style.transform = `rotateY(0deg) rotateX(5deg)`; // Reset to default tilt
                 });
+            }
+        </script>
+        <script type="module" src="landing-page-products.js"></script>
+        <script type="module">
+            const product = await window.LandingProductSync.loadProduct('gamma');
+            if (product) {
+                window.__gammaPrices = Object.fromEntries(product.subOffers.map(offer => [offer.id, {
+                    dzd: offer.dzd,
+                    usd: offer.usd,
+                    label: {
+                        ar: offer.id,
+                        en: offer.id,
+                        fr: offer.id
+                    }
+                }]));
+                if (typeof updatePricesInUI === 'function') updatePricesInUI();
             }
         </script>
         <script src="order-form.js" defer></script>

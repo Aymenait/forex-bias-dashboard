@@ -210,6 +210,7 @@ function prepareProductForSave(product, serverTimestamp) {
         features: Array.isArray(product.features) ? product.features : [],
         paymentMethods: product.paymentMethods || { usdt: true, redotpay: true, baridimob: true },
         subOffers: Array.isArray(product.subOffers) ? product.subOffers : [],
+        landingPage: product.landingPage || '',
         displayOrder: typeof product.displayOrder === 'number' ? product.displayOrder : 0,
         isArchived: Boolean(product.isArchived),
         updatedAt: now,

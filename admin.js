@@ -3309,6 +3309,7 @@ function normalizeAdminProductForV2(productData, existingProduct = null) {
         subOffers: Array.isArray(productData.subOffers) && productData.subOffers.length > 0
             ? productData.subOffers
             : normalizeDurationsToSubOffers(productData.durations),
+        landingPage: productData.landingPage || existingProduct?.landingPage || '',
         isArchived: Boolean(productData.isArchived),
         active: productData.active !== false,
         updatedAt: new Date(),

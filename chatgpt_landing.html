@@ -28,6 +28,7 @@
     <!-- Meta Pixel -->
 
     <script src="/meta-pixel.js"></script>
+    <script type="module" src="landing-page-products.js"></script>
     <script>
         fbq('track', 'ViewContent', { content_name: 'ChatGPT Plus Landing', content_category: 'AI Tools' });
     </script>
@@ -685,7 +686,7 @@
         });
 
         // Data & State
-        const prices = {
+        let prices = {
             '1month': { dzd: 2500, usd: 10, label: '2500 DA' },
             '1month-upgrade': { dzd: 1800, usd: 7.2, label: '1800 DA' }
         };
@@ -826,10 +827,35 @@
             }
         }
 
+        async function syncChatgptPricesFromAdmin() {
+            try {
+                const product = await window.LandingProductSync?.loadProduct('chatgpt');
+                if (!product) return;
+
+                const offers = Object.fromEntries(product.subOffers.map(offer => [offer.id, offer]));
+                prices = {
+                    '1month': {
+                        dzd: offers['1month']?.dzd || product.priceDZD || prices['1month'].dzd,
+                        usd: offers['1month']?.usd || product.priceUSD || prices['1month'].usd,
+                        label: ''
+                    },
+                    '1month-upgrade': {
+                        dzd: offers['1month-upgrade']?.dzd || prices['1month-upgrade'].dzd,
+                        usd: offers['1month-upgrade']?.usd || prices['1month-upgrade'].usd,
+                        label: ''
+                    }
+                };
+                selectDuration(currentDuration);
+            } catch (error) {
+                console.warn('Could not sync ChatGPT landing prices from admin:', error);
+            }
+        }
+
         // Init
         document.addEventListener('DOMContentLoaded', () => {
             switchLanguage(currentLang);
             selectDuration('1month');
+            syncChatgptPricesFromAdmin();
         });
 
         // Close modal on outside click

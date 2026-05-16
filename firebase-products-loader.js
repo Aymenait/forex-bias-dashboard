@@ -38,6 +38,20 @@ const DEFAULT_PRODUCT_ORDER = [
     'crunchyroll',
     'alight-motion'
 ];
+const DEFAULT_LANDING_PAGES = {
+    trw: 'trw_landing.html',
+    chatgpt: 'chatgpt_landing.html',
+    claude: 'claude_landing.html',
+    adobe: 'adobe_landing.html',
+    gamma: 'gamma_landing.html',
+    netflix: 'netflix_landing.html',
+    tradingview: 'tradingview_landing.html',
+    perplexity: 'perplexity_landing.html',
+    canva: 'canva_landing.html',
+    capcut: 'capcut_landing.html',
+    'google-ai': 'google_ai_landing.html',
+    duolingo: 'duolingo_landing.html'
+};
 
 function getLocalizedText(value, lang = 'ar', fallback = '') {
     if (!value) return fallback;
@@ -160,6 +174,17 @@ function getDefaultProductOrder(product) {
     const name = getLocalizedText(product?.name, 'en', '').toLowerCase();
     const index = DEFAULT_PRODUCT_ORDER.findIndex(key => id.includes(key) || name.includes(key));
     return index === -1 ? 9999 : index;
+}
+
+function getProductLandingPage(product) {
+    if (product?.landingPage) return product.landingPage;
+
+    const id = String(product?.id || '').toLowerCase().trim();
+    if (DEFAULT_LANDING_PAGES[id]) return DEFAULT_LANDING_PAGES[id];
+
+    const name = getLocalizedText(product?.name, 'en', '').toLowerCase();
+    const matchedKey = Object.keys(DEFAULT_LANDING_PAGES).find(key => id.includes(key) || name.includes(key));
+    return matchedKey ? DEFAULT_LANDING_PAGES[matchedKey] : '';
 }
 
 function normalizeProducts(products) {
@@ -292,7 +317,7 @@ function createProductCardHTML(product, lang = 'ar') {
     const availability = product.availability || 'available';
     const features = normalizeFeatures(product.features);
     const paymentMethods = product.paymentMethods || { usdt: true, redotpay: true, baridimob: true };
-    const landingPage = product.landingPage || '';
+    const landingPage = getProductLandingPage(product);
     const category = normalizeProductCategory(product);
 
     // بناء أزرار العروض الفرعية (المدد المختلفة)
@@ -566,7 +591,7 @@ function renderMobileProducts(products, lang = 'ar') {
                     ${offerButtons}
                     ${features ? `<ul>${features}</ul>` : ''}
                     <div class="mobile-expand-actions">
-                        <a href="${product.landingPage || '#products'}">${getUiText('productDetails', lang)}</a>
+                        <a href="${getProductLandingPage(product) || '#products'}">${getUiText('productDetails', lang)}</a>
                         <button type="button" data-product="${name}" data-price="${activePriceDZD}" data-price-usd="${activePriceUSD}" ${disabled ? 'disabled' : ''}>${disabled ? statusLabel : getUiText('orderNow', lang)}</button>
                     </div>
                 </div>

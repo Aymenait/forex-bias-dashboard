@@ -129,6 +129,7 @@ function createProduct({
     features = [],
     paymentMethods = DEFAULT_PAYMENT_METHODS,
     subOffers = [],
+    landingPage = '',
     displayOrder = 0,
     isArchived = false,
     createdAt = null,
@@ -152,6 +153,7 @@ function createProduct({
             baridimob: paymentMethods?.baridimob !== false
         },
         subOffers: Array.isArray(subOffers) ? subOffers.map(s => createSubOffer(s)) : [],
+        landingPage: landingPage || '',
         displayOrder: typeof displayOrder === 'number' ? displayOrder : 0,
         isArchived: Boolean(isArchived),
         createdAt: createdAt || now,
@@ -203,6 +205,7 @@ function productFromFirebase(id, data) {
         features: data.features,
         paymentMethods: data.paymentMethods,
         subOffers: data.subOffers,
+        landingPage: data.landingPage,
         displayOrder: data.displayOrder,
         isArchived: data.isArchived,
         createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : data.createdAt,

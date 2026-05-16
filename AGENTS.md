@@ -1,13 +1,13 @@
 <claude-mem-context>
 # Memory Context
 
-# [forex-bias-dashboard-create-product-catalog-website] recent context, 2026-05-10 3:12pm GMT+1
+# [forex-bias-dashboard-create-product-catalog-website] recent context, 2026-05-16 11:55am GMT+1
 
 Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision 🚨security_alert 🔐security_note
 Format: ID TIME TYPE TITLE
 Fetch details: get_observations([IDs]) | Search: mem-search skill
 
-Stats: 50 obs (21 350t read) | 144 710t work | 85% savings
+Stats: 50 obs (20 420t read) | 212 628t work | 90% savings
 
 ### May 3, 2026
 S15 Live site not updating after CapCut price fixes pushed to GitHub — investigating directory structure and deployment (May 3, 5:38 PM)
@@ -22,34 +22,6 @@ S22 User selected Design B "Premium Glass" — glassmorphism purple-blue aesthet
 S23 3Ahub website redesign exploration — session ended without implementing changes; user decided to keep current design (May 9, 12:14 PM)
 ### May 10, 2026
 S24 Fix Order Now button (broken) + Redesign it with dynamic animations — both tasks completed and verified (May 10, 1:58 AM)
-190 11:58a 🔵 20 Product Cards Load But Zero Have .visible Class — Cards Invisible
-191 " 🔵 Cards Get .visible When Navigating to #products Anchor — But Order Button Text Is Missing
-192 11:59a 🔵 Firebase Products Render Correctly in French — i18n Working, "Commander" Not "Order Now"
-193 " 🔵 Language Switch to English Shows No "Order Now" Text — Re-render May Not Fire
-194 12:00p 🔵 English Language Switch Confirmed Working — "Order Now" and "Choose duration" Render Correctly
-195 " 🔵 English Mode Stable After 5s — 20 Cards Visible, "Order Now" Present, Zero Arabic Leak
-196 12:01p 🔵 firebase-products-loader.js and script.js Are Untracked by Git
-197 " 🔵 Full i18n Implementation Confirmed in Both Files — All getUiText/formatDzd Hooks Present
-198 12:02p 🔵 Dual Category Filter Systems Found — script.js Still Has data-category='all' Fallback Bug
-199 " 🔵 CapCut Mobile-Expand Card Missing data-category Attribute
-200 12:03p 🔵 index.html Inline Filter Script Is Duplicate of script.js — HMA VPN Mapped to Non-Existent 'tools' Category
-201 " 🔵 buildMobileOfferCards() Generates Mobile Cards from Desktop Cards — data-category 'all' Fallback Persists
-202 12:04p 🔵 script.js Category Filter Still Has Old Code — applyProductCategoryFilter and normalizeCardCategory Not Present
-203 " 🔵 CRITICAL: All Firebase Cards Have Raw Unormalized Categories — normalizeProductCategory() Not Working
-204 12:05p 🔴 normalizeProductCategory() Rewritten to Map Raw Firebase Values to Filter Categories
-205 " 🔴 createProductCardHTML and renderMobileProducts Now Use normalizeProductCategory()
-206 12:06p 🔴 script.js Category Filter Patched — Live NodeList, normalizeCardCategory(), Early-Exit Guard Fixed
-207 12:07p 🔵 Both Files Pass node --check After Category Filter Patches
-208 " 🔵 CDP Timeout Again on Category Pill Click — Browser Tab Unstable After Reload
-209 " 🔵 tab.reload() Breaks CDP Connection — Tab 1 Becomes Unresponsive After Reload
-210 12:08p 🔴 Category Normalization Verified — All 20 Firebase Cards Now Have Correct Filter Categories
-211 " 🔵 Category Pill Click Still Times Out via CDP — Runtime.evaluate 3s Limit Blocks Interactive Verification
-212 " 🟣 window.applyProductCategoryFilter() Added to script.js — Unified Global Filter Function
-213 12:09p 🟣 Firebase Render Now Applies Active Filter Pill After Products Load
-214 " 🟣 Category Filter Fully Verified — All 20 Cards Correctly Categorized and Filter Counts Match
-215 12:10p 🟣 i18n + Category Filter Feature Committed to Git — 373 Insertions in 2 Files
-216 12:11p 🔵 REGRESSION: Fresh Tab3 Shows 9 Cards with data-category='all' After Commit
-217 " 🔴 normalizeCardCategory() Fallback Changed — 'all' No Longer Preserved as Category
 218 12:12p 🔴 Tab4 Shows Only 11 of 20 Cards With Normalized Categories — 9 Still Have Raw Firebase Values
 219 " 🔴 Removed data-category='all' Fallback From DOMContentLoaded Static Card Assignment
 220 12:14p 🔵 9 Cards Still Have Raw Firebase Categories — Browser Likely Caching Old firebase-products-loader.js
@@ -72,6 +44,35 @@ S24 Fix Order Now button (broken) + Redesign it with dynamic animations — both
 237 12:22p 🔵 availability-ui.js Architecture — ES Module with updateAvailabilityTextsForLanguage() for Language Switch
 238 " 🔵 thank-you.html — Purchase Event, Telegram Admin Notification, and Upsell Grid
 239 12:23p 🔵 index.html Does Not Load meta-pixel.js — order-form.js CAPI Calls Silently Disabled on Homepage
+### May 16, 2026
+240 11:32a 🔵 Missing Landing Pages Identified on Forex Bias Dashboard Product Catalog
+243 " 🔵 Missing Landing Pages Investigation Started for Product Catalog Website
+252 " 🔵 claude_landing.html Recoverable from Git Commit bfcae2b (2026-05-01)
+261 " 🔵 Patch Applied Multiple Times — index.html Already Modified, Final apply_patch Failed on index.html
+241 11:33a 🔵 Landing Page Inventory: 12 Products Have Pages, Claude Is Missing
+242 " 🔵 Claude AI Product Card Confirmed Missing Landing Page Link and HTML File
+265 11:35a 🟣 claude_landing.html Restored from Git History — 1059 Lines, 130KB File Created
+244 11:36a 🔵 Product Catalog Landing Pages Inventory Mapped
+245 11:37a 🔵 Claude AI Product Card Has No Landing Page Link — Root Cause Confirmed
+246 " 🔵 Claude AI Absent from products-data.js Static Catalog
+247 " 🔵 Firebase Products Loader Architecture — landingPage Field Controls Discover Button
+248 11:38a 🔵 Admin Product Model Schema Missing landingPage Field
+249 " 🔵 landingPage Field Set for 8 Products in data-migration.js — Claude and Adobe Missing
+250 " 🔵 Admin Panel Has Zero landingPage Support — Field Completely Absent from Admin UI and Controller
+251 " 🔵 claude_landing.html Was Created and Then Deleted from Git History
+253 11:39a 🔴 Git Repo State: Most Files Untracked, claude_landing.html Confirmed Absent from Working Tree
+254 " 🔵 claude_landing.html Content Successfully Retrieved from Git History
+255 " 🔵 claude_landing.html in Git is 1059 Lines — Full-Size Page Comparable to Other Landing Pages
+256 11:40a 🔵 Site Hosted on Netlify at marketalgeria.store — Claude Never Added to Sitemap
+257 " 🔵 Admin saveProduct() Confirmed to Overwrite Firebase Without landingPage — Data Loss Risk
+258 11:41a 🔵 setDoc with merge:true Means landingPage Won't Be Wiped by Admin Saves
+259 " 🔵 normalizeAdminProductForV2 Uses Spread — landingPage Preserved If Present in Loaded productData
+260 " 🟣 Landing Page System Overhauled with DEFAULT_LANDING_PAGES Fallback Map
+262 11:42a 🔴 index.html Claude Card Discover Button Patch Did Not Apply — Button Still Missing
+263 11:43a 🔴 Claude Product Card Discover Button Successfully Added to index.html
+264 11:44a 🔵 index.html Discover Button Confirmed Inserted — Final apply_patch Fails Because It's Already There
+267 " 🔴 claude_landing.html Re-Restored Without BOM Using Set-Content — index.html Discover Button Inserted via PowerShell String Replace
+266 11:45a 🟣 All Changes Verified — Claude Landing Page Fix Fully Deployed to Working Tree
 
-Access 145k tokens of past work via get_observations([IDs]) or mem-search skill.
+Access 213k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>

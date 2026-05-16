@@ -734,7 +734,7 @@
         }
 
         // Product Configuration
-        const PRODUCT_CONFIG = {
+        let PRODUCT_CONFIG = {
             '1month': { dzd: 1500, usd: 6 },
             '2months': { dzd: 2500, usd: 10 },
             '3months': { dzd: 3900, usd: 15.6 },
@@ -974,6 +974,22 @@
             // Update Toggle Button Text if we add one (we will add one in next step)
         }
 
+        async function syncAdobePricesFromAdmin() {
+            try {
+                const product = await window.LandingProductSync?.loadProduct('adobe');
+                if (!product) return;
+                const offers = Object.fromEntries(product.subOffers.map(offer => [offer.id, offer]));
+                Object.keys(PRODUCT_CONFIG).forEach(key => {
+                    if (offers[key]) {
+                        PRODUCT_CONFIG[key] = { dzd: offers[key].dzd, usd: offers[key].usd };
+                    }
+                });
+                updateUI();
+            } catch (error) {
+                console.warn('Could not sync Adobe landing prices from admin:', error);
+            }
+        }
+
         function setLang(lang) {
             localStorage.setItem('preferredLanguage', lang);
             location.reload();
@@ -1010,6 +1026,10 @@
             const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
+    </script>
+    <script type="module" src="landing-page-products.js"></script>
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', syncAdobePricesFromAdmin);
     </script>
     <script src="order-form.js" defer></script>
 </body>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -17,6 +17,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script type="module" src="landing-page-products.js"></script>
 
     <!-- Meta Pixel Code -->
     <script>
@@ -1057,7 +1058,35 @@ function selectOffer(offer) {
             document.getElementById('main-price-display').textContent = `${data.price} DA`;
             document.getElementById('offer-subtitle').textContent = data.subtitle[currentLang] || data.subtitle.ar;
             showSteps(offer);
-        }
+}
+
+async function syncClaudePricesFromAdmin() {
+    try {
+        const product = await window.LandingProductSync?.loadProduct('claude');
+        if (!product) return;
+
+        const offers = Object.fromEntries(product.subOffers.map(offer => [offer.id, offer]));
+        const proPrice = offers.pro?.dzd || product.priceDZD || offerData['claude-pro'].price;
+        const apiPrice = offers.api?.dzd || offerData['claude-code-api'].price;
+
+        offerData['claude-pro'].price = proPrice;
+        offerData['claude-code-api'].price = apiPrice;
+
+        Object.values(translations).forEach(t => {
+            t.offers.pro.price = `${proPrice} DA`;
+            t.offers.api.price = `${apiPrice} DA`;
+            t.pricing.pro.price = String(proPrice);
+            t.pricing.api.price = String(apiPrice);
+        });
+
+        document.getElementById('pro-price-tab').textContent = `${proPrice} DA`;
+        document.getElementById('api-price-tab').textContent = `${apiPrice} DA`;
+        applyTranslations(currentLang);
+        selectOffer(currentOffer);
+    } catch (error) {
+        console.warn('Could not sync Claude landing prices from admin:', error);
+    }
+}
 
         function showSteps(offer) {
             document.querySelectorAll('.steps-section').forEach(el => el.style.display = 'none');
@@ -1128,6 +1157,7 @@ function selectOffer(offer) {
         });
 
         // Init
+        document.addEventListener('DOMContentLoaded', syncClaudePricesFromAdmin);
         switchLanguage(currentLang);
     </script>
 </body>

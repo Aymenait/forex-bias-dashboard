@@ -1540,6 +1540,18 @@
             });
         });
     </script>
+    <script type="module" src="landing-page-products.js"></script>
+    <script type="module">
+        const product = await window.LandingProductSync.loadProduct('tradingview');
+        window.LandingProductSync.syncSimplePagePrice(product, {
+            heroText: (dzd) => `فقط بـ ${dzd} دج`,
+            pricingText: (dzd) => `${dzd} دج`,
+            replaceAmounts: [
+                { from: '1500', to: (dzd) => dzd },
+                { from: '6', to: (_, usd) => usd }
+            ]
+        });
+    </script>
     <script src="order-form.js" defer></script>
 </body>
 

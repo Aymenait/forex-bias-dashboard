@@ -1219,6 +1219,13 @@
             });
         });
     </script>
+    <script type="module" src="landing-page-products.js"></script>
+    <script type="module">
+        const product = await window.LandingProductSync.loadProduct('canva');
+        window.LandingProductSync.syncSimplePagePrice(product, {
+            heroText: (dzd, usd) => `${dzd} د.ج / $${usd} للسنة`
+        });
+    </script>
     <script src="order-form.js" defer></script>
 </body>
 
