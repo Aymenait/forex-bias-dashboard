@@ -13,10 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    document.documentElement.classList.add('gate-open');
     document.body.classList.add('gate-open');
 
     const passGate = () => {
         sessionStorage.setItem('siteGatePassed', 'true');
+        document.documentElement.classList.remove('gate-open');
         document.body.classList.remove('gate-open');
         document.body.classList.add('gate-passed');
         window.setTimeout(() => gate.remove(), 720);

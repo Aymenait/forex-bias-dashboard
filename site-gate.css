@@ -1,7 +1,7 @@
 .site-gate {
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 2147483646;
     overflow: hidden;
     isolation: isolate;
     background:
@@ -11,9 +11,11 @@
         linear-gradient(180deg, #020309 0%, #03050a 55%, #010207 100%);
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     transition: opacity 700ms ease, visibility 700ms ease;
 }
 
+html.gate-open,
 body.gate-open {
     overflow: hidden;
 }
