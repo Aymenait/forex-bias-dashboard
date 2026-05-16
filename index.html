@@ -256,11 +256,35 @@
             color: #ffd56f !important;
         }
     </style>
-        <link rel="stylesheet" href="homepage-redesign.css?v=16">
+    <link rel="stylesheet" href="homepage-redesign.css?v=16">
+    <link rel="stylesheet" href="site-gate.css?v=1">
     <link rel="stylesheet" href="order-form.css">
 </head>
 
 <body class="homepage-redesign">
+    <section class="site-gate" aria-label="3Ahub entry screen">
+        <div class="site-gate-nebula"></div>
+        <div class="site-gate-stars"></div>
+        <div class="site-gate-vignette"></div>
+        <div class="site-gate-wall" aria-hidden="true">
+            <div class="site-gate-tile"><img src="https://i.imgur.com/hEiJhso.gif" alt=""></div>
+            <div class="site-gate-tile"><img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt=""></div>
+            <div class="site-gate-tile"><img src="https://i.pinimg.com/736x/71/8b/41/718b41945aab84bd2276c762266931d0.jpg" alt=""></div>
+            <div class="site-gate-tile"><img src="https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif" alt=""></div>
+            <div class="site-gate-tile"><video autoplay loop muted playsinline src="https://i.imgur.com/mEy5oXF.mp4"></video></div>
+            <div class="site-gate-tile"><img src="https://i.pinimg.com/originals/98/59/12/98591272861e66a02eecf5dae0450c73.gif" alt=""></div>
+            <div class="site-gate-tile"><img src="https://i.pinimg.com/1200x/38/e3/08/38e308732b87069ed50893423f09ca4b.jpg" alt=""></div>
+            <div class="site-gate-tile"><img src="https://i.pinimg.com/736x/c2/5b/dd/c25bdda8e7d4eb27bcb2f4d411441d92.jpg" alt=""></div>
+        </div>
+        <div class="site-gate-center">
+            <div>
+                <img class="site-gate-logo" src="logo.png" alt="3Ahub">
+                <h1 class="site-gate-title">Entrez <em>3Ahub</em></h1>
+                <p class="site-gate-subtitle">Cinematic product wall</p>
+                <button class="site-gate-enter" type="button">Enter</button>
+            </div>
+        </div>
+    </section>
     <!-- Particles Background -->
     <div id="particles-js"></div>
 
@@ -296,10 +320,10 @@
             </button>
 
             <div class="nav-actions" id="nav-actions">
-                <div class="language-switcher">
-                    <button class="lang-btn active" data-lang="ar">Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</button>
+                <div class="language-switcher" aria-label="Language selector">
+                    <button class="lang-btn active" data-lang="ar">العربية</button>
                     <button class="lang-btn" data-lang="en">English</button>
-                    <button class="lang-btn" data-lang="fr">FranÃ§ais</button>
+                    <button class="lang-btn" data-lang="fr">Français</button>
                 </div>
                 <div class="currency-selector">
                     <button class="currency-btn active" data-currency="DZD">
@@ -411,8 +435,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="slider-btn prev" aria-label="Ø§Ù„Ø³Ø§Ø¨Ù‚" data-i18n-aria-label="aria.previous">â€¹</button>
-                            <button class="slider-btn next" aria-label="Ø§Ù„ØªØ§Ù„ÙŠ" data-i18n-aria-label="aria.next">â€º</button>
+                            <button class="slider-btn prev" aria-label="Ø§Ù„Ø³Ø§Ø¨Ù‚" data-i18n-aria-label="aria.previous">&#10094;</button>
+                            <button class="slider-btn next" aria-label="Ø§Ù„ØªØ§Ù„ÙŠ" data-i18n-aria-label="aria.next">&#10095;</button>
                         </div>
                         <div class="slider-dots">
                             <span class="dot active" data-slide="0"></span>
@@ -2132,8 +2156,8 @@
         <!-- Lightbox Overlay -->
         <div class="gallery-lightbox" id="galleryLightbox">
             <button class="lightbox-close" id="lightboxClose" aria-label="Close">âœ•</button>
-            <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">â€¹</button>
-            <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">â€º</button>
+            <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">&#10094;</button>
+            <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">&#10095;</button>
             <img src="" alt="Ø¹Ø±Ø¶ Ø§Ù„ØµÙˆØ±Ø©" id="lightboxImage">
         </div>
 
@@ -4092,6 +4116,7 @@
             }
         }
     </script>
+    <script src="site-gate.js?v=1"></script>
 </body>
 
 </html>
