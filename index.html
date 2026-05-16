@@ -257,7 +257,22 @@
         }
     </style>
     <link rel="stylesheet" href="homepage-redesign.css?v=16">
-    <link rel="stylesheet" href="site-gate.css?v=1">
+    <style>
+        .site-gate {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 2147483646 !important;
+            display: block !important;
+            min-height: 100dvh !important;
+            background: #020309 !important;
+        }
+
+        body.gate-open,
+        html.gate-open {
+            overflow: hidden !important;
+        }
+    </style>
+    <link rel="stylesheet" href="site-gate.css?v=2">
     <link rel="stylesheet" href="order-form.css">
 </head>
 
@@ -4116,7 +4131,7 @@
             }
         }
     </script>
-    <script src="site-gate.js?v=1"></script>
+    <script src="site-gate.js?v=2"></script>
 </body>
 
 </html>

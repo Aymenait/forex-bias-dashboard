@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const directSectionVisit = Boolean(window.location.hash);
 
     if (gateAlreadyPassed || directSectionVisit) {
+        document.documentElement.classList.remove('gate-open');
+        document.body.classList.remove('gate-open');
         gate.remove();
         document.body.classList.add('gate-passed');
         return;
