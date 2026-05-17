@@ -1,13 +1,13 @@
 <claude-mem-context>
 # Memory Context
 
-# [forex-bias-dashboard-create-product-catalog-website] recent context, 2026-05-16 1:53pm GMT+1
+# [forex-bias-dashboard-create-product-catalog-website] recent context, 2026-05-17 1:22pm GMT+1
 
 Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision 🚨security_alert 🔐security_note
 Format: ID TIME TYPE TITLE
 Fetch details: get_observations([IDs]) | Search: mem-search skill
 
-Stats: 50 obs (20 420t read) | 212 628t work | 90% savings
+Stats: 50 obs (19 888t read) | 448 119t work | 96% savings
 
 ### May 3, 2026
 S15 Live site not updating after CapCut price fixes pushed to GitHub — investigating directory structure and deployment (May 3, 5:38 PM)
@@ -22,40 +22,7 @@ S22 User selected Design B "Premium Glass" — glassmorphism purple-blue aesthet
 S23 3Ahub website redesign exploration — session ended without implementing changes; user decided to keep current design (May 9, 12:14 PM)
 ### May 10, 2026
 S24 Fix Order Now button (broken) + Redesign it with dynamic animations — both tasks completed and verified (May 10, 1:58 AM)
-218 12:12p 🔴 Tab4 Shows Only 11 of 20 Cards With Normalized Categories — 9 Still Have Raw Firebase Values
-219 " 🔴 Removed data-category='all' Fallback From DOMContentLoaded Static Card Assignment
-220 12:14p 🔵 9 Cards Still Have Raw Firebase Categories — Browser Likely Caching Old firebase-products-loader.js
-221 " 🔵 Browser Tab Pool Exhausted — Cannot Open New Tabs After 5+ Tabs Created
-222 " 🔵 Reusing tab2 Shows Perfect ai=8, design=4, courses=5, entertainment=3 — Cache Confirmed as Root Cause
-223 12:15p 🔵 Admin Panel Has Full Product Order Management — displayOrder Field Saved to Both Firestore Collections
-224 12:16p 🔵 index.html Still References firebase-products-loader.js?v=3 — Cache Bust Required
-225 12:17p 🔵 renderProducts() Still Has Old AI-First Secondary Sort — DEFAULT_PRODUCT_ORDER Patches Not Applied
-226 " 🔵 Admin Product Form Saves Legacy category='subscriptions' Default — Root Cause of Raw Category Values in Firebase
-227 12:18p 🟣 DEFAULT_PRODUCT_ORDER and Three-Stage Sort Added to firebase-products-loader.js
-229 " 🔵 Meta Pixel Implementation Audit — 3Ahub Product Catalog
-228 " 🔄 Removed AI-First Secondary Sort From renderProducts() — normalizeProducts() Now Sole Sort Authority
-230 12:19p 🔴 index.html Cache-Busted to ?v=4 — All Browsers Will Fetch Updated firebase-products-loader.js
-231 12:20p 🔵 Final Audit Confirms All Ordering Functions in Place — sortedProducts Uses normalizeProducts() Directly
-232 " 🔵 Availability System Uses Three Parallel Implementations — availability-ui.js, index.html Inline Script, and firebase-products-loader.js
-233 " 🔵 meta-pixel.js Full Implementation — Advanced Matching, CAPI, and PII Hashing
-234 " 🔵 Final State of renderProducts() and renderMobileProducts() Confirmed — Clean Implementation
-235 12:21p 🔵 CAPI Server Function — Cloudflare Pages Function at /capi
-236 " 🔵 order-form.js Pixel Tracking — Currency Inconsistency Between Normal and Special InitiateCheckout
-237 12:22p 🔵 availability-ui.js Architecture — ES Module with updateAvailabilityTextsForLanguage() for Language Switch
-238 " 🔵 thank-you.html — Purchase Event, Telegram Admin Notification, and Upsell Grid
-239 12:23p 🔵 index.html Does Not Load meta-pixel.js — order-form.js CAPI Calls Silently Disabled on Homepage
 ### May 16, 2026
-240 11:32a 🔵 Missing Landing Pages Identified on Forex Bias Dashboard Product Catalog
-243 " 🔵 Missing Landing Pages Investigation Started for Product Catalog Website
-252 " 🔵 claude_landing.html Recoverable from Git Commit bfcae2b (2026-05-01)
-261 " 🔵 Patch Applied Multiple Times — index.html Already Modified, Final apply_patch Failed on index.html
-241 11:33a 🔵 Landing Page Inventory: 12 Products Have Pages, Claude Is Missing
-242 " 🔵 Claude AI Product Card Confirmed Missing Landing Page Link and HTML File
-265 11:35a 🟣 claude_landing.html Restored from Git History — 1059 Lines, 130KB File Created
-244 11:36a 🔵 Product Catalog Landing Pages Inventory Mapped
-245 11:37a 🔵 Claude AI Product Card Has No Landing Page Link — Root Cause Confirmed
-246 " 🔵 Claude AI Absent from products-data.js Static Catalog
-247 " 🔵 Firebase Products Loader Architecture — landingPage Field Controls Discover Button
 248 11:38a 🔵 Admin Product Model Schema Missing landingPage Field
 249 " 🔵 landingPage Field Set for 8 Products in data-migration.js — Claude and Adobe Missing
 250 " 🔵 Admin Panel Has Zero landingPage Support — Field Completely Absent from Admin UI and Controller
@@ -73,6 +40,39 @@ S24 Fix Order Now button (broken) + Redesign it with dynamic animations — both
 264 11:44a 🔵 index.html Discover Button Confirmed Inserted — Final apply_patch Fails Because It's Already There
 267 " 🔴 claude_landing.html Re-Restored Without BOM Using Set-Content — index.html Discover Button Inserted via PowerShell String Replace
 266 11:45a 🟣 All Changes Verified — Claude Landing Page Fix Fully Deployed to Working Tree
+268 12:46p 🔴 Site Gate Z-Index and Overflow Lock Fix
+269 " ✅ Mobile Bottom Nav Spans Wired to i18n Translation System
+270 " 🔵 User Reports Product Card Images/Layout Changed After Gate Fix
+271 9:44p 🔵 site-gate.css Still Shows z-index: 9999 — Patch May Not Have Applied to File
+272 " 🔵 site-gate.css and site-gate.js Patches Never Applied — Files Contain Original Code
+274 " 🔵 apply_patch Direct Tool Succeeds Where write_file apply_patch Silently Failed
+289 " ⚖️ Firebase Product Restoration Plan Approved
+273 9:45p 🔴 Re-applied site-gate.css and site-gate.js Patches After Confirming Prior Application Failed
+275 9:46p 🔵 index.html Inline CSS Patch Also Never Applied — Still References site-gate.css?v=1 and site-gate.js?v=1
+276 " 🔵 write_file apply_patch Returns success:true for index.html Again — Likely Silent No-Op
+277 " 🔴 index.html Gate CSS/JS References Finally Updated via Direct apply_patch Tool
+278 9:47p 🔵 write_file apply_patch for site-gate.js Early-Exit Fix Returns success:true — Pattern Predicts Silent Failure
+279 " 🔴 site-gate.js Early-Exit Scroll-Lock Bug Fixed
+280 " 🔵 Misplaced &lt;/section&gt; Tag at Line 626 Closes Before product-grid Div
+281 9:49p 🔵 Mobile Bottom Nav data-i18n Patch Also Never Applied — Spans Still Have Hard-Coded Arabic Text
+282 " 🔵 Category Filter Script Has Dead Code After Early return Statement
+283 9:50p 🔵 nav.contact Translation Key Maps to WhatsApp Not Contact Us — Mobile Nav i18n Mismatch
+284 9:51p 🔵 Mobile Nav i18n Patch Submitted via write_file — Expected Silent No-Op Plus nav.contact Semantic Mismatch
+285 " ✅ Mobile Bottom Nav Spans Updated with data-i18n Attributes via Direct apply_patch
+286 " 🔵 git diff Shows No Changes for All Patched Files — Working Tree Matches HEAD
+287 9:52p 🔵 Firebase Products Loader Clears Static HTML and Replaces Entire Product Grid — Root Cause of Unexpected Product Changes
+288 " 🔵 Almost All Project Files Are Untracked by Git — Only products-data.js and Screenshots Are in the Repo
+290 10:17p 🔵 Firebase Products Loader Uses products_v2 Collection, Not products
+291 10:18p 🔵 products-data.js Has One Uncommitted Change: CapCut USD Prices
+292 " 🔵 Direct Firestore REST API Access Blocked From Dev Machine
+293 " 🔵 Live Firebase products_v2 Collection Fetched — Critical Issues Found
+294 10:20p 🔵 Complete Firebase products_v2 Inventory — 20 Active Products, 3 Problem Cases
+295 " 🔵 Static HTML Product Cards Extracted — Previous Website Baseline with Images
+296 " 🔵 Full Firebase Inventory Reveals 33 Products — Massive Duplicate Problem from Data Migration
+297 10:21p 🔴 Firebase products_v2 Bulk Patched — Duplicates Deactivated and Images Restored
+298 " 🔵 Post-Patch Verification: 22 Active Products — Still Has Problems
+299 " 🔴 scispace and tradingview Deactivated in Firebase — But These Are Approved Products
+300 10:22p 🔵 Final Firebase State: 20 Active Products — All Hyphenated IDs, Not Canonical Short IDs
 
-Access 213k tokens of past work via get_observations([IDs]) or mem-search skill.
+Access 448k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>

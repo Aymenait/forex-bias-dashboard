@@ -15,29 +15,6 @@
 
 const PRODUCTS_COLLECTION = 'products_v2';
 let productsUnsubscribe = null;
-const DEFAULT_PRODUCT_ORDER = [
-    'trw',
-    'adobe',
-    'chatgpt',
-    'capcut',
-    'claude',
-    'super-grok',
-    'gamma',
-    'google-ai',
-    'lovable',
-    'perplexity',
-    'cursor',
-    'scispace',
-    'canva',
-    'netflix',
-    'duolingo',
-    'tradingview',
-    'microsoft-office',
-    'hma-vpn',
-    'primevideo',
-    'crunchyroll',
-    'alight-motion'
-];
 const DEFAULT_LANDING_PAGES = {
     trw: 'trw_landing.html',
     chatgpt: 'chatgpt_landing.html',
@@ -169,13 +146,6 @@ function getProductOrderValue(product) {
     return Number.isFinite(explicitOrder) && explicitOrder >= 0 ? explicitOrder : 9999;
 }
 
-function getDefaultProductOrder(product) {
-    const id = String(product?.id || '').toLowerCase().trim();
-    const name = getLocalizedText(product?.name, 'en', '').toLowerCase();
-    const index = DEFAULT_PRODUCT_ORDER.findIndex(key => id.includes(key) || name.includes(key));
-    return index === -1 ? 9999 : index;
-}
-
 function getProductLandingPage(product) {
     if (product?.landingPage) return product.landingPage;
 
@@ -193,12 +163,31 @@ function normalizeProducts(products) {
         .sort((a, b) => {
             const explicitOrderDiff = getProductOrderValue(a) - getProductOrderValue(b);
             if (explicitOrderDiff !== 0) return explicitOrderDiff;
-
-            const defaultOrderDiff = getDefaultProductOrder(a) - getDefaultProductOrder(b);
-            if (defaultOrderDiff !== 0) return defaultOrderDiff;
-
             return String(a.id || '').localeCompare(String(b.id || ''));
         });
+}
+
+function preloadCriticalProductMedia(products, count = 6) {
+    const criticalMedia = normalizeProducts(products)
+        .slice(0, count)
+        .map(product => product.mediaUrl || product.image || product.imageUrl)
+        .filter(url => typeof url === 'string' && url && !url.includes('.mp4'));
+
+    return Promise.allSettled(
+        criticalMedia.map(url => new Promise(resolve => {
+            const image = new Image();
+            const timeoutId = window.setTimeout(resolve, 1200);
+            image.onload = () => {
+                window.clearTimeout(timeoutId);
+                resolve();
+            };
+            image.onerror = () => {
+                window.clearTimeout(timeoutId);
+                resolve();
+            };
+            image.src = url;
+        }))
+    );
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -516,6 +505,10 @@ function renderProducts(products, lang = 'ar') {
 
     productGrid.querySelectorAll('.product-card.fade-in').forEach(card => card.classList.add('visible'));
 
+    window.dispatchEvent(new CustomEvent('productsRendered', {
+        detail: { products: sortedProducts }
+    }));
+
     console.log('✅ تم عرض', sortedProducts.length, 'منتج في الصفحة');
 
     // إعادة تهيئة الأحداث
@@ -694,6 +687,8 @@ async function initFirebaseProducts() {
         const products = await loadProductsFromFirebase(db, firebaseModules);
 
         if (products.length > 0) {
+            await preloadCriticalProductMedia(products);
+
             // عرض المنتجات
             const currentLang = window.currentLang || 'ar';
             renderProducts(products, currentLang);
@@ -775,6 +770,7 @@ if (typeof window !== 'undefined') {
     window.selectProductDuration = selectProductDuration;
     window.FirebaseProductsLoader = {
         loadProductsFromFirebase,
+        preloadCriticalProductMedia,
         createProductCardHTML,
         renderProducts,
         renderMobileProducts,

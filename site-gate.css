@@ -165,6 +165,31 @@ body.gate-passed .site-gate {
     text-transform: uppercase;
 }
 
+.site-gate-progress {
+    position: relative;
+    width: min(220px, 52vw);
+    height: 2px;
+    margin: 20px auto 0;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.site-gate-progress span {
+    position: absolute;
+    inset: 0;
+    width: 42%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, transparent, rgba(243, 215, 137, 0.95), transparent);
+    animation: siteGateProgressSweep 1.35s ease-in-out infinite;
+}
+
+.site-gate.is-ready .site-gate-progress span {
+    width: 100%;
+    background: linear-gradient(90deg, rgba(243, 215, 137, 0.42), #f3d789);
+    animation: siteGateProgressComplete 520ms ease forwards;
+}
+
 .site-gate-enter {
     min-width: 148px;
     min-height: 42px;
@@ -179,6 +204,25 @@ body.gate-passed .site-gate {
     text-transform: uppercase;
     backdrop-filter: blur(12px);
     cursor: pointer;
+    transition:
+        opacity 220ms ease,
+        border-color 220ms ease,
+        background 220ms ease,
+        transform 220ms ease;
+}
+
+.site-gate.is-loading .site-gate-enter {
+    opacity: 0.56;
+    cursor: wait;
+}
+
+.site-gate.is-ready .site-gate-enter {
+    border-color: rgba(243, 215, 137, 0.58);
+    background: rgba(243, 215, 137, 0.08);
+}
+
+.site-gate.is-ready .site-gate-enter:hover {
+    transform: translateY(-1px);
 }
 
 @keyframes siteGateNebula {
@@ -202,6 +246,24 @@ body.gate-passed .site-gate {
 @keyframes siteGateTwinkle {
     from { opacity: 0.25; }
     to { opacity: 0.8; }
+}
+
+@keyframes siteGateProgressSweep {
+    from { transform: translateX(-120%); }
+    to { transform: translateX(280%); }
+}
+
+@keyframes siteGateProgressComplete {
+    from {
+        width: 42%;
+        transform: translateX(0);
+        opacity: 0.76;
+    }
+    to {
+        width: 100%;
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 @media (max-width: 760px) {
@@ -249,6 +311,11 @@ body.gate-passed .site-gate {
     .site-gate-subtitle {
         font-size: 0.74rem;
         letter-spacing: 0.22em;
+    }
+
+    .site-gate-progress {
+        width: min(190px, 58vw);
+        margin-top: 18px;
     }
 
     .site-gate-enter {

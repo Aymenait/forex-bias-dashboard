@@ -3109,6 +3109,20 @@ function getProductOrder(product) {
     return Number(product?.displayOrder ?? product?.order ?? 0) || 0;
 }
 
+function isHomepageVisibleProduct(product) {
+    return Boolean(product) && product.active !== false && product.isArchived !== true;
+}
+
+function getHomepageVisibleProducts(products = allProducts) {
+    return products
+        .filter(isHomepageVisibleProduct)
+        .sort((a, b) => {
+            const orderDiff = getProductOrder(a) - getProductOrder(b);
+            if (orderDiff !== 0) return orderDiff;
+            return String(a.id || '').localeCompare(String(b.id || ''));
+        });
+}
+
 function getProductSubOffers(product) {
     if (Array.isArray(product?.subOffers) && product.subOffers.length > 0) {
         return product.subOffers;
@@ -3354,8 +3368,10 @@ async function loadProducts() {
             }
         }
 
-        // 2. الدمج مع المنتجات المحلية (من currency-config.js) لضمان عدم نقص أي منتج
-        if (typeof PRODUCTS !== 'undefined' && PRODUCTS) {
+        // 2. إثراء منتجات Firebase فقط من الكتالوج المحلي عند توفر Firebase.
+        // لا نضيف منتجات محلية جديدة تلقائيًا، لأن ذلك يجعل الإدارة تعرض قائمة
+        // مختلفة عن القائمة الحية التي يراها الزائر في الصفحة الرئيسية.
+        if (!productsFromFirebase && typeof PRODUCTS !== 'undefined' && PRODUCTS) {
             Object.keys(PRODUCTS).forEach(key => {
                 if (isProductDeleted({ id: key, ...PRODUCTS[key] }, deletedProductIds)) return;
 
@@ -3395,24 +3411,28 @@ async function loadProducts() {
             });
         }
 
-        const homepageProducts = await discoverHomepageProducts();
-        homepageProducts.forEach((homepageProduct) => {
-            if (isProductDeleted(homepageProduct, deletedProductIds)) return;
+        // بطاقات index.html القديمة يمكن أن تكون مرجعًا مساعدًا فقط عند غياب Firebase.
+        // لا يجب أن تعيد إدخال منتجات شبحية إلى لوحة الإدارة أو إلى السحابة.
+        if (!productsFromFirebase) {
+            const homepageProducts = await discoverHomepageProducts();
+            homepageProducts.forEach((homepageProduct) => {
+                if (isProductDeleted(homepageProduct, deletedProductIds)) return;
 
-            if (!productMap.has(homepageProduct.id)) {
-                productMap.set(homepageProduct.id, homepageProduct);
-                missingLocalProducts.push(homepageProduct);
-                console.log('New homepage product detected:', homepageProduct.id);
-            } else {
-                const existingProduct = productMap.get(homepageProduct.id);
-                const mergedProduct = mergeProductCatalogDetails(existingProduct, homepageProduct);
-                productMap.set(homepageProduct.id, mergedProduct);
-                if (productHasMissingCatalogDetails(existingProduct)) {
-                    missingLocalProducts.push(mergedProduct);
-                    console.log('Enriched Firebase product from homepage:', homepageProduct.id);
+                if (!productMap.has(homepageProduct.id)) {
+                    productMap.set(homepageProduct.id, homepageProduct);
+                    missingLocalProducts.push(homepageProduct);
+                    console.log('New homepage product detected:', homepageProduct.id);
+                } else {
+                    const existingProduct = productMap.get(homepageProduct.id);
+                    const mergedProduct = mergeProductCatalogDetails(existingProduct, homepageProduct);
+                    productMap.set(homepageProduct.id, mergedProduct);
+                    if (productHasMissingCatalogDetails(existingProduct)) {
+                        missingLocalProducts.push(mergedProduct);
+                        console.log('Enriched Firebase product from homepage:', homepageProduct.id);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // تحويل الخريطة إلى مصفوفة
         allProducts = Array.from(productMap.values());
@@ -3488,7 +3508,7 @@ async function syncProductsToFirebase(productsToSync = allProducts) {
 /**
  * عرض جدول المنتجات
  */
-function displayProductsTable(products = allProducts) {
+function displayProductsTable(products = getHomepageVisibleProducts()) {
     const tbody = document.getElementById('products-table-body');
     if (!tbody) {
         console.warn('products-table-body not found');
@@ -3504,7 +3524,11 @@ function displayProductsTable(products = allProducts) {
     updateProductStats();
 
     // ترتيب المنتجات حسب order إذا موجود
-    const sortedProducts = [...products].sort((a, b) => getProductOrder(a) - getProductOrder(b));
+    const sortedProducts = [...products].sort((a, b) => {
+        const orderDiff = getProductOrder(a) - getProductOrder(b);
+        if (orderDiff !== 0) return orderDiff;
+        return String(a.id || '').localeCompare(String(b.id || ''));
+    });
 
     console.log('عرض المنتجات:', sortedProducts.length);
     tbody.innerHTML = sortedProducts.map((product, index) => {
@@ -3925,7 +3949,7 @@ function searchProducts() {
     const categoryFilter = document.getElementById('filter-category')?.value || 'all';
     const availabilityFilter = document.getElementById('filter-availability')?.value || 'all';
 
-    let filtered = allProducts;
+    let filtered = getHomepageVisibleProducts();
 
     // فلترة حسب البحث
     if (searchTerm) {
