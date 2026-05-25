@@ -592,7 +592,40 @@ const CURRENT_PRODUCTS = [
             redotpay: true,
             baridimob: true
         },
-        subOffers: [],
+        subOffers: [
+            {
+                id: '1month',
+                name: { ar: '30 يوم', en: '30 Days', fr: '30 Jours' },
+                priceDZD: 800,
+                priceUSD: 3,
+                availability: 'available',
+                order: 0
+            },
+            {
+                id: '3months',
+                name: { ar: '3 أشهر', en: '3 Months', fr: '3 Mois' },
+                priceDZD: 1800,
+                priceUSD: 4.5,
+                availability: 'available',
+                order: 1
+            },
+            {
+                id: '6months',
+                name: { ar: '6 أشهر', en: '6 Months', fr: '6 Mois' },
+                priceDZD: 3200,
+                priceUSD: 12.8,
+                availability: 'available',
+                order: 2
+            },
+            {
+                id: '1year',
+                name: { ar: 'سنة كاملة', en: '1 Year', fr: '1 An' },
+                priceDZD: 5500,
+                priceUSD: 22,
+                availability: 'available',
+                order: 3
+            }
+        ],
         displayOrder: 8,
         isArchived: false,
         landingPage: 'capcut_landing.html'
@@ -675,6 +708,86 @@ const CURRENT_PRODUCTS = [
             }
         ],
         displayOrder: 9,
+        isArchived: false
+    },
+    {
+        id: 'lovable',
+        name: {
+            ar: 'Lovable AI',
+            en: 'Lovable AI',
+            fr: 'Lovable AI'
+        },
+        description: {
+            ar: 'أداة متقدمة لبناء تطبيقات الويب بالذكاء الاصطناعي',
+            en: 'Advanced tool for building web apps with AI',
+            fr: 'Outil avancé pour créer des applications web avec l\'IA'
+        },
+        mediaUrl: 'https://i.pinimg.com/1200x/cd/d4/69/cdd469e94eb529ae307f9b5d56e8da96.jpg',
+        mediaType: 'image',
+        priceDZD: 1500,
+        priceUSD: 6,
+        availability: 'available',
+        features: [
+            {
+                id: 'lovable_f1',
+                text: {
+                    ar: 'بناء تطبيقات كاملة من خلال الدردشة',
+                    en: 'Build full apps through chat',
+                    fr: 'Créer des applications complètes via le chat'
+                },
+                order: 0
+            },
+            {
+                id: 'lovable_f2',
+                text: {
+                    ar: 'تصدير الكود وتعديله بحرية',
+                    en: 'Export and freely edit code',
+                    fr: 'Exporter et modifier le code librement'
+                },
+                order: 1
+            },
+            {
+                id: 'lovable_f3',
+                text: {
+                    ar: 'تكامل مع أفضل أدوات التطوير',
+                    en: 'Integrates with top dev tools',
+                    fr: 'Intégration avec les meilleurs outils de dev'
+                },
+                order: 2
+            }
+        ],
+        paymentMethods: {
+            usdt: true,
+            redotpay: true,
+            baridimob: true
+        },
+        subOffers: [
+            {
+                id: '1month',
+                name: { ar: 'شهر واحد', en: '1 Month', fr: '1 Mois' },
+                priceDZD: 1500,
+                priceUSD: 6,
+                availability: 'available',
+                order: 0
+            },
+            {
+                id: '2months',
+                name: { ar: 'شهران', en: '2 Months', fr: '2 Mois' },
+                priceDZD: 2200,
+                priceUSD: 8.8,
+                availability: 'available',
+                order: 1
+            },
+            {
+                id: '3months',
+                name: { ar: '3 أشهر', en: '3 Months', fr: '3 Mois' },
+                priceDZD: 3000,
+                priceUSD: 12,
+                availability: 'available',
+                order: 2
+            }
+        ],
+        displayOrder: 17,
         isArchived: false
     }
 ];

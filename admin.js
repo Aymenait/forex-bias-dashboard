@@ -2896,6 +2896,30 @@ let charts = {};
 const ADMIN_PRODUCTS_COLLECTION_NAME = 'products_v2';
 const LEGACY_PRODUCTS_COLLECTION_NAME = 'products';
 const DELETED_PRODUCTS_COLLECTION_NAME = 'deleted_products';
+const ADMIN_PRODUCT_DEBUG = true;
+const REQUIRED_ADMIN_PRODUCT_IDS = ['capcut', 'lovable'];
+
+function adminProductDebug(label, payload) {
+    if (!ADMIN_PRODUCT_DEBUG) return;
+    if (payload === undefined) {
+        console.log(`[admin-products] ${label}`);
+        return;
+    }
+    console.log(`[admin-products] ${label}`, payload);
+}
+
+function summarizeProductForDebug(product) {
+    if (!product) return null;
+    return {
+        id: product.id,
+        name: getProductDisplayName(product),
+        active: product.active,
+        isArchived: product.isArchived,
+        availability: getProductStatus(product),
+        displayOrder: getProductOrder(product),
+        subOffers: getProductSubOffers(product).length
+    };
+}
 
 function getProductDisplayName(product) {
     if (!product) return '';
@@ -3123,6 +3147,62 @@ function getHomepageVisibleProducts(products = allProducts) {
         });
 }
 
+/**
+ * Produits affichés dans le tableau admin (tous les produits gérables).
+ * Ne pas réutiliser le filtre homepage ici : active:false / isArchived:true
+ * doivent rester éditables dans l'admin.
+ */
+function getAdminTableProducts(products = allProducts) {
+    return products
+        .filter(product => Boolean(product))
+        .sort((a, b) => {
+            const orderDiff = getProductOrder(a) - getProductOrder(b);
+            if (orderDiff !== 0) return orderDiff;
+            return String(a.id || '').localeCompare(String(b.id || ''));
+        });
+}
+
+function findProductById(productId) {
+    const canonicalId = resolveCanonicalProductId(productId);
+    return allProducts.find(product =>
+        product.id === canonicalId ||
+        product.id === productId ||
+        resolveCanonicalProductId(product.id, getProductDisplayName(product)) === canonicalId
+    );
+}
+
+async function ensureRequiredAdminProductsVisible(productMap, missingLocalProducts, deletedProductIds) {
+    for (const canonicalId of REQUIRED_ADMIN_PRODUCT_IDS) {
+        const deleteKeys = getProductDeleteKeys(canonicalId);
+        const isBlocked = Array.from(deleteKeys).some(key => deletedProductIds.has(key));
+        if (isBlocked) {
+            adminProductDebug(`Removing deleted_products block for required product: ${canonicalId}`, Array.from(deleteKeys));
+            await clearDeletedProductMarker(canonicalId);
+            deleteKeys.forEach(key => deletedProductIds.delete(key));
+        }
+
+        const existing = productMap.get(canonicalId);
+        if (!existing) continue;
+
+        if (existing.active === false || existing.isArchived === true) {
+            const restored = {
+                ...existing,
+                id: canonicalId,
+                active: true,
+                isArchived: false,
+                availability: getProductStatus(existing) === 'unavailable'
+                    ? existing.availability || 'unavailable'
+                    : (existing.availability || existing.status || 'available')
+            };
+            productMap.set(canonicalId, restored);
+            if (!missingLocalProducts.some(product => product.id === canonicalId)) {
+                missingLocalProducts.push(restored);
+            }
+            adminProductDebug(`Restored hidden required product for admin + Firebase`, summarizeProductForDebug(restored));
+        }
+    }
+}
+
 function getProductSubOffers(product) {
     if (Array.isArray(product?.subOffers) && product.subOffers.length > 0) {
         return product.subOffers;
@@ -3167,26 +3247,59 @@ function mergeProductCatalogDetails(baseProduct, catalogProduct) {
     return merged;
 }
 
-function getHomepageProductId(card, fallbackName = '') {
-    const rawId = card.dataset.productId || card.id || fallbackName;
-    const mapped = {
-        'product-chatgpt': 'chatgpt',
-        'product-claude': 'claude',
-        'grok-card': 'super-grok',
-        'gamma-card': 'gamma',
-        'adobe-card': 'adobe',
-        'hma-vpn': 'hma-vpn',
-        'google-ai': 'google-ai',
-        'veo-order-btn': 'google-ai'
-    };
-
-    if (mapped[rawId]) return mapped[rawId];
-    return String(rawId || fallbackName || '')
+function normalizeProductIdSlug(value = '') {
+    if (window.ProductIdUtils?.normalizeProductIdSlug) {
+        return window.ProductIdUtils.normalizeProductIdSlug(value);
+    }
+    return String(value || '')
         .toLowerCase()
         .replace(/^product-/, '')
         .replace(/-card$/, '')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
+}
+
+function resolveCanonicalProductId(rawId = '', fallbackName = '') {
+    if (window.ProductIdUtils?.resolveCanonicalProductId) {
+        return window.ProductIdUtils.resolveCanonicalProductId(rawId, fallbackName);
+    }
+    return normalizeProductIdSlug(rawId) || normalizeProductIdSlug(fallbackName);
+}
+
+function buildProductFromLocalCatalog(catalogKey, catalogProduct) {
+    const catalogEntry = catalogProduct || {};
+    const catalogName = typeof catalogEntry.name === 'string'
+        ? { ar: catalogEntry.name, en: catalogEntry.name, fr: catalogEntry.name }
+        : (catalogEntry.name || { ar: catalogKey, en: catalogKey, fr: catalogKey });
+
+    return {
+        id: catalogKey,
+        ...catalogEntry,
+        name: catalogName,
+        description: catalogEntry.description || { ar: '', en: '', fr: '' },
+        mediaUrl: catalogEntry.mediaUrl || catalogEntry.image || '',
+        image: catalogEntry.mediaUrl || catalogEntry.image || '',
+        priceDZD: getProductPriceDZD(catalogEntry),
+        priceUSD: getProductPriceUSD(catalogEntry),
+        price_dzd: getProductPriceDZD(catalogEntry),
+        price_usd: getProductPriceUSD(catalogEntry),
+        durations: catalogEntry.durations || {},
+        subOffers: getProductSubOffers(catalogEntry).length > 0
+            ? getProductSubOffers(catalogEntry)
+            : normalizeDurationsToSubOffers(catalogEntry.durations || {}),
+        displayOrder: Number(catalogEntry.displayOrder ?? catalogEntry.order ?? 9999),
+        order: Number(catalogEntry.displayOrder ?? catalogEntry.order ?? 9999),
+        availability: catalogEntry.availability ||
+            (catalogEntry.available === false ? 'unavailable' : 'available'),
+        active: catalogEntry.active !== false,
+        isArchived: catalogEntry.isArchived === true,
+        source: 'local-catalog'
+    };
+}
+
+function getHomepageProductId(card, fallbackName = '') {
+    const rawId = card.dataset.productId || card.id || fallbackName;
+    return resolveCanonicalProductId(rawId, fallbackName);
 }
 
 function extractBackgroundImageUrl(styleValue = '') {
@@ -3336,11 +3449,17 @@ function normalizeAdminProductForV2(productData, existingProduct = null) {
  */
 async function loadProducts() {
     console.log('🔄 جاري تحميل المنتجات...');
+    adminProductDebug('loadProducts() started');
     try {
         const productMap = new Map();
         let productsFromFirebase = false;
         const missingLocalProducts = [];
+        const skippedDeleted = [];
+        const skippedFilters = [];
+        const firestoreRaw = [];
         const deletedProductIds = await loadDeletedProductIds();
+
+        adminProductDebug('deleted_products keys', Array.from(deletedProductIds));
 
         // 1. التحميل من Firebase
         if (window.db && window.firebaseModules) {
@@ -3349,15 +3468,51 @@ async function loadProducts() {
                 const querySnapshot = await getDocs(collection(window.db, ADMIN_PRODUCTS_COLLECTION_NAME));
 
                 querySnapshot.forEach((docItem) => {
-                    if (isProductDeleted({ id: docItem.id, ...docItem.data() }, deletedProductIds)) return;
-
                     const data = docItem.data();
-                    productMap.set(docItem.id, {
-                        id: docItem.id,
-                        ...data,
-                        source: 'firebase'
+                    const canonicalId = resolveCanonicalProductId(
+                        docItem.id,
+                        getProductDisplayName({ id: docItem.id, ...data })
+                    );
+
+                    firestoreRaw.push({
+                        docId: docItem.id,
+                        canonicalId,
+                        ...summarizeProductForDebug({ id: canonicalId, ...data })
                     });
+
+                    if (isProductDeleted({ id: docItem.id, ...data }, deletedProductIds)) {
+                        skippedDeleted.push({ stage: 'firestore', docId: docItem.id, canonicalId });
+                        return;
+                    }
+                    if (isProductDeleted({ id: canonicalId, ...data }, deletedProductIds)) {
+                        skippedDeleted.push({ stage: 'firestore-canonical', docId: docItem.id, canonicalId });
+                        return;
+                    }
+
+                    const firebaseProduct = {
+                        id: canonicalId,
+                        ...data,
+                        source: 'firebase',
+                        legacyDocId: docItem.id !== canonicalId ? docItem.id : undefined
+                    };
+
+                    if (productMap.has(canonicalId)) {
+                        productMap.set(
+                            canonicalId,
+                            mergeProductCatalogDetails(productMap.get(canonicalId), firebaseProduct)
+                        );
+                    } else {
+                        productMap.set(canonicalId, firebaseProduct);
+                    }
                 });
+
+                adminProductDebug('Firestore products_v2 loaded', firestoreRaw);
+                adminProductDebug('Firestore capcut entries', firestoreRaw.filter(item =>
+                    /capcut/i.test(item.docId) || /capcut/i.test(item.canonicalId) || /capcut/i.test(item.name || '')
+                ));
+                adminProductDebug('Firestore lovable entries', firestoreRaw.filter(item =>
+                    /lovable/i.test(item.docId) || /lovable/i.test(item.canonicalId) || /lovable/i.test(item.name || '')
+                ));
 
                 if (productMap.size > 0) {
                     productsFromFirebase = true;
@@ -3365,74 +3520,92 @@ async function loadProducts() {
                 }
             } catch (fbError) {
                 console.warn('⚠️ تعذر التحميل من Firebase، سيتم استخدام البيانات المحلية:', fbError);
+                adminProductDebug('Firestore load failed', fbError);
             }
         }
 
-        // 2. إثراء منتجات Firebase فقط من الكتالوج المحلي عند توفر Firebase.
-        // لا نضيف منتجات محلية جديدة تلقائيًا، لأن ذلك يجعل الإدارة تعرض قائمة
-        // مختلفة عن القائمة الحية التي يراها الزائر في الصفحة الرئيسية.
-        if (!productsFromFirebase && typeof PRODUCTS !== 'undefined' && PRODUCTS) {
-            Object.keys(PRODUCTS).forEach(key => {
-                if (isProductDeleted({ id: key, ...PRODUCTS[key] }, deletedProductIds)) return;
-
-                if (!productMap.has(key)) {
-                    const localProduct = {
-                        id: key,
-                        ...PRODUCTS[key],
-                        active: PRODUCTS[key].active !== false,
-                        source: 'local'
-                    };
-                    productMap.set(key, localProduct);
-                    missingLocalProducts.push(localProduct);
-                    console.log('New local product detected:', key);
-                }
-            });
-        }
-
+        // 2. Toujours aligner l'admin et Firebase sur le catalogue local + l'accueil.
+        // Les produits visibles sur la page d'accueil doivent aussi être administrables.
         if (typeof PRODUCTS !== 'undefined' && PRODUCTS) {
-            Object.keys(PRODUCTS).forEach(key => {
-                if (isProductDeleted({ id: key, ...PRODUCTS[key] }, deletedProductIds)) return;
-                if (!productMap.has(key)) return;
+            const catalogKeys = Object.keys(PRODUCTS);
+            adminProductDebug('currency-config PRODUCTS keys', catalogKeys);
+            adminProductDebug('currency-config capcut', summarizeProductForDebug(buildProductFromLocalCatalog('capcut', PRODUCTS.capcut)));
+            adminProductDebug('currency-config lovable', summarizeProductForDebug(buildProductFromLocalCatalog('lovable', PRODUCTS.lovable)));
 
-                const existingProduct = productMap.get(key);
-                const localProduct = {
-                    id: key,
+            catalogKeys.forEach(key => {
+                if (isProductDeleted({ id: key, ...PRODUCTS[key] }, deletedProductIds)) {
+                    skippedDeleted.push({ stage: 'catalog', id: key });
+                    return;
+                }
+
+                const canonicalKey = resolveCanonicalProductId(key);
+                const localProduct = buildProductFromLocalCatalog(canonicalKey, {
                     ...PRODUCTS[key],
-                    active: PRODUCTS[key].active !== false,
-                    source: 'local'
-                };
+                    id: canonicalKey
+                });
+
+                if (!productMap.has(canonicalKey)) {
+                    productMap.set(canonicalKey, localProduct);
+                    missingLocalProducts.push(localProduct);
+                    console.log('Catalog product missing from Firebase, queued for sync:', canonicalKey);
+                    return;
+                }
+
+                const existingProduct = productMap.get(canonicalKey);
                 const mergedProduct = mergeProductCatalogDetails(existingProduct, localProduct);
-                productMap.set(key, mergedProduct);
+                if (REQUIRED_ADMIN_PRODUCT_IDS.includes(canonicalKey)) {
+                    mergedProduct.active = true;
+                    mergedProduct.isArchived = false;
+                    if (!getProductSubOffers(mergedProduct).length) {
+                        mergedProduct.subOffers = getProductSubOffers(localProduct);
+                        mergedProduct.durations = localProduct.durations || {};
+                    }
+                    if (!mergedProduct.category) {
+                        mergedProduct.category = localProduct.category || (canonicalKey === 'capcut' ? 'design' : 'ai');
+                    }
+                }
+                productMap.set(canonicalKey, mergedProduct);
 
                 if (productHasMissingCatalogDetails(existingProduct)) {
                     missingLocalProducts.push(mergedProduct);
-                    console.log('Enriched Firebase product from local catalog:', key);
+                    console.log('Enriched Firebase product from local catalog:', canonicalKey);
                 }
             });
         }
 
-        // بطاقات index.html القديمة يمكن أن تكون مرجعًا مساعدًا فقط عند غياب Firebase.
-        // لا يجب أن تعيد إدخال منتجات شبحية إلى لوحة الإدارة أو إلى السحابة.
-        if (!productsFromFirebase) {
-            const homepageProducts = await discoverHomepageProducts();
-            homepageProducts.forEach((homepageProduct) => {
-                if (isProductDeleted(homepageProduct, deletedProductIds)) return;
+        const homepageProducts = await discoverHomepageProducts();
+        homepageProducts.forEach((homepageProduct) => {
+            if (isProductDeleted(homepageProduct, deletedProductIds)) return;
 
-                if (!productMap.has(homepageProduct.id)) {
-                    productMap.set(homepageProduct.id, homepageProduct);
-                    missingLocalProducts.push(homepageProduct);
-                    console.log('New homepage product detected:', homepageProduct.id);
-                } else {
-                    const existingProduct = productMap.get(homepageProduct.id);
-                    const mergedProduct = mergeProductCatalogDetails(existingProduct, homepageProduct);
-                    productMap.set(homepageProduct.id, mergedProduct);
-                    if (productHasMissingCatalogDetails(existingProduct)) {
-                        missingLocalProducts.push(mergedProduct);
-                        console.log('Enriched Firebase product from homepage:', homepageProduct.id);
-                    }
-                }
-            });
-        }
+            const canonicalId = resolveCanonicalProductId(
+                homepageProduct.id,
+                getProductDisplayName(homepageProduct)
+            );
+            const normalizedHomepage = {
+                ...homepageProduct,
+                id: canonicalId,
+                subOffers: getProductSubOffers(homepageProduct).length > 0
+                    ? getProductSubOffers(homepageProduct)
+                    : normalizeDurationsToSubOffers(homepageProduct.durations || {})
+            };
+
+            if (!productMap.has(canonicalId)) {
+                productMap.set(canonicalId, normalizedHomepage);
+                missingLocalProducts.push(normalizedHomepage);
+                console.log('Homepage product missing from Firebase, queued for sync:', canonicalId);
+                return;
+            }
+
+            const existingProduct = productMap.get(canonicalId);
+            const mergedProduct = mergeProductCatalogDetails(existingProduct, normalizedHomepage);
+            productMap.set(canonicalId, mergedProduct);
+            if (productHasMissingCatalogDetails(existingProduct)) {
+                missingLocalProducts.push(mergedProduct);
+                console.log('Enriched Firebase product from homepage card:', canonicalId);
+            }
+        });
+
+        await ensureRequiredAdminProductsVisible(productMap, missingLocalProducts, deletedProductIds);
 
         // تحويل الخريطة إلى مصفوفة
         allProducts = Array.from(productMap.values());
@@ -3440,20 +3613,37 @@ async function loadProducts() {
         // 3. ترتيب المنتجات
         allProducts.sort((a, b) => getProductOrder(a) - getProductOrder(b));
 
-        console.log(`📊 إجمالي المنتجات الجاهزة: ${allProducts.length}`);
+        const homepageVisible = getHomepageVisibleProducts();
+        const adminVisible = getAdminTableProducts();
+        const hiddenFromHomepage = allProducts.filter(product => !isHomepageVisibleProduct(product));
 
-        // تحديث الجدول المعروض
-        if (typeof displayProductsTable === 'function') {
-            displayProductsTable();
-        }
+        adminProductDebug('Merged allProducts', allProducts.map(summarizeProductForDebug));
+        adminProductDebug('Skipped because deleted_products', skippedDeleted);
+        adminProductDebug('Hidden from homepage filter (active:false or isArchived:true)', hiddenFromHomepage.map(summarizeProductForDebug));
+        adminProductDebug('CapCut in allProducts', summarizeProductForDebug(allProducts.find(product => product.id === 'capcut')));
+        adminProductDebug('Lovable in allProducts', summarizeProductForDebug(allProducts.find(product => product.id === 'lovable')));
+        adminProductDebug('Counts', {
+            allProducts: allProducts.length,
+            homepageVisible: homepageVisible.length,
+            adminTable: adminVisible.length,
+            queuedForSync: missingLocalProducts.length
+        });
+
+        console.log(`📊 إجمالي المنتجات الجاهزة: ${allProducts.length}`);
 
         // مزامنة المنتجات المحلية إلى Firebase إذا كانت مفقودة هناك
         if (window.db && window.firebaseModules && missingLocalProducts.length > 0) {
             await syncProductsToFirebase(missingLocalProducts);
         }
 
+        // تحديث الجدول المعروض après sync
+        if (typeof displayProductsTable === 'function') {
+            displayProductsTable();
+        }
+
     } catch (error) {
         console.error('❌ خطأ فادح في loadProducts:', error);
+        adminProductDebug('loadProducts() failed', error);
         showToast('خطأ في تحميل المنتجات', 'error');
     }
 }
@@ -3469,21 +3659,28 @@ async function syncProductsToFirebase(productsToSync = allProducts) {
         const { setDoc, doc } = window.firebaseModules;
         const deletedProductIds = await loadDeletedProductIds();
 
+        const syncedIds = new Set();
         for (const product of productsToSync) {
             if (isProductDeleted(product, deletedProductIds)) continue;
 
+            const canonicalId = resolveCanonicalProductId(product.id, getProductDisplayName(product));
+            if (syncedIds.has(canonicalId)) continue;
+            syncedIds.add(canonicalId);
+
             const productForV2 = normalizeAdminProductForV2({
                 ...product,
-                id: product.id,
+                id: canonicalId,
                 priceDZD: getProductPriceDZD(product),
                 priceUSD: getProductPriceUSD(product),
                 displayOrder: getProductOrder(product),
-                availability: getProductStatus(product)
+                availability: getProductStatus(product),
+                active: REQUIRED_ADMIN_PRODUCT_IDS.includes(canonicalId) ? true : product.active !== false,
+                isArchived: REQUIRED_ADMIN_PRODUCT_IDS.includes(canonicalId) ? false : Boolean(product.isArchived)
             }, product);
 
-            await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, product.id), productForV2, { merge: true });
-            await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, product.id), {
-                id: product.id,
+            await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, canonicalId), productForV2, { merge: true });
+            await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, canonicalId), {
+                id: canonicalId,
                 name: getProductDisplayName(productForV2),
                 price_dzd: productForV2.priceDZD,
                 price_usd: productForV2.priceUSD,
@@ -3508,7 +3705,7 @@ async function syncProductsToFirebase(productsToSync = allProducts) {
 /**
  * عرض جدول المنتجات
  */
-function displayProductsTable(products = getHomepageVisibleProducts()) {
+function displayProductsTable(products = getAdminTableProducts()) {
     const tbody = document.getElementById('products-table-body');
     if (!tbody) {
         console.warn('products-table-body not found');
@@ -3517,18 +3714,24 @@ function displayProductsTable(products = getHomepageVisibleProducts()) {
 
     if (!products || products.length === 0) {
         tbody.innerHTML = '<tr><td colspan="10" class="text-center py-8 text-gray-400">لا توجد منتجات</td></tr>';
+        adminProductDebug('displayProductsTable() rendered 0 rows');
         return;
     }
 
     // تحديث الإحصائيات
     updateProductStats();
 
-    // ترتيب المنتجات حسب order إذا موجود
-    const sortedProducts = [...products].sort((a, b) => {
-        const orderDiff = getProductOrder(a) - getProductOrder(b);
-        if (orderDiff !== 0) return orderDiff;
-        return String(a.id || '').localeCompare(String(b.id || ''));
-    });
+    const sortedProducts = getAdminTableProducts(products);
+    const homepageOnlyHidden = allProducts.filter(product =>
+        !isHomepageVisibleProduct(product) &&
+        sortedProducts.some(visible => visible.id === product.id)
+    );
+
+    adminProductDebug('displayProductsTable() input products', products.map(summarizeProductForDebug));
+    adminProductDebug('displayProductsTable() rows rendered', sortedProducts.map(summarizeProductForDebug));
+    adminProductDebug('Previously hidden by homepage filter but now shown in admin', homepageOnlyHidden.map(summarizeProductForDebug));
+    adminProductDebug('CapCut rendered in admin table', sortedProducts.some(product => product.id === 'capcut'));
+    adminProductDebug('Lovable rendered in admin table', sortedProducts.some(product => product.id === 'lovable'));
 
     console.log('عرض المنتجات:', sortedProducts.length);
     tbody.innerHTML = sortedProducts.map((product, index) => {
@@ -3575,6 +3778,7 @@ function displayProductsTable(products = getHomepageVisibleProducts()) {
             <td class="px-4 py-4">
                 <div class="font-bold">${escapeHtml(productName || product.id)}</div>
                 <div class="text-gray-400 text-xs">${escapeHtml(product.id)}</div>
+                ${product.active === false || product.isArchived === true ? '<span class="text-orange-400 text-xs">مخفي من الصفحة الرئيسية</span>' : ''}
                 ${product.featured ? '<span class="text-yellow-400 text-xs">⭐ مميز</span>' : ''}
             </td>
             <!-- Category -->
@@ -3689,7 +3893,7 @@ function updateProductStats() {
 }
 
 async function updateProductPrice(productId, currency, rawValue) {
-    const product = allProducts.find(p => p.id === productId);
+    const product = findProductById(productId);
     if (!product) return;
 
     const value = Number(rawValue);
@@ -3729,7 +3933,7 @@ async function updateProductPrice(productId, currency, rawValue) {
  * تبديل حالة التوفر بين ثلاث حالات: متوفر، غير متوفر، قريباً
  */
 async function toggleAvailability(productId) {
-    const product = allProducts.find(p => p.id === productId);
+    const product = findProductById(productId);
     if (!product) return;
 
     // التنقل بين الحالات الثلاث: available -> unavailable -> coming_soon -> available
@@ -3790,7 +3994,7 @@ function getProductStatus(product) {
  * تبديل حالة النشاط
  */
 async function toggleActive(productId) {
-    const product = allProducts.find(p => p.id === productId);
+    const product = findProductById(productId);
     if (!product) return;
 
     const newActive = product.active === false ? true : false;
@@ -3861,7 +4065,7 @@ function duplicateProduct(productId) {
  * معاينة المنتج
  */
 function previewProduct(productId) {
-    const product = allProducts.find(p => p.id === productId);
+    const product = findProductById(productId);
     if (!product) return;
 
     const modal = document.getElementById('product-preview-modal');
@@ -3949,7 +4153,7 @@ function searchProducts() {
     const categoryFilter = document.getElementById('filter-category')?.value || 'all';
     const availabilityFilter = document.getElementById('filter-availability')?.value || 'all';
 
-    let filtered = getHomepageVisibleProducts();
+    let filtered = getAdminTableProducts();
 
     // فلترة حسب البحث
     if (searchTerm) {
@@ -4060,17 +4264,29 @@ async function saveProductOrder() {
     const rows = tbody.querySelectorAll('.product-row');
 
     try {
-        const { updateDoc, doc } = window.firebaseModules;
+        const { setDoc, doc } = window.firebaseModules;
 
         for (let i = 0; i < rows.length; i++) {
             const productId = rows[i].dataset.productId;
-            const product = allProducts.find(p => p.id === productId);
-            if (product) {
-                product.order = i;
-                product.displayOrder = i;
-                await updateDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, productId), { order: i, displayOrder: i, updatedAt: new Date() });
-                await updateDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, productId), { order: i, displayOrder: i, updatedAt: new Date() });
-            }
+            const product = findProductById(productId);
+            if (!product) continue;
+
+            const canonicalId = resolveCanonicalProductId(product.id, getProductDisplayName(product));
+            const sortOrder = Number(i);
+
+            product.order = sortOrder;
+            product.displayOrder = sortOrder;
+
+            const orderPayload = {
+                id: canonicalId,
+                order: sortOrder,
+                displayOrder: sortOrder,
+                updatedAt: new Date()
+            };
+
+            await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, canonicalId), orderPayload, { merge: true });
+            await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, canonicalId), orderPayload, { merge: true });
+            adminProductDebug(`Saved drag order for ${canonicalId}`, orderPayload);
         }
 
         showToast('تم حفظ الترتيب الجديد ✅');
@@ -4100,7 +4316,7 @@ function openProductModal(productId = null) {
     // Fallback to legacy behavior
     if (productId) {
         title.textContent = '✏️ تعديل المنتج';
-        const product = allProducts.find(p => p.id === productId);
+        const product = findProductById(productId);
         if (product) {
             document.getElementById('product-id').value = product.id;
             document.getElementById('product-id').disabled = true;
@@ -5003,16 +5219,6 @@ document.getElementById('import-file')?.addEventListener('change', async functio
 
 /**
  * تفعيل/تعطيل وضع الصيانة
- */
-function toggleMaintenanceMode() {
-    const enabled = document.getElementById('maintenance-mode').checked;
-    localStorage.setItem('maintenanceMode', enabled ? 'true' : 'false');
-    showToast(enabled ? 'تم تفعيل وضع الصيانة ✅' : 'تم تعطيل وضع الصيانة ✅');
-    logActivity('tools', 'maintenance_mode', enabled ? 'enabled' : 'disabled');
-}
-
-/**
- * فتح نافذة كود الخصم
  */
 async function toggleMaintenanceMode() {
     const enabled = document.getElementById('maintenance-mode').checked;

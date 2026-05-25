@@ -222,11 +222,12 @@ const PRODUCTS = {
   'capcut': {
     id: 'capcut',
     name: 'CapCut Pro',
+    category: 'design',
     price_dzd: 800,
     price_usd: 3,
     durations: {
       '1month': { dzd: 800, usd: 3 },
-      '3months': { dzd: 1200, usd: 4.5 },
+      '3months': { dzd: 1800, usd: 4.5 },
       '6months': { dzd: 3200, usd: 12.8 },
       '1year': { dzd: 5500, usd: 22 }
     },
@@ -298,9 +299,46 @@ const PRODUCTS = {
       usd: ['binance', 'redotpay', 'crypto']
     }
   },
+  'super-grok': {
+    id: 'super-grok',
+    name: 'SUPER GROK',
+    price_dzd: 2200,
+    price_usd: 8.8,
+    durations: {
+      '1month': { dzd: 2200, usd: 8.8 }
+    },
+    description: {
+      ar: 'نموذج الذكاء الاصطناعي الأقوى والأسرع من xAI للمبرمجين والمبدعين.',
+      en: 'The most powerful and fastest AI model from xAI for developers and creators.',
+      fr: 'Le modèle IA le plus puissant et rapide de xAI pour développeurs et créateurs.'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
+  'youtube': {
+    id: 'youtube',
+    name: 'YouTube Premium',
+    price_dzd: 500,
+    price_usd: 2,
+    durations: {
+      '1month': { dzd: 500, usd: 2 }
+    },
+    description: {
+      ar: 'استمتع بمشاهدة YouTube بدون إعلانات مع تشغيل في الخلفية وYouTube Music.',
+      en: 'Enjoy YouTube without ads, background play, and YouTube Music.',
+      fr: 'Profitez de YouTube sans publicités, lecture en arrière-plan et YouTube Music.'
+    },
+    paymentMethods: {
+      dzd: ['baridimob', 'crypto'],
+      usd: ['binance', 'redotpay', 'crypto']
+    }
+  },
   'lovable': {
     id: 'lovable',
     name: 'Lovable AI',
+    category: 'ai',
     price_dzd: 1500,
     price_usd: 6,
     durations: {
@@ -537,3 +575,6 @@ function getProductPrice(product, currency) {
 }
 
 // End of file - Removed export to ensure global compatibility in browser script tags.
+// Expose PRODUCTS on window so module scripts (e.g. index.html <script type="module">)
+// can access and patch it at runtime (e.g. with live Firebase prices).
+window.PRODUCTS = PRODUCTS;

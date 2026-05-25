@@ -14,7 +14,21 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const PRODUCTS_COLLECTION = 'products_v2';
+const HOMEPAGE_PRODUCT_DEBUG = true;
 let productsUnsubscribe = null;
+
+function homepageProductDebug(label, payload) {
+    if (!HOMEPAGE_PRODUCT_DEBUG) return;
+    if (payload === undefined) {
+        console.log(`[homepage-products] ${label}`);
+        return;
+    }
+    console.log(`[homepage-products] ${label}`, payload);
+}
+
+function getProductDisplayNameForSort(product) {
+    return getLocalizedText(product?.name, 'en', product?.id || '');
+}
 const DEFAULT_LANDING_PAGES = {
     trw: 'trw_landing.html',
     chatgpt: 'chatgpt_landing.html',
@@ -141,9 +155,113 @@ function normalizeProductCategory(product) {
     return rawCategory || 'courses';
 }
 
+function getExplicitProductSortOrder(product) {
+    const displayOrder = Number(product?.displayOrder);
+    if (Number.isFinite(displayOrder) && displayOrder >= 0) {
+        return displayOrder;
+    }
+
+    const order = Number(product?.order);
+    if (Number.isFinite(order) && order >= 0) {
+        return order;
+    }
+
+    return null;
+}
+
 function getProductOrderValue(product) {
-    const explicitOrder = Number(product?.displayOrder ?? product?.order);
-    return Number.isFinite(explicitOrder) && explicitOrder >= 0 ? explicitOrder : 9999;
+    const explicitOrder = getExplicitProductSortOrder(product);
+    return explicitOrder === null ? 9999 : explicitOrder;
+}
+
+function normalizeProductOrderFields(product) {
+    if (!product) return product;
+    const sortOrder = getExplicitProductSortOrder(product);
+    if (sortOrder !== null) {
+        product.displayOrder = sortOrder;
+        product.order = sortOrder;
+    }
+    return product;
+}
+
+function isCanonicalFirestoreDoc(product, canonicalId) {
+    const docId = product?.firebaseDocId || product?.id;
+    if (!docId || !canonicalId) return false;
+    return resolveCanonicalFirestoreId(docId) === canonicalId && docId === canonicalId;
+}
+
+function resolveCanonicalFirestoreId(rawId = '', fallbackName = '') {
+    if (window.ProductIdUtils?.resolveCanonicalProductId) {
+        return window.ProductIdUtils.resolveCanonicalProductId(rawId, fallbackName);
+    }
+    // Map stale/ghost Firebase documents → their admin-managed canonical ID.
+    // The canonical ID is whichever document the admin panel actually manages
+    // (usually the one with active:true and a real displayOrder).
+    // To add a new mapping: find the stale doc ID, map it to the admin-managed doc ID.
+    const KNOWN_DUPLICATES = {
+        // Stale short-ID docs → admin-managed long-ID docs
+        'canva':        'canva-pro',
+        'netflix':      'netflix-premium',
+        'duolingo':     'duolingo-super',
+        'primevideo':   'prime-video',
+        'lovable':      'lovable-ai',
+        'cursor':       'cursor-ai',
+        'perplexity':   'perplexity-ai-pro',
+        // Stale long-ID docs → admin-managed short-ID docs
+        'the-real-world-account':   'trw',
+        'google-gemini-pro-veo-3':  'google-ai',
+        'capcut-pro':               'capcut'
+    };
+    const id = String(rawId || '').toLowerCase().trim();
+    return KNOWN_DUPLICATES[id] || id;
+}
+
+function resolveMergedProductSortOrder(existing, incoming, canonicalId) {
+    const candidates = [existing, incoming].filter(Boolean);
+    const canonicalRecord = candidates.find(item => isCanonicalFirestoreDoc(item, canonicalId));
+
+    if (canonicalRecord) {
+        const canonicalOrder = getExplicitProductSortOrder(canonicalRecord);
+        if (canonicalOrder !== null) return canonicalOrder;
+    }
+
+    const candidateOrders = candidates
+        .map(getExplicitProductSortOrder)
+        .filter(order => order !== null);
+
+    if (candidateOrders.length > 0) {
+        return Math.min(...candidateOrders);
+    }
+
+    return 9999;
+}
+
+function mergeCanonicalProductRecords(existing, incoming, canonicalId) {
+    const existingCanonical = isCanonicalFirestoreDoc(existing, canonicalId);
+    const incomingCanonical = isCanonicalFirestoreDoc(incoming, canonicalId);
+
+    let preferred = existing;
+    let secondary = incoming;
+
+    if (incomingCanonical && !existingCanonical) {
+        preferred = incoming;
+        secondary = existing;
+    } else if (!incomingCanonical && !existingCanonical) {
+        preferred = { ...existing, ...incoming };
+        secondary = null;
+    }
+
+    const merged = secondary ? { ...secondary, ...preferred } : { ...preferred };
+    merged.id = canonicalId;
+    merged.firebaseDocId = preferred.firebaseDocId || incoming.firebaseDocId || canonicalId;
+
+    const sortOrder = resolveMergedProductSortOrder(existing, incoming, canonicalId);
+    if (sortOrder !== 9999) {
+        merged.displayOrder = sortOrder;
+        merged.order = sortOrder;
+    }
+
+    return normalizeProductOrderFields(merged);
 }
 
 function getProductLandingPage(product) {
@@ -157,14 +275,76 @@ function getProductLandingPage(product) {
     return matchedKey ? DEFAULT_LANDING_PAGES[matchedKey] : '';
 }
 
-function normalizeProducts(products) {
-    return products
-        .filter(product => product && product.isArchived !== true && product.active !== false)
-        .sort((a, b) => {
-            const explicitOrderDiff = getProductOrderValue(a) - getProductOrderValue(b);
-            if (explicitOrderDiff !== 0) return explicitOrderDiff;
-            return String(a.id || '').localeCompare(String(b.id || ''));
+function dedupeProductsToCanonicalIds(products) {
+    const map = new Map();
+
+    products.forEach((product) => {
+        if (!product) return;
+
+        const firebaseDocId = product.firebaseDocId || product.id;
+        const canonicalId = resolveCanonicalFirestoreId(
+            firebaseDocId,
+            getProductDisplayNameForSort(product)
+        );
+        const normalized = normalizeProductOrderFields({
+            ...product,
+            id: canonicalId,
+            firebaseDocId
         });
+        const existing = map.get(canonicalId);
+
+        if (!existing) {
+            map.set(canonicalId, normalized);
+            return;
+        }
+
+        map.set(canonicalId, mergeCanonicalProductRecords(existing, normalized, canonicalId));
+    });
+
+    return Array.from(map.values());
+}
+
+function logSortedProductsForDebug(products, stage = 'sorted') {
+    homepageProductDebug(`${stage} product order`, products.map((product, index) => ({
+        index,
+        id: product.id,
+        firebaseDocId: product.firebaseDocId,
+        name: getProductDisplayNameForSort(product),
+        displayOrder: product.displayOrder,
+        order: product.order,
+        sortValue: getProductOrderValue(product)
+    })));
+    homepageProductDebug('Lovable sort debug', products
+        .filter(product => /lovable/i.test(String(product.id)) || /lovable/i.test(getProductDisplayNameForSort(product)))
+        .map((product, index) => ({
+            index,
+            id: product.id,
+            firebaseDocId: product.firebaseDocId,
+            displayOrder: product.displayOrder,
+            order: product.order,
+            sortValue: getProductOrderValue(product)
+        })));
+}
+
+function normalizeProducts(products) {
+    const deduped = dedupeProductsToCanonicalIds(products)
+        .filter(product => {
+            if (!product || product.isArchived === true) return false;
+            // If admin set availability to 'unavailable', show the product with a badge
+            if (product.availability === 'unavailable') return true;
+            // Otherwise, respect the active toggle — hide deactivated products
+            return product.active !== false;
+        })
+        .map(normalizeProductOrderFields);
+
+    const sorted = deduped.sort((a, b) => {
+        const explicitOrderDiff = getProductOrderValue(a) - getProductOrderValue(b);
+        if (explicitOrderDiff !== 0) return explicitOrderDiff;
+        return String(a.id || '').localeCompare(String(b.id || ''));
+    });
+
+    logSortedProductsForDebug(sorted, 'normalizeProducts');
+    return sorted;
 }
 
 function preloadCriticalProductMedia(products, count = 6) {
@@ -212,11 +392,21 @@ async function loadProductsFromFirebase(db, firebaseModules) {
         const products = [];
 
         querySnapshot.forEach((docItem) => {
+            const data = docItem.data();
             products.push({
+                ...data,
                 id: docItem.id,
-                ...docItem.data()
+                firebaseDocId: docItem.id
             });
         });
+
+        homepageProductDebug('Firestore raw docs before normalize', products.map(product => ({
+            firebaseDocId: product.firebaseDocId,
+            id: product.id,
+            name: getProductDisplayNameForSort(product),
+            displayOrder: product.displayOrder,
+            order: product.order
+        })));
 
         const visibleProducts = normalizeProducts(products);
         console.log('✅ تم تحميل', visibleProducts.length, 'منتج من Firebase');
@@ -324,17 +514,43 @@ function createProductCardHTML(product, lang = 'ar') {
         : (subOffers && !firstAvailableSubOffer ? (firstSubOffer?.availability || 'unavailable') : 'available');
     const isUnavailableState = effectiveAvailability !== 'available';
 
+    const getFallbackDurationPrice = (offerId, field) => {
+        // Try multiple ID variants to handle cases like Firebase 'capcut-pro' vs config 'capcut'
+        const idVariants = [
+            product.id,
+            product.id?.replace(/-pro$/i, ''),
+            product.id?.replace(/pro$/i, ''),
+            product.id?.replace(/-/g, '')
+        ].filter((id, i, arr) => id && arr.indexOf(id) === i);
+
+        for (const tryId of idVariants) {
+            const localProduct = typeof window !== 'undefined' ? window.PRODUCTS?.[tryId] : null;
+            if (!localProduct?.durations) continue;
+            const normKey = k => String(k).toLowerCase().replace(/[\s-]/g, '');
+            const localDur = localProduct.durations[offerId] ||
+                localProduct.durations[Object.keys(localProduct.durations).find(k => normKey(k) === normKey(String(offerId)))];
+            if (!localDur) continue;
+            if (field === 'dzd') return localDur.dzd || localDur.price_dzd || 0;
+            return localDur.usd || localDur.price_usd || 0;
+        }
+        return 0;
+    };
+
     if (subOffers) {
         const firstAvail = firstAvailableSubOffer || firstSubOffer;
         activePriceDZD = getNumericValue(firstAvail, ['priceDZD', 'price_dzd'], priceDZD);
         activePriceUSD = getNumericValue(firstAvail, ['priceUSD', 'price_usd'], priceUSD);
+        if (!activePriceDZD) activePriceDZD = getFallbackDurationPrice(firstAvail?.id, 'dzd');
+        if (!activePriceUSD) activePriceUSD = getFallbackDurationPrice(firstAvail?.id, 'usd');
 
         const btns = subOffers.map(offer => {
             const label = getLocalizedText(offer.name, lang, offer.id || '');
             const isActive = offer.id === firstAvail.id;
             const isDisabled = offer.availability !== 'available';
-            const offerPriceDZD = getNumericValue(offer, ['priceDZD', 'price_dzd'], 0);
-            const offerPriceUSD = getNumericValue(offer, ['priceUSD', 'price_usd'], 0);
+            let offerPriceDZD = getNumericValue(offer, ['priceDZD', 'price_dzd'], 0);
+            let offerPriceUSD = getNumericValue(offer, ['priceUSD', 'price_usd'], 0);
+            if (!offerPriceDZD) offerPriceDZD = getFallbackDurationPrice(offer.id, 'dzd');
+            if (!offerPriceUSD) offerPriceUSD = getFallbackDurationPrice(offer.id, 'usd');
             const subLabel = isDisabled
                 ? `<span style="display:block;font-size:0.7rem;color:#ef4444;">${offer.availability === 'coming_soon' ? getUiText('comingSoon', lang) : getUiText('unavailable', lang)}</span>`
                 : '';
@@ -491,6 +707,7 @@ function renderProducts(products, lang = 'ar') {
     }
 
     const sortedProducts = normalizeProducts(products);
+    logSortedProductsForDebug(sortedProducts, 'renderProducts');
 
     window.__firebaseRenderedProducts = sortedProducts;
 
@@ -519,6 +736,7 @@ function renderProducts(products, lang = 'ar') {
         window.applyProductCategoryFilter(activeFilter);
     }
     window.dispatchEvent(new CustomEvent('firebaseProductsRendered', { detail: { products: sortedProducts } }));
+    productGrid.classList.add('ready');
 }
 
 function renderMobileProducts(products, lang = 'ar') {
@@ -720,12 +938,15 @@ function subscribeToProductChanges(db, firebaseModules) {
     productsUnsubscribe = onSnapshot(collection(db, PRODUCTS_COLLECTION), (snapshot) => {
         const products = [];
         snapshot.forEach(docItem => {
+            const data = docItem.data();
             products.push({
+                ...data,
                 id: docItem.id,
-                ...docItem.data()
+                firebaseDocId: docItem.id
             });
         });
 
+        homepageProductDebug('Realtime snapshot received', products.length);
         const currentLang = window.currentLang || 'ar';
         renderProducts(products, currentLang);
     }, (error) => {
