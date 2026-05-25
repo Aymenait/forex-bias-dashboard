@@ -5148,7 +5148,7 @@ async function saveMetaPixel() {
 async function backupData() {
     try {
         const { collection, getDocs } = window.firebaseModules;
-        const collections = ['reviews', 'orders', 'products', 'settings'];
+        const collections = ['reviews', 'orders', 'products_v2', 'products', 'settings'];
         const backup = {};
 
         for (const collName of collections) {

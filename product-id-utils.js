@@ -1,30 +1,37 @@
 /**
  * Canonical product IDs shared by admin, homepage loader, and verification scripts.
+ *
+ * Direction: stale/ghost Firebase doc ID → admin-managed canonical doc ID.
+ * This must match KNOWN_DUPLICATES in firebase-products-loader.js.
  */
-export const CANONICAL_PRODUCT_ID_ALIASES = {
-    'capcut-pro': 'capcut',
-    'lovable-ai': 'lovable',
-    'the-real-world-account': 'trw',
-    'gama-ai-pro': 'gamma',
-    'canva-pro': 'canva',
-    'netflix-premium': 'netflix',
-    'prime-video': 'primevideo',
-    'youtube-premium': 'youtube',
-    'microsoft-office-365': 'microsoft-office',
-    'duolingo-super': 'duolingo',
-    'google-gemini-pro-veo-3': 'google-ai',
-    'perplexity-ai-pro': 'perplexity',
-    'cursor-ai': 'cursor',
-    'super-grok': 'super-grok',
-    'product-chatgpt': 'chatgpt',
-    'product-claude': 'claude',
-    'grok-card': 'super-grok',
-    'gamma-card': 'gamma',
-    'adobe-card': 'adobe',
-    'veo-order-btn': 'google-ai'
+const CANONICAL_PRODUCT_ID_ALIASES = {
+    // Stale short-ID ghost docs → admin-managed long-ID docs
+    'canva':                    'canva-pro',
+    'netflix':                  'netflix-premium',
+    'duolingo':                 'duolingo-super',
+    'primevideo':               'prime-video',
+    'lovable':                  'lovable-ai',
+    'cursor':                   'cursor-ai',
+    'perplexity':               'perplexity-ai-pro',
+    // Stale long-ID ghost docs → admin-managed short-ID docs
+    'the-real-world-account':   'trw',
+    'google-gemini-pro-veo-3':  'google-ai',
+    'capcut-pro':               'capcut',
+    // Other aliases
+    'gama-ai-pro':              'gamma',
+    'youtube-premium':          'youtube',
+    'microsoft-office-365':     'microsoft-office',
+    'super-grok':               'super-grok',
+    // UI card/element IDs → canonical product IDs
+    'product-chatgpt':          'chatgpt',
+    'product-claude':           'claude',
+    'grok-card':                'super-grok',
+    'gamma-card':               'gamma',
+    'adobe-card':               'adobe',
+    'veo-order-btn':            'google-ai'
 };
 
-export function normalizeProductIdSlug(value = '') {
+function normalizeProductIdSlug(value = '') {
     return String(value || '')
         .toLowerCase()
         .replace(/^product-/, '')
@@ -33,7 +40,7 @@ export function normalizeProductIdSlug(value = '') {
         .replace(/^-+|-+$/g, '');
 }
 
-export function resolveCanonicalProductId(rawId = '', fallbackName = '') {
+function resolveCanonicalProductId(rawId = '', fallbackName = '') {
     const normalizedRaw = normalizeProductIdSlug(rawId);
     if (CANONICAL_PRODUCT_ID_ALIASES[normalizedRaw]) {
         return CANONICAL_PRODUCT_ID_ALIASES[normalizedRaw];
@@ -54,4 +61,3 @@ if (typeof window !== 'undefined') {
         resolveCanonicalProductId
     };
 }
-

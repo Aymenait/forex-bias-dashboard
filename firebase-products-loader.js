@@ -475,14 +475,44 @@ function createProductCardHTML(product, lang = 'ar') {
         'google-ai': { url: 'https://i.pinimg.com/736x/c2/5b/dd/c25bdda8e7d4eb27bcb2f4d411441d92.jpg', type: 'image' },
         'alight-motion': { url: 'https://i.pinimg.com/originals/ad/8b/2c/ad8b2cf5e7b44514ab71b9fd9666ec16.jpg', type: 'image' },
         'perplexity': { url: 'https://i.imgur.com/mEy5oXF.mp4', type: 'video' },
-        'microsoft-office': { url: 'https://i.pinimg.com/736x/3c/0d/b2/3c0db24fec715f86cc3e167892f88e2f.jpg', type: 'image' }
+        'microsoft-office': { url: 'https://i.pinimg.com/736x/3c/0d/b2/3c0db24fec715f86cc3e167892f88e2f.jpg', type: 'image' },
+        // Canonical long-ID aliases (after dedup, products use these IDs)
+        'canva-pro':          { url: 'https://i.pinimg.com/736x/71/8b/41/718b41945aab84bd2276c762266931d0.jpg', type: 'image' },
+        'netflix-premium':    { url: 'https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif', type: 'image' },
+        'duolingo-super':     { url: 'https://i.pinimg.com/originals/98/59/12/98591272861e66a02eecf5dae0450c73.gif', type: 'image' },
+        'prime-video':        { url: 'https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif', type: 'image' },
+        'primevideo':         { url: 'https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif', type: 'image' },
+        'lovable-ai':         { url: 'https://i.pinimg.com/1200x/cd/d4/69/cdd469e94eb529ae307f9b5d56e8da96.jpg', type: 'image' },
+        'cursor-ai':          { url: 'https://i.pinimg.com/736x/29/f9/48/29f9488bd27d42debcfbddb33c1c79d7.jpg', type: 'image' },
+        'perplexity-ai-pro':  { url: 'https://i.imgur.com/mEy5oXF.mp4', type: 'video' },
+        'capcut-pro':         { url: 'https://i.pinimg.com/1200x/38/e3/08/38e308732b87069ed50893423f09ca4b.jpg', type: 'image' },
+        'tradingview-premium':{ url: 'https://i.pinimg.com/736x/8c/63/a5/8c63a5c7d9d6e826b281b01dea6bd5da.jpg', type: 'image' }
     };
 
-    // Apply media fallback if missing in product data
-    if (!product.mediaUrl || product.mediaUrl === '' || product.mediaUrl === 'null') {
-        const fallback = mediaMap[product.id] || 
-                         Object.entries(mediaMap).find(([key]) => name.toLowerCase().includes(key))?.[1];
-        
+    // Apply media fallback + cross-contamination detection
+    const correctMedia = mediaMap[product.id];
+    const firebaseUrl = (product.mediaUrl || '').trim();
+    const hasFirebaseUrl = firebaseUrl && firebaseUrl !== '' && firebaseUrl !== 'null';
+
+    if (correctMedia) {
+        if (!hasFirebaseUrl) {
+            // No Firebase media → use our known-good fallback
+            product.mediaUrl = correctMedia.url;
+            product.mediaType = correctMedia.type;
+        } else if (firebaseUrl !== correctMedia.url) {
+            // Firebase has a URL but it's different from what we expect.
+            // Check if it actually belongs to ANOTHER product (cross-contamination).
+            const isCrossContaminated = Object.entries(mediaMap).some(
+                ([otherId, other]) => otherId !== product.id && other.url === firebaseUrl
+            );
+            if (isCrossContaminated) {
+                product.mediaUrl = correctMedia.url;
+                product.mediaType = correctMedia.type;
+            }
+        }
+    } else if (!hasFirebaseUrl) {
+        // No known media and no Firebase URL → try fuzzy name match
+        const fallback = Object.entries(mediaMap).find(([key]) => name.toLowerCase().includes(key))?.[1];
         if (fallback) {
             product.mediaUrl = fallback.url;
             product.mediaType = fallback.type;
@@ -518,8 +548,7 @@ function createProductCardHTML(product, lang = 'ar') {
         // Try multiple ID variants to handle cases like Firebase 'capcut-pro' vs config 'capcut'
         const idVariants = [
             product.id,
-            product.id?.replace(/-pro$/i, ''),
-            product.id?.replace(/pro$/i, ''),
+            product.id?.replace(/(-(ai|pro|premium|super|lite))+$/i, ''),
             product.id?.replace(/-/g, '')
         ].filter((id, i, arr) => id && arr.indexOf(id) === i);
 
