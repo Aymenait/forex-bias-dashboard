@@ -371,6 +371,19 @@ function handleCurrencyToggle(selectedCurrency, currencyManager, paymentManager)
     // Update all payment buttons (Requirement 4.1, 5.1)
     paymentManager.updateAllPaymentButtons(selectedCurrency);
 
+    // Sync mobile cards after desktop prices finish updating (150ms delay + buffer)
+    setTimeout(() => {
+      if (typeof window.refreshMobileOfferCardsText === 'function') {
+        window.refreshMobileOfferCardsText();
+      }
+      if (typeof window.selectMobileChatGPTDuration === 'function' && window.mobileSelectedChatGPTDuration) {
+        window.selectMobileChatGPTDuration(window.mobileSelectedChatGPTDuration);
+      }
+      if (typeof window.refreshMobilePopularPrice === 'function') {
+        window.refreshMobilePopularPrice();
+      }
+    }, 250);
+
     // Restore scroll position (Requirement 7.4)
     // Check if scrollTo is available (not in test environment)
     try {

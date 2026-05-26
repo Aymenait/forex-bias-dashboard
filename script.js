@@ -1122,10 +1122,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 fr: 'Fonctionnalites Pro pour creer et monter des videos.'
             }
         };
-        const localizedPopularPrices = { chatgpt: 1000, adobe: 1500, trw: 3500, capcut: 800 };
-        const symbol = lang === 'ar' ? '\u062f\u062c' : 'DA';
+        const localizedPopularPrices = { chatgpt: 2500, adobe: 1500, trw: 3500, capcut: 800 };
+        const localizedPopularPricesUSD = { chatgpt: 10, adobe: 6, trw: 15, capcut: 3 };
+        const currency = window.currencyManager?.getCurrentCurrency() || 'DZD';
         mobilePopularDesc.textContent = localizedPopularCopy[item.key]?.[lang] || localizedPopularCopy[item.key]?.ar || item.desc;
-        mobilePopularPrice.textContent = `${localizedPopularPrices[item.key] || ''} ${symbol}`.trim();
+        if (currency === 'USD') {
+            const usdVal = localizedPopularPricesUSD[item.key];
+            mobilePopularPrice.textContent = usdVal != null ? `$${usdVal}` : '';
+        } else {
+            const symbol = lang === 'ar' ? '\u062f\u062c' : 'DA';
+            mobilePopularPrice.textContent = `${localizedPopularPrices[item.key] || ''} ${symbol}`.trim();
+        }
         mobilePopularIndex++;
     }
 
@@ -1133,6 +1140,12 @@ document.addEventListener('DOMContentLoaded', () => {
         rotateMobilePopularOffer();
         setInterval(rotateMobilePopularOffer, 2000);
     }
+
+    window.refreshMobilePopularPrice = function() {
+        if (!mobilePopularMedia.length) return;
+        mobilePopularIndex--;
+        rotateMobilePopularOffer();
+    };
 });
 
 // Copy wallet address function

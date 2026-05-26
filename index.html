@@ -560,7 +560,7 @@
                         <article class="mobile-expand-card is-open" data-mobile-expand-product="chatgpt" data-category="ai">
                             <button class="mobile-expand-toggle" type="button" aria-expanded="true">
                                 <img src="https://i.imgur.com/FDZBdd9.gif" alt="ChatGPT">
-                                <span><strong>ChatGPT Premium</strong><em id="mobile-chatgpt-price">1000 DZD</em></span>
+                                <span><strong>ChatGPT Premium</strong><em id="mobile-chatgpt-price">2500 DZD</em></span>
                             </button>
                             <div class="mobile-expand-details">
                                 <p data-i18n="mobile.chatgpt.desc">Suitable subscription for students, content creators and business owners, with support after activation.</p>
@@ -613,7 +613,7 @@
                         <article class="mobile-expand-card" data-mobile-expand-product="adobe" data-category="design">
                             <button class="mobile-expand-toggle" type="button" aria-expanded="false">
                                 <img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt="Adobe Creative Cloud">
-                                <span><strong>Adobe Creative Cloud</strong><em>1500 DZD</em></span>
+                                <span><strong>Adobe Creative Cloud</strong><em data-price-dzd="1500" data-price-usd="6">1500 DZD</em></span>
                             </button>
                             <div class="mobile-expand-details">
                                 <p data-i18n="mobile.adobe.desc">Suitable package for design and video editing, with clear activation and order tracking.</p>
@@ -631,7 +631,7 @@
                         <article class="mobile-expand-card" data-mobile-expand-product="trw" data-category="courses">
                             <button class="mobile-expand-toggle" type="button" aria-expanded="false">
                                 <img src="https://i.imgur.com/hEiJhso.gif" alt="The Real World">
-                                <span><strong>The Real World</strong><em>3500 DZD</em></span>
+                                <span><strong>The Real World</strong><em data-price-dzd="3500" data-price-usd="15">3500 DZD</em></span>
                             </button>
                             <div class="mobile-expand-details">
                                 <p data-i18n="mobile.trw.desc">Courses account and educational platform with order tracking and after-sales service.</p>
@@ -651,7 +651,7 @@
                                 <video autoplay loop muted playsinline aria-label="CapCut Pro">
                                     <source src="https://i.imgur.com/ZpMzFGa.mp4" type="video/mp4">
                                 </video>
-                                <span><strong>CapCut Pro</strong><em>800 Ø¯Ø¬</em></span>
+                                <span><strong>CapCut Pro</strong><em data-price-dzd="800" data-price-usd="3">800 DZD</em></span>
                             </button>
                             <div class="mobile-expand-details">
                                 <p data-i18n="mobile.capcut.desc">Ù…Ù†Ø§Ø³Ø¨ Ù„Ù„Ù…ÙˆÙ†ØªØ§Ø¬ ÙˆØµÙ†Ø§Ø¹Ø© Ø§Ù„ÙÙŠØ¯ÙŠÙˆÙ‡Ø§Øª Ø§Ù„Ù‚ØµÙŠØ±Ø© Ù…Ø¹ Ù…Ø²Ø§ÙŠØ§ Pro.</p>
@@ -2425,6 +2425,9 @@
     <script>
         // Initialize all product selection states
         document.addEventListener('DOMContentLoaded', () => {
+            // Set default mobile ChatGPT duration so currency switching works before user clicks
+            window.mobileSelectedChatGPTDuration = '1month';
+
             // Give script.js time to load and export translations/functions
             setTimeout(() => {
                 if (window.selectCanvaType) selectCanvaType('standard');
@@ -2617,15 +2620,27 @@
                 }
             });
 
+            window.mobileSelectedChatGPTDuration = duration;
+            const currency = window.currencyManager?.getCurrentCurrency() || 'DZD';
+            const priceMap = {
+                '1month':         { DZD: '2500 DZD', USD: '$10' },
+                '1month-upgrade': { DZD: '1800 DZD', USD: '$7.2' }
+            };
+            const label = (priceMap[duration] || {})[currency] || (priceMap[duration] || {}).DZD || '';
+            const price1monthEl = document.getElementById('mobile-chatgpt-prices-1month');
+            const price1monthUpgradeEl = document.getElementById('mobile-chatgpt-prices-1month-upgrade');
+            const summaryPriceEl = document.getElementById('mobile-chatgpt-price');
+
             if (duration === '1month') {
-                document.getElementById('mobile-chatgpt-prices-1month').style.display = 'block';
-                document.getElementById('mobile-chatgpt-prices-1month-upgrade').style.display = 'none';
-                document.getElementById('mobile-chatgpt-price').textContent = '2500 DZD';
+                if (price1monthEl) price1monthEl.style.display = 'block';
+                if (price1monthUpgradeEl) price1monthUpgradeEl.style.display = 'none';
+                if (price1monthEl) price1monthEl.querySelector('strong').textContent = priceMap['1month'][currency] || priceMap['1month'].DZD;
             } else if (duration === '1month-upgrade') {
-                document.getElementById('mobile-chatgpt-prices-1month').style.display = 'none';
-                document.getElementById('mobile-chatgpt-prices-1month-upgrade').style.display = 'block';
-                document.getElementById('mobile-chatgpt-price').textContent = '1800 DZD';
+                if (price1monthEl) price1monthEl.style.display = 'none';
+                if (price1monthUpgradeEl) price1monthUpgradeEl.style.display = 'block';
+                if (price1monthUpgradeEl) price1monthUpgradeEl.querySelector('strong').textContent = priceMap['1month-upgrade'][currency] || priceMap['1month-upgrade'].DZD;
             }
+            if (summaryPriceEl) summaryPriceEl.textContent = label;
         }
     </script>
     <script src="site-gate.js?v=3"></script>

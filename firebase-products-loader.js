@@ -79,6 +79,12 @@ function formatDzd(amount, lang = 'ar') {
     return `${Number(amount || 0).toLocaleString(locale)} ${getUiText('currencyDzd', lang)}`;
 }
 
+function formatPrice(dzd, usd, lang = 'ar') {
+    const currency = window.currencyManager?.getCurrentCurrency() || 'DZD';
+    if (currency === 'USD' && usd) return `$${usd}`;
+    return formatDzd(dzd, lang);
+}
+
 function normalizeFeatures(features) {
     if (Array.isArray(features)) return features;
     if (typeof features === 'string') {
@@ -807,7 +813,7 @@ function renderMobileProducts(products, lang = 'ar') {
                         data-price-usd="${offerPriceUSD}"
                         ${offerDisabled ? 'disabled aria-disabled="true"' : ''}>
                         <span>${getLocalizedText(offer.name, lang, offer.id || '')}</span>
-                        <strong>${formatDzd(offerPriceDZD, lang)}</strong>
+                        <strong data-price-dzd="${offerPriceDZD}" data-price-usd="${offerPriceUSD}">${formatPrice(offerPriceDZD, offerPriceUSD, lang)}</strong>
                     </button>`;
                 }).join('')}
             </div>` : '';
@@ -824,7 +830,7 @@ function renderMobileProducts(products, lang = 'ar') {
                 <button class="mobile-expand-toggle" type="button" aria-expanded="${index === 0 ? 'true' : 'false'}" ${disabled ? 'aria-disabled="true"' : ''}>
                     ${media}
                     ${disabled ? `<span class="mobile-status-badge">${statusLabel}</span>` : ''}
-                    <span><strong>${name}</strong><em data-available-price="${formatDzd(activePriceDZD, lang)}">${disabled ? statusLabel : formatDzd(activePriceDZD, lang)}</em></span>
+                    <span><strong>${name}</strong><em data-price-dzd="${activePriceDZD}" data-price-usd="${activePriceUSD}" data-available-price="${formatPrice(activePriceDZD, activePriceUSD, lang)}">${disabled ? statusLabel : formatPrice(activePriceDZD, activePriceUSD, lang)}</em></span>
                 </button>
                 <div class="mobile-expand-details">
                     <p>${description}</p>
@@ -861,7 +867,7 @@ function renderMobileProducts(products, lang = 'ar') {
             button.classList.add('is-selected');
             const dzd = Number(button.dataset.priceDzd) || 0;
             const usd = Number(button.dataset.priceUsd) || 0;
-            const label = formatDzd(dzd, lang);
+            const label = formatPrice(dzd, usd, lang);
             const priceLabel = card.querySelector('.mobile-expand-toggle em');
             const orderButton = card.querySelector('.mobile-expand-actions button');
             if (priceLabel) {
