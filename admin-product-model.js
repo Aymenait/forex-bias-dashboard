@@ -96,7 +96,8 @@ function createSubOffer({
     priceDZD,
     priceUSD,
     availability = AVAILABILITY_STATUS.AVAILABLE,
-    order = 0
+    order = 0,
+    deliveryTime = ''
 }) {
     return {
         id: id || generateId(),
@@ -104,7 +105,8 @@ function createSubOffer({
         priceDZD: typeof priceDZD === 'number' ? priceDZD : 0,
         priceUSD: typeof priceUSD === 'number' ? priceUSD : 0,
         availability: availability,
-        order: order
+        order: order,
+        deliveryTime: deliveryTime || ''
     };
 }
 

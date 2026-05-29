@@ -471,11 +471,15 @@ function openSubOfferModal(index = null) {
         const availability = subOffer.availability || 'available';
         const radio = document.querySelector(`input[name="sub-offer-availability"][value="${availability}"]`);
         if (radio) radio.checked = true;
+
+        // Set delivery time
+        setFieldValue('sub-offer-delivery-time', subOffer.deliveryTime || '');
     } else {
         // Add mode
         title.textContent = '➕ إضافة عرض فرعي';
         setFieldValue('sub-offer-id', '');
         setFieldValue('sub-offer-index', '');
+        setFieldValue('sub-offer-delivery-time', '');
         const dkSelectAdd = document.getElementById('sub-offer-duration-key');
         if (dkSelectAdd) dkSelectAdd.value = '';
     }
@@ -509,12 +513,13 @@ function saveSubOffer(event) {
     const priceDzd = parseFloat(document.getElementById('sub-offer-price-dzd')?.value) || 0;
     const priceUsd = parseFloat(document.getElementById('sub-offer-price-usd')?.value) || 0;
     const availability = document.querySelector('input[name="sub-offer-availability"]:checked')?.value || 'available';
-    
+    const deliveryTime = document.getElementById('sub-offer-delivery-time')?.value?.trim() || '';
+
     if (!nameAr) {
         showToast('اسم العرض بالعربية مطلوب', 'error');
         return;
     }
-    
+
     const subOffer = {
         id: document.getElementById('sub-offer-duration-key')?.value ||
             document.getElementById('sub-offer-id')?.value || `suboffer_${Date.now()}`,
@@ -522,6 +527,7 @@ function saveSubOffer(event) {
         priceDZD: priceDzd,
         priceUSD: priceUsd,
         availability: availability,
+        deliveryTime: deliveryTime,
         order: editingSubOfferIndex !== null ? editingSubOfferIndex : currentProductSubOffers.length
     };
     
@@ -576,6 +582,13 @@ function renderSubOffersContainer() {
                     ${subOffer.priceDZD?.toLocaleString() || 0} د.ج / ${subOffer.priceUSD || 0}$
                 </div>
                 <div class="text-xs mt-1">${availabilityLabels[subOffer.availability] || availabilityLabels.available}</div>
+                ${subOffer.deliveryTime ? `<div class="text-xs mt-1 text-gray-400">${escapeHtml({
+                    '5-10min': '5-10 دقائق',
+                    '30min-1h': '30 دقيقة - ساعة',
+                    '2-3h': '2-3 ساعات',
+                    '5h': '5 ساعات',
+                    '24h': '24 ساعة'
+                }[subOffer.deliveryTime] || subOffer.deliveryTime)}</div>` : ''}
             </div>
             <div class="flex gap-2">
                 <button type="button" onclick="openSubOfferModal(${index})" 

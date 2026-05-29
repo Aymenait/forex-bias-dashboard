@@ -66,12 +66,36 @@ function getUiText(key, lang = 'ar') {
         unavailable: { ar: 'غير متوفر', en: 'Unavailable', fr: 'Indisponible' },
         unavailableIcon: { ar: '❌ غير متوفر', en: '❌ Unavailable', fr: '❌ Indisponible' },
         comingSoon: { ar: 'قريباً', en: 'Coming Soon', fr: 'Bientot' },
+        deliveryLabel: { ar: 'مدة التوصيل', en: 'Delivery', fr: 'Livraison' },
         selectDuration: { ar: 'اختر المدة:', en: 'Choose duration:', fr: 'Choisir la duree :' },
         month: { ar: 'شهر', en: 'month', fr: 'mois' },
         currencyDzd: { ar: 'د.ج', en: 'DA', fr: 'DA' }
     };
 
     return texts[key]?.[lang] || texts[key]?.ar || '';
+}
+
+const DELIVERY_TIME_OPTIONS = {
+    '5-10min': { ar: '5 إلى 10 دقائق', en: '5 to 10 minutes', fr: '5 à 10 minutes' },
+    '30min-1h': { ar: '30 دقيقة إلى ساعة', en: '30 min to 1 hour', fr: '30 min à 1 heure' },
+    '2-3h': { ar: 'ساعتين إلى 3 ساعات', en: '2 to 3 hours', fr: '2 à 3 heures' },
+    '5h': { ar: '5 ساعات', en: '5 hours', fr: '5 heures' },
+    '24h': { ar: '24 ساعة', en: '24 hours', fr: '24 heures' }
+};
+
+function getDeliveryTimeText(key, lang = 'ar') {
+    if (!key || !DELIVERY_TIME_OPTIONS[key]) return '';
+    return DELIVERY_TIME_OPTIONS[key][lang] || DELIVERY_TIME_OPTIONS[key].ar || '';
+}
+
+function buildDeliveryTimeBadge(deliveryKey, lang = 'ar') {
+    if (!deliveryKey || !DELIVERY_TIME_OPTIONS[deliveryKey]) return '';
+    const text = getDeliveryTimeText(deliveryKey, lang);
+    const label = getUiText('deliveryLabel', lang);
+    return `<div class="delivery-time-badge" data-delivery-key="${deliveryKey}"
+        style="margin:4px 0;font-size:0.75rem;color:var(--text-secondary,#999);text-align:center;">
+        ${label}: <span style="font-weight:600;color:var(--accent,#d4a843);">${text}</span>
+    </div>`;
 }
 
 function formatDzd(amount, lang = 'ar') {
@@ -260,6 +284,10 @@ function mergeCanonicalProductRecords(existing, incoming, canonicalId) {
     const merged = secondary ? { ...secondary, ...preferred } : { ...preferred };
     merged.id = canonicalId;
     merged.firebaseDocId = preferred.firebaseDocId || incoming.firebaseDocId || canonicalId;
+
+    if (Array.isArray(preferred.subOffers)) {
+        merged.subOffers = preferred.subOffers;
+    }
 
     const sortOrder = resolveMergedProductSortOrder(existing, incoming, canonicalId);
     if (sortOrder !== 9999) {
@@ -595,6 +623,7 @@ function createProductCardHTML(product, lang = 'ar') {
                 data-duration="${offer.id}"
                 data-price-dzd="${offerPriceDZD}"
                 data-price-usd="${offerPriceUSD}"
+                data-delivery-time="${offer.deliveryTime || ''}"
                 onclick="selectProductDuration(this,'${product.id}')">${label}${subLabel}</button>`;
         }).join('');
 
@@ -691,6 +720,14 @@ function createProductCardHTML(product, lang = 'ar') {
         discoverBtn = `<a href="${landingPage}" class="discover-btn" data-i18n="product.discoverMore">${getUiText('discoverMore', lang)}</a>`;
     }
 
+    // مدة التوصيل للعرض النشط
+    const activeDeliveryKey = subOffers
+        ? (firstAvailableSubOffer || firstSubOffer)?.deliveryTime || ''
+        : '';
+    const deliveryTimeHTML = !isUnavailableState
+        ? (activeDeliveryKey ? buildDeliveryTimeBadge(activeDeliveryKey, lang) : `<div class="delivery-time-badge" style="display:none;"></div>`)
+        : '';
+
     // إنشاء البطاقة الكاملة
     return `
         <div class="product-card fade-in" data-product-id="${product.id}" data-category="${category}" ${cardOpacity}>
@@ -705,7 +742,8 @@ function createProductCardHTML(product, lang = 'ar') {
             </div>` :
             (!isUnavailableState ? `<div class="price-tag" data-price-dzd="${activePriceDZD}" data-price-usd="${activePriceUSD}">${formatDzd(activePriceDZD, lang)}</div>` : '')}
             ${!isUnavailableState ? durationSelectorHTML : ''}
-            
+            ${deliveryTimeHTML}
+
             ${!isUnavailableState ? `<div class="payment-methods-row">
                 ${paymentButtons}
             </div>` : ''}
@@ -811,6 +849,7 @@ function renderMobileProducts(products, lang = 'ar') {
                         class="mobile-offer-option${offerIndex === 0 ? ' is-selected' : ''}"
                         data-price-dzd="${offerPriceDZD}"
                         data-price-usd="${offerPriceUSD}"
+                        data-delivery-time="${offer.deliveryTime || ''}"
                         ${offerDisabled ? 'disabled aria-disabled="true"' : ''}>
                         <span>${getLocalizedText(offer.name, lang, offer.id || '')}</span>
                         <strong data-price-dzd="${offerPriceDZD}" data-price-usd="${offerPriceUSD}">${formatPrice(offerPriceDZD, offerPriceUSD, lang)}</strong>
@@ -835,6 +874,18 @@ function renderMobileProducts(products, lang = 'ar') {
                 <div class="mobile-expand-details">
                     <p>${description}</p>
                     ${offerButtons}
+                    ${(() => {
+                        const mobileDeliveryKey = activeOffer?.deliveryTime || '';
+                        if (mobileDeliveryKey && DELIVERY_TIME_OPTIONS[mobileDeliveryKey]) {
+                            const text = getDeliveryTimeText(mobileDeliveryKey, lang);
+                            const label = getUiText('deliveryLabel', lang);
+                            return `<div class="mobile-delivery-time" data-delivery-key="${mobileDeliveryKey}"
+                                style="margin:4px 0;font-size:0.72rem;color:var(--text-secondary,#999);text-align:center;">
+                                ${label}: <span style="font-weight:600;color:var(--accent,#d4a843);">${text}</span>
+                            </div>`;
+                        }
+                        return `<div class="mobile-delivery-time" style="display:none;"></div>`;
+                    })()}
                     ${features ? `<ul>${features}</ul>` : ''}
                     <div class="mobile-expand-actions">
                         <a href="${getProductLandingPage(product) || '#products'}">${getUiText('productDetails', lang)}</a>
@@ -877,6 +928,19 @@ function renderMobileProducts(products, lang = 'ar') {
             if (orderButton) {
                 orderButton.dataset.price = dzd;
                 orderButton.dataset.priceUsd = usd;
+            }
+            const mobileDeliveryBadge = card.querySelector('.mobile-delivery-time');
+            if (mobileDeliveryBadge) {
+                const dtKey = button.dataset.deliveryTime || '';
+                if (dtKey && DELIVERY_TIME_OPTIONS[dtKey]) {
+                    const text = getDeliveryTimeText(dtKey, lang);
+                    const label = getUiText('deliveryLabel', lang);
+                    mobileDeliveryBadge.innerHTML = `<span>${label}:</span><span style="font-weight:600;color:var(--accent,#d4a843);">${text}</span>`;
+                    mobileDeliveryBadge.style.display = 'inline-flex';
+                    mobileDeliveryBadge.dataset.deliveryKey = dtKey;
+                } else {
+                    mobileDeliveryBadge.style.display = 'none';
+                }
             }
         });
     });
@@ -1019,6 +1083,21 @@ function selectProductDuration(btn, productId) {
         b.dataset.price = newDZD;
         b.dataset.priceUsd = newUSD;
     });
+
+    const deliveryBadge = card.querySelector('.delivery-time-badge');
+    if (deliveryBadge) {
+        const deliveryKey = btn.dataset.deliveryTime || '';
+        if (deliveryKey && DELIVERY_TIME_OPTIONS[deliveryKey]) {
+            const lang = window.currentLang || document.documentElement.lang || localStorage.getItem('preferredLanguage') || 'ar';
+            const text = getDeliveryTimeText(deliveryKey, lang);
+            const label = getUiText('deliveryLabel', lang);
+            deliveryBadge.innerHTML = `<span>${label}:</span><span style="font-weight:600;color:var(--accent,#d4a843);">${text}</span>`;
+            deliveryBadge.style.display = 'inline-flex';
+            deliveryBadge.dataset.deliveryKey = deliveryKey;
+        } else {
+            deliveryBadge.style.display = 'none';
+        }
+    }
 }
 
 // للاستخدام في المتصفح

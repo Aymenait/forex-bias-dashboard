@@ -3211,10 +3211,10 @@ function getProductSubOffers(product) {
 }
 
 function productHasMissingCatalogDetails(product) {
+    if (product?.source === 'firebase') return false;
     return !getProductDisplayName(product) ||
         getProductPriceDZD(product) <= 0 ||
         getProductPriceUSD(product) <= 0 ||
-        getProductSubOffers(product).length === 0 ||
         !getProductImage(product);
 }
 
@@ -3222,6 +3222,7 @@ function mergeProductCatalogDetails(baseProduct, catalogProduct) {
     if (!baseProduct) return catalogProduct;
     if (!catalogProduct) return baseProduct;
 
+    const baseIsFirebase = baseProduct.source === 'firebase';
     const merged = { ...catalogProduct, ...baseProduct };
     const baseName = getProductDisplayName(baseProduct);
     const catalogName = getProductDisplayName(catalogProduct);
@@ -3237,10 +3238,20 @@ function mergeProductCatalogDetails(baseProduct, catalogProduct) {
     merged.priceUSD = getProductPriceUSD(baseProduct) || getProductPriceUSD(catalogProduct);
     merged.price_dzd = merged.priceDZD;
     merged.price_usd = merged.priceUSD;
-    merged.durations = baseProduct.durations || catalogProduct.durations || {};
-    merged.subOffers = getProductSubOffers(baseProduct).length > 0
-        ? getProductSubOffers(baseProduct)
-        : getProductSubOffers(catalogProduct);
+
+    if (baseIsFirebase) {
+        merged.subOffers = getProductSubOffers(baseProduct);
+        merged.durations = baseProduct.durations || {};
+        if (Number.isFinite(baseProduct.displayOrder)) {
+            merged.displayOrder = baseProduct.displayOrder;
+            merged.order = baseProduct.displayOrder;
+        }
+    } else {
+        merged.durations = baseProduct.durations || catalogProduct.durations || {};
+        merged.subOffers = getProductSubOffers(baseProduct).length > 0
+            ? getProductSubOffers(baseProduct)
+            : getProductSubOffers(catalogProduct);
+    }
     merged.active = baseProduct.active !== false;
     merged.source = baseProduct.source || catalogProduct.source || 'merged';
 
@@ -3556,10 +3567,6 @@ async function loadProducts() {
                 if (REQUIRED_ADMIN_PRODUCT_IDS.includes(canonicalKey)) {
                     mergedProduct.active = true;
                     mergedProduct.isArchived = false;
-                    if (!getProductSubOffers(mergedProduct).length) {
-                        mergedProduct.subOffers = getProductSubOffers(localProduct);
-                        mergedProduct.durations = localProduct.durations || {};
-                    }
                     if (!mergedProduct.category) {
                         mergedProduct.category = localProduct.category || (canonicalKey === 'capcut' ? 'design' : 'ai');
                     }
@@ -3662,6 +3669,7 @@ async function syncProductsToFirebase(productsToSync = allProducts) {
         const syncedIds = new Set();
         for (const product of productsToSync) {
             if (isProductDeleted(product, deletedProductIds)) continue;
+            if (product.source === 'firebase' || product.source === 'merged') continue;
 
             const canonicalId = resolveCanonicalProductId(product.id, getProductDisplayName(product));
             if (syncedIds.has(canonicalId)) continue;
@@ -4575,13 +4583,13 @@ async function saveProduct(event) {
         const { setDoc, doc } = window.firebaseModules;
         await clearDeletedProductMarker(productForV2.id);
 
-        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, productForV2.id), productForV2, { merge: true });
+        await setDoc(doc(window.db, ADMIN_PRODUCTS_COLLECTION_NAME, productForV2.id), productForV2);
         await setDoc(doc(window.db, LEGACY_PRODUCTS_COLLECTION_NAME, productForV2.id), {
             ...productForV2,
             name: getProductDisplayName(productForV2),
             price_dzd: productForV2.priceDZD,
             price_usd: productForV2.priceUSD
-        }, { merge: true });
+        });
 
         // تحديث القائمة المحلية
         const index = allProducts.findIndex(p => p.id === productForV2.id);
