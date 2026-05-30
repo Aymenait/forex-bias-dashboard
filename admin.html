@@ -940,32 +940,32 @@
             <!-- ═══════════ Accounting Tab ═══════════ -->
             <div id="tab-accounting" class="tab-content hidden accounting-dashboard">
                 <div class="accounting-toolbar flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
-                    <h2 class="text-2xl font-bold">💰 المحاسبة والأرباح</h2>
+                    <h2 class="text-2xl font-bold" data-i18n="acc_title">💰 المحاسبة والأرباح</h2>
                     <div class="flex flex-wrap items-center gap-3">
                         <!-- Date Filter -->
                         <select id="accounting-date-filter"
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
-                            <option value="all">كل الفترات</option>
-                            <option value="today">اليوم</option>
-                            <option value="week">هذا الأسبوع</option>
-                            <option value="month">هذا الشهر</option>
-                            <option value="year">هذه السنة</option>
-                            <option value="custom">تاريخ مخصص</option>
+                            <option value="all" data-i18n="acc_period_all">كل الفترات</option>
+                            <option value="today" data-i18n="acc_period_today">اليوم</option>
+                            <option value="week" data-i18n="acc_period_week">هذا الأسبوع</option>
+                            <option value="month" data-i18n="acc_period_month">هذا الشهر</option>
+                            <option value="year" data-i18n="acc_period_year">هذه السنة</option>
+                            <option value="custom" data-i18n="acc_period_custom">تاريخ مخصص</option>
                         </select>
                         <!-- Custom Date Range (hidden by default) -->
                         <div id="custom-date-range" class="hidden flex gap-2">
                             <input type="date" id="accounting-date-from"
                                 class="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
-                            <span class="text-gray-400 self-center">إلى</span>
+                            <span class="text-gray-400 self-center" data-i18n="acc_to">إلى</span>
                             <input type="date" id="accounting-date-to"
                                 class="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
                         <!-- Currency Toggle -->
                         <select id="accounting-currency"
                             class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:border-purple-500 focus:outline-none">
-                            <option value="both">عرض الكل</option>
-                            <option value="dzd">DZD فقط</option>
-                            <option value="usd">USD فقط</option>
+                            <option value="both" data-i18n="acc_cur_all">عرض الكل</option>
+                            <option value="dzd" data-i18n="acc_cur_dzd">DZD فقط</option>
+                            <option value="usd" data-i18n="acc_cur_usd">USD فقط</option>
                         </select>
                         <!-- USD Rate -->
                         <div class="flex items-center gap-1 bg-gray-800 rounded-lg px-2 py-1 border border-gray-700">
@@ -976,21 +976,25 @@
                             <span class="text-xs text-gray-400">د.ج</span>
                         </div>
                         <!-- Action Buttons -->
-                        <button onclick="openPurchaseModal()"
+                        <button onclick="openPurchaseModal()" data-i18n="acc_btn_purchase"
                             class="px-3 py-2 rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm">
                             📥 شراء
                         </button>
-                        <button onclick="openSaleModal()"
+                        <button onclick="openSaleModal()" data-i18n="acc_btn_sale"
                             class="px-3 py-2 rounded-lg transition-colors bg-green-600 hover:bg-green-700 text-white font-bold text-sm">
                             📤 بيع
                         </button>
-                        <button onclick="openExpenseModal()"
+                        <button onclick="openExpenseModal()" data-i18n="acc_btn_expense"
                             class="px-3 py-2 rounded-lg transition-colors bg-red-600 hover:bg-red-700 text-white font-bold text-sm">
                             💸 مصروف
                         </button>
-                        <button onclick="openMonthlyReportModal()" class="px-3 py-2 rounded-lg transition-colors"
+                        <button onclick="openMonthlyReportModal()" data-i18n="acc_btn_monthly" class="px-3 py-2 rounded-lg transition-colors"
                             style="background: var(--accent); color: #1b1d32; font-weight: 700; font-size: 0.875rem;">
                             📊 التقرير الشهري
+                        </button>
+                        <button onclick="exportAccountingReport()" data-i18n="acc_btn_export"
+                            class="px-3 py-2 rounded-lg transition-colors bg-gray-700 hover:bg-gray-600 text-white font-bold text-sm border border-gray-600">
+                            📄 تصدير CSV
                         </button>
                     </div>
                 </div>
@@ -1004,11 +1008,13 @@
                                 class="w-16 h-16 bg-purple-600/30 rounded-full flex items-center justify-center text-3xl">
                                 💹</div>
                             <div>
-                                <div class="text-sm text-purple-300">رأس المال الحالي (الخزينة)</div>
+                                <div class="text-sm text-purple-300"><span data-i18n="acc_treasury_label">رأس المال الحالي (الخزينة)</span>
+                                    <span class="text-[10px] text-gray-400" data-i18n="acc_treasury_note">— إجمالي تراكمي، لا يتأثر بفلتر التاريخ</span>
+                                </div>
                                 <div class="text-3xl font-bold" id="stat-current-balance" style="color: var(--accent);">
                                     0 د.ج</div>
                                 <div class="text-xs mt-1">
-                                    <span class="text-gray-400">البداية:</span>
+                                    <span class="text-gray-400" data-i18n="acc_starting_label">البداية:</span>
                                     <span class="text-white font-bold" id="stat-starting-capital-display">0 د.ج</span>
                                     <span class="mx-2">|</span>
                                     <span id="capital-performance-badge"
@@ -1017,27 +1023,31 @@
                                 <!-- Capital Breakdown -->
                                 <div class="mt-3 pt-2 border-t border-gray-700/50 text-xs space-y-1">
                                     <div class="flex items-center gap-2">
-                                        <span class="text-orange-400">🔶 أمانات الموزعين:</span>
+                                        <span class="text-orange-400" data-i18n="acc_reseller_liab_inline">🔶 أمانات الموزعين:</span>
                                         <span class="font-bold text-orange-400" id="stat-reseller-liabilities">0
                                             د.ج</span>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <span class="text-green-400">🟢 رأس مالي الصافي:</span>
+                                        <span class="text-green-400" data-i18n="acc_net_own_inline">🟢 رأس مالي الصافي:</span>
                                         <span class="font-bold text-green-400" id="stat-net-own-capital">0 د.ج</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="accounting-hero-actions flex flex-wrap items-center gap-3">
-                            <button onclick="fixOldOrdersCost()"
+                            <button onclick="fixOldOrdersCost()" data-i18n="acc_btn_fix_costs"
                                 class="px-4 py-2 rounded-lg text-sm font-bold bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-600/30 transition-all">
                                 🪄 إصلاح التكاليف
                             </button>
-                            <button onclick="openCapitalModal()"
+                            <button onclick="openReconcileModal()" data-i18n="acc_btn_reconcile"
+                                class="px-4 py-2 rounded-lg text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-all">
+                                🧮 تسوية الرصيد
+                            </button>
+                            <button onclick="openCapitalModal()" data-i18n="acc_btn_adjust_capital"
                                 class="px-4 py-2 rounded-lg text-sm font-bold bg-purple-600 hover:bg-purple-700 text-white transition-all">
                                 ⚙️ ضبط رأس المال
                             </button>
-                            <button onclick="openResetAccountingModal()"
+                            <button onclick="openResetAccountingModal()" data-i18n="acc_btn_reset"
                                 class="px-4 py-2 rounded-lg text-sm font-bold bg-red-600/20 hover:bg-red-600/40 text-red-400 border border-red-600/30 transition-all">
                                 🗑️ إعادة ضبط
                             </button>
@@ -1050,22 +1060,22 @@
                     <div class="stat-card rounded-xl p-3 text-center">
                         <div class="text-2xl mb-1">💵</div>
                         <div class="text-lg font-bold text-green-400" id="stat-total-revenue-acc">0 د.ج</div>
-                        <div class="text-gray-400 text-xs">إيرادات المبيعات</div>
+                        <div class="text-gray-400 text-xs" data-i18n="acc_kpi_sales_revenue">إيرادات المبيعات</div>
                     </div>
                     <div class="stat-card rounded-xl p-3 text-center">
                         <div class="text-2xl mb-1">📦</div>
                         <div class="text-lg font-bold text-blue-400" id="stat-total-cost-acc">0 د.ج</div>
-                        <div class="text-gray-400 text-xs">تكلفة المنتجات</div>
+                        <div class="text-gray-400 text-xs" data-i18n="acc_kpi_product_cost">تكلفة المنتجات</div>
                     </div>
                     <div class="stat-card rounded-xl p-3 text-center">
                         <div class="text-2xl mb-1">📢</div>
                         <div class="text-lg font-bold text-orange-400" id="stat-business-expenses">0 د.ج</div>
-                        <div class="text-gray-400 text-xs">مصاريف العمل</div>
+                        <div class="text-gray-400 text-xs" data-i18n="acc_kpi_business_exp">مصاريف العمل</div>
                     </div>
                     <div class="stat-card rounded-xl p-3 text-center">
                         <div class="text-2xl mb-1">👤</div>
                         <div class="text-lg font-bold text-purple-400" id="stat-personal-expenses">0 د.ج</div>
-                        <div class="text-gray-400 text-xs">مصاريف شخصية</div>
+                        <div class="text-gray-400 text-xs" data-i18n="acc_kpi_personal_exp">مصاريف شخصية</div>
                     </div>
                 </div>
 
@@ -1078,11 +1088,11 @@
                                 class="w-12 h-12 bg-orange-600/30 rounded-full flex items-center justify-center text-2xl">
                                 🔶</div>
                             <div>
-                                <div class="text-sm text-orange-300">أمانات الموزعين (ديون عليك)</div>
+                                <div class="text-sm text-orange-300" data-i18n="acc_liab_title">أمانات الموزعين (ديون عليك)</div>
                                 <div class="text-2xl font-bold text-orange-400" id="stat-reseller-liabilities-card">0
                                     د.ج
                                 </div>
-                                <div class="text-xs text-gray-400 mt-1">مبالغ الموزعين المحفوظة لديك</div>
+                                <div class="text-xs text-gray-400 mt-1" data-i18n="acc_liab_note">مبالغ الموزعين المحفوظة لديك</div>
                             </div>
                         </div>
                     </div>
@@ -1093,9 +1103,9 @@
                                 class="w-12 h-12 bg-red-600/30 rounded-full flex items-center justify-center text-2xl">
                                 ⚠️</div>
                             <div>
-                                <div class="text-sm text-red-300">ديون على الموزعين</div>
+                                <div class="text-sm text-red-300" data-i18n="acc_debts_title">ديون على الموزعين</div>
                                 <div class="text-2xl font-bold text-red-400" id="stat-reseller-debts-card">0 د.ج</div>
-                                <div class="text-xs text-gray-400 mt-1">أرصدة سالبة يجب تحصيلها من الموزعين</div>
+                                <div class="text-xs text-gray-400 mt-1" data-i18n="acc_debts_note">أرصدة سالبة يجب تحصيلها من الموزعين</div>
                             </div>
                         </div>
                     </div>
@@ -1105,14 +1115,10 @@
                             <div
                                 class="w-12 h-12 bg-green-600/30 rounded-full flex items-center justify-center text-2xl">
                                 🟢</div>
-                            <div class="mt-4 pt-4 border-t border-gray-700/50">
-                                <div class="space-y-2">
-                                    <p class="text-xs text-orange-400 font-bold">🔶 أمانات الموزعين: <span
-                                            id="stat-reseller-liabilities-inline">0</span> د.ج</p>
-                                    <p class="text-xs text-green-400 font-bold">🟢 رأس مالي الصافي: <span
-                                            id="stat-net-own-capital-inline">0</span> د.ج</p>
-                                    <p class="text-[10px] text-gray-500 mt-1">الخزينة - أمانات الموزعين</p>
-                                </div>
+                            <div>
+                                <div class="text-sm text-green-300" data-i18n="acc_net_own_title">رأس مالي الصافي</div>
+                                <div class="text-2xl font-bold text-green-400" id="stat-net-own-capital-card">0 د.ج</div>
+                                <div class="text-xs text-gray-400 mt-1" data-i18n="acc_net_own_note">الخزينة − أمانات الموزعين</div>
                             </div>
                         </div>
                     </div>
@@ -1124,50 +1130,51 @@
                         style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));">
                         <div class="text-2xl mb-1">💼</div>
                         <div class="text-lg font-bold text-green-400" id="stat-gross-profit">0 د.ج</div>
-                        <div class="text-gray-400 text-xs">ربح المنتجات</div>
+                        <div class="text-gray-400 text-xs" data-i18n="acc_kpi_gross">ربح المنتجات</div>
                     </div>
                     <div class="stat-card rounded-xl p-3 text-center"
                         style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));">
                         <div class="text-2xl mb-1">🏢</div>
                         <div class="text-lg font-bold text-blue-400" id="stat-net-business-profit">0 د.ج</div>
-                        <div class="text-gray-400 text-xs">ربح العمل الصافي</div>
+                        <div class="text-gray-400 text-xs" data-i18n="acc_kpi_net_business">ربح العمل الصافي</div>
                     </div>
                     <div class="stat-card rounded-xl p-3 text-center"
                         style="background: linear-gradient(135deg, rgba(255, 213, 111, 0.15), rgba(255, 213, 111, 0.05));">
                         <div class="text-2xl mb-1">💰</div>
                         <div class="text-lg font-bold" id="stat-net-profit" style="color: var(--accent);">0 د.ج</div>
-                        <div class="text-gray-400 text-xs">المتبقي (بعد المصاريف)</div>
+                        <div class="text-gray-400 text-xs" data-i18n="acc_kpi_remaining">المتبقي (بعد المصاريف)</div>
+                        <div class="text-[10px] mt-1" id="stat-net-profit-comparison"></div>
                     </div>
                     <div class="stat-card rounded-xl p-3 text-center">
                         <div class="text-2xl mb-1">📊</div>
                         <div class="text-lg font-bold text-cyan-400" id="stat-profit-margin">0%</div>
-                        <div class="text-gray-400 text-xs">هامش الربح</div>
+                        <div class="text-gray-400 text-xs" data-i18n="acc_kpi_margin">هامش الربح</div>
                     </div>
                 </div>
 
                 <div class="accounting-insights-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 mb-6">
                     <div class="accounting-insight-card">
-                        <div class="insight-label">أعلى منتج ربحاً</div>
+                        <div class="insight-label" data-i18n="acc_ins_top">أعلى منتج ربحاً</div>
                         <div class="insight-value text-green-400" id="stat-top-profit-product">-</div>
                         <div class="insight-note" id="stat-top-profit-value">0 د.ج</div>
                     </div>
                     <div class="accounting-insight-card">
-                        <div class="insight-label">أضعف هامش</div>
+                        <div class="insight-label" data-i18n="acc_ins_weak">أضعف هامش</div>
                         <div class="insight-value text-amber-400" id="stat-weakest-margin-product">-</div>
                         <div class="insight-note" id="stat-weakest-margin-value">0%</div>
                     </div>
                     <div class="accounting-insight-card warning">
-                        <div class="insight-label">تكاليف ناقصة</div>
+                        <div class="insight-label" data-i18n="acc_ins_missing">تكاليف ناقصة</div>
                         <div class="insight-value text-red-400" id="stat-missing-cost-orders">0</div>
-                        <div class="insight-note">طلب بدون تكلفة مسجلة</div>
+                        <div class="insight-note" data-i18n="acc_ins_missing_note">طلب بدون تكلفة مسجلة</div>
                     </div>
                     <div class="accounting-insight-card">
-                        <div class="insight-label">متوسط ربح الطلب</div>
+                        <div class="insight-label" data-i18n="acc_ins_avg">متوسط ربح الطلب</div>
                         <div class="insight-value text-cyan-400" id="stat-average-order-profit">0 د.ج</div>
-                        <div class="insight-note">من ربح المنتجات</div>
+                        <div class="insight-note" data-i18n="acc_ins_avg_note">من ربح المنتجات</div>
                     </div>
                     <div class="accounting-insight-card">
-                        <div class="insight-label">ربح الجملة</div>
+                        <div class="insight-label" data-i18n="acc_ins_wholesale">ربح الجملة</div>
                         <div class="insight-value text-blue-400" id="stat-wholesale-profit-share">0%</div>
                         <div class="insight-note" id="stat-retail-profit-share">التجزئة 0%</div>
                     </div>
@@ -1177,21 +1184,21 @@
                 <div class="accounting-charts-grid grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <div class="rounded-xl p-6"
                         style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
-                        <h3 class="text-lg font-bold mb-4">📈 الأرباح عبر الزمن</h3>
+                        <h3 class="text-lg font-bold mb-4" data-i18n="acc_chart_time">📈 الأرباح عبر الزمن</h3>
                         <canvas id="profit-over-time-chart"></canvas>
                     </div>
                     <div class="rounded-xl p-6"
                         style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
-                        <h3 class="text-lg font-bold mb-4">🏆 أفضل المنتجات ربحا</h3>
+                        <h3 class="text-lg font-bold mb-4" data-i18n="acc_chart_top">🏆 أفضل المنتجات ربحا</h3>
                         <canvas id="profit-by-product-chart"></canvas>
                     </div>
                     <div class="rounded-xl p-6"
                         style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
-                        <h3 class="text-lg font-bold mb-4">📊 مصادر الأرباح (تجزئة vs جملة)</h3>
+                        <h3 class="text-lg font-bold mb-4" data-i18n="acc_chart_source">📊 مصادر الأرباح (تجزئة vs جملة)</h3>
                         <div id="profit-source-summary" class="profit-source-summary">
                             <div class="profit-source-row">
                                 <div>
-                                    <span class="profit-source-label retail">التجزئة</span>
+                                    <span class="profit-source-label retail" data-i18n="acc_retail">التجزئة</span>
                                     <strong id="profit-source-retail-value">0 د.ج</strong>
                                 </div>
                                 <span id="profit-source-retail-percent">0%</span>
@@ -1202,12 +1209,12 @@
                             </div>
                             <div class="profit-source-row">
                                 <div>
-                                    <span class="profit-source-label wholesale">الجملة</span>
+                                    <span class="profit-source-label wholesale" data-i18n="acc_wholesale">الجملة</span>
                                     <strong id="profit-source-wholesale-value">0 د.ج</strong>
                                 </div>
                                 <span id="profit-source-wholesale-percent">0%</span>
                             </div>
-                            <p id="profit-source-empty" class="profit-source-empty hidden">لا توجد أرباح موجبة في هذه الفترة.</p>
+                            <p id="profit-source-empty" class="profit-source-empty hidden" data-i18n="acc_no_profit">لا توجد أرباح موجبة في هذه الفترة.</p>
                         </div>
                     </div>
                 </div>
@@ -1217,8 +1224,8 @@
                     style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
                     <div class="accounting-table-header">
                         <div>
-                            <h3>جدول ربحية المنتجات</h3>
-                            <p>مراقبة المبيعات، التكاليف، الهامش، والتنبيهات.</p>
+                            <h3 data-i18n="acc_table_title">جدول ربحية المنتجات</h3>
+                            <p data-i18n="acc_table_sub">مراقبة المبيعات، التكاليف، الهامش، والتنبيهات.</p>
                         </div>
                         <span id="accounting-table-health" class="accounting-health-pill">جاري التحليل</span>
                     </div>
@@ -1226,15 +1233,15 @@
                         <table class="w-full text-sm" id="accounting-table">
                             <thead style="background: rgba(255, 255, 255, 0.05);">
                                 <tr>
-                                    <th class="text-right px-3 py-3">المنتج</th>
-                                    <th class="text-center px-2 py-3 text-blue-400">📥 مشتراة</th>
-                                    <th class="text-center px-2 py-3 text-green-400">📤 مباعة</th>
-                                    <th class="text-center px-2 py-3 text-yellow-400">📦 متبقي</th>
-                                    <th class="text-right px-2 py-3">تكلفة الشراء</th>
-                                    <th class="text-right px-2 py-3">إيرادات البيع</th>
-                                    <th class="text-right px-2 py-3 text-green-400">💰 الربح</th>
-                                    <th class="text-center px-2 py-3">هامش</th>
-                                    <th class="text-center px-2 py-3">الحالة</th>
+                                    <th class="text-right px-3 py-3" data-i18n="acc_th_product">المنتج</th>
+                                    <th class="text-center px-2 py-3 text-blue-400" data-i18n="acc_th_purchased">📥 مشتراة</th>
+                                    <th class="text-center px-2 py-3 text-green-400" data-i18n="acc_th_sold">📤 مباعة</th>
+                                    <th class="text-center px-2 py-3 text-yellow-400" data-i18n="acc_th_remaining">📦 متبقي</th>
+                                    <th class="text-right px-2 py-3" data-i18n="acc_th_buy_cost">تكلفة الشراء</th>
+                                    <th class="text-right px-2 py-3" data-i18n="acc_th_sale_revenue">إيرادات البيع</th>
+                                    <th class="text-right px-2 py-3 text-green-400" data-i18n="acc_th_profit">💰 الربح</th>
+                                    <th class="text-center px-2 py-3" data-i18n="acc_th_margin">هامش</th>
+                                    <th class="text-center px-2 py-3" data-i18n="acc_th_status">الحالة</th>
                                 </tr>
                             </thead>
                             <tbody id="accounting-table-body">
@@ -1245,7 +1252,7 @@
                             <tfoot id="accounting-table-footer"
                                 style="background: rgba(255, 213, 111, 0.1); font-weight: bold;">
                                 <tr>
-                                    <td class="px-3 py-3 text-right">الإجمالي</td>
+                                    <td class="px-3 py-3 text-right" data-i18n="acc_total">الإجمالي</td>
                                     <td class="px-2 py-3 text-center" id="footer-total-purchased">0</td>
                                     <td class="px-2 py-3 text-center" id="footer-total-sold">0</td>
                                     <td class="px-2 py-3 text-center" id="footer-total-remaining">0</td>
@@ -1266,7 +1273,7 @@
                     <div class="rounded-xl p-4"
                         style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-bold text-orange-400">📢 مصاريف العمل</h3>
+                            <h3 class="text-lg font-bold text-orange-400" data-i18n="acc_business_exp_title">📢 مصاريف العمل</h3>
                             <span class="text-sm text-gray-400" id="business-expenses-total">0 د.ج</span>
                         </div>
                         <div id="business-expenses-list" class="space-y-2 max-h-64 overflow-y-auto">
@@ -1278,7 +1285,7 @@
                     <div class="rounded-xl p-4"
                         style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-bold text-purple-400">👤 مصاريف شخصية</h3>
+                            <h3 class="text-lg font-bold text-purple-400" data-i18n="acc_personal_exp_title">👤 مصاريف شخصية</h3>
                             <span class="text-sm text-gray-400" id="personal-expenses-total">0 د.ج</span>
                         </div>
                         <div id="personal-expenses-list" class="space-y-2 max-h-64 overflow-y-auto">
@@ -1293,7 +1300,7 @@
                     <div class="rounded-xl p-4"
                         style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-bold text-blue-400">📥 سجل المشتريات</h3>
+                            <h3 class="text-lg font-bold text-blue-400" data-i18n="acc_purchases_log">📥 سجل المشتريات</h3>
                             <span class="text-sm text-gray-400" id="purchases-count">0 عملية</span>
                         </div>
                         <div id="purchases-log" class="space-y-2 max-h-72 overflow-y-auto">
@@ -1305,7 +1312,7 @@
                     <div class="rounded-xl p-4"
                         style="background: var(--card-bg); border: 1px solid var(--border-color);">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-bold text-green-400">📤 سجل المبيعات</h3>
+                            <h3 class="text-lg font-bold text-green-400" data-i18n="acc_sales_log">📤 سجل المبيعات</h3>
                             <span class="text-sm text-gray-400" id="sales-count">0 عملية</span>
                         </div>
                         <div id="sales-log" class="space-y-2 max-h-72 overflow-y-auto">
@@ -1317,7 +1324,7 @@
                 <!-- Suppliers Summary -->
                 <div class="mt-6 rounded-xl p-6"
                     style="background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
-                    <h3 class="text-lg font-bold mb-4">🏪 ملخص الموردين</h3>
+                    <h3 class="text-lg font-bold mb-4" data-i18n="acc_suppliers">🏪 ملخص الموردين</h3>
                     <div id="suppliers-summary" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <p class="text-gray-400">جاري التحميل...</p>
                     </div>
@@ -3443,6 +3450,42 @@
                         تأكيد تغيير رأس المال
                     </button>
                     <button type="button" onclick="closeCapitalModal()"
+                        class="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors">
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: تسوية الرصيد الفعلي -->
+    <div id="reconcile-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+        <div class="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-emerald-500/30 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-emerald-400">🧮 تسوية الرصيد الفعلي</h3>
+                <button onclick="closeReconcileModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <form onsubmit="saveReconciliation(event)">
+                <div class="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3">
+                    <div class="text-gray-400 text-xs mb-1">الخزينة المحسوبة حاليًا</div>
+                    <div class="text-lg font-bold text-emerald-300" id="reconcile-computed-value">0 د.ج</div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-300 text-sm mb-2">الرصيد الفعلي الموجود لديك الآن (نقدًا)</label>
+                    <input type="number" id="reconcile-actual-input" oninput="previewReconcileDiff()"
+                        class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white text-lg focus:border-emerald-500 focus:outline-none"
+                        placeholder="مثال: 90000" min="0" step="100">
+                </div>
+                <div id="reconcile-diff-box" class="mb-4 text-sm leading-relaxed"></div>
+                <div class="mb-4 rounded-lg border border-gray-600/40 bg-gray-800/40 p-3">
+                    <p class="text-gray-300 text-xs">💡 يجعل الخزينة تطابق نقودك الفعلية عبر قيد متوازن: النقص يُسجَّل كمصروف "تسوية" (مصاريف غير مسجّلة)، والفائض يُضاف إلى رأس المال الأساسي. لن تُحذف أو تُعدَّل أي بيانات سابقة، ولن تتأثر أمانات الموزعين.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit"
+                        class="flex-1 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors">
+                        🧮 تنفيذ التسوية
+                    </button>
+                    <button type="button" onclick="closeReconcileModal()"
                         class="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors">
                         إلغاء
                     </button>

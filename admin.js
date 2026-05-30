@@ -248,6 +248,162 @@ async function saveStartingCapital(event) {
     }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// تسوية الرصيد الفعلي - Reconcile actual cash on hand
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * فتح نافذة تسوية الرصيد: تعرض الخزينة المحسوبة وتطلب الرصيد الفعلي.
+ */
+function openReconcileModal() {
+    const snapshot = computeTreasurySnapshot();
+    const modal = document.getElementById('reconcile-modal');
+    if (!modal) return;
+
+    const computedEl = document.getElementById('reconcile-computed-value');
+    const input = document.getElementById('reconcile-actual-input');
+    const diffBox = document.getElementById('reconcile-diff-box');
+
+    if (computedEl) computedEl.textContent = `${Math.round(snapshot.currentTreasury).toLocaleString()} د.ج`;
+    if (input) input.value = '';
+    if (diffBox) diffBox.innerHTML = '';
+
+    // حفظ الخزينة المحسوبة على النافذة لاستعمالها عند الحفظ
+    modal.dataset.computed = String(Math.round(snapshot.currentTreasury));
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeReconcileModal() {
+    const modal = document.getElementById('reconcile-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+/**
+ * معاينة الفرق أثناء الكتابة.
+ */
+function previewReconcileDiff() {
+    const modal = document.getElementById('reconcile-modal');
+    const diffBox = document.getElementById('reconcile-diff-box');
+    if (!modal || !diffBox) return;
+
+    const computed = parseFloat(modal.dataset.computed) || 0;
+    const actualRaw = document.getElementById('reconcile-actual-input')?.value;
+    if (actualRaw === '' || actualRaw == null) { diffBox.innerHTML = ''; return; }
+
+    const actual = parseFloat(actualRaw) || 0;
+    const diff = computed - actual; // موجب = نقص (مصاريف غير مسجلة)، سالب = فائض
+
+    if (Math.abs(diff) < 1) {
+        diffBox.innerHTML = `<span class="text-green-400">✅ الرصيد مطابق، لا حاجة لتسوية.</span>`;
+    } else if (diff > 0) {
+        diffBox.innerHTML = `<span class="text-red-400">🔻 نقص قدره <strong>${Math.round(diff).toLocaleString()} د.ج</strong> — سيُسجَّل كمصروف عمل (مصاريف غير مسجّلة) لتنزيل الخزينة للواقع.</span>`;
+    } else {
+        diffBox.innerHTML = `<span class="text-green-400">🔺 فائض قدره <strong>${Math.round(Math.abs(diff)).toLocaleString()} د.ج</strong> — سيُضاف إلى رأس المال الأساسي لرفع الخزينة للواقع.</span>`;
+    }
+}
+
+/**
+ * تنفيذ التسوية: يجعل الخزينة تساوي الرصيد الفعلي تمامًا عبر قيد متوازن.
+ *  - نقص (الخزينة > الفعلي): يُسجّل مصروف عمل بقيمة الفرق.
+ *  - فائض (الخزينة < الفعلي): يُضاف الفرق إلى رأس المال الأساسي.
+ */
+async function saveReconciliation(event) {
+    if (event) event.preventDefault();
+
+    if (!window.db || !window.firebaseModules) {
+        showToast('Firebase غير جاهز', 'error');
+        return;
+    }
+
+    const modal = document.getElementById('reconcile-modal');
+    const computed = parseFloat(modal?.dataset.computed) || 0;
+    const actualRaw = document.getElementById('reconcile-actual-input')?.value;
+
+    if (actualRaw === '' || actualRaw == null) {
+        showToast('يرجى إدخال الرصيد الفعلي', 'error');
+        return;
+    }
+
+    const actual = parseFloat(actualRaw);
+    if (!Number.isFinite(actual) || actual < 0) {
+        showToast('يرجى إدخال مبلغ صحيح', 'error');
+        return;
+    }
+
+    const diff = Math.round(computed - actual);
+
+    if (Math.abs(diff) < 1) {
+        showToast('الرصيد مطابق بالفعل، لا حاجة لتسوية', 'info');
+        closeReconcileModal();
+        return;
+    }
+
+    const confirmed = confirm(
+        `تأكيد تسوية الرصيد؟\n\n` +
+        `الخزينة المحسوبة: ${computed.toLocaleString()} د.ج\n` +
+        `الرصيد الفعلي: ${actual.toLocaleString()} د.ج\n` +
+        (diff > 0
+            ? `سيُسجَّل مصروف "تسوية" بقيمة ${diff.toLocaleString()} د.ج.`
+            : `سيُضاف ${Math.abs(diff).toLocaleString()} د.ج إلى رأس المال الأساسي.`)
+    );
+    if (!confirmed) return;
+
+    try {
+        const today = new Date().toISOString().split('T')[0];
+
+        if (diff > 0) {
+            // نقص → مصروف عمل بقيمة الفرق (مصاريف غير مسجّلة)
+            const { addDoc, collection, serverTimestamp } = window.firebaseModules;
+            await addDoc(collection(window.db, 'expenses'), {
+                type: 'business',
+                category: 'reconciliation',
+                isAdjustment: true,
+                amount: diff,
+                currency: 'DZD',
+                exchangeRate: USD_TO_DZD_RATE,
+                description: `تسوية رصيد: مصاريف غير مسجّلة (تطابق الخزينة مع ${actual.toLocaleString()} د.ج)`,
+                date: today,
+                timestamp: serverTimestamp(),
+                createdAt: new Date()
+            });
+            await loadExpenses();
+            logActivity('accounting', 'reconcile', `Shortfall adjustment ${diff} DZD (actual ${actual})`);
+        } else {
+            // فائض → زيادة رأس المال الأساسي بقيمة الفرق
+            const addition = Math.abs(diff);
+            const newCapital = (Number(startingCapital) || 0) + addition;
+            const { doc, setDoc } = window.firebaseModules;
+            await setDoc(doc(window.db, 'settings', 'capital'), {
+                startingCapital: newCapital,
+                updatedAt: new Date().toISOString()
+            });
+            startingCapital = newCapital;
+            localStorage.setItem('startingCapital', newCapital.toString());
+            logActivity('accounting', 'reconcile', `Surplus added to capital ${addition} DZD (actual ${actual})`);
+        }
+
+        invalidateAccountingCache();
+        closeReconcileModal();
+        showToast('✅ تمت تسوية الرصيد بنجاح');
+
+        // إعادة تحميل وعرض كل شيء
+        displayAccountingTable();
+        updateAccountingStats();
+        updateProfitCharts();
+        displayExpensesList();
+        updateCapitalDisplay();
+
+    } catch (error) {
+        console.error('خطأ في تسوية الرصيد:', error);
+        showToast('❌ خطأ في تسوية الرصيد', 'error');
+    }
+}
+
 /**
  * تحميل رأس المال من Firebase
  */
@@ -298,17 +454,20 @@ function calculateTotalResellerDebts() {
  * تحديث عرض رأس المال والرصيد الحالي
  * الحساب المباشر من البيانات بدون الاعتماد على أي شيء آخر
  */
-function updateCapitalDisplay() {
-    // 1. حساب الإيرادات (من الطلبات المكتملة فقط)
+/**
+ * حساب لقطة الخزينة الكاملة (تراكمي، غير مفلتر بالتاريخ).
+ * مصدر واحد للمعادلة يُستعمل في العرض وفي تسوية الرصيد.
+ */
+function computeTreasurySnapshot() {
+    // 1. الإيرادات والتكلفة من الطلبات المكتملة فقط
     let totalRevenue = 0;
     let totalCost = 0;
-
     allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed').forEach(order => {
         totalRevenue += getOrderRevenueDzd(order);
         totalCost += getOrderCostDzd(order);
     });
 
-    // 2. حساب المصاريف
+    // 2. المصاريف (كلها)
     let totalExpenses = 0;
     allExpenses.forEach(e => {
         let amount = parseFloat(e.amount) || 0;
@@ -316,7 +475,7 @@ function updateCapitalDisplay() {
         totalExpenses += amount;
     });
 
-    // 3. حساب الأمانات (أرصدة الموزعين)
+    // 3. أمانات/ديون الموزعين
     const totalLiabilities = calculateTotalLiabilities();
     const totalResellerDebts = calculateTotalResellerDebts();
 
@@ -327,34 +486,39 @@ function updateCapitalDisplay() {
     // 5. الخزينة = رأس مالك + أمانات الموزعين
     const currentTreasury = netOwnCapital + totalLiabilities;
 
+    return { totalRevenue, totalCost, totalExpenses, totalLiabilities, totalResellerDebts, netProfit, netOwnCapital, currentTreasury };
+}
+
+function updateCapitalDisplay() {
+    const { totalRevenue, totalCost, totalExpenses, totalLiabilities, totalResellerDebts, netProfit, netOwnCapital, currentTreasury } = computeTreasurySnapshot();
+
     // تحديث العناصر
     const balanceEl = document.getElementById('stat-current-balance');
     const startingEl = document.getElementById('stat-starting-capital-display');
     const badgeEl = document.getElementById('capital-performance-badge');
     const liabilitiesEls = [
         document.getElementById('stat-reseller-liabilities'),
-        document.getElementById('stat-reseller-liabilities-card'),
-        document.getElementById('stat-reseller-liabilities-inline')
+        document.getElementById('stat-reseller-liabilities-card')
     ].filter(Boolean);
     const netOwnCapitalEls = [
         document.getElementById('stat-net-own-capital'),
-        document.getElementById('stat-net-own-capital-inline')
+        document.getElementById('stat-net-own-capital-card')
     ].filter(Boolean);
     const resellerDebtsEl = document.getElementById('stat-reseller-debts-card');
 
     if (balanceEl) {
-        balanceEl.textContent = Math.round(currentTreasury).toLocaleString() + " د.ج";
+        balanceEl.textContent = formatAccountingMoney(currentTreasury);
         balanceEl.style.color = currentTreasury >= startingCapital ? 'var(--accent)' : '#ef4444';
     }
 
-    if (startingEl) startingEl.textContent = Math.round(startingCapital).toLocaleString() + " د.ج";
+    if (startingEl) startingEl.textContent = formatAccountingMoney(startingCapital);
     liabilitiesEls.forEach(el => {
-        el.textContent = Math.round(totalLiabilities).toLocaleString() + " د.ج";
+        el.textContent = formatAccountingMoney(totalLiabilities);
     });
     netOwnCapitalEls.forEach(el => {
-        el.textContent = Math.round(netOwnCapital).toLocaleString() + " د.ج";
+        el.textContent = formatAccountingMoney(netOwnCapital);
     });
-    if (resellerDebtsEl) resellerDebtsEl.textContent = Math.round(totalResellerDebts).toLocaleString() + " د.ج";
+    if (resellerDebtsEl) resellerDebtsEl.textContent = formatAccountingMoney(totalResellerDebts);
 
     // إضافة زر الإصلاح إذا كان هناك فرق في الحساب (اختياري)
     const actionContainer = document.querySelector('.khazina-actions') || document.querySelector('.flex.gap-3.mb-6');
@@ -426,11 +590,41 @@ function calculateTotalFinancials() {
 }
 
 function getOrderRevenueDzd(order) {
-    let amount = parseFloat(order?.sold_price ?? order?.amount) || 0;
-    if (!order?.sold_price && order?.currency === 'USD') {
+    // سعر البيع المسجّل (sold_price) هو المصدر الموثوق إذا كان أكبر من صفر
+    const soldPrice = parseFloat(order?.sold_price);
+    if (Number.isFinite(soldPrice) && soldPrice > 0) {
+        return soldPrice;
+    }
+    // وإلا نرجع لمبلغ الطلب مع تحويل العملة عند اللزوم
+    let amount = parseFloat(order?.amount) || 0;
+    if (order?.currency === 'USD') {
         amount *= (order.exchangeRate || USD_TO_DZD_RATE);
     }
     return amount;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// مساعدات عرض العملة في لوحة المحاسبة
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * وضع العملة الحالي في لوحة المحاسبة (both / dzd / usd)
+ */
+function getAccountingCurrencyMode() {
+    return document.getElementById('accounting-currency')?.value || 'both';
+}
+
+/**
+ * تنسيق مبلغ (مخزّن بالـ DZD) حسب فلتر العملة المختار.
+ * المصدر الموثوق دائماً هو DZD، ويُحوَّل إلى USD بالسعر الحالي عند الحاجة.
+ */
+function formatAccountingMoney(dzd) {
+    const value = Number(dzd) || 0;
+    if (getAccountingCurrencyMode() === 'usd') {
+        const rate = USD_TO_DZD_RATE || 1;
+        return `$${(value / rate).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+    }
+    return `${Math.round(value).toLocaleString()} د.ج`;
 }
 
 function getOrderCostDzd(order) {
@@ -704,6 +898,11 @@ async function fixOldOrdersCost() {
 window.openCapitalModal = openCapitalModal;
 window.closeCapitalModal = closeCapitalModal;
 window.saveStartingCapital = saveStartingCapital;
+window.openReconcileModal = openReconcileModal;
+window.closeReconcileModal = closeReconcileModal;
+window.previewReconcileDiff = previewReconcileDiff;
+window.saveReconciliation = saveReconciliation;
+window.computeTreasurySnapshot = computeTreasurySnapshot;
 window.loadStartingCapital = loadStartingCapital;
 window.updateCapitalDisplay = updateCapitalDisplay;
 window.openResetAccountingModal = openResetAccountingModal;
@@ -5675,6 +5874,9 @@ async function loadAccountingData() {
         return;
     }
     try {
+        // إبطال أي بيانات محاسبة مخزّنة مؤقتاً قبل إعادة التحميل
+        invalidateAccountingCache();
+
         // تعيين سعر الدولار في الحقل
         const usdRateInput = document.getElementById('usd-rate-input');
         if (usdRateInput) usdRateInput.value = USD_TO_DZD_RATE;
@@ -5737,53 +5939,39 @@ async function loadPurchases() {
 }
 
 /**
- * فلترة الطلبات حسب التاريخ
+ * حساب بيانات المحاسبة لكل منتج (مع تخزين مؤقت لتفادي إعادة الحساب)
+ *
+ * كانت هذه الدالة تُستدعى 3 مرات أو أكثر في كل تحديث (الجدول + الإحصائيات +
+ * الرسوم) وتمرّ في كل مرة على كل المنتجات × كل الطلبات. أصبحت الآن غلافاً
+ * يخزّن النتيجة حسب توقيع المدخلات (الفلتر + أطوال المصفوفات + سعر الصرف)
+ * ويعيد حسابها فقط عند تغيّر أي منها.
  */
-function filterOrdersByTimestampDate(orders, filter) {
-    if (filter === 'all') return orders;
+let _accountingDataCache = null;
+let _accountingDataCacheKey = '';
 
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    return orders.filter(order => {
-        if (!order.timestamp) return false;
-        const orderDate = order.timestamp.toDate ? order.timestamp.toDate() : new Date(order.timestamp);
-
-        switch (filter) {
-            case 'today':
-                return orderDate >= today;
-            case 'week':
-                const weekAgo = new Date(today);
-                weekAgo.setDate(weekAgo.getDate() - 7);
-                return orderDate >= weekAgo;
-            case 'month':
-                const monthAgo = new Date(today);
-                monthAgo.setMonth(monthAgo.getMonth() - 1);
-                return orderDate >= monthAgo;
-            case 'year':
-                const yearAgo = new Date(today);
-                yearAgo.setFullYear(yearAgo.getFullYear() - 1);
-                return orderDate >= yearAgo;
-            case 'custom':
-                const fromDate = document.getElementById('accounting-date-from')?.value;
-                const toDate = document.getElementById('accounting-date-to')?.value;
-                if (fromDate && toDate) {
-                    const from = new Date(fromDate);
-                    const to = new Date(toDate);
-                    to.setHours(23, 59, 59);
-                    return orderDate >= from && orderDate <= to;
-                }
-                return true;
-            default:
-                return true;
-        }
-    });
+function getAccountingCacheKey() {
+    const dateFilter = document.getElementById('accounting-date-filter')?.value || 'all';
+    const from = document.getElementById('accounting-date-from')?.value || '';
+    const to = document.getElementById('accounting-date-to')?.value || '';
+    return [dateFilter, from, to, allProducts.length, allOrders.length, allPurchases.length, USD_TO_DZD_RATE].join('|');
 }
 
-/**
- * حساب بيانات المحاسبة لكل منتج
- */
+function invalidateAccountingCache() {
+    _accountingDataCache = null;
+    _accountingDataCacheKey = '';
+}
+
 function calculateAccountingData() {
+    const key = getAccountingCacheKey();
+    if (_accountingDataCache && _accountingDataCacheKey === key) {
+        return _accountingDataCache;
+    }
+    _accountingDataCache = computeAccountingData();
+    _accountingDataCacheKey = key;
+    return _accountingDataCache;
+}
+
+function computeAccountingData() {
     const dateFilter = document.getElementById('accounting-date-filter')?.value || 'all';
     const filteredOrders = filterOrdersByDate(
         allOrders.filter(o => o.status === 'delivered' || o.status === 'confirmed'),
@@ -6032,6 +6220,89 @@ function updateAccountingFooter(data) {
 }
 
 /**
+ * حساب نوافذ الفترة الحالية والفترة السابقة المماثلة حسب الفلتر.
+ * يرجع null للفلاتر التي لا يمكن مقارنتها (all / custom).
+ */
+function getPeriodComparisonWindows(filter) {
+    const now = new Date();
+    const dayMs = 24 * 60 * 60 * 1000;
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    switch (filter) {
+        case 'today': {
+            const prevStart = new Date(today.getTime() - dayMs);
+            return { currStart: today, currEnd: now, prevStart, prevEnd: today, label: 'أمس' };
+        }
+        case 'week': {
+            const currStart = new Date(today.getTime() - 7 * dayMs);
+            const prevStart = new Date(today.getTime() - 14 * dayMs);
+            return { currStart, currEnd: now, prevStart, prevEnd: currStart, label: 'الأسبوع السابق' };
+        }
+        case 'month': {
+            const currStart = new Date(today.getTime() - 30 * dayMs);
+            const prevStart = new Date(today.getTime() - 60 * dayMs);
+            return { currStart, currEnd: now, prevStart, prevEnd: currStart, label: 'الشهر السابق' };
+        }
+        case 'year': {
+            const currStart = new Date(today); currStart.setFullYear(currStart.getFullYear() - 1);
+            const prevStart = new Date(today); prevStart.setFullYear(prevStart.getFullYear() - 2);
+            return { currStart, currEnd: now, prevStart, prevEnd: currStart, label: 'السنة السابقة' };
+        }
+        default:
+            return null; // all / custom
+    }
+}
+
+/**
+ * صافي "المتبقي" (الإيرادات - التكلفة - المصاريف) داخل نافذة زمنية محددة.
+ */
+function computeNetTotalInWindow(start, end) {
+    let net = 0;
+    allOrders
+        .filter(o => o.status === 'delivered' || o.status === 'confirmed')
+        .forEach(order => {
+            const d = getOrderDate(order);
+            if (Number.isNaN(d.getTime()) || d < start || d >= end) return;
+            net += getOrderRevenueDzd(order) - getOrderCostDzd(order);
+        });
+    (allExpenses || []).forEach(e => {
+        const d = getAccountingExpenseDate(e);
+        if (Number.isNaN(d.getTime()) || d < start || d >= end) return;
+        let amount = parseFloat(e.amount) || 0;
+        if (e.currency === 'USD') amount *= (e.exchangeRate || USD_TO_DZD_RATE);
+        net -= amount;
+    });
+    return net;
+}
+
+/**
+ * تحديث شارة المقارنة بالفترة السابقة على بطاقة "المتبقي".
+ */
+function updatePeriodComparison(filter, currentNet) {
+    const el = document.getElementById('stat-net-profit-comparison');
+    if (!el) return;
+
+    const windows = getPeriodComparisonWindows(filter);
+    if (!windows) {
+        el.textContent = '';
+        el.className = 'text-[10px] mt-1';
+        return;
+    }
+
+    const prevNet = computeNetTotalInWindow(windows.prevStart, windows.prevEnd);
+    if (prevNet === 0) {
+        el.textContent = `لا توجد بيانات لـ${windows.label} للمقارنة`;
+        el.className = 'text-[10px] mt-1 text-gray-500';
+        return;
+    }
+
+    const delta = ((currentNet - prevNet) / Math.abs(prevNet)) * 100;
+    const up = delta >= 0;
+    el.textContent = `${up ? '▲' : '▼'} ${up ? '+' : ''}${delta.toFixed(1)}% مقارنة بـ${windows.label}`;
+    el.className = `text-[10px] mt-1 font-bold ${up ? 'text-green-400' : 'text-red-400'}`;
+}
+
+/**
  * تحديث إحصائيات المحاسبة
  */
 function updateAccountingStats() {
@@ -6112,10 +6383,10 @@ function updateAccountingStats() {
     const statBusinessExp = document.getElementById('stat-business-expenses');
     const statPersonalExp = document.getElementById('stat-personal-expenses');
 
-    if (statRevenue) statRevenue.textContent = `${Math.round(totals.revenueDzd).toLocaleString()} د.ج`;
-    if (statCost) statCost.textContent = `${Math.round(totals.costDzd).toLocaleString()} د.ج`;
-    if (statBusinessExp) statBusinessExp.textContent = `${Math.round(businessExpSum).toLocaleString()} د.ج`;
-    if (statPersonalExp) statPersonalExp.textContent = `${Math.round(personalExpSum).toLocaleString()} د.ج`;
+    if (statRevenue) statRevenue.textContent = formatAccountingMoney(totals.revenueDzd);
+    if (statCost) statCost.textContent = formatAccountingMoney(totals.costDzd);
+    if (statBusinessExp) statBusinessExp.textContent = formatAccountingMoney(businessExpSum);
+    if (statPersonalExp) statPersonalExp.textContent = formatAccountingMoney(personalExpSum);
 
     // تحديث البطاقات - الصف الثاني
     const statGrossProfit = document.getElementById('stat-gross-profit');
@@ -6124,18 +6395,21 @@ function updateAccountingStats() {
     const statMargin = document.getElementById('stat-profit-margin');
 
     if (statGrossProfit) {
-        statGrossProfit.textContent = `${Math.round(grossProfit).toLocaleString()} د.ج`;
+        statGrossProfit.textContent = formatAccountingMoney(grossProfit);
         statGrossProfit.className = `text-lg font-bold ${grossProfit >= 0 ? 'text-green-400' : 'text-red-400'}`;
     }
     if (statNetBusiness) {
-        statNetBusiness.textContent = `${Math.round(netBusinessProfit).toLocaleString()} د.ج`;
+        statNetBusiness.textContent = formatAccountingMoney(netBusinessProfit);
         statNetBusiness.className = `text-lg font-bold ${netBusinessProfit >= 0 ? 'text-blue-400' : 'text-red-400'}`;
     }
     if (statNetProfit) {
-        statNetProfit.textContent = `${Math.round(netTotal).toLocaleString()} د.ج`;
+        statNetProfit.textContent = formatAccountingMoney(netTotal);
         statNetProfit.className = `text-lg font-bold ${netTotal >= 0 ? '' : 'text-red-400'}`;
         if (netTotal >= 0) statNetProfit.style.color = 'var(--accent)';
     }
+
+    // مقارنة "المتبقي" بالفترة السابقة (±%)
+    updatePeriodComparison(dateFilter, netTotal);
     if (statMargin) statMargin.textContent = `${margin.toFixed(1)}%`;
 
     const topProductEl = document.getElementById('stat-top-profit-product');
@@ -6148,14 +6422,14 @@ function updateAccountingStats() {
     const retailShareEl = document.getElementById('stat-retail-profit-share');
 
     if (topProductEl) topProductEl.textContent = topProfitProduct ? topProfitProduct.name : '-';
-    if (topValueEl) topValueEl.textContent = topProfitProduct ? `${Math.round(topProfitProduct.profitDzd).toLocaleString()} د.ج` : '0 د.ج';
+    if (topValueEl) topValueEl.textContent = topProfitProduct ? formatAccountingMoney(topProfitProduct.profitDzd) : formatAccountingMoney(0);
     if (weakestProductEl) weakestProductEl.textContent = weakestMarginProduct ? weakestMarginProduct.name : '-';
     if (weakestValueEl) weakestValueEl.textContent = weakestMarginProduct ? `${weakestMarginProduct.marginDzd.toFixed(1)}%` : '0%';
     if (missingCostEl) {
         missingCostEl.textContent = missingCostOrders.toLocaleString();
         missingCostEl.className = `insight-value ${missingCostOrders > 0 ? 'text-red-400' : 'text-green-400'}`;
     }
-    if (averageProfitEl) averageProfitEl.textContent = `${Math.round(averageOrderProfit).toLocaleString()} د.ج`;
+    if (averageProfitEl) averageProfitEl.textContent = formatAccountingMoney(averageOrderProfit);
     if (wholesaleShareEl) wholesaleShareEl.textContent = `${wholesaleShare.toFixed(0)}%`;
     if (retailShareEl) retailShareEl.textContent = `التجزئة ${retailShare.toFixed(0)}%`;
 }
@@ -6534,7 +6808,13 @@ function initAccountingEvents() {
     const dateTo = document.getElementById('accounting-date-to');
 
     if (dateFilter) dateFilter.addEventListener('change', handleDateFilterChange);
-    if (currencyFilter) currencyFilter.addEventListener('change', () => displayAccountingTable());
+    if (currencyFilter) currencyFilter.addEventListener('change', () => {
+        // تغيير العملة يجب أن يحدّث البطاقات والرسوم وليس الجدول فقط
+        displayAccountingTable();
+        updateAccountingStats();
+        updateCapitalDisplay();
+        updateProfitCharts();
+    });
     if (dateFrom) dateFrom.addEventListener('change', handleDateFilterChange);
     if (dateTo) dateTo.addEventListener('change', handleDateFilterChange);
 }

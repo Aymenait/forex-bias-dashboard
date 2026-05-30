@@ -130,6 +130,88 @@ window.translations = {
     "stats_net_cashflow": { ar: "التدفق النقدي", en: "Net Cashflow", fr: "Flux de Trésorerie" },
     "chart_profit_source": { ar: "مصادر الربح (تجزئة vs جملة)", en: "Profit Sources (Retail vs Wholesale)", fr: "Sources de Profit (Détail vs Gros)" },
 
+    // ── Accounting Tab: full UI labels (acc_*) ──
+    "acc_title": { ar: "💰 المحاسبة والأرباح", en: "💰 Accounting & Profits", fr: "💰 Comptabilité & Profits" },
+    // Date filter
+    "acc_period_all": { ar: "كل الفترات", en: "All Periods", fr: "Toutes les périodes" },
+    "acc_period_today": { ar: "اليوم", en: "Today", fr: "Aujourd'hui" },
+    "acc_period_week": { ar: "هذا الأسبوع", en: "This Week", fr: "Cette semaine" },
+    "acc_period_month": { ar: "هذا الشهر", en: "This Month", fr: "Ce mois" },
+    "acc_period_year": { ar: "هذه السنة", en: "This Year", fr: "Cette année" },
+    "acc_period_custom": { ar: "تاريخ مخصص", en: "Custom Range", fr: "Période personnalisée" },
+    "acc_to": { ar: "إلى", en: "to", fr: "à" },
+    // Currency filter
+    "acc_cur_all": { ar: "عرض الكل", en: "Show All", fr: "Tout afficher" },
+    "acc_cur_dzd": { ar: "DZD فقط", en: "DZD only", fr: "DZD seulement" },
+    "acc_cur_usd": { ar: "USD فقط", en: "USD only", fr: "USD seulement" },
+    // Action buttons
+    "acc_btn_purchase": { ar: "📥 شراء", en: "📥 Purchase", fr: "📥 Achat" },
+    "acc_btn_sale": { ar: "📤 بيع", en: "📤 Sale", fr: "📤 Vente" },
+    "acc_btn_expense": { ar: "💸 مصروف", en: "💸 Expense", fr: "💸 Dépense" },
+    "acc_btn_monthly": { ar: "📊 التقرير الشهري", en: "📊 Monthly Report", fr: "📊 Rapport mensuel" },
+    "acc_btn_export": { ar: "📄 تصدير CSV", en: "📄 Export CSV", fr: "📄 Exporter CSV" },
+    "acc_btn_fix_costs": { ar: "🪄 إصلاح التكاليف", en: "🪄 Fix Costs", fr: "🪄 Corriger les coûts" },
+    "acc_btn_reconcile": { ar: "🧮 تسوية الرصيد", en: "🧮 Reconcile Balance", fr: "🧮 Réconcilier le solde" },
+    "acc_btn_adjust_capital": { ar: "⚙️ ضبط رأس المال", en: "⚙️ Adjust Capital", fr: "⚙️ Ajuster le capital" },
+    "acc_btn_reset": { ar: "🗑️ إعادة ضبط", en: "🗑️ Reset", fr: "🗑️ Réinitialiser" },
+    // Treasury / hero card
+    "acc_treasury_label": { ar: "رأس المال الحالي (الخزينة)", en: "Current Capital (Treasury)", fr: "Capital actuel (Trésorerie)" },
+    "acc_treasury_note": { ar: "— إجمالي تراكمي، لا يتأثر بفلتر التاريخ", en: "— Cumulative total, not affected by the date filter", fr: "— Total cumulé, non affecté par le filtre de date" },
+    "acc_starting_label": { ar: "البداية:", en: "Start:", fr: "Départ :" },
+    "acc_reseller_liab_inline": { ar: "🔶 أمانات الموزعين:", en: "🔶 Reseller deposits:", fr: "🔶 Dépôts revendeurs :" },
+    "acc_net_own_inline": { ar: "🟢 رأس مالي الصافي:", en: "🟢 My net capital:", fr: "🟢 Mon capital net :" },
+    // KPI row 1
+    "acc_kpi_sales_revenue": { ar: "إيرادات المبيعات", en: "Sales Revenue", fr: "Revenus des ventes" },
+    "acc_kpi_product_cost": { ar: "تكلفة المنتجات", en: "Product Cost", fr: "Coût des produits" },
+    "acc_kpi_business_exp": { ar: "مصاريف العمل", en: "Business Expenses", fr: "Dépenses pro" },
+    "acc_kpi_personal_exp": { ar: "مصاريف شخصية", en: "Personal Expenses", fr: "Dépenses perso" },
+    // Liability cards
+    "acc_liab_title": { ar: "أمانات الموزعين (ديون عليك)", en: "Reseller Deposits (your liabilities)", fr: "Dépôts revendeurs (vos dettes)" },
+    "acc_liab_note": { ar: "مبالغ الموزعين المحفوظة لديك", en: "Reseller funds held by you", fr: "Fonds des revendeurs détenus par vous" },
+    "acc_debts_title": { ar: "ديون على الموزعين", en: "Debts owed by resellers", fr: "Dettes dues par les revendeurs" },
+    "acc_debts_note": { ar: "أرصدة سالبة يجب تحصيلها من الموزعين", en: "Negative balances to collect from resellers", fr: "Soldes négatifs à récupérer des revendeurs" },
+    "acc_net_own_title": { ar: "رأس مالي الصافي", en: "My Net Capital", fr: "Mon capital net" },
+    "acc_net_own_note": { ar: "الخزينة − أمانات الموزعين", en: "Treasury − reseller deposits", fr: "Trésorerie − dépôts revendeurs" },
+    // KPI row 2
+    "acc_kpi_gross": { ar: "ربح المنتجات", en: "Product Profit", fr: "Profit produits" },
+    "acc_kpi_net_business": { ar: "ربح العمل الصافي", en: "Net Business Profit", fr: "Profit net d'activité" },
+    "acc_kpi_remaining": { ar: "المتبقي (بعد المصاريف)", en: "Remaining (after expenses)", fr: "Restant (après dépenses)" },
+    "acc_kpi_margin": { ar: "هامش الربح", en: "Profit Margin", fr: "Marge bénéficiaire" },
+    // Insights
+    "acc_ins_top": { ar: "أعلى منتج ربحاً", en: "Top Product by Profit", fr: "Produit le plus rentable" },
+    "acc_ins_weak": { ar: "أضعف هامش", en: "Weakest Margin", fr: "Marge la plus faible" },
+    "acc_ins_missing": { ar: "تكاليف ناقصة", en: "Missing Costs", fr: "Coûts manquants" },
+    "acc_ins_missing_note": { ar: "طلب بدون تكلفة مسجلة", en: "Orders without a recorded cost", fr: "Commandes sans coût enregistré" },
+    "acc_ins_avg": { ar: "متوسط ربح الطلب", en: "Avg Profit / Order", fr: "Profit moyen / commande" },
+    "acc_ins_avg_note": { ar: "من ربح المنتجات", en: "From product profit", fr: "Du profit produits" },
+    "acc_ins_wholesale": { ar: "ربح الجملة", en: "Wholesale Profit", fr: "Profit de gros" },
+    // Charts
+    "acc_chart_time": { ar: "📈 الأرباح عبر الزمن", en: "📈 Profit Over Time", fr: "📈 Profits dans le temps" },
+    "acc_chart_top": { ar: "🏆 أفضل المنتجات ربحا", en: "🏆 Most Profitable Products", fr: "🏆 Produits les plus rentables" },
+    "acc_chart_source": { ar: "📊 مصادر الأرباح (تجزئة vs جملة)", en: "📊 Profit Sources (Retail vs Wholesale)", fr: "📊 Sources de profit (Détail vs Gros)" },
+    "acc_retail": { ar: "التجزئة", en: "Retail", fr: "Détail" },
+    "acc_wholesale": { ar: "الجملة", en: "Wholesale", fr: "Gros" },
+    "acc_no_profit": { ar: "لا توجد أرباح موجبة في هذه الفترة.", en: "No positive profit in this period.", fr: "Aucun profit positif sur cette période." },
+    // Profit table
+    "acc_table_title": { ar: "جدول ربحية المنتجات", en: "Product Profitability Table", fr: "Tableau de rentabilité des produits" },
+    "acc_table_sub": { ar: "مراقبة المبيعات، التكاليف، الهامش، والتنبيهات.", en: "Track sales, costs, margin, and alerts.", fr: "Suivez ventes, coûts, marge et alertes." },
+    "acc_th_product": { ar: "المنتج", en: "Product", fr: "Produit" },
+    "acc_th_purchased": { ar: "📥 مشتراة", en: "📥 Purchased", fr: "📥 Achetées" },
+    "acc_th_sold": { ar: "📤 مباعة", en: "📤 Sold", fr: "📤 Vendues" },
+    "acc_th_remaining": { ar: "📦 متبقي", en: "📦 Remaining", fr: "📦 Restantes" },
+    "acc_th_buy_cost": { ar: "تكلفة الشراء", en: "Purchase Cost", fr: "Coût d'achat" },
+    "acc_th_sale_revenue": { ar: "إيرادات البيع", en: "Sales Revenue", fr: "Revenus de vente" },
+    "acc_th_profit": { ar: "💰 الربح", en: "💰 Profit", fr: "💰 Profit" },
+    "acc_th_margin": { ar: "هامش", en: "Margin", fr: "Marge" },
+    "acc_th_status": { ar: "الحالة", en: "Status", fr: "Statut" },
+    "acc_total": { ar: "الإجمالي", en: "Total", fr: "Total" },
+    // Lower sections
+    "acc_business_exp_title": { ar: "📢 مصاريف العمل", en: "📢 Business Expenses", fr: "📢 Dépenses pro" },
+    "acc_personal_exp_title": { ar: "👤 مصاريف شخصية", en: "👤 Personal Expenses", fr: "👤 Dépenses perso" },
+    "acc_purchases_log": { ar: "📥 سجل المشتريات", en: "📥 Purchases Log", fr: "📥 Journal des achats" },
+    "acc_sales_log": { ar: "📤 سجل المبيعات", en: "📤 Sales Log", fr: "📤 Journal des ventes" },
+    "acc_suppliers": { ar: "🏪 ملخص الموردين", en: "🏪 Suppliers Summary", fr: "🏪 Résumé des fournisseurs" },
+
     // ═══════════════════════════════════════════════════════════════════════════
     // Common Messages (JS)
     // ═══════════════════════════════════════════════════════════════════════════
