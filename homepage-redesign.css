@@ -1907,3 +1907,289 @@
         display: none !important;
     }
 }
+
+/* =========================================================
+   TOP BAR — Concept 1: Floating Pill (desktop ≥ 769px)
+   Single rounded glass pill: brand · centered links · lang/currency · CTA.
+   Scoped ≥769px so the ≤768px hamburger drawer stays untouched.
+   ========================================================= */
+@media (min-width: 769px) {
+    /* The pill itself */
+    .homepage-redesign .nav-bar {
+        position: sticky;
+        top: 16px;
+        margin: 16px auto 0;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 18px;
+        padding: 9px 12px 9px 22px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 999px;
+        background:
+            linear-gradient(135deg, rgba(255, 213, 111, 0.05), transparent 40%),
+            linear-gradient(180deg, rgba(28, 36, 54, 0.8), rgba(9, 13, 21, 0.9));
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.06) inset,
+            0 24px 60px -22px rgba(0, 0, 0, 0.7),
+            0 0 0 1px rgba(255, 213, 111, 0.05);
+        backdrop-filter: blur(22px) saturate(1.1);
+        -webkit-backdrop-filter: blur(22px) saturate(1.1);
+        transition: box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+
+    .homepage-redesign .nav-bar:hover {
+        border-color: rgba(255, 213, 111, 0.2);
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.08) inset,
+            0 28px 70px -22px rgba(0, 0, 0, 0.75),
+            0 0 0 1px rgba(255, 213, 111, 0.12),
+            0 0 34px -10px rgba(255, 213, 111, 0.16);
+    }
+
+    /* Brand: logo with gold ring + gradient wordmark, tagline hidden in pill */
+    .homepage-redesign .brand {
+        flex-shrink: 0;
+        gap: 11px;
+    }
+
+    .homepage-redesign .brand .logo {
+        width: 46px !important;
+        height: 46px !important;
+        padding: 3px;
+        border-radius: 13px;
+        background: radial-gradient(circle at 30% 25%, rgba(255, 213, 111, 0.28), rgba(255, 255, 255, 0.04));
+        box-shadow:
+            0 0 0 1px rgba(255, 213, 111, 0.25),
+            0 6px 18px -6px rgba(255, 213, 111, 0.4);
+    }
+
+    .homepage-redesign .brand-name {
+        font-size: 1.4rem;
+        line-height: 1.1;
+        background: linear-gradient(120deg, #fff6dc, #ffd56f 55%, #f2b33d);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 0.2px;
+    }
+
+    .homepage-redesign .brand-tagline {
+        display: none;
+    }
+
+    /* nav-actions becomes the flexible track holding links + controls */
+    .homepage-redesign .nav-actions {
+        flex: 1;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Links: centered between brand and the controls cluster */
+    .homepage-redesign .nav-buttons-row {
+        order: 1;
+        margin-inline: auto;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .homepage-redesign .language-switcher { order: 2; }
+    .homepage-redesign .currency-selector { order: 3; }
+    .homepage-redesign .nav-cta-order      { order: 4; }
+
+    /* Link chips */
+    .homepage-redesign .nav-buttons-row .btn.ghost {
+        min-height: 38px;
+        padding: 8px 15px;
+        border: 1px solid transparent;
+        border-radius: 999px !important;
+        background: transparent;
+        color: var(--preview-muted);
+        font-weight: 600;
+        font-size: 0.93rem;
+        white-space: nowrap;
+        transition: color 0.22s ease, background 0.22s ease, transform 0.2s ease;
+    }
+
+    .homepage-redesign .nav-buttons-row .btn.ghost:hover {
+        transform: translateY(-1px);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Compact segmented controls (language / currency) */
+    .homepage-redesign .language-switcher,
+    .homepage-redesign .currency-selector {
+        flex-shrink: 0;
+        gap: 3px;
+        padding: 4px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(255, 255, 255, 0.02));
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35) inset;
+    }
+
+    .homepage-redesign .lang-btn,
+    .homepage-redesign .currency-btn {
+        min-height: 32px;
+        padding: 6px 12px;
+        border-radius: 999px !important;
+        color: var(--preview-muted);
+        font-size: 0.82rem;
+        transition: color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .homepage-redesign .lang-btn:hover,
+    .homepage-redesign .currency-btn:hover {
+        color: var(--preview-text);
+        background: rgba(255, 255, 255, 0.07);
+    }
+
+    .homepage-redesign .lang-btn.active,
+    .homepage-redesign .currency-btn.active {
+        color: #1a1205 !important;
+        background: linear-gradient(135deg, #ffe39a, #ffce5e 55%, #f0aa33);
+        box-shadow:
+            0 4px 14px -4px rgba(255, 196, 77, 0.6),
+            0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+    }
+
+    /* Gold CTA */
+    .homepage-redesign .nav-actions .nav-cta-order {
+        flex-shrink: 0;
+        min-height: 40px;
+        padding: 9px 22px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 999px !important;
+        background: linear-gradient(135deg, #ffe39a, #ffce5e 55%, #f0aa33);
+        color: #1a1205;
+        font-weight: 800;
+        font-size: 0.9rem;
+        white-space: nowrap;
+        box-shadow: 0 8px 22px -8px rgba(255, 196, 77, 0.7);
+        transition: transform 0.22s ease, box-shadow 0.25s ease;
+    }
+
+    .homepage-redesign .nav-cta-order:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 13px 28px -8px rgba(255, 196, 77, 0.85);
+    }
+}
+
+/* Tighten the pill on narrower laptops so nothing wraps */
+@media (min-width: 769px) and (max-width: 1080px) {
+    .homepage-redesign .nav-bar {
+        gap: 12px;
+        padding: 8px 10px 8px 16px;
+    }
+
+    .homepage-redesign .nav-actions { gap: 6px; }
+    .homepage-redesign .brand-name { font-size: 1.2rem; }
+
+    .homepage-redesign .nav-buttons-row .btn.ghost {
+        padding: 7px 11px;
+        font-size: 0.84rem;
+    }
+
+    .homepage-redesign .lang-btn,
+    .homepage-redesign .currency-btn {
+        padding: 5px 9px;
+        font-size: 0.76rem;
+    }
+
+    .homepage-redesign .nav-cta-order {
+        padding: 8px 15px;
+        font-size: 0.82rem;
+    }
+}
+
+/* Hide the in-bar Order CTA inside the mobile drawer (≤768px) to avoid duplication */
+@media (max-width: 768px) {
+    .homepage-redesign .nav-cta-order { display: none; }
+}
+
+/* =========================================================
+   Dropdown chips for language / currency (Concept 1)
+   Trigger is hidden until JS adds `.ready`; menu stays inline
+   as a no-JS / mobile fallback (segmented look).
+   ========================================================= */
+.homepage-redesign .nav-dd-trigger { display: none; }
+.homepage-redesign .nav-dd-caret { width: 11px; height: 11px; color: var(--preview-muted); transition: transform 0.25s ease; }
+/* Fallback / mobile: wrapper is transparent so buttons lay out like the original segmented control */
+.homepage-redesign .nav-dd-menu { display: contents; }
+
+@media (min-width: 769px) {
+    /* In dropdown mode the wrapper is just a positioning context — drop the pill skin */
+    .homepage-redesign .nav-dd.ready {
+        position: relative;
+        padding: 0;
+        border: 0;
+        background: none;
+        box-shadow: none;
+    }
+
+    .homepage-redesign .nav-dd.ready .nav-dd-trigger {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 38px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--preview-text);
+        font-weight: 700;
+        font-size: 0.84rem;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .homepage-redesign .nav-dd.ready .nav-dd-trigger:hover {
+        border-color: rgba(255, 213, 111, 0.4);
+        background: rgba(255, 213, 111, 0.08);
+    }
+
+    .homepage-redesign .nav-dd.ready.open .nav-dd-trigger {
+        border-color: rgba(255, 213, 111, 0.5);
+        background: rgba(255, 213, 111, 0.12);
+    }
+
+    .homepage-redesign .nav-dd.ready.open .nav-dd-caret { transform: rotate(180deg); }
+
+    /* The menu floats below the chip */
+    .homepage-redesign .nav-dd.ready .nav-dd-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        inset-inline-end: 0;
+        z-index: 60;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 160px;
+        padding: 8px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(180deg, rgba(22, 31, 47, 0.98), rgba(9, 13, 21, 0.98));
+        box-shadow: 0 20px 50px -16px rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+
+    .homepage-redesign .nav-dd.ready.open .nav-dd-menu { display: flex; }
+
+    /* Menu items: full-width rows */
+    .homepage-redesign .nav-dd.ready .nav-dd-menu .lang-btn,
+    .homepage-redesign .nav-dd.ready .nav-dd-menu .currency-btn {
+        width: 100%;
+        justify-content: flex-start;
+        min-height: 38px;
+        padding: 9px 12px;
+        border-radius: 9px !important;
+        font-size: 0.9rem;
+    }
+}

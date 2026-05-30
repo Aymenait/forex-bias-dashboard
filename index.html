@@ -256,7 +256,7 @@
             color: #ffd56f !important;
         }
     </style>
-    <link rel="stylesheet" href="homepage-redesign.css?v=16">
+    <link rel="stylesheet" href="homepage-redesign.css?v=17">
     <style>
         /* Hide product grid until Firebase renders products into it */
         .products-section {
@@ -378,12 +378,23 @@
             </button>
 
             <div class="nav-actions" id="nav-actions">
-                <div class="language-switcher" aria-label="Language selector">
-                    <button class="lang-btn active" data-lang="ar">العربية</button>
-                    <button class="lang-btn" data-lang="en">English</button>
-                    <button class="lang-btn" data-lang="fr">Français</button>
+                <div class="language-switcher nav-dd" aria-label="Language selector">
+                    <button type="button" class="nav-dd-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Language">
+                        <span class="nav-dd-label" data-dd-label>العربية</span>
+                        <svg class="nav-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="nav-dd-menu" role="listbox">
+                        <button class="lang-btn active" data-lang="ar">العربية</button>
+                        <button class="lang-btn" data-lang="en">English</button>
+                        <button class="lang-btn" data-lang="fr">Français</button>
+                    </div>
                 </div>
-                <div class="currency-selector">
+                <div class="currency-selector nav-dd">
+                    <button type="button" class="nav-dd-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Currency">
+                        <span class="nav-dd-label" data-dd-label>DZD</span>
+                        <svg class="nav-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="nav-dd-menu" role="listbox">
                     <button class="currency-btn active" data-currency="DZD">
                         <span class="currency-flag" style="font-size: 0.85rem; font-weight: 800; background: rgba(0,100,0,0.2); padding: 2px 5px; border-radius: 4px; color: #4ade80;">DZ</span>
                         <span class="currency-code">DZD</span>
@@ -392,6 +403,7 @@
                         <span class="currency-flag" style="font-size: 0.85rem; font-weight: 800; background: rgba(59,130,246,0.2); padding: 2px 5px; border-radius: 4px; color: #60a5fa;">US</span>
                         <span class="currency-code">USD</span>
                     </button>
+                    </div>
                 </div>
                 <div class="nav-buttons-row">
                     <a href="#products" class="btn ghost" data-i18n="nav.products">Ù…Ù†ØªØ¬Ø§ØªÙ†Ø§</a>
@@ -399,6 +411,7 @@
                     <a href="resellers.html" class="btn ghost" data-i18n="nav.resellers" style="color: #10b981;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M16.5 3C14.76 3 13.09 3.81 12 5.08 10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3z"/></svg>Ù…ÙˆØ²Ø¹ÙŠÙ†</a>
                     <a href="games_landing.html" class="btn ghost" style="color: #66c0f4; font-weight: bold;"><span data-i18n="nav.games"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -1px; margin-inline-end: 4px;"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg> Ø£Ù„Ø¹Ø§Ø¨</span> <span style="font-size: 0.7em; background: rgba(102, 192, 244, 0.2); padding: 2px 6px; border-radius: 4px; margin-right: 4px;" data-i18n="badge.coming_soon">Ù‚Ø±ÙŠØ¨Ø§Ù‹</span></a>
                 </div>
+                <a href="#products" class="btn nav-cta-order" data-i18n="nav.order">Ø§Ø·Ù„Ø¨ Ø§Ù„Ø¢Ù†</a>
             </div>
         </nav>
         <div class="hero">
@@ -1972,9 +1985,77 @@
     <script src="currency-manager.js?v=6"></script>
     <script src="payment-manager.js?v=5"></script>
     <script src="international-expansion-init.js?v=5"></script>
-    <script src="script.js?v=final17" defer></script>
+    <script src="script.js?v=final18" defer></script>
     <script src="firebase-products-loader.js?v=9" defer></script>
     <script src="order-form.js" defer></script>
+
+    <!-- Top-bar dropdown chips (language / currency) -->
+    <script>
+    (function () {
+        function initNavDropdowns() {
+            var dds = document.querySelectorAll('.nav-dd');
+            if (!dds.length) return;
+
+            function syncLabel(dd) {
+                var labelEl = dd.querySelector('[data-dd-label]');
+                var menu = dd.querySelector('.nav-dd-menu');
+                if (!labelEl || !menu) return;
+                var active = menu.querySelector('.active') || menu.querySelector('button');
+                if (!active) return;
+                var code = active.querySelector('.currency-code');
+                labelEl.textContent = (code ? code.textContent : active.textContent).trim();
+            }
+
+            function closeAll(except) {
+                document.querySelectorAll('.nav-dd.open').forEach(function (o) {
+                    if (o === except) return;
+                    o.classList.remove('open');
+                    var t = o.querySelector('.nav-dd-trigger');
+                    if (t) t.setAttribute('aria-expanded', 'false');
+                });
+            }
+
+            dds.forEach(function (dd) {
+                dd.classList.add('ready');
+                var trigger = dd.querySelector('.nav-dd-trigger');
+                var menu = dd.querySelector('.nav-dd-menu');
+                if (!trigger || !menu) return;
+
+                syncLabel(dd);
+
+                trigger.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var willOpen = !dd.classList.contains('open');
+                    closeAll(dd);
+                    dd.classList.toggle('open', willOpen);
+                    trigger.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+                });
+
+                // When a choice is picked, refresh the chip label and close
+                menu.addEventListener('click', function (e) {
+                    if (!e.target.closest('button')) return;
+                    setTimeout(function () {
+                        syncLabel(dd);
+                        dd.classList.remove('open');
+                        trigger.setAttribute('aria-expanded', 'false');
+                    }, 0);
+                });
+            });
+
+            // Outside click / Escape close everything
+            document.addEventListener('click', function () { closeAll(null); });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') closeAll(null);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initNavDropdowns);
+        } else {
+            initNavDropdowns();
+        }
+    })();
+    </script>
 
     <!-- Firebase SDK for Reviews -->
     <script type="module">

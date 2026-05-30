@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concept 2 — Two-Tier Bar</title>
+<style>
+  :root{
+    --bg:#05070d; --gold:#ffd56f; --gold-strong:#f0aa33; --blue:#66c0f4; --teal:#18c6a3;
+    --text:#f7fafc; --muted:#aab6c8; --border:rgba(255,255,255,.1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif}
+  body{
+    min-height:100vh;color:var(--text);
+    background:
+      radial-gradient(circle at 78% 14%,rgba(102,192,244,.16),transparent 34%),
+      radial-gradient(circle at 16% 40%,rgba(255,213,111,.12),transparent 30%),
+      var(--bg);
+  }
+  .label{position:fixed;bottom:14px;inset-inline-start:18px;font-size:.8rem;color:var(--muted);
+    background:rgba(0,0,0,.4);padding:6px 12px;border-radius:8px;border:1px solid var(--border);z-index:99}
+  svg{width:15px;height:15px;flex-shrink:0}
+
+  header{position:sticky;top:0;z-index:50;
+    background:linear-gradient(180deg,rgba(9,13,21,.96),rgba(9,13,21,.88));
+    backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+
+  /* ---- Tier 1: utility strip ---- */
+  .utility{border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02)}
+  .utility .row{max-width:1180px;margin:0 auto;padding:7px 24px;display:flex;align-items:center;justify-content:space-between;font-size:.8rem}
+  .seg{display:inline-flex;gap:2px;padding:3px;border-radius:9px;background:rgba(0,0,0,.3);border:1px solid var(--border)}
+  .seg button{border:0;background:transparent;color:var(--muted);font-weight:700;font-size:.78rem;
+    padding:5px 11px;border-radius:7px;cursor:pointer;transition:.2s}
+  .seg button.on{color:#1a1205;background:linear-gradient(135deg,#ffe39a,#ffce5e 55%,#f0aa33)}
+  .util-left{display:flex;align-items:center;gap:14px}
+  .util-right{display:flex;align-items:center;gap:16px;color:var(--muted)}
+  .util-right a{color:var(--muted);text-decoration:none;font-weight:600;display:flex;align-items:center;gap:6px}
+  .util-right a:hover{color:#fff}
+  .util-right .dot{width:5px;height:5px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal)}
+  .wa{color:var(--teal)!important}
+
+  /* ---- Tier 2: main bar ---- */
+  .main{max-width:1180px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:28px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand img{width:58px;height:58px;border-radius:16px;padding:4px;
+    background:radial-gradient(circle at 30% 25%,rgba(255,213,111,.3),rgba(255,255,255,.04));
+    box-shadow:0 0 0 1px rgba(255,213,111,.25),0 8px 22px -8px rgba(255,213,111,.45)}
+  .brand .bt b{display:block;font-size:1.55rem;line-height:1.1;
+    background:linear-gradient(120deg,#fff6dc,#ffd56f 55%,#f2b33d);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .brand .bt span{font-size:.82rem;color:var(--muted)}
+  nav.links{display:flex;align-items:center;gap:4px;margin-inline:auto}
+  nav.links a{display:flex;align-items:center;gap:7px;color:#d7dfec;text-decoration:none;font-weight:700;font-size:1rem;padding:11px 16px;border-radius:10px;transition:.22s;position:relative}
+  nav.links a:hover{color:#fff;background:rgba(255,255,255,.05)}
+  nav.links a.active{color:#fff}
+  nav.links a.active::after{content:"";position:absolute;left:16px;right:16px;bottom:4px;height:3px;border-radius:3px;
+    background:linear-gradient(90deg,var(--gold),var(--gold-strong))}
+  nav.links a.games{color:var(--blue)}
+  .badge{font-size:.62rem;background:rgba(102,192,244,.2);padding:2px 6px;border-radius:6px;margin-inline-start:4px}
+  .cta{padding:13px 26px;border-radius:12px;font-weight:800;text-decoration:none;color:#1a1205;
+    background:linear-gradient(135deg,#ffe39a,#ffce5e 55%,#f0aa33);box-shadow:0 12px 26px -10px rgba(255,196,77,.7);transition:.25s}
+  .cta:hover{transform:translateY(-2px)}
+
+  .hero{max-width:1180px;margin:70px auto 0;padding:0 24px;text-align:center}
+  .hero h1{font-size:3rem;line-height:1.1;margin-bottom:14px}
+  .hero h1 span{color:var(--gold)}
+  .hero p{color:var(--muted);font-size:1.1rem}
+</style>
+</head>
+<body>
+  <header>
+    <!-- Tier 1 -->
+    <div class="utility">
+      <div class="row">
+        <div class="util-left">
+          <div class="seg">
+            <button class="on">عربية</button><button>English</button><button>Français</button>
+          </div>
+          <div class="seg">
+            <button class="on">DZD</button><button>USD</button>
+          </div>
+        </div>
+        <div class="util-right">
+          <span class="dot"></span>
+          <span>توصيل سريع داخل الجزائر</span>
+          <a href="#" class="wa">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.5.1.3.6 1 1.3 1.6.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
+            واتساب
+          </a>
+          <a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            تواصل معنا
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Tier 2 -->
+    <div class="main">
+      <div class="brand">
+        <img src="https://i.imgur.com/hyjvY4Z.png" alt="3Ahub">
+        <div class="bt"><b>3Ahub</b><span>حلول رقمية تعزّز حضورك</span></div>
+      </div>
+      <nav class="links">
+        <a href="#" class="active">منتجاتنا</a>
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="#ffd56f"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          آراء العملاء
+        </a>
+        <a href="#">موزّعين</a>
+        <a href="#" class="games">ألعاب<span class="badge">قريباً</span></a>
+      </nav>
+      <a href="#" class="cta">اطلب الآن</a>
+    </div>
+  </header>
+
+  <div class="label">Concept 2 — شريط بطبقتين (Two-Tier)</div>
+
+  <div class="hero">
+    <h1>منصّتك المتكاملة لكل <span>الخدمات الرقمية</span></h1>
+    <p>حسابات تعليمية، أدوات إبداعية، وحلول ذكاء اصطناعي بأفضل الأسعار.</p>
+  </div>
+</body>
+</html>

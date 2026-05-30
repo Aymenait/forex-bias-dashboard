@@ -240,7 +240,8 @@ function resolveCanonicalFirestoreId(rawId = '', fallbackName = '') {
         // Stale long-ID docs → admin-managed short-ID docs
         'the-real-world-account':   'trw',
         'google-gemini-pro-veo-3':  'google-ai',
-        'capcut-pro':               'capcut'
+        'capcut-pro':               'capcut',
+        'youtube':                  'youtube-premium'
     };
     const id = String(rawId || '').toLowerCase().trim();
     return KNOWN_DUPLICATES[id] || id;
@@ -421,9 +422,10 @@ async function loadProductsFromFirebase(db, firebaseModules) {
     }
 
     try {
-        const { collection, getDocs } = firebaseModules;
+        const { collection, getDocs, doc, getDoc } = firebaseModules;
         const querySnapshot = await getDocs(collection(db, PRODUCTS_COLLECTION));
         const products = [];
+        const loadedIds = new Set();
 
         querySnapshot.forEach((docItem) => {
             const data = docItem.data();
@@ -432,7 +434,21 @@ async function loadProductsFromFirebase(db, firebaseModules) {
                 id: docItem.id,
                 firebaseDocId: docItem.id
             });
+            loadedIds.add(docItem.id);
         });
+
+        // تحميل صريح للمنتجات التي قد لا تظهر في الاستعلام العام
+        const explicitIds = ['youtube-premium'];
+        for (const pid of explicitIds) {
+            if (!loadedIds.has(pid)) {
+                try {
+                    const snap = await getDoc(doc(db, PRODUCTS_COLLECTION, pid));
+                    if (snap.exists()) {
+                        products.push({ ...snap.data(), id: snap.id, firebaseDocId: snap.id });
+                    }
+                } catch (_) {}
+            }
+        }
 
         homepageProductDebug('Firestore raw docs before normalize', products.map(product => ({
             firebaseDocId: product.firebaseDocId,
@@ -787,8 +803,12 @@ function renderProducts(products, lang = 'ar') {
     // مسح المحتوى الحالي
     productGrid.innerHTML = '';
 
+    // المنتجات المحذوفة يدوياً
+    const hiddenProducts = ['scispace', 'cursor', 'cursor-ai', 'tradingview', 'tradingview-premium'];
+
     // إنشاء بطاقات المنتجات
     sortedProducts.forEach(product => {
+        if (hiddenProducts.includes(product.id)) return;
         const cardHTML = createProductCardHTML(product, lang);
         productGrid.insertAdjacentHTML('beforeend', cardHTML);
     });

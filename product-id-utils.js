@@ -19,7 +19,7 @@ const CANONICAL_PRODUCT_ID_ALIASES = {
     'capcut-pro':               'capcut',
     // Other aliases
     'gama-ai-pro':              'gamma',
-    'youtube-premium':          'youtube',
+    'youtube':                  'youtube-premium',
     'microsoft-office-365':     'microsoft-office',
     'super-grok':               'super-grok',
     // UI card/element IDs → canonical product IDs
