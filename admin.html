@@ -3357,7 +3357,14 @@
     <!-- Migration Function -->
     <script>
         // دالة تشغيل ترحيل البيانات
+        // ⛔ معطّلة نهائياً: كانت تعيد رفع المنتجات القديمة بمعرّفات قديمة (canva/netflix/perplexity)
+        // مما يسبب عودة المنتجات المحذوفة وتكرارها. إدارة المنتجات تتم من الجدول أدناه فقط.
         async function runDataMigration() {
+            alert('⛔ ترحيل البيانات معطّل لحماية منتجاتك من العودة أو التكرار.\n\nأضف أو عدّل أو احذف المنتجات من جدول المنتجات في الأسفل مباشرة.');
+            return;
+        }
+
+        async function runDataMigration_DISABLED() {
             const btn = document.getElementById('migration-btn');
 
             if (!window.db || !window.firebaseModules) {

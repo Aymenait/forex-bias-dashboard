@@ -3096,7 +3096,7 @@ const ADMIN_PRODUCTS_COLLECTION_NAME = 'products_v2';
 const LEGACY_PRODUCTS_COLLECTION_NAME = 'products';
 const DELETED_PRODUCTS_COLLECTION_NAME = 'deleted_products';
 const ADMIN_PRODUCT_DEBUG = true;
-const REQUIRED_ADMIN_PRODUCT_IDS = ['capcut', 'lovable'];
+const REQUIRED_ADMIN_PRODUCT_IDS = [];
 
 function adminProductDebug(label, payload) {
     if (!ADMIN_PRODUCT_DEBUG) return;
@@ -3755,9 +3755,9 @@ async function loadProducts() {
                 });
 
                 if (!productMap.has(canonicalKey)) {
-                    productMap.set(canonicalKey, localProduct);
-                    missingLocalProducts.push(localProduct);
-                    console.log('Catalog product missing from Firebase, queued for sync:', canonicalKey);
+                    // المنتج غير موجود في Firebase - لا نضيفه تلقائياً
+                    // يجب إضافة المنتجات يدوياً من الأدمن فقط
+                    adminProductDebug('Catalog product missing from Firebase, skipped (no auto-sync):', canonicalKey);
                     return;
                 }
 
@@ -3796,9 +3796,8 @@ async function loadProducts() {
             };
 
             if (!productMap.has(canonicalId)) {
-                productMap.set(canonicalId, normalizedHomepage);
-                missingLocalProducts.push(normalizedHomepage);
-                console.log('Homepage product missing from Firebase, queued for sync:', canonicalId);
+                // المنتج موجود في الصفحة لكن ليس في Firebase - لا نضيفه تلقائياً
+                adminProductDebug('Homepage product missing from Firebase, skipped (no auto-sync):', canonicalId);
                 return;
             }
 
@@ -3837,10 +3836,11 @@ async function loadProducts() {
 
         console.log(`📊 إجمالي المنتجات الجاهزة: ${allProducts.length}`);
 
-        // مزامنة المنتجات المحلية إلى Firebase إذا كانت مفقودة هناك
-        if (window.db && window.firebaseModules && missingLocalProducts.length > 0) {
-            await syncProductsToFirebase(missingLocalProducts);
-        }
+        // مزامنة المنتجات المحلية إلى Firebase معطلة - الأدمن هو المصدر الوحيد للمنتجات
+        // لمنع إعادة ظهور المنتجات المحذوفة تلقائياً
+        // if (window.db && window.firebaseModules && missingLocalProducts.length > 0) {
+        //     await syncProductsToFirebase(missingLocalProducts);
+        // }
 
         // تحديث الجدول المعروض après sync
         if (typeof displayProductsTable === 'function') {
