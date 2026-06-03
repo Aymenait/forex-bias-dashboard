@@ -260,10 +260,11 @@ img {
 }
 
 .logo {
-    width: 90px;
-    height: 90px;
+    width: 220px;
+    height: 105px;
     object-fit: contain;
-    filter: drop-shadow(0 4px 15px rgba(255, 213, 111, 0.3));
+    border-radius: 0;
+    filter: none;
     animation: logoGlow 3s ease-in-out infinite, logoFloat 4s ease-in-out infinite;
     cursor: pointer;
     transition: transform 0.3s ease;
@@ -298,7 +299,7 @@ img {
 }
 
 .brand-text {
-    display: flex;
+    display: none;
     flex-direction: column;
 }
 
@@ -3111,8 +3112,9 @@ img {
     }
 
     .logo {
-        width: 40px !important;
-        height: 40px !important;
+        width: 118px !important;
+        height: 54px !important;
+        object-fit: contain !important;
     }
 
     .brand-name {

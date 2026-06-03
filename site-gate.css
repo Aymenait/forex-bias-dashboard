@@ -131,11 +131,11 @@ body.gate-passed .site-gate {
 }
 
 .site-gate-logo {
-    width: 148px;
-    height: 148px;
+    width: min(460px, 86vw);
+    height: 300px;
     margin-bottom: 26px;
-    border-radius: 50%;
-    object-fit: cover;
+    border-radius: 12px;
+    object-fit: contain;
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.05),
         0 0 70px rgba(243, 215, 137, 0.1),
@@ -299,8 +299,9 @@ body.gate-passed .site-gate {
     }
 
     .site-gate-logo {
-        width: 116px;
-        height: 116px;
+        width: min(320px, 84vw);
+        height: 230px;
+        object-fit: contain;
     }
 
     .site-gate-title {

@@ -59,9 +59,12 @@
 }
 
 .homepage-redesign .brand .logo {
-    width: 54px !important;
-    height: 54px !important;
-    border-radius: 8px;
+    width: 220px !important;
+    height: 105px !important;
+    border-radius: 0;
+    object-fit: contain;
+    background: transparent;
+    box-shadow: none;
 }
 
 .homepage-redesign .brand-name {
@@ -842,8 +845,11 @@
     }
 
     .homepage-redesign .brand .logo {
-        width: 42px !important;
-        height: 42px !important;
+        width: 156px !important;
+        height: 74px !important;
+        object-fit: contain;
+        background: transparent;
+        box-shadow: none;
     }
 
     .homepage-redesign .brand-name {
@@ -1954,14 +1960,13 @@
     }
 
     .homepage-redesign .brand .logo {
-        width: 46px !important;
-        height: 46px !important;
-        padding: 3px;
-        border-radius: 13px;
-        background: radial-gradient(circle at 30% 25%, rgba(255, 213, 111, 0.28), rgba(255, 255, 255, 0.04));
-        box-shadow:
-            0 0 0 1px rgba(255, 213, 111, 0.25),
-            0 6px 18px -6px rgba(255, 213, 111, 0.4);
+        width: 220px !important;
+        height: 105px !important;
+        padding: 0;
+        border-radius: 0;
+        object-fit: contain;
+        background: transparent;
+        box-shadow: none;
     }
 
     .homepage-redesign .brand-name {
