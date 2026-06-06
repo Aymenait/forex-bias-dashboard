@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const gate = document.querySelector('.site-gate');
     const enterButton = document.querySelector('.site-gate-enter');
+    const choiceButtons = Array.from(document.querySelectorAll('.site-gate-choice'));
     const subtitle = document.querySelector('.site-gate-subtitle');
 
-    if (!gate || !enterButton) return;
+    if (!gate || !enterButton || choiceButtons.length === 0) return;
 
     const gateAlreadyPassed = sessionStorage.getItem('siteGatePassed') === 'true';
     const directSectionVisit = Boolean(window.location.hash);
@@ -18,7 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.documentElement.classList.add('gate-open');
     document.body.classList.add('gate-open');
-    enterButton.disabled = true;
+    choiceButtons.forEach(button => {
+        button.disabled = true;
+    });
     gate.classList.add('is-loading');
 
     let gateReady = false;
@@ -28,9 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gateReady = true;
         gate.classList.remove('is-loading');
         gate.classList.add('is-ready');
-        enterButton.disabled = false;
-        enterButton.textContent = 'Enter';
-        if (subtitle) subtitle.textContent = 'Ready to enter';
+        choiceButtons.forEach(button => {
+            button.disabled = false;
+        });
+        if (subtitle) subtitle.textContent = 'Choose your section';
     };
 
     const waitForFonts = document.fonts?.ready || Promise.resolve();
@@ -50,17 +54,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // If the static HTML is all we have, still let the visitor through quickly.
     window.setTimeout(markReady, 2800);
 
-    const passGate = () => {
+    const passGate = (target = 'products') => {
         if (!gateReady) return;
         sessionStorage.setItem('siteGatePassed', 'true');
+
+        if (target === 'games') {
+            window.location.href = 'games_landing.html';
+            return;
+        }
+
         document.documentElement.classList.remove('gate-open');
         document.body.classList.remove('gate-open');
         document.body.classList.add('gate-passed');
         window.setTimeout(() => gate.remove(), 720);
     };
 
-    enterButton.addEventListener('click', passGate);
+    choiceButtons.forEach(button => {
+        button.addEventListener('click', () => passGate(button.dataset.gateTarget || 'products'));
+    });
+
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') passGate();
+        if (event.key === 'Enter') passGate('products');
     });
 });

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinematic Motion Concepts - 3Ahub Steam Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="steam-games-data.js?v=4"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background: #050914;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 80;
+            background: rgba(5, 9, 20, 0.82);
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(16px);
+        }
+        .brand-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.22);
+        }
+        .tab {
+            min-height: 42px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.08);
+            color: #dbeafe;
+            padding: 0 14px;
+            font-weight: 900;
+        }
+        .tab.active {
+            color: #111827;
+            background: #ffd76b;
+            border-color: #ffd76b;
+        }
+        .concept { display: none; min-height: 100vh; position: relative; overflow: hidden; }
+        .concept.active { display: block; }
+        .game-img { width: 100%; aspect-ratio: 460 / 215; object-fit: cover; background: #111827; }
+        .tag {
+            display: inline-flex;
+            min-height: 23px;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0 8px;
+            font-size: 0.72rem;
+            white-space: nowrap;
+            background: rgba(102,192,244,0.18);
+            color: #d4f2ff;
+        }
+        .price { color: #ffd76b; font-weight: 900; font-size: 1.65rem; line-height: 1; }
+        .order {
+            min-height: 42px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #061017;
+            background: linear-gradient(135deg, #76d186, #66c0f4);
+        }
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(12, 18, 32, 0.82);
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: 0 18px 60px rgba(0,0,0,0.28);
+            backdrop-filter: blur(10px);
+        }
+        .card-title {
+            min-height: 3.1em;
+            line-height: 1.25;
+        }
+
+        /* Shared motion safety */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* A: Rotating hero montage */
+        .montage {
+            background: #050914;
+        }
+        .montage-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            animation: montageSwap 24s infinite steps(1);
+            transform: scale(1.08);
+        }
+        .montage::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(5,9,20,0.95), rgba(5,9,20,0.42), rgba(5,9,20,0.92)),
+                linear-gradient(180deg, rgba(5,9,20,0.1), #050914 82%);
+        }
+        .montage::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 5px);
+            mix-blend-mode: overlay;
+        }
+        @keyframes montageSwap {
+            0%, 24% { background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3768760/dbe86ebd2edb4c77d113e9e2feefeb90189fabc9/header.jpg?t=1780705646'); }
+            25%, 49% { background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2947440/7e5d923ac622bd1775ebc9b5d4b5b0a24bf5ed40/header.jpg?t=1770169624'); }
+            50%, 74% { background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3357650/e32e168b25ed68a0cf6264c220c07e96c2abfb56/header.jpg?t=1777351016'); }
+            75%, 100% { background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3751260/a7062f3b59d491c2678e3fd7ce2672858e480641/header.jpg?t=1780740503'); }
+        }
+        .pulse-line {
+            height: 2px;
+            width: 180px;
+            background: linear-gradient(90deg, transparent, #66c0f4, #ffd76b, transparent);
+            animation: pulseLine 2.4s ease-in-out infinite;
+        }
+        @keyframes pulseLine {
+            0%, 100% { opacity: 0.35; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(-24px); }
+        }
+
+        /* B: Neon arena */
+        .neon {
+            background:
+                radial-gradient(circle at 20% 25%, rgba(102,192,244,0.22), transparent 25rem),
+                radial-gradient(circle at 80% 30%, rgba(255,215,107,0.16), transparent 24rem),
+                #060b18;
+        }
+        .neon-grid {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(102,192,244,0.11) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102,192,244,0.11) 1px, transparent 1px);
+            background-size: 64px 64px;
+            transform: perspective(800px) rotateX(58deg) translateY(8rem);
+            transform-origin: bottom;
+            animation: gridMove 7s linear infinite;
+            opacity: 0.42;
+        }
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 0 64px; }
+        }
+        .neon-spot {
+            position: absolute;
+            width: 42vw;
+            height: 42vw;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.2;
+            background: #66c0f4;
+            animation: spotMove 9s ease-in-out infinite alternate;
+        }
+        @keyframes spotMove {
+            from { transform: translate(4vw, 8vh); }
+            to { transform: translate(52vw, 18vh); }
+        }
+        .neon .card { box-shadow: 0 0 0 1px rgba(102,192,244,0.15), 0 22px 80px rgba(102,192,244,0.1); }
+
+        /* C: Trailer wall */
+        .wall {
+            background:
+                radial-gradient(circle at 76% 18%, rgba(255,215,107,0.18), transparent 20rem),
+                radial-gradient(circle at 18% 26%, rgba(102,192,244,0.18), transparent 24rem),
+                #070b13;
+        }
+        .wall-track {
+            position: absolute;
+            z-index: 0;
+            inset: -8vh -8vw;
+            opacity: 0.86;
+            display: grid;
+            grid-template-columns: repeat(7, minmax(220px, 1fr));
+            gap: 18px;
+            transform: rotate(-7deg) scale(1.08);
+            animation: wallDrift 24s linear infinite;
+        }
+        .wall-track img {
+            width: 100%;
+            height: 154px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            filter: saturate(1.28) contrast(1.08) brightness(1.04);
+            box-shadow: 0 16px 50px rgba(0,0,0,0.32);
+        }
+        @keyframes wallDrift {
+            from { transform: rotate(-7deg) scale(1.08) translateX(0); }
+            to { transform: rotate(-7deg) scale(1.08) translateX(-300px); }
+        }
+        .wall-hero-bg {
+            position: absolute;
+            z-index: 0;
+            top: 4.5rem;
+            left: 0;
+            right: 0;
+            height: 62vh;
+            opacity: 0.92;
+            filter: saturate(1.15) contrast(1.08);
+            background-image:
+                url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3768760/dbe86ebd2edb4c77d113e9e2feefeb90189fabc9/header.jpg?t=1780705646'),
+                url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3357650/e32e168b25ed68a0cf6264c220c07e96c2abfb56/header.jpg?t=1777351016'),
+                url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2947440/7e5d923ac622bd1775ebc9b5d4b5b0a24bf5ed40/header.jpg?t=1770169624');
+            background-size: 52rem auto, 34rem auto, 28rem auto;
+            background-position: left 4vw top 5vh, right 0 top 12vh, center top 1vh;
+            background-repeat: no-repeat;
+            animation: heroPosterFloat 12s ease-in-out infinite alternate;
+        }
+        @keyframes heroPosterFloat {
+            from { transform: translateY(0) scale(1); }
+            to { transform: translateY(-18px) scale(1.035); }
+        }
+        .wall::after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(7,11,19,0.78) 0%, rgba(7,11,19,0.18) 43%, rgba(7,11,19,0.76) 100%),
+                linear-gradient(180deg, rgba(7,11,19,0.06), rgba(7,11,19,0.26) 58%, #070b13 100%);
+            pointer-events: none;
+        }
+        .wall-panel {
+            position: relative;
+            z-index: 3;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            text-shadow: 0 6px 26px rgba(0,0,0,0.92);
+        }
+        .wall .card {
+            background: rgba(8, 13, 24, 0.68);
+            border-color: rgba(255,255,255,0.22);
+        }
+        .wall-reveal {
+            position: absolute;
+            z-index: 2;
+            left: 2rem;
+            top: clamp(7.5rem, 18vh, 12rem);
+            width: min(34rem, calc(100vw - 4rem));
+            min-height: 11rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.16);
+            background:
+                linear-gradient(90deg, rgba(7,11,19,0.12), rgba(7,11,19,0.34)),
+                url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3751260/a7062f3b59d491c2678e3fd7ce2672858e480641/header.jpg?t=1780740503') center / cover;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 28px 90px rgba(0,0,0,0.28);
+        }
+        .wall-reveal::before {
+            content: "";
+            position: absolute;
+            inset: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,215,107,0.35);
+        }
+        @media (max-width: 720px) {
+            .wall-track {
+                grid-template-columns: repeat(4, minmax(180px, 1fr));
+                opacity: 0.76;
+            }
+            .wall-track img { height: 118px; }
+            .wall-hero-bg {
+                top: 7rem;
+                height: 56vh;
+                background-size: 25rem auto, 20rem auto, 17rem auto;
+                background-position: left -8rem top 8rem, right -8rem top 4rem, center top 0;
+                opacity: 0.82;
+            }
+            .wall-reveal {
+                left: 1rem;
+                right: 1rem;
+                top: 7.5rem;
+                width: auto;
+                min-height: 6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="topbar">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <img src="logo-new.png" onerror="this.src='logo.png'" alt="3Ahub" class="brand-logo">
+                <div>
+                    <div class="font-black">Cinematic Motion Concepts</div>
+                    <div class="text-xs text-slate-400">أمثلة أكثر حيوية لصفحة ألعاب Steam</div>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button class="tab active" data-target="montage">A: Dynamic Montage</button>
+                <button class="tab" data-target="neon">B: Neon Arena</button>
+                <button class="tab" data-target="wall">C: Trailer Wall</button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="montage" class="concept montage active">
+        <div class="montage-bg"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 py-10">
+            <header class="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-end min-h-[54vh]">
+                <div>
+                    <div class="flex items-center gap-3 mb-5">
+                        <img src="logo-new.png" onerror="this.src='logo.png'" alt="3Ahub" class="brand-logo">
+                        <span class="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-sm font-bold">Steam Offline فقط</span>
+                    </div>
+                    <div class="pulse-line mb-5"></div>
+                    <h1 class="text-4xl md:text-7xl font-black leading-tight">خلفية تتبدل مثل trailer</h1>
+                    <p class="text-slate-300 text-lg mt-5 max-w-2xl">الخلفية تتغير بين ألعاب جديدة، وتخلي الصفحة حية بدون فيديو ثقيل.</p>
+                </div>
+                <div class="card p-5">
+                    <div class="text-slate-400 text-sm">السعر الافتراضي</div>
+                    <div class="price mt-2">500 دج / $2.00</div>
+                    <p class="text-slate-300 mt-4 text-sm">مناسب إذا تريد Hero قوي مع إحساس سينمائي واضح.</p>
+                </div>
+            </header>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8" id="montage-grid"></div>
+        </div>
+    </section>
+
+    <section id="neon" class="concept neon">
+        <div class="neon-spot"></div>
+        <div class="neon-grid"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 py-10">
+            <header class="min-h-[48vh] flex flex-col justify-end pb-8">
+                <div class="flex items-center gap-3 mb-5">
+                    <img src="logo-new.png" onerror="this.src='logo.png'" alt="3Ahub" class="brand-logo">
+                    <span class="text-cyan-200 font-bold">LIVE GAMING GRID</span>
+                </div>
+                <h1 class="text-4xl md:text-7xl font-black leading-tight max-w-4xl">Neon arena بخلفية تتحرك</h1>
+                <p class="text-slate-300 text-lg mt-5 max-w-2xl">خطوط grid تتحرك مثل أرضية arena، يعطي إحساس gaming بدون تشويش على البطاقات.</p>
+            </header>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" id="neon-grid-cards"></div>
+        </div>
+    </section>
+
+    <section id="wall" class="concept wall">
+        <div class="wall-track" id="wall-track"></div>
+        <div class="wall-hero-bg"></div>
+        <div class="wall-reveal"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 py-10">
+            <header class="wall-panel p-6 md:p-8 min-h-[48vh] flex flex-col justify-end mb-8">
+                <div class="flex items-center gap-3 mb-5">
+                    <img src="logo-new.png" onerror="this.src='logo.png'" alt="3Ahub" class="brand-logo">
+                    <span class="text-yellow-200 font-bold">TRAILER WALL</span>
+                </div>
+                <h1 class="text-4xl md:text-7xl font-black leading-tight max-w-4xl">جدار صور متحرك من الألعاب</h1>
+                <p class="text-slate-300 text-lg mt-5 max-w-2xl">الخلفية عبارة عن wall متحرك من صور ألعابك، يعطي إحساس متجر حي ومليان عناوين.</p>
+            </header>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" id="wall-grid"></div>
+        </div>
+    </section>
+
+    <script>
+        const games = (window.STEAM_GAMES_DEFAULTS || []).slice(0, 12);
+        const wallGames = [...games, ...games].slice(0, 24);
+
+        function card(game) {
+            const tags = (game.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('');
+            return `
+                <article class="card">
+                    <img class="game-img" src="${game.imageUrl}" alt="${game.name}">
+                    <div class="p-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="font-black text-lg card-title">${game.name}</h3>
+                            <span class="text-xs text-slate-400">${game.releaseYear || ''}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-3">${tags}</div>
+                        <div class="mt-4">
+                            <div class="text-xs text-slate-400">السعر</div>
+                            <div class="price">500 دج</div>
+                            <div class="text-blue-200 text-sm font-bold">$2.00</div>
+                        </div>
+                        <a class="order mt-4" href="#">اطلب عبر واتساب</a>
+                    </div>
+                </article>
+            `;
+        }
+
+        document.getElementById('montage-grid').innerHTML = games.slice(0, 8).map(card).join('');
+        document.getElementById('neon-grid-cards').innerHTML = games.slice(0, 8).map(card).join('');
+        document.getElementById('wall-grid').innerHTML = games.slice(0, 8).map(card).join('');
+        document.getElementById('wall-track').innerHTML = wallGames.map(game => `<img src="${game.imageUrl}" alt="">`).join('');
+
+        document.querySelectorAll('.tab').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.concept').forEach(section => section.classList.remove('active'));
+                button.classList.add('active');
+                document.getElementById(button.dataset.target).classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

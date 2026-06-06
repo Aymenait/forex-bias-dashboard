@@ -312,7 +312,7 @@
             overflow: hidden !important;
         }
     </style>
-    <link rel="stylesheet" href="site-gate.css?v=3">
+    <link rel="stylesheet" href="site-gate.css?v=4">
     <link rel="stylesheet" href="order-form.css">
 </head>
 
@@ -324,12 +324,16 @@
         <div class="site-gate-wall" aria-hidden="true">
             <div class="site-gate-tile"><img src="https://i.imgur.com/hEiJhso.gif" alt=""></div>
             <div class="site-gate-tile"><img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt=""></div>
-            <div class="site-gate-tile"><img src="https://i.pinimg.com/736x/71/8b/41/718b41945aab84bd2276c762266931d0.jpg" alt=""></div>
-            <div class="site-gate-tile"><img src="https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif" alt=""></div>
-            <div class="site-gate-tile"><video autoplay loop muted playsinline src="https://i.imgur.com/mEy5oXF.mp4"></video></div>
-            <div class="site-gate-tile"><img src="https://i.pinimg.com/originals/98/59/12/98591272861e66a02eecf5dae0450c73.gif" alt=""></div>
+            <div class="site-gate-tile"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3768760/dbe86ebd2edb4c77d113e9e2feefeb90189fabc9/header.jpg?t=1780705646" alt=""></div>
+            <div class="site-gate-tile"><img src="https://i.imgur.com/FDZBdd9.gif" alt=""></div>
+            <div class="site-gate-tile"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2215200/a07a9a6c0c9c1225f5b260b4f29fe40e6f099f6b/header.jpg?t=1780591479" alt=""></div>
             <div class="site-gate-tile"><img src="https://i.pinimg.com/1200x/38/e3/08/38e308732b87069ed50893423f09ca4b.jpg" alt=""></div>
+            <div class="site-gate-tile"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3764200/ce5437442768e38eb575f205ab9397d0264017b0/header.jpg?t=1779840172" alt=""></div>
             <div class="site-gate-tile"><img src="https://i.pinimg.com/736x/c2/5b/dd/c25bdda8e7d4eb27bcb2f4d411441d92.jpg" alt=""></div>
+            <div class="site-gate-tile"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1962700/header.jpg?t=1780372044" alt=""></div>
+            <div class="site-gate-tile"><img src="https://i.pinimg.com/1200x/ac/29/4c/ac294c4a7fb6ec4932b5b435260b53bc.jpg" alt=""></div>
+            <div class="site-gate-tile"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3751260/a7062f3b59d491c2678e3fd7ce2672858e480641/header.jpg?t=1780740503" alt=""></div>
+            <div class="site-gate-tile"><img src="https://i.pinimg.com/736x/71/8b/41/718b41945aab84bd2276c762266931d0.jpg" alt=""></div>
         </div>
         <div class="site-gate-center">
             <div>
@@ -339,7 +343,18 @@
                 <div class="site-gate-progress" aria-hidden="true">
                     <span></span>
                 </div>
-                <button class="site-gate-enter" type="button">Loading</button>
+                <div class="site-gate-actions" aria-label="Choose catalog">
+                    <button class="site-gate-enter site-gate-choice" type="button" data-gate-target="products" data-ready-label="Digital products">
+                        <span class="site-gate-choice-kicker">Catalog</span>
+                        <span class="site-gate-choice-title">Digital products</span>
+                        <span class="site-gate-choice-note">AI, streaming, design and software</span>
+                    </button>
+                    <button class="site-gate-choice site-gate-games" type="button" data-gate-target="games" data-ready-label="Steam Offline games">
+                        <span class="site-gate-choice-kicker">Gaming</span>
+                        <span class="site-gate-choice-title">Steam Offline games</span>
+                        <span class="site-gate-choice-note">New and trending PC games</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -2724,7 +2739,7 @@
             if (summaryPriceEl) summaryPriceEl.textContent = label;
         }
     </script>
-    <script src="site-gate.js?v=3"></script>
+    <script src="site-gate.js?v=4"></script>
 </body>
 
 </html>

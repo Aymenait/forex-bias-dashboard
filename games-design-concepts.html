@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Games Design Concepts - 3Ahub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="steam-games-data.js?v=4"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background: #080d16;
+            color: #fff;
+        }
+        .concept-tabs {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(8, 13, 22, 0.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+        .concept-tab {
+            min-height: 42px;
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 8px;
+            padding: 0 14px;
+            background: rgba(255,255,255,0.08);
+            color: #d8e4f5;
+            font-weight: 800;
+        }
+        .concept-tab.active {
+            background: #f1c75b;
+            color: #111827;
+            border-color: #f1c75b;
+        }
+        .concept { display: none; min-height: 100vh; }
+        .concept.active { display: block; }
+        .brand-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.22);
+        }
+        .game-img {
+            width: 100%;
+            aspect-ratio: 460 / 215;
+            object-fit: cover;
+            background: #111827;
+        }
+        .game-title {
+            min-height: 3.2em;
+            line-height: 1.25;
+            display: flex;
+            align-items: flex-start;
+        }
+        .tag {
+            display: inline-flex;
+            min-height: 23px;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0 8px;
+            font-size: 0.72rem;
+            white-space: nowrap;
+        }
+        .price {
+            color: #ffd76b;
+            font-size: 1.65rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .order {
+            min-height: 42px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+        }
+
+        /* Concept A: Cinematic Arena */
+        .arena {
+            background:
+                linear-gradient(180deg, rgba(8,13,22,0.6), #080d16 70%),
+                url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3768760/dbe86ebd2edb4c77d113e9e2feefeb90189fabc9/header.jpg?t=1780705646') center top / cover fixed;
+        }
+        .arena::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, rgba(8,13,22,0.92) 0%, rgba(8,13,22,0.46) 48%, rgba(8,13,22,0.88) 100%),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.045) 0, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 80px);
+        }
+        .arena-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background: rgba(11, 18, 31, 0.82);
+            border: 1px solid rgba(255,255,255,0.13);
+        }
+        .arena .tag { background: rgba(102,192,244,0.18); color: #c9efff; }
+        .arena .order { background: linear-gradient(135deg, #76d186, #66c0f4); color: #061017; }
+
+        /* Concept B: Steam Library Pro */
+        .library {
+            background: #101825;
+        }
+        .library-band {
+            background:
+                linear-gradient(90deg, #111827 0%, rgba(17,24,39,0.82) 42%, rgba(25,51,70,0.74) 100%),
+                url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3357650/e32e168b25ed68a0cf6264c220c07e96c2abfb56/header.jpg?t=1777351016') center / cover;
+            border-bottom: 1px solid rgba(255,255,255,0.13);
+        }
+        .library-panel {
+            background: #151f2e;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .library-card {
+            display: grid;
+            grid-template-columns: minmax(128px, 190px) 1fr;
+            gap: 14px;
+            background: #172231;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .library-card .game-img {
+            height: 100%;
+            min-height: 112px;
+            aspect-ratio: auto;
+            border-radius: 6px;
+        }
+        .library .tag { background: rgba(240,199,94,0.13); color: #ffe3a0; }
+        .library .order { background: #66c0f4; color: #071522; }
+
+        /* Concept C: Arcade Grid */
+        .arcade {
+            background:
+                linear-gradient(rgba(6, 10, 18, 0.68), rgba(6, 10, 18, 0.96)),
+                url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2947440/7e5d923ac622bd1775ebc9b5d4b5b0a24bf5ed40/header.jpg?t=1770169624') center top / cover fixed;
+        }
+        .arcade-board {
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)),
+                rgba(7, 12, 22, 0.82);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 8px;
+        }
+        .arcade-card {
+            border-radius: 8px;
+            overflow: hidden;
+            background: #101827;
+            border: 1px solid rgba(255,255,255,0.13);
+            box-shadow: inset 0 0 0 1px rgba(102,192,244,0.05);
+        }
+        .arcade .tag { background: rgba(118,209,134,0.16); color: #caffd6; }
+        .arcade .order { background: #f1c75b; color: #151515; }
+
+        @media (max-width: 700px) {
+            .library-card { grid-template-columns: 1fr; }
+            .library-card .game-img { aspect-ratio: 460 / 215; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="concept-tabs">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <img src="logo-new.png" onerror="this.src='logo.png'" alt="3Ahub" class="brand-logo">
+                <div>
+                    <div class="font-black">3Ahub Steam Games</div>
+                    <div class="text-xs text-slate-400">اختر اتجاه التصميم الذي تريد تطبيقه</div>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button class="concept-tab active" data-target="arena">A: Cinematic Arena</button>
+                <button class="concept-tab" data-target="library">B: Library Pro</button>
+                <button class="concept-tab" data-target="arcade">C: Arcade Grid</button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="arena" class="concept arena active">
+        <div class="relative max-w-7xl mx-auto px-4 py-10">
+            <header class="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 items-end mb-8">
+                <div>
+                    <div class="inline-flex items-center gap-3 mb-5">
+                        <img src="logo-new.png" onerror="this.src='logo.png'" alt="3Ahub" class="brand-logo">
+                        <span class="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-sm font-bold">Steam Offline فقط</span>
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-black leading-tight">كتالوج ألعاب بطابع سينمائي</h1>
+                    <p class="mt-5 text-slate-300 text-lg max-w-2xl">خلفية كبيرة من لعبة ترند، إحساس قوي ومباشر، مناسب إذا تحب الصفحة تبان aggressive وgaming.</p>
+                </div>
+                <div class="arena-card p-5">
+                    <div class="text-slate-400 text-sm">السعر الافتراضي</div>
+                    <div class="price mt-2">500 دج / $2.00</div>
+                    <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
+                        <div class="bg-white/5 border border-white/10 rounded-lg p-3"><b>44</b><br><span class="text-slate-400">لعبة</span></div>
+                        <div class="bg-white/5 border border-white/10 rounded-lg p-3"><b>AR / EN / FR</b><br><span class="text-slate-400">لغات</span></div>
+                    </div>
+                </div>
+            </header>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" id="arena-grid"></div>
+        </div>
+    </section>
+
+    <section id="library" class="concept library">
+        <div class="library-band">
+            <div class="max-w-7xl mx-auto px-4 py-10">
+                <div class="flex items-center gap-4 mb-7">
+                    <img src="logo-new.png" onerror="this.src='logo.png'" alt="3Ahub" class="brand-logo">
+                    <div>
+                        <h1 class="text-3xl md:text-5xl font-black">Steam Library Pro</h1>
+                        <p class="text-slate-300 mt-2">تصميم هادئ ومنظم مثل مكتبة Steam، ممتاز لو تحب الاحتراف وسهولة التصفح.</p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-4 gap-3">
+                    <div class="library-panel p-4"><div class="text-slate-400 text-sm">السعر</div><b class="text-2xl text-[#ffd76b]">500 دج</b></div>
+                    <div class="library-panel p-4"><div class="text-slate-400 text-sm">USD</div><b class="text-2xl text-[#66c0f4]">$2.00</b></div>
+                    <div class="library-panel p-4"><div class="text-slate-400 text-sm">الفلاتر</div><b class="text-2xl">New / RPG</b></div>
+                    <div class="library-panel p-4"><div class="text-slate-400 text-sm">الطلب</div><b class="text-2xl">WhatsApp</b></div>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div class="grid lg:grid-cols-2 gap-4" id="library-grid"></div>
+        </div>
+    </section>
+
+    <section id="arcade" class="concept arcade">
+        <div class="max-w-7xl mx-auto px-4 py-10">
+            <div class="arcade-board p-5 md:p-8 mb-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-5">
+                    <div>
+                        <div class="flex items-center gap-3 mb-5">
+                            <img src="logo-new.png" onerror="this.src='logo.png'" alt="3Ahub" class="brand-logo">
+                            <span class="text-sm text-green-200 font-bold">NEW RELEASES WALL</span>
+                        </div>
+                        <h1 class="text-4xl md:text-6xl font-black leading-tight">جدار ألعاب ترند</h1>
+                        <p class="text-slate-300 mt-4 max-w-2xl">تصميم شبابي وحيوي، يعطي إحساس متجر ألعاب سريع ومليء بالإصدارات الجديدة.</p>
+                    </div>
+                    <div class="text-left md:text-right">
+                        <div class="text-slate-400 text-sm">1 USD = 250 DA</div>
+                        <div class="price mt-1">500 دج / $2.00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4" id="arcade-grid"></div>
+        </div>
+    </section>
+
+    <script>
+        const games = (window.STEAM_GAMES_DEFAULTS || []).slice(0, 10);
+
+        function gameCard(game, mode) {
+            const tags = (game.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('');
+            if (mode === 'library') {
+                return `
+                    <article class="library-card">
+                        <img class="game-img" src="${game.imageUrl}" alt="${game.name}">
+                        <div class="flex flex-col">
+                            <div class="flex items-start justify-between gap-3">
+                                <h3 class="font-black text-lg game-title">${game.name}</h3>
+                                <span class="text-xs text-slate-400">${game.releaseYear || ''}</span>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mt-2">${tags}</div>
+                            <div class="mt-auto pt-4 flex items-end justify-between gap-3">
+                                <div><div class="text-xs text-slate-400">السعر</div><div class="price">500 دج</div><div class="text-blue-200 text-sm font-bold">$2.00</div></div>
+                                <a class="order px-4" href="#">اطلب</a>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+            return `
+                <article class="${mode === 'arcade' ? 'arcade-card' : 'arena-card'}">
+                    <img class="game-img" src="${game.imageUrl}" alt="${game.name}">
+                    <div class="p-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="font-black text-lg game-title">${game.name}</h3>
+                            <span class="text-xs text-slate-400">${game.releaseYear || ''}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-3">${tags}</div>
+                        <div class="mt-4 flex items-end justify-between gap-3">
+                            <div><div class="text-xs text-slate-400">السعر</div><div class="price">500 دج</div><div class="text-blue-200 text-sm font-bold">$2.00</div></div>
+                        </div>
+                        <a class="order mt-4" href="#">اطلب عبر واتساب</a>
+                    </div>
+                </article>
+            `;
+        }
+
+        document.getElementById('arena-grid').innerHTML = games.slice(0, 8).map(game => gameCard(game, 'arena')).join('');
+        document.getElementById('library-grid').innerHTML = games.slice(0, 8).map(game => gameCard(game, 'library')).join('');
+        document.getElementById('arcade-grid').innerHTML = games.slice(0, 10).map(game => gameCard(game, 'arcade')).join('');
+
+        document.querySelectorAll('.concept-tab').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.concept-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.concept').forEach(section => section.classList.remove('active'));
+                button.classList.add('active');
+                document.getElementById(button.dataset.target).classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
