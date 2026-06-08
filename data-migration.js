@@ -429,63 +429,6 @@ const CURRENT_PRODUCTS = [
         landingPage: 'tradingview_landing.html'
     },
     {
-        id: 'perplexity',
-        name: {
-            ar: 'Perplexity AI Pro',
-            en: 'Perplexity AI Pro',
-            fr: 'Perplexity AI Pro'
-        },
-        description: {
-            ar: 'محرك بحث ذكي مدعوم بالذكاء الاصطناعي مع إجابات دقيقة ومصادر موثوقة.',
-            en: 'AI-powered smart search engine with accurate answers and reliable sources.',
-            fr: 'Moteur de recherche intelligent alimenté par l\'IA avec des réponses précises et des sources fiables.'
-        },
-        mediaUrl: 'https://i.imgur.com/mEy5oXF.mp4',
-        mediaType: 'video',
-        priceDZD: 800,
-        priceUSD: 3.2,
-        availability: 'available',
-        features: [
-            {
-                id: 'perplexity_f1',
-                text: {
-                    ar: 'بحث ذكي بالذكاء الاصطناعي',
-                    en: 'AI-powered smart search',
-                    fr: 'Recherche intelligente par IA'
-                },
-                order: 0
-            },
-            {
-                id: 'perplexity_f2',
-                text: {
-                    ar: 'إجابات مع مصادر موثوقة',
-                    en: 'Answers with reliable sources',
-                    fr: 'Réponses avec sources fiables'
-                },
-                order: 1
-            },
-            {
-                id: 'perplexity_f3',
-                text: {
-                    ar: 'استخدام غير محدود للنماذج المتقدمة',
-                    en: 'Unlimited use of advanced models',
-                    fr: 'Utilisation illimitée des modèles avancés'
-                },
-                order: 2
-            }
-        ],
-        paymentMethods: {
-            usdt: true,
-            redotpay: true,
-            baridimob: true
-        },
-        subOffers: [],
-        displayOrder: 6,
-        isArchived: false,
-        landingPage: 'perplexity_landing.html'
-    },
-
-    {
         id: 'canva',
         name: {
             ar: 'Canva Pro',

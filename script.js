@@ -5332,29 +5332,6 @@ function orderDuolingoYear() {
     redirectToWhatsApp(name, price, currency);
 }
 
-function orderPerplexity() {
-    const name = 'Perplexity AI Pro - 1 Month';
-    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-    const config = PRODUCTS['perplexity'];
-    const priceObj = config.durations['1month'];
-    const price = currency === 'USD' ? priceObj.usd : priceObj.dzd;
-
-    if (typeof fbq !== 'undefined') {
-        fbq('track', 'AddToCart', {
-            content_name: name,
-            value: parseFloat(price),
-            currency: currency
-        });
-        fbq('track', 'InitiateCheckout', {
-            content_name: name,
-            value: parseFloat(price),
-            currency: currency
-        });
-    }
-
-    redirectToWhatsApp(name, price, currency);
-}
-
 // Order Adobe
 function orderAdobe() {
     const activeBtn = document.querySelector('.adobe-duration-btn.active');

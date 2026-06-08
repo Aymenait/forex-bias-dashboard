@@ -12,7 +12,6 @@ const CANONICAL_PRODUCT_ID_ALIASES = {
     'primevideo':               'prime-video',
     'lovable':                  'lovable-ai',
     'cursor':                   'cursor-ai',
-    'perplexity':               'perplexity-ai-pro',
     // Stale long-ID ghost docs → admin-managed short-ID docs
     'the-real-world-account':   'trw',
     'google-gemini-pro-veo-3':  'google-ai',
@@ -61,3 +60,9 @@ if (typeof window !== 'undefined') {
         resolveCanonicalProductId
     };
 }
+
+export {
+    CANONICAL_PRODUCT_ID_ALIASES,
+    normalizeProductIdSlug,
+    resolveCanonicalProductId
+};

@@ -224,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     else if (product.includes('Canva')) collectionName = 'canva-reviews';
                     else if (product.includes('CapCut')) collectionName = 'capcut-reviews';
                     else if (product.includes('Netflix')) collectionName = 'netflix-reviews';
-                    else if (product.includes('Perplexity')) collectionName = 'perplexity-reviews';
                     else if (product.includes('TradingView')) collectionName = 'tradingview-reviews';
                     else if (product.includes('Cursor')) collectionName = 'cursor-reviews';
 
@@ -316,7 +315,6 @@ async function loadReviews() {
                 'canva-reviews',
                 'capcut-reviews',
                 'netflix-reviews',
-                'perplexity-reviews',
                 'tradingview-reviews',
                 'cursor-reviews'
             ];
@@ -476,17 +474,19 @@ function displayReviews() {
     const showMoreContainer = document.getElementById('show-more-container');
     const noReviews = document.getElementById('no-reviews');
 
-    let filteredReviews = allReviews;
+    let filteredReviews = allReviews.filter(r => {
+        const product = String(r.product || '').toLowerCase();
+        return !product.includes('perplexity');
+    });
 
     if (currentFilter !== 'all') {
-        filteredReviews = allReviews.filter(r => {
+        filteredReviews = filteredReviews.filter(r => {
             const product = r.product.toLowerCase();
             if (currentFilter === 'trw') return product.includes('real world');
             if (currentFilter === 'chatgpt') return product.includes('chatgpt');
             if (currentFilter === 'adobe') return product.includes('adobe');
             if (currentFilter === 'gamma') return product.includes('gamma');
             if (currentFilter === 'netflix') return product.includes('netflix');
-            if (currentFilter === 'perplexity') return product.includes('perplexity');
             if (currentFilter === 'tradingview') return product.includes('tradingview');
             if (currentFilter === 'canva') return product.includes('canva');
             if (currentFilter === 'capcut') return product.includes('capcut');
@@ -577,8 +577,6 @@ function getProductBadge(product) {
         return '<span class="product-badge badge-gamma">Gamma.AI</span>';
     } else if (productLower.includes('netflix')) {
         return '<span class="product-badge badge-netflix">Netflix</span>';
-    } else if (productLower.includes('perplexity')) {
-        return '<span class="product-badge badge-perplexity">Perplexity</span>';
     } else if (productLower.includes('tradingview')) {
         return '<span class="product-badge badge-tradingview">TradingView</span>';
     } else if (productLower.includes('canva')) {

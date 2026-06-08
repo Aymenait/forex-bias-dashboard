@@ -51,18 +51,6 @@ export const PRODUCTS_DATA = {
             ]
         },
         {
-            name: "Perplexity AI Pro",
-            category: "AI Search & Research",
-            keywords: ["search engine", "research", "citations", "academic"],
-            delivery_type: "email_password",
-            price_dzd: 1800,
-            price_usd: 8,
-            description: "حساب Perplexity AI Pro للبحث الذكي والتحليل الأكاديمي.",
-            durations: [
-                { key: "1month", price_dzd: 1800, price_usd: 8 }
-            ]
-        },
-        {
             name: "Canva Pro",
             category: "Design & Creative",
             keywords: ["design", "social media", "templates", "easy design"],

@@ -182,24 +182,6 @@ const PRODUCTS = {
       usd: ['binance', 'redotpay', 'crypto']
     }
   },
-  'perplexity': {
-    id: 'perplexity',
-    name: 'Perplexity AI Pro',
-    price_dzd: 1800,
-    price_usd: 8,
-    durations: {
-      '1month': { dzd: 1800, usd: 8 }
-    },
-    description: {
-      ar: 'حساب Perplexity AI Pro للبحث الذكي (شهر واحد)',
-      en: 'Perplexity AI Pro account for smart search (1 Month)',
-      fr: 'Compte Perplexity AI Pro pour recherche intelligente (1 Mois)'
-    },
-    paymentMethods: {
-      dzd: ['baridimob', 'crypto'],
-      usd: ['binance', 'redotpay', 'crypto']
-    }
-  },
   'canva': {
     id: 'canva',
     name: 'Canva Pro',

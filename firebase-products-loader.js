@@ -37,12 +37,19 @@ const DEFAULT_LANDING_PAGES = {
     gamma: 'gamma_landing.html',
     netflix: 'netflix_landing.html',
     tradingview: 'tradingview_landing.html',
-    perplexity: 'perplexity_landing.html',
     canva: 'canva_landing.html',
     capcut: 'capcut_landing.html',
     'google-ai': 'google_ai_landing.html',
     duolingo: 'duolingo_landing.html'
 };
+
+const REMOVED_PRODUCT_IDS = new Set(['perplexity', 'perplexity-ai-pro']);
+
+function isRemovedProduct(product) {
+    const id = String(product?.id || product?.firebaseDocId || '').toLowerCase().trim();
+    const name = getLocalizedText(product?.name, 'en', '').toLowerCase();
+    return REMOVED_PRODUCT_IDS.has(id) || name.includes('perplexity');
+}
 
 function getLocalizedText(value, lang = 'ar', fallback = '') {
     if (!value) return fallback;
@@ -171,7 +178,7 @@ function normalizeProductCategory(product) {
     if (directCategoryMap[rawCategory]) return directCategoryMap[rawCategory];
 
     const haystack = `${id} ${name}`;
-    const aiIds = ['chatgpt', 'gpt', 'claude', 'grok', 'super grok', 'google ai', 'google gemini', 'gemini', 'veo', 'gamma', 'gama', 'perplexity', 'cursor', 'scispace', 'sci space', 'lovable'];
+    const aiIds = ['chatgpt', 'gpt', 'claude', 'grok', 'super grok', 'google ai', 'google gemini', 'gemini', 'veo', 'gamma', 'gama', 'cursor', 'scispace', 'sci space', 'lovable'];
     const designIds = ['adobe', 'creative cloud', 'canva', 'capcut', 'cap cut', 'alight', 'motion'];
     const courseIds = ['trw', 'real world', 'duolingo', 'microsoft', 'office', 'hma', 'vpn', 'tradingview', 'trading view'];
     const entertainmentIds = ['netflix', 'primevideo', 'prime video', 'crunchyroll', 'youtube', 'spotify'];
@@ -236,7 +243,6 @@ function resolveCanonicalFirestoreId(rawId = '', fallbackName = '') {
         'primevideo':   'prime-video',
         'lovable':      'lovable-ai',
         'cursor':       'cursor-ai',
-        'perplexity':   'perplexity-ai-pro',
         // Stale long-ID docs → admin-managed short-ID docs
         'the-real-world-account':   'trw',
         'google-gemini-pro-veo-3':  'google-ai',
@@ -364,7 +370,7 @@ function logSortedProductsForDebug(products, stage = 'sorted') {
 function normalizeProducts(products) {
     const deduped = dedupeProductsToCanonicalIds(products)
         .filter(product => {
-            if (!product || product.isArchived === true) return false;
+            if (!product || isRemovedProduct(product) || product.isArchived === true) return false;
             // If admin set availability to 'unavailable', show the product with a badge
             if (product.availability === 'unavailable') return true;
             // Otherwise, respect the active toggle — hide deactivated products
@@ -524,7 +530,6 @@ function createProductCardHTML(product, lang = 'ar') {
         'lovable': { url: 'https://i.pinimg.com/1200x/cd/d4/69/cdd469e94eb529ae307f9b5d56e8da96.jpg', type: 'image' },
         'google-ai': { url: 'https://i.pinimg.com/736x/c2/5b/dd/c25bdda8e7d4eb27bcb2f4d411441d92.jpg', type: 'image' },
         'alight-motion': { url: 'https://i.pinimg.com/originals/ad/8b/2c/ad8b2cf5e7b44514ab71b9fd9666ec16.jpg', type: 'image' },
-        'perplexity': { url: 'https://i.imgur.com/mEy5oXF.mp4', type: 'video' },
         'microsoft-office': { url: 'https://i.pinimg.com/736x/3c/0d/b2/3c0db24fec715f86cc3e167892f88e2f.jpg', type: 'image' },
         // Canonical long-ID aliases (after dedup, products use these IDs)
         'canva-pro':          { url: 'https://i.pinimg.com/736x/71/8b/41/718b41945aab84bd2276c762266931d0.jpg', type: 'image' },
@@ -534,7 +539,6 @@ function createProductCardHTML(product, lang = 'ar') {
         'primevideo':         { url: 'https://i.pinimg.com/originals/67/9d/aa/679daac8c726277e809c6413a650c547.gif', type: 'image' },
         'lovable-ai':         { url: 'https://i.pinimg.com/1200x/cd/d4/69/cdd469e94eb529ae307f9b5d56e8da96.jpg', type: 'image' },
         'cursor-ai':          { url: 'https://i.pinimg.com/736x/29/f9/48/29f9488bd27d42debcfbddb33c1c79d7.jpg', type: 'image' },
-        'perplexity-ai-pro':  { url: 'https://i.imgur.com/mEy5oXF.mp4', type: 'video' },
         'capcut-pro':         { url: 'https://i.pinimg.com/1200x/38/e3/08/38e308732b87069ed50893423f09ca4b.jpg', type: 'image' },
         'tradingview-premium':{ url: 'https://i.pinimg.com/736x/8c/63/a5/8c63a5c7d9d6e826b281b01dea6bd5da.jpg', type: 'image' }
     };
@@ -751,12 +755,7 @@ function createProductCardHTML(product, lang = 'ar') {
             ${mediaElement}
             <h3>${name}</h3>
             <p class="description" data-i18n="product.${product.id}.desc">${description}</p>
-            ${!isUnavailableState && product.id === 'perplexity' ?
-            `<div class="price-tag no-currency-update">
-                <span data-price-dzd="${activePriceDZD}" data-price-usd="${activePriceUSD}">${formatDzd(activePriceDZD, lang)}</span>
-                <span style="font-size: 0.8em; font-weight: normal;">/ <span data-i18n="perMonth">${getUiText('month', lang)}</span></span>
-            </div>` :
-            (!isUnavailableState ? `<div class="price-tag" data-price-dzd="${activePriceDZD}" data-price-usd="${activePriceUSD}">${formatDzd(activePriceDZD, lang)}</div>` : '')}
+            ${!isUnavailableState ? `<div class="price-tag" data-price-dzd="${activePriceDZD}" data-price-usd="${activePriceUSD}">${formatDzd(activePriceDZD, lang)}</div>` : ''}
             ${!isUnavailableState ? durationSelectorHTML : ''}
             ${deliveryTimeHTML}
 
@@ -768,7 +767,7 @@ function createProductCardHTML(product, lang = 'ar') {
                 ${featuresHTML}
             </ul>
             ${discoverBtn}
-            <button class="order-btn" data-product="${name}" data-price="${activePriceDZD}" data-price-usd="${activePriceUSD}" ${orderButtonStatusAttr} onclick="${product.id === 'perplexity' ? 'orderPerplexity()' : 'orderProduct(this.dataset.product)'}" ${buttonDisabled}>${orderButtonText}</button>
+            <button class="order-btn" data-product="${name}" data-price="${activePriceDZD}" data-price-usd="${activePriceUSD}" ${orderButtonStatusAttr} onclick="orderProduct(this.dataset.product)" ${buttonDisabled}>${orderButtonText}</button>
         </div>
     `;
 }
