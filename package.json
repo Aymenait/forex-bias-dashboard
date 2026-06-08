@@ -4,6 +4,7 @@
   "description": "3Ahub - International Expansion",
   "type": "module",
   "scripts": {
+    "diagnose:cloudflare": "node scripts/cloudflare-connectivity-check.js",
     "verify:products": "node scripts/verify-product-sync.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
