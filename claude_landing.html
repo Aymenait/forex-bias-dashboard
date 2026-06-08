@@ -19,12 +19,15 @@
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script type="module" src="landing-page-products.js"></script>
 
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel + Conversions API -->
+    <script src="/meta-pixel.js"></script>
     <script>
-        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }, f._fbq = n, n.push = n, n.loaded = !0, n.version = '2.0', n.queue = [], t = b.createElement(e), t.async = !0, t.src = v, s = b.getElementsByTagName(e)[0], s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '2046893892791206');
-        fbq('track', 'PageView');
-        fbq('track', 'ViewContent', { content_name: 'Claude AI Landing', content_category: 'AI Tools' });
+        if (window.metaPixel) {
+            window.metaPixel.trackEvent('ViewContent', {
+                content_name: 'Claude AI Landing',
+                content_category: 'AI Tools'
+            });
+        }
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2046893892791206&ev=PageView&noscript=1" /></noscript>
 

@@ -17,6 +17,26 @@
     var bridgedFbq = null;
     var recentEvents = {};
     var RECENT_EVENT_TTL_MS = 1500;
+    var STANDARD_EVENTS = {
+        PageView: true,
+        ViewContent: true,
+        Search: true,
+        AddToCart: true,
+        AddToWishlist: true,
+        InitiateCheckout: true,
+        AddPaymentInfo: true,
+        Purchase: true,
+        Lead: true,
+        CompleteRegistration: true,
+        Contact: true,
+        CustomizeProduct: true,
+        Donate: true,
+        FindLocation: true,
+        Schedule: true,
+        StartTrial: true,
+        SubmitApplication: true,
+        Subscribe: true
+    };
 
     // ── Pixel loader (standard FB snippet) ────────────────────────
     function loadFbevents() {
@@ -94,6 +114,15 @@
         return '';
     }
 
+    function persistFbclid() {
+        try {
+            var fbclid = new URLSearchParams(window.location.search).get('fbclid');
+            if (fbclid) window.localStorage.setItem('fbclid', fbclid);
+        } catch (e) {
+            // Storage can be unavailable in private browsing; tracking still works without it.
+        }
+    }
+
     function getFbp() {
         return getCookie('_fbp');
     }
@@ -131,6 +160,10 @@
             params.value || '',
             params.currency || ''
         ].join('|');
+    }
+
+    function isStandardEvent(eventName) {
+        return !!STANDARD_EVENTS[eventName];
     }
 
     function shouldTrackEvent(eventName, params, options) {
@@ -175,6 +208,17 @@
     }
 
     // ── Init ──────────────────────────────────────────────────────
+    function callBrowserPixel(args) {
+        if (!window.fbq) return;
+        if (window.fbq.__metaPixelBridge && typeof window.fbq.callMethod === 'function') {
+            return window.fbq.callMethod.apply(window.fbq, args);
+        }
+        if (window.fbq.__metaPixelBridge && window.fbq.__rawFbq && typeof window.fbq.__rawFbq.callMethod === 'function') {
+            return window.fbq.__rawFbq.callMethod.apply(window.fbq.__rawFbq, args);
+        }
+        return window.fbq.apply(window, args);
+    }
+
     function initMetaPixel(advancedMatching) {
         loadFbevents();
         if (advancedMatching && Object.keys(advancedMatching).length) {
@@ -203,8 +247,8 @@
         // 1) Client pixel (init guard)
         try {
             if (includeBrowser && typeof window.fbq !== 'undefined') {
-                var fbqTarget = bridgedFbq && bridgedFbq.__rawFbq ? bridgedFbq.__rawFbq : window.fbq;
-                fbqTarget('trackSingle', META_PIXEL_ID, eventName, normalizedParams, { eventID: eventId });
+                var command = isStandardEvent(eventName) ? 'trackSingle' : 'trackSingleCustom';
+                callBrowserPixel([command, META_PIXEL_ID, eventName, normalizedParams, { eventID: eventId }]);
             }
         } catch (e) {
             console.warn('[meta-pixel] client track failed', e);
@@ -235,8 +279,19 @@
 
     // ── Build hashed user_data from raw form fields ───────────────
     function installLegacyFbqBridge() {
-        if (!window.fbq || window.fbq.__metaPixelBridge || !window.fbq.callMethod) return;
+        if (!window.fbq || window.fbq.__metaPixelBridge) return;
         var rawFbq = window.fbq;
+
+        function invokeNative(args) {
+            if (bridgedFbq && typeof bridgedFbq.callMethod === 'function') {
+                return bridgedFbq.callMethod.apply(bridgedFbq, args);
+            }
+            if (typeof rawFbq.callMethod === 'function') {
+                return rawFbq.callMethod.apply(rawFbq, args);
+            }
+            return rawFbq.apply(window, args);
+        }
+
         bridgedFbq = function () {
             var args = Array.prototype.slice.call(arguments);
             var command = args[0];
@@ -244,13 +299,17 @@
 
             if ((command === 'track' || command === 'trackCustom') && eventName && eventName !== 'PageView') {
                 var params = normalizeValue(args[2] || {});
-                var eventId = uuid();
+                var eventOptions = args[3] || {};
+                var eventId = eventOptions.eventID || eventOptions.event_id || uuid();
                 var eventTime = Math.floor(Date.now() / 1000);
                 if (!shouldTrackEvent(eventName, params)) return;
+                if (command === 'track' && !isStandardEvent(eventName)) {
+                    args[0] = 'trackCustom';
+                }
                 args[2] = params;
-                args[3] = Object.assign({}, args[3] || {}, { eventID: eventId });
+                args[3] = Object.assign({}, eventOptions, { eventID: eventId });
                 try {
-                    rawFbq.apply(window, args);
+                    invokeNative(args);
                     sendCapi(eventName, params, {}, eventId, eventTime, window.location.href, {})
                         .catch(function (e) { console.warn('[meta-pixel] legacy CAPI send failed', e); });
                     return;
@@ -259,7 +318,7 @@
                 }
             }
 
-            return rawFbq.apply(window, args);
+            return invokeNative(args);
         };
         Object.keys(rawFbq).forEach(function (key) {
             bridgedFbq[key] = rawFbq[key];
@@ -282,7 +341,9 @@
     }
 
     // ── Auto-init on script load (PageView for every page) ────────
+    persistFbclid();
     initMetaPixel();
+    installLegacyFbqBridge();
     setTimeout(installLegacyFbqBridge, 1500);
 
     // ── Public API ────────────────────────────────────────────────

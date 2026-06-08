@@ -1,17 +1,29 @@
 // Add these copy functions and confirm payment functions
 // They should be in the global scope so onclick handlers can access them
 
+function trackMetaEvent(eventName, params) {
+    params = params || {};
+    if (window.metaPixel && typeof window.metaPixel.trackEvent === 'function') {
+        window.metaPixel.trackEvent(eventName, params);
+        return;
+    }
+    if (typeof fbq !== 'undefined') {
+        const command = ['CopyPaymentInfo', 'InterestedLead', 'OrderSubmitted', 'DeepScroll', 'CategoryFilter'].includes(eventName)
+            ? 'trackCustom'
+            : 'track';
+        fbq(command, eventName, params);
+    }
+}
+
 // Copy RedotPay ID function
 function copyRedotPayID() {
     const redotpayID = document.getElementById('redotpay-id').textContent;
 
     // Track Copy Event
-    if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'CopyPaymentInfo', {
-            content_category: 'RedotPay',
-            content_type: 'ID'
-        });
-    }
+    trackMetaEvent('CopyPaymentInfo', {
+        content_category: 'RedotPay',
+        content_type: 'ID'
+    });
 
     navigator.clipboard.writeText(redotpayID).then(() => {
         const copyBtn = document.querySelector('#redotpay-modal .copy-btn');
@@ -34,12 +46,10 @@ function copyWalletAddress() {
     const walletAddress = document.getElementById('wallet-address').textContent;
 
     // Track Copy Event
-    if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'CopyPaymentInfo', {
-            content_category: 'Crypto',
-            content_type: 'Wallet Address'
-        });
-    }
+    trackMetaEvent('CopyPaymentInfo', {
+        content_category: 'Crypto',
+        content_type: 'Wallet Address'
+    });
 
     navigator.clipboard.writeText(walletAddress).then(() => {
         const copyBtn = document.querySelector('#crypto-modal .copy-btn');
@@ -62,12 +72,10 @@ function copyBaridiMobRIP() {
     const baridimobRIP = document.getElementById('baridimob-rip').textContent;
 
     // Track Copy Event
-    if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'CopyPaymentInfo', {
-            content_category: 'BaridiMob',
-            content_type: 'RIP'
-        });
-    }
+    trackMetaEvent('CopyPaymentInfo', {
+        content_category: 'BaridiMob',
+        content_type: 'RIP'
+    });
 
     navigator.clipboard.writeText(baridimobRIP).then(() => {
         const copyBtn = document.querySelector('#baridimob-modal .copy-btn');
@@ -105,18 +113,14 @@ Thank you!`;
     const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
-    // Track Facebook Purchase event
-    if (typeof fbq !== 'undefined') {
-        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-        const value = currency === 'USD' ? parseFloat(priceUSD) : parseFloat(priceDZD);
-
-        fbq('track', 'Lead', {
-            content_name: productName,
-            value: value || 0,
-            currency: currency,
-            content_category: 'RedotPay'
-        });
-    }
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const value = currency === 'USD' ? parseFloat(priceUSD) : parseFloat(priceDZD);
+    trackMetaEvent('Lead', {
+        content_name: productName,
+        value: value || 0,
+        currency: currency,
+        content_category: 'RedotPay'
+    });
     const modal = document.getElementById('redotpay-modal');
     modal.classList.remove('show');
     modal.classList.add('hidden');
@@ -142,18 +146,14 @@ Thank you!`;
     const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
-    // Track Facebook Purchase event
-    if (typeof fbq !== 'undefined') {
-        const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
-        const value = currency === 'USD' ? parseFloat(priceUSD) : parseFloat(priceDZD);
-
-        fbq('track', 'Lead', {
-            content_name: productName,
-            value: value || 0,
-            currency: currency,
-            content_category: 'Crypto - ' + network
-        });
-    }
+    const currency = (window.currencyManager && window.currencyManager.currentCurrency) || 'DZD';
+    const value = currency === 'USD' ? parseFloat(priceUSD) : parseFloat(priceDZD);
+    trackMetaEvent('Lead', {
+        content_name: productName,
+        value: value || 0,
+        currency: currency,
+        content_category: 'Crypto - ' + network
+    });
     const modal = document.getElementById('crypto-modal');
     modal.classList.remove('show');
     modal.classList.add('hidden');
@@ -177,16 +177,12 @@ Thank you!`;
     const whatsappUrl = `https://wa.me/213782125821?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
-    // Track Facebook Purchase event
-    if (typeof fbq !== 'undefined') {
-        // BaridiMob is usually DZD only, but we keep it consistent
-        fbq('track', 'Lead', {
-            content_name: productName,
-            value: parseFloat(priceDZD) || 0,
-            currency: 'DZD',
-            content_category: 'BaridiMob'
-        });
-    }
+    trackMetaEvent('Lead', {
+        content_name: productName,
+        value: parseFloat(priceDZD) || 0,
+        currency: 'DZD',
+        content_category: 'BaridiMob'
+    });
     const modal = document.getElementById('baridimob-modal');
     modal.classList.remove('show');
     modal.classList.add('hidden');
